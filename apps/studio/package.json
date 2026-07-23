@@ -10,5 +10,13 @@
     "lint": "eslint .",
     "format": "prettier --check .",
     "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@covenant/analyzer": "workspace:*",
+    "@covenant/benchmark": "workspace:*",
+    "@covenant/domain": "workspace:*",
+    "@covenant/evaluator": "workspace:*",
+    "@covenant/language": "workspace:*",
+    "@covenant/provenance": "workspace:*"
   }
 }

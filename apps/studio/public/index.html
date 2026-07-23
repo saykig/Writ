@@ -1,0 +1,224 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Covenant Studio</title>
+<meta
+  name="description"
+  content="An auditable policy-evaluation compiler for G7 commitment compliance. Write a methodology, compile it to a typed IR, evaluate it over frozen evidence, and read a reproducible receipt."
+/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="/styles.css" />
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar" id="top">
+  <a class="brand" href="#thesis" data-view="thesis">
+    <span class="brand-mark">Covenant</span>
+    <span class="brand-sub">policy-evaluation compiler</span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#thesis" data-view="thesis" class="nav-link is-active">Thesis</a>
+    <a href="#playground" data-view="playground" class="nav-link">Playground</a>
+    <a href="#benchmark" data-view="benchmark" class="nav-link">Benchmark</a>
+  </nav>
+  <button class="theme-toggle" type="button" aria-label="Toggle paper / sumi theme">
+    <span class="theme-dot" aria-hidden="true"></span>
+    <span class="theme-label">paper</span>
+  </button>
+</header>
+
+<main>
+  <!-- ────────────────────────────  THESIS  ──────────────────────────── -->
+  <section class="view view-thesis is-active" id="view-thesis" aria-label="Thesis">
+    <div class="hero">
+      <div class="hero-text">
+        <p class="eyebrow reveal" style="--d: 0">Auditable compliance · G7 commitments</p>
+        <h1 class="hero-quote reveal" style="--d: 1">
+          <span class="quote-mark" aria-hidden="true">“</span>up to four strong actions.<span
+            class="quote-mark"
+            aria-hidden="true"
+            >”</span
+          >
+        </h1>
+        <p class="hero-lede reveal" style="--d: 2">
+          Five words decide a country&rsquo;s score. Read as one-to-four, a state with zero strong
+          actions and five weak ones matches no rule. Read inclusively, the same state matches two.
+          The 2025 G7 AI-for-SMEs rubric never says which.
+        </p>
+        <p class="hero-body reveal" style="--d: 3">
+          Covenant compiles a scoring methodology to a typed intermediate form and evaluates it with
+          a four-valued engine over a frozen, reviewed body of evidence. The ambiguity has to be
+          resolved on purpose, in writing, before any score is assigned. What comes out is a
+          receipt: a result, a proof tree, and the content hashes that reproduce it.
+        </p>
+        <div class="hero-actions reveal" style="--d: 4">
+          <a class="btn btn-primary" href="#playground" data-view="playground"
+            >Open the playground</a
+          >
+          <a class="btn btn-ghost" href="#benchmark" data-view="benchmark">See the benchmark</a>
+        </div>
+      </div>
+
+      <figure class="hero-artifact reveal" style="--d: 3">
+        <figcaption class="artifact-cap">
+          <span class="mono-label">examples / 2025-ai-sme-literal.covenant</span>
+        </figcaption>
+        <pre class="artifact-code"><code><span class="c-kw">score</span> {
+  <span class="c-kw">result</span> <span class="c-str">"+1"</span> <span class="c-kw">priority</span> <span class="c-num">10</span> <span class="c-kw">when</span> strong_count &gt;= <span class="c-num">5</span> <span class="c-kw">id</span> full;
+  <span class="c-kw">result</span> <span class="c-str">"0"</span>  <span class="c-kw">priority</span> <span class="c-num">10</span> <span class="c-kw">when</span> (strong_count <span class="c-kw">between</span> {<span class="c-num">1</span>, <span class="c-num">4</span>}) <span class="c-kw">or</span>
+    (strong_count == <span class="c-num">0</span> <span class="c-kw">and</span> weak_count <span class="c-kw">between</span> {<span class="c-num">3</span>, <span class="c-num">4</span>}) <span class="c-kw">id</span> partial;
+  <span class="c-kw">result</span> <span class="c-str">"-1"</span> <span class="c-kw">priority</span> <span class="c-num">10</span> <span class="c-kw">when</span> counter_exists <span class="c-kw">or</span>
+    (strong_count == <span class="c-num">0</span> <span class="c-kw">and</span> weak_count &lt;= <span class="c-num">2</span>) <span class="c-kw">id</span> none;
+<span class="seam-line"><span class="c-kw">otherwise</span> <span class="c-status">unresolved</span> <span class="c-str">"The published rule text does not cover this state."</span>;</span>
+}</code></pre>
+        <div class="witness">
+          <span class="witness-tag">uncovered region</span>
+          <span class="witness-cell"><em>strong_count</em> 0</span>
+          <span class="witness-cell"><em>weak_count</em> 5</span>
+          <span class="witness-cell"><em>counter</em> false</span>
+          <span class="witness-arrow" aria-hidden="true">→</span>
+          <span class="witness-verdict">no rule matches</span>
+        </div>
+      </figure>
+    </div>
+
+    <div class="movements">
+      <ol class="movement-list">
+        <li class="movement">
+          <span class="movement-idx">01</span>
+          <h3 class="movement-h">Compile &amp; analyze</h3>
+          <p class="movement-p">
+            The methodology becomes a typed canonical IR. A static analyzer enumerates the score
+            program&rsquo;s input space and reports every gap and overlap
+            <em>before any evidence exists</em>, each with the exact witness that breaks it.
+          </p>
+        </li>
+        <li class="movement">
+          <span class="movement-idx">02</span>
+          <h3 class="movement-h">Evaluate</h3>
+          <p class="movement-p">
+            A deterministic, four-valued engine reads a frozen evidence snapshot, classifies the
+            eligible actions, and selects a single score branch. No wall-clock, no network, no
+            randomness.
+          </p>
+        </li>
+        <li class="movement">
+          <span class="movement-idx">03</span>
+          <h3 class="movement-h">Reproduce</h3>
+          <p class="movement-p">
+            The result is a content-addressed receipt: proof tree, matched rule, qualifying actions,
+            and five bound hashes. Identical inputs give a byte-identical receipt.
+          </p>
+        </li>
+      </ol>
+      <dl class="figures">
+        <div class="figure">
+          <dt>8</dt>
+          <dd>G7 members reproduced</dd>
+        </div>
+        <div class="figure figure-truth">
+          <dt>4</dt>
+          <dd>truth values <span class="truth-legend">true · false · unknown · contested</span></dd>
+        </div>
+        <div class="figure figure-seam">
+          <dt>2</dt>
+          <dd>cells that hold only under a judgment call</dd>
+        </div>
+        <div class="figure">
+          <dt>1</dt>
+          <dd>frozen, reviewed snapshot</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────  PLAYGROUND  ────────────────────────── -->
+  <section class="view view-playground" id="view-playground" aria-label="Playground" hidden>
+    <div class="pg-head">
+      <div class="pg-head-main">
+        <p class="eyebrow">Live methodology</p>
+        <h2 class="pg-title">Three readings of the same five words.</h2>
+      </div>
+      <div class="pg-switch" role="tablist" aria-label="Example methodology">
+        <!-- example chips injected here -->
+      </div>
+    </div>
+    <p class="pg-note" data-example-note>
+      Edit the source. The analyzer runs on every pause; switch readings to watch the gap appear and
+      close.
+    </p>
+
+    <div class="pg-grid">
+      <div class="pg-editor-wrap">
+        <div class="pane-bar">
+          <span class="mono-label">source · covenant 0.1</span>
+          <span class="pane-status" data-compile-status>compiling…</span>
+        </div>
+        <div class="pg-editor" id="editor"></div>
+      </div>
+
+      <div class="pg-results">
+        <div class="pane-bar pane-bar-tabs">
+          <div class="result-tabs" role="tablist" aria-label="Results">
+            <button class="rtab is-active" data-tab="analysis" role="tab">
+              Analysis <span class="rtab-badge" data-analysis-badge></span>
+            </button>
+            <button class="rtab" data-tab="ir" role="tab">IR</button>
+            <button class="rtab" data-tab="receipt" role="tab">Receipt</button>
+          </div>
+        </div>
+
+        <div class="result-body">
+          <div class="rpanel is-active" data-panel="analysis"></div>
+          <div class="rpanel" data-panel="ir"></div>
+          <div class="rpanel" data-panel="receipt">
+            <div class="receipt-controls">
+              <label class="mono-label" for="member-select">evaluate against</label>
+              <select id="member-select" class="member-select"></select>
+              <div class="profile-toggle" role="radiogroup" aria-label="Interpretation profile">
+                <button class="ptog is-active" data-profile="published" role="radio">
+                  published
+                </button>
+                <button class="ptog" data-profile="generous" role="radio">generous</button>
+              </div>
+              <button class="btn btn-small" data-evaluate>Evaluate</button>
+            </div>
+            <div class="receipt-out" data-receipt-out>
+              <p class="muted">Choose a member and evaluate to produce a receipt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────  BENCHMARK  ─────────────────────────── -->
+  <section class="view view-benchmark" id="view-benchmark" aria-label="Benchmark" hidden>
+    <div class="bm-head">
+      <p class="eyebrow">2025 · AI for SMEs</p>
+      <h2 class="bm-title">All eight members, reproduced from one frozen snapshot.</h2>
+      <p class="bm-lede">
+        Every computed cell is produced by the evaluator over reviewed, page-anchored evidence. Two
+        of them &mdash; Japan and the United States &mdash; hold only because general, non-SME AI
+        legislation is read as <em>weak</em>. Read it generously and both flip to
+        <span class="seam-text">+1</span>. That is not a fact about the world; it is a decision,
+        recorded here as one.
+      </p>
+    </div>
+    <div class="bm-body" data-benchmark-out>
+      <p class="muted">Loading the discrepancy ledger…</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <span class="mono-label">Covenant Studio · the real toolchain, server-side</span>
+  <span class="foot-hashes" data-foot-version></span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script src="/app.js"></script>

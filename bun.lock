@@ -30,6 +30,14 @@
     "apps/studio": {
       "name": "@covenant/studio",
       "version": "0.1.0",
+      "dependencies": {
+        "@covenant/analyzer": "workspace:*",
+        "@covenant/benchmark": "workspace:*",
+        "@covenant/domain": "workspace:*",
+        "@covenant/evaluator": "workspace:*",
+        "@covenant/language": "workspace:*",
+        "@covenant/provenance": "workspace:*",
+      },
     },
     "packages/analyzer": {
       "name": "@covenant/analyzer",
