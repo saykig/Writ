@@ -20,16 +20,36 @@ const nextConfig: NextConfig = {
   // though this app only uses the pure-TS bounded-enumeration path.
   serverExternalPackages: ["z3-solver"],
   typedRoutes: true,
-  // Trace the frozen repo data (read at runtime by lib/repo.ts) into the
-  // serverless bundle so the API routes work on Vercel as well as locally.
+  // Trace the frozen repo data into the serverless bundle so the API routes work
+  // on Vercel as well as locally. Two kinds of runtime file reads must ship:
+  //   1. lib/repo.ts reads examples/ and benchmark/2025-ai-sme/ (relative to the
+  //      repo root it discovers from process.cwd()).
+  //   2. The @covenant/* packages read data relative to their own module via
+  //      import.meta.url — @covenant/domain loads packages/domain/schemas/*.json
+  //      for AJV validation (triggered by every compile/parse/evaluate), and
+  //      @covenant/benchmark reads examples/2025-ai-sme-resolved.covenant plus
+  //      benchmark/2025-ai-sme/. Miss any of these and the route 500s with ENOENT.
   outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
-    "/api/**": ["../../examples/**", "../../benchmark/2025-ai-sme/**"],
-    "/playground": ["../../examples/**", "../../benchmark/2025-ai-sme/**"],
-    "/benchmark": ["../../benchmark/2025-ai-sme/**"],
+    "/api/**": [
+      "../../examples/**",
+      "../../benchmark/2025-ai-sme/**",
+      "../../packages/domain/schemas/**",
+      "../../conformance/**",
+    ],
+    "/playground": [
+      "../../examples/**",
+      "../../benchmark/2025-ai-sme/**",
+      "../../packages/domain/schemas/**",
+    ],
+    "/benchmark": [
+      "../../benchmark/2025-ai-sme/**",
+      "../../packages/domain/schemas/**",
+    ],
     "/how-it-works": [
       "../../examples/**",
       "../../benchmark/2025-ai-sme/**",
+      "../../packages/domain/schemas/**",
       "../../conformance/**",
     ],
   },
