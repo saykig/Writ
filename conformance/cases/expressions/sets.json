@@ -1,0 +1,107 @@
+[
+  {
+    "id": "expr.in.member",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "3 in [1,2,3] is true",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "in",
+        "left": { "kind": "literal", "value": 3 },
+        "right": { "kind": "literal", "value": [1, 2, 3] }
+      }
+    },
+    "expected": "true"
+  },
+  {
+    "id": "expr.in.non-member",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "4 in [1,2,3] is false",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "in",
+        "left": { "kind": "literal", "value": 4 },
+        "right": { "kind": "literal", "value": [1, 2, 3] }
+      }
+    },
+    "expected": "false"
+  },
+  {
+    "id": "expr.contains.present",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "[a,b,c] contains b is true",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "contains",
+        "left": { "kind": "literal", "value": ["a", "b", "c"] },
+        "right": { "kind": "literal", "value": "b" }
+      }
+    },
+    "expected": "true"
+  },
+  {
+    "id": "expr.overlaps.sets-intersect",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "Set overlap: [1,2] overlaps [2,3] is true (shared element)",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "overlaps",
+        "left": { "kind": "literal", "value": [1, 2] },
+        "right": { "kind": "literal", "value": [2, 3] }
+      }
+    },
+    "expected": "true"
+  },
+  {
+    "id": "expr.overlaps.sets-disjoint",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "Set overlap: [1,2] overlaps [3,4] is false (disjoint)",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "overlaps",
+        "left": { "kind": "literal", "value": [1, 2] },
+        "right": { "kind": "literal", "value": [3, 4] }
+      }
+    },
+    "expected": "false"
+  },
+  {
+    "id": "expr.nonempty.list",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "nonempty over a non-empty list is true",
+    "input": {
+      "expr": {
+        "kind": "unary",
+        "op": "nonempty",
+        "operand": { "kind": "ref", "path": "items" }
+      },
+      "facts": { "items": ["x"] }
+    },
+    "expected": "true"
+  },
+  {
+    "id": "expr.nonempty.empty-list",
+    "area": "expressions",
+    "kind": "expr.evaluateTruth",
+    "description": "nonempty over an empty list is false",
+    "input": {
+      "expr": {
+        "kind": "unary",
+        "op": "nonempty",
+        "operand": { "kind": "ref", "path": "items" }
+      },
+      "facts": { "items": [] }
+    },
+    "expected": "false"
+  }
+]

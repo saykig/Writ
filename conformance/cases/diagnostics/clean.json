@@ -1,0 +1,17 @@
+[
+  {
+    "id": "diag.clean.no-diagnostics",
+    "area": "diagnostics",
+    "kind": "expr.evaluate",
+    "description": "A well-typed comparison over matching units raises no diagnostics (a nearby negative fixture for the lint codes)",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "gte",
+        "left": { "kind": "literal", "value": 5 },
+        "right": { "kind": "literal", "value": 5 }
+      }
+    },
+    "expected": { "truth": "true", "diagnostics": [] }
+  }
+]

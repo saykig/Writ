@@ -1,0 +1,34 @@
+[
+  {
+    "id": "truth.not.true",
+    "area": "truth",
+    "kind": "truth.not",
+    "description": "not true = false",
+    "input": { "value": "true" },
+    "expected": "false"
+  },
+  {
+    "id": "truth.not.false",
+    "area": "truth",
+    "kind": "truth.not",
+    "description": "not false = true",
+    "input": { "value": "false" },
+    "expected": "true"
+  },
+  {
+    "id": "truth.not.unknown",
+    "area": "truth",
+    "kind": "truth.not",
+    "description": "not unknown = unknown (absence of evidence is preserved)",
+    "input": { "value": "unknown" },
+    "expected": "unknown"
+  },
+  {
+    "id": "truth.not.contested",
+    "area": "truth",
+    "kind": "truth.not",
+    "description": "not contested = contested (conflict is preserved)",
+    "input": { "value": "contested" },
+    "expected": "contested"
+  }
+]

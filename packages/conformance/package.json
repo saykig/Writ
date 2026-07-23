@@ -1,0 +1,24 @@
+{
+  "name": "@covenant/conformance",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+  },
+  "dependencies": {
+    "@covenant/domain": "workspace:*",
+    "@covenant/evaluator": "workspace:*",
+    "@covenant/analyzer": "workspace:*",
+    "@covenant/provenance": "workspace:*"
+  }
+}

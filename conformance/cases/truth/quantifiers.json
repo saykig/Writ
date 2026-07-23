@@ -1,0 +1,66 @@
+[
+  {
+    "id": "truth.all.empty",
+    "area": "truth",
+    "kind": "truth.all",
+    "description": "forall over an empty set is vacuously true (identity of AND)",
+    "input": { "values": [] },
+    "expected": "true"
+  },
+  {
+    "id": "truth.any.empty",
+    "area": "truth",
+    "kind": "truth.any",
+    "description": "exists over an empty set is false (identity of OR)",
+    "input": { "values": [] },
+    "expected": "false"
+  },
+  {
+    "id": "truth.all.true-true-true",
+    "area": "truth",
+    "kind": "truth.all",
+    "description": "forall of all-true is true",
+    "input": { "values": ["true", "true", "true"] },
+    "expected": "true"
+  },
+  {
+    "id": "truth.all.with-unknown",
+    "area": "truth",
+    "kind": "truth.all",
+    "description": "forall with an unknown member is unknown (not false)",
+    "input": { "values": ["true", "unknown", "true"] },
+    "expected": "unknown"
+  },
+  {
+    "id": "truth.all.with-false",
+    "area": "truth",
+    "kind": "truth.all",
+    "description": "forall with a false member is false",
+    "input": { "values": ["true", "unknown", "false"] },
+    "expected": "false"
+  },
+  {
+    "id": "truth.any.with-true",
+    "area": "truth",
+    "kind": "truth.any",
+    "description": "exists with a true member is true",
+    "input": { "values": ["false", "unknown", "true"] },
+    "expected": "true"
+  },
+  {
+    "id": "truth.any.all-false",
+    "area": "truth",
+    "kind": "truth.any",
+    "description": "exists over all-false is false",
+    "input": { "values": ["false", "false"] },
+    "expected": "false"
+  },
+  {
+    "id": "truth.any.unknown-only",
+    "area": "truth",
+    "kind": "truth.any",
+    "description": "exists over only unknowns is unknown (not false)",
+    "input": { "values": ["unknown", "unknown"] },
+    "expected": "unknown"
+  }
+]

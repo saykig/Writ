@@ -1,0 +1,97 @@
+[
+  {
+    "id": "hash.key-order.invariant-a",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "Content hash of {a:2,b:1} (named-hash stability: authored order does not change the hash)",
+    "input": { "value": { "a": 2, "b": 1 } },
+    "expected": "sha256:d3626ac30a87e6f7a6428233b3c68299976865fa5508e4267c5415c76af7a772"
+  },
+  {
+    "id": "hash.key-order.invariant-b",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "The reordered {b:1,a:2} hashes identically to {a:2,b:1} (canonical hash is key-order invariant, section 16)",
+    "input": { "value": { "b": 1, "a": 2 } },
+    "expected": "sha256:d3626ac30a87e6f7a6428233b3c68299976865fa5508e4267c5415c76af7a772"
+  },
+  {
+    "id": "hash.array-order.ascending",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "Content hash of [1,2,3]",
+    "input": { "value": [1, 2, 3] },
+    "expected": "sha256:a615eeaee21de5179de080de8c3052c8da901138406ba71c38c032845f7d54f4"
+  },
+  {
+    "id": "hash.array-order.descending",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "Content hash of [3,2,1] differs from [1,2,3]: array order is part of the content identity",
+    "input": { "value": [3, 2, 1] },
+    "expected": "sha256:30c8681f9b840aceee56b737f3b126ae67ec4eb71d2881db831f86014fba016d"
+  },
+  {
+    "id": "hash.nfc.precomposed",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "Content hash of the precomposed e-acute string",
+    "input": { "value": { "k": "é" } },
+    "expected": "sha256:0ca09f1dffb485d259fc791100d48ad7ae9c17f52a2bb07b608c0e28fbca34a1"
+  },
+  {
+    "id": "hash.nfc.combining",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "The decomposed e + combining acute hashes identically to the precomposed form (NFC before hashing, section 16)",
+    "input": { "value": { "k": "é" } },
+    "expected": "sha256:0ca09f1dffb485d259fc791100d48ad7ae9c17f52a2bb07b608c0e28fbca34a1"
+  },
+  {
+    "id": "hash.receipt.transport-dropped-a",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "The named receipt hash drops the self-referential canonical_hash and signature before hashing",
+    "input": {
+      "algorithm": "receipt",
+      "value": {
+        "schema_version": "1.0.0",
+        "id": "r1",
+        "result": "+1",
+        "dependencies": { "a": 1 },
+        "canonical_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "signature": "sigA"
+      }
+    },
+    "expected": "sha256:746bc543c327934b02af66b412c56c1b1277e9d2d1d4b61dd4fc29cc73722864"
+  },
+  {
+    "id": "hash.receipt.transport-dropped-b",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "The same receipt with different canonical_hash and signature hashes identically: the receipt hash is stable across changes to its transport fields",
+    "input": {
+      "algorithm": "receipt",
+      "value": {
+        "schema_version": "1.0.0",
+        "id": "r1",
+        "result": "+1",
+        "dependencies": { "a": 1 },
+        "canonical_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "signature": "sigB"
+      }
+    },
+    "expected": "sha256:746bc543c327934b02af66b412c56c1b1277e9d2d1d4b61dd4fc29cc73722864"
+  },
+  {
+    "id": "hash.methodology-bundle",
+    "area": "canonicalization",
+    "kind": "hash",
+    "description": "The named methodology-bundle hash is the content hash of the bundle",
+    "input": {
+      "algorithm": "methodologyBundle",
+      "value": { "package": { "name": "x", "version": "1.0.0" } }
+    },
+    "expected": "sha256:4b4bbe6cf1b98f989368870d278b1872c1d52b52137528893f73c72fa6852562"
+  }
+]

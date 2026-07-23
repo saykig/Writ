@@ -1,0 +1,40 @@
+[
+  {
+    "id": "quantities.currency-mismatch.unknown",
+    "area": "quantities",
+    "kind": "expr.evaluate",
+    "description": "Comparing CAD to USD is not a silent wrong answer: it is unknown plus a COV-LINT-UNIT diagnostic (§10 requires compatible units)",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "gte",
+        "left": { "kind": "ref", "path": "amount" },
+        "right": { "kind": "ref", "path": "threshold" }
+      },
+      "facts": {
+        "amount": { "value": "300000000", "currency": "CAD", "bound": "exact" },
+        "threshold": { "value": "250000000", "currency": "USD", "bound": "exact" }
+      }
+    },
+    "expected": { "truth": "unknown", "diagnostics": ["COV-LINT-UNIT"] }
+  },
+  {
+    "id": "quantities.currency-match.clean",
+    "area": "quantities",
+    "kind": "expr.evaluate",
+    "description": "Matching currencies compare cleanly with no unit diagnostic",
+    "input": {
+      "expr": {
+        "kind": "compare",
+        "op": "gte",
+        "left": { "kind": "ref", "path": "amount" },
+        "right": { "kind": "ref", "path": "threshold" }
+      },
+      "facts": {
+        "amount": { "value": "300000000", "currency": "CAD", "bound": "exact" },
+        "threshold": { "value": "250000000", "currency": "CAD", "bound": "exact" }
+      }
+    },
+    "expected": { "truth": "true", "diagnostics": [] }
+  }
+]

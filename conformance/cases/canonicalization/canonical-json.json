@@ -1,0 +1,58 @@
+[
+  {
+    "id": "canon.key-order.sorted",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "Object keys are sorted by code unit at every level (section 16, RFC 8785)",
+    "input": { "value": { "b": 1, "a": 2, "c": { "z": 1, "y": 2 } } },
+    "expected": "{\"a\":2,\"b\":1,\"c\":{\"y\":2,\"z\":1}}"
+  },
+  {
+    "id": "canon.key-order.invariant",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "The same object authored in a different key order canonicalizes identically (key order and whitespace are not semantic)",
+    "input": { "value": { "a": 2, "b": 1, "c": { "y": 2, "z": 1 } } },
+    "expected": "{\"a\":2,\"b\":1,\"c\":{\"y\":2,\"z\":1}}"
+  },
+  {
+    "id": "canon.array-order.preserved-ascending",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "Array order is semantically meaningful and preserved: [1,2,3] stays [1,2,3]",
+    "input": { "value": { "list": [1, 2, 3] } },
+    "expected": "{\"list\":[1,2,3]}"
+  },
+  {
+    "id": "canon.array-order.preserved-descending",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "The reversed array canonicalizes differently: [3,2,1] stays [3,2,1] (array order is sensitive)",
+    "input": { "value": { "list": [3, 2, 1] } },
+    "expected": "{\"list\":[3,2,1]}"
+  },
+  {
+    "id": "canon.drop-transport-field",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "Declared transport fields are removed before canonicalizing (section 16 excludes non-semantic fields)",
+    "input": { "value": { "a": 1, "signature": "x" }, "options": { "dropFields": ["signature"] } },
+    "expected": "{\"a\":1}"
+  },
+  {
+    "id": "canon.nfc.precomposed",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "A precomposed e-acute (U+00E9) canonicalizes to its literal NFC form",
+    "input": { "value": { "k": "é" } },
+    "expected": "{\"k\":\"é\"}"
+  },
+  {
+    "id": "canon.nfc.combining",
+    "area": "canonicalization",
+    "kind": "canonicalize",
+    "description": "A decomposed e + combining acute (U+0065 U+0301) canonicalizes to the same NFC form as the precomposed e-acute (section 16 NFC normalization)",
+    "input": { "value": { "k": "é" } },
+    "expected": "{\"k\":\"é\"}"
+  }
+]

@@ -1,0 +1,743 @@
+[
+  {
+    "id": "score.ai-sme.literal.gap",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "AI-for-SMEs literal reading: 0 strong, 5 weak, no counteraction falls in the published rule text's gap and stays unresolved (never forced to a score)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "full",
+            "priority": 10,
+            "result": "+1",
+            "when": {
+              "kind": "compare",
+              "op": "gte",
+              "left": { "kind": "ref", "path": "strong_count" },
+              "right": { "kind": "literal", "value": 5 }
+            }
+          },
+          {
+            "id": "partial",
+            "priority": 10,
+            "result": "0",
+            "when": {
+              "kind": "nary",
+              "op": "or",
+              "operands": [
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "gte",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 1 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 4 }
+                    }
+                  ]
+                },
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "eq",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 0 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "gte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 3 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 4 }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "none",
+            "priority": 10,
+            "result": "-1",
+            "when": {
+              "kind": "nary",
+              "op": "or",
+              "operands": [
+                { "kind": "ref", "path": "counter_exists" },
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "eq",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 0 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 2 }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "otherwise": {
+          "result": "unresolved",
+          "message": "The published rule text does not cover this state."
+        }
+      },
+      "facts": { "strong_count": 0, "weak_count": 5, "counter_exists": false }
+    },
+    "expected": {
+      "result": "unresolved",
+      "status": "incomplete",
+      "matchedRuleId": null,
+      "diagnostics": []
+    }
+  },
+  {
+    "id": "score.ai-sme.literal.different-result-overlap",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "AI-for-SMEs literal reading: 5 strong with a counteraction makes the +1 and -1 branches both true at equal priority; the result is unresolved and ambiguous (§12 step 5)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "full",
+            "priority": 10,
+            "result": "+1",
+            "when": {
+              "kind": "compare",
+              "op": "gte",
+              "left": { "kind": "ref", "path": "strong_count" },
+              "right": { "kind": "literal", "value": 5 }
+            }
+          },
+          {
+            "id": "partial",
+            "priority": 10,
+            "result": "0",
+            "when": {
+              "kind": "nary",
+              "op": "or",
+              "operands": [
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "gte",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 1 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 4 }
+                    }
+                  ]
+                },
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "eq",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 0 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "gte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 3 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 4 }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "none",
+            "priority": 10,
+            "result": "-1",
+            "when": {
+              "kind": "nary",
+              "op": "or",
+              "operands": [
+                { "kind": "ref", "path": "counter_exists" },
+                {
+                  "kind": "nary",
+                  "op": "and",
+                  "operands": [
+                    {
+                      "kind": "compare",
+                      "op": "eq",
+                      "left": { "kind": "ref", "path": "strong_count" },
+                      "right": { "kind": "literal", "value": 0 }
+                    },
+                    {
+                      "kind": "compare",
+                      "op": "lte",
+                      "left": { "kind": "ref", "path": "weak_count" },
+                      "right": { "kind": "literal", "value": 2 }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "otherwise": {
+          "result": "unresolved",
+          "message": "The published rule text does not cover this state."
+        }
+      },
+      "facts": { "strong_count": 5, "weak_count": 0, "counter_exists": true }
+    },
+    "expected": {
+      "result": "unresolved",
+      "status": "ambiguous",
+      "matchedRuleId": null,
+      "diagnostics": ["COV-EVAL-AMBIGUOUS"]
+    }
+  },
+  {
+    "id": "score.ai-sme.resolved.full-compliance",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "AI-for-SMEs resolved reading: 5 strong, no counteraction selects the +1 branch (§12 unique highest-priority selection)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "counter",
+            "priority": 30,
+            "result": "-1",
+            "when": { "kind": "ref", "path": "counter_exists" }
+          },
+          {
+            "id": "full",
+            "priority": 20,
+            "result": "+1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "gte",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 5 }
+                }
+              ]
+            }
+          },
+          {
+            "id": "partial",
+            "priority": 20,
+            "result": "0",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "nary",
+                  "op": "or",
+                  "operands": [
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 1 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "lte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 4 }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "eq",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 0 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "weak_count" },
+                          "right": { "kind": "literal", "value": 3 }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "none",
+            "priority": 20,
+            "result": "-1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "eq",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 0 }
+                },
+                {
+                  "kind": "compare",
+                  "op": "lte",
+                  "left": { "kind": "ref", "path": "weak_count" },
+                  "right": { "kind": "literal", "value": 2 }
+                }
+              ]
+            }
+          }
+        ],
+        "otherwise": { "result": "unresolved", "message": "Evidence incomplete." }
+      },
+      "facts": { "strong_count": 5, "weak_count": 0, "counter_exists": false }
+    },
+    "expected": {
+      "result": "+1",
+      "status": "supported",
+      "matchedRuleId": "full",
+      "diagnostics": []
+    }
+  },
+  {
+    "id": "score.ai-sme.resolved.many-weak",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "AI-for-SMEs resolved reading: 0 strong, 6 weak, no counteraction selects the 0 (partial) branch",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "counter",
+            "priority": 30,
+            "result": "-1",
+            "when": { "kind": "ref", "path": "counter_exists" }
+          },
+          {
+            "id": "full",
+            "priority": 20,
+            "result": "+1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "gte",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 5 }
+                }
+              ]
+            }
+          },
+          {
+            "id": "partial",
+            "priority": 20,
+            "result": "0",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "nary",
+                  "op": "or",
+                  "operands": [
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 1 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "lte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 4 }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "eq",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 0 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "weak_count" },
+                          "right": { "kind": "literal", "value": 3 }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "none",
+            "priority": 20,
+            "result": "-1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "eq",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 0 }
+                },
+                {
+                  "kind": "compare",
+                  "op": "lte",
+                  "left": { "kind": "ref", "path": "weak_count" },
+                  "right": { "kind": "literal", "value": 2 }
+                }
+              ]
+            }
+          }
+        ],
+        "otherwise": { "result": "unresolved", "message": "Evidence incomplete." }
+      },
+      "facts": { "strong_count": 0, "weak_count": 6, "counter_exists": false }
+    },
+    "expected": {
+      "result": "0",
+      "status": "supported",
+      "matchedRuleId": "partial",
+      "diagnostics": []
+    }
+  },
+  {
+    "id": "score.ai-sme.resolved.counteraction-precedence",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "AI-for-SMEs resolved reading: a counteraction wins by priority even with 7 strong actions (§12 priority; never chosen as a lower score by accident)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "counter",
+            "priority": 30,
+            "result": "-1",
+            "when": { "kind": "ref", "path": "counter_exists" }
+          },
+          {
+            "id": "full",
+            "priority": 20,
+            "result": "+1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "gte",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 5 }
+                }
+              ]
+            }
+          },
+          {
+            "id": "partial",
+            "priority": 20,
+            "result": "0",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "nary",
+                  "op": "or",
+                  "operands": [
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 1 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "lte",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 4 }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "nary",
+                      "op": "and",
+                      "operands": [
+                        {
+                          "kind": "compare",
+                          "op": "eq",
+                          "left": { "kind": "ref", "path": "strong_count" },
+                          "right": { "kind": "literal", "value": 0 }
+                        },
+                        {
+                          "kind": "compare",
+                          "op": "gte",
+                          "left": { "kind": "ref", "path": "weak_count" },
+                          "right": { "kind": "literal", "value": 3 }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "none",
+            "priority": 20,
+            "result": "-1",
+            "when": {
+              "kind": "nary",
+              "op": "and",
+              "operands": [
+                {
+                  "kind": "unary",
+                  "op": "not",
+                  "operand": { "kind": "ref", "path": "counter_exists" }
+                },
+                {
+                  "kind": "compare",
+                  "op": "eq",
+                  "left": { "kind": "ref", "path": "strong_count" },
+                  "right": { "kind": "literal", "value": 0 }
+                },
+                {
+                  "kind": "compare",
+                  "op": "lte",
+                  "left": { "kind": "ref", "path": "weak_count" },
+                  "right": { "kind": "literal", "value": 2 }
+                }
+              ]
+            }
+          }
+        ],
+        "otherwise": { "result": "unresolved", "message": "Evidence incomplete." }
+      },
+      "facts": { "strong_count": 7, "weak_count": 0, "counter_exists": true }
+    },
+    "expected": {
+      "result": "-1",
+      "status": "supported",
+      "matchedRuleId": "counter",
+      "diagnostics": []
+    }
+  },
+  {
+    "id": "score.overlap.same-result",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "Two equal-priority branches are both true and agree on the result; the result is selected with a benign same-result overlap notice (§12 step 4)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "a",
+            "priority": 10,
+            "result": "+1",
+            "when": {
+              "kind": "compare",
+              "op": "gte",
+              "left": { "kind": "ref", "path": "x" },
+              "right": { "kind": "literal", "value": 1 }
+            }
+          },
+          {
+            "id": "b",
+            "priority": 10,
+            "result": "+1",
+            "when": {
+              "kind": "compare",
+              "op": "gte",
+              "left": { "kind": "ref", "path": "x" },
+              "right": { "kind": "literal", "value": 2 }
+            }
+          }
+        ],
+        "otherwise": { "result": "unresolved", "message": "n/a" }
+      },
+      "facts": { "x": 5 }
+    },
+    "expected": {
+      "result": "+1",
+      "status": "supported",
+      "matchedRuleId": "a",
+      "diagnostics": ["COV-EVAL-SAME-RESULT-OVERLAP"]
+    }
+  },
+  {
+    "id": "score.decisive-unknown",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "A true branch coexists with an equal-priority branch whose condition is unknown; the score is unresolved rather than a guess (§12 step 6, unknown is not treated as false)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "t",
+            "priority": 10,
+            "result": "+1",
+            "when": { "kind": "literal", "value": true }
+          },
+          {
+            "id": "u",
+            "priority": 10,
+            "result": "-1",
+            "when": { "kind": "ref", "path": "missing" }
+          }
+        ],
+        "otherwise": { "result": "unresolved", "message": "n/a" }
+      },
+      "facts": {}
+    },
+    "expected": {
+      "result": "unresolved",
+      "status": "incomplete",
+      "matchedRuleId": null,
+      "diagnostics": ["COV-EVAL-DECISIVE-UNKNOWN"]
+    }
+  },
+  {
+    "id": "score.otherwise.explicit",
+    "area": "scoring",
+    "kind": "score.evaluate",
+    "description": "No branch is true and nothing decisive is uncertain; the explicit otherwise result applies (§12 step 6)",
+    "input": {
+      "program": {
+        "rules": [
+          {
+            "id": "r",
+            "priority": 10,
+            "result": "+1",
+            "when": {
+              "kind": "compare",
+              "op": "gte",
+              "left": { "kind": "ref", "path": "x" },
+              "right": { "kind": "literal", "value": 5 }
+            }
+          }
+        ],
+        "otherwise": { "result": "0", "message": "floor" }
+      },
+      "facts": { "x": 1 }
+    },
+    "expected": {
+      "result": "0",
+      "status": "supported",
+      "matchedRuleId": null,
+      "diagnostics": []
+    }
+  }
+]
