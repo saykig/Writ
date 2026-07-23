@@ -9,7 +9,8 @@
     "test": "bun test",
     "lint": "eslint .",
     "format": "prettier --check .",
-    "generate": "bun scripts/generate-types.ts"
+    "generate": "bun scripts/generate-types.ts",
+    "embed-schemas": "bun scripts/embed-schemas.ts"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",

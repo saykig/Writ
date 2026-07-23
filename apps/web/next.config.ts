@@ -42,10 +42,7 @@ const nextConfig: NextConfig = {
       "../../benchmark/2025-ai-sme/**",
       "../../packages/domain/schemas/**",
     ],
-    "/benchmark": [
-      "../../benchmark/2025-ai-sme/**",
-      "../../packages/domain/schemas/**",
-    ],
+    "/benchmark": ["../../benchmark/2025-ai-sme/**", "../../packages/domain/schemas/**"],
     "/how-it-works": [
       "../../examples/**",
       "../../benchmark/2025-ai-sme/**",

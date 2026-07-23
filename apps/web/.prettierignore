@@ -3,3 +3,4 @@ node_modules/
 components/ui/
 public/
 next-env.d.ts
+lib/frozen-data.ts

@@ -1,16 +1,18 @@
 /**
- * Repo-root resolution + file readers for the server side of the site.
+ * Frozen-data readers for the server side of the site.
  *
- * The @covenant/* packages locate their data via `import.meta.url`, which is
- * rewritten by the Next bundler and would break at runtime. Instead we resolve
- * the repository root from `process.cwd()` (stable in `next dev` and on Vercel,
- * where cwd is the app root) by walking up to the directory that holds both
- * `examples/` and `benchmark/2025-ai-sme/`, and read the frozen files directly.
- * `next.config.ts` traces these paths into the serverless bundle.
+ * The example sources and the 2025 AI-for-SMEs benchmark corpus are inlined at
+ * build time into `frozen-data.ts` (see `scripts/embed-frozen.ts`) and served
+ * from there. This is deliberate: the @covenant/* packages locate their data via
+ * `import.meta.url`, which bundlers rewrite to a build-time path, and Vercel does
+ * not ship the repo data dirs into the serverless lambda (its root is
+ * `/var/task`). Reading from the inlined map removes both failure modes. A
+ * filesystem fallback keeps ad-hoc local reads working when a path is not inlined.
  */
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { FROZEN_FILES } from "./frozen-data.js";
 
 let cached: string | undefined;
 
@@ -33,6 +35,8 @@ export function repoRoot(): string {
 export const BENCH_DIR = "benchmark/2025-ai-sme";
 
 export function readRepoText(rel: string): string {
+  const inlined = FROZEN_FILES[rel];
+  if (inlined !== undefined) return inlined;
   return readFileSync(join(repoRoot(), rel), "utf8");
 }
 
@@ -41,9 +45,14 @@ export function readRepoJson<T>(rel: string): T {
 }
 
 export function listRepoDir(rel: string): string[] {
+  const prefix = rel.endsWith("/") ? rel : `${rel}/`;
+  const inlined = Object.keys(FROZEN_FILES)
+    .filter((key) => key.startsWith(prefix))
+    .map((key) => key.slice(prefix.length).split("/")[0]);
+  if (inlined.length > 0) return [...new Set(inlined)];
   return readdirSync(join(repoRoot(), rel));
 }
 
 export function repoFileExists(rel: string): boolean {
-  return existsSync(join(repoRoot(), rel));
+  return rel in FROZEN_FILES || existsSync(join(repoRoot(), rel));
 }

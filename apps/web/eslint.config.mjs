@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated: frozen data inlined as text (see scripts/embed-frozen.ts).
+    "lib/frozen-data.ts",
   ]),
 ]);
 
