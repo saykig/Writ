@@ -81,6 +81,78 @@ function decisiveAnchors(component: MeasureComponent, assignment: Assignment): n
   return hits;
 }
 
+/** Location for a component-scoped diagnostic. */
+function componentLocation(
+  objectId: string | undefined,
+  measure: Measure,
+  component: MeasureComponent,
+) {
+  const path = `${measure.id}.${component.id}`;
+  return objectId !== undefined ? { objectId, path } : { path };
+}
+
+/**
+ * Structural anchor coverage, used when a component's anchors reference no
+ * declared-domain variable (e.g. the Gap Matrix's evidence-query anchors). It
+ * cannot reason about the anchor *conditions*, but it can verify the ordinal
+ * *levels*: every level `0..scale` must be declared exactly once. A missing level
+ * is a gap (the component is pending there); a duplicated level is an overlap.
+ */
+function structuralComponentCoverage(
+  measure: Measure,
+  component: MeasureComponent,
+  objectId: string | undefined,
+): Diagnostic[] {
+  const scale = measure.aggregation.scale;
+  if (!Number.isInteger(scale) || scale < 1) return [];
+  const counts = new Map<number, number>();
+  for (const anchor of component.anchors) {
+    counts.set(anchor.value, (counts.get(anchor.value) ?? 0) + 1);
+  }
+  const location = componentLocation(objectId, measure, component);
+  const diagnostics: Diagnostic[] = [];
+
+  let missing: number | undefined;
+  for (let level = 0; level <= scale; level += 1) {
+    if (!counts.has(level)) {
+      missing = level;
+      break;
+    }
+  }
+  if (missing !== undefined) {
+    const witness = { level: missing };
+    diagnostics.push(
+      makeDiagnostic("COV-MEASURE-ANCHOR-GAP", {
+        values: { measure: measure.id, component: component.id, witness: formatWitness(witness) },
+        location,
+        witness,
+        context: { measureId: measure.id, componentId: component.id, missingLevel: missing },
+      }),
+    );
+  }
+
+  const duplicate = [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([value]) => value)
+    .sort((a, b) => a - b)[0];
+  if (duplicate !== undefined) {
+    diagnostics.push(
+      makeDiagnostic("COV-MEASURE-ANCHOR-OVERLAP", {
+        values: {
+          measure: measure.id,
+          component: component.id,
+          anchorA: String(duplicate),
+          anchorB: String(duplicate),
+          witness: `level ${duplicate} declared more than once`,
+        },
+        location,
+        context: { measureId: measure.id, componentId: component.id, duplicateLevel: duplicate },
+      }),
+    );
+  }
+  return diagnostics;
+}
+
 function analyzeComponentCoverage(
   measure: Measure,
   component: MeasureComponent,
@@ -88,7 +160,9 @@ function analyzeComponentCoverage(
   objectId: string | undefined,
 ): Diagnostic[] {
   const sub = componentDomains(component, domains);
-  if (sub === null) return [];
+  // No declared domain (e.g. evidence-query anchors) — fall back to the
+  // structural level-completeness check rather than claiming nothing.
+  if (sub === null) return structuralComponentCoverage(measure, component, objectId);
   const rows = enumerateAssignments(sub);
 
   let gap: Assignment | undefined;

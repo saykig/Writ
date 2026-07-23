@@ -76,9 +76,29 @@ describe("graded-measure analysis", () => {
     expect(codes(badWeights, domains)).toContain("COV-MEASURE-WEIGHTS");
   });
 
-  test("no claim is made when an anchor references a variable with no declared domain", () => {
-    const freeVar = measure([0, 1, 2, 3, 4].map((v) => ({ value: v, when: eq("undeclared", v) })));
-    // Only the structural pending-decisive info; no spurious gap.
-    expect(codes(freeVar)).toEqual(["COV-MEASURE-PENDING-DECISIVE"]);
+  test("query-driven anchors get a structural level check (a complete 0..4 is clean)", () => {
+    // No declared domain, but all five ordinal levels are present exactly once.
+    const complete = measure([0, 1, 2, 3, 4].map((v) => ({ value: v, when: eq("undeclared", v) })));
+    expect(codes(complete)).toEqual(["COV-MEASURE-PENDING-DECISIVE"]);
+  });
+
+  test("a missing ordinal level is caught even without a declared domain (the Gap Matrix case)", () => {
+    const missing = measure([0, 1, 2, 3].map((v) => ({ value: v, when: eq("undeclared", v) })));
+    const found = analyzeMeasureByEnumeration(missing, {} as FiniteDomains, { objectId: "FIELD" });
+    const gap = found.find((d) => d.code === "COV-MEASURE-ANCHOR-GAP");
+    expect(gap).toBeDefined();
+    expect(gap?.witness).toEqual({ level: 4 });
+  });
+
+  test("a duplicated ordinal level is caught structurally", () => {
+    const dup = measure([
+      { value: 0, when: eq("undeclared", 0) },
+      { value: 1, when: eq("undeclared", 1) },
+      { value: 2, when: eq("undeclared", 2) },
+      { value: 3, when: eq("undeclared", 3) },
+      { value: 4, when: eq("undeclared", 4) },
+      { value: 4, when: eq("undeclared", 40) },
+    ]);
+    expect(codes(dup, {} as FiniteDomains)).toContain("COV-MEASURE-ANCHOR-OVERLAP");
   });
 });

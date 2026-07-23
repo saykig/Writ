@@ -45,11 +45,16 @@ wired into the CLI, and there is no Z3 path for measures yet.
 - **Bounded.** Guarantees hold only inside the declared `min..max`/`{set}`
   domains. A gap at a value outside the declared range is invisible; declaring
   `strong_count in 0..8` says nothing about 9+.
-- **No domains, no claim.** With no `assert … over …` (and, for a measure, no
-  declared domain on the variables its anchors read), nothing is enumerated and
-  nothing is asserted. Anchor coverage of query-driven rubrics (e.g. the ported
-  Gap Matrix, whose anchors read evidence claims) is therefore *not* claimed; the
-  weight and pending-decisive findings still apply.
+- **No domains, weaker claim.** With no `assert … over …`, the score program's
+  input space is not enumerated. For a **measure** whose anchors reference a
+  declared-domain variable, the analyzer enumerates and checks the anchor
+  *conditions* (do they partition every state?). For a measure whose anchors are
+  evidence queries with no such variable (the ported Gap Matrix), it cannot reason
+  about the conditions, but it still runs a **structural level check**: every
+  ordinal level `0..scale` must be declared exactly once, so a missing or
+  duplicated anchor level is caught (`COV-MEASURE-ANCHOR-GAP`/`OVERLAP`). What it
+  does *not* verify for query-driven anchors is that the conditions themselves are
+  mutually exclusive and exhaustive.
 - **Uncertainty under-decision.** A rule or anchor whose guard is `unknown`
   (a query, an unimplemented call, a reference outside the domain) is neither
   decisively true nor false, so a region covered only by an uncertain rule is not
