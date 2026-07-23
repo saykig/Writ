@@ -10,9 +10,14 @@ import { compileSource, type CompileSourceResult } from "@covenant/language";
 import { methodologyBundleHash } from "@covenant/provenance";
 import type { CanonicalIr, Commitment } from "@covenant/domain";
 
-/** Absolute path to the resolved covenant source (repo `examples/`). */
+/**
+ * Absolute path to the resolved covenant source (repo `examples/`). The relative
+ * specifier is computed so bundlers do not asset-analyze it; Bun/Node behavior
+ * is unchanged.
+ */
+const RESOLVED_COVENANT_REL = `${"../".repeat(3)}examples/2025-ai-sme-resolved.covenant`;
 export const RESOLVED_COVENANT_PATH = fileURLToPath(
-  new URL("../../../examples/2025-ai-sme-resolved.covenant", import.meta.url),
+  new URL(RESOLVED_COVENANT_REL, import.meta.url),
 );
 
 let cached: CompileSourceResult | undefined;

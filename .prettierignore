@@ -5,6 +5,11 @@ coverage/
 bun.lock
 bun.lockb
 *.langium
+.next/
+**/.next/
+next-env.d.ts
+**/components/ui/
+apps/web/public/
 
 # Authored specification + evidence content — kept byte-stable (golden JSON,
 # canonical IR, receipts, and governance docs must never be reformatted).

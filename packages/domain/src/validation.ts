@@ -8,11 +8,17 @@
 import _Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import _addFormats from "ajv-formats";
 
-// ajv and ajv-formats are CJS; under NodeNext their default export is typed as a
-// module namespace even though the ESM interop (Bun/Node) hands us the
-// constructor/function at runtime. Normalize the types to the real default.
-const Ajv2020 = _Ajv2020 as unknown as typeof _Ajv2020.default;
-const addFormats = _addFormats as unknown as typeof _addFormats.default;
+// ajv and ajv-formats are CJS. Under NodeNext their default import is typed as a
+// module namespace ({ default: Ctor }); under a bundler resolution (e.g. Next)
+// it is the constructor/function directly. This conditional unwraps to the real
+// callable under BOTH resolutions, and the runtime `.default ?? self` picks it.
+type DefaultExport<T> = T extends { default: infer D } ? D : T;
+const Ajv2020 = ((_Ajv2020 as { default?: unknown }).default ?? _Ajv2020) as DefaultExport<
+  typeof _Ajv2020
+>;
+const addFormats = ((_addFormats as { default?: unknown }).default ?? _addFormats) as DefaultExport<
+  typeof _addFormats
+>;
 import { RAW_SCHEMAS, SCHEMA_IDS, SCHEMA_KINDS, type SchemaKind } from "./schemas.js";
 import type { SchemaTypeMap } from "./types.js";
 

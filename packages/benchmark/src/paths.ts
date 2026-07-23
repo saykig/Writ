@@ -6,10 +6,14 @@
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 
-/** Absolute path to `benchmark/2025-ai-sme/`. */
-export const BENCHMARK_DIR = fileURLToPath(
-  new URL("../../../benchmark/2025-ai-sme/", import.meta.url),
-);
+/**
+ * Absolute path to `benchmark/2025-ai-sme/`. The relative specifier is computed
+ * (not a string literal) so bundlers that statically asset-analyze
+ * `new URL("<literal>", import.meta.url)` leave it as ordinary runtime code;
+ * behavior under Bun/Node is unchanged.
+ */
+const BENCHMARK_REL = `${"../".repeat(3)}benchmark/2025-ai-sme/`;
+export const BENCHMARK_DIR = fileURLToPath(new URL(BENCHMARK_REL, import.meta.url));
 
 export const SOURCES_PATH = join(BENCHMARK_DIR, "sources.json");
 export const INVENTORY_PATH = join(BENCHMARK_DIR, "methodology-inventory.json");

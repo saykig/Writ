@@ -9,7 +9,14 @@
  * The named helpers drop the self-referential / volatile envelope fields for
  * their record type before hashing, so that a record's own hash (and its
  * signature over that hash) never feed back into the content identity.
+ *
+ * Hashing uses `node:crypto`, which is available identically on both Node and
+ * Bun, so the whole provenance/evaluator/benchmark stack runs unchanged on a
+ * Node (e.g. Vercel) runtime as well as under Bun. SHA-256 output is byte-for-
+ * byte identical to Bun's `CryptoHasher` (cross-checked in the tests).
  */
+
+import { createHash } from "node:crypto";
 
 import { canonicalJson, type CanonicalOptions } from "./canonical-json.js";
 
@@ -23,9 +30,7 @@ const PREFIX = "sha256:";
  */
 export function sha256Canonical(value: unknown, options?: HashOptions): string {
   const canonical = canonicalJson(value, options);
-  const hasher = new Bun.CryptoHasher("sha256");
-  hasher.update(canonical);
-  return PREFIX + hasher.digest("hex");
+  return PREFIX + createHash("sha256").update(canonical, "utf8").digest("hex");
 }
 
 /**

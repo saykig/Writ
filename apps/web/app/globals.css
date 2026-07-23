@@ -1,0 +1,163 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Covenant "Seam" identity, ported from the original studio. A paper-and-ink
+ * palette (Kawase Hasui twilight indigo, sumi ink, warm paper); gold marks the
+ * kintsugi seam — exactly where human judgment enters (score gaps, the two
+ * interpretation-sensitive benchmark cells). Fonts: Newsreader (serif) + IBM
+ * Plex Mono. Loaded via next/font in app/layout.tsx as --font-serif / --font-mono.
+ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-serif);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-serif);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Covenant custom tokens (exposed as Tailwind utilities) */
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-wash: var(--gold-wash);
+  --color-indigo: var(--indigo);
+  --color-indigo-soft: var(--indigo-soft);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule-strong: var(--rule-strong);
+  --color-surface-2: var(--surface-2);
+  --color-true: var(--t-true);
+  --color-false: var(--t-false);
+  --color-unknown: var(--t-unknown);
+  --color-contested: var(--t-contested);
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+}
+
+/* Light — "paper" */
+:root {
+  --paper: #efe9dc;
+  --surface: #f7f2e8;
+  --surface-2: #ece5d5;
+  --ink: #1c1a15;
+  --ink-soft: #55503f;
+  --ink-faint: #8b8571;
+  --rule: rgba(28, 26, 21, 0.14);
+  --rule-strong: rgba(28, 26, 21, 0.28);
+  --indigo: #384a68;
+  --indigo-soft: #5a6d8e;
+  --gold: #9a7828;
+  --gold-soft: #b79a53;
+  --gold-wash: rgba(154, 120, 40, 0.09);
+  --t-true: #3f6248;
+  --t-false: #97463a;
+  --t-unknown: #8b8571;
+  --t-contested: #9a7828;
+
+  --radius: 4px;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--indigo);
+  --primary-foreground: #f7f2e8;
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--surface-2);
+  --accent-foreground: var(--ink);
+  --destructive: var(--t-false);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--gold);
+}
+
+/* Dark — "sumi" */
+.dark {
+  --paper: #14141a;
+  --surface: #1a1b22;
+  --surface-2: #202129;
+  --ink: #ece6d8;
+  --ink-soft: #a49e8d;
+  --ink-faint: #6d6857;
+  --rule: rgba(236, 230, 216, 0.13);
+  --rule-strong: rgba(236, 230, 216, 0.26);
+  --indigo: #93a8cf;
+  --indigo-soft: #7688ad;
+  --gold: #c7a24e;
+  --gold-soft: #a2823c;
+  --gold-wash: rgba(199, 162, 78, 0.12);
+  --t-true: #7fa886;
+  --t-false: #cd7d6f;
+  --t-unknown: #98917d;
+  --t-contested: #c7a24e;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--indigo);
+  --primary-foreground: #14141a;
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--surface-2);
+  --accent-foreground: var(--ink);
+  --destructive: var(--t-false);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--gold);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-serif antialiased;
+    font-optical-sizing: auto;
+  }
+  /* Uppercase mono eyebrow/label convention */
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  /* Kintsugi seam: gold left-border + wash, marks where judgment enters */
+  .seam {
+    border-left: 2px solid var(--gold);
+    background: var(--gold-wash);
+  }
+}

@@ -13,6 +13,8 @@ export default tseslint.config(
       "**/*.langium",
       "**/generated/**",
       "reference-core/**",
+      "**/.next/**",
+      "apps/web/**",
     ],
   },
   js.configs.recommended,
