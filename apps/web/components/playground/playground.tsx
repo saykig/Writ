@@ -5,14 +5,12 @@ import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
-import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
-import { Reveal } from "@/components/site/reveal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { AnalysisPanel } from "./analysis-panel";
 import { IrPanel } from "./ir-panel";
 import { ReceiptPanel } from "./receipt-panel";
-import { Verdict } from "./verdict";
+import { VerdictInline } from "./verdict";
 import type {
   AnalyzeResponse,
   CompileResponse,
@@ -263,108 +261,91 @@ export function Playground({ initialExample }: PlaygroundProps) {
 
   return (
     <main className="flex-1">
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:py-24">
-        {/* Header */}
-        <Reveal className="max-w-2xl">
-          <SectionLabel>Playground · the live compiler</SectionLabel>
-          <SectionHeading className="mt-4">Try it: one phrase, three readings.</SectionHeading>
-          <Prose className="mt-5">
-            The 2025 G7 rubric asks each member for &ldquo;up to four strong actions.&rdquo; That
-            phrase can be read three ways, and each compiles to a different scoring program. Pick a
-            reading below — Covenant compiles it, checks it for ambiguity before any evidence, and
-            the verdict tells you what it found. Everything runs live, through the same engine as
-            the benchmark.
-          </Prose>
-        </Reveal>
-
-        {/* Reading switch */}
-        <Reveal className="mt-10" delay={80}>
-          <div
-            role="radiogroup"
-            aria-label="Reading of the 2025 AI-for-SMEs rubric"
-            className="inline-flex flex-wrap gap-1 rounded-xl border border-rule bg-paper-deep/50 p-1"
-          >
-            {examples.map((example, index) => {
-              const active = example.id === exampleId;
-              return (
-                <button
-                  key={example.id}
-                  ref={(el) => {
-                    readingRefs.current[index] = el;
-                  }}
-                  role="radio"
-                  aria-checked={active}
-                  tabIndex={active ? 0 : -1}
-                  onClick={() => selectExample(example)}
-                  onKeyDown={(event) => onReadingKeyDown(event, index)}
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-[0.92rem] transition-colors focus-visible:outline-none",
-                    active
-                      ? "bg-card text-foreground shadow-sm ring-1 ring-border"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <span
-                    aria-hidden
+      <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[112rem] flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
+        {/* Slim toolbar: the reading switch on the left, the live verdict on the right. */}
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="label hidden shrink-0 md:inline">Playground</span>
+            <div
+              role="radiogroup"
+              aria-label="Reading of the 2025 AI-for-SMEs rubric"
+              className="inline-flex gap-0.5 rounded-lg border border-border bg-muted/40 p-0.5"
+            >
+              {examples.map((example, index) => {
+                const active = example.id === exampleId;
+                return (
+                  <button
+                    key={example.id}
+                    ref={(el) => {
+                      readingRefs.current[index] = el;
+                    }}
+                    role="radio"
+                    aria-checked={active}
+                    tabIndex={active ? 0 : -1}
+                    onClick={() => selectExample(example)}
+                    onKeyDown={(event) => onReadingKeyDown(event, index)}
                     className={cn(
-                      "size-2 shrink-0 rounded-full transition-opacity",
-                      OUTCOME_DOT[example.outcome],
-                      active ? "opacity-100" : "opacity-60",
-                    )}
-                  />
-                  <span>{example.title.replace(/\s+reading$/i, "")}</span>
-                  <span
-                    className={cn(
-                      "text-[0.72rem] transition-opacity",
-                      OUTCOME_TAG_TONE[example.outcome],
-                      active ? "opacity-100" : "opacity-55",
+                      "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[0.85rem] transition-colors focus-visible:outline-none",
+                      active
+                        ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                        : "text-muted-foreground hover:text-foreground",
                     )}
                   >
-                    {OUTCOME_LABEL[example.outcome]}
-                  </span>
-                </button>
-              );
-            })}
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "size-2 shrink-0 rounded-full",
+                        OUTCOME_DOT[example.outcome],
+                        active ? "opacity-100" : "opacity-60",
+                      )}
+                    />
+                    <span>{example.title.replace(/\s+reading$/i, "")}</span>
+                    <span
+                      className={cn(
+                        "hidden text-[0.7rem] sm:inline",
+                        OUTCOME_TAG_TONE[example.outcome],
+                        active ? "opacity-100" : "opacity-55",
+                      )}
+                    >
+                      {OUTCOME_LABEL[example.outcome]}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {edited ? (
+              <button
+                type="button"
+                onClick={() => activeExample && selectExample(activeExample)}
+                className="shrink-0 text-[0.78rem] text-muted-foreground underline decoration-dotted underline-offset-4 hover:text-foreground"
+              >
+                reset
+              </button>
+            ) : null}
           </div>
 
-          {/* Verdict */}
-          <div className="mt-6 max-w-2xl">
-            <Verdict
+          <div className="min-w-0 max-w-full">
+            <VerdictInline
               analyzing={analyzing}
               compiled={compiled}
               errors={errors}
               findings={findings}
               gap={gap}
-              note={edited ? null : (activeExample?.note ?? null)}
             />
           </div>
-        </Reveal>
+        </div>
 
-        {/* Workspace — the card renders outside any transform so Monaco can
-            measure its own height reliably on mount. */}
-        <div className="mt-16">
-          <Reveal className="max-w-2xl" delay={40}>
-            <SectionLabel>Under the hood</SectionLabel>
-            <p className="mt-3 max-w-[60ch] text-[0.95rem] leading-[1.65] text-ink-soft [text-wrap:pretty]">
-              <strong className="text-foreground">Left:</strong> the methodology, as a program —
-              edit it and the verdict above recomputes live.{" "}
-              <strong className="text-foreground">Right:</strong> what the analyzer found, the
-              compiled form it reasons over, and a real member country&rsquo;s receipt — the full
-              score, its proof, and the hash you can verify.
-            </p>
-          </Reveal>
-
-          <div className="tool mt-6 h-[62vh] min-h-[520px] overflow-hidden lg:h-[660px]">
-            <ResizablePanelGroup orientation={isDesktop ? "horizontal" : "vertical"}>
-              <ResizablePanel defaultSize={isDesktop ? 52 : 55} minSize={30}>
-                {editorPane}
-              </ResizablePanel>
-              <ResizableHandle withHandle />
-              <ResizablePanel defaultSize={isDesktop ? 48 : 45} minSize={25}>
-                {resultsPane}
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </div>
+        {/* Workspace fills the viewport — the tool is the page. */}
+        <div className="tool min-h-0 flex-1 overflow-hidden">
+          <ResizablePanelGroup orientation={isDesktop ? "horizontal" : "vertical"}>
+            <ResizablePanel defaultSize={isDesktop ? 52 : 55} minSize={30}>
+              {editorPane}
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={isDesktop ? 48 : 45} minSize={25}>
+              {resultsPane}
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </div>
       </div>
     </main>

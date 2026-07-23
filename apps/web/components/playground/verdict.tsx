@@ -73,6 +73,54 @@ function shapeOf(
   };
 }
 
+/**
+ * VerdictInline — the same live analysis distilled to a single line, for the
+ * tool-first toolbar: a tone dot, the outcome, its plain headline, and a live pip.
+ */
+export function VerdictInline({
+  analyzing,
+  compiled,
+  errors,
+  findings,
+  gap,
+}: {
+  analyzing: boolean;
+  compiled: boolean;
+  errors: CompileDiagnostic[];
+  findings: Finding[];
+  gap: Finding | null;
+}) {
+  const overlap = findings.find((f) => f.code === "COV-SCORE-OVERLAP") ?? null;
+  const shape = shapeOf(compiled, errors, findings, gap, overlap);
+  if (!shape) {
+    return (
+      <span className="flex items-center gap-2 text-[0.82rem] text-ink-muted">
+        <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-ink-faint/60" />
+        Reading the score program…
+      </span>
+    );
+  }
+  return (
+    <span className="flex min-w-0 items-center gap-2 text-[0.85rem]">
+      <span aria-hidden className={cn("size-2 shrink-0 rounded-full", DOT_TONE[shape.tone])} />
+      <span className={cn("font-medium whitespace-nowrap", LABEL_TONE[shape.tone])}>
+        {shape.eyebrow}
+      </span>
+      <span aria-hidden className="text-ink-faint">
+        ·
+      </span>
+      <span className="truncate text-foreground">{shape.headline}</span>
+      <span
+        aria-hidden
+        className={cn(
+          "ml-0.5 size-1.5 shrink-0 rounded-full",
+          analyzing ? "animate-pulse bg-ink-faint/60" : "bg-true/70",
+        )}
+      />
+    </span>
+  );
+}
+
 export interface VerdictProps {
   analyzing: boolean;
   compiled: boolean;
