@@ -26,9 +26,18 @@ export type ProofKind =
   | "selection"
   | "diagnostic";
 
+/** An interval value carried on a proof node (`value_interval` in the receipt). */
+export interface ProofValueInterval {
+  readonly min: unknown;
+  readonly max: unknown;
+}
+
 /**
- * A single node in a proof DAG. Field names match the receipt schema so a
- * collection of these serializes directly into `proof.nodes[]`.
+ * A single node in a proof DAG. Field names match the receipt schema
+ * (`evaluation-receipt.schema.json` `#/$defs/proofNode`) so a collection of these
+ * serializes directly into `proof.nodes[]`. Beyond the Phase-1 truth fields, a
+ * node may carry the concrete `value` it evaluated to, a `value_interval` (which
+ * count/aggregation nodes MUST populate, §7), and the evidence ids it rests on.
  */
 export interface ProofNode {
   readonly id: string;
@@ -36,6 +45,13 @@ export interface ProofNode {
   readonly truth_value: TruthName;
   readonly child_ids: readonly string[];
   readonly label?: string;
+  readonly value?: unknown;
+  readonly value_interval?: ProofValueInterval;
+  readonly rule_id?: string;
+  readonly action_ids?: readonly string[];
+  readonly claim_ids?: readonly string[];
+  readonly passage_ids?: readonly string[];
+  readonly metadata?: Readonly<Record<string, unknown>>;
 }
 
 export interface ProofNodeInit {
@@ -44,20 +60,37 @@ export interface ProofNodeInit {
   readonly truthValue: Truth;
   readonly childIds?: readonly string[];
   readonly label?: string;
+  readonly value?: unknown;
+  readonly valueInterval?: ProofValueInterval;
+  readonly ruleId?: string;
+  readonly actionIds?: readonly string[];
+  readonly claimIds?: readonly string[];
+  readonly passageIds?: readonly string[];
+  readonly metadata?: Readonly<Record<string, unknown>>;
 }
 
 /**
  * Pure constructor: build a `ProofNode` from an explicit id, kind, support-pair
- * truth value, and optional children/label. Does no id allocation.
+ * truth value, and optional children/value/interval/evidence. Does no id
+ * allocation. Optional fields are OMITTED (not set to `undefined`) so the node
+ * stays schema-clean under `exactOptionalPropertyTypes`.
  */
 export function proofNode(init: ProofNodeInit): ProofNode {
-  const base = {
+  let node: ProofNode = {
     id: init.id,
     kind: init.kind,
     truth_value: truthName(init.truthValue),
     child_ids: init.childIds ?? [],
   };
-  return init.label === undefined ? base : { ...base, label: init.label };
+  if (init.label !== undefined) node = { ...node, label: init.label };
+  if (init.value !== undefined) node = { ...node, value: init.value };
+  if (init.valueInterval !== undefined) node = { ...node, value_interval: init.valueInterval };
+  if (init.ruleId !== undefined) node = { ...node, rule_id: init.ruleId };
+  if (init.actionIds !== undefined) node = { ...node, action_ids: init.actionIds };
+  if (init.claimIds !== undefined) node = { ...node, claim_ids: init.claimIds };
+  if (init.passageIds !== undefined) node = { ...node, passage_ids: init.passageIds };
+  if (init.metadata !== undefined) node = { ...node, metadata: init.metadata };
+  return node;
 }
 
 export interface ProofBuilderOptions {
@@ -97,6 +130,15 @@ export class ProofBuilder {
   private register(node: ProofNode): ProofNode {
     this.created.push(node);
     return node;
+  }
+
+  /**
+   * Allocate an id and register a node from an init without an `id`. This is the
+   * general entry point the interpreter and query engine use to emit comparison,
+   * reference, query, and n-ary operator nodes with values/intervals attached.
+   */
+  emit(init: Omit<ProofNodeInit, "id">): ProofNode {
+    return this.register(proofNode({ ...init, id: this.nextId() }));
   }
 
   /** A leaf `literal` node carrying a fixed truth value. */

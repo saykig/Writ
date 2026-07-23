@@ -12,7 +12,14 @@
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "bin": {
+    "covenant": "./bin/covenant.ts"
+  },
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@covenant/domain": "workspace:*",
+    "@covenant/evaluator": "workspace:*"
   }
 }

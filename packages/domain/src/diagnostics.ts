@@ -131,6 +131,20 @@ const DEFINITIONS = [
     category: "provenance",
     messageTemplate: "Reference `{reference}` at `{path}` does not resolve to a known object.",
   },
+  {
+    code: "COV-IDENTITY-MISSING",
+    severity: "error",
+    category: "semantic-lint",
+    messageTemplate:
+      "A counting query is score-decisive at `{path}` but commitment `{objectId}` declares no action-identity policy; counts are ambiguous.",
+  },
+  {
+    code: "COV-PROSE-METRIC-MISMATCH",
+    severity: "error",
+    category: "semantic-lint",
+    messageTemplate:
+      "Prose claim `{claimId}` conflicts with the compiled score metric for `{objectId}`; a methodologist must reconcile the two.",
+  },
 ] as const satisfies ReadonlyArray<Omit<DiagnosticDefinition, "code"> & { code: string }>;
 
 /** Union of every diagnostic code in the catalog. */
