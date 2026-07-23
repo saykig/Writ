@@ -38,6 +38,19 @@ const OUTCOME_DOT: Record<ExampleOutcome, string> = {
   clean: "bg-true",
 };
 
+/** Plain one-word outcome shown on each reading, so the lesson reads before a click. */
+const OUTCOME_LABEL: Record<ExampleOutcome, string> = {
+  gap: "leaves a gap",
+  overlap: "overlaps",
+  clean: "clean",
+};
+
+const OUTCOME_TAG_TONE: Record<ExampleOutcome, string> = {
+  gap: "text-gold",
+  overlap: "text-false",
+  clean: "text-true",
+};
+
 async function postJson<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(path, {
     method: "POST",
@@ -299,7 +312,16 @@ export function Playground({ initialExample }: PlaygroundProps) {
                       active ? "opacity-100" : "opacity-60",
                     )}
                   />
-                  {example.title.replace(/\s+reading$/i, "")}
+                  <span>{example.title.replace(/\s+reading$/i, "")}</span>
+                  <span
+                    className={cn(
+                      "text-[0.72rem] transition-opacity",
+                      OUTCOME_TAG_TONE[example.outcome],
+                      active ? "opacity-100" : "opacity-55",
+                    )}
+                  >
+                    {OUTCOME_LABEL[example.outcome]}
+                  </span>
                 </button>
               );
             })}
@@ -322,10 +344,13 @@ export function Playground({ initialExample }: PlaygroundProps) {
             measure its own height reliably on mount. */}
         <div className="mt-16">
           <Reveal className="max-w-2xl" delay={40}>
-            <SectionLabel>The source</SectionLabel>
-            <p className="mt-3 max-w-[58ch] text-[0.95rem] leading-[1.65] text-ink-soft [text-wrap:pretty]">
-              Edit the methodology and the verdict above recomputes. Compile to the canonical IR,
-              then evaluate a member against a frozen snapshot into a receipt you can verify.
+            <SectionLabel>Under the hood</SectionLabel>
+            <p className="mt-3 max-w-[60ch] text-[0.95rem] leading-[1.65] text-ink-soft [text-wrap:pretty]">
+              <strong className="text-foreground">Left:</strong> the methodology, as a program —
+              edit it and the verdict above recomputes live.{" "}
+              <strong className="text-foreground">Right:</strong> what the analyzer found, the
+              compiled form it reasons over, and a real member country&rsquo;s receipt — the full
+              score, its proof, and the hash you can verify.
             </p>
           </Reveal>
 

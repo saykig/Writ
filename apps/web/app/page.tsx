@@ -9,6 +9,7 @@ import { CodeArtifact } from "@/components/site/code-artifact";
 import { Pipeline } from "@/components/site/pipeline";
 import { FeatureGrid } from "@/components/site/feature-grid";
 import { ReceiptVisual } from "@/components/site/receipt-visual";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { TruthBadge } from "@/components/site/truth-badge";
 import { Reveal } from "@/components/site/reveal";
@@ -73,7 +74,19 @@ export default function Home() {
     <main>
       {/* ── Hero: what Covenant is, plainly + the signature artifact ─────── */}
       <section className="relative overflow-hidden">
-        <div aria-hidden className="absolute inset-0 backdrop-grid" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_75%_60%_at_50%_0%,#000_30%,transparent_95%)]"
+        >
+          <FlickeringGrid
+            className="absolute inset-0 size-full"
+            squareSize={3}
+            gridGap={10}
+            flickerChance={0.08}
+            maxOpacity={0.28}
+            color="#9ca3af"
+          />
+        </div>
         <div aria-hidden className="absolute inset-0 backdrop-glow" />
         <div className="relative mx-auto grid max-w-[76rem] items-center gap-12 px-5 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:py-28">
           <Reveal>
