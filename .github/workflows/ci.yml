@@ -49,3 +49,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0001_initial.sql
+      - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0002_bitemporal_immutability.sql
+      - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0003_source_registry.sql

@@ -6,9 +6,17 @@
   "scripts": {
     "build": "tsc -p tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "bun test",
+    "test": "bun test --timeout 20000",
     "lint": "eslint .",
     "format": "prettier --check .",
     "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@covenant/analyzer": "workspace:*",
+    "@covenant/domain": "workspace:*",
+    "@covenant/evaluator": "workspace:*",
+    "@covenant/provenance": "workspace:*",
+    "fastify": "^5.10.0",
+    "postgres": "^3.4.9"
   }
 }
