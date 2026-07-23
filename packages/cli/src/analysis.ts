@@ -11,6 +11,7 @@
 
 import type { Assertion, Commitment, Expr } from "@covenant/domain";
 import {
+  analyzeMeasures,
   analyzeScoreProgramByEnumeration,
   evaluateTruth,
   isDefinitelyTrue,
@@ -100,32 +101,41 @@ function collectRefPaths(expr: Expr, out: Set<string>): void {
 /** Run the bounded score analysis for one commitment over its declared domains. */
 export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
   const domains = domainsFromCommitment(commitment);
-  if (Object.values(domains).some((values) => values.length === 0)) {
-    return [];
+  const domainsUsable =
+    Object.keys(domains).length > 0 &&
+    !Object.values(domains).some((values) => values.length === 0);
+
+  // Score-program analysis (only when the axis domains are enumerable).
+  let scoreDiagnostics: Diagnostic[] = [];
+  if (domainsUsable) {
+    const { diagnostics } = analyzeScoreProgramByEnumeration(commitment.score_program, domains, {
+      objectId: commitment.id,
+      monotonic: monotonicSpecs(commitment),
+    });
+    // Suppress false-positive unreachability: a rule is only provably dead when
+    // its reachability is decidable over the enumerated domain. If its `when`
+    // depends on a variable outside that domain (e.g. a derived predicate whose
+    // truth the static analysis cannot determine), we cannot conclude it is dead.
+    const domainKeys = new Set(Object.keys(domains));
+    const rulesById = new Map(commitment.score_program.rules.map((rule) => [rule.id, rule]));
+    scoreDiagnostics = diagnostics.filter((diagnostic) => {
+      if (diagnostic.code !== "COV-SCORE-UNREACHABLE") return true;
+      const ruleId = (diagnostic.context as { ruleId?: string } | undefined)?.ruleId;
+      const rule = ruleId ? rulesById.get(ruleId) : undefined;
+      if (!rule) return true;
+      const refs = new Set<string>();
+      collectRefPaths(rule.when, refs);
+      return [...refs].every((path) => domainKeys.has(path));
+    });
   }
-  if (Object.keys(domains).length === 0) {
-    return [];
-  }
-  const { diagnostics } = analyzeScoreProgramByEnumeration(commitment.score_program, domains, {
+
+  // Static graded-measure analysis (weights, per-component anchor coverage over
+  // declared domains, pending-decisiveness) — independent of the score program.
+  const measureDiagnostics = analyzeMeasures(commitment.measures ?? [], domains, {
     objectId: commitment.id,
-    monotonic: monotonicSpecs(commitment),
   });
 
-  // Suppress false-positive unreachability: a rule is only provably dead when
-  // its reachability is decidable over the enumerated domain. If its `when`
-  // depends on a variable outside that domain (e.g. a derived predicate whose
-  // truth the static analysis cannot determine), we cannot conclude it is dead.
-  const domainKeys = new Set(Object.keys(domains));
-  const rulesById = new Map(commitment.score_program.rules.map((rule) => [rule.id, rule]));
-  return diagnostics.filter((diagnostic) => {
-    if (diagnostic.code !== "COV-SCORE-UNREACHABLE") return true;
-    const ruleId = (diagnostic.context as { ruleId?: string } | undefined)?.ruleId;
-    const rule = ruleId ? rulesById.get(ruleId) : undefined;
-    if (!rule) return true;
-    const refs = new Set<string>();
-    collectRefPaths(rule.when, refs);
-    return [...refs].every((path) => domainKeys.has(path));
-  });
+  return [...scoreDiagnostics, ...measureDiagnostics];
 }
 
 // --- Scenario execution -----------------------------------------------------

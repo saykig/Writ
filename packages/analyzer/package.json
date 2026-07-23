@@ -15,6 +15,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./enumerate": "./src/enumerate.ts",
+    "./measure-analysis": "./src/measure-analysis.ts",
     "./types": "./src/types.ts"
   },
   "dependencies": {

@@ -30,3 +30,7 @@ TASKS.yaml
 START_HERE.md
 VALIDATION.md
 VERSION_POLICY.md
+
+# Generated embed outputs (regenerated on build)
+**/schemas.embedded.ts
+**/frozen-data.ts

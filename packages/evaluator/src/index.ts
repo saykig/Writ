@@ -18,6 +18,7 @@ export * from "./query.js";
 export * from "./refs.js";
 export * from "./derive.js";
 export * from "./classify.js";
+export * from "./measure.js";
 export * from "./score.js";
 export * from "./receipt.js";
 export * from "./evaluate.js";

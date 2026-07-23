@@ -94,6 +94,7 @@ CommitmentMember:
     | Predicate
     | Classification
     | Variable
+    | Measure
     | ScoreBlock
     | Assertion;
 
@@ -152,6 +153,25 @@ OtherwiseClass:
 // --- Variables --------------------------------------------------------------
 
 Variable: 'let' name=ID ':' type=TypeRef '=' expression=Expression ';';
+
+// --- Measures (weighted-ordinal graded indices) -----------------------------
+
+Measure:
+    'measure' name=ID '{'
+        components+=MeasureComponent+
+        'aggregate' strategy=AggregationStrategy 'scale' scale=NUMBER ';'
+    '}';
+
+MeasureComponent:
+    'component' name=ID 'weight' weight=NUMBER ('cite' source=ID)? '{'
+        anchors+=AnchorRule+
+    '}';
+
+AnchorRule:
+    'anchor' value=NUMBER 'when' when=Expression
+    ('because' rationale=ID)? ';';
+
+AggregationStrategy returns string: 'weighted_ordinal_percent';
 
 // --- Score ------------------------------------------------------------------
 

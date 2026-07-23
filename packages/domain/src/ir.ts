@@ -102,6 +102,55 @@ export interface ScoreProgram {
   };
 }
 
+// ---- Measures (weighted-ordinal graded indices) ----------------------------
+
+/** One ordinal anchor of a rubric component: the integer level and its guard. */
+export interface AnchorRule {
+  readonly value: number;
+  readonly when: Expr;
+  readonly source_passage_ids?: readonly string[];
+  readonly rationale_id?: string;
+}
+
+/**
+ * A weighted rubric component whose ordinal score is a single selected anchor
+ * (`0..scale`). If the anchors are ambiguous or none is decisively true the
+ * component is *pending* (a typed unknown), never a silent zero.
+ */
+export interface MeasureComponent {
+  readonly id: string;
+  readonly weight: number;
+  readonly anchors: readonly AnchorRule[];
+  readonly source_passage_ids?: readonly string[];
+  readonly rationale_id?: string;
+}
+
+/**
+ * Aggregation strategy for a measure. `weighted_ordinal_percent` computes
+ * `round(100 * Σ wᵢ·sᵢ / scale)` in IEEE-754 with round-half-up, so it
+ * reproduces reference engines that score in floating point.
+ */
+export interface MeasureAggregation {
+  readonly strategy: "weighted_ordinal_percent";
+  readonly scale: number;
+}
+
+/**
+ * A named graded measure: a weighted aggregation of ordinal rubric components.
+ * The index is *pending* when any component is pending, and *public* only when
+ * every contributing component is reviewed. Its numeric value is folded into the
+ * fact environment under the measure id, so derived quantities (e.g.
+ * `gap = subtract(a, b)`) and tier classifications can reference it.
+ */
+export interface Measure {
+  readonly id: string;
+  readonly title?: string;
+  readonly components: readonly MeasureComponent[];
+  readonly aggregation: MeasureAggregation;
+  readonly source_passage_ids?: readonly string[];
+  readonly rationale_id?: string;
+}
+
 // ---- Predicates, classification, variables ---------------------------------
 
 export interface PredicateParameter {
@@ -218,6 +267,7 @@ export interface Commitment {
   readonly predicates: readonly Predicate[];
   readonly classifications: readonly ClassificationBlock[];
   readonly variables: readonly Variable[];
+  readonly measures?: readonly Measure[];
   readonly score_program: ScoreProgram;
   readonly assertions: readonly Assertion[];
   readonly rationales?: readonly Rationale[];

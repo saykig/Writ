@@ -38,6 +38,8 @@ export { buildMethodologyInventory } from "./inventory.js";
 
 export { generateArtifacts } from "./generate.js";
 
+export { replicate, recomputeContentHash, type Check } from "./replicate.js";
+
 export {
   runBenchmark,
   writeDiscrepancyLedger,

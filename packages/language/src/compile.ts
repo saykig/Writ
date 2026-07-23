@@ -23,6 +23,7 @@ import type {
   CompareOp,
   DeriveRule as IrDeriveRule,
   Expr,
+  Measure as IrMeasure,
   Parameter as IrParameter,
   Predicate as IrPredicate,
   ScoreProgram,
@@ -38,6 +39,7 @@ import type {
   Commitment,
   Domain as AstDomain,
   Expression,
+  Measure,
   Model,
   Parameter,
   Predicate,
@@ -423,6 +425,23 @@ function lowerVariable(variable: Variable, ctx: LowerContext): IrVariable {
   };
 }
 
+function lowerMeasure(measure: Measure, ctx: LowerContext): IrMeasure {
+  return {
+    id: measure.name,
+    components: measure.components.map((component) => ({
+      id: component.name,
+      weight: component.weight,
+      anchors: component.anchors.map((anchor) => ({
+        value: anchor.value,
+        when: lowerExpr(anchor.when, ctx, "operand"),
+        ...(anchor.rationale ? { rationale_id: anchor.rationale } : {}),
+      })),
+      ...(component.source ? { source_passage_ids: [component.source] } : {}),
+    })),
+    aggregation: { strategy: measure.strategy as "weighted_ordinal_percent", scale: measure.scale },
+  };
+}
+
 function lowerScore(block: ScoreBlock, ctx: LowerContext): ScoreProgram {
   const rules: IrScoreRule[] = block.rules.map((rule, index) => {
     const id = rule.name ?? `rule_${index}`;
@@ -530,6 +549,15 @@ function lowerCommitment(
       return variable;
     });
 
+  const measures = commitment.members
+    .filter((m) => m.$type === "Measure")
+    .map((m) => {
+      const measure = lowerMeasure(m as Measure, localCtx);
+      const span = spanOf(m);
+      if (span) sourceMap.push({ key: `measure:${commitment.name}.${measure.id}`, span });
+      return measure;
+    });
+
   const scoreBlock = commitment.members.find((m) => m.$type === "ScoreBlock");
   const scoreProgram: ScoreProgram = scoreBlock
     ? lowerScore(scoreBlock as ScoreBlock, localCtx)
@@ -615,6 +643,7 @@ function lowerCommitment(
     predicates,
     classifications,
     variables,
+    ...(measures.length > 0 ? { measures } : {}),
     score_program: scoreProgram,
     assertions,
     rationales: [],

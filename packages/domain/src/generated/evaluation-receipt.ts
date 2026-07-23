@@ -37,6 +37,21 @@ export interface EvaluationReceipt {
   dependencies: Dependencies;
   canonical_hash: string;
   signature?: {};
+  measures?: {
+    id: string;
+    strategy: string;
+    scale: number;
+    internal_score: number | null;
+    public_score: number | null;
+    pending: boolean;
+    proof_id: string;
+    components: {
+      id: string;
+      weight: number;
+      score: number | null;
+      pending: boolean;
+    }[];
+  }[];
 }
 export interface Run {
   commitment_version_id: string;

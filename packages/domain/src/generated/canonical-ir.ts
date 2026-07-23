@@ -70,6 +70,7 @@ export interface Commitment {
   score_program: ScoreProgram;
   assertions: Assertion[];
   rationales?: Rationale[];
+  measures?: Measure[];
 }
 export interface Interval {
   start: string;
@@ -227,6 +228,36 @@ export interface Rationale {
   id: Identifier;
   text: string;
   source_passage_ids?: string[];
+}
+export interface Measure {
+  id: Identifier;
+  title?: string;
+  /**
+   * @minItems 1
+   */
+  components: [MeasureComponent, ...MeasureComponent[]];
+  aggregation: {
+    strategy: "weighted_ordinal_percent";
+    scale: number;
+  };
+  source_passage_ids?: string[];
+  rationale_id?: string;
+}
+export interface MeasureComponent {
+  id: Identifier;
+  weight: number;
+  /**
+   * @minItems 1
+   */
+  anchors: [AnchorRule, ...AnchorRule[]];
+  source_passage_ids?: string[];
+  rationale_id?: string;
+}
+export interface AnchorRule {
+  value: number;
+  when: Expr;
+  source_passage_ids?: string[];
+  rationale_id?: string;
 }
 export interface Waiver {
   diagnostic_code: string;

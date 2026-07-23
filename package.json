@@ -20,6 +20,7 @@
     "format:write": "prettier --write .",
     "conformance": "bun test packages/conformance",
     "conformance:reference": "bun run --filter '@covenant/reference-core' test",
+    "replicate": "bun scripts/replicate.ts",
     "dev": "bun run --filter '@covenant/api' --filter '@covenant/web' dev",
     "studio": "bun run --filter '@covenant/web' dev",
     "web": "bun run --filter '@covenant/web' dev",

@@ -5,141 +5,447 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version", "id", "run", "result", "result_status",
-    "rule_evaluations", "proof", "dependencies", "canonical_hash"
+    "schema_version",
+    "id",
+    "run",
+    "result",
+    "result_status",
+    "rule_evaluations",
+    "proof",
+    "dependencies",
+    "canonical_hash"
   ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
-    "id": {"type": "string"},
-    "run": {"$ref": "#/$defs/run"},
-    "result": {"enum": ["-1", "0", "+1", "not_applicable", "unresolved"]},
-    "result_status": {"enum": ["supported", "contested", "incomplete", "ambiguous", "invalid"]},
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string"
+    },
+    "run": {
+      "$ref": "#/$defs/run"
+    },
+    "result": {
+      "enum": [
+        "-1",
+        "0",
+        "+1",
+        "not_applicable",
+        "unresolved"
+      ]
+    },
+    "result_status": {
+      "enum": [
+        "supported",
+        "contested",
+        "incomplete",
+        "ambiguous",
+        "invalid"
+      ]
+    },
     "confidence": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "value": {"type": "string", "pattern": "^(0(\\.[0-9]+)?|1(\\.0+)?)$"},
-        "method": {"type": "string"},
-        "factors": {"type": "array", "items": {"type": "object"}}
+        "value": {
+          "type": "string",
+          "pattern": "^(0(\\.[0-9]+)?|1(\\.0+)?)$"
+        },
+        "method": {
+          "type": "string"
+        },
+        "factors": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
       }
     },
-    "matched_rule_id": {"type": "string"},
-    "rule_evaluations": {"type": "array", "items": {"$ref": "#/$defs/ruleEvaluation"}},
-    "proof": {"$ref": "#/$defs/proof"},
-    "qualifying_action_ids": {"type": "array", "items": {"type": "string"}},
+    "matched_rule_id": {
+      "type": "string"
+    },
+    "rule_evaluations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ruleEvaluation"
+      }
+    },
+    "proof": {
+      "$ref": "#/$defs/proof"
+    },
+    "qualifying_action_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "excluded_actions": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["action_id", "reason"],
+        "required": [
+          "action_id",
+          "reason"
+        ],
         "properties": {
-          "action_id": {"type": "string"},
-          "reason": {"type": "string"},
-          "proof_id": {"type": "string"}
+          "action_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "proof_id": {
+            "type": "string"
+          }
         }
       }
     },
-    "unresolved_claim_ids": {"type": "array", "items": {"type": "string"}},
-    "contested_claim_ids": {"type": "array", "items": {"type": "string"}},
+    "unresolved_claim_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contested_claim_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "diagnostics": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["code", "severity", "message"],
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
         "properties": {
-          "code": {"type": "string"},
-          "severity": {"enum": ["error", "warning", "info"]},
-          "message": {"type": "string"},
-          "context": {"type": "object"}
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "context": {
+            "type": "object"
+          }
         }
       }
     },
-    "dependencies": {"$ref": "#/$defs/dependencies"},
-    "canonical_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "signature": {"type": "object"}
+    "dependencies": {
+      "$ref": "#/$defs/dependencies"
+    },
+    "canonical_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "object"
+    },
+    "measures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "strategy",
+          "scale",
+          "internal_score",
+          "public_score",
+          "pending",
+          "proof_id",
+          "components"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "strategy": {
+            "type": "string"
+          },
+          "scale": {
+            "type": "number"
+          },
+          "internal_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "public_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pending": {
+            "type": "boolean"
+          },
+          "proof_id": {
+            "type": "string"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "weight",
+                "score",
+                "pending"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "score": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pending": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "$defs": {
-    "truth": {"enum": ["true", "false", "unknown", "contested"]},
+    "truth": {
+      "enum": [
+        "true",
+        "false",
+        "unknown",
+        "contested"
+      ]
+    },
     "run": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["commitment_version_id", "subject_id", "interpretation_profile_id", "as_of", "cutoff"],
+      "required": [
+        "commitment_version_id",
+        "subject_id",
+        "interpretation_profile_id",
+        "as_of",
+        "cutoff"
+      ],
       "properties": {
-        "commitment_version_id": {"type": "string"},
-        "subject_id": {"type": "string"},
-        "interpretation_profile_id": {"type": "string"},
-        "as_of": {"type": "string", "format": "date-time"},
-        "cutoff": {"type": "string", "format": "date-time"},
-        "started_at": {"type": "string", "format": "date-time"},
-        "completed_at": {"type": "string", "format": "date-time"}
+        "commitment_version_id": {
+          "type": "string"
+        },
+        "subject_id": {
+          "type": "string"
+        },
+        "interpretation_profile_id": {
+          "type": "string"
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cutoff": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
       }
     },
     "ruleEvaluation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rule_id", "priority", "result", "truth_value", "proof_id"],
+      "required": [
+        "rule_id",
+        "priority",
+        "result",
+        "truth_value",
+        "proof_id"
+      ],
       "properties": {
-        "rule_id": {"type": "string"},
-        "priority": {"type": "integer"},
-        "result": {"enum": ["-1", "0", "+1", "not_applicable"]},
-        "truth_value": {"$ref": "#/$defs/truth"},
-        "proof_id": {"type": "string"}
+        "rule_id": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "result": {
+          "enum": [
+            "-1",
+            "0",
+            "+1",
+            "not_applicable"
+          ]
+        },
+        "truth_value": {
+          "$ref": "#/$defs/truth"
+        },
+        "proof_id": {
+          "type": "string"
+        }
       }
     },
     "proof": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["root_id", "nodes"],
+      "required": [
+        "root_id",
+        "nodes"
+      ],
       "properties": {
-        "root_id": {"type": "string"},
-        "nodes": {"type": "array", "items": {"$ref": "#/$defs/proofNode"}}
+        "root_id": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proofNode"
+          }
+        }
       }
     },
     "proofNode": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "kind", "label", "truth_value", "child_ids"],
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "truth_value",
+        "child_ids"
+      ],
       "properties": {
-        "id": {"type": "string"},
+        "id": {
+          "type": "string"
+        },
         "kind": {
           "enum": [
-            "literal", "reference", "operator", "comparison", "query",
-            "predicate", "classification", "score_rule", "selection", "diagnostic"
+            "literal",
+            "reference",
+            "operator",
+            "comparison",
+            "query",
+            "predicate",
+            "classification",
+            "score_rule",
+            "selection",
+            "diagnostic"
           ]
         },
-        "label": {"type": "string"},
-        "truth_value": {"$ref": "#/$defs/truth"},
+        "label": {
+          "type": "string"
+        },
+        "truth_value": {
+          "$ref": "#/$defs/truth"
+        },
         "value": {},
         "value_interval": {
           "type": "object",
           "additionalProperties": false,
-          "properties": {"min": {}, "max": {}}
+          "properties": {
+            "min": {},
+            "max": {}
+          }
         },
-        "rule_id": {"type": "string"},
-        "claim_ids": {"type": "array", "items": {"type": "string"}},
-        "action_ids": {"type": "array", "items": {"type": "string"}},
-        "passage_ids": {"type": "array", "items": {"type": "string"}},
-        "child_ids": {"type": "array", "items": {"type": "string"}},
-        "metadata": {"type": "object"}
+        "rule_id": {
+          "type": "string"
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "action_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "passage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "child_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "object"
+        }
       }
     },
     "dependencies": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "methodology_bundle_hash", "evidence_snapshot_hash",
-        "interpretation_profile_hash", "evaluator_build_hash", "source_snapshot_ids"
+        "methodology_bundle_hash",
+        "evidence_snapshot_hash",
+        "interpretation_profile_hash",
+        "evaluator_build_hash",
+        "source_snapshot_ids"
       ],
       "properties": {
-        "methodology_bundle_hash": {"type": "string"},
-        "evidence_snapshot_hash": {"type": "string"},
-        "interpretation_profile_hash": {"type": "string"},
-        "evaluator_build_hash": {"type": "string"},
-        "source_snapshot_ids": {"type": "array", "items": {"type": "string"}},
-        "claim_ids": {"type": "array", "items": {"type": "string"}},
-        "action_ids": {"type": "array", "items": {"type": "string"}}
+        "methodology_bundle_hash": {
+          "type": "string"
+        },
+        "evidence_snapshot_hash": {
+          "type": "string"
+        },
+        "interpretation_profile_hash": {
+          "type": "string"
+        },
+        "evaluator_build_hash": {
+          "type": "string"
+        },
+        "source_snapshot_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "action_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   }

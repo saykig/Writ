@@ -34,6 +34,7 @@ import type { Environment, EvidenceRecord } from "./environment.js";
 import { compareInstant, parseInstant } from "./temporal.js";
 import { derivePredicate } from "./derive.js";
 import { classifyBlock } from "./classify.js";
+import { evaluateMeasure, type MeasureResult } from "./measure.js";
 import { evaluateScore, type VariableContribution } from "./score.js";
 import { finalizeReceipt, toReceiptDiagnostic, toReceiptProofNode } from "./receipt.js";
 import type { EvaluationReceipt } from "@covenant/domain";
@@ -133,6 +134,22 @@ export function evaluateCommitment(options: EvaluateCommitmentOptions): Evaluati
     };
   }
 
+  // --- measures (weighted-ordinal graded indices) ---------------------------
+  // Evaluated before variables so derived quantities (e.g.
+  // `gap = subtract(a, b)`) and tier classifications can reference the index.
+  // A pending index leaves its fact absent, so any dependent read is unknown too.
+  const measureResults: MeasureResult[] = [];
+  for (const measure of commitment.measures ?? []) {
+    const result = runStage((ctx) => evaluateMeasure(measure, ctx));
+    measureResults.push(result);
+    facts = {
+      ...facts,
+      ...(result.internal !== null ? { [measure.id]: result.internal } : {}),
+      [`${measure.id}__pending`]: result.pending,
+      [`${measure.id}__public`]: result.public !== null,
+    };
+  }
+
   // --- variables ------------------------------------------------------------
   const variableContribs = new Map<string, VariableContribution>();
   for (const variable of commitment.variables) {
@@ -188,6 +205,25 @@ export function evaluateCommitment(options: EvaluateCommitmentOptions): Evaluati
       nodes: proof.nodes.map(toReceiptProofNode),
     },
     qualifying_action_ids: [...outcome.qualifyingActionIds],
+    ...(measureResults.length > 0
+      ? {
+          measures: measureResults.map((measure) => ({
+            id: measure.id,
+            strategy: measure.strategy,
+            scale: measure.scale,
+            internal_score: measure.internal,
+            public_score: measure.public,
+            pending: measure.pending,
+            proof_id: measure.rootId,
+            components: measure.components.map((component) => ({
+              id: component.id,
+              weight: component.weight,
+              score: component.score,
+              pending: component.pending,
+            })),
+          })),
+        }
+      : {}),
     ...(unresolvedClaimIds.length > 0 ? { unresolved_claim_ids: unresolvedClaimIds } : {}),
     ...(contestedClaimIds.length > 0 ? { contested_claim_ids: contestedClaimIds } : {}),
     ...(diagnostics.length > 0 ? { diagnostics: diagnostics.map(toReceiptDiagnostic) } : {}),

@@ -65,53 +65,83 @@ This is exhaustiveness and overlap checking, the property a compiler checks on a
 pattern match, applied to policy scoring. It is a real capability, independent of
 any country's data.
 
+## Update: a second methodology, a different scoring shape
+
+The first named next step — a second methodology — is done, and deliberately in a
+different domain *and* a different scoring paradigm: **Sara Kim's Gap Matrix** (an
+AI-governance index across the EU, US, UK, and China). Where AI-for-SMEs is a
+three-point `+1/0/-1` verdict, the Gap Matrix is a **weighted-ordinal measure**:
+each axis is five equally-weighted components, each scored on a five-anchor
+rubric (0..4), aggregated as `round(100 · Σ wᵢ·sᵢ/4)`. That shape did not exist in
+Covenant; expressing it required a graded-measure extension to the IR, the
+evaluator, and the analyzer (see the plan and `docs/ANALYZER-SCOPE.md`).
+
+What it shows:
+
+- **Faithful reproduction of a genuinely different shape.** Covenant recomputes
+  Sara's `deriveAssessment` exactly: `public_authority` (five components at level
+  2) → **50**; `knowledge_concentration` (two of five components unassessed) →
+  **pending**, not a silent 0 — reproducing her "if some score is null, return
+  null". Cross-checked against her formula, byte-identical hash across runs
+  (`packages/benchmark/test/gap-matrix-reproduction.test.ts`).
+- **Pending as a first-class, located outcome.** The analyzer reports each axis
+  *pending-decisive*: the index turns on every component, so a single unresolved
+  judgment carries the whole result. This is the graded analog of the
+  interpretation-sensitivity finding — the "who bears the risk" localization —
+  and it falls out of the same four-valued core.
+
+One case was an anecdote; two methodologies that behave the same way — faithful
+recomputation, honest pending/uncertainty, and a located point of judgment —
+across two different scoring paradigms is the start of a generality claim.
+
 ## What this does not establish
 
-- **Generality.** One methodology, one domain, one year. That the same behaviors
-  appear elsewhere is asserted, not shown.
+- **Generality, still bounded.** Two methodologies in two domains and two scoring
+  shapes, not a broad sweep. The direction is now evidenced, not merely asserted,
+  but a handful of cases is not a population.
 - **The judgment is still human.** Gathering evidence, translating the rubric, and
-  authoring the interpretation profiles were all hand work. Covenant makes the
-  judgment explicit and its consequences reproducible. It does not produce the
-  judgment. This is a narrower claim than "automates compliance scoring," and the
-  narrower claim is the honest one.
-- **No user validation.** That an auditor or a multilateral body would find this
-  worth adopting is plausible and argued, not tested with a real reviewer.
-- **Analyzer scope.** Gap and overlap detection runs by bounded enumeration over
-  declared finite domains. A "no findings" result guarantees clean only within
-  that bounded domain; rubric shapes outside it would need the solver path.
+  authoring the interpretation profiles (or, for the Gap Matrix, transcribing the
+  analyst assessments) were all hand work. Covenant makes the judgment explicit
+  and its consequences reproducible. It does not produce the judgment.
+- **No user validation yet.** The analyzer's output on Sara's own Gap Matrix is
+  the natural fixture for her review, but her sign-off is not recorded here and is
+  not assumed. That review is the next honest step, not a claimed result.
+- **Analyzer scope.** Findings are decided by bounded enumeration over declared
+  finite domains; a clean result guarantees clean only within them, and query-
+  driven rubric anchors are not coverage-checked. `docs/ANALYZER-SCOPE.md` states
+  the bounds in full.
 
 ## How to check it
 
 The evidence is frozen in-repo and needs no network. `bash scripts/demo.sh`
-reproduces every figure above. The live site runs the same toolchain: the
-playground compiles and analyzes arbitrary source, and the benchmark recomputes
-all eight cells from the frozen corpus.
+reproduces the AI-for-SMEs figures; `bun scripts/replicate.ts` re-derives every
+hash and score from the frozen bytes (`docs/REPLICATION.md`); and
+`bun test packages/benchmark/test/gap-matrix-reproduction.test.ts` reproduces the
+Gap Matrix. The live site runs the same toolchain: the playground compiles and
+analyzes arbitrary source, and the benchmark recomputes all eight cells from the
+frozen corpus.
 
 ## Next steps
 
-In priority order. The first one is the credibility multiplier; the rest harden
-the claim.
+Status: three of the four named steps are done; the reviewer step remains.
 
-1. **A second methodology in a different domain.** Pick a G7, OECD, or
-   multilateral commitment with published per-member scores and a rubric that
-   contains at least one soft quantifier or scope term ("adequate," "substantial,"
-   "where feasible," "up to N"). Show the same three behaviors: faithful
-   reproduction, at least one static gap or overlap, and at least one located
-   sensitivity flip. One case is an anecdote. Two that behave the same way is the
-   start of a claim.
+1. ✅ **A second methodology, a different scoring shape.** Done — Sara Kim's Gap
+   Matrix, ported as a weighted-ordinal measure, reproduced faithfully (see the
+   Update above). It required extending the IR/evaluator/analyzer for graded
+   scoring rather than reusing the three-point path.
 
-2. **Independent replication of the evidence step.** Have a second person
-   independently gather evidence for one or two members from the same source
-   registry and confirm the receipts match, or surface where they diverge. This
-   tests the weakest link in the reproduction claim: whether "frozen reviewed
-   evidence" is reproducible across analysts.
+2. ✅ **Frozen re-derivation of the evidence.** Done — `bun scripts/replicate.ts`
+   re-derives every source hash, snapshot content hash, profile hash, and score
+   from the in-repo bytes, and a test proves a one-character quote edit breaks the
+   hash (`docs/REPLICATION.md`). What a matching hash does and does not prove is
+   stated there; independent re-*gathering* by a second analyst remains open.
 
-3. **One real domain reviewer.** Show the sensitivity output to someone who works
-   on compliance scoring and get a plain yes or no on whether "Japan and the US
-   turn on this phrase" is correct and useful. One honest expert reaction is worth
-   more than another benchmark.
+3. ⏳ **One real domain reviewer.** Open. The analyzer's output on Sara's own Gap
+   Matrix — the pending-decisive components, the reproduced indices — is the
+   natural fixture for her review. Her plain yes/no on whether it is correct and
+   useful is the honest remaining validation; it is not assumed here.
 
-4. **Document analyzer scope, and publish negative results.** State what rubric
-   shapes the bounded analyzer can and cannot decide. When a methodology is clean,
-   say so. A tool that sometimes returns "this rubric has no gaps and no
-   sensitivity" is more trustworthy than one that always finds something.
+4. ✅ **Analyzer scope + negative results.** Done — `docs/ANALYZER-SCOPE.md` states
+   what the score and measure analyzers decide and where they are silent, and
+   "clean" is a first-class reported result (the resolved AI-for-SMEs methodology
+   and the Gap Matrix both report clean/well-formed within their declared bounds).

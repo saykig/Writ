@@ -47,6 +47,14 @@ export {
 export { analyzeScoreProgram, type ScoreAnalysisOptions } from "./score-analysis.js";
 export { analyzeScoreProgramByEnumeration } from "./enumerate.js";
 
+// Static graded-measure analysis (weights, anchor coverage, pending-decisiveness).
+// z3-free (bounded enumeration only); also exposed at `@covenant/analyzer/measure-analysis`.
+export {
+  analyzeMeasureByEnumeration,
+  analyzeMeasures,
+  type MeasureAnalysisOptions,
+} from "./measure-analysis.js";
+
 // CORE-010 — structural lints, waivers, publication profile.
 export {
   lintIr,

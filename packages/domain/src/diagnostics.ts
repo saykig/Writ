@@ -61,6 +61,36 @@ const DEFINITIONS = [
       "Score program violates a declared monotonicity assertion along `{variable}` ({witness}).",
   },
 
+  // --- Static measure-analysis (graded weighted-ordinal indices) ---
+  {
+    code: "COV-MEASURE-ANCHOR-GAP",
+    severity: "error",
+    category: "score-analysis",
+    messageTemplate:
+      "Measure `{measure}` component `{component}` has an uncovered ordinal state: no anchor matches, so the component is pending there ({witness}).",
+  },
+  {
+    code: "COV-MEASURE-ANCHOR-OVERLAP",
+    severity: "error",
+    category: "score-analysis",
+    messageTemplate:
+      "Measure `{measure}` component `{component}` anchors `{anchorA}` and `{anchorB}` both match with different levels ({witness}).",
+  },
+  {
+    code: "COV-MEASURE-WEIGHTS",
+    severity: "error",
+    category: "score-analysis",
+    messageTemplate:
+      "Measure `{measure}` component weights sum to `{sum}`, not 1; the weighted aggregation is ill-defined.",
+  },
+  {
+    code: "COV-MEASURE-PENDING-DECISIVE",
+    severity: "info",
+    category: "score-analysis",
+    messageTemplate:
+      "Measure `{measure}` is pending unless all {count} components resolve; any one pending component ({components}) blocks the index.",
+  },
+
   // --- Evaluation-time (deterministic evaluator over a fact environment) ---
   {
     code: "COV-EVAL-DECISIVE-UNKNOWN",

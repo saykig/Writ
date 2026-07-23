@@ -19,9 +19,11 @@ import { resolveInScope, type Environment, type EvidenceRecord } from "./environ
 import {
   addDecimal,
   compareDecimal,
+  decimalFromNumber,
   formatDecimal,
   multiplyDecimal,
   parseDecimal,
+  subtractDecimal,
   ZERO,
   type Decimal,
 } from "./decimal.js";
@@ -469,16 +471,174 @@ export function evalValue(expr: Expr, ctx: EvalContext, scope?: EvidenceRecord):
       const t = evalTruth(expr, ctx, scope);
       return { known: true, value: truthName(t.truth), node: t.node };
     }
-    case "call": {
-      const node = ctx.proof.emit({
-        kind: "operator",
-        truthValue: truth("unknown"),
-        label: `call:${expr.function}`,
-      });
-      return { known: false, node };
-    }
+    case "call":
+      return evalCallValue(expr, ctx, scope);
     case "query":
       return queryValue(expr, ctx, scope);
+  }
+}
+
+// --- Built-in numeric functions ---------------------------------------------
+//
+// A small library of evaluable `call` functions so weighted-ordinal measures and
+// derived quantities (e.g. `gap = a - b`) actually run. Every function propagates
+// `unknown` from any argument (so a pending component yields a pending result,
+// never a silent 0), rejects money/quantity operands (use the `sum` query for
+// those), and emits a diagnostic on an arity or type mismatch rather than
+// guessing. Unlisted call names stay `unknown` (not yet implemented, e.g.
+// currency conversion) — never a guess, never a collapse to false.
+//
+// `divide`/`round` use IEEE-754 doubles with `Math.round` (round-half-up) so they
+// reproduce reference engines that score in floating point; `subtract` keeps the
+// exact-decimal path (mirroring `add`/`multiply`), and `min2`/`max2`/`clamp`
+// return the selected operand verbatim so no precision is lost.
+const BUILTIN_ARITIES: Readonly<Record<string, readonly number[]>> = {
+  subtract: [2],
+  divide: [2],
+  round: [1, 2],
+  clamp: [3],
+  min2: [2],
+  max2: [2],
+};
+
+function evalCallValue(
+  expr: Extract<Expr, { kind: "call" }>,
+  ctx: EvalContext,
+  scope?: EvidenceRecord,
+): ValueNode {
+  const fn = expr.function;
+  const items = expr.arguments.map((argument) => evalValue(argument, ctx, scope));
+  const childIds = items.map((item) => item.node.id);
+  const unknown = (): ValueNode => ({
+    known: false,
+    node: ctx.proof.emit({
+      kind: "operator",
+      truthValue: truth("unknown"),
+      label: `call:${fn}`,
+      childIds,
+    }),
+  });
+
+  const arities = BUILTIN_ARITIES[fn];
+  if (!arities) return unknown(); // not implemented in this slice
+  if (items.some((item) => !item.known)) return unknown(); // pending propagation
+  if (!arities.includes(items.length)) {
+    ctx.diag("COV-LINT-TYPE", {
+      path: `call.${fn}`,
+      expected: `${arities.join(" or ")} argument(s)`,
+      actual: `${items.length}`,
+    });
+    return unknown();
+  }
+  const raw = items.map((item) => item.value);
+  if (raw.some((value) => isMoneyValue(value) || isUnitedQuantity(value))) {
+    ctx.diag("COV-LINT-TYPE", {
+      path: `call.${fn}`,
+      expected: "number/decimal",
+      actual: "money/quantity",
+    });
+    return unknown();
+  }
+  const result = applyBuiltin(fn, raw, ctx);
+  if (result === null) {
+    ctx.diag("COV-LINT-TYPE", {
+      path: `call.${fn}`,
+      expected: "number/decimal",
+      actual: "non-numeric",
+    });
+    return unknown();
+  }
+  return {
+    known: true,
+    value: result,
+    node: ctx.proof.emit({
+      kind: "operator",
+      truthValue: truth("unknown"),
+      label: `call:${fn}`,
+      value: result,
+      childIds,
+    }),
+  };
+}
+
+/** A finite JS number from a plain number or an exact-decimal string, else null. */
+function toFiniteNumber(value: unknown): number | null {
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  if (typeof value === "string" && parseDecimal(value) !== null) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
+/** A `Decimal` from a plain finite number or an exact-decimal string, else null. */
+function toDecimalValue(value: unknown): Decimal | null {
+  if (typeof value === "number") return Number.isFinite(value) ? decimalFromNumber(value) : null;
+  if (typeof value === "string") return parseDecimal(value);
+  return null;
+}
+
+function applyBuiltin(
+  fn: string,
+  values: readonly unknown[],
+  ctx: EvalContext,
+): number | string | null {
+  switch (fn) {
+    case "subtract": {
+      const [a, b] = values;
+      if (
+        typeof a === "number" &&
+        Number.isFinite(a) &&
+        typeof b === "number" &&
+        Number.isFinite(b)
+      ) {
+        return a - b;
+      }
+      const da = toDecimalValue(a);
+      const db = toDecimalValue(b);
+      return da && db ? formatDecimal(subtractDecimal(da, db)) : null;
+    }
+    case "divide": {
+      const a = toFiniteNumber(values[0]);
+      const b = toFiniteNumber(values[1]);
+      if (a === null || b === null) return null;
+      if (b === 0) {
+        ctx.diag("COV-LINT-TYPE", {
+          path: "call.divide",
+          expected: "non-zero divisor",
+          actual: "0",
+        });
+        return null;
+      }
+      return a / b;
+    }
+    case "round": {
+      const x = toFiniteNumber(values[0]);
+      if (x === null) return null;
+      const digits = values.length === 2 ? toFiniteNumber(values[1]) : 0;
+      if (digits === null || !Number.isInteger(digits) || digits < 0) return null;
+      const factor = 10 ** digits;
+      return Math.round(x * factor) / factor;
+    }
+    case "clamp": {
+      const x = toDecimalValue(values[0]);
+      const lo = toDecimalValue(values[1]);
+      const hi = toDecimalValue(values[2]);
+      if (!x || !lo || !hi) return null;
+      if (compareDecimal(x, lo) < 0) return values[1] as number | string;
+      if (compareDecimal(x, hi) > 0) return values[2] as number | string;
+      return values[0] as number | string;
+    }
+    case "min2":
+    case "max2": {
+      const a = toDecimalValue(values[0]);
+      const b = toDecimalValue(values[1]);
+      if (!a || !b) return null;
+      const aWins = fn === "min2" ? compareDecimal(a, b) <= 0 : compareDecimal(a, b) >= 0;
+      return (aWins ? values[0] : values[1]) as number | string;
+    }
+    default:
+      return null;
   }
 }
 

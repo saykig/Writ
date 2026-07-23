@@ -42,8 +42,10 @@ export type CovenantKeywordNames =
   | "action_identity"
   | "adopted"
   | "after"
+  | "aggregate"
   | "all_score_inputs_reviewed"
   | "allowed"
+  | "anchor"
   | "and"
   | "assert"
   | "authority"
@@ -55,6 +57,7 @@ export type CovenantKeywordNames =
   | "classify"
   | "closed_world"
   | "commitment"
+  | "component"
   | "concept"
   | "contains"
   | "contested"
@@ -95,6 +98,7 @@ export type CovenantKeywordNames =
   | "let"
   | "lines"
   | "max"
+  | "measure"
   | "media_type"
   | "min"
   | "monotonic"
@@ -126,6 +130,7 @@ export type CovenantKeywordNames =
   | "retrieved"
   | "review_required"
   | "safe_under_open_world"
+  | "scale"
   | "scenario"
   | "score"
   | "select"
@@ -148,6 +153,8 @@ export type CovenantKeywordNames =
   | "uri"
   | "version"
   | "waive"
+  | "weight"
+  | "weighted_ordinal_percent"
   | "when"
   | "where"
   | "{"
@@ -185,6 +192,31 @@ export const Adopted = {
 
 export function isAdopted(item: unknown): item is Adopted {
   return reflection.isInstance(item, Adopted.$type);
+}
+
+export type AggregationStrategy = "weighted_ordinal_percent";
+
+export function isAggregationStrategy(item: unknown): item is AggregationStrategy {
+  return item === "weighted_ordinal_percent";
+}
+
+export interface AnchorRule extends langium.AstNode {
+  readonly $container: MeasureComponent;
+  readonly $type: "AnchorRule";
+  rationale?: string;
+  value: number;
+  when: Expression;
+}
+
+export const AnchorRule = {
+  $type: "AnchorRule",
+  rationale: "rationale",
+  value: "value",
+  when: "when",
+} as const;
+
+export function isAnchorRule(item: unknown): item is AnchorRule {
+  return reflection.isInstance(item, AnchorRule.$type);
 }
 
 export interface Assertion extends langium.AstNode {
@@ -242,6 +274,7 @@ export function isAuthority(item: unknown): item is Authority {
 
 export interface BinaryExpression extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -277,6 +310,7 @@ export function isBinaryExpression(item: unknown): item is BinaryExpression {
 
 export interface BooleanLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -308,6 +342,7 @@ export function isBooleanLiteral(item: unknown): item is BooleanLiteral {
 
 export interface CallExpression extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -420,6 +455,7 @@ export type CommitmentMember =
   | EvidencePolicy
   | Goal
   | IssueAreas
+  | Measure
   | Parameter
   | PartnerClass
   | Predicate
@@ -523,6 +559,7 @@ export function isConceptProperty(item: unknown): item is ConceptProperty {
 
 export interface DateLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -825,6 +862,48 @@ export function isLinesAnchor(item: unknown): item is LinesAnchor {
   return reflection.isInstance(item, LinesAnchor.$type);
 }
 
+export interface Measure extends langium.AstNode {
+  readonly $container: Commitment;
+  readonly $type: "Measure";
+  components: Array<MeasureComponent>;
+  name: string;
+  scale: number;
+  strategy: AggregationStrategy;
+}
+
+export const Measure = {
+  $type: "Measure",
+  components: "components",
+  name: "name",
+  scale: "scale",
+  strategy: "strategy",
+} as const;
+
+export function isMeasure(item: unknown): item is Measure {
+  return reflection.isInstance(item, Measure.$type);
+}
+
+export interface MeasureComponent extends langium.AstNode {
+  readonly $container: Measure;
+  readonly $type: "MeasureComponent";
+  anchors: Array<AnchorRule>;
+  name: string;
+  source?: string;
+  weight: number;
+}
+
+export const MeasureComponent = {
+  $type: "MeasureComponent",
+  anchors: "anchors",
+  name: "name",
+  source: "source",
+  weight: "weight",
+} as const;
+
+export function isMeasureComponent(item: unknown): item is MeasureComponent {
+  return reflection.isInstance(item, MeasureComponent.$type);
+}
+
 export interface Model extends langium.AstNode {
   readonly $type: "Model";
   declarations: Array<Declaration>;
@@ -855,6 +934,7 @@ export function isNamePart(item: unknown): item is NamePart {
 
 export interface NumberLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1105,6 +1185,7 @@ export function isQualifiedName(item: unknown): item is QualifiedName {
 
 export interface QueryExpression extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1212,6 +1293,7 @@ export function isRationaleDeclaration(item: unknown): item is RationaleDeclarat
 
 export interface ReferenceExpression extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1325,6 +1407,7 @@ export function isSetDeclaration(item: unknown): item is SetDeclaration {
 
 export interface SetLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1443,6 +1526,7 @@ export function isSourceUri(item: unknown): item is SourceUri {
 
 export interface StringLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1519,6 +1603,7 @@ export function isTitle(item: unknown): item is Title {
 
 export interface TruthLiteral extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1562,6 +1647,7 @@ export function isTypeRef(item: unknown): item is TypeRef {
 
 export interface UnaryExpression extends langium.AstNode {
   readonly $container:
+    | AnchorRule
     | Assertion
     | BinaryExpression
     | CallExpression
@@ -1651,6 +1737,7 @@ export function isWindow(item: unknown): item is Window {
 export type CovenantAstType = {
   ActionIdentity: ActionIdentity;
   Adopted: Adopted;
+  AnchorRule: AnchorRule;
   Assertion: Assertion;
   Authority: Authority;
   BinaryExpression: BinaryExpression;
@@ -1680,6 +1767,8 @@ export type CovenantAstType = {
   IssueAreas: IssueAreas;
   JsonPointerAnchor: JsonPointerAnchor;
   LinesAnchor: LinesAnchor;
+  Measure: Measure;
+  MeasureComponent: MeasureComponent;
   Model: Model;
   NumberLiteral: NumberLiteral;
   OtherwiseClass: OtherwiseClass;
@@ -1744,6 +1833,22 @@ export class CovenantAstReflection extends langium.AbstractAstReflection {
         },
       },
       superTypes: [CommitmentMember.$type],
+    },
+    AnchorRule: {
+      name: AnchorRule.$type,
+      properties: {
+        rationale: {
+          name: AnchorRule.rationale,
+          optional: true,
+        },
+        value: {
+          name: AnchorRule.value,
+        },
+        when: {
+          name: AnchorRule.when,
+        },
+      },
+      superTypes: [],
     },
     Assertion: {
       name: Assertion.$type,
@@ -2101,6 +2206,45 @@ export class CovenantAstReflection extends langium.AbstractAstReflection {
         },
       },
       superTypes: [CitationAnchor.$type],
+    },
+    Measure: {
+      name: Measure.$type,
+      properties: {
+        components: {
+          name: Measure.components,
+          defaultValue: [],
+        },
+        name: {
+          name: Measure.name,
+        },
+        scale: {
+          name: Measure.scale,
+        },
+        strategy: {
+          name: Measure.strategy,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    MeasureComponent: {
+      name: MeasureComponent.$type,
+      properties: {
+        anchors: {
+          name: MeasureComponent.anchors,
+          defaultValue: [],
+        },
+        name: {
+          name: MeasureComponent.name,
+        },
+        source: {
+          name: MeasureComponent.source,
+          optional: true,
+        },
+        weight: {
+          name: MeasureComponent.weight,
+        },
+      },
+      superTypes: [],
     },
     Model: {
       name: Model.$type,

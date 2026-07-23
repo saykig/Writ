@@ -10,6 +10,7 @@
 // runtime (Vercel). enumerate.ts references the z3 path only as an erased type,
 // so this path carries no z3 dependency.
 import { analyzeScoreProgramByEnumeration } from "@covenant/analyzer/enumerate";
+import { analyzeMeasures } from "@covenant/analyzer/measure-analysis";
 import type { FiniteDomains } from "@covenant/analyzer/types";
 import type { Assertion, Commitment, Diagnostic, Expr } from "@covenant/domain";
 
@@ -106,7 +107,7 @@ export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
 
   const domainKeys = new Set(Object.keys(domainRecord));
   const rulesById = new Map(commitment.score_program.rules.map((rule) => [rule.id, rule]));
-  return diagnostics.filter((diagnostic) => {
+  const scoreDiagnostics = diagnostics.filter((diagnostic) => {
     if (diagnostic.code !== "COV-SCORE-UNREACHABLE") return true;
     const ruleId = (diagnostic.context as { ruleId?: string } | undefined)?.ruleId;
     const rule = ruleId ? rulesById.get(ruleId) : undefined;
@@ -115,4 +116,12 @@ export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
     collectRefPaths(rule.when, refs);
     return [...refs].every((path) => domainKeys.has(path));
   });
+
+  // Static graded-measure findings (weights, per-component anchor coverage,
+  // pending-decisiveness), decided over the same declared finite domains.
+  const measureDiagnostics = analyzeMeasures(commitment.measures ?? [], domains, {
+    objectId: commitment.id,
+  });
+
+  return [...scoreDiagnostics, ...measureDiagnostics];
 }

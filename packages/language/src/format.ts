@@ -281,9 +281,33 @@ function printMember(member: CommitmentMember, indent: string): string {
       return printPredicate(member, indent);
     case "Classification":
       return printClassification(member, indent);
+    case "Measure":
+      return printMeasure(member, indent);
     default:
       return "";
   }
+}
+
+function printMeasure(
+  member: Extract<CommitmentMember, { $type: "Measure" }>,
+  indent: string,
+): string {
+  const inner = indent + INDENT;
+  const anchorIndent = inner + INDENT;
+  const lines: string[] = [`${indent}measure ${member.name} {`];
+  for (const component of member.components) {
+    const cite = component.source ? ` cite ${component.source}` : "";
+    lines.push(`${inner}component ${component.name} weight ${num(component.weight)}${cite} {`);
+    for (const anchor of component.anchors) {
+      let line = `${anchorIndent}anchor ${num(anchor.value)} when ${printExprRaw(anchor.when)}`;
+      if (anchor.rationale) line += ` because ${anchor.rationale}`;
+      lines.push(`${line};`);
+    }
+    lines.push(`${inner}}`);
+  }
+  lines.push(`${inner}aggregate ${member.strategy} scale ${num(member.scale)};`);
+  lines.push(`${indent}}`);
+  return lines.join("\n");
 }
 
 function printClassification(
