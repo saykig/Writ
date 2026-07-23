@@ -13,9 +13,12 @@
 //                                components resolve — the "who bears the risk"
 //                                statement: any one pending component blocks it.
 //
-// Anchor coverage is only claimed for a component whose anchors reference solely
-// variables with a declared domain; otherwise nothing is asserted (the same
-// honesty the score analyzer applies to out-of-domain references).
+// Anchor coverage has two modes. When a component's anchors reference a declared
+// finite domain, the analyzer enumerates it and checks the anchor *conditions*
+// (do they partition every state?). When they do not (evidence-query anchors,
+// e.g. the Gap Matrix), it falls back to a *structural* check of the ordinal
+// levels: 0..scale must each be declared exactly once. It never claims the
+// conditions are well-formed for query-driven anchors — only the levels.
 
 import type { Diagnostic, Expr, Measure, MeasureComponent } from "@covenant/domain";
 import { makeDiagnostic } from "@covenant/domain";
