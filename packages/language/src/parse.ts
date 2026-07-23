@@ -1,17 +1,17 @@
 /**
- * Turn Covenant source text into a typed AST.
+ * Turn Writ source text into a typed AST.
  *
  * Parsing uses the generated Langium (Chevrotain) parser, which recovers from
  * errors and reports every lexer/parser fault with a token span. We translate
  * those faults into {@link LanguageDiagnostic}s that point at exact source
- * offsets. Literate `.covenant.md` files are masked (prose replaced by
+ * offsets. Literate `.writ.md` files are masked (prose replaced by
  * offset-preserving whitespace) so diagnostic spans still refer to the original
  * document.
  */
 
 import type { AstNode, CstNode, ParseResult } from "langium";
 import type { Model } from "./generated/ast.js";
-import { createCovenantServices } from "./covenant-module.js";
+import { createWritServices } from "./writ-module.js";
 import type { LanguageDiagnostic, SourceSpan } from "./diagnostics.js";
 
 /** The outcome of parsing one document. */
@@ -69,11 +69,11 @@ function spanFromToken(token: ChevToken | undefined, fallbackLength = 1): Source
 }
 
 /**
- * Mask a literate `.covenant.md` document: every character outside a fenced
- * ```covenant block (including the fence lines themselves) is replaced by a
- * space, and newlines are preserved. The result parses as plain Covenant while
+ * Mask a literate `.writ.md` document: every character outside a fenced
+ * ```writ block (including the fence lines themselves) is replaced by a
+ * space, and newlines are preserved. The result parses as plain Writ while
  * keeping every retained character at its original offset, so diagnostics map
- * straight back to the `.covenant.md` file.
+ * straight back to the `.writ.md` file.
  */
 export function extractLiterate(markdown: string): string {
   const lines = markdown.split(/(?<=\n)/); // keep the trailing newline on each line
@@ -82,7 +82,7 @@ export function extractLiterate(markdown: string): string {
   const blank = (line: string): string => line.replace(/[^\n]/g, " ");
   for (const line of lines) {
     const trimmed = line.trimStart();
-    if (!inside && /^```+\s*covenant\b/.test(trimmed)) {
+    if (!inside && /^```+\s*writ\b/.test(trimmed)) {
       inside = true;
       out.push(blank(line)); // drop the opening fence
       continue;
@@ -99,11 +99,11 @@ export function extractLiterate(markdown: string): string {
 
 /** True for a document whose content should be treated as literate Markdown. */
 export function isLiterateFile(fileName: string): boolean {
-  return fileName.endsWith(".covenant.md");
+  return fileName.endsWith(".writ.md");
 }
 
 /**
- * Parse `text` into a Covenant AST. Pass `{ literate: true }` (or a `.covenant.md`
+ * Parse `text` into a Writ AST. Pass `{ literate: true }` (or a `.writ.md`
  * file name) to first mask Markdown prose.
  */
 export function parseDocument(
@@ -114,8 +114,8 @@ export function parseDocument(
     options.literate ?? (options.fileName ? isLiterateFile(options.fileName) : false);
   const source = literate ? extractLiterate(text) : text;
 
-  const { Covenant } = createCovenantServices();
-  const result: ParseResult<Model> = Covenant.parser.LangiumParser.parse<Model>(source);
+  const { Writ } = createWritServices();
+  const result: ParseResult<Model> = Writ.parser.LangiumParser.parse<Model>(source);
 
   const diagnostics: LanguageDiagnostic[] = [];
   for (const error of result.lexerErrors) {
@@ -138,7 +138,7 @@ export function parseDocument(
           }
         : undefined;
     diagnostics.push({
-      code: "COV-LEX-ERROR",
+      code: "WRT-LEX-ERROR",
       severity: "error",
       message: error.message,
       ...(span ? { span } : {}),
@@ -147,7 +147,7 @@ export function parseDocument(
   for (const error of result.parserErrors) {
     const span = spanFromToken(error.token as unknown as ChevToken);
     diagnostics.push({
-      code: "COV-PARSE-ERROR",
+      code: "WRT-PARSE-ERROR",
       severity: "error",
       message: error.message,
       ...(span ? { span } : {}),

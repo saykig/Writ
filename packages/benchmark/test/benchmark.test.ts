@@ -1,13 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { analyzeScoreProgram, type FiniteDomains } from "@covenant/analyzer";
-import { canonicalJson } from "@covenant/provenance";
-import { validate, type Evidence, type InterpretationProfile } from "@covenant/domain";
-import { verifyReceipt } from "@covenant/evaluator";
+import { analyzeScoreProgram, type FiniteDomains } from "@writ/analyzer";
+import { canonicalJson } from "@writ/provenance";
+import { validate, type Evidence, type InterpretationProfile } from "@writ/domain";
+import { verifyReceipt } from "@writ/evaluator";
 import {
   MEMBERS,
   buildMemberSnapshot,
-  compileResolvedCovenant,
+  compileResolvedWrit,
   resolvedCommitment,
   runBenchmark,
   profilePath,
@@ -37,20 +37,20 @@ const FULL_DOMAINS: FiniteDomains = {
 
 describe("resolved methodology", () => {
   test("compiles to schema-valid IR with no error diagnostics", () => {
-    const result = compileResolvedCovenant();
+    const result = compileResolvedWrit();
     expect(result.schemaValid).toBe(true);
     expect(result.diagnostics.filter((d) => d.severity === "error")).toHaveLength(0);
     expect(result.ir).toBeDefined();
   });
 
-  test("score program analyzes clean — no COV-SCORE-GAP / COV-SCORE-OVERLAP", async () => {
+  test("score program analyzes clean — no WRT-SCORE-GAP / WRT-SCORE-OVERLAP", async () => {
     const program = resolvedCommitment().score_program;
     const { diagnostics } = await analyzeScoreProgram(program, FULL_DOMAINS, {
       objectId: "AI_SME_ADOPTION",
     });
     const codes = diagnostics.map((d) => d.code);
-    expect(codes.filter((c) => c === "COV-SCORE-GAP")).toHaveLength(0);
-    expect(codes.filter((c) => c === "COV-SCORE-OVERLAP")).toHaveLength(0);
+    expect(codes.filter((c) => c === "WRT-SCORE-GAP")).toHaveLength(0);
+    expect(codes.filter((c) => c === "WRT-SCORE-OVERLAP")).toHaveLength(0);
   });
 });
 

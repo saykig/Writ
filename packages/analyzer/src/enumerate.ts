@@ -8,7 +8,7 @@
  * lowering, not to be fast.
  */
 
-import type { Diagnostic, Expr, ScoreProgram } from "@covenant/domain";
+import type { Diagnostic, Expr, ScoreProgram } from "@writ/domain";
 import { canonicalKeys, enumerateAssignments, stableWitness } from "./domains.js";
 import { evaluateTruth } from "./semantics.js";
 import { isDefinitelyFalse, isDefinitelyTrue } from "./truth.js";

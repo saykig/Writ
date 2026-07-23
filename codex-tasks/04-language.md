@@ -1,10 +1,10 @@
-# Build the Covenant language toolchain
+# Build the Writ language toolchain
 
 ## Instruction
 
-Use Langium to implement the language target in `03_LANGUAGE_SPEC.md` and `specs/covenant.ebnf`. Add literate Markdown extraction, parser recovery, imports pinned to content hashes, symbol linking, type checking, source maps, formatting, AST-to-IR lowering, and an LSP usable in Monaco and VS Code.
+Use Langium to implement the language target in `03_LANGUAGE_SPEC.md` and `specs/writ.ebnf`. Add literate Markdown extraction, parser recovery, imports pinned to content hashes, symbol linking, type checking, source maps, formatting, AST-to-IR lowering, and an LSP usable in Monaco and VS Code.
 
-Acceptance: all `.covenant` examples parse and compile to schema-valid IR; formatter is idempotent; diagnostics point to exact source spans; no embedded general-purpose code is permitted.
+Acceptance: all `.writ` examples parse and compile to schema-valid IR; formatter is idempotent; diagnostics point to exact source spans; no embedded general-purpose code is permitted.
 
 ## Non-goals
 

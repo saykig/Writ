@@ -1,8 +1,8 @@
 {
-  "name": "@covenant/reference-core",
+  "name": "@writ/reference-core",
   "version": "0.1.0",
   "private": true,
-  "description": "Dependency-light semantic reference for Covenant truth, score evaluation, and bounded analysis.",
+  "description": "Dependency-light semantic reference for Writ truth, score evaluation, and bounded analysis.",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "tsc -p tsconfig.json",

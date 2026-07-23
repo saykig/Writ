@@ -1,5 +1,5 @@
 /**
- * Ergonomic, hand-authored TypeScript types for the Covenant canonical IR.
+ * Ergonomic, hand-authored TypeScript types for the Writ canonical IR.
  *
  * These mirror `specs/canonical-ir.schema.json` (the interchange authority) field
  * for field, using the same snake_case keys as schema-valid IR JSON so a parsed,

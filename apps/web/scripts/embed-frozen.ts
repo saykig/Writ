@@ -23,10 +23,10 @@ const BENCH = "benchmark/2025-ai-sme";
 
 // Exactly the files the server layer (lib/toolchain.ts) reads at runtime.
 const rels: string[] = [
-  "examples/2025-ai-sme-literal.covenant",
-  "examples/2025-ai-sme-resolved.covenant",
-  "examples/2025-ai-sme-inclusive-up-to.covenant",
-  "examples/ai-governance-gap-matrix.covenant",
+  "examples/2025-ai-sme-literal.writ",
+  "examples/2025-ai-sme-resolved.writ",
+  "examples/2025-ai-sme-inclusive-up-to.writ",
+  "examples/ai-governance-gap-matrix.writ",
   "benchmark/ai-governance-gap-matrix/assessments.json",
   `${BENCH}/discrepancy-ledger.json`,
   ...readdirSync(join(repoRoot, BENCH, "evidence"))

@@ -1,4 +1,4 @@
-// Runtime value model for the Covenant evaluator's value layer.
+// Runtime value model for the Writ evaluator's value layer.
 //
 // Expression operands resolve to heterogeneous runtime values: plain scalars,
 // count intervals `{min,max}`, money records `{value,currency,bound}` (evidence
@@ -7,7 +7,7 @@
 // coercions that let the interpreter and query engine treat those values
 // exactly and unit-aware, per 04_FORMAL_SEMANTICS.md §9–11.
 
-import type { CountInterval } from "@covenant/domain";
+import type { CountInterval } from "@writ/domain";
 import {
   ZERO,
   addDecimal,

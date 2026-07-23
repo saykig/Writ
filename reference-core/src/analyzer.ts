@@ -56,7 +56,7 @@ export function analyzeScoreProgram(program: ScoreProgram, domains: FiniteDomain
 
     if (!firstGap && trueRules.length === 0 && uncertain.length === 0) {
       firstGap = {
-        code: "COV-SCORE-GAP",
+        code: "WRT-SCORE-GAP",
         severity: "error",
         message: "No score branch matches a bounded-domain assignment.",
         witness: stableWitness(row),
@@ -67,7 +67,7 @@ export function analyzeScoreProgram(program: ScoreProgram, domains: FiniteDomain
         ...new Set(trueRules.map((item) => item.rule.result)),
       ].sort() as ScoreValue[];
       firstOverlap = {
-        code: "COV-SCORE-OVERLAP",
+        code: "WRT-SCORE-OVERLAP",
         severity: results.length > 1 ? "error" : "warning",
         message: "Multiple score branches match a bounded-domain assignment.",
         witness: stableWitness(row),
@@ -77,7 +77,7 @@ export function analyzeScoreProgram(program: ScoreProgram, domains: FiniteDomain
     }
     if (!firstUnknown && uncertain.length > 0) {
       firstUnknown = {
-        code: "COV-SCORE-UNKNOWN",
+        code: "WRT-SCORE-UNKNOWN",
         severity: "warning",
         message:
           "At least one score branch is unknown or contested in a bounded-domain assignment.",
@@ -94,7 +94,7 @@ export function analyzeScoreProgram(program: ScoreProgram, domains: FiniteDomain
   for (const rule of [...program.rules].sort((a, b) => a.id.localeCompare(b.id))) {
     if (!reachable.has(rule.id)) {
       diagnostics.push({
-        code: "COV-SCORE-UNREACHABLE",
+        code: "WRT-SCORE-UNREACHABLE",
         severity: "warning",
         message: `Score rule ${rule.id} is unreachable in the supplied domains.`,
         ruleIds: [rule.id],

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate examples/ai-governance-gap-matrix.covenant from Sara Kim's Gap Matrix
+"""Generate examples/ai-governance-gap-matrix.writ from Sara Kim's Gap Matrix
 methodology in ~/personal/cepheus (fields.json + scoring-rubrics.json).
 
 The port encodes each analyst assessment as a reviewed evidence claim
@@ -12,7 +12,7 @@ import os
 import textwrap
 
 GM = os.path.expanduser("~/personal/cepheus/public/data/gap-matrix")
-OUT = os.path.join(os.path.dirname(__file__), "..", "examples", "ai-governance-gap-matrix.covenant")
+OUT = os.path.join(os.path.dirname(__file__), "..", "examples", "ai-governance-gap-matrix.writ")
 
 fields = json.load(open(os.path.join(GM, "fields.json")))
 rubrics = {r["id"]: r for r in json.load(open(os.path.join(GM, "scoring-rubrics.json")))["rubrics"]}
@@ -52,11 +52,11 @@ def measure_block(measure_id: str, metric_key: str) -> str:
     return "\n".join(parts)
 
 
-body = f'''language covenant "0.1"
+body = f'''language writ "0.1"
 package science.ai_governance.gap_matrix version "1.0.0";
 
 // The Gap Matrix (Sara Kim, cepheus "What We Owe to Each Other"), ported to
-// Covenant. A frontier-AI governance field is scored on two weighted-ordinal
+// Writ. A frontier-AI governance field is scored on two weighted-ordinal
 // axes — how concentrated the knowledge/control is, and how much public
 // authority exists — from reviewed analyst assessments. The distance between
 // them is the governance gap: who knows vs. who decides.

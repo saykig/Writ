@@ -1,4 +1,4 @@
-# Covenant Language Specification
+# Writ Language Specification
 
 Status: proposed language version `0.1`.
 
@@ -25,20 +25,20 @@ It should not expose implementation details such as SQL or model prompts.
 
 ### 2.1 Plain source
 
-Extension: `.covenant`
+Extension: `.writ`
 
-Contains only Covenant syntax.
+Contains only Writ syntax.
 
 ### 2.2 Literate source
 
-Extension: `.covenant.md`
+Extension: `.writ.md`
 
-Markdown prose is documentation. Fenced blocks labelled `covenant` are compiled in document order.
+Markdown prose is documentation. Fenced blocks labelled `writ` are compiled in document order.
 
 ````markdown
 The report defines a strong action as an implemented measure directly targeting SMEs.
 
-```covenant
+```writ
 classify action as strong when ...;
 ```
 ````
@@ -48,11 +48,11 @@ A literate compiler preserves the Markdown heading path and nearby source anchor
 ## 3. Package header
 
 ```text
-language covenant "0.1"
+language writ "0.1"
 
 package g7.kananaskis_2025.ai_sme version "1.0.0" {
-  import covenant.std.g7 version "1.0.0";
-  import covenant.std.evidence version "1.0.0";
+  import writ.std.g7 version "1.0.0";
+  import writ.std.evidence version "1.0.0";
 }
 ```
 

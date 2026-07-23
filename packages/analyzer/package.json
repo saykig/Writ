@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/analyzer",
+  "name": "@writ/analyzer",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,7 +19,7 @@
     "./types": "./src/types.ts"
   },
   "dependencies": {
-    "@covenant/domain": "workspace:*",
+    "@writ/domain": "workspace:*",
     "z3-solver": "^5.0.0"
   }
 }

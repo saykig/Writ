@@ -1,4 +1,4 @@
-import type { CanonicalIr, EvaluationReceipt } from "@covenant/domain";
+import type { CanonicalIr, EvaluationReceipt } from "@writ/domain";
 
 /**
  * Client-side mirrors of the site's JSON API response shapes. These are the

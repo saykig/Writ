@@ -1,12 +1,12 @@
 /**
- * RFC 8785 (JSON Canonicalization Scheme, "JCS") serializer plus Covenant's
+ * RFC 8785 (JSON Canonicalization Scheme, "JCS") serializer plus Writ's
  * additional pre-hash normalization from `04_FORMAL_SEMANTICS.md` §16:
  *
  *   - strings are Unicode NFC-normalized, then escaped with JCS string rules;
  *   - object keys are sorted by UTF-16 code unit (the JCS rule);
  *   - numbers use the ECMAScript `Number` serialization (RFC 8785 §3.2.2.3);
  *     non-finite numbers (NaN, ±Infinity) are rejected, and `-0` becomes `0`;
- *   - array order is preserved (order is semantically meaningful in Covenant);
+ *   - array order is preserved (order is semantically meaningful in Writ);
  *   - declared transport / volatile / self-referential fields are dropped
  *     before canonicalizing so that they do not affect the content hash.
  *

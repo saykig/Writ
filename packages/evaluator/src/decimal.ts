@@ -1,4 +1,4 @@
-// Exact decimal arithmetic for the Covenant evaluator.
+// Exact decimal arithmetic for the Writ evaluator.
 //
 // Money and quantities are decimal STRINGS with units (04_FORMAL_SEMANTICS.md
 // §10, AGENTS.md invariant 9: exact decimals + explicit units). This module

@@ -1,12 +1,12 @@
-# Covenant core conformance suite
+# Writ core conformance suite
 
-An implementation-independent corpus of declarative cases for the Covenant
+An implementation-independent corpus of declarative cases for the Writ
 semantic core (04_FORMAL_SEMANTICS.md §19, 11_TEST_AND_VALIDATION.md §3). Every
 case is pure data. The corpus imports nothing and depends on no engine. Any
-evaluator that implements the Covenant semantics can consume it: read each case,
+evaluator that implements the Writ semantics can consume it: read each case,
 dispatch on `kind`, run `input`, and check the produced value against `expected`.
 
-The canonical runner that proves the reference `@covenant/*` stack passes every
+The canonical runner that proves the reference `@writ/*` stack passes every
 case lives at `packages/conformance/`. It is one consumer of this corpus, not
 part of it.
 
@@ -71,7 +71,7 @@ truth-support and disjoins false-support; `or` is the dual.
 
 ## Expression AST
 
-`expr.*` cases carry a Covenant IR expression (`canonical-ir.schema.json`
+`expr.*` cases carry a Writ IR expression (`canonical-ir.schema.json`
 `#/$defs/expr`). The node kinds used here:
 
 ```jsonc
@@ -140,7 +140,7 @@ randomness.
 
 - input: `{ "expr": <expr>, ...environment }`
 - expected: `{ "truth": <truth>, "diagnostics": [<code>, ...] }` — truth plus the
-  sorted set of diagnostic codes raised (e.g. `"COV-LINT-UNIT"` for a currency
+  sorted set of diagnostic codes raised (e.g. `"WRT-LINT-UNIT"` for a currency
   mismatch). `diagnostics` is `[]` when none are raised.
 
 ### `compare.interval`

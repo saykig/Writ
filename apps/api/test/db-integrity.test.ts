@@ -51,7 +51,7 @@ suite("DATA-001 integrity", () => {
         retrieved_at: new Date(),
         media_type: "text/html",
         sha256: SHA,
-        storage_uri: "s3://covenant/x",
+        storage_uri: "s3://writ/x",
       }),
     );
   });
@@ -80,7 +80,7 @@ suite("DATA-001 integrity", () => {
       retrieved_at: new Date(),
       media_type: "application/pdf",
       sha256: `sha256:${"c".repeat(64)}`,
-      storage_uri: "s3://covenant/doc",
+      storage_uri: "s3://writ/doc",
     });
     const snap = await repos.snapshots.freeze({
       id: uid("snap"),

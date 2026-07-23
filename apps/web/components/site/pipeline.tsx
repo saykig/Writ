@@ -5,7 +5,7 @@ import { TruthBadge } from "@/components/site/truth-badge";
 import { HashPill } from "@/components/site/hash-pill";
 
 /**
- * Pipeline — a plain, one-glance picture of what Covenant does with a policy
+ * Pipeline — a plain, one-glance picture of what Writ does with a policy
  * rubric: read it as a program, check it before any evidence, score it against a
  * frozen record, and return an auditable receipt. Each stage shows a real
  * artifact, not an abstract icon, so the story reads left to right.
@@ -50,7 +50,7 @@ otherwise  unresolved`}</code>
 
       <Connector />
 
-      <Stage step="2" title="Covenant checks it, then scores it">
+      <Stage step="2" title="Writ checks it, then scores it">
         <p className="text-[0.82rem] leading-relaxed text-muted-foreground">
           The analyzer flags ambiguity <em className="text-foreground not-italic">before</em> any
           evidence. Then it scores against a frozen, reviewed record — where{" "}

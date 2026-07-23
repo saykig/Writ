@@ -1,5 +1,5 @@
 /**
- * The real Covenant toolchain, wrapped for the site's server layer.
+ * The real Writ toolchain, wrapped for the site's server layer.
  *
  * Every function runs the checked-in semantic packages server-side — the
  * language front end, the deterministic evaluator, the bounded score analyzer,
@@ -7,16 +7,16 @@
  * site only orchestrates and shapes results. Repo data is read via `repo.ts`.
  */
 
-import { compileSource, type LanguageDiagnostic } from "@covenant/language";
-import { evaluateCommitment, verifyReceipt } from "@covenant/evaluator";
-import { enrichSnapshotForProfile, type DiscrepancyLedger } from "@covenant/benchmark";
+import { compileSource, type LanguageDiagnostic } from "@writ/language";
+import { evaluateCommitment, verifyReceipt } from "@writ/evaluator";
+import { enrichSnapshotForProfile, type DiscrepancyLedger } from "@writ/benchmark";
 import type {
   CanonicalIr,
   Diagnostic,
   EvaluationReceipt,
   Evidence,
   InterpretationProfile,
-} from "@covenant/domain";
+} from "@writ/domain";
 import { analyzeCommitment } from "./analysis.js";
 import { BENCH_DIR, readRepoJson, readRepoText, repoFileExists } from "./repo.js";
 
@@ -37,7 +37,7 @@ export interface StudioExample {
 const EXAMPLE_SEEDS = [
   {
     id: "literal",
-    file: "2025-ai-sme-literal.covenant",
+    file: "2025-ai-sme-literal.writ",
     title: "Literal reading",
     reading: "up to four → 1–4 strong",
     outcome: "gap" as const,
@@ -45,7 +45,7 @@ const EXAMPLE_SEEDS = [
   },
   {
     id: "resolved",
-    file: "2025-ai-sme-resolved.covenant",
+    file: "2025-ai-sme-resolved.writ",
     title: "Resolved reading",
     reading: "exhaustive, counter-precedence",
     outcome: "clean" as const,
@@ -53,7 +53,7 @@ const EXAMPLE_SEEDS = [
   },
   {
     id: "inclusive",
-    file: "2025-ai-sme-inclusive-up-to.covenant",
+    file: "2025-ai-sme-inclusive-up-to.writ",
     title: "Inclusive reading",
     reading: "up to four → 0–4 strong",
     outcome: "overlap" as const,
@@ -91,7 +91,7 @@ export interface CompileResponse {
 }
 
 export function compile(source: string): CompileResponse {
-  const result = compileSource(source, { fileName: "playground.covenant" });
+  const result = compileSource(source, { fileName: "playground.writ" });
   return {
     diagnostics: result.diagnostics,
     schemaValid: result.schemaValid,
@@ -109,7 +109,7 @@ export interface AnalyzeResponse {
 }
 
 export function analyze(source: string): AnalyzeResponse {
-  const result = compileSource(source, { fileName: "playground.covenant" });
+  const result = compileSource(source, { fileName: "playground.writ" });
   const findings: Diagnostic[] = [];
   if (result.ir) {
     for (const commitment of result.ir.commitments) {
@@ -157,7 +157,7 @@ export function evaluate(
   member: string,
   profileName: string = "published",
 ): EvaluateResponse {
-  const compiled = compileSource(source, { fileName: "playground.covenant" });
+  const compiled = compileSource(source, { fileName: "playground.writ" });
   if (compiled.ir === undefined) {
     return {
       ok: false,
@@ -217,8 +217,8 @@ export interface BenchmarkResponse {
 let resolvedIrCache: CanonicalIr | undefined;
 function resolvedIr(): CanonicalIr {
   if (resolvedIrCache === undefined) {
-    const source = readRepoText("examples/2025-ai-sme-resolved.covenant");
-    const compiled = compileSource(source, { fileName: "2025-ai-sme-resolved.covenant" });
+    const source = readRepoText("examples/2025-ai-sme-resolved.writ");
+    const compiled = compileSource(source, { fileName: "2025-ai-sme-resolved.writ" });
     if (!compiled.ir) throw new Error("Resolved methodology failed to compile.");
     resolvedIrCache = compiled.ir;
   }

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { Expr, Measure } from "@covenant/domain";
+import type { Expr, Measure } from "@writ/domain";
 import { analyzeMeasureByEnumeration } from "../src/measure-analysis.js";
 import type { FiniteDomains } from "../src/types.js";
 
@@ -34,13 +34,13 @@ const codes = (m: Measure, d: FiniteDomains = LEVEL_DOMAIN) =>
 describe("graded-measure analysis", () => {
   test("a clean five-anchor rubric reports only pending-decisiveness (info)", () => {
     const clean = measure([0, 1, 2, 3, 4].map((v) => ({ value: v, when: eq("level", v) })));
-    expect(codes(clean)).toEqual(["COV-MEASURE-PENDING-DECISIVE"]);
+    expect(codes(clean)).toEqual(["WRT-MEASURE-PENDING-DECISIVE"]);
   });
 
   test("a missing anchor is an anchor gap, with the uncovered state as witness", () => {
     const withGap = measure([0, 1, 2, 3].map((v) => ({ value: v, when: eq("level", v) })));
     const found = analyzeMeasureByEnumeration(withGap, LEVEL_DOMAIN, { objectId: "FIELD" });
-    const gap = found.find((d) => d.code === "COV-MEASURE-ANCHOR-GAP");
+    const gap = found.find((d) => d.code === "WRT-MEASURE-ANCHOR-GAP");
     expect(gap).toBeDefined();
     expect(gap?.witness).toEqual({ level: 4 });
   });
@@ -52,7 +52,7 @@ describe("graded-measure analysis", () => {
       { value: 3, when: gte("level", 2) },
       { value: 4, when: gte("level", 3) },
     ]);
-    expect(codes(withOverlap)).toContain("COV-MEASURE-ANCHOR-OVERLAP");
+    expect(codes(withOverlap)).toContain("WRT-MEASURE-ANCHOR-OVERLAP");
   });
 
   test("weights that do not sum to 1 are reported", () => {
@@ -73,19 +73,19 @@ describe("graded-measure analysis", () => {
       aggregation: { strategy: "weighted_ordinal_percent", scale: 4 },
     };
     const domains = { level: [0, 1, 2, 3, 4], level2: [0, 1, 2, 3, 4] } as FiniteDomains;
-    expect(codes(badWeights, domains)).toContain("COV-MEASURE-WEIGHTS");
+    expect(codes(badWeights, domains)).toContain("WRT-MEASURE-WEIGHTS");
   });
 
   test("query-driven anchors get a structural level check (a complete 0..4 is clean)", () => {
     // No declared domain, but all five ordinal levels are present exactly once.
     const complete = measure([0, 1, 2, 3, 4].map((v) => ({ value: v, when: eq("undeclared", v) })));
-    expect(codes(complete)).toEqual(["COV-MEASURE-PENDING-DECISIVE"]);
+    expect(codes(complete)).toEqual(["WRT-MEASURE-PENDING-DECISIVE"]);
   });
 
   test("a missing ordinal level is caught even without a declared domain (the Gap Matrix case)", () => {
     const missing = measure([0, 1, 2, 3].map((v) => ({ value: v, when: eq("undeclared", v) })));
     const found = analyzeMeasureByEnumeration(missing, {} as FiniteDomains, { objectId: "FIELD" });
-    const gap = found.find((d) => d.code === "COV-MEASURE-ANCHOR-GAP");
+    const gap = found.find((d) => d.code === "WRT-MEASURE-ANCHOR-GAP");
     expect(gap).toBeDefined();
     expect(gap?.witness).toEqual({ level: 4 });
   });
@@ -99,6 +99,6 @@ describe("graded-measure analysis", () => {
       { value: 4, when: eq("undeclared", 4) },
       { value: 4, when: eq("undeclared", 40) },
     ]);
-    expect(codes(dup, {} as FiniteDomains)).toContain("COV-MEASURE-ANCHOR-OVERLAP");
+    expect(codes(dup, {} as FiniteDomains)).toContain("WRT-MEASURE-ANCHOR-OVERLAP");
   });
 });

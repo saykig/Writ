@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ActionIdentityPolicy, CountInterval, Expr, QueryExpr } from "@covenant/domain";
+import type { ActionIdentityPolicy, CountInterval, Expr, QueryExpr } from "@writ/domain";
 import {
   EvalContext,
   evaluate,
@@ -106,7 +106,7 @@ describe("review_required blocks a score-decisive possible duplicate (§8)", () 
       e,
     );
     expect(result.blocking).toBe(true);
-    const identity = diagnostics.find((d) => d.code === "COV-LINT-IDENTITY");
+    const identity = diagnostics.find((d) => d.code === "WRT-LINT-IDENTITY");
     expect(identity?.severity).toBe("error");
   });
 
@@ -122,7 +122,7 @@ describe("review_required blocks a score-decisive possible duplicate (§8)", () 
     );
     expect(result.blocking).toBeUndefined();
     expect(result.countInterval).toEqual({ min: 2, max: 3 });
-    expect(diagnostics.some((d) => d.code === "COV-LINT-IDENTITY")).toBe(false);
+    expect(diagnostics.some((d) => d.code === "WRT-LINT-IDENTITY")).toBe(false);
   });
 
   test("no block when identity is certain (all keys known, distinct)", () => {
@@ -216,7 +216,7 @@ describe("sum over money -> exact-decimal interval (§10)", () => {
     expect(result.node.value_interval).toEqual({ min: "200.00", max: "300.00" });
   });
 
-  test("currency mismatch -> unknown + COV-LINT-UNIT", () => {
+  test("currency mismatch -> unknown + WRT-LINT-UNIT", () => {
     const recs = [
       { id: "a", strong: "true", amt: { value: "100", currency: "USD", bound: "exact" } },
       { id: "b", strong: "true", amt: { value: "100", currency: "CAD", bound: "exact" } },
@@ -227,7 +227,7 @@ describe("sum over money -> exact-decimal interval (§10)", () => {
       e,
     );
     expect(result.known).toBe(false);
-    expect(diagnostics.map((d) => d.code)).toContain("COV-LINT-UNIT");
+    expect(diagnostics.map((d) => d.code)).toContain("WRT-LINT-UNIT");
   });
 
   test("at_least bound makes the max unbounded (+infinity)", () => {

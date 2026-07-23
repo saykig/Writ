@@ -9,16 +9,16 @@ import {
 
 const ITEMS: { q: string; a: string }[] = [
   {
-    q: "What is Covenant, in one sentence?",
-    a: "A compiler for policy scoring: you write a scoring rubric as a program, and Covenant catches ambiguity before any evidence, scores it against a frozen, reviewed record, and returns every number as a receipt anyone can recompute.",
+    q: "What is Writ, in one sentence?",
+    a: "A compiler for policy scoring: you write a scoring rubric as a program, and Writ catches ambiguity before any evidence, scores it against a frozen, reviewed record, and returns every number as a receipt anyone can recompute.",
   },
   {
     q: "Does it automate the judgment?",
-    a: "No — and that is the honest claim. Gathering evidence, translating the rubric, and choosing the interpretation are human work. Covenant makes those judgments explicit and their consequences reproducible; it does not make the call for you.",
+    a: "No — and that is the honest claim. Gathering evidence, translating the rubric, and choosing the interpretation are human work. Writ makes those judgments explicit and their consequences reproducible; it does not make the call for you.",
   },
   {
     q: "Why four truth values instead of true and false?",
-    a: "Because evidence is often incomplete or conflicting. Covenant keeps “unknown” and “contested” distinct from “false”, so a missing fact never silently becomes a failing score — the result stays honestly unresolved rather than guessed.",
+    a: "Because evidence is often incomplete or conflicting. Writ keeps “unknown” and “contested” distinct from “false”, so a missing fact never silently becomes a failing score — the result stays honestly unresolved rather than guessed.",
   },
   {
     q: "What does “reproducible” actually mean here?",

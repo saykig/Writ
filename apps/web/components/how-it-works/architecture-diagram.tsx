@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * A hand-rendered architecture figure for the Covenant pipeline, in the Seam
+ * A hand-rendered architecture figure for the Writ pipeline, in the Seam
  * palette. Two governed lanes — a normative methodology and reviewed evidence,
  * each pinned by a content hash — converge on a deterministic evaluator that
  * emits a proof-carrying receipt. Pure HTML/SVG: real DOM text (selectable,
@@ -105,7 +105,7 @@ export function ArchitectureDiagram() {
       {/* Two governed input lanes */}
       <div className="grid gap-5 md:grid-cols-2">
         <Lane label="Normative methodology">
-          <Node kicker="written" title=".covenant source" sub="A rubric as a small DSL." />
+          <Node kicker="written" title=".writ source" sub="A rubric as a small DSL." />
           <Arrow />
           <Node kicker="compile" title="Compiler" sub="Type, link, canonicalize." />
           <Arrow />

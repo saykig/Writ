@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { CompareOp, Expr, Measure } from "@covenant/domain";
+import type { CompareOp, Expr, Measure } from "@writ/domain";
 import { EvalContext, evaluateMeasure, type Environment } from "../src/index.js";
 
 function env(facts: Record<string, unknown> = {}): Environment {

@@ -2,7 +2,7 @@
  * Content-addressed SHA-256 hashing over RFC 8785 canonical JSON.
  *
  * Every hash is `"sha256:" + lowercaseHex(sha256(utf8(canonicalJson(value))))`,
- * matching the `^sha256:[0-9a-f]{64}$` shape used throughout the Covenant
+ * matching the `^sha256:[0-9a-f]{64}$` shape used throughout the Writ
  * schemas (see `specs/evaluation-receipt.schema.json`,
  * `specs/release.schema.json`). Hashing uses Bun's `CryptoHasher`.
  *
@@ -25,7 +25,7 @@ export type HashOptions = CanonicalOptions;
 const PREFIX = "sha256:";
 
 /**
- * Canonicalize `value` (RFC 8785 + Covenant §16 normalization) and return its
+ * Canonicalize `value` (RFC 8785 + Writ §16 normalization) and return its
  * content hash as `"sha256:<64 lowercase hex>"`.
  */
 export function sha256Canonical(value: unknown, options?: HashOptions): string {

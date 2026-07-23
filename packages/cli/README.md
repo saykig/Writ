@@ -1,4 +1,4 @@
-# `@covenant/cli`
+# `@writ/cli`
 
 Commands for parse, compile, lint, evaluate, receipt verify, benchmark, source verify, and release.
 

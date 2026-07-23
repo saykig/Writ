@@ -112,17 +112,17 @@
     },
     "expected": [
       {
-        "code": "COV-SCORE-GAP",
+        "code": "WRT-SCORE-GAP",
         "severity": "error",
         "witness": { "counter_exists": false, "strong_count": 0, "weak_count": 5 }
       },
       {
-        "code": "COV-SCORE-OVERLAP",
+        "code": "WRT-SCORE-OVERLAP",
         "severity": "error",
         "witness": { "counter_exists": true, "strong_count": 0, "weak_count": 3 }
       },
       {
-        "code": "COV-SCORE-OVERLAP",
+        "code": "WRT-SCORE-OVERLAP",
         "severity": "error",
         "witness": { "counter_exists": true, "strong_count": 5, "weak_count": 0 }
       }
@@ -235,17 +235,17 @@
     },
     "expected": [
       {
-        "code": "COV-SCORE-OVERLAP",
+        "code": "WRT-SCORE-OVERLAP",
         "severity": "error",
         "witness": { "counter_exists": false, "strong_count": 0, "weak_count": 0 }
       },
       {
-        "code": "COV-SCORE-OVERLAP",
+        "code": "WRT-SCORE-OVERLAP",
         "severity": "error",
         "witness": { "counter_exists": false, "strong_count": 5, "weak_count": 3 }
       },
       {
-        "code": "COV-SCORE-OVERLAP",
+        "code": "WRT-SCORE-OVERLAP",
         "severity": "error",
         "witness": { "counter_exists": true, "strong_count": 5, "weak_count": 0 }
       }

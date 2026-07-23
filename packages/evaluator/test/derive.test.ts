@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { Expr, Predicate } from "@covenant/domain";
+import type { Expr, Predicate } from "@writ/domain";
 import { derivePredicate, EvalContext, type Environment } from "../src/index.js";
 
 function env(facts: Record<string, unknown>): Environment {

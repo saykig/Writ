@@ -244,7 +244,7 @@ export function evaluateScore(program: ScoreProgram, facts: Facts): ScoreEvaluat
     if (trueRules.length > 0) {
       if (uncertainRules.length > 0) {
         diagnostics.push({
-          code: "COV-SCORE-DECISIVE-UNKNOWN",
+          code: "WRT-SCORE-DECISIVE-UNKNOWN",
           severity: "error",
           message: "A score branch is true, but an equal-priority branch is unknown or contested.",
           context: {
@@ -258,7 +258,7 @@ export function evaluateScore(program: ScoreProgram, facts: Facts): ScoreEvaluat
       const distinctResults = [...new Set(trueRules.map((rule) => rule.result))];
       if (distinctResults.length > 1) {
         diagnostics.push({
-          code: "COV-SCORE-AMBIGUOUS",
+          code: "WRT-SCORE-AMBIGUOUS",
           severity: "error",
           message: "Equal-priority score branches with different results are simultaneously true.",
           context: {
@@ -271,7 +271,7 @@ export function evaluateScore(program: ScoreProgram, facts: Facts): ScoreEvaluat
       }
       if (trueRules.length > 1) {
         diagnostics.push({
-          code: "COV-SCORE-SAME-RESULT-OVERLAP",
+          code: "WRT-SCORE-SAME-RESULT-OVERLAP",
           severity: "warning",
           message: "Multiple equal-priority branches with the same result are true.",
           context: {
@@ -294,7 +294,7 @@ export function evaluateScore(program: ScoreProgram, facts: Facts): ScoreEvaluat
 
     if (uncertainRules.length > 0) {
       diagnostics.push({
-        code: "COV-SCORE-DECISIVE-UNKNOWN",
+        code: "WRT-SCORE-DECISIVE-UNKNOWN",
         severity: "error",
         message:
           "A higher-priority score branch is unknown or contested, so lower-priority selection is unsafe.",

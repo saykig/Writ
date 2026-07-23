@@ -20,7 +20,7 @@ It performs no network access, model inference, wall-clock reads, random generat
 
 ## 2. Four-valued truth
 
-Covenant uses a Belnap-style representation:
+Writ uses a Belnap-style representation:
 
 ```text
 true       = support for truth, no support for falsity       = (1, 0)

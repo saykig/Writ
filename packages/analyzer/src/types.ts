@@ -1,10 +1,10 @@
 /**
  * Analyzer-local types. IR types (`Expr`, `ScoreProgram`, `CanonicalIr`, …) come
- * from `@covenant/domain`; these describe the finite-domain analysis surface and
+ * from `@writ/domain`; these describe the finite-domain analysis surface and
  * the analyzer's result shapes.
  */
 
-import type { Diagnostic } from "@covenant/domain";
+import type { Diagnostic } from "@writ/domain";
 
 /** A concrete value a bounded-domain variable can take. */
 export type DomainValue = string | number | boolean;
@@ -38,5 +38,5 @@ export interface MonotonicitySpec {
   /** The variable along which the score must not decrease. */
   readonly variable: string;
   /** Points where monotonicity is not required (e.g. a declared counteraction). */
-  readonly exceptions?: import("@covenant/domain").Expr;
+  readonly exceptions?: import("@writ/domain").Expr;
 }

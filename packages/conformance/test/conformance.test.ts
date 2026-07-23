@@ -1,5 +1,5 @@
 /**
- * The whole conformance corpus, run against the canonical `@covenant/*` engines.
+ * The whole conformance corpus, run against the canonical `@writ/*` engines.
  *
  * Every case in `conformance/cases/**` must pass, and the corpus must cover all
  * ten semantic areas (04_FORMAL_SEMANTICS.md §19).

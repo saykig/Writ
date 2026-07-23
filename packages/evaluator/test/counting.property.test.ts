@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { CountInterval, Expr, QueryExpr } from "@covenant/domain";
+import type { CountInterval, Expr, QueryExpr } from "@writ/domain";
 import { EvalContext, evaluateQuery, type Environment, type EvidenceRecord } from "../src/index.js";
 
 // A deterministic, seedable PRNG (mulberry32) — the evaluator must be pure, and

@@ -1,14 +1,14 @@
 /**
- * `@covenant/language` public API.
+ * `@writ/language` public API.
  *
- * The Covenant compiler front end: a Langium grammar and generated parser (with
+ * The Writ compiler front end: a Langium grammar and generated parser (with
  * error recovery), symbol linking + type checking, an idempotent formatter, and
  * an AST→canonical-IR lowering pass. Everything is pure and deterministic and
- * never imports `@covenant/api` or touches a database.
+ * never imports `@writ/api` or touches a database.
  */
 
-import type { CanonicalIr } from "@covenant/domain";
-import { validate } from "@covenant/domain";
+import type { CanonicalIr } from "@writ/domain";
+import { validate } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
 import { checkModel } from "./checker.js";
@@ -20,7 +20,7 @@ import {
 } from "./compile.js";
 import { sortDiagnostics, hasErrors, type LanguageDiagnostic } from "./diagnostics.js";
 
-export { createCovenantServices, type CovenantServices } from "./covenant-module.js";
+export { createWritServices, type WritServices } from "./writ-module.js";
 export {
   parseDocument,
   spanFromCst,

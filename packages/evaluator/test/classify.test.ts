@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ClassificationBlock, Expr } from "@covenant/domain";
+import type { ClassificationBlock, Expr } from "@writ/domain";
 import { classifyBlock, EvalContext, type Environment } from "../src/index.js";
 
 function env(facts: Record<string, unknown>): Environment {
@@ -54,7 +54,7 @@ describe("classifyBlock — exclusive", () => {
     const result = run(b, { a: "true", b: "true" });
     expect(result.label).toBeNull();
     expect(result.status).toBe("ambiguous");
-    expect(result.diagnostics.map((d) => d.code)).toContain("COV-EVAL-AMBIGUOUS");
+    expect(result.diagnostics.map((d) => d.code)).toContain("WRT-EVAL-AMBIGUOUS");
   });
 
   test("unknown label does NOT trigger the otherwise default when unsafe", () => {

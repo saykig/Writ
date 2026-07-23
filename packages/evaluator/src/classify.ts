@@ -19,8 +19,8 @@
 // `classification` proof node whose children are every rule instance — matched
 // and unmatched alike.
 
-import type { ClassificationBlock } from "@covenant/domain";
-import { makeDiagnostic, type Diagnostic } from "@covenant/domain";
+import type { ClassificationBlock } from "@writ/domain";
+import { makeDiagnostic, type Diagnostic } from "@writ/domain";
 import { EvalContext, evalTruth } from "./interpret.js";
 import type { EvidenceRecord } from "./environment.js";
 import { truth, truthName, type Truth, type TruthName } from "./truth.js";
@@ -131,7 +131,7 @@ function classifyExclusive(
     const distinctLabels = [...new Set(top.map((outcome) => outcome.label))];
     if (distinctLabels.length > 1) {
       diagnostics.push(
-        makeDiagnostic("COV-EVAL-AMBIGUOUS", {
+        makeDiagnostic("WRT-EVAL-AMBIGUOUS", {
           values: { path: block.id },
           context: {
             classification: block.id,

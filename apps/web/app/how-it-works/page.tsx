@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import type { Diagnostic } from "@covenant/domain";
+import type { Diagnostic } from "@writ/domain";
 import { Button } from "@/components/ui/button";
 import { CodeArtifact } from "@/components/site/code-artifact";
 import { HashPill } from "@/components/site/hash-pill";
@@ -19,9 +19,9 @@ import { analyze, compile, evaluateMember, exampleSource, verify } from "@/lib/t
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "How it works · Covenant",
+  title: "How it works · Writ",
   description:
-    "One reading of the whole path: the source to canonical IR to evaluator to receipt pipeline, a four-valued truth lattice where unknown is never silently false, the Covenant language compiled live, the governed evidence ledger, and the implementation-independent conformance corpus.",
+    "One reading of the whole path: the source to canonical IR to evaluator to receipt pipeline, a four-valued truth lattice where unknown is never silently false, the Writ language compiled live, the governed evidence ledger, and the implementation-independent conformance corpus.",
 };
 
 // The five movements of the essay, in reading order. Their ids anchor the
@@ -61,7 +61,7 @@ const OPEN_WORLD_EXITS: readonly string[] = [
   "a reviewed negative-search protocol satisfies a declared completeness requirement.",
 ];
 
-// ── The language surface, in brief (specs/covenant.ebnf) ─────────────────────
+// ── The language surface, in brief (specs/writ.ebnf) ─────────────────────
 const FORMS: readonly { keyword: string; gloss: string }[] = [
   {
     keyword: "commitment",
@@ -320,11 +320,11 @@ export default function HowItWorksPage() {
             How a rubric becomes a receipt.
           </SectionHeading>
           <Prose className="mt-6 max-w-[42rem] text-[length:var(--t-lead)] leading-[1.55]">
-            Covenant is a pipeline with a lattice at its center. A methodology compiles to a
-            canonical intermediate form; a deterministic engine scores a subject over frozen
-            evidence using four truth values rather than two; and every result carries a proof tree
-            and content hashes anyone can recompute. This reading follows the whole path, from the
-            language you write to the corpus that pins its meaning.
+            Writ is a pipeline with a lattice at its center. A methodology compiles to a canonical
+            intermediate form; a deterministic engine scores a subject over frozen evidence using
+            four truth values rather than two; and every result carries a proof tree and content
+            hashes anyone can recompute. This reading follows the whole path, from the language you
+            write to the corpus that pins its meaning.
           </Prose>
         </header>
 
@@ -389,7 +389,7 @@ export default function HowItWorksPage() {
                 Two values cannot tell no from we do not know.
               </SectionHeading>
               <Prose className="mt-5">
-                Covenant scores over a Belnap support pair: one bit for support of truth, one for
+                Writ scores over a Belnap support pair: one bit for support of truth, one for
                 support of falsity. That single distinction separates absence of evidence from
                 conflicting evidence, the difference between a country that did nothing and one
                 whose record is disputed.
@@ -495,8 +495,8 @@ export default function HowItWorksPage() {
                 A rubric, written as a program.
               </SectionHeading>
               <Prose className="mt-5">
-                A methodology in the Covenant DSL compiles to a typed, canonical IR: the same
-                rubric, made precise enough to analyze and evaluate. The flagship 2025 AI-for-SMEs
+                A methodology in the Writ DSL compiles to a typed, canonical IR: the same rubric,
+                made precise enough to analyze and evaluate. The flagship 2025 AI-for-SMEs
                 commitment appears in three readings of one ambiguous phrase,{" "}
                 <em>up to four strong actions</em>, so the ambiguity is visible rather than hidden.
                 Below is the literal reading, compiled on this request.
@@ -522,12 +522,12 @@ export default function HowItWorksPage() {
                 <div className="flex min-w-0 flex-col gap-5">
                   <CodeArtifact
                     label="Queried variables"
-                    filename="2025-ai-sme-literal.covenant"
+                    filename="2025-ai-sme-literal.writ"
                     code={QUERY_SNIPPET}
                   />
                   <CodeArtifact
                     label="Score program"
-                    filename="2025-ai-sme-literal.covenant"
+                    filename="2025-ai-sme-literal.writ"
                     code={SCORE_SNIPPET}
                     seam={SCORE_SEAM}
                     caption={
@@ -617,11 +617,11 @@ export default function HowItWorksPage() {
                 A score is only as trustworthy as the evidence beneath it.
               </SectionHeading>
               <Prose className="mt-5">
-                Covenant separates the path from an international commitment to a compliance
-                judgment into three governed layers, each with a role boundary, a content hash, and
-                an append-only history. The methodology does not pretend interpretation is
-                mechanical, and it does not hide analyst judgment inside prose or a model prompt. A
-                disagreement can then be located precisely.
+                Writ separates the path from an international commitment to a compliance judgment
+                into three governed layers, each with a role boundary, a content hash, and an
+                append-only history. The methodology does not pretend interpretation is mechanical,
+                and it does not hide analyst judgment inside prose or a model prompt. A disagreement
+                can then be located precisely.
               </Prose>
 
               <ol className="mt-8 grid grid-cols-1 gap-x-10 md:grid-cols-3">
@@ -719,7 +719,7 @@ export default function HowItWorksPage() {
               </SectionHeading>
               <Prose className="mt-5">
                 A specification two implementations can read differently is not a specification.
-                Covenant pins its meaning in an implementation-independent corpus: {totalCases}{" "}
+                Writ pins its meaning in an implementation-independent corpus: {totalCases}{" "}
                 declarative cases across {areas.length} semantic areas, each a frozen input and the
                 exact value the semantics require. The corpus imports nothing and depends on no
                 engine; the reference stack is one consumer of it, not part of it. It is

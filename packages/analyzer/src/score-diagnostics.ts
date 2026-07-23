@@ -5,7 +5,7 @@
  * lowering rather than comparing two independently-formatted shapes.
  */
 
-import { makeDiagnostic, type Diagnostic, type ScoreRule } from "@covenant/domain";
+import { makeDiagnostic, type Diagnostic, type ScoreRule } from "@writ/domain";
 import type { Witness } from "./types.js";
 
 export type Location = { readonly objectId: string } | undefined;
@@ -17,7 +17,7 @@ export function formatWitness(witness: Witness): string {
 }
 
 export function buildGap(witness: Witness, otherwise: string, location: Location): Diagnostic {
-  return makeDiagnostic("COV-SCORE-GAP", {
+  return makeDiagnostic("WRT-SCORE-GAP", {
     values: { witness: formatWitness(witness) },
     ...(location ? { location } : {}),
     witness,
@@ -34,7 +34,7 @@ export function buildOverlap(
 ): Diagnostic {
   const matchedResults = [...new Set([ruleA.result, ruleB.result])];
   const differ = matchedResults.length > 1;
-  const diagnostic = makeDiagnostic("COV-SCORE-OVERLAP", {
+  const diagnostic = makeDiagnostic("WRT-SCORE-OVERLAP", {
     values: { ruleA: ruleA.id, ruleB: ruleB.id, witness: formatWitness(witness) },
     ...(location ? { location } : {}),
     witness,
@@ -49,7 +49,7 @@ export function buildOverlap(
 }
 
 export function buildUnreachable(rule: ScoreRule, location: Location): Diagnostic {
-  return makeDiagnostic("COV-SCORE-UNREACHABLE", {
+  return makeDiagnostic("WRT-SCORE-UNREACHABLE", {
     values: { rule: rule.id },
     ...(location ? { location } : {}),
     context: { ruleId: rule.id },
@@ -64,7 +64,7 @@ export function buildMonotonicity(
   higherScore: number,
   location: Location,
 ): Diagnostic {
-  return makeDiagnostic("COV-SCORE-MONOTONICITY", {
+  return makeDiagnostic("WRT-SCORE-MONOTONICITY", {
     values: { variable, witness: formatWitness(lower) },
     ...(location ? { location } : {}),
     witness: { variable, lower, higher, lowerScore, higherScore },

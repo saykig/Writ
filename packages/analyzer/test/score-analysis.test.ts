@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import type { Diagnostic } from "@covenant/domain";
+import type { Diagnostic } from "@writ/domain";
 import { analyzeScoreProgram } from "../src/index.js";
 import {
   deadRuleProgram,
@@ -42,9 +42,9 @@ const counterOverlapDomains: FiniteDomains = {
   counter_exists: [false, true],
 };
 
-test("literal 1..4 reading exposes COV-SCORE-GAP with the strong=0 uncovered witness", async () => {
+test("literal 1..4 reading exposes WRT-SCORE-GAP with the strong=0 uncovered witness", async () => {
   const { diagnostics } = await analyzeScoreProgram(literalProgram, fullDomains);
-  const gap = withWitness(diagnostics, "COV-SCORE-GAP", {
+  const gap = withWitness(diagnostics, "WRT-SCORE-GAP", {
     counter_exists: false,
     strong_count: 0,
     weak_count: 5,
@@ -57,7 +57,7 @@ test("counteraction overlap: strong=5 with a counteraction satisfies full and no
   const { diagnostics } = await analyzeScoreProgram(literalProgram, counterOverlapDomains, {
     objectId: "AI_SME_ADOPTION",
   });
-  const overlap = withWitness(diagnostics, "COV-SCORE-OVERLAP", {
+  const overlap = withWitness(diagnostics, "WRT-SCORE-OVERLAP", {
     strong_count: 5,
     weak_count: 0,
     counter_exists: true,
@@ -67,9 +67,9 @@ test("counteraction overlap: strong=5 with a counteraction satisfies full and no
   expect(overlap!.context?.matchedResults).toEqual(["+1", "-1"]);
 });
 
-test("inclusive 0..4 reading turns the gap into a COV-SCORE-OVERLAP at strong=0 low weak", async () => {
+test("inclusive 0..4 reading turns the gap into a WRT-SCORE-OVERLAP at strong=0 low weak", async () => {
   const { diagnostics } = await analyzeScoreProgram(inclusiveUpToProgram(), fullDomains);
-  const overlap = withWitness(diagnostics, "COV-SCORE-OVERLAP", {
+  const overlap = withWitness(diagnostics, "WRT-SCORE-OVERLAP", {
     strong_count: 0,
     weak_count: 0,
     counter_exists: false,
@@ -81,25 +81,25 @@ test("inclusive 0..4 reading turns the gap into a COV-SCORE-OVERLAP at strong=0 
 
 test("priority-resolved program is exhaustive and non-overlapping", async () => {
   const { diagnostics } = await analyzeScoreProgram(resolvedProgram(), fullDomains);
-  expect(byCode(diagnostics, "COV-SCORE-GAP")).toHaveLength(0);
-  expect(byCode(diagnostics, "COV-SCORE-OVERLAP")).toHaveLength(0);
+  expect(byCode(diagnostics, "WRT-SCORE-GAP")).toHaveLength(0);
+  expect(byCode(diagnostics, "WRT-SCORE-OVERLAP")).toHaveLength(0);
 });
 
-test("dead branch is reported as COV-SCORE-UNREACHABLE", async () => {
+test("dead branch is reported as WRT-SCORE-UNREACHABLE", async () => {
   const { diagnostics } = await analyzeScoreProgram(deadRuleProgram(), {
     strong_count: [0, 1, 2, 3, 4, 5, 6],
   });
-  const unreachable = byCode(diagnostics, "COV-SCORE-UNREACHABLE");
+  const unreachable = byCode(diagnostics, "WRT-SCORE-UNREACHABLE");
   expect(unreachable).toHaveLength(1);
   expect(unreachable[0]!.context?.ruleId).toBe("dead");
-  expect(byCode(diagnostics, "COV-SCORE-GAP")).toHaveLength(0);
+  expect(byCode(diagnostics, "WRT-SCORE-GAP")).toHaveLength(0);
 });
 
-test("non-monotonic program yields a COV-SCORE-MONOTONICITY counterexample", async () => {
+test("non-monotonic program yields a WRT-SCORE-MONOTONICITY counterexample", async () => {
   const { diagnostics } = await analyzeScoreProgram(nonMonotonicProgram(), smallAxisDomains, {
     monotonic: [{ variable: "strong_count" }],
   });
-  const mono = byCode(diagnostics, "COV-SCORE-MONOTONICITY");
+  const mono = byCode(diagnostics, "WRT-SCORE-MONOTONICITY");
   expect(mono).toHaveLength(1);
   const witness = mono[0]!.witness as {
     lower: { strong_count: number };
@@ -115,7 +115,7 @@ test("resolved program is monotonic in strong_count once the counteraction excep
   const { diagnostics } = await analyzeScoreProgram(resolvedProgram(), fullDomains, {
     monotonic: [{ variable: "strong_count", exceptions: { kind: "ref", path: "counter_exists" } }],
   });
-  expect(byCode(diagnostics, "COV-SCORE-MONOTONICITY")).toHaveLength(0);
+  expect(byCode(diagnostics, "WRT-SCORE-MONOTONICITY")).toHaveLength(0);
 });
 
 test("analysis is deterministic across repeated runs", async () => {

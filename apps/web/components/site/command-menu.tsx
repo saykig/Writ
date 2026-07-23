@@ -16,11 +16,11 @@ import {
 import { EXAMPLE_ITEMS, PRIMARY_NAV } from "@/components/site/nav-items";
 
 /** Custom event other components dispatch to open the palette (see SiteNav). */
-export const OPEN_COMMAND_EVENT = "covenant:open-command";
+export const OPEN_COMMAND_EVENT = "writ:open-command";
 
 /**
  * CommandMenu — the ⌘K palette. Mounted once (in SiteNav). Toggles on ⌘K/Ctrl+K
- * and opens on the `covenant:open-command` window event, so any button can
+ * and opens on the `writ:open-command` window event, so any button can
  * trigger it. Jumps to a route or loads an example reading in the playground.
  */
 export function CommandMenu() {

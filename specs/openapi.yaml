@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Covenant API
+  title: Writ API
   version: 0.1.0
   summary: Governed methodology, evidence, evaluation, and release API.
   description: |

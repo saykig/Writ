@@ -1,41 +1,39 @@
-// The frozen methodology: the resolved AI-for-SMEs covenant compiled to IR.
+// The frozen methodology: the resolved AI-for-SMEs writ compiled to IR.
 //
-// The runner and tests use this AS-IS (`examples/2025-ai-sme-resolved.covenant`).
+// The runner and tests use this AS-IS (`examples/2025-ai-sme-resolved.writ`).
 // It is the gap/overlap-free methodology whose score program the benchmark
 // reproduces; nothing here edits it.
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { compileSource, type CompileSourceResult } from "@covenant/language";
-import { methodologyBundleHash } from "@covenant/provenance";
-import type { CanonicalIr, Commitment } from "@covenant/domain";
+import { compileSource, type CompileSourceResult } from "@writ/language";
+import { methodologyBundleHash } from "@writ/provenance";
+import type { CanonicalIr, Commitment } from "@writ/domain";
 
 /**
- * Absolute path to the resolved covenant source (repo `examples/`). The relative
+ * Absolute path to the resolved writ source (repo `examples/`). The relative
  * specifier is computed so bundlers do not asset-analyze it; Bun/Node behavior
  * is unchanged.
  */
-const RESOLVED_COVENANT_REL = `${"../".repeat(3)}examples/2025-ai-sme-resolved.covenant`;
-export const RESOLVED_COVENANT_PATH = fileURLToPath(
-  new URL(RESOLVED_COVENANT_REL, import.meta.url),
-);
+const RESOLVED_WRIT_REL = `${"../".repeat(3)}examples/2025-ai-sme-resolved.writ`;
+export const RESOLVED_WRIT_PATH = fileURLToPath(new URL(RESOLVED_WRIT_REL, import.meta.url));
 
 let cached: CompileSourceResult | undefined;
 
-/** Compile the resolved covenant to IR (memoized, deterministic). */
-export function compileResolvedCovenant(): CompileSourceResult {
+/** Compile the resolved writ to IR (memoized, deterministic). */
+export function compileResolvedWrit(): CompileSourceResult {
   if (cached === undefined) {
-    const source = readFileSync(RESOLVED_COVENANT_PATH, "utf8");
-    cached = compileSource(source, { fileName: "2025-ai-sme-resolved.covenant" });
+    const source = readFileSync(RESOLVED_WRIT_PATH, "utf8");
+    cached = compileSource(source, { fileName: "2025-ai-sme-resolved.writ" });
   }
   return cached;
 }
 
 /** The compiled canonical IR; throws if compilation did not produce one. */
 export function resolvedIr(): CanonicalIr {
-  const result = compileResolvedCovenant();
+  const result = compileResolvedWrit();
   if (result.ir === undefined) {
-    throw new Error("Resolved covenant failed to compile to IR.");
+    throw new Error("Resolved writ failed to compile to IR.");
   }
   return result.ir;
 }

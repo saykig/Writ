@@ -5,7 +5,7 @@ import { TruthBadge } from "@/components/site/truth-badge";
 import { Term } from "@/components/site/term";
 
 /**
- * FeatureGrid — the four things that make Covenant different, as a bento of
+ * FeatureGrid — the four things that make Writ different, as a bento of
  * shadcn-style cards. Each carries a real visual (a gap flag, the four truth
  * values, a hash, the amber judgment marker), not a decorative icon alone.
  */
@@ -99,8 +99,8 @@ export function FeatureGrid() {
           </span>
         }
       >
-        Where a score turns on a reading rather than a fact, Covenant marks the exact cell and shows
-        the reading that flips it.
+        Where a score turns on a reading rather than a fact, Writ marks the exact cell and shows the
+        reading that flips it.
       </Card>
     </div>
   );

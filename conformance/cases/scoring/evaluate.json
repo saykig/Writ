@@ -230,7 +230,7 @@
       "result": "unresolved",
       "status": "ambiguous",
       "matchedRuleId": null,
-      "diagnostics": ["COV-EVAL-AMBIGUOUS"]
+      "diagnostics": ["WRT-EVAL-AMBIGUOUS"]
     }
   },
   {
@@ -674,7 +674,7 @@
       "result": "+1",
       "status": "supported",
       "matchedRuleId": "a",
-      "diagnostics": ["COV-EVAL-SAME-RESULT-OVERLAP"]
+      "diagnostics": ["WRT-EVAL-SAME-RESULT-OVERLAP"]
     }
   },
   {
@@ -706,7 +706,7 @@
       "result": "unresolved",
       "status": "incomplete",
       "matchedRuleId": null,
-      "diagnostics": ["COV-EVAL-DECISIVE-UNKNOWN"]
+      "diagnostics": ["WRT-EVAL-DECISIVE-UNKNOWN"]
     }
   },
   {

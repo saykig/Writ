@@ -2,19 +2,19 @@
  * CORE-011: bounded score analysis over finite domains via Z3.
  *
  * Detects, with minimized and deterministic witnesses:
- *   - COV-SCORE-GAP          an assignment where no rule is decisively true and
+ *   - WRT-SCORE-GAP          an assignment where no rule is decisively true and
  *                            `otherwise` is not a safe catch-all;
- *   - COV-SCORE-OVERLAP      two equal-priority rules decisively true at once
+ *   - WRT-SCORE-OVERLAP      two equal-priority rules decisively true at once
  *                            (error if their results differ, warning if equal);
- *   - COV-SCORE-UNREACHABLE  a rule decisively true in no assignment;
- *   - COV-SCORE-MONOTONICITY a counterexample to a declared `monotonic` axis.
+ *   - WRT-SCORE-UNREACHABLE  a rule decisively true in no assignment;
+ *   - WRT-SCORE-MONOTONICITY a counterexample to a declared `monotonic` axis.
  *
  * Witnesses are minimized lexicographically in canonical (alphabetical) variable
  * order, which reproduces the reference enumeration's first-hit witness, and the
  * solver runs synchronously with a fixed configuration, so output is stable.
  */
 
-import type { Diagnostic, ScoreProgram } from "@covenant/domain";
+import type { Diagnostic, ScoreProgram } from "@writ/domain";
 import { canonicalKeys, stableWitness } from "./domains.js";
 import {
   buildGap,

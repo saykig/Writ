@@ -1,14 +1,14 @@
-# Covenant works: a demonstration
+# Writ works: a demonstration
 
 This document shows the system doing the thing it exists to do, on real data,
 reproducibly. Run `bash scripts/demo.sh` from a clean checkout to reproduce every
 line below (the benchmark needs no network; the evidence is frozen in-repo).
 
-## What Covenant is for
+## What Writ is for
 
 A G7 compliance score is a number on a `+1 / 0 / -1` scale, and behind each number
 is a methodology, a pile of public evidence, and — usually invisibly — a set of
-judgment calls. Covenant makes the methodology a program, the evidence a frozen
+judgment calls. Writ makes the methodology a program, the evidence a frozen
 reviewed ledger, and the score a receipt you can recompute and audit. Two things
 fall out of that: the analyzer catches ambiguity in the *methodology* before any
 evidence exists, and the discrepancy ledger names exactly where a *score* depends
@@ -16,7 +16,7 @@ on judgment rather than public fact.
 
 ## 1. The language compiles to a canonical IR
 
-`examples/2025-ai-sme-literal.covenant` compiles to an IR whose canonical hash is
+`examples/2025-ai-sme-literal.writ` compiles to an IR whose canonical hash is
 byte-identical to the hand-authored golden IR. The textual DSL is a convenience;
 the typed IR is the artifact of record.
 
@@ -24,13 +24,13 @@ the typed IR is the artifact of record.
 
 The 2025 G7 AI-for-SMEs rubric awards `0` for "up to four strong actions." Read
 literally that leaves a **gap** — 0 strong and 5 weak actions match no rule — and,
-under a different normalization, an **overlap**. Covenant finds both statically,
+under a different normalization, an **overlap**. Writ finds both statically,
 with a minimized witness, and refuses to guess which reading was intended:
 
 ```
 literal reading:
-  COV-SCORE-GAP     ... (counter_exists=false, strong_count=0, weak_count=5)
-  COV-SCORE-OVERLAP ... rules `partial` and `none` ...
+  WRT-SCORE-GAP     ... (counter_exists=false, strong_count=0, weak_count=5)
+  WRT-SCORE-OVERLAP ... rules `partial` and `none` ...
 resolved reading:
   no score-analysis findings
 ```

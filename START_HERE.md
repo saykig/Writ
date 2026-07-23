@@ -1,10 +1,10 @@
 # Start Here: Codex Handoff
 
-This pack is a build specification for **Covenant**, a domain-specific language and evidence system for auditable G7 commitment compliance evaluation.
+This pack is a build specification for **Writ**, a domain-specific language and evidence system for auditable G7 commitment compliance evaluation.
 
 ## The first command to give Codex
 
-Open `13_CODEX_MASTER_PROMPT.md` and use it as the initial task prompt in a fresh repository. Keep `AGENTS.md`, `TASKS.yaml`, `.agents/skills/covenant-domain/SKILL.md`, `specs/`, `examples/`, and `fixtures/` at the repository root.
+Open `13_CODEX_MASTER_PROMPT.md` and use it as the initial task prompt in a fresh repository. Keep `AGENTS.md`, `TASKS.yaml`, `.agents/skills/writ-domain/SKILL.md`, `specs/`, `examples/`, and `fixtures/` at the repository root.
 
 ## What is normative
 

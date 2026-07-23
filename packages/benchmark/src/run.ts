@@ -1,6 +1,6 @@
 // The benchmark runner.
 //
-// Compiles the resolved covenant to IR, then for each of the eight subjects
+// Compiles the resolved writ to IR, then for each of the eight subjects
 // loads its frozen evidence snapshot, enriches it under an interpretation
 // profile, and calls `evaluateCommitment` to obtain a receipt. The published
 // profile reproduces the published cell; the generous profile records
@@ -11,13 +11,13 @@
 // hardcoded here. This module only compares and records.
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { evaluateCommitment } from "@covenant/evaluator";
+import { evaluateCommitment } from "@writ/evaluator";
 import type {
   EvaluationReceipt,
   Evidence,
   InterpretationProfile,
   MethodologyInventory,
-} from "@covenant/domain";
+} from "@writ/domain";
 import { resolvedIr, methodologyVersionId } from "./methodology.js";
 import { enrichSnapshotForProfile } from "./evidence.js";
 import { INVENTORY_PATH, LEDGER_PATH, profilePath, snapshotPath } from "./paths.js";

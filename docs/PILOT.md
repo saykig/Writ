@@ -1,4 +1,4 @@
-# Covenant pilot: results and next steps
+# Writ pilot: results and next steps
 
 A short, honest read on what the first pilot established, what it did not, and
 where it should go. For the reproducible run behind the numbers, see
@@ -6,7 +6,7 @@ where it should go. For the reproducible run behind the numbers, see
 
 ## Summary
 
-Covenant compiles a compliance methodology into a program, evaluates it against
+Writ compiles a compliance methodology into a program, evaluates it against
 frozen reviewed evidence, and returns a score as a receipt anyone can recompute.
 The pilot ran the 2025 G7 AI-for-SMEs chapter across all eight members. It shows
 the mechanism works on real published data and produces one substantive finding:
@@ -55,9 +55,9 @@ you that.
 ### 3. Static ambiguity, caught before any evidence exists
 
 The rubric awards `0` for "up to four strong actions." Read literally (1 to 4),
-that leaves an uncovered state no rule scores (`COV-SCORE-GAP`: zero strong, five
+that leaves an uncovered state no rule scores (`WRT-SCORE-GAP`: zero strong, five
 weak). Read inclusively (0 to 4), a state is scored by two rules with different
-results (`COV-SCORE-OVERLAP`). Covenant proves both statically, with a minimized
+results (`WRT-SCORE-OVERLAP`). Writ proves both statically, with a minimized
 witness, and refuses to guess the intended reading. The resolved methodology,
 which makes the interpretation explicit, analyzes clean.
 
@@ -73,12 +73,12 @@ AI-governance index across the EU, US, UK, and China). Where AI-for-SMEs is a
 three-point `+1/0/-1` verdict, the Gap Matrix is a **weighted-ordinal measure**:
 each axis is five equally-weighted components, each scored on a five-anchor
 rubric (0..4), aggregated as `round(100 · Σ wᵢ·sᵢ/4)`. That shape did not exist in
-Covenant; expressing it required a graded-measure extension to the IR, the
+Writ; expressing it required a graded-measure extension to the IR, the
 evaluator, and the analyzer (see the plan and `docs/ANALYZER-SCOPE.md`).
 
 What it shows:
 
-- **Faithful reproduction of a genuinely different shape.** Covenant recomputes
+- **Faithful reproduction of a genuinely different shape.** Writ recomputes
   Sara's `deriveAssessment` exactly: `public_authority` (five components at level
   2) → **50**; `knowledge_concentration` (two of five components unassessed) →
   **pending**, not a silent 0 — reproducing her "if some score is null, return
@@ -101,7 +101,7 @@ across two different scoring paradigms is the start of a generality claim.
   but a handful of cases is not a population.
 - **The judgment is still human.** Gathering evidence, translating the rubric, and
   authoring the interpretation profiles (or, for the Gap Matrix, transcribing the
-  analyst assessments) were all hand work. Covenant makes the judgment explicit
+  analyst assessments) were all hand work. Writ makes the judgment explicit
   and its consequences reproducible. It does not produce the judgment.
 - **No user validation yet.** The analyzer's output on Sara's own Gap Matrix is
   the natural fixture for her review, but her sign-off is not recorded here and is

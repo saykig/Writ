@@ -1,4 +1,4 @@
-// Four-valued interval comparison for the Covenant evaluator.
+// Four-valued interval comparison for the Writ evaluator.
 //
 // Threshold comparisons over intervals are 4-valued (04_FORMAL_SEMANTICS.md §7,
 // §10): an interval wholly satisfying the relation is `true`, wholly violating it
@@ -11,7 +11,7 @@
 // logic to exact decimals with an unbounded (`+infinity`) upper endpoint and a
 // unit dimension.
 
-import type { CountInterval } from "@covenant/domain";
+import type { CountInterval } from "@writ/domain";
 import { truth, not, all, type Truth } from "./truth.js";
 import { compareDecimal, type Decimal } from "./decimal.js";
 import type { UnitedInterval } from "./values.js";

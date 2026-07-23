@@ -8,7 +8,7 @@
   "action_identity": null,
   "expect": [
     {
-      "code": "COV-IDENTITY-MISSING",
+      "code": "WRT-IDENTITY-MISSING",
       "severity": "error"
     }
   ]

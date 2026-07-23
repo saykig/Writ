@@ -1,4 +1,4 @@
-language covenant "0.1"
+language writ "0.1"
 package g7.kananaskis_2025.ai_sme.literal version "1.0.0";
 
 source ai_chapter {
@@ -38,12 +38,12 @@ scenario uncovered_many_weak for AI_SME_ADOPTION {
   given strong_count = 0;
   given weak_count = 5;
   given counter_exists = false;
-  expect diagnostic COV-SCORE-GAP;
+  expect diagnostic WRT-SCORE-GAP;
 }
 
 scenario counteraction_overlap for AI_SME_ADOPTION {
   given strong_count = 5;
   given weak_count = 0;
   given counter_exists = true;
-  expect diagnostic COV-SCORE-OVERLAP;
+  expect diagnostic WRT-SCORE-OVERLAP;
 }

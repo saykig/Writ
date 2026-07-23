@@ -1,4 +1,4 @@
-// Row and input types for the Covenant evidence ledger.
+// Row and input types for the Writ evidence ledger.
 //
 // These mirror the SQL columns (snake_case) rather than the evaluator/domain
 // types on purpose: per AGENTS.md, database types must not leak into the

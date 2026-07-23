@@ -1,7 +1,7 @@
-language covenant "0.1"
+language writ "0.1"
 package fatf.mutual_evaluation version "1.0.0";
 
-// FATF Mutual Evaluations (AML/CFT), ported to Covenant — the third methodology.
+// FATF Mutual Evaluations (AML/CFT), ported to Writ — the third methodology.
 //
 // The Financial Action Task Force rates each assessed country on two axes,
 // published in full per country in the Consolidated Assessment Ratings table:
@@ -16,7 +16,7 @@ package fatf.mutual_evaluation version "1.0.0";
 //       High / Substantial / Moderate / Low. The load-bearing word is
 //       **"substantial" vs "moderate"**.
 //
-// What Covenant reproduces here is not the ratings themselves (those are FATF's
+// What Writ reproduces here is not the ratings themselves (those are FATF's
 // published record, carried in as evidence) but the DERIVED, published outcome
 // FATF computes from them: the country's **follow-up stream** (regular vs
 // enhanced), assigned mechanically at the adoption of the Mutual Evaluation

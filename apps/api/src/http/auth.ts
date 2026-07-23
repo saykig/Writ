@@ -47,13 +47,13 @@ export class StaticTokenVerifier implements TokenVerifier {
 }
 
 /**
- * Build a {@link StaticTokenVerifier} from `COVENANT_DEV_TOKENS`, a JSON object
+ * Build a {@link StaticTokenVerifier} from `WRIT_DEV_TOKENS`, a JSON object
  * of `{ "<token>": { "id": "...", "roles": ["reviewer"] } }`. When unset, a
  * single well-known admin token seeds a usable dev instance. This is the "dev
  * static-token mode" seam; production wires a real IdP verifier instead.
  */
 export function devTokenVerifier(env: NodeJS.ProcessEnv = process.env): StaticTokenVerifier {
-  const raw = env.COVENANT_DEV_TOKENS;
+  const raw = env.WRIT_DEV_TOKENS;
   if (raw !== undefined && raw.trim() !== "") {
     const parsed = JSON.parse(raw) as Record<string, Actor>;
     return new StaticTokenVerifier(parsed);

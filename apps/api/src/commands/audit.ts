@@ -8,7 +8,7 @@
 // Hashing is deterministic (no wall-clock): the DB assigns `occurred_at`, which
 // is excluded from the content that is hashed.
 
-import { sha256Canonical } from "@covenant/provenance";
+import { sha256Canonical } from "@writ/provenance";
 import type { AuditRepository } from "../db/repositories/audit.js";
 import type { AuditEventRow, JsonObject } from "../db/types.js";
 

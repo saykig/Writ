@@ -23,7 +23,7 @@ describe("schema-version registry", () => {
   test("resolveSchemaVersion defaults to current and returns metadata", () => {
     const entry = resolveSchemaVersion("evidence");
     expect(entry?.schemaVersion).toBe("1.0.0");
-    expect(entry?.title).toBe("Covenant Evidence Snapshot");
+    expect(entry?.title).toBe("Writ Evidence Snapshot");
   });
 
   test("resolveSchemaVersion returns undefined for an unknown version (never coerces)", () => {

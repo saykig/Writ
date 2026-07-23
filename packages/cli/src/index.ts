@@ -1,31 +1,27 @@
-// The Covenant CLI.
+// The Writ CLI.
 //
 // Evaluator commands (CORE-009, no DB, no network):
 //
-//   covenant evaluate --ir <file> --evidence <file> --subject <id>
+//   writ evaluate --ir <file> --evidence <file> --subject <id>
 //                     [--profile <file>] [--as-of <date>] [--cutoff <date>] [--json]
-//   covenant receipt verify <receipt.json>
+//   writ receipt verify <receipt.json>
 //
 // Language commands (LANG-004, no DB, no network):
 //
-//   covenant fmt <files...> [--write] [--check]
-//   covenant check <files...> [--json]
-//   covenant compile <file> [--out <file>] [--json]
-//   covenant analyze <file> [--json]
-//   covenant test <files...> [--json]
+//   writ fmt <files...> [--write] [--check]
+//   writ check <files...> [--json]
+//   writ compile <file> [--out <file>] [--json]
+//   writ analyze <file> [--json]
+//   writ test <files...> [--json]
 //
 // `evaluate` runs the deterministic commitment evaluator and prints the receipt.
 // `receipt verify` recomputes the canonical hash and exits non-zero on tamper.
-// The language commands drive `@covenant/language` and `@covenant/analyzer`.
+// The language commands drive `@writ/language` and `@writ/analyzer`.
 // Argument parsing uses the Node built-in `parseArgs` — no third-party dependency.
 
 import { parseArgs } from "node:util";
 import { readFileSync } from "node:fs";
-import {
-  evaluateCommitment,
-  verifyReceipt,
-  type EvaluateCommitmentOptions,
-} from "@covenant/evaluator";
+import { evaluateCommitment, verifyReceipt, type EvaluateCommitmentOptions } from "@writ/evaluator";
 import {
   validate,
   type CanonicalIr,
@@ -33,28 +29,28 @@ import {
   type Evidence,
   type InterpretationProfile,
   type SchemaKind,
-} from "@covenant/domain";
+} from "@writ/domain";
 import { processIO, type CliIO } from "./io.js";
 import { runAnalyze, runCheck, runCompile, runFmt, runTest } from "./language-commands.js";
 
 export type { CliIO } from "./io.js";
 
 const USAGE = [
-  "covenant — Covenant toolchain",
+  "writ — Writ toolchain",
   "",
   "Usage:",
-  "  covenant evaluate --ir <file> --evidence <file> --subject <id>",
+  "  writ evaluate --ir <file> --evidence <file> --subject <id>",
   "                    [--profile <file>] [--as-of <date>] [--cutoff <date>] [--json]",
-  "  covenant receipt verify <receipt.json>",
-  "  covenant fmt <files...> [--write] [--check]",
-  "  covenant check <files...> [--json]",
-  "  covenant compile <file> [--out <file>] [--json]",
-  "  covenant analyze <file> [--json]",
-  "  covenant test <files...> [--json]",
+  "  writ receipt verify <receipt.json>",
+  "  writ fmt <files...> [--write] [--check]",
+  "  writ check <files...> [--json]",
+  "  writ compile <file> [--out <file>] [--json]",
+  "  writ analyze <file> [--json]",
+  "  writ test <files...> [--json]",
 ].join("\n");
 
 /**
- * Run the CLI over an argument vector (everything after `covenant`). Returns a
+ * Run the CLI over an argument vector (everything after `writ`). Returns a
  * process exit code; never calls `process.exit` itself so it stays testable.
  */
 export async function runCli(argv: readonly string[], io: CliIO = processIO): Promise<number> {

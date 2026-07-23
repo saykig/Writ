@@ -1,4 +1,4 @@
-# `@covenant/language`
+# `@writ/language`
 
 Langium grammar, parser recovery, symbol linking, formatter, source maps, AST-to-IR compiler, and LSP.
 

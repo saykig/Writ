@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/evidence.schema.json",
-  "title": "Covenant Evidence Snapshot",
+  "$id": "https://writ.example/schemas/evidence.schema.json",
+  "title": "Writ Evidence Snapshot",
   "type": "object",
   "additionalProperties": false,
   "required": [

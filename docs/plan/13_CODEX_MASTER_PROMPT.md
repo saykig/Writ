@@ -4,7 +4,7 @@ Copy the prompt below into Codex from the repository root. Do not ask Codex to i
 
 ---
 
-You are implementing Covenant, an auditable DSL and evidence system for G7 compliance evaluation.
+You are implementing Writ, an auditable DSL and evidence system for G7 compliance evaluation.
 
 Read, in this order:
 

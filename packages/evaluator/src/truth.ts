@@ -1,4 +1,4 @@
-// Four-valued (Belnap-style) truth kernel for the Covenant evaluator.
+// Four-valued (Belnap-style) truth kernel for the Writ evaluator.
 //
 // A truth value is a pair of independent support flags — support for truth and
 // support for falsity — per `docs/plan/04_FORMAL_SEMANTICS.md` §2:

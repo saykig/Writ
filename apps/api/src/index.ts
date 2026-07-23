@@ -1,4 +1,4 @@
-// Application entry point for @covenant/api.
+// Application entry point for @writ/api.
 //
 // The evidence-ledger database layer (schema/migrations DATA-001 and the source
 // registry service DATA-004) plus the governed command API (DATA-002) and the

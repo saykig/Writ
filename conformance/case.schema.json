@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://covenant.dev/conformance/case.schema.json",
-  "title": "Covenant conformance case",
+  "$id": "https://writ.dev/conformance/case.schema.json",
+  "title": "Writ conformance case",
   "description": "An implementation-independent conformance case (or an array of them). Each case names an `area`, a `kind` (the operation under test), a frozen `input`, and the `expected` result. A conformant evaluator dispatches on `kind`, runs `input`, and must produce a value deep-equal to `expected`. See conformance/README.md for the per-kind input/expected contract.",
   "oneOf": [
     { "$ref": "#/$defs/case" },
@@ -53,7 +53,7 @@
             "hash",
             "receipt.evaluate"
           ],
-          "description": "Selects the operation. The runner maps each kind to a canonical @covenant/* API; the contract for each is documented in conformance/README.md."
+          "description": "Selects the operation. The runner maps each kind to a canonical @writ/* API; the contract for each is documented in conformance/README.md."
         },
         "description": {
           "type": "string",

@@ -1,4 +1,4 @@
-// `@covenant/benchmark` — the 2025 G7 AI-for-SMEs benchmark.
+// `@writ/benchmark` — the 2025 G7 AI-for-SMEs benchmark.
 //
 // Reproduces the published per-member scores from a frozen evidence snapshot and
 // the resolved methodology, and records the interpretation-sensitive cells in a
@@ -24,12 +24,12 @@ export {
 } from "./evidence.js";
 
 export {
-  compileResolvedCovenant,
+  compileResolvedWrit,
   resolvedIr,
   resolvedCommitment,
   resolvedBundleHash,
   methodologyVersionId,
-  RESOLVED_COVENANT_PATH,
+  RESOLVED_WRIT_PATH,
 } from "./methodology.js";
 
 export { buildProfile, sensitiveInstrumentIds, type ProfileKind } from "./profiles.js";

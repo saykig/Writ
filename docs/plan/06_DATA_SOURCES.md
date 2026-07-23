@@ -4,7 +4,7 @@
 
 Evidence collection must be driven by a versioned source registry, not ad hoc search alone. The registry says which sources exist, what they are authoritative for, how they can be queried, how often they should be checked, and what legal or technical constraints apply.
 
-The G7 compliance coding manual prioritizes national government sources, then international organizations, then reliable major news sources. Covenant preserves that hierarchy while allowing issue-specific exceptions.
+The G7 compliance coding manual prioritizes national government sources, then international organizations, then reliable major news sources. Writ preserves that hierarchy while allowing issue-specific exceptions.
 
 The machine-readable registry is in `data/source-registry.json`.
 

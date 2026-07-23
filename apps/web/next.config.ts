@@ -6,15 +6,15 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..");
 
 const nextConfig: NextConfig = {
-  // The @covenant/* workspace packages ship raw NodeNext TypeScript source
+  // The @writ/* workspace packages ship raw NodeNext TypeScript source
   // (exports point at ./src/index.ts), so Next must transpile them.
   transpilePackages: [
-    "@covenant/domain",
-    "@covenant/provenance",
-    "@covenant/evaluator",
-    "@covenant/analyzer",
-    "@covenant/language",
-    "@covenant/benchmark",
+    "@writ/domain",
+    "@writ/provenance",
+    "@writ/evaluator",
+    "@writ/analyzer",
+    "@writ/language",
+    "@writ/benchmark",
   ],
   // The analyzer barrel statically references z3-solver (a WASM package) even
   // though this app only uses the pure-TS bounded-enumeration path.
@@ -24,10 +24,10 @@ const nextConfig: NextConfig = {
   // on Vercel as well as locally. Two kinds of runtime file reads must ship:
   //   1. lib/repo.ts reads examples/ and benchmark/2025-ai-sme/ (relative to the
   //      repo root it discovers from process.cwd()).
-  //   2. The @covenant/* packages read data relative to their own module via
-  //      import.meta.url — @covenant/domain loads packages/domain/schemas/*.json
+  //   2. The @writ/* packages read data relative to their own module via
+  //      import.meta.url — @writ/domain loads packages/domain/schemas/*.json
   //      for AJV validation (triggered by every compile/parse/evaluate), and
-  //      @covenant/benchmark reads examples/2025-ai-sme-resolved.covenant plus
+  //      @writ/benchmark reads examples/2025-ai-sme-resolved.writ plus
   //      benchmark/2025-ai-sme/. Miss any of these and the route 500s with ENOENT.
   outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
@@ -50,7 +50,7 @@ const nextConfig: NextConfig = {
       "../../conformance/**",
     ],
   },
-  // The @covenant/* packages are NodeNext TS source: relative imports carry a
+  // The @writ/* packages are NodeNext TS source: relative imports carry a
   // `.js` extension that must resolve to the `.ts` file. Webpack's extensionAlias
   // does this remap (turbopack does not), so we build/dev on webpack.
   webpack: (config) => {

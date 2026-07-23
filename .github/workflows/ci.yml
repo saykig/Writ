@@ -37,17 +37,17 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_USER: covenant
-          POSTGRES_PASSWORD: covenant
-          POSTGRES_DB: covenant
+          POSTGRES_USER: writ
+          POSTGRES_PASSWORD: writ
+          POSTGRES_DB: writ
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U covenant -d covenant"
+          --health-cmd "pg_isready -U writ -d writ"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 20
     steps:
       - uses: actions/checkout@v4
-      - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0001_initial.sql
-      - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0002_bitemporal_immutability.sql
-      - run: PGPASSWORD=covenant psql -h localhost -U covenant -d covenant -v ON_ERROR_STOP=1 -f db/migrations/0003_source_registry.sql
+      - run: PGPASSWORD=writ psql -h localhost -U writ -d writ -v ON_ERROR_STOP=1 -f db/migrations/0001_initial.sql
+      - run: PGPASSWORD=writ psql -h localhost -U writ -d writ -v ON_ERROR_STOP=1 -f db/migrations/0002_bitemporal_immutability.sql
+      - run: PGPASSWORD=writ psql -h localhost -U writ -d writ -v ON_ERROR_STOP=1 -f db/migrations/0003_source_registry.sql

@@ -2,9 +2,9 @@
 //
 // Freezing selects the score-eligible evidence (accepted, recorded on-or-before
 // the cutoff, reviewed) as of a system-time instant, assembles an immutable
-// evidence document, content-addresses it with `@covenant/provenance`, and
+// evidence document, content-addresses it with `@writ/provenance`, and
 // records the frozen membership. Export re-materializes that document and
-// validates it against `specs/evidence.schema.json` (via `@covenant/domain`).
+// validates it against `specs/evidence.schema.json` (via `@writ/domain`).
 //
 // The exported document's shape is EXACTLY what `evaluateCommitment` consumes:
 // `{ schema_version, snapshot, document_versions, passages, claims, actions,
@@ -15,9 +15,9 @@
 // the same content hash (invariant: accepted records are superseded, not edited;
 // a frozen snapshot never changes).
 
-import type { Evidence } from "@covenant/domain";
-import { assertValid } from "@covenant/domain";
-import { evidenceSnapshotHash } from "@covenant/provenance";
+import type { Evidence } from "@writ/domain";
+import { assertValid } from "@writ/domain";
+import { evidenceSnapshotHash } from "@writ/provenance";
 import type { DbClient } from "../db/client.js";
 import { createRepositories } from "../db/repositories/index.js";
 import type { Queryable } from "../db/repositories/shared.js";

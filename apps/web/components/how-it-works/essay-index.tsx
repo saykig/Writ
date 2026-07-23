@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * EssayIndex — the sticky reading rail for the How-it-works monograph, adapted
- * from ~/personal/cepheus/app/components/essay-index.tsx into the Covenant paper
+ * from ~/personal/cepheus/app/components/essay-index.tsx into the Writ paper
  * palette. A single-level list of section links with:
  *   • a scroll-progress spine (a hairline whose filled portion tracks how far
  *     the reader has come), and

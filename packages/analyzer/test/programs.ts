@@ -7,7 +7,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import type { CanonicalIr, Expr, ScoreProgram } from "@covenant/domain";
+import type { CanonicalIr, Expr, ScoreProgram } from "@writ/domain";
 import type { FiniteDomains } from "../src/index.js";
 
 const lit = (value: unknown): Expr => ({ kind: "literal", value });

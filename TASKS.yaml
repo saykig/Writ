@@ -1,5 +1,5 @@
 version: 1
-project: covenant
+project: writ
 working_name_status: provisional
 execution_policy:
   one_task_per_change: true
@@ -23,7 +23,7 @@ phases:
     gate: A deterministic schema-validated evaluator emits proof receipts and catches seeded rule defects.
   - id: LANG
     name: Language and compiler
-    gate: The diversity-set methodologies compile from Covenant source to golden canonical IR.
+    gate: The diversity-set methodologies compile from Writ source to golden canonical IR.
   - id: DATA
     name: Evidence ledger and ingestion
     gate: Reviewed evidence can be frozen and traced to immutable source passages.
@@ -224,7 +224,7 @@ tasks:
 
   - id: LANG-001
     phase: LANG
-    title: Stabilize Covenant grammar from canonical IR
+    title: Stabilize Writ grammar from canonical IR
     status: todo
     dependencies: [CORE-002, CORE-008, CORE-010]
     scope:

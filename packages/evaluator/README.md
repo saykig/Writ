@@ -1,4 +1,4 @@
-# `@covenant/evaluator`
+# `@writ/evaluator`
 
 Pure deterministic evaluation, four-valued logic, temporal and quantity operations, action selection, and proof DAG construction.
 

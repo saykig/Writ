@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/cli",
+  "name": "@writ/cli",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,15 +13,15 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "bin": {
-    "covenant": "./bin/covenant.ts"
+    "writ": "./bin/writ.ts"
   },
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@covenant/analyzer": "workspace:*",
-    "@covenant/domain": "workspace:*",
-    "@covenant/evaluator": "workspace:*",
-    "@covenant/language": "workspace:*"
+    "@writ/analyzer": "workspace:*",
+    "@writ/domain": "workspace:*",
+    "@writ/evaluator": "workspace:*",
+    "@writ/language": "workspace:*"
   }
 }

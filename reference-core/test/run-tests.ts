@@ -199,7 +199,7 @@ function run(): void {
   });
   equal(overlapEvaluation.result, "unresolved", "different-result overlap remains unresolved");
   assert(
-    overlapEvaluation.diagnostics.some((item) => item.code === "COV-SCORE-AMBIGUOUS"),
+    overlapEvaluation.diagnostics.some((item) => item.code === "WRT-SCORE-AMBIGUOUS"),
     "expected ambiguity diagnostic",
   );
 
@@ -209,8 +209,8 @@ function run(): void {
     counter_exists: [false, true],
   } as const;
   const literalAnalysis = analyzeScoreProgram(literal, domains);
-  const gap = literalAnalysis.diagnostics.find((item) => item.code === "COV-SCORE-GAP");
-  const overlap = literalAnalysis.diagnostics.find((item) => item.code === "COV-SCORE-OVERLAP");
+  const gap = literalAnalysis.diagnostics.find((item) => item.code === "WRT-SCORE-GAP");
+  const overlap = literalAnalysis.diagnostics.find((item) => item.code === "WRT-SCORE-OVERLAP");
   assert(gap, "expected score gap");
   assert(overlap, "expected score overlap");
   equal(
@@ -221,7 +221,7 @@ function run(): void {
 
   const inclusiveAnalysis = analyzeScoreProgram(aiInclusiveUpToProgram(), domains);
   const inclusiveOverlap = inclusiveAnalysis.diagnostics.find(
-    (item) => item.code === "COV-SCORE-OVERLAP",
+    (item) => item.code === "WRT-SCORE-OVERLAP",
   );
   assert(inclusiveOverlap, "expected overlap for inclusive zero-to-four reading");
   equal(
@@ -233,11 +233,11 @@ function run(): void {
   const resolved = aiResolvedProgram();
   const resolvedAnalysis = analyzeScoreProgram(resolved, domains);
   assert(
-    !resolvedAnalysis.diagnostics.some((item) => item.code === "COV-SCORE-GAP"),
+    !resolvedAnalysis.diagnostics.some((item) => item.code === "WRT-SCORE-GAP"),
     "resolved program should be exhaustive",
   );
   assert(
-    !resolvedAnalysis.diagnostics.some((item) => item.code === "COV-SCORE-OVERLAP"),
+    !resolvedAnalysis.diagnostics.some((item) => item.code === "WRT-SCORE-OVERLAP"),
     "resolved program should be non-overlapping",
   );
   equal(
@@ -257,7 +257,7 @@ function run(): void {
   );
 
   console.log(
-    `ok: Covenant reference core (${literalAnalysis.assignmentsChecked} bounded assignments checked)`,
+    `ok: Writ reference core (${literalAnalysis.assignmentsChecked} bounded assignments checked)`,
   );
 }
 

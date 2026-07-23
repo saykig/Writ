@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import type { Commitment, Diagnostic, ScoreProgram } from "@covenant/domain";
+import type { Commitment, Diagnostic, ScoreProgram } from "@writ/domain";
 import {
   analyzeScoreProgram,
   evaluateTruth,
@@ -151,13 +151,13 @@ test("missing-action-identity fixture: a score-decisive count with no identity p
 
   const diagnostics = lintCommitment(commitment);
   const identity = diagnostics.find((diagnostic) => diagnostic.code === expectedCode);
-  expect(expectedCode).toBe("COV-IDENTITY-MISSING");
+  expect(expectedCode).toBe("WRT-IDENTITY-MISSING");
   expect(identity).toBeDefined();
   expect(identity!.severity).toBe("error");
   expect(identity!.location?.objectId).toBe("AI_SME_ADOPTION");
 });
 
-test("a declared action-identity policy with key paths suppresses COV-IDENTITY-MISSING", () => {
+test("a declared action-identity policy with key paths suppresses WRT-IDENTITY-MISSING", () => {
   const commitment: Commitment = {
     ...commitmentBase(),
     variables: [
@@ -185,10 +185,10 @@ test("a declared action-identity policy with key paths suppresses COV-IDENTITY-M
     },
   };
   const diagnostics = lintCommitment(commitment);
-  expect(diagnostics.some((diagnostic) => diagnostic.code === "COV-IDENTITY-MISSING")).toBe(false);
+  expect(diagnostics.some((diagnostic) => diagnostic.code === "WRT-IDENTITY-MISSING")).toBe(false);
 });
 
-test("transnational prose/metric fixture surfaces COV-PROSE-METRIC-MISMATCH", () => {
+test("transnational prose/metric fixture surfaces WRT-PROSE-METRIC-MISMATCH", () => {
   const fixture = readFixture<{
     commitment: string;
     inputs: { guideline_text: string; metric_text: string };
@@ -204,7 +204,7 @@ test("transnational prose/metric fixture surfaces COV-PROSE-METRIC-MISMATCH", ()
   };
   const diagnostics = lintProseMetric([claim]);
   const mismatch = diagnostics.find((diagnostic) => diagnostic.code === fixture.expect[0]!.code);
-  expect(fixture.expect[0]!.code).toBe("COV-PROSE-METRIC-MISMATCH");
+  expect(fixture.expect[0]!.code).toBe("WRT-PROSE-METRIC-MISMATCH");
   expect(mismatch).toBeDefined();
   expect(mismatch!.severity).toBe("error");
   expect(mismatch!.location?.objectId).toBe("TRANSNATIONAL_CRIME");
@@ -238,7 +238,7 @@ test("unknown-threshold fixture: an interval crossing the threshold is unknown",
 // Guard: the flagship literal IR still resolves all score references.
 test("flagship literal IR has no unresolved score references", () => {
   const diagnostics = lintCommitment(literalIr.commitments[0]!);
-  expect(diagnostics.some((diagnostic) => diagnostic.code === "COV-LINT-MISSING-REFERENCE")).toBe(
+  expect(diagnostics.some((diagnostic) => diagnostic.code === "WRT-LINT-MISSING-REFERENCE")).toBe(
     false,
   );
 });

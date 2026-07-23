@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/web",
+  "name": "@writ/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
-    "@covenant/analyzer": "workspace:*",
-    "@covenant/benchmark": "workspace:*",
-    "@covenant/domain": "workspace:*",
-    "@covenant/evaluator": "workspace:*",
-    "@covenant/language": "workspace:*",
-    "@covenant/provenance": "workspace:*",
+    "@writ/analyzer": "workspace:*",
+    "@writ/benchmark": "workspace:*",
+    "@writ/domain": "workspace:*",
+    "@writ/evaluator": "workspace:*",
+    "@writ/language": "workspace:*",
+    "@writ/provenance": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

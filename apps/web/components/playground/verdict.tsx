@@ -90,7 +90,7 @@ export function VerdictInline({
   findings: Finding[];
   gap: Finding | null;
 }) {
-  const overlap = findings.find((f) => f.code === "COV-SCORE-OVERLAP") ?? null;
+  const overlap = findings.find((f) => f.code === "WRT-SCORE-OVERLAP") ?? null;
   const shape = shapeOf(compiled, errors, findings, gap, overlap);
   if (!shape) {
     return (
@@ -138,7 +138,7 @@ export interface VerdictProps {
  * the one place a score turns on judgment: the score gap.
  */
 export function Verdict({ analyzing, compiled, errors, findings, gap, note }: VerdictProps) {
-  const overlap = findings.find((f) => f.code === "COV-SCORE-OVERLAP") ?? null;
+  const overlap = findings.find((f) => f.code === "WRT-SCORE-OVERLAP") ?? null;
   const shape = shapeOf(compiled, errors, findings, gap, overlap);
 
   if (!shape) {

@@ -15,7 +15,7 @@
  * declared values, so a value that can be `unknown` genuinely lowers to `(⊥,⊥)`.
  */
 
-import type { Expr } from "@covenant/domain";
+import type { Expr } from "@writ/domain";
 import type { DomainValue, FiniteDomains, Assignment } from "./types.js";
 import {
   canonicalKeys,

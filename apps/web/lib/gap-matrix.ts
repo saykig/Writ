@@ -1,19 +1,19 @@
 /**
  * Server-side reproduction of Sara Kim's Gap Matrix, run through the real
- * Covenant toolchain: compile the graded-measure methodology, evaluate it against
+ * Writ toolchain: compile the graded-measure methodology, evaluate it against
  * her analyst assessments (encoded as reviewed evidence), and return the
  * reproduced axis indices plus the static measure findings. Deterministic and
  * filesystem-free (the methodology + assessments are inlined via `frozen-data`).
  */
 
-import { compileSource } from "@covenant/language";
-import { evaluateCommitment } from "@covenant/evaluator";
-import { analyzeMeasures } from "@covenant/analyzer/measure-analysis";
-import type { CanonicalIr, Evidence } from "@covenant/domain";
+import { compileSource } from "@writ/language";
+import { evaluateCommitment } from "@writ/evaluator";
+import { analyzeMeasures } from "@writ/analyzer/measure-analysis";
+import type { CanonicalIr, Evidence } from "@writ/domain";
 import { readRepoJson, readRepoText } from "./repo.js";
 
 const CUTOFF = "2026-07-21T00:00:00Z";
-const SOURCE = "examples/ai-governance-gap-matrix.covenant";
+const SOURCE = "examples/ai-governance-gap-matrix.writ";
 const ASSESSMENTS = "benchmark/ai-governance-gap-matrix/assessments.json";
 
 interface AssessmentComponent {
@@ -108,7 +108,7 @@ export function gapMatrix(): GapMatrixResult {
 
   const data = readRepoJson<AssessmentData>(ASSESSMENTS);
   const compiled = compileSource(readRepoText(SOURCE), {
-    fileName: "ai-governance-gap-matrix.covenant",
+    fileName: "ai-governance-gap-matrix.writ",
   });
   const ir = compiled.ir as CanonicalIr;
   const commitment = ir.commitments[0]!;

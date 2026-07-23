@@ -1,7 +1,7 @@
-# 2026 frontier-AI governance — the Gap Matrix, ported to Covenant
+# 2026 frontier-AI governance — the Gap Matrix, ported to Writ
 
 This corpus ports **Sara Kim's Gap Matrix** (from `cepheus`, the essay _What We
-Owe to Each Other_) into Covenant, as the project's second methodology and the
+Owe to Each Other_) into Writ, as the project's second methodology and the
 first that exercises the **graded weighted-ordinal measure** (a scoring shape the
 original 3-point `+1/0/-1` AI-for-SMEs benchmark could not express).
 
@@ -23,7 +23,7 @@ who knows and who decides.
 
 ## Encoding
 
-- The methodology of record is [`examples/ai-governance-gap-matrix.covenant`](../../examples/ai-governance-gap-matrix.covenant),
+- The methodology of record is [`examples/ai-governance-gap-matrix.writ`](../../examples/ai-governance-gap-matrix.writ),
   generated from Sara's `fields.json` + `scoring-rubrics.json` by
   [`scripts/gen-gap-matrix.py`](../../scripts/gen-gap-matrix.py). Each rubric
   component becomes a `measure` component; each ordinal anchor keeps its prose
@@ -40,10 +40,10 @@ who knows and who decides.
 Sara's current live assessment is deliberately partial, which makes it a real
 demonstration of pending propagation:
 
-| axis                    | components             | Covenant index | matches Sara |
-| ----------------------- | ---------------------- | -------------- | ------------ |
-| public_authority        | all five at level 2    | **50**         | ✓            |
-| knowledge_concentration | two of five unassessed | **pending**    | ✓            |
+| axis                    | components             | Writ index  | matches Sara |
+| ----------------------- | ---------------------- | ----------- | ------------ |
+| public_authority        | all five at level 2    | **50**      | ✓            |
+| knowledge_concentration | two of five unassessed | **pending** | ✓            |
 
 The static analyzer additionally reports each axis as _pending-decisive_: the
 index depends on every component, so any single unresolved judgment blocks it —

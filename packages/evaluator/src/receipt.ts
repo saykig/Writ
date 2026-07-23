@@ -6,7 +6,7 @@
 //
 //   1. Byte-identical determinism — the receipt is built from frozen inputs with
 //      no wall-clock or randomness, so the canonical JSON and hash are stable
-//      across runs. `receiptHash` (from @covenant/provenance) canonicalizes per
+//      across runs. `receiptHash` (from @writ/provenance) canonicalizes per
 //      RFC 8785 + §16 and drops the self-referential transport fields.
 //
 //   2. JSON-safety — proof nodes carry rich runtime values (exact `Decimal`s with
@@ -14,8 +14,8 @@
 //      directly, so every dynamic field is projected to a JSON scalar first,
 //      rendering exact decimals as canonical strings.
 
-import { receiptHash } from "@covenant/provenance";
-import { validate, type Diagnostic, type EvaluationReceipt } from "@covenant/domain";
+import { receiptHash } from "@writ/provenance";
+import { validate, type Diagnostic, type EvaluationReceipt } from "@writ/domain";
 import { formatDecimal, type Decimal } from "./decimal.js";
 import type { ProofNode } from "./proof.js";
 

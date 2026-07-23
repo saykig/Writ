@@ -15,8 +15,8 @@
 // (the two ambiguous Japanese measures and the three US strategy documents) and
 // cites the rubric-definition passages behind the call.
 
-import { sha256Canonical } from "@covenant/provenance";
-import type { InterpretationProfile } from "@covenant/domain";
+import { sha256Canonical } from "@writ/provenance";
+import type { InterpretationProfile } from "@writ/domain";
 import type { Classification } from "./members.js";
 import { MEMBERS } from "./members.js";
 import { GENERAL_MEASURE_DECISION_ID, instrumentId } from "./evidence.js";

@@ -3,9 +3,9 @@
 // A structured, schema-valid (`methodology-inventory`) capture of the report's
 // commitment text, definitions, the strong / weak / countervailing
 // classification, the score table, and the "up to four strong" prose/metric
-// anomaly that the resolved covenant fixes with rule priorities.
+// anomaly that the resolved writ fixes with rule priorities.
 
-import type { MethodologyInventory } from "@covenant/domain";
+import type { MethodologyInventory } from "@writ/domain";
 import { MEMBERS } from "./members.js";
 import { SOURCE_SHA256, SOURCE_URI } from "./evidence.js";
 
@@ -123,7 +123,7 @@ export function buildMethodologyInventory(): MethodologyInventory {
         category: "prose_metric_mismatch",
         blocking: false,
         proposed_resolution:
-          "The resolved covenant reads the 0 branch as requiring at least one strong action (strong in 1..4), and separately assigns strong=0 with weak≥3 to 0, leaving strong=0 with weak≤2 to −1. Rule priorities make the counteraction override and the full-compliance branch decisive, yielding an exhaustive, non-overlapping score program (no COV-SCORE-GAP / -OVERLAP).",
+          "The resolved writ reads the 0 branch as requiring at least one strong action (strong in 1..4), and separately assigns strong=0 with weak≥3 to 0, leaving strong=0 with weak≤2 to −1. Rule priorities make the counteraction override and the full-compliance branch decisive, yielding an exhaustive, non-overlapping score program (no WRT-SCORE-GAP / -OVERLAP).",
       },
       {
         id: "oq-general-ai-measures",

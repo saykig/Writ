@@ -16,7 +16,7 @@ import {
   type Diagnostic,
   type Expr,
   type Variable,
-} from "@covenant/domain";
+} from "@writ/domain";
 
 /**
  * A candidate prose-vs-metric conflict. Models the human-in-the-loop pipeline:
@@ -144,7 +144,7 @@ export function lintCommitment(commitment: Commitment): Diagnostic[] {
       if (symbols.has(symbol) || seen.has(symbol)) continue;
       seen.add(symbol);
       diagnostics.push(
-        makeDiagnostic("COV-LINT-MISSING-REFERENCE", {
+        makeDiagnostic("WRT-LINT-MISSING-REFERENCE", {
           values: { reference: symbol, path: `score_program/rules/${index}/when` },
           location: {
             objectId: rule.id,
@@ -164,7 +164,7 @@ export function lintCommitment(commitment: Commitment): Diagnostic[] {
   );
   if (countingVar && isMissingIdentity(commitment)) {
     diagnostics.push(
-      makeDiagnostic("COV-IDENTITY-MISSING", {
+      makeDiagnostic("WRT-IDENTITY-MISSING", {
         values: { path: countingVar.id, objectId: commitment.id },
         location: {
           objectId: commitment.id,
@@ -181,7 +181,7 @@ export function lintCommitment(commitment: Commitment): Diagnostic[] {
     const hasRationale = rule.rationale_id !== undefined && rule.rationale_id !== "";
     if (!hasSource && !hasRationale) {
       diagnostics.push(
-        makeDiagnostic("COV-LINT-SOURCE-RATIONALE", {
+        makeDiagnostic("WRT-LINT-SOURCE-RATIONALE", {
           values: { rationaleId: rule.id },
           location: { objectId: rule.id, path: `/commitments/${commitment.id}/score_program` },
           context: { ruleId: rule.id },
@@ -195,7 +195,7 @@ export function lintCommitment(commitment: Commitment): Diagnostic[] {
   commitment.score_program.rules.forEach((rule, index) => {
     for (const finding of orderingTypeErrors(rule.when, typeById)) {
       diagnostics.push(
-        makeDiagnostic("COV-LINT-TYPE", {
+        makeDiagnostic("WRT-LINT-TYPE", {
           values: {
             path: `score_program/rules/${index}/when`,
             expected: "numeric",
@@ -215,7 +215,7 @@ export function lintCommitment(commitment: Commitment): Diagnostic[] {
   commitment.score_program.rules.forEach((rule, index) => {
     if (temporalDateAmbiguity(rule.when)) {
       diagnostics.push(
-        makeDiagnostic("COV-LINT-TIME-AXIS", {
+        makeDiagnostic("WRT-LINT-TIME-AXIS", {
           values: {
             path: `score_program/rules/${index}/when`,
             detail: "bare `date` has no declared axis",
@@ -310,7 +310,7 @@ function attributionFindings(commitment: Commitment): Diagnostic[] {
       !rationaleMentionsAttribution
     ) {
       findings.push(
-        makeDiagnostic("COV-LINT-ATTRIBUTION", {
+        makeDiagnostic("WRT-LINT-ATTRIBUTION", {
           values: {
             path: `subjects`,
             detail: `${collective} and its members are scored without an attribution policy`,
@@ -329,7 +329,7 @@ export function lintProseMetric(claims: readonly ProseClaim[]): Diagnostic[] {
   return claims
     .filter((claim) => claim.status === "conflict")
     .map((claim) =>
-      makeDiagnostic("COV-PROSE-METRIC-MISMATCH", {
+      makeDiagnostic("WRT-PROSE-METRIC-MISMATCH", {
         values: { claimId: claim.id, objectId: claim.objectId },
         location: { objectId: claim.objectId },
         context: { claimId: claim.id, prose: claim.proseText, metric: claim.metricText },

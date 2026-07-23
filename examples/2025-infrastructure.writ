@@ -1,4 +1,4 @@
-language covenant "0.1"
+language writ "0.1"
 package g7.kananaskis_2025.infrastructure version "1.0.0";
 
 commitment QUALITY_INFRASTRUCTURE_PARTNERSHIPS {

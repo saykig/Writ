@@ -19,7 +19,7 @@ import type {
   PlaygroundExample,
 } from "./types";
 
-const CovenantEditor = dynamic(() => import("./covenant-editor"), {
+const WritEditor = dynamic(() => import("./writ-editor"), {
   ssr: false,
   loading: () => (
     <div className="flex h-full w-full items-center justify-center bg-paper-deep/30">
@@ -164,7 +164,7 @@ export function Playground({ initialExample }: PlaygroundProps) {
   const diagnostics = compile?.diagnostics ?? [];
   const errors = diagnostics.filter((d) => d.severity === "error");
   const findings = analysis?.findings ?? [];
-  const gap = findings.find((f) => f.code === "COV-SCORE-GAP") ?? null;
+  const gap = findings.find((f) => f.code === "WRT-SCORE-GAP") ?? null;
   const compiled = Boolean(compile?.ir);
   const canEvaluate = compiled && errors.length === 0;
   const activeExample = examples.find((example) => example.id === exampleId);
@@ -199,14 +199,14 @@ export function Playground({ initialExample }: PlaygroundProps) {
   const editorPane = (
     <div className="flex h-full min-h-0 flex-col bg-paper-deep/40">
       <div className="flex items-center justify-between gap-3 border-b border-rule px-4 py-2.5">
-        <span className="font-mono text-[0.72rem] text-ink-faint">methodology.covenant</span>
+        <span className="font-mono text-[0.72rem] text-ink-faint">methodology.writ</span>
         <span className="flex items-center gap-2 text-[0.72rem]">
           <span aria-hidden className={cn("size-1.5 rounded-full", statusPip)} />
           <span className={statusTone}>{statusText}</span>
         </span>
       </div>
       <div className="min-h-0 flex-1">
-        <CovenantEditor
+        <WritEditor
           value={source}
           onChange={setSource}
           isDark={isDark}

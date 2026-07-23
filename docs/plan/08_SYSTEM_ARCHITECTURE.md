@@ -366,22 +366,22 @@ Adopt a dedicated durable workflow system only after measured requirements such 
 Required commands:
 
 ```text
-covenant init
-covenant fmt
-covenant check
-covenant compile
-covenant analyze
-covenant test
-covenant evaluate
-covenant receipt verify
-covenant diff methodology
-covenant diff evidence
-covenant diff receipt
-covenant benchmark
-covenant release build
-covenant release verify
-covenant source validate
-covenant source fetch
+writ init
+writ fmt
+writ check
+writ compile
+writ analyze
+writ test
+writ evaluate
+writ receipt verify
+writ diff methodology
+writ diff evidence
+writ diff receipt
+writ benchmark
+writ release build
+writ release verify
+writ source validate
+writ source fetch
 ```
 
 CLI output supports human text and JSON. CI uses JSON and stable diagnostic codes.

@@ -93,17 +93,17 @@ describe("DATA-004 secret handling", () => {
   test("sanitizeEntry keeps the secret reference but strips raw secrets", () => {
     const entry = makeEntry({
       id: "sec",
-      authentication: { type: "api_key", secret_ref: "vault://covenant/x" },
+      authentication: { type: "api_key", secret_ref: "vault://writ/x" },
     });
     (entry as Record<string, unknown>).api_key = "RAW-SECRET-VALUE";
     (entry.authentication as unknown as Record<string, unknown>).password = "RAW-PASSWORD";
 
     const { body, secretRef } = sanitizeEntry(entry);
-    expect(secretRef).toBe("vault://covenant/x");
+    expect(secretRef).toBe("vault://writ/x");
     const serialized = JSON.stringify(body);
     expect(serialized).not.toContain("RAW-SECRET-VALUE");
     expect(serialized).not.toContain("RAW-PASSWORD");
-    expect(serialized).toContain("vault://covenant/x");
+    expect(serialized).toContain("vault://writ/x");
   });
 });
 
@@ -173,7 +173,7 @@ suite("DATA-004 registry import", () => {
     const entry = makeEntry({
       id: "with.secret",
       verification_status: "catalogued",
-      authentication: { type: "api_key", secret_ref: "env:COVENANT_TEST_KEY" },
+      authentication: { type: "api_key", secret_ref: "env:WRIT_TEST_KEY" },
     });
     (entry as Record<string, unknown>).api_key = "SUPER-SECRET-1234";
 
@@ -181,7 +181,7 @@ suite("DATA-004 registry import", () => {
 
     const [row] = await db.sql<{ body: unknown; secret_ref: string | null }[]>`
       SELECT body, secret_ref FROM source_registry_entries WHERE id = 'with.secret'`;
-    expect(row?.secret_ref).toBe("env:COVENANT_TEST_KEY");
+    expect(row?.secret_ref).toBe("env:WRIT_TEST_KEY");
     expect(JSON.stringify(row?.body)).not.toContain("SUPER-SECRET-1234");
   });
 });

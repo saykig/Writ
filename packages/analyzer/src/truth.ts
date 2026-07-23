@@ -3,7 +3,7 @@
  *
  * This is a peer re-implementation of the reference-core truth kernel. The
  * analyzer and evaluator are peers, so this is intentionally NOT imported from
- * `@covenant/evaluator`; the four-valued semantics are encoded here directly so
+ * `@writ/evaluator`; the four-valued semantics are encoded here directly so
  * both the bounded-enumeration oracle and the Z3 lowering share one meaning of
  * true / false / unknown / contested.
  *

@@ -9,7 +9,7 @@ This matrix separates the canonical choice from useful alternatives. Resolve cur
 | Grammar, typed AST, linking, validation, LSP | Langium | ANTLR4, Xtext | Use Langium because the primary stack is TypeScript and editor tooling is a first-class deliverable. |
 | Incremental syntax highlighting | Langium LSP plus Monaco | Tree-sitter | Add Tree-sitter only if very large files expose measurable editor latency. |
 | Browser editor | Monaco Editor | CodeMirror | Monaco aligns with LSP, diagnostics, code actions, and diff views. |
-| Literate files | Unified/remark or a small fenced-block extractor | Pandoc AST | Preserve Markdown positions and compile only `covenant` fences. |
+| Literate files | Unified/remark or a small fenced-block extractor | Pandoc AST | Preserve Markdown positions and compile only `writ` fences. |
 
 ## Canonical data and types
 

@@ -6,11 +6,11 @@
 //   - benchmark/2025-ai-sme/evidence/<member>.snapshot.json  (8 snapshots)
 //   - benchmark/2025-ai-sme/profiles/<name>.profile.json     (2 profiles)
 //
-// Every artifact is validated against its `@covenant/domain` schema before it is
+// Every artifact is validated against its `@writ/domain` schema before it is
 // written, so a generation that succeeds cannot emit an invalid deliverable.
 
 import { mkdirSync, writeFileSync } from "node:fs";
-import { assertValid, validate, type Evidence } from "@covenant/domain";
+import { assertValid, validate, type Evidence } from "@writ/domain";
 import { MEMBERS } from "./members.js";
 import { buildMemberSnapshot, buildSourceManifest, sourceDocumentVersion } from "./evidence.js";
 import { buildMethodologyInventory } from "./inventory.js";

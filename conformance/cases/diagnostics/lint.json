@@ -3,7 +3,7 @@
     "id": "diag.type-error",
     "area": "diagnostics",
     "kind": "expr.evaluate",
-    "description": "Ordering two incomparable operands is unknown with a stable COV-LINT-TYPE code, never a silent wrong boolean",
+    "description": "Ordering two incomparable operands is unknown with a stable WRT-LINT-TYPE code, never a silent wrong boolean",
     "input": {
       "expr": {
         "kind": "compare",
@@ -12,13 +12,13 @@
         "right": { "kind": "literal", "value": 5 }
       }
     },
-    "expected": { "truth": "unknown", "diagnostics": ["COV-LINT-TYPE"] }
+    "expected": { "truth": "unknown", "diagnostics": ["WRT-LINT-TYPE"] }
   },
   {
     "id": "diag.unit-mismatch",
     "area": "diagnostics",
     "kind": "expr.evaluate",
-    "description": "A currency mismatch raises the stable COV-LINT-UNIT code and yields unknown (section 10)",
+    "description": "A currency mismatch raises the stable WRT-LINT-UNIT code and yields unknown (section 10)",
     "input": {
       "expr": {
         "kind": "compare",
@@ -31,13 +31,13 @@
         "b": { "value": "10", "currency": "USD", "bound": "exact" }
       }
     },
-    "expected": { "truth": "unknown", "diagnostics": ["COV-LINT-UNIT"] }
+    "expected": { "truth": "unknown", "diagnostics": ["WRT-LINT-UNIT"] }
   },
   {
     "id": "diag.missing-collection",
     "area": "diagnostics",
     "kind": "count.interval",
-    "description": "A query over an undeclared collection raises COV-LINT-MISSING-REFERENCE and produces no count interval",
+    "description": "A query over an undeclared collection raises WRT-LINT-MISSING-REFERENCE and produces no count interval",
     "input": {
       "query": { "kind": "query", "operation": "count", "collection": "ghosts" },
       "collections": {}
@@ -45,7 +45,7 @@
     "expected": {
       "interval": null,
       "blocking": false,
-      "diagnostics": ["COV-LINT-MISSING-REFERENCE"]
+      "diagnostics": ["WRT-LINT-MISSING-REFERENCE"]
     }
   }
 ]

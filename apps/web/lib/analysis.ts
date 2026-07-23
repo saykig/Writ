@@ -5,14 +5,14 @@
  * pure TS with no solver/Bun dependency, safe on the Node runtime.
  */
 
-// Deep imports of the pure-TS enumeration analyzer: the barrel (`@covenant/analyzer`)
+// Deep imports of the pure-TS enumeration analyzer: the barrel (`@writ/analyzer`)
 // eagerly loads the z3-solver WASM package, which fails in a Node serverless
 // runtime (Vercel). enumerate.ts references the z3 path only as an erased type,
 // so this path carries no z3 dependency.
-import { analyzeScoreProgramByEnumeration } from "@covenant/analyzer/enumerate";
-import { analyzeMeasures } from "@covenant/analyzer/measure-analysis";
-import type { FiniteDomains } from "@covenant/analyzer/types";
-import type { Assertion, Commitment, Diagnostic, Expr } from "@covenant/domain";
+import { analyzeScoreProgramByEnumeration } from "@writ/analyzer/enumerate";
+import { analyzeMeasures } from "@writ/analyzer/measure-analysis";
+import type { FiniteDomains } from "@writ/analyzer/types";
+import type { Assertion, Commitment, Diagnostic, Expr } from "@writ/domain";
 
 type DomainValue = string | number | boolean;
 
@@ -87,7 +87,7 @@ function collectRefPaths(expr: Expr, out: Set<string>): void {
 
 /**
  * Run the bounded score analysis for one commitment over its declared domains.
- * Suppresses false-positive `COV-SCORE-UNREACHABLE`: a rule is only provably
+ * Suppresses false-positive `WRT-SCORE-UNREACHABLE`: a rule is only provably
  * dead when its reachability is decidable over the enumerated domain.
  */
 export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
@@ -108,7 +108,7 @@ export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
   const domainKeys = new Set(Object.keys(domainRecord));
   const rulesById = new Map(commitment.score_program.rules.map((rule) => [rule.id, rule]));
   const scoreDiagnostics = diagnostics.filter((diagnostic) => {
-    if (diagnostic.code !== "COV-SCORE-UNREACHABLE") return true;
+    if (diagnostic.code !== "WRT-SCORE-UNREACHABLE") return true;
     const ruleId = (diagnostic.context as { ruleId?: string } | undefined)?.ruleId;
     const rule = ruleId ? rulesById.get(ruleId) : undefined;
     if (!rule) return true;

@@ -8,11 +8,11 @@
 //   evaluateValue(expr, env): { known, value?, interval? }
 //
 // Both propagate `unknown`/`contested` per 04_FORMAL_SEMANTICS.md §2; a type or
-// unit mismatch yields `unknown` PLUS a stable `@covenant/domain` diagnostic —
+// unit mismatch yields `unknown` PLUS a stable `@writ/domain` diagnostic —
 // never a silent wrong comparison, never an unknown-to-false collapse.
 
-import type { CompareOp, CountInterval, Expr, QueryExpr } from "@covenant/domain";
-import { makeDiagnostic, type Diagnostic, type DiagnosticCode } from "@covenant/domain";
+import type { CompareOp, CountInterval, Expr, QueryExpr } from "@writ/domain";
+import { makeDiagnostic, type Diagnostic, type DiagnosticCode } from "@writ/domain";
 import { all, any, not, truth, truthName, type Truth } from "./truth.js";
 import { ProofBuilder, type ProofNode } from "./proof.js";
 import { resolveInScope, type Environment, type EvidenceRecord } from "./environment.js";
@@ -152,7 +152,7 @@ function unitedCompare(
   const l = toUnitedInterval(left);
   const r = toUnitedInterval(right);
   if (l === null || r === null) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path,
       expected: "decimal/money",
       actual: l === null ? "left" : "right",
@@ -160,7 +160,7 @@ function unitedCompare(
     return truth("unknown");
   }
   if (l.unit !== null && r.unit !== null && l.unit !== r.unit) {
-    ctx.diag("COV-LINT-UNIT", { path, found: r.unit, expected: l.unit });
+    ctx.diag("WRT-LINT-UNIT", { path, found: r.unit, expected: l.unit });
     return truth("unknown");
   }
   return compareUnitedIntervals(op, l, r);
@@ -184,7 +184,7 @@ function orderCompare(
   // eq/neq degrade to structural equality; ordering non-numerics is a type error.
   if (op === "eq") return truth(valuesEqual(left, right) ? "true" : "false");
   if (op === "neq") return truth(valuesEqual(left, right) ? "false" : "true");
-  ctx.diag("COV-LINT-TYPE", {
+  ctx.diag("WRT-LINT-TYPE", {
     path,
     expected: "number/interval",
     actual: describe(left) + " vs " + describe(right),
@@ -212,7 +212,7 @@ function temporalCompare(
       op === "before" ? instantBefore(ia.end, ib.start) : instantAfter(ia.start, ib.end);
     return truth(earlier ? "true" : "false");
   }
-  ctx.diag("COV-LINT-TIME-AXIS", { path, detail: `non-temporal operand in \`${op}\`` });
+  ctx.diag("WRT-LINT-TIME-AXIS", { path, detail: `non-temporal operand in \`${op}\`` });
   return truth("unknown");
 }
 
@@ -225,13 +225,13 @@ function overlapsCompare(left: unknown, right: unknown, ctx: EvalContext, path: 
   if (Array.isArray(left) && Array.isArray(right)) {
     return truth(left.some((x) => right.some((y) => valuesEqual(x, y))) ? "true" : "false");
   }
-  ctx.diag("COV-LINT-TYPE", { path, expected: "interval/set", actual: "overlaps operands" });
+  ctx.diag("WRT-LINT-TYPE", { path, expected: "interval/set", actual: "overlaps operands" });
   return truth("unknown");
 }
 
 function betweenCompare(left: unknown, right: unknown, ctx: EvalContext, path: string): Truth {
   if (!Array.isArray(right) || right.length !== 2) {
-    ctx.diag("COV-LINT-TYPE", { path, expected: "[low, high]", actual: describe(right) });
+    ctx.diag("WRT-LINT-TYPE", { path, expected: "[low, high]", actual: describe(right) });
     return truth("unknown");
   }
   const lo = right[0];
@@ -255,7 +255,7 @@ function compareValues(
   if (op === "overlaps") return overlapsCompare(left, right, ctx, path);
   if (op === "in") {
     if (!Array.isArray(right)) {
-      ctx.diag("COV-LINT-TYPE", { path, expected: "array", actual: describe(right) });
+      ctx.diag("WRT-LINT-TYPE", { path, expected: "array", actual: describe(right) });
       return truth("unknown");
     }
     return truth(right.some((el) => valuesEqual(el, left)) ? "true" : "false");
@@ -265,7 +265,7 @@ function compareValues(
     return truth(left.some((el) => valuesEqual(el, right)) ? "true" : "false");
   if (typeof left === "string" && typeof right === "string")
     return truth(left.includes(right) ? "true" : "false");
-  ctx.diag("COV-LINT-TYPE", { path, expected: "array/string", actual: describe(left) });
+  ctx.diag("WRT-LINT-TYPE", { path, expected: "array/string", actual: describe(left) });
   return truth("unknown");
 }
 
@@ -523,7 +523,7 @@ function evalCallValue(
   if (!arities) return unknown(); // not implemented in this slice
   if (items.some((item) => !item.known)) return unknown(); // pending propagation
   if (!arities.includes(items.length)) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `call.${fn}`,
       expected: `${arities.join(" or ")} argument(s)`,
       actual: `${items.length}`,
@@ -532,7 +532,7 @@ function evalCallValue(
   }
   const raw = items.map((item) => item.value);
   if (raw.some((value) => isMoneyValue(value) || isUnitedQuantity(value))) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `call.${fn}`,
       expected: "number/decimal",
       actual: "money/quantity",
@@ -541,7 +541,7 @@ function evalCallValue(
   }
   const result = applyBuiltin(fn, raw, ctx);
   if (result === null) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `call.${fn}`,
       expected: "number/decimal",
       actual: "non-numeric",
@@ -603,7 +603,7 @@ function applyBuiltin(
       const b = toFiniteNumber(values[1]);
       if (a === null || b === null) return null;
       if (b === 0) {
-        ctx.diag("COV-LINT-TYPE", {
+        ctx.diag("WRT-LINT-TYPE", {
           path: "call.divide",
           expected: "non-zero divisor",
           actual: "0",
@@ -691,7 +691,7 @@ function evalNaryValue(
     };
   const rawValues = items.map((item) => item.value);
   if (rawValues.some((value) => isMoneyValue(value) || isUnitedQuantity(value))) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `nary.${expr.op}`,
       expected: "number/decimal",
       actual: "money/quantity",
@@ -708,7 +708,7 @@ function evalNaryValue(
   }
   const arithmetic = arith(expr.op, rawValues);
   if (arithmetic === null) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `nary.${expr.op}`,
       expected: "number/decimal",
       actual: "non-numeric",

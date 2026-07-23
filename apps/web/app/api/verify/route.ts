@@ -1,5 +1,5 @@
 import { verify } from "@/lib/toolchain";
-import type { EvaluationReceipt } from "@covenant/domain";
+import type { EvaluationReceipt } from "@writ/domain";
 
 export const runtime = "nodejs";
 

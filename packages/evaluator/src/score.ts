@@ -1,7 +1,7 @@
 // CORE-008 (part 1) — deterministic score-branch selection with proof.
 //
 // Ported from `reference-core/src/evaluator.ts::evaluateScore`, with the runtime
-// diagnostic codes renamed to the ADR-0011 `COV-EVAL-*` catalog and a proof
+// diagnostic codes renamed to the ADR-0011 `WRT-EVAL-*` catalog and a proof
 // subtree emitted for every rule plus a `selection` root. The value/status split
 // of 04_FORMAL_SEMANTICS.md §12–13 is preserved:
 //
@@ -14,8 +14,8 @@
 // equal-priority differing true results ⇒ ambiguous/unresolved; equal-priority
 // same-result overlap ⇒ a benign overlap notice but still selects.
 
-import type { ScoreProgram, ScoreValue } from "@covenant/domain";
-import { makeDiagnostic, type Diagnostic } from "@covenant/domain";
+import type { ScoreProgram, ScoreValue } from "@writ/domain";
+import { makeDiagnostic, type Diagnostic } from "@writ/domain";
 import { EvalContext, evalTruth } from "./interpret.js";
 import { refPaths } from "./refs.js";
 import { truth, truthName, type Truth, type TruthName } from "./truth.js";
@@ -170,7 +170,7 @@ function selectBranch(
       // have changed the result: unresolved, never a guess.
       if (uncertainRules.length > 0) {
         diagnostics.push(
-          makeDiagnostic("COV-EVAL-DECISIVE-UNKNOWN", {
+          makeDiagnostic("WRT-EVAL-DECISIVE-UNKNOWN", {
             values: { path: `priority ${priority}` },
             context: {
               priority,
@@ -184,7 +184,7 @@ function selectBranch(
       const distinctResults = dedupe(trueRules.map((rule) => rule.result));
       if (distinctResults.length > 1) {
         diagnostics.push(
-          makeDiagnostic("COV-EVAL-AMBIGUOUS", {
+          makeDiagnostic("WRT-EVAL-AMBIGUOUS", {
             values: { path: `priority ${priority}` },
             context: {
               priority,
@@ -198,7 +198,7 @@ function selectBranch(
       if (trueRules.length > 1) {
         const [ruleA, ruleB] = trueRules;
         diagnostics.push(
-          makeDiagnostic("COV-EVAL-SAME-RESULT-OVERLAP", {
+          makeDiagnostic("WRT-EVAL-SAME-RESULT-OVERLAP", {
             values: {
               ruleA: ruleA?.ruleId ?? "",
               ruleB: ruleB?.ruleId ?? "",
@@ -222,7 +222,7 @@ function selectBranch(
     // result: stop here — descending to a lower branch would be an unsafe guess.
     if (uncertainRules.length > 0) {
       diagnostics.push(
-        makeDiagnostic("COV-EVAL-DECISIVE-UNKNOWN", {
+        makeDiagnostic("WRT-EVAL-DECISIVE-UNKNOWN", {
           values: { path: `priority ${priority}` },
           context: {
             priority,

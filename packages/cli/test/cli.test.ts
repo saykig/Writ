@@ -13,7 +13,7 @@ const IR = example("2025-ai-sme-literal.ir.json");
 const EVIDENCE = example("2025-ai-sme.sample-evidence.json");
 const PROFILE = example("2025-ai-sme.sample-profile.json");
 
-const workdir = mkdtempSync(join(tmpdir(), "covenant-cli-"));
+const workdir = mkdtempSync(join(tmpdir(), "writ-cli-"));
 afterAll(() => rmSync(workdir, { recursive: true, force: true }));
 
 function capture(): { io: CliIO; out: string[]; err: string[] } {
@@ -22,7 +22,7 @@ function capture(): { io: CliIO; out: string[]; err: string[] } {
   return { io: { out: (l) => out.push(l), err: (l) => err.push(l) }, out, err };
 }
 
-describe("covenant CLI", () => {
+describe("writ CLI", () => {
   test("evaluate prints a human summary and exits 0", async () => {
     const { io, out } = capture();
     const code = await runCli(

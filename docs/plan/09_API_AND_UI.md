@@ -145,10 +145,10 @@ Reject stale writes with a conflict response.
 
 ```json
 {
-  "type": "https://covenant.example/errors/ambiguous-score",
+  "type": "https://writ.example/errors/ambiguous-score",
   "title": "Evaluation cannot select a unique score",
   "status": 409,
-  "code": "COV-SCORE-005",
+  "code": "WRT-SCORE-005",
   "detail": "Rules full and countervailing are true at equal priority.",
   "instance": "/v1/evaluation-runs/01...",
   "request_id": "01...",

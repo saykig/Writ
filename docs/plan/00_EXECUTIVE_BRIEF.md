@@ -33,7 +33,7 @@ This variety makes a typed rule algebra useful. A spreadsheet or generic rules e
 
 ## Product thesis
 
-**Covenant should make compliance judgments reproducible, inspectable, challengeable, and continuously updateable without claiming to remove human judgment.**
+**Writ should make compliance judgments reproducible, inspectable, challengeable, and continuously updateable without claiming to remove human judgment.**
 
 The strongest use cases are:
 

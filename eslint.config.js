@@ -1,4 +1,4 @@
-// Flat ESLint config shared across the Covenant monorepo.
+// Flat ESLint config shared across the Writ monorepo.
 // Discovered by each package's `eslint .` via ancestor lookup.
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";

@@ -1,15 +1,15 @@
 ---
-name: covenant-domain
-summary: Domain rules for implementing the Covenant G7 compliance DSL, evaluator, evidence ledger, and static analyzer.
+name: writ-domain
+summary: Domain rules for implementing the Writ G7 compliance DSL, evaluator, evidence ledger, and static analyzer.
 ---
 
-# Covenant Domain Skill
+# Writ Domain Skill
 
-Use this skill when implementing or reviewing Covenant domain behavior.
+Use this skill when implementing or reviewing Writ domain behavior.
 
 ## Mental model
 
-Covenant has three governed layers:
+Writ has three governed layers:
 
 1. normative methodology;
 2. reviewed evidence;

@@ -13,7 +13,7 @@
 // per-rule instance nodes, so the derivation is fully auditable and each
 // predicate ref resolves during downstream variable/score evaluation.
 
-import type { Predicate } from "@covenant/domain";
+import type { Predicate } from "@writ/domain";
 import { EvalContext, evalTruth } from "./interpret.js";
 import { truthName, type Truth, type TruthName } from "./truth.js";
 

@@ -1,5 +1,5 @@
 /**
- * Idempotent Covenant formatter.
+ * Idempotent Writ formatter.
  *
  * The formatter is a canonical pretty-printer: it derives its output purely from
  * the parsed AST, so `format(format(x)) === format(x)`. Parentheses in the source
@@ -391,11 +391,11 @@ function printDeclaration(decl: Declaration): string {
   }
 }
 
-/** Pretty-print a parsed model to canonical Covenant source. */
+/** Pretty-print a parsed model to canonical Writ source. */
 export function printModel(model: Model): string {
   const blocks: string[] = [];
   blocks.push(
-    `language covenant ${quote(model.languageVersion)}\npackage ${model.packageName} version ${quote(model.packageVersion)};`,
+    `language writ ${quote(model.languageVersion)}\npackage ${model.packageName} version ${quote(model.packageVersion)};`,
   );
   for (const imp of model.imports) {
     blocks.push(printImport(imp));
@@ -407,7 +407,7 @@ export function printModel(model: Model): string {
 }
 
 /**
- * Format Covenant source text. Returns the canonical rendering, or the original
+ * Format Writ source text. Returns the canonical rendering, or the original
  * text unchanged when it does not parse (so a broken file is never rewritten).
  */
 export function formatText(

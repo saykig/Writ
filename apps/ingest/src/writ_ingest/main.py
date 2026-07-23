@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="Covenant Ingestion", version="0.1.0")
+app = FastAPI(title="Writ Ingestion", version="0.1.0")
 
 
 @app.get("/health")

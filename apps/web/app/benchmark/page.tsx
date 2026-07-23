@@ -10,7 +10,7 @@ import { BenchmarkExplorer } from "@/components/benchmark/benchmark-explorer";
 import type { ActionView, MemberView, Score } from "@/components/benchmark/types";
 
 export const metadata: Metadata = {
-  title: "Benchmark · Covenant",
+  title: "Benchmark · Writ",
   description:
     "The 2025 G7 AI-for-SMEs benchmark: all eight members' published scores reproduced from one frozen, reviewed evidence snapshot, with the two interpretation-sensitive cells named.",
 };

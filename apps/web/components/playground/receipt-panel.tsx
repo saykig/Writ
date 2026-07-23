@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { CheckCircle2, ScrollText, ShieldAlert, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
-import type { EvaluationReceipt } from "@covenant/domain";
+import type { EvaluationReceipt } from "@writ/domain";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

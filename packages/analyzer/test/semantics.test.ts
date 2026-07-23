@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import type { Expr } from "@covenant/domain";
+import type { Expr } from "@writ/domain";
 import { and, evaluateTruth, not, or, truth, truthName } from "../src/index.js";
 
 test("four-valued operators follow the bilattice", () => {

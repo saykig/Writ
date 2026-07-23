@@ -34,27 +34,27 @@ export const DIAGNOSTIC_CATALOG_VERSION = "1.0.0";
 const DEFINITIONS = [
   // --- Static score-analysis (analyzer; asserted by scenarios) ---
   {
-    code: "COV-SCORE-GAP",
+    code: "WRT-SCORE-GAP",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
       "Score program has an uncovered input region: no rule matches and `otherwise` does not resolve it ({witness}).",
   },
   {
-    code: "COV-SCORE-OVERLAP",
+    code: "WRT-SCORE-OVERLAP",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
       "Score rules `{ruleA}` and `{ruleB}` overlap with different results and are not marked intentional ({witness}).",
   },
   {
-    code: "COV-SCORE-UNREACHABLE",
+    code: "WRT-SCORE-UNREACHABLE",
     severity: "warning",
     category: "score-analysis",
     messageTemplate: "Score rule `{rule}` is unreachable: no input satisfies it given prior rules.",
   },
   {
-    code: "COV-SCORE-MONOTONICITY",
+    code: "WRT-SCORE-MONOTONICITY",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
@@ -63,28 +63,28 @@ const DEFINITIONS = [
 
   // --- Static measure-analysis (graded weighted-ordinal indices) ---
   {
-    code: "COV-MEASURE-ANCHOR-GAP",
+    code: "WRT-MEASURE-ANCHOR-GAP",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
       "Measure `{measure}` component `{component}` has an uncovered ordinal state: no anchor matches, so the component is pending there ({witness}).",
   },
   {
-    code: "COV-MEASURE-ANCHOR-OVERLAP",
+    code: "WRT-MEASURE-ANCHOR-OVERLAP",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
       "Measure `{measure}` component `{component}` anchors `{anchorA}` and `{anchorB}` both match with different levels ({witness}).",
   },
   {
-    code: "COV-MEASURE-WEIGHTS",
+    code: "WRT-MEASURE-WEIGHTS",
     severity: "error",
     category: "score-analysis",
     messageTemplate:
       "Measure `{measure}` component weights sum to `{sum}`, not 1; the weighted aggregation is ill-defined.",
   },
   {
-    code: "COV-MEASURE-PENDING-DECISIVE",
+    code: "WRT-MEASURE-PENDING-DECISIVE",
     severity: "info",
     category: "score-analysis",
     messageTemplate:
@@ -93,21 +93,21 @@ const DEFINITIONS = [
 
   // --- Evaluation-time (deterministic evaluator over a fact environment) ---
   {
-    code: "COV-EVAL-DECISIVE-UNKNOWN",
+    code: "WRT-EVAL-DECISIVE-UNKNOWN",
     severity: "warning",
     category: "evaluation",
     messageTemplate:
       "Result is unresolved because a decisive input is `unknown` and unknown is not treated as false at `{path}`.",
   },
   {
-    code: "COV-EVAL-AMBIGUOUS",
+    code: "WRT-EVAL-AMBIGUOUS",
     severity: "warning",
     category: "evaluation",
     messageTemplate:
       "Multiple score rules of equal priority match with different results at `{path}`; the outcome is ambiguous.",
   },
   {
-    code: "COV-EVAL-SAME-RESULT-OVERLAP",
+    code: "WRT-EVAL-SAME-RESULT-OVERLAP",
     severity: "info",
     category: "evaluation",
     messageTemplate:
@@ -116,60 +116,60 @@ const DEFINITIONS = [
 
   // --- Semantic-lint placeholders (categories reserved for the analyzer) ---
   {
-    code: "COV-LINT-TYPE",
+    code: "WRT-LINT-TYPE",
     severity: "error",
     category: "type",
     messageTemplate: "Type error at `{path}`: expected `{expected}`, found `{actual}`.",
   },
   {
-    code: "COV-LINT-UNIT",
+    code: "WRT-LINT-UNIT",
     severity: "warning",
     category: "semantic-lint",
     messageTemplate:
       "Unit inconsistency at `{path}`: `{found}` is not compatible with `{expected}`.",
   },
   {
-    code: "COV-LINT-TIME-AXIS",
+    code: "WRT-LINT-TIME-AXIS",
     severity: "warning",
     category: "semantic-lint",
     messageTemplate:
       "Time-axis inconsistency at `{path}`: comparing values on different temporal axes ({detail}).",
   },
   {
-    code: "COV-LINT-IDENTITY",
+    code: "WRT-LINT-IDENTITY",
     severity: "warning",
     category: "semantic-lint",
     messageTemplate:
       "Action-identity concern at `{path}`: identity policy `{policy}` may merge or split distinct actions.",
   },
   {
-    code: "COV-LINT-ATTRIBUTION",
+    code: "WRT-LINT-ATTRIBUTION",
     severity: "warning",
     category: "semantic-lint",
     messageTemplate: "Attribution is ambiguous at `{path}`: `{detail}`.",
   },
   {
-    code: "COV-LINT-SOURCE-RATIONALE",
+    code: "WRT-LINT-SOURCE-RATIONALE",
     severity: "warning",
     category: "provenance",
     messageTemplate:
       "Rationale `{rationaleId}` is not anchored to any source passage; source-rationale linkage is required.",
   },
   {
-    code: "COV-LINT-MISSING-REFERENCE",
+    code: "WRT-LINT-MISSING-REFERENCE",
     severity: "error",
     category: "provenance",
     messageTemplate: "Reference `{reference}` at `{path}` does not resolve to a known object.",
   },
   {
-    code: "COV-IDENTITY-MISSING",
+    code: "WRT-IDENTITY-MISSING",
     severity: "error",
     category: "semantic-lint",
     messageTemplate:
       "A counting query is score-decisive at `{path}` but commitment `{objectId}` declares no action-identity policy; counts are ambiguous.",
   },
   {
-    code: "COV-PROSE-METRIC-MISMATCH",
+    code: "WRT-PROSE-METRIC-MISMATCH",
     severity: "error",
     category: "semantic-lint",
     messageTemplate:

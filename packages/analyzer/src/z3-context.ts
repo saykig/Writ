@@ -51,7 +51,7 @@ let contextCounter = 0;
 /** A fresh, isolated Z3 context with the high-level constructors we use. */
 export async function createZ3Api(): Promise<Z3Api> {
   const z3 = await loadZ3();
-  const ctx = new z3.Context(`cov-analyzer-${contextCounter++}`);
+  const ctx = new z3.Context(`writ-analyzer-${contextCounter++}`);
   return {
     ctx,
     Int: ctx.Int,

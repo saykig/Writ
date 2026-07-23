@@ -3,13 +3,13 @@
 // Three properties, decided over the same declared finite domains the score
 // analyzer uses (bounded enumeration is the oracle):
 //
-//   COV-MEASURE-WEIGHTS          component weights must be non-negative and
+//   WRT-MEASURE-WEIGHTS          component weights must be non-negative and
 //                                sum to 1, or the weighted mean is ill-defined.
-//   COV-MEASURE-ANCHOR-GAP       for some reachable ordinal state a component's
+//   WRT-MEASURE-ANCHOR-GAP       for some reachable ordinal state a component's
 //                                anchors leave it uncovered (pending there).
-//   COV-MEASURE-ANCHOR-OVERLAP   two anchors match the same state with different
+//   WRT-MEASURE-ANCHOR-OVERLAP   two anchors match the same state with different
 //                                levels (an ambiguous rubric).
-//   COV-MEASURE-PENDING-DECISIVE (info) the index is pending unless *all*
+//   WRT-MEASURE-PENDING-DECISIVE (info) the index is pending unless *all*
 //                                components resolve — the "who bears the risk"
 //                                statement: any one pending component blocks it.
 //
@@ -20,8 +20,8 @@
 // levels: 0..scale must each be declared exactly once. It never claims the
 // conditions are well-formed for query-driven anchors — only the levels.
 
-import type { Diagnostic, Expr, Measure, MeasureComponent } from "@covenant/domain";
-import { makeDiagnostic } from "@covenant/domain";
+import type { Diagnostic, Expr, Measure, MeasureComponent } from "@writ/domain";
+import { makeDiagnostic } from "@writ/domain";
 import { enumerateAssignments, stableWitness } from "./domains.js";
 import { evaluateTruth } from "./semantics.js";
 import { isDefinitelyTrue } from "./truth.js";
@@ -125,7 +125,7 @@ function structuralComponentCoverage(
   if (missing !== undefined) {
     const witness = { level: missing };
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-ANCHOR-GAP", {
+      makeDiagnostic("WRT-MEASURE-ANCHOR-GAP", {
         values: { measure: measure.id, component: component.id, witness: formatWitness(witness) },
         location,
         witness,
@@ -140,7 +140,7 @@ function structuralComponentCoverage(
     .sort((a, b) => a - b)[0];
   if (duplicate !== undefined) {
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-ANCHOR-OVERLAP", {
+      makeDiagnostic("WRT-MEASURE-ANCHOR-OVERLAP", {
         values: {
           measure: measure.id,
           component: component.id,
@@ -185,7 +185,7 @@ function analyzeComponentCoverage(
   if (gap !== undefined) {
     const witness = stableWitness(gap);
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-ANCHOR-GAP", {
+      makeDiagnostic("WRT-MEASURE-ANCHOR-GAP", {
         values: { measure: measure.id, component: component.id, witness: formatWitness(witness) },
         location,
         witness,
@@ -197,7 +197,7 @@ function analyzeComponentCoverage(
     const witness = stableWitness(overlap.assignment);
     const [anchorA, anchorB] = overlap.levels;
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-ANCHOR-OVERLAP", {
+      makeDiagnostic("WRT-MEASURE-ANCHOR-OVERLAP", {
         values: {
           measure: measure.id,
           component: component.id,
@@ -244,7 +244,7 @@ export function analyzeMeasureByEnumeration(
     measure.components.some((component) => component.weight < 0)
   ) {
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-WEIGHTS", {
+      makeDiagnostic("WRT-MEASURE-WEIGHTS", {
         values: { measure: measure.id, sum: String(weightSum) },
         location,
       }),
@@ -259,7 +259,7 @@ export function analyzeMeasureByEnumeration(
   // Pending-decisiveness: for weighted_ordinal_percent the index is all-or-nothing.
   if (measure.components.length > 0) {
     diagnostics.push(
-      makeDiagnostic("COV-MEASURE-PENDING-DECISIVE", {
+      makeDiagnostic("WRT-MEASURE-PENDING-DECISIVE", {
         values: {
           measure: measure.id,
           count: String(measure.components.length),

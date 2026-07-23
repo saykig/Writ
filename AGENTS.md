@@ -2,7 +2,7 @@
 
 ## Mission
 
-Build Covenant as an auditable compliance-evaluation compiler and evidence system. Optimize for semantic correctness, reproducibility, provenance, and reviewability before UI polish or automation volume.
+Build Writ as an auditable compliance-evaluation compiler and evidence system. Optimize for semantic correctness, reproducibility, provenance, and reviewability before UI polish or automation volume.
 
 ## Read first
 
@@ -58,7 +58,7 @@ npm run typecheck
 npm test
 npm run test:conformance
 npm run test:integration
-npm run covenant -- check examples
+npm run writ -- check examples
 ```
 
 Do not change command names without updating this file and CI.

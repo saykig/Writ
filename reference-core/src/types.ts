@@ -94,7 +94,7 @@ export type FiniteDomains = Readonly<Record<string, readonly DomainValue[]>>;
 
 export interface AnalysisDiagnostic {
   readonly code:
-    "COV-SCORE-GAP" | "COV-SCORE-OVERLAP" | "COV-SCORE-UNREACHABLE" | "COV-SCORE-UNKNOWN";
+    "WRT-SCORE-GAP" | "WRT-SCORE-OVERLAP" | "WRT-SCORE-UNREACHABLE" | "WRT-SCORE-UNKNOWN";
   readonly severity: "error" | "warning";
   readonly message: string;
   readonly witness?: Readonly<Record<string, DomainValue>>;

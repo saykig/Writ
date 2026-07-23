@@ -9,16 +9,16 @@
  * agree on the seeded programs by construction.
  */
 
-import type { Assertion, Commitment, Expr } from "@covenant/domain";
+import type { Assertion, Commitment, Expr } from "@writ/domain";
 import {
   analyzeMeasures,
   analyzeScoreProgramByEnumeration,
   evaluateTruth,
   isDefinitelyTrue,
   type FiniteDomains,
-} from "@covenant/analyzer";
-import type { Diagnostic } from "@covenant/domain";
-import type { Expression, Scenario } from "@covenant/language";
+} from "@writ/analyzer";
+import type { Diagnostic } from "@writ/domain";
+import type { Expression, Scenario } from "@writ/language";
 
 type DomainValue = string | number | boolean;
 
@@ -119,7 +119,7 @@ export function analyzeCommitment(commitment: Commitment): Diagnostic[] {
     const domainKeys = new Set(Object.keys(domains));
     const rulesById = new Map(commitment.score_program.rules.map((rule) => [rule.id, rule]));
     scoreDiagnostics = diagnostics.filter((diagnostic) => {
-      if (diagnostic.code !== "COV-SCORE-UNREACHABLE") return true;
+      if (diagnostic.code !== "WRT-SCORE-UNREACHABLE") return true;
       const ruleId = (diagnostic.context as { ruleId?: string } | undefined)?.ruleId;
       const rule = ruleId ? rulesById.get(ruleId) : undefined;
       if (!rule) return true;

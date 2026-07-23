@@ -1,4 +1,4 @@
-// Deterministic ISO-8601 temporal comparison for the Covenant evaluator.
+// Deterministic ISO-8601 temporal comparison for the Writ evaluator.
 //
 // Per 04_FORMAL_SEMANTICS.md §9: every temporal predicate compares normalized
 // ISO instants; a date has no implicit local time; `overlaps` follows interval

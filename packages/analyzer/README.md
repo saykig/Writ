@@ -1,4 +1,4 @@
-# `@covenant/analyzer`
+# `@writ/analyzer`
 
 Static diagnostics, finite-domain analysis, Z3 lowering, witness minimization, and methodology publication gates.
 

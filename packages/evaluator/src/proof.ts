@@ -4,7 +4,7 @@
 // `specs/evaluation-receipt.schema.json`. It records how a derived truth value
 // was reached: leaf nodes for literals/operands and operator nodes (`not`,
 // `and`, `or`) referencing their child node ids. It will later be unified with
-// the proof types in `@covenant/domain`; until then this package depends on
+// the proof types in `@writ/domain`; until then this package depends on
 // nothing.
 //
 // The pure truth kernel (`./truth`) stays side-effect free. Id allocation lives

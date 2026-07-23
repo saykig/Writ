@@ -1,5 +1,5 @@
 /**
- * `@covenant/domain` public API.
+ * `@writ/domain` public API.
  *
  * Canonical domain types, JSON Schema validation, a schema-version registry, and
  * the unified diagnostic catalog. `specs/*.schema.json` remains the interchange

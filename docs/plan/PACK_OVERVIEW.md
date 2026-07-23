@@ -1,6 +1,6 @@
-# Covenant: G7 Compliance DSL Build Pack
+# Writ: G7 Compliance DSL Build Pack
 
-Working name: **Covenant**. The name is provisional.
+Working name: **Writ**. The name is provisional.
 
 This repository pack is an implementation specification for an auditable system that converts G7 commitments, public evidence, and explicit interpretation rules into reproducible compliance evaluations.
 
@@ -65,9 +65,9 @@ Do not ask Codex to build the entire system in one task. Use `TASKS.yaml` or the
 The first meaningful milestone is not a web interface. It is a command that can:
 
 ```text
-covenant compile examples/2025-ai-sme-resolved.covenant
-covenant analyze examples/2025-ai-sme-resolved.covenant
-covenant evaluate \
+writ compile examples/2025-ai-sme-resolved.writ
+writ analyze examples/2025-ai-sme-resolved.writ
+writ evaluate \
   --bundle build/2025-ai-sme.bundle.json \
   --evidence examples/2025-ai-sme.sample-evidence.json \
   --subject Canada \

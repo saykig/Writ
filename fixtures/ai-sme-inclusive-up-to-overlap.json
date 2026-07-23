@@ -28,7 +28,7 @@
   },
   "expect": [
     {
-      "code": "COV-SCORE-OVERLAP",
+      "code": "WRT-SCORE-OVERLAP",
       "witness": {
         "strong_count": 0,
         "weak_count": 0,

@@ -1,4 +1,4 @@
-// PostgreSQL client factory for @covenant/api.
+// PostgreSQL client factory for @writ/api.
 //
 // Uses the porsager `postgres` driver. TLS is derived from the connection
 // string (`sslmode=require`, as Neon uses) so the same factory serves both the

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { Expr, ScoreProgram } from "@covenant/domain";
+import type { Expr, ScoreProgram } from "@writ/domain";
 import { EvalContext, evaluateScore, type Environment } from "../src/index.js";
 
 function env(facts: Record<string, unknown>): Environment {
@@ -49,7 +49,7 @@ describe("evaluateScore — deterministic branch selection", () => {
     expect(outcome.result).toBe("unresolved");
     expect(outcome.status).toBe("incomplete");
     expect(outcome.matchedRuleId).toBeUndefined();
-    expect(outcome.diagnostics.map((d) => d.code)).toContain("COV-EVAL-DECISIVE-UNKNOWN");
+    expect(outcome.diagnostics.map((d) => d.code)).toContain("WRT-EVAL-DECISIVE-UNKNOWN");
   });
 
   test("equal-priority true branch coexisting with an unknown ⇒ decisive-unknown", () => {
@@ -60,7 +60,7 @@ describe("evaluateScore — deterministic branch selection", () => {
     const outcome = score(prog, { a: "true", b: "unknown" });
     expect(outcome.result).toBe("unresolved");
     expect(outcome.status).toBe("incomplete");
-    expect(outcome.diagnostics.map((d) => d.code)).toContain("COV-EVAL-DECISIVE-UNKNOWN");
+    expect(outcome.diagnostics.map((d) => d.code)).toContain("WRT-EVAL-DECISIVE-UNKNOWN");
   });
 
   test("different-result overlap ⇒ ambiguous / unresolved", () => {
@@ -71,7 +71,7 @@ describe("evaluateScore — deterministic branch selection", () => {
     const outcome = score(prog, { a: "true", b: "true" });
     expect(outcome.result).toBe("unresolved");
     expect(outcome.status).toBe("ambiguous");
-    expect(outcome.diagnostics.map((d) => d.code)).toContain("COV-EVAL-AMBIGUOUS");
+    expect(outcome.diagnostics.map((d) => d.code)).toContain("WRT-EVAL-AMBIGUOUS");
   });
 
   test("same-result overlap ⇒ benign notice but still selects", () => {
@@ -83,9 +83,9 @@ describe("evaluateScore — deterministic branch selection", () => {
     expect(outcome.result).toBe("+1");
     expect(outcome.status).toBe("supported");
     expect(outcome.matchedRuleId).toBe("a");
-    expect(outcome.diagnostics.map((d) => d.code)).toContain("COV-EVAL-SAME-RESULT-OVERLAP");
+    expect(outcome.diagnostics.map((d) => d.code)).toContain("WRT-EVAL-SAME-RESULT-OVERLAP");
     // The overlap notice is informational, not an error.
-    const notice = outcome.diagnostics.find((d) => d.code === "COV-EVAL-SAME-RESULT-OVERLAP");
+    const notice = outcome.diagnostics.find((d) => d.code === "WRT-EVAL-SAME-RESULT-OVERLAP");
     expect(notice?.severity).toBe("info");
   });
 

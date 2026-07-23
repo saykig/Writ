@@ -19,8 +19,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
-import { sha256Canonical } from "@covenant/provenance";
-import { verifyReceipt } from "@covenant/evaluator";
+import { sha256Canonical } from "@writ/provenance";
+import { verifyReceipt } from "@writ/evaluator";
 import { BENCHMARK_DIR, EVIDENCE_DIR, PROFILES_DIR } from "./paths.js";
 import { runBenchmark } from "./run.js";
 

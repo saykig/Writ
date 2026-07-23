@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/evaluator",
+  "name": "@writ/evaluator",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@covenant/domain": "workspace:*",
-    "@covenant/provenance": "workspace:*"
+    "@writ/domain": "workspace:*",
+    "@writ/provenance": "workspace:*"
   }
 }

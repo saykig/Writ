@@ -6,7 +6,7 @@
 /* eslint-disable */
 import * as langium from "langium";
 
-export const CovenantTerminals = {
+export const WritTerminals = {
   WS: /\s+/,
   ML_COMMENT: /\/\*[\s\S]*?\*\//,
   SL_COMMENT: /\/\/[^\n\r]*/,
@@ -17,9 +17,9 @@ export const CovenantTerminals = {
   STRING: /"(?:\\.|[^"\\])*"/,
 };
 
-export type CovenantTerminalNames = keyof typeof CovenantTerminals;
+export type WritTerminalNames = keyof typeof WritTerminals;
 
-export type CovenantKeywordNames =
+export type WritKeywordNames =
   | "!="
   | "("
   | ")"
@@ -63,7 +63,6 @@ export type CovenantKeywordNames =
   | "contested"
   | "count"
   | "count_distinct"
-  | "covenant"
   | "coverage"
   | "derive"
   | "diagnostic"
@@ -157,10 +156,11 @@ export type CovenantKeywordNames =
   | "weighted_ordinal_percent"
   | "when"
   | "where"
+  | "writ"
   | "{"
   | "}";
 
-export type CovenantTokenNames = CovenantTerminalNames | CovenantKeywordNames;
+export type WritTokenNames = WritTerminalNames | WritKeywordNames;
 
 export interface ActionIdentity extends langium.AstNode {
   readonly $container: Commitment;
@@ -1734,7 +1734,7 @@ export function isWindow(item: unknown): item is Window {
   return reflection.isInstance(item, Window.$type);
 }
 
-export type CovenantAstType = {
+export type WritAstType = {
   ActionIdentity: ActionIdentity;
   Adopted: Adopted;
   AnchorRule: AnchorRule;
@@ -1810,7 +1810,7 @@ export type CovenantAstType = {
   Window: Window;
 };
 
-export class CovenantAstReflection extends langium.AbstractAstReflection {
+export class WritAstReflection extends langium.AbstractAstReflection {
   override readonly types = {
     ActionIdentity: {
       name: ActionIdentity.$type,
@@ -2761,4 +2761,4 @@ export class CovenantAstReflection extends langium.AbstractAstReflection {
   } as const satisfies langium.AstMetaData;
 }
 
-export const reflection = new CovenantAstReflection();
+export const reflection = new WritAstReflection();

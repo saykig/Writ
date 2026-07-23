@@ -30,7 +30,7 @@ function openCommand() {
 }
 
 /**
- * SiteNav — sticky top navigation: the COVENANT wordmark + tagline, the primary
+ * SiteNav — sticky top navigation: the WRIT wordmark + tagline, the primary
  * route links with an active underline, a ⌘K trigger, the paper/sumi theme
  * toggle, and a GitHub link. Collapses to a Sheet below `lg`. Mounts the single
  * CommandMenu instance for the whole app.
@@ -43,18 +43,12 @@ export function SiteNav() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto flex h-14 max-w-[76rem] items-center gap-5 px-5 sm:px-6">
         {/* Wordmark */}
-        <Link
-          href="/"
-          className="group flex shrink-0 items-center gap-2"
-          aria-label="Covenant — home"
-        >
+        <Link href="/" className="group flex shrink-0 items-center gap-2" aria-label="Writ — home">
           <span
             aria-hidden
             className="size-2 rounded-[2px] bg-gold transition-transform duration-300 group-hover:scale-110"
           />
-          <span className="text-[0.95rem] font-semibold tracking-tight text-foreground">
-            Covenant
-          </span>
+          <span className="text-[0.95rem] font-semibold tracking-tight text-foreground">Writ</span>
         </Link>
 
         {/* Desktop nav */}
@@ -99,7 +93,7 @@ export function SiteNav() {
           <Button
             variant="ghost"
             size="icon-sm"
-            aria-label="Covenant on GitHub"
+            aria-label="Writ on GitHub"
             nativeButton={false}
             render={
               <a href={GITHUB_URL} target="_blank" rel="noreferrer noopener">
@@ -123,7 +117,7 @@ export function SiteNav() {
               <SheetHeader className="border-b border-border">
                 <SheetTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight">
                   <span aria-hidden className="size-2 rounded-[2px] bg-gold" />
-                  Covenant
+                  Writ
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col p-2" aria-label="Primary">

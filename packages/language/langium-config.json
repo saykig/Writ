@@ -1,10 +1,10 @@
 {
-  "projectName": "Covenant",
+  "projectName": "Writ",
   "languages": [
     {
-      "id": "covenant",
-      "grammar": "covenant.langium",
-      "fileExtensions": [".covenant", ".covenant.md"]
+      "id": "writ",
+      "grammar": "writ.langium",
+      "fileExtensions": [".writ", ".writ.md"]
     }
   ],
   "mode": "production",

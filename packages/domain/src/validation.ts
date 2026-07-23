@@ -1,5 +1,5 @@
 /**
- * JSON Schema validation for governed Covenant artifacts.
+ * JSON Schema validation for governed Writ artifacts.
  *
  * Every vendored `*.schema.json` contract is registered on a single AJV 2020
  * instance so any cross-`$ref` between them resolves. Validation is

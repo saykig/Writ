@@ -1,4 +1,4 @@
-# `@covenant/provenance`
+# `@writ/provenance`
 
 Document and passage hashing, WARC links, anchor relocation, receipt canonicalization, signatures, and verification.
 

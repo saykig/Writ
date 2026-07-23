@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { CompareOp, Expr } from "@covenant/domain";
+import type { CompareOp, Expr } from "@writ/domain";
 import {
   compareCountIntervals,
   evaluate,
@@ -106,7 +106,7 @@ describe("exact-decimal & money comparison", () => {
     );
   });
 
-  test("currency mismatch yields unknown + COV-LINT-UNIT (never a silent compare)", () => {
+  test("currency mismatch yields unknown + WRT-LINT-UNIT (never a silent compare)", () => {
     const expr = cmp(
       "gt",
       lit({ value: "100", currency: "USD", bound: "exact" }),
@@ -114,7 +114,7 @@ describe("exact-decimal & money comparison", () => {
     );
     const result = evaluate(expr, env());
     expect(truthName(result.truth)).toBe("unknown");
-    expect(result.diagnostics.map((d) => d.code)).toContain("COV-LINT-UNIT");
+    expect(result.diagnostics.map((d) => d.code)).toContain("WRT-LINT-UNIT");
   });
 
   test("up_to bound becomes an interval and can straddle a threshold", () => {
@@ -130,7 +130,7 @@ describe("type mismatch yields unknown + diagnostic", () => {
   test("ordering a non-numeric string is a type error, not false", () => {
     const result = evaluate(cmp("gt", lit("abc"), lit(5)), env());
     expect(truthName(result.truth)).toBe("unknown");
-    expect(result.diagnostics.map((d) => d.code)).toContain("COV-LINT-TYPE");
+    expect(result.diagnostics.map((d) => d.code)).toContain("WRT-LINT-TYPE");
   });
 });
 

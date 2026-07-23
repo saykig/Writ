@@ -262,4 +262,4 @@ Used to make tasks explicit, scoped, testable, and rich in repository context.
 
 `https://developers.openai.com/codex/build-skills`
 
-Used for the checked-in domain skill in `.agents/skills/covenant-domain/`.
+Used for the checked-in domain skill in `.agents/skills/writ-domain/`.

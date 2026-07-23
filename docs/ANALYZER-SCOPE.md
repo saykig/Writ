@@ -1,6 +1,6 @@
 # What the analyzer decides — and what it does not
 
-Covenant's static analyzer inspects a *methodology* before any evidence exists.
+Writ's static analyzer inspects a *methodology* before any evidence exists.
 This document states, honestly, what a finding means, what a clean result
 guarantees, and where the analysis is silent. Being explicit about the bounds is
 the point: a tool that overstates what it proves is worse than one that says "I
@@ -11,23 +11,23 @@ cannot decide this here."
 **Score programs** (the `+1/0/-1` shape), over the finite domains a methodology
 declares with `assert … over var in …`:
 
-- `COV-SCORE-GAP` — some input state matches no rule and `otherwise` does not
+- `WRT-SCORE-GAP` — some input state matches no rule and `otherwise` does not
   resolve it (an uncovered region), with a minimal witness.
-- `COV-SCORE-OVERLAP` — two equal-priority rules match with different results and
+- `WRT-SCORE-OVERLAP` — two equal-priority rules match with different results and
   are not marked `intentional_overlap`.
-- `COV-SCORE-UNREACHABLE` — a rule is satisfiable by no input in the declared
+- `WRT-SCORE-UNREACHABLE` — a rule is satisfiable by no input in the declared
   domain.
-- `COV-SCORE-MONOTONICITY` — a declared `monotonic` axis is violated by a witness
+- `WRT-SCORE-MONOTONICITY` — a declared `monotonic` axis is violated by a witness
   pair.
 
 **Measures** (the weighted-ordinal shape), over the same declared domains:
 
-- `COV-MEASURE-WEIGHTS` — component weights are negative or do not sum to 1.
-- `COV-MEASURE-ANCHOR-GAP` / `COV-MEASURE-ANCHOR-OVERLAP` — a component's ordinal
+- `WRT-MEASURE-WEIGHTS` — component weights are negative or do not sum to 1.
+- `WRT-MEASURE-ANCHOR-GAP` / `WRT-MEASURE-ANCHOR-OVERLAP` — a component's ordinal
   anchors leave some state uncovered, or two anchors match one state with
   different levels. Checked only when the anchors reference variables with a
   declared domain (see below).
-- `COV-MEASURE-PENDING-DECISIVE` (info) — the index is pending unless *every*
+- `WRT-MEASURE-PENDING-DECISIVE` (info) — the index is pending unless *every*
   component resolves; any one pending component blocks it. This is the graded
   analog of interpretation-sensitivity: it localizes where a single unresolved
   judgment carries the whole result.
@@ -52,7 +52,7 @@ wired into the CLI, and there is no Z3 path for measures yet.
   evidence queries with no such variable (the ported Gap Matrix), it cannot reason
   about the conditions, but it still runs a **structural level check**: every
   ordinal level `0..scale` must be declared exactly once, so a missing or
-  duplicated anchor level is caught (`COV-MEASURE-ANCHOR-GAP`/`OVERLAP`). What it
+  duplicated anchor level is caught (`WRT-MEASURE-ANCHOR-GAP`/`OVERLAP`). What it
   does *not* verify for query-driven anchors is that the conditions themselves are
   mutually exclusive and exhaustive.
 - **Uncertainty under-decision.** A rule or anchor whose guard is `unknown`

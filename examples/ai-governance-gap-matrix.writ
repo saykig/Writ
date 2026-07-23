@@ -1,8 +1,8 @@
-language covenant "0.1"
+language writ "0.1"
 package science.ai_governance.gap_matrix version "1.0.0";
 
 // The Gap Matrix (Sara Kim, cepheus "What We Owe to Each Other"), ported to
-// Covenant. A frontier-AI governance field is scored on two weighted-ordinal
+// Writ. A frontier-AI governance field is scored on two weighted-ordinal
 // axes — how concentrated the knowledge/control is, and how much public
 // authority exists — from reviewed analyst assessments. The distance between
 // them is the governance gap: who knows vs. who decides.

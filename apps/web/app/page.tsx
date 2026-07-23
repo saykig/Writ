@@ -76,7 +76,7 @@ export default function Home() {
 
   return (
     <main>
-      {/* ── Hero: what Covenant is, plainly + the signature artifact ─────── */}
+      {/* ── Hero: what Writ is, plainly + the signature artifact ─────── */}
       <section className="relative overflow-hidden">
         <HeroBackdrop flickerChance={0.08} />
         <div className="relative mx-auto grid max-w-[76rem] items-center gap-12 px-5 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:py-28">
@@ -87,9 +87,9 @@ export default function Home() {
             </h1>
             <Prose className="mt-7">
               A compliance score is a single number, but behind it sits a rubric full of reading
-              calls you usually cannot see or reproduce. Covenant compiles the rubric into a
-              program: it <strong>catches ambiguity before any evidence exists</strong>, scores
-              against a frozen, reviewed record, and returns every number as a{" "}
+              calls you usually cannot see or reproduce. Writ compiles the rubric into a program: it{" "}
+              <strong>catches ambiguity before any evidence exists</strong>, scores against a
+              frozen, reviewed record, and returns every number as a{" "}
               <strong>receipt anyone can recompute</strong>. Where a score turns on a reading rather
               than a fact, it says so.
             </Prose>
@@ -158,15 +158,15 @@ export default function Home() {
               The 2025 G7 rubric awards a middle score for &ldquo;up to four strong actions.&rdquo;
               Read literally, that is the range one to four — so a country with{" "}
               <em className="text-foreground not-italic">zero</em> strong actions and five weak ones
-              matches no rule at all. Covenant proves that gap statically, before any
-              country&rsquo;s evidence is loaded.
+              matches no rule at all. Writ proves that gap statically, before any country&rsquo;s
+              evidence is loaded.
             </Prose>
           </Reveal>
 
           <Reveal className="mt-9 max-w-2xl" delay={90}>
             <CodeArtifact
               label="Literal reading · score"
-              filename="2025-ai-sme-literal.covenant"
+              filename="2025-ai-sme-literal.writ"
               code={code}
               seam={seamLine ? [seamLine] : []}
               caption={
@@ -194,8 +194,8 @@ export default function Home() {
             <SectionLabel>Proven, not asserted</SectionLabel>
             <SectionHeading className="mt-4">Two methodologies, two scoring shapes.</SectionHeading>
             <Prose className="mt-4">
-              Covenant reproduces published scores it did not write, on two genuinely different
-              rubrics — a G7 three-point verdict and a weighted-ordinal governance index.
+              Writ reproduces published scores it did not write, on two genuinely different rubrics
+              — a G7 three-point verdict and a weighted-ordinal governance index.
             </Prose>
           </Reveal>
 

@@ -1,9 +1,9 @@
 # FATF Mutual Evaluations — the third methodology (scaffold, source-gated)
 
 This corpus ports the **Financial Action Task Force (FATF) Mutual Evaluation**
-ratings into Covenant, as the project's third methodology. Its purpose is to move
+ratings into Writ, as the project's third methodology. Its purpose is to move
 the generality claim from "two methodologies" toward a pattern, on a record
-Covenant's authors had **no hand in writing**: a standing intergovernmental body
+Writ's authors had **no hand in writing**: a standing intergovernmental body
 publishes the ratings in full, per country, in the
 [Consolidated Assessment Ratings table](https://www.fatf-gafi.org/en/publications/mutualevaluations/documents/assessment-ratings.html).
 
@@ -21,7 +21,7 @@ FATF rates each assessed country on two axes:
 - **Effectiveness** — each of the **11 Immediate Outcomes** is rated
   High / Substantial / Moderate / Low.
 
-Covenant does not re-derive these ratings (they are the input evidence). It
+Writ does not re-derive these ratings (they are the input evidence). It
 reproduces the **derived, published outcome** FATF computes from them: the
 country's **follow-up stream** — regular or enhanced — assigned at the adoption
 of its Mutual Evaluation Report. In the receipt's three-point vocabulary,
@@ -31,7 +31,7 @@ of its Mutual Evaluation Report. In the receipt's three-point vocabulary,
 ## Encoding
 
 - The methodology of record is
-  [`examples/fatf-mutual-evaluation.covenant`](../../examples/fatf-mutual-evaluation.covenant).
+  [`examples/fatf-mutual-evaluation.writ`](../../examples/fatf-mutual-evaluation.writ).
   Each rating is one reviewed, accepted evidence claim:
   `claim_type` `"technical_compliance"` with `subject_ref` `"R.<n>"` and `object`
   in `{C, LC, PC, NC, NA}`, or `claim_type` `"effectiveness"` with `subject_ref`
@@ -51,22 +51,22 @@ of its Mutual Evaluation Report. In the receipt's three-point vocabulary,
 
 This is a **scaffold**. The encoding, the static analysis, and the rule's
 computation over evidence are done and tested
-(`packages/benchmark/test/fatf-reproduction.test.ts`, over *synthetic,
-clearly-labelled* ratings — no real country's ratings appear anywhere yet). Three
+(`packages/benchmark/test/fatf-reproduction.test.ts`, over _synthetic,
+clearly-labelled_ ratings — no real country's ratings appear anywhere yet). Three
 things must be sourced from the primary record before any reproduction is
 claimed:
 
 1. **The enhanced-follow-up trigger constants.** The thresholds in the
    methodology (8 PC/NC; 9 Low/Moderate outcomes; 6 Low outcomes) and the core
    Recommendation set (R.3, R.5, R.6, R.10, R.11, R.20) are transcribed from
-   recollection of the *Procedures for the FATF Fourth Round of AML/CFT Mutual
-   Evaluations* and must be verified against that document verbatim.
+   recollection of the _Procedures for the FATF Fourth Round of AML/CFT Mutual
+   Evaluations_ and must be verified against that document verbatim.
 2. **The per-country ratings** — the 40 + 11 published ratings per country, from
    the Consolidated Assessment Ratings table, transcribed into one snapshot per
    country (see `ratings.template.json` for the exact shape).
 3. **The assigned follow-up streams** — FATF's actually-assigned regular/enhanced
    stream per country, the record the reproduction is checked against. Where
-   Covenant's mechanical computation diverges from FATF's assignment, that
+   Writ's mechanical computation diverges from FATF's assignment, that
    divergence localizes plenary discretion — a finding, not a bug.
 
 Until then, `packages/benchmark/test/fatf-reproduction.test.ts` holds the real

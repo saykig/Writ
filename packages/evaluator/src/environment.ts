@@ -48,7 +48,7 @@
 //                  (the safe production default) when unset.
 // -----------------------------------------------------------------------------
 
-import type { ActionIdentity } from "@covenant/domain";
+import type { ActionIdentity } from "@writ/domain";
 
 /** A single evidence record (action/claim); resolved into by dotted path. */
 export type EvidenceRecord = Readonly<Record<string, unknown>>;

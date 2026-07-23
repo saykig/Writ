@@ -1,7 +1,7 @@
 /**
- * Language subcommands for the Covenant CLI: `fmt`, `check`, `compile`,
- * `analyze`, and `test`. These drive the `@covenant/language` front end and the
- * `@covenant/analyzer` bounded score analysis over compiled IR. All output is
+ * Language subcommands for the Writ CLI: `fmt`, `check`, `compile`,
+ * `analyze`, and `test`. These drive the `@writ/language` front end and the
+ * `@writ/analyzer` bounded score analysis over compiled IR. All output is
  * deterministic; `--json` produces stable, sorted payloads suitable for CI.
  */
 
@@ -15,13 +15,13 @@ import {
   type LanguageDiagnostic,
   type Model,
   type Scenario,
-} from "@covenant/language";
-import type { CanonicalIr, Commitment } from "@covenant/domain";
+} from "@writ/language";
+import type { CanonicalIr, Commitment } from "@writ/domain";
 import { analyzeCommitment, runScenario, type ScenarioResult } from "./analysis.js";
 import type { CliIO } from "./io.js";
 
 function isLiterate(file: string): boolean {
-  return file.endsWith(".covenant.md");
+  return file.endsWith(".writ.md");
 }
 
 function read(file: string): string {
@@ -124,7 +124,7 @@ export function runCheck(args: readonly string[], io: CliIO): number {
     errors += errorCount(result.diagnostics);
     if (!result.schemaValid) {
       errors += 1;
-      io.err(`${file}: error COV-IR-INVALID: compiled IR did not validate against canonical-ir`);
+      io.err(`${file}: error WRT-IR-INVALID: compiled IR did not validate against canonical-ir`);
       for (const issue of result.schemaErrors.slice(0, 8)) {
         io.err(`  ${issue.instancePath || "/"}: ${issue.message}`);
       }

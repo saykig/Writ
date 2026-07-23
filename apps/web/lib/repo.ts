@@ -3,7 +3,7 @@
  *
  * The example sources and the 2025 AI-for-SMEs benchmark corpus are inlined at
  * build time into `frozen-data.ts` (see `scripts/embed-frozen.ts`) and served
- * from there. This is deliberate: the @covenant/* packages locate their data via
+ * from there. This is deliberate: the @writ/* packages locate their data via
  * `import.meta.url`, which bundlers rewrite to a build-time path, and Vercel does
  * not ship the repo data dirs into the serverless lambda (its root is
  * `/var/task`). Reading from the inlined map removes both failure modes. A

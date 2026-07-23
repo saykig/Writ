@@ -1,6 +1,6 @@
 "use client";
 
-import type { CanonicalIr } from "@covenant/domain";
+import type { CanonicalIr } from "@writ/domain";
 
 import { CodeArtifact } from "@/components/site/code-artifact";
 import { TruthBadge } from "@/components/site/truth-badge";

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/release.schema.json",
-  "title": "Covenant Release Manifest",
+  "$id": "https://writ.example/schemas/release.schema.json",
+  "title": "Writ Release Manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [

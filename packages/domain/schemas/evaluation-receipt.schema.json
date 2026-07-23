@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/evaluation-receipt.schema.json",
-  "title": "Covenant Evaluation Receipt",
+  "$id": "https://writ.example/schemas/evaluation-receipt.schema.json",
+  "title": "Writ Evaluation Receipt",
   "type": "object",
   "additionalProperties": false,
   "required": [

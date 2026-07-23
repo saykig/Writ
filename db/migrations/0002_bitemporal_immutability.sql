@@ -1,6 +1,6 @@
 -- 0002_bitemporal_immutability.sql
 --
--- Refines the baseline schema (0001) to satisfy the Covenant ledger invariants:
+-- Refines the baseline schema (0001) to satisfy the Writ ledger invariants:
 --   * institutions / institution_aliases (identity of publishers and actors);
 --   * bitemporal version rows for claims and actions (valid-time + system-time);
 --   * immutability of frozen / published rows (snapshots, receipts, published
@@ -64,7 +64,7 @@ ALTER TABLE actions
 
 -- Default logical_id to the row id on insert when the caller does not supply
 -- an explicit logical identity (first version of a logical entity).
-CREATE OR REPLACE FUNCTION covenant_default_logical_id() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION writ_default_logical_id() RETURNS trigger AS $$
 BEGIN
   IF NEW.logical_id IS NULL THEN
     NEW.logical_id := NEW.id;
@@ -76,12 +76,12 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS claims_default_logical_id ON claims;
 CREATE TRIGGER claims_default_logical_id
   BEFORE INSERT ON claims
-  FOR EACH ROW EXECUTE FUNCTION covenant_default_logical_id();
+  FOR EACH ROW EXECUTE FUNCTION writ_default_logical_id();
 
 DROP TRIGGER IF EXISTS actions_default_logical_id ON actions;
 CREATE TRIGGER actions_default_logical_id
   BEFORE INSERT ON actions
-  FOR EACH ROW EXECUTE FUNCTION covenant_default_logical_id();
+  FOR EACH ROW EXECUTE FUNCTION writ_default_logical_id();
 
 UPDATE claims SET logical_id = id WHERE logical_id IS NULL;
 UPDATE actions SET logical_id = id WHERE logical_id IS NULL;
@@ -103,7 +103,7 @@ CREATE INDEX IF NOT EXISTS actions_logical_system_idx
 -- ---------------------------------------------------------------------------
 
 -- Reject every UPDATE / DELETE: frozen or append-only rows.
-CREATE OR REPLACE FUNCTION covenant_freeze() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION writ_freeze() RETURNS trigger AS $$
 BEGIN
   RAISE EXCEPTION 'relation % is immutable; % is not permitted on frozen rows',
     TG_TABLE_NAME, TG_OP
@@ -112,7 +112,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Reject UPDATE / DELETE only once a release row is published.
-CREATE OR REPLACE FUNCTION covenant_freeze_if_published() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION writ_freeze_if_published() RETURNS trigger AS $$
 BEGIN
   IF OLD.status = 'published' THEN
     RAISE EXCEPTION 'release % is published and immutable; % rejected', OLD.id, TG_OP
@@ -128,7 +128,7 @@ $$ LANGUAGE plpgsql;
 -- Accepted claims are superseded via new rows, never edited in place. The only
 -- permitted mutation of an accepted claim is closing its system-time interval
 -- (status -> superseded/withdrawn, set system_to) with content left unchanged.
-CREATE OR REPLACE FUNCTION covenant_claims_guard() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION writ_claims_guard() RETURNS trigger AS $$
 BEGIN
   IF TG_OP = 'DELETE' THEN
     IF OLD.status IN ('accepted', 'superseded') THEN
@@ -164,32 +164,32 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS evidence_snapshots_freeze ON evidence_snapshots;
 CREATE TRIGGER evidence_snapshots_freeze
   BEFORE UPDATE OR DELETE ON evidence_snapshots
-  FOR EACH ROW EXECUTE FUNCTION covenant_freeze();
+  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
 
 DROP TRIGGER IF EXISTS snapshot_members_freeze ON snapshot_document_versions;
 CREATE TRIGGER snapshot_members_freeze
   BEFORE UPDATE OR DELETE ON snapshot_document_versions
-  FOR EACH ROW EXECUTE FUNCTION covenant_freeze();
+  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
 
 DROP TRIGGER IF EXISTS evaluation_receipts_freeze ON evaluation_receipts;
 CREATE TRIGGER evaluation_receipts_freeze
   BEFORE UPDATE OR DELETE ON evaluation_receipts
-  FOR EACH ROW EXECUTE FUNCTION covenant_freeze();
+  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
 
 DROP TRIGGER IF EXISTS audit_events_freeze ON audit_events;
 CREATE TRIGGER audit_events_freeze
   BEFORE UPDATE OR DELETE ON audit_events
-  FOR EACH ROW EXECUTE FUNCTION covenant_freeze();
+  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
 
 DROP TRIGGER IF EXISTS releases_freeze ON releases;
 CREATE TRIGGER releases_freeze
   BEFORE UPDATE OR DELETE ON releases
-  FOR EACH ROW EXECUTE FUNCTION covenant_freeze_if_published();
+  FOR EACH ROW EXECUTE FUNCTION writ_freeze_if_published();
 
 DROP TRIGGER IF EXISTS claims_guard ON claims;
 CREATE TRIGGER claims_guard
   BEFORE UPDATE OR DELETE ON claims
-  FOR EACH ROW EXECUTE FUNCTION covenant_claims_guard();
+  FOR EACH ROW EXECUTE FUNCTION writ_claims_guard();
 
 -- ---------------------------------------------------------------------------
 -- Spec alignment: evidence-link stance / support_type

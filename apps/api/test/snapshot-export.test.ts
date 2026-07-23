@@ -6,9 +6,9 @@
 // produce a receipt (the benchmark-phase integration point).
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import type { FastifyInstance } from "fastify";
-import { canonicalJson } from "@covenant/provenance";
-import { validate, type CanonicalIr, type Evidence } from "@covenant/domain";
-import { evaluateCommitment } from "@covenant/evaluator";
+import { canonicalJson } from "@writ/provenance";
+import { validate, type CanonicalIr, type Evidence } from "@writ/domain";
+import { evaluateCommitment } from "@writ/evaluator";
 import { createSql, type Sql } from "../src/db/client.js";
 import { createRepositories, type Repositories } from "../src/db/repositories/index.js";
 import { buildApp } from "../src/http/app.js";
@@ -122,7 +122,7 @@ suite("DATA-003 snapshot freeze + export", () => {
       issued_at: "2025-05-30T00:00:00Z",
       media_type: "application/pdf",
       sha256: uniqueSha(),
-      storage_uri: `s3://covenant/${versionId}`,
+      storage_uri: `s3://writ/${versionId}`,
     });
     await repos.documents.insertPassage({
       id: passageId,

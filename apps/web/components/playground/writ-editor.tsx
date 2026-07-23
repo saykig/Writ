@@ -3,53 +3,42 @@
 import { useEffect, useRef, useState } from "react";
 import { Editor, type Monaco, type OnMount } from "@monaco-editor/react";
 
-import {
-  COVENANT_LANGUAGE_ID,
-  COVENANT_THEME_DARK,
-  COVENANT_THEME_LIGHT,
-  registerCovenant,
-} from "./covenant-language";
+import { WRIT_LANGUAGE_ID, WRIT_THEME_DARK, WRIT_THEME_LIGHT, registerWrit } from "./writ-language";
 import type { CompileDiagnostic, Finding } from "./types";
 
 type CodeEditor = Parameters<OnMount>[0];
 
 /** Decoration CSS for the gold gap seam, injected once (globals.css is off-limits). */
 const GAP_DECORATION_CSS = `
-.cov-gap-line { background: var(--gold-wash); }
-.cov-gap-glyph { margin-left: 3px; width: 3px !important; background: var(--gold); }
+.writ-gap-line { background: var(--gold-wash); }
+.writ-gap-glyph { margin-left: 3px; width: 3px !important; background: var(--gold); }
 `;
 
-export interface CovenantEditorProps {
+export interface WritEditorProps {
   value: string;
   onChange: (value: string) => void;
   /** Resolved theme; drives which Seam Monaco theme is active. */
   isDark: boolean;
   /** Compile diagnostics rendered as squiggles + hovers. */
   diagnostics: readonly CompileDiagnostic[];
-  /** The active `COV-SCORE-GAP` finding, if any — marks the `otherwise` line. */
+  /** The active `WRT-SCORE-GAP` finding, if any — marks the `otherwise` line. */
   gap: Finding | null;
 }
 
 /**
- * CovenantEditor — a Monaco editor bound to the `covenant` language and the two
+ * WritEditor — a Monaco editor bound to the `writ` language and the two
  * Seam themes. It renders compile diagnostics as markers and, when the analyzer
  * reports an uncovered region, paints a gold gutter seam on the `otherwise`
  * clause via `deltaDecorations`. Loaded client-only (see `Playground`).
  */
-export default function CovenantEditor({
-  value,
-  onChange,
-  isDark,
-  diagnostics,
-  gap,
-}: CovenantEditorProps) {
+export default function WritEditor({ value, onChange, isDark, diagnostics, gap }: WritEditorProps) {
   const editorRef = useRef<CodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const decorationsRef = useRef<string[]>([]);
   const [ready, setReady] = useState(false);
 
   const handleBeforeMount = (monaco: Monaco) => {
-    registerCovenant(monaco);
+    registerWrit(monaco);
   };
 
   const handleMount: OnMount = (editor, monaco) => {
@@ -86,7 +75,7 @@ export default function CovenantEditor({
           endColumn: end.column,
         };
       });
-    monaco.editor.setModelMarkers(model, COVENANT_LANGUAGE_ID, markers);
+    monaco.editor.setModelMarkers(model, WRIT_LANGUAGE_ID, markers);
   }, [ready, diagnostics]);
 
   // Score-gap finding → gold seam decoration on the `otherwise` line.
@@ -106,8 +95,8 @@ export default function CovenantEditor({
           range: new monaco.Range(line, 1, line, 1),
           options: {
             isWholeLine: true,
-            className: "cov-gap-line",
-            glyphMarginClassName: "cov-gap-glyph",
+            className: "writ-gap-line",
+            glyphMarginClassName: "writ-gap-glyph",
             overviewRuler: {
               color: isDark ? "#c7a24e" : "#9a7828",
               position: monaco.editor.OverviewRulerLane.Left,
@@ -124,8 +113,8 @@ export default function CovenantEditor({
     <>
       <style>{GAP_DECORATION_CSS}</style>
       <Editor
-        language={COVENANT_LANGUAGE_ID}
-        theme={isDark ? COVENANT_THEME_DARK : COVENANT_THEME_LIGHT}
+        language={WRIT_LANGUAGE_ID}
+        theme={isDark ? WRIT_THEME_DARK : WRIT_THEME_LIGHT}
         value={value}
         onChange={(next) => onChange(next ?? "")}
         beforeMount={handleBeforeMount}
@@ -153,7 +142,7 @@ export default function CovenantEditor({
           automaticLayout: true,
           tabSize: 2,
           wordWrap: "off",
-          ariaLabel: "Covenant methodology source",
+          ariaLabel: "Writ methodology source",
           fixedOverflowWidgets: true,
         }}
       />

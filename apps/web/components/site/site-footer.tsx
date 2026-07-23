@@ -4,7 +4,7 @@ import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
 
 /**
  * SiteFooter — quiet closing band: the seam motif (a hairline rule broken by a
- * short gold kintsugi segment), a one-line statement of what Covenant is, the
+ * short gold kintsugi segment), a one-line statement of what Writ is, the
  * route list, and the GitHub link. Server component (no interactivity).
  */
 export function SiteFooter() {
@@ -15,7 +15,7 @@ export function SiteFooter() {
           <div className="flex items-center gap-2">
             <span aria-hidden className="size-2 rounded-[2px] bg-gold" />
             <span className="text-[0.95rem] font-semibold tracking-tight text-foreground">
-              Covenant
+              Writ
             </span>
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">

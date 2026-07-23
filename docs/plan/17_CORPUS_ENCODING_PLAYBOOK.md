@@ -1,6 +1,6 @@
 # Corpus Encoding Playbook
 
-This is the operating procedure for converting a G7 chapter into a reviewed Covenant package.
+This is the operating procedure for converting a G7 chapter into a reviewed Writ package.
 
 ## 1. Freeze the chapter source
 
@@ -26,7 +26,7 @@ Output: reviewed inventory with page-level anchors.
 
 ## 3. Encode the literal methodology
 
-Write a `.covenant` package that preserves the apparent source rule even when it is incomplete. Do not silently repair gaps, precedence, or contradictory prose.
+Write a `.writ` package that preserves the apparent source rule even when it is incomplete. Do not silently repair gaps, precedence, or contradictory prose.
 
 Output: literal package and canonical IR.
 

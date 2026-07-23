@@ -3,7 +3,7 @@
 // Two responsibilities:
 //
 //   1. `buildMemberSnapshot` turns a reviewed `MemberSeed` into a schema-valid
-//      evidence snapshot (`@covenant/domain` `evidence`). The analyst's reviewed
+//      evidence snapshot (`@writ/domain` `evidence`). The analyst's reviewed
 //      classification is stored as an accepted, reviewed supporting *claim*
 //      (predicate `rubric_classification`) — NOT as a raw field on the action,
 //      because the evidence `action` schema is closed (`additionalProperties:
@@ -16,8 +16,8 @@
 //      interpretation profile's decision for the general, non-SME AI measures.
 //      The score itself is then computed by `evaluateCommitment` — never here.
 
-import { sha256Canonical } from "@covenant/provenance";
-import type { Evidence, InterpretationProfile } from "@covenant/domain";
+import { sha256Canonical } from "@writ/provenance";
+import type { Evidence, InterpretationProfile } from "@writ/domain";
 import { MEMBERS } from "./members.js";
 import type { ActionSeed, Classification, MemberSeed } from "./members.js";
 

@@ -1,6 +1,6 @@
-# Covenant
+# Writ
 
-Covenant is an auditable policy-evaluation compiler for G7 commitment compliance. It turns a
+Writ is an auditable policy-evaluation compiler for G7 commitment compliance. It turns a
 normative methodology, a reviewed evidence ledger, and explicit interpretation rules into a
 deterministic, reproducible evaluation receipt with a proof tree and content hashes.
 
@@ -26,7 +26,7 @@ truth — a rendered report is a view, never the record.
 - `db/migrations` — PostgreSQL schema and controlled migrations.
 - `reference-core` — dependency-light executable specification for the hardest semantics (kept until `packages/evaluator` supersedes it).
 - `specs/` — JSON Schemas, the EBNF, and the OpenAPI contract (interchange authority).
-- `examples/`, `fixtures/`, `data/` — golden `.covenant`/IR/receipt examples, seeded defect fixtures, and the source registry.
+- `examples/`, `fixtures/`, `data/` — golden `.writ`/IR/receipt examples, seeded defect fixtures, and the source registry.
 - `docs/plan/` — the numbered product, semantics, and architecture specifications.
 - `adr/` — architecture decision records.
 

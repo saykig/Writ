@@ -1,9 +1,9 @@
 /**
- * Canonical runner for the Covenant core conformance suite (task CORE-012).
+ * Canonical runner for the Writ core conformance suite (task CORE-012).
  *
  * The corpus at `conformance/cases/**` is pure, implementation-independent data.
  * This runner is one consumer of it: it loads every case, dispatches on `kind`
- * to the real `@covenant/*` semantic APIs, and compares the produced value to the
+ * to the real `@writ/*` semantic APIs, and compares the produced value to the
  * case's `expected` by structural deep-equality. An alternate evaluator can reuse
  * `loadCases` / `runCase` / `runAll` by swapping the dispatch table for its own
  * engine; the case data and the pass/fail contract are unchanged.
@@ -35,14 +35,14 @@ import {
   verifyReceipt,
   type Environment,
   type EvidenceRecord,
-} from "@covenant/evaluator";
-import { analyzeScoreProgram, type FiniteDomains } from "@covenant/analyzer";
+} from "@writ/evaluator";
+import { analyzeScoreProgram, type FiniteDomains } from "@writ/analyzer";
 import {
   canonicalJson,
   methodologyBundleHash,
   receiptHash,
   sha256Canonical,
-} from "@covenant/provenance";
+} from "@writ/provenance";
 import {
   validate,
   type ActionIdentity,
@@ -54,7 +54,7 @@ import {
   type QueryExpr,
   type ScoreProgram,
   type TruthName,
-} from "@covenant/domain";
+} from "@writ/domain";
 
 /** The ten semantic areas of the conformance corpus (04_FORMAL_SEMANTICS.md §19). */
 export const AREAS = [
@@ -255,7 +255,7 @@ function runReceipt(input: Readonly<Record<string, unknown>>): {
 
 /**
  * Run one case's operation and return the produced value. Dispatches on `kind`
- * to the canonical `@covenant/*` APIs. Exported so an alternate engine can be
+ * to the canonical `@writ/*` APIs. Exported so an alternate engine can be
  * cross-checked by comparing its dispatch to this one over the same corpus.
  */
 export async function produce(caseData: ConformanceCase): Promise<unknown> {

@@ -6,7 +6,7 @@
 // their contributing evidence ids upward. This is a pure structural walk — it
 // touches no environment and evaluates nothing.
 
-import type { Expr } from "@covenant/domain";
+import type { Expr } from "@writ/domain";
 
 /** Collect every `ref` path reachable inside an expression, in first-seen order. */
 export function refPaths(expr: Expr): string[] {

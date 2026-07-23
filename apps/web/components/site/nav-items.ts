@@ -27,4 +27,4 @@ export const EXAMPLE_ITEMS: readonly ExampleItem[] = [
   { id: "inclusive", label: "Inclusive reading", reading: "up to four → 0–4 strong" },
 ];
 
-export const GITHUB_URL = "https://github.com/williamjblair/covenant";
+export const GITHUB_URL = "https://github.com/saykig";

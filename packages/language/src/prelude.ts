@@ -1,9 +1,9 @@
 /**
- * The Covenant standard prelude.
+ * The Writ standard prelude.
  *
  * A methodology may reference well-known entities that are not declared in its
  * own source but are provided by the standard library it implicitly imports
- * (`covenant.std.g7`). The 2025 G7 examples all write `subjects G7Members;`
+ * (`writ.std.g7`). The 2025 G7 examples all write `subjects G7Members;`
  * without declaring the set, and the golden IR for the literal example carries
  * `issue_areas: [artificial_intelligence, digital_economy]` for the AI-SME
  * commitment even though its source lists no issue areas. Both are supplied here

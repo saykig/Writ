@@ -1,4 +1,4 @@
-# Covenant reference core
+# Writ reference core
 
 This is a dependency-light executable specification for the highest-risk semantics:
 

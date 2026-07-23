@@ -1,4 +1,4 @@
-// Idempotent SQL migration runner for @covenant/api.
+// Idempotent SQL migration runner for @writ/api.
 //
 // Applies the plain-SQL files in `db/migrations/*.sql` in filename order and
 // records each in a `schema_migrations` table so re-runs are no-ops. The same
@@ -102,14 +102,14 @@ export async function applyMigrations(sql: Sql, options: ApplyOptions = {}): Pro
   const files = options.files ?? loadMigrationFiles();
   const conn = await sql.reserve();
   try {
-    await conn`SELECT pg_advisory_lock(hashtext('covenant.migrations.' || ${schema}))`;
+    await conn`SELECT pg_advisory_lock(hashtext('writ.migrations.' || ${schema}))`;
     const searchPath =
       schema === "public" ? "public" : `${quoteIdent(schema)}, public`;
     await conn.unsafe(`SET search_path TO ${searchPath}`);
     try {
       return await applyPendingOnConnection(conn, files);
     } finally {
-      await conn`SELECT pg_advisory_unlock(hashtext('covenant.migrations.' || ${schema}))`;
+      await conn`SELECT pg_advisory_unlock(hashtext('writ.migrations.' || ${schema}))`;
     }
   } finally {
     conn.release();

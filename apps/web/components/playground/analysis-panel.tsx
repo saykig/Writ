@@ -16,14 +16,14 @@ interface FindingKind {
 
 function kindOf(finding: Finding): FindingKind {
   switch (finding.code) {
-    case "COV-SCORE-GAP":
+    case "WRT-SCORE-GAP":
       return {
         label: "Gap",
         panel: "border-gold/30 bg-gold-wash",
         Icon: CircleSlash,
         iconClass: "text-gold",
       };
-    case "COV-SCORE-OVERLAP":
+    case "WRT-SCORE-OVERLAP":
       return {
         label: "Overlap",
         panel: "border-false/25 bg-false/[0.05]",
@@ -43,8 +43,8 @@ function kindOf(finding: Finding): FindingKind {
 function FindingCard({ finding }: { finding: Finding }) {
   const kind = kindOf(finding);
   const { Icon } = kind;
-  const isGap = finding.code === "COV-SCORE-GAP";
-  const isOverlap = finding.code === "COV-SCORE-OVERLAP";
+  const isGap = finding.code === "WRT-SCORE-GAP";
+  const isOverlap = finding.code === "WRT-SCORE-OVERLAP";
   const otherwise = isGap ? finding.context?.otherwise : undefined;
 
   return (

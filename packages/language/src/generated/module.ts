@@ -11,25 +11,25 @@ import type {
   LanguageMetaData,
   Module,
 } from "langium";
-import { CovenantAstReflection } from "./ast.js";
-import { CovenantGrammar } from "./grammar.js";
+import { WritAstReflection } from "./ast.js";
+import { WritGrammar } from "./grammar.js";
 
-export const CovenantLanguageMetaData = {
-  languageId: "covenant",
-  fileExtensions: [".covenant", ".covenant.md"],
+export const WritLanguageMetaData = {
+  languageId: "writ",
+  fileExtensions: [".writ", ".writ.md"],
   caseInsensitive: false,
   mode: "production",
 } as const satisfies LanguageMetaData;
 
-export const CovenantGeneratedSharedModule: Module<
+export const WritGeneratedSharedModule: Module<
   LangiumSharedCoreServices,
   LangiumGeneratedSharedCoreServices
 > = {
-  AstReflection: () => new CovenantAstReflection(),
+  AstReflection: () => new WritAstReflection(),
 };
 
-export const CovenantGeneratedModule: Module<LangiumCoreServices, LangiumGeneratedCoreServices> = {
-  Grammar: () => CovenantGrammar(),
-  LanguageMetaData: () => CovenantLanguageMetaData,
+export const WritGeneratedModule: Module<LangiumCoreServices, LangiumGeneratedCoreServices> = {
+  Grammar: () => WritGrammar(),
+  LanguageMetaData: () => WritLanguageMetaData,
   parser: {},
 };

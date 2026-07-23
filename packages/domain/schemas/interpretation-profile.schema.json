@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/interpretation-profile.schema.json",
-  "title": "Covenant Interpretation Profile",
+  "$id": "https://writ.example/schemas/interpretation-profile.schema.json",
+  "title": "Writ Interpretation Profile",
   "type": "object",
   "additionalProperties": false,
   "required": [

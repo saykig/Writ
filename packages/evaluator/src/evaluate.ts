@@ -20,14 +20,14 @@
 // randomness, or network — two runs on identical inputs produce byte-identical
 // canonical JSON and an identical `canonical_hash`.
 
-import type { CanonicalIr, Commitment, Evidence, InterpretationProfile } from "@covenant/domain";
-import type { Diagnostic } from "@covenant/domain";
+import type { CanonicalIr, Commitment, Evidence, InterpretationProfile } from "@writ/domain";
+import type { Diagnostic } from "@writ/domain";
 import {
   evaluatorBuildHash,
   evidenceSnapshotHash,
   interpretationProfileHash,
   methodologyBundleHash,
-} from "@covenant/provenance";
+} from "@writ/provenance";
 import { ProofBuilder } from "./proof.js";
 import { EvalContext, evalValue } from "./interpret.js";
 import type { Environment, EvidenceRecord } from "./environment.js";
@@ -37,11 +37,11 @@ import { classifyBlock } from "./classify.js";
 import { evaluateMeasure, type MeasureResult } from "./measure.js";
 import { evaluateScore, type VariableContribution } from "./score.js";
 import { finalizeReceipt, toReceiptDiagnostic, toReceiptProofNode } from "./receipt.js";
-import type { EvaluationReceipt } from "@covenant/domain";
+import type { EvaluationReceipt } from "@writ/domain";
 
 /** Descriptor of the evaluator binary that produced a receipt (hashed as-is). */
 export const DEFAULT_EVALUATOR_BUILD = Object.freeze({
-  name: "@covenant/evaluator",
+  name: "@writ/evaluator",
   version: "0.1.0",
 });
 

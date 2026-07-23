@@ -14,7 +14,7 @@
 // the anchors (evaluate.ts §3), a non-pending index is also a *publishable* one:
 // `public = pending ? null : internal`.
 
-import type { Measure, MeasureComponent } from "@covenant/domain";
+import type { Measure, MeasureComponent } from "@writ/domain";
 import { EvalContext, evalTruth } from "./interpret.js";
 import { truth, truthName } from "./truth.js";
 
@@ -95,7 +95,7 @@ export function evaluateMeasure(measure: Measure, ctx: EvalContext): MeasureResu
 
   const weightSum = measure.components.reduce((sum, component) => sum + component.weight, 0);
   if (Math.abs(weightSum - 1) > WEIGHT_TOLERANCE) {
-    ctx.diag("COV-LINT-TYPE", {
+    ctx.diag("WRT-LINT-TYPE", {
       path: `measure.${measure.id}`,
       expected: "weights summing to 1",
       actual: String(weightSum),

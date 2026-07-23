@@ -1,5 +1,5 @@
 /**
- * `@covenant/analyzer` public API.
+ * `@writ/analyzer` public API.
  *
  * Two capabilities over a canonical IR:
  *   - CORE-010 non-SMT lints, typed/scoped/versioned waivers, and the
@@ -8,7 +8,7 @@
  *     monotonicity) with minimized, deterministic witnesses, plus a
  *     bounded-enumeration oracle that cross-checks the Z3 lowering.
  *
- * Diagnostics come from the unified `@covenant/domain` catalog.
+ * Diagnostics come from the unified `@writ/domain` catalog.
  */
 
 // Four-valued truth kernel (peer re-implementation; not imported from evaluator).
@@ -48,7 +48,7 @@ export { analyzeScoreProgram, type ScoreAnalysisOptions } from "./score-analysis
 export { analyzeScoreProgramByEnumeration } from "./enumerate.js";
 
 // Static graded-measure analysis (weights, anchor coverage, pending-decisiveness).
-// z3-free (bounded enumeration only); also exposed at `@covenant/analyzer/measure-analysis`.
+// z3-free (bounded enumeration only); also exposed at `@writ/analyzer/measure-analysis`.
 export {
   analyzeMeasureByEnumeration,
   analyzeMeasures,

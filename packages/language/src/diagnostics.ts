@@ -1,7 +1,7 @@
 /**
- * Source-level diagnostics for the Covenant toolchain.
+ * Source-level diagnostics for the Writ toolchain.
  *
- * These are distinct from the IR-level `@covenant/domain` `Diagnostic` (which has
+ * These are distinct from the IR-level `@writ/domain` `Diagnostic` (which has
  * no source span): a `LanguageDiagnostic` points at an exact span in the source
  * text so editors and CI can underline the offending token. The JSON form is
  * stable and sorted so CI output does not churn.
@@ -21,7 +21,7 @@ export type DiagnosticSeverity = "error" | "warning" | "info";
 
 /** A single source-mapped finding. */
 export interface LanguageDiagnostic {
-  /** Stable machine code, e.g. `COV-PARSE-ERROR`, `COV-LINK-UNDEFINED`. */
+  /** Stable machine code, e.g. `WRT-PARSE-ERROR`, `WRT-LINK-UNDEFINED`. */
   readonly code: string;
   readonly severity: DiagnosticSeverity;
   readonly message: string;

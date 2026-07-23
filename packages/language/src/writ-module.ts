@@ -1,5 +1,5 @@
 /**
- * Headless Covenant language services.
+ * Headless Writ language services.
  *
  * The compiler and CLI do not run a language server, so we wire only the core
  * Langium services (lexer, parser, value converter, AST reflection) over an
@@ -16,30 +16,27 @@ import {
   type LangiumCoreServices,
   type LangiumSharedCoreServices,
 } from "langium";
-import { CovenantGeneratedModule, CovenantGeneratedSharedModule } from "./generated/module.js";
+import { WritGeneratedModule, WritGeneratedSharedModule } from "./generated/module.js";
 
 /** The bundle of shared + language-specific core services. */
-export interface CovenantServices {
+export interface WritServices {
   readonly shared: LangiumSharedCoreServices;
-  readonly Covenant: LangiumCoreServices;
+  readonly Writ: LangiumCoreServices;
 }
 
-let cached: CovenantServices | undefined;
+let cached: WritServices | undefined;
 
 /**
- * Build (and memoize) the Covenant core services. Construction is pure and
+ * Build (and memoize) the Writ core services. Construction is pure and
  * deterministic; a single instance is reused across parses in a process.
  */
-export function createCovenantServices(): CovenantServices {
+export function createWritServices(): WritServices {
   if (cached) {
     return cached;
   }
-  const shared = inject(
-    createDefaultSharedCoreModule(EmptyFileSystem),
-    CovenantGeneratedSharedModule,
-  );
-  const Covenant = inject(createDefaultCoreModule({ shared }), CovenantGeneratedModule);
-  shared.ServiceRegistry.register(Covenant);
-  cached = { shared, Covenant };
+  const shared = inject(createDefaultSharedCoreModule(EmptyFileSystem), WritGeneratedSharedModule);
+  const Writ = inject(createDefaultCoreModule({ shared }), WritGeneratedModule);
+  shared.ServiceRegistry.register(Writ);
+  cached = { shared, Writ };
   return cached;
 }

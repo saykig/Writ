@@ -116,7 +116,7 @@
       "question": "The 0 branch reads 'up to four strong actions', which literally includes zero strong actions and does not bound the weak count; the −1 branch reads 'two or fewer weak actions'. Taken literally these overlap at (strong=0, low weak) and leave (strong=0, weak≥5) uncovered — a prose/metric mismatch.",
       "category": "prose_metric_mismatch",
       "blocking": false,
-      "proposed_resolution": "The resolved covenant reads the 0 branch as requiring at least one strong action (strong in 1..4), and separately assigns strong=0 with weak≥3 to 0, leaving strong=0 with weak≤2 to −1. Rule priorities make the counteraction override and the full-compliance branch decisive, yielding an exhaustive, non-overlapping score program (no COV-SCORE-GAP / -OVERLAP)."
+      "proposed_resolution": "The resolved writ reads the 0 branch as requiring at least one strong action (strong in 1..4), and separately assigns strong=0 with weak≥3 to 0, leaving strong=0 with weak≤2 to −1. Rule priorities make the counteraction override and the full-compliance branch decisive, yielding an exhaustive, non-overlapping score program (no WRT-SCORE-GAP / -OVERLAP)."
     },
     {
       "id": "oq-general-ai-measures",

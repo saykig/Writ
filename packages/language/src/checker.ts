@@ -12,7 +12,7 @@
  * carries an exact source span.
  */
 
-import { DIAGNOSTIC_CODES } from "@covenant/domain";
+import { DIAGNOSTIC_CODES } from "@writ/domain";
 import type {
   Commitment,
   Expression,
@@ -123,7 +123,7 @@ function checkVariableType(variable: Variable, diagnostics: LanguageDiagnostic[]
   if (resultCategory === "unknown" || declared === "unknown") return;
   if (resultCategory !== declared) {
     push(diagnostics, {
-      code: "COV-LINT-TYPE",
+      code: "WRT-LINT-TYPE",
       severity: "error",
       message: `Variable \`${variable.name}\` is declared \`${variable.type}\` but \`${expr.op}(…)\` yields a ${resultCategory} value.`,
       ...(spanOf(variable) ? { span: spanOf(variable)! } : {}),
@@ -154,7 +154,7 @@ function checkParameter(parameter: Parameter, diagnostics: LanguageDiagnostic[])
   if (declared === "unknown" || actual === "unknown") return;
   if (declared !== actual) {
     push(diagnostics, {
-      code: "COV-LINT-TYPE",
+      code: "WRT-LINT-TYPE",
       severity: "error",
       message: `Parameter \`${parameter.name}\` is declared \`${parameter.type}\` but its default is a ${actual} literal.`,
       ...(spanOf(parameter) ? { span: spanOf(parameter)! } : {}),
@@ -180,7 +180,7 @@ function checkCommitment(
         const value = member.value;
         if (value.$type === "ReferenceExpression" && !PRELUDE_SETS[value.path]) {
           push(diagnostics, {
-            code: "COV-LINK-MISSING-REFERENCE",
+            code: "WRT-LINK-MISSING-REFERENCE",
             severity: "error",
             message: `Subject set \`${value.path}\` is not declared or provided by a standard import.`,
             ...(spanOf(value) ? { span: spanOf(value)! } : {}),
@@ -194,7 +194,7 @@ function checkCommitment(
           const info = scope.symbols.get(domain.variable);
           if (!info || (info.kind !== "variable" && info.kind !== "parameter")) {
             push(diagnostics, {
-              code: "COV-LINK-MISSING-REFERENCE",
+              code: "WRT-LINK-MISSING-REFERENCE",
               severity: "error",
               message: `Assertion domain references \`${domain.variable}\`, which is not a declared variable or parameter of \`${commitment.name}\`.`,
               ...(spanOf(domain) ? { span: spanOf(domain)! } : {}),
@@ -208,7 +208,7 @@ function checkCommitment(
         for (const rule of member.rules) {
           if (!VALID_SCORE_RESULTS.has(rule.result)) {
             push(diagnostics, {
-              code: "COV-LINT-TYPE",
+              code: "WRT-LINT-TYPE",
               severity: "error",
               message: `Score rule result \`${rule.result}\` must be one of "-1", "0", "+1".`,
               ...(spanOf(rule) ? { span: spanOf(rule)! } : {}),
@@ -220,7 +220,7 @@ function checkCommitment(
         const otherwiseResult = otherwise.resultKw ?? otherwise.resultValue ?? "";
         if (!VALID_OTHERWISE_RESULTS.has(otherwiseResult)) {
           push(diagnostics, {
-            code: "COV-LINT-TYPE",
+            code: "WRT-LINT-TYPE",
             severity: "error",
             message: `\`otherwise\` result \`${otherwiseResult}\` is not a valid score outcome.`,
             ...(spanOf(otherwise) ? { span: spanOf(otherwise)! } : {}),
@@ -244,7 +244,7 @@ function checkScenario(
   const scope = scopes.get(scenario.commitment);
   if (!scope) {
     push(diagnostics, {
-      code: "COV-LINK-MISSING-REFERENCE",
+      code: "WRT-LINK-MISSING-REFERENCE",
       severity: "error",
       message: `Scenario \`${scenario.name}\` targets unknown commitment \`${scenario.commitment}\`.`,
       ...(spanOf(scenario) ? { span: spanOf(scenario)! } : {}),
@@ -255,7 +255,7 @@ function checkScenario(
     const info = scope.symbols.get(given.path);
     if (!info || (info.kind !== "variable" && info.kind !== "parameter")) {
       push(diagnostics, {
-        code: "COV-LINK-MISSING-REFERENCE",
+        code: "WRT-LINK-MISSING-REFERENCE",
         severity: "error",
         message: `Scenario input \`${given.path}\` is not a declared variable or parameter of \`${scenario.commitment}\`.`,
         ...(spanOf(given) ? { span: spanOf(given)! } : {}),
@@ -265,7 +265,7 @@ function checkScenario(
   const expect = scenario.expect;
   if (expect.diagnostic && !(DIAGNOSTIC_CODES as readonly string[]).includes(expect.diagnostic)) {
     push(diagnostics, {
-      code: "COV-LINK-UNKNOWN-DIAGNOSTIC",
+      code: "WRT-LINK-UNKNOWN-DIAGNOSTIC",
       severity: "warning",
       message: `Scenario expects diagnostic \`${expect.diagnostic}\`, which is not in the catalog.`,
       ...(spanOf(expect) ? { span: spanOf(expect)! } : {}),
@@ -293,7 +293,7 @@ export function checkModel(model: Model): CheckResult {
   )) {
     if (seenPackages.has(imp.packageName)) {
       push(diagnostics, {
-        code: "COV-LINK-DUPLICATE-IMPORT",
+        code: "WRT-LINK-DUPLICATE-IMPORT",
         severity: "warning",
         message: `Duplicate import of \`${imp.packageName}\`.`,
         ...(spanOf(imp) ? { span: spanOf(imp)! } : {}),

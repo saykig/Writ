@@ -5,14 +5,14 @@ import { analyze, benchmark, compile, evaluate } from "../lib/toolchain";
 import { repoRoot } from "../lib/repo";
 
 const read = (f: string) => readFileSync(join(repoRoot(), "examples", f), "utf8");
-const literal = read("2025-ai-sme-literal.covenant");
-const resolved = read("2025-ai-sme-resolved.covenant");
+const literal = read("2025-ai-sme-literal.writ");
+const resolved = read("2025-ai-sme-resolved.writ");
 
 test("compile produces canonical IR", () => {
   expect(compile(literal).ir).toBeDefined();
 });
 test("analyze finds the gap on the literal reading", () => {
-  expect(analyze(literal).findings.map((f) => f.code)).toContain("COV-SCORE-GAP");
+  expect(analyze(literal).findings.map((f) => f.code)).toContain("WRT-SCORE-GAP");
 });
 test("the resolved reading analyzes clean", () => {
   expect(analyze(resolved).findings.length).toBe(0);

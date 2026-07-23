@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Covenant planning pack without modifying governed artifacts."""
+"""Validate the Writ planning pack without modifying governed artifacts."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ REQUIRED_FILES = [
     "AGENTS.md",
     "TASKS.yaml",
     "13_CODEX_MASTER_PROMPT.md",
-    ".agents/skills/covenant-domain/SKILL.md",
+    ".agents/skills/writ-domain/SKILL.md",
     "reference-core/package.json",
     "repo-scaffold/db/migrations/0001_initial.sql",
     "data/source-registry.json",
@@ -125,7 +125,7 @@ def main() -> None:
     validate_yaml()
     validate_text_policy()
     run_reference_core()
-    print("OK: Covenant build pack validated")
+    print("OK: Writ build pack validated")
 
 
 if __name__ == "__main__":

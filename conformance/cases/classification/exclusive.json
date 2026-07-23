@@ -86,7 +86,7 @@
       "unknownLabels": [],
       "contestedLabels": [],
       "status": "ambiguous",
-      "diagnostics": ["COV-EVAL-AMBIGUOUS"]
+      "diagnostics": ["WRT-EVAL-AMBIGUOUS"]
     }
   },
   {

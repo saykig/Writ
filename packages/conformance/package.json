@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/conformance",
+  "name": "@writ/conformance",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,9 +16,9 @@
     "format": "prettier --check ."
   },
   "dependencies": {
-    "@covenant/domain": "workspace:*",
-    "@covenant/evaluator": "workspace:*",
-    "@covenant/analyzer": "workspace:*",
-    "@covenant/provenance": "workspace:*"
+    "@writ/domain": "workspace:*",
+    "@writ/evaluator": "workspace:*",
+    "@writ/analyzer": "workspace:*",
+    "@writ/provenance": "workspace:*"
   }
 }

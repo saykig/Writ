@@ -1,4 +1,4 @@
-language covenant "0.1"
+language writ "0.1"
 package g7.kananaskis_2025.ai_sme.inclusive_up_to version "1.0.0";
 
 commitment AI_SME_ADOPTION {
@@ -30,5 +30,5 @@ scenario zero_strong_low_weak_overlap for AI_SME_ADOPTION {
   given strong_count = 0;
   given weak_count = 0;
   given counter_exists = false;
-  expect diagnostic COV-SCORE-OVERLAP;
+  expect diagnostic WRT-SCORE-OVERLAP;
 }

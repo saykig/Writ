@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/benchmark",
+  "name": "@writ/benchmark",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -17,10 +17,10 @@
     "run-benchmark": "bun run src/run.ts"
   },
   "dependencies": {
-    "@covenant/domain": "workspace:*",
-    "@covenant/evaluator": "workspace:*",
-    "@covenant/analyzer": "workspace:*",
-    "@covenant/provenance": "workspace:*",
-    "@covenant/language": "workspace:*"
+    "@writ/domain": "workspace:*",
+    "@writ/evaluator": "workspace:*",
+    "@writ/analyzer": "workspace:*",
+    "@writ/provenance": "workspace:*",
+    "@writ/language": "workspace:*"
   }
 }

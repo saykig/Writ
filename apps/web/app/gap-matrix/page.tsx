@@ -9,9 +9,9 @@ import { Term } from "@/components/site/term";
 import { Reveal } from "@/components/site/reveal";
 
 export const metadata: Metadata = {
-  title: "Gap Matrix · Covenant",
+  title: "Gap Matrix · Writ",
   description:
-    "A second methodology: Sara Kim's frontier-AI governance Gap Matrix, a weighted-ordinal index, reproduced by Covenant — including a genuinely pending axis.",
+    "A second methodology: Sara Kim's frontier-AI governance Gap Matrix, a weighted-ordinal index, reproduced by Writ — including a genuinely pending axis.",
 };
 
 /** A single component's assessed ordinal level, or a pending marker. */
@@ -78,13 +78,13 @@ export default function GapMatrixPage() {
               Who knows, and who decides.
             </h1>
             <Prose className="mt-7">
-              Covenant&rsquo;s first benchmark scores a G7 rubric on a three-point scale. This is a
+              Writ&rsquo;s first benchmark scores a G7 rubric on a three-point scale. This is a
               different methodology and a different scoring shape:{" "}
               <strong>Sara Kim&rsquo;s Gap Matrix</strong>, a frontier-AI governance index across
               the EU, US, UK, and China. Each axis is five weighted components, each on a
               five-anchor ordinal rubric, aggregated as <strong>round(100 · Σ wᵢ·sᵢ / 4)</strong>.
-              Covenant reproduces her computation exactly, and the distance between the two axes is
-              the governance gap.
+              Writ reproduces her computation exactly, and the distance between the two axes is the
+              governance gap.
             </Prose>
           </Reveal>
         </div>
@@ -149,7 +149,7 @@ export default function GapMatrixPage() {
         <div className="mx-auto max-w-[76rem] px-5 py-16 sm:px-6 sm:py-20">
           <Reveal className="max-w-2xl">
             <Prose>
-              Expressing this required extending Covenant&rsquo;s intermediate representation with a
+              Expressing this required extending Writ&rsquo;s intermediate representation with a
               graded weighted-ordinal measure — the AI-for-SMEs three-point path could not represent
               it. One methodology was an anecdote; two that behave the same way, across two scoring
               paradigms, is the start of a generality claim.

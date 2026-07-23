@@ -1,4 +1,4 @@
-// Public surface of @covenant/evaluator.
+// Public surface of @writ/evaluator.
 //
 // Phase-1 seed: the four-valued truth kernel and a minimal proof-node model.
 // CORE-005: the scalar expression interpreter (exact decimals, unit-aware money,

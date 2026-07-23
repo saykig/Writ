@@ -3,7 +3,7 @@
     "id": "quantities.currency-mismatch.unknown",
     "area": "quantities",
     "kind": "expr.evaluate",
-    "description": "Comparing CAD to USD is not a silent wrong answer: it is unknown plus a COV-LINT-UNIT diagnostic (§10 requires compatible units)",
+    "description": "Comparing CAD to USD is not a silent wrong answer: it is unknown plus a WRT-LINT-UNIT diagnostic (§10 requires compatible units)",
     "input": {
       "expr": {
         "kind": "compare",
@@ -16,7 +16,7 @@
         "threshold": { "value": "250000000", "currency": "USD", "bound": "exact" }
       }
     },
-    "expected": { "truth": "unknown", "diagnostics": ["COV-LINT-UNIT"] }
+    "expected": { "truth": "unknown", "diagnostics": ["WRT-LINT-UNIT"] }
   },
   {
     "id": "quantities.currency-match.clean",

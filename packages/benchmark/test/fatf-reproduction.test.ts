@@ -1,8 +1,8 @@
 /**
  * FATF Mutual Evaluation follow-up stream — the third methodology (scaffold).
  *
- * This proves the ENCODING: Covenant compiles `examples/fatf-mutual-evaluation
- * .covenant`, the follow-up score program analyzes clean (the regular/enhanced
+ * This proves the ENCODING: Writ compiles `examples/fatf-mutual-evaluation
+ * .writ`, the follow-up score program analyzes clean (the regular/enhanced
  * branches partition the rating space), and the rule computes the documented
  * outcome over evidence. The evidence used here is SYNTHETIC and clearly labelled
  * — it is illustrative rating data, NOT a real country's FATF ratings. The real
@@ -15,17 +15,17 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { compileSource } from "@covenant/language";
-import { evaluateCommitment, verifyReceipt } from "@covenant/evaluator";
-import { analyzeScoreProgramByEnumeration, type FiniteDomains } from "@covenant/analyzer";
-import type { CanonicalIr, Evidence } from "@covenant/domain";
+import { compileSource } from "@writ/language";
+import { evaluateCommitment, verifyReceipt } from "@writ/evaluator";
+import { analyzeScoreProgramByEnumeration, type FiniteDomains } from "@writ/analyzer";
+import type { CanonicalIr, Evidence } from "@writ/domain";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CUTOFF = "2026-03-23T00:00:00Z";
 
 function compileFatf(): CanonicalIr {
-  const source = readFileSync(join(REPO_ROOT, "examples", "fatf-mutual-evaluation.covenant"), "utf8");
-  const result = compileSource(source, { fileName: "fatf-mutual-evaluation.covenant" });
+  const source = readFileSync(join(REPO_ROOT, "examples", "fatf-mutual-evaluation.writ"), "utf8");
+  const result = compileSource(source, { fileName: "fatf-mutual-evaluation.writ" });
   if (!result.ir) throw new Error("FATF methodology failed to compile.");
   return result.ir;
 }
@@ -118,11 +118,8 @@ const DOMAINS: FiniteDomains = {
 
 describe("FATF follow-up rule — static shape", () => {
   test("compiles with no error diagnostics", () => {
-    const source = readFileSync(
-      join(REPO_ROOT, "examples", "fatf-mutual-evaluation.covenant"),
-      "utf8",
-    );
-    const result = compileSource(source, { fileName: "fatf-mutual-evaluation.covenant" });
+    const source = readFileSync(join(REPO_ROOT, "examples", "fatf-mutual-evaluation.writ"), "utf8");
+    const result = compileSource(source, { fileName: "fatf-mutual-evaluation.writ" });
     expect(result.diagnostics.filter((d) => d.severity === "error")).toHaveLength(0);
     expect(result.ir).toBeDefined();
   });
@@ -134,8 +131,8 @@ describe("FATF follow-up rule — static shape", () => {
       objectId: "FATF_MUTUAL_EVALUATION",
     });
     const codes = diagnostics.map((d) => d.code);
-    expect(codes.filter((c) => c === "COV-SCORE-GAP")).toHaveLength(0);
-    expect(codes.filter((c) => c === "COV-SCORE-OVERLAP")).toHaveLength(0);
+    expect(codes.filter((c) => c === "WRT-SCORE-GAP")).toHaveLength(0);
+    expect(codes.filter((c) => c === "WRT-SCORE-OVERLAP")).toHaveLength(0);
   });
 });
 

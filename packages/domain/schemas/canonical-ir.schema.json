@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/canonical-ir.schema.json",
-  "title": "Covenant Canonical Intermediate Representation",
+  "$id": "https://writ.example/schemas/canonical-ir.schema.json",
+  "title": "Writ Canonical Intermediate Representation",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://covenant.example/schemas/search-protocol.schema.json",
-  "title": "Covenant Negative Evidence Search Protocol",
+  "$id": "https://writ.example/schemas/search-protocol.schema.json",
+  "title": "Writ Negative Evidence Search Protocol",
   "type": "object",
   "additionalProperties": false,
   "required": [

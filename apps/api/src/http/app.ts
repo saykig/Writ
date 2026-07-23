@@ -140,7 +140,7 @@ export function buildApp(options: BuildAppOptions): FastifyInstance {
   const ctxFor = (actor: Actor): CommandContext => ({ client: options.client, actor });
 
   // --- Health (public) ------------------------------------------------------
-  app.get("/health", async () => ({ status: "ok", service: "@covenant/api" }));
+  app.get("/health", async () => ({ status: "ok", service: "@writ/api" }));
 
   // --- Claim commands -------------------------------------------------------
   app.post("/v1/claims", (request, reply) =>

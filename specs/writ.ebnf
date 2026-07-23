@@ -1,8 +1,8 @@
-(* Covenant 0.1 reference grammar. This is the language design target, not a generated parser. *)
+(* Writ 0.1 reference grammar. This is the language design target, not a generated parser. *)
 
 Document        = Header, { Import | Source | TypeDecl | SetDecl | Rationale |
                             Commitment | Profile | Scenario } ;
-Header          = "language", "covenant", String, "package", QName,
+Header          = "language", "writ", String, "package", QName,
                   "version", String, ";" ;
 Import          = "import", QName, "version", String,
                   [ "hash", String ], ";" ;

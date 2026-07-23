@@ -1,5 +1,5 @@
 {
-  "name": "@covenant/language",
+  "name": "@writ/language",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@covenant/domain": "workspace:*",
+    "@writ/domain": "workspace:*",
+    "@writ/provenance": "workspace:*",
     "langium": "^4.3.1"
   },
   "devDependencies": {

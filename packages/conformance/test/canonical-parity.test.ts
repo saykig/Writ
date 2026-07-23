@@ -1,5 +1,5 @@
 /**
- * Parity guard: the canonical `@covenant/*` stack must reproduce the reference-core
+ * Parity guard: the canonical `@writ/*` stack must reproduce the reference-core
  * AI-for-SMEs gap and overlap outcomes.
  *
  * `reference-core` is the dependency-light semantic reference. This test runs it
@@ -65,9 +65,9 @@ describe("canonical vs reference-core parity (AI-for-SMEs)", () => {
     const ref = reference.evaluateScore(overlapCase.input.program, overlapCase.input.facts);
     expect(ref.result).toBe("unresolved");
     expect(canonical.result).toBe(ref.result);
-    // Both flag ambiguity, each in its own catalog (COV-SCORE-* vs COV-EVAL-*).
+    // Both flag ambiguity, each in its own catalog (WRT-SCORE-* vs WRT-EVAL-*).
     expect(ref.diagnostics.some((diagnostic) => diagnostic.code.includes("AMBIGUOUS"))).toBe(true);
-    expect(canonical.diagnostics).toContain("COV-EVAL-AMBIGUOUS");
+    expect(canonical.diagnostics).toContain("WRT-EVAL-AMBIGUOUS");
   });
 
   test("literal analysis: the gap witness agrees and the reference overlap is reproduced", async () => {
@@ -78,14 +78,14 @@ describe("canonical vs reference-core parity (AI-for-SMEs)", () => {
       analyzeCase.input.domains,
     );
 
-    const refGap = refAnalysis.diagnostics.find((d) => d.code === "COV-SCORE-GAP");
-    const canonGap = canonicalDiags.find((d) => d.code === "COV-SCORE-GAP");
+    const refGap = refAnalysis.diagnostics.find((d) => d.code === "WRT-SCORE-GAP");
+    const canonGap = canonicalDiags.find((d) => d.code === "WRT-SCORE-GAP");
     expect(refGap).toBeDefined();
     expect(canonGap).toBeDefined();
     expect(canonGap?.witness).toEqual(refGap?.witness ?? {});
 
-    const refOverlap = refAnalysis.diagnostics.find((d) => d.code === "COV-SCORE-OVERLAP");
-    const canonOverlaps = canonicalDiags.filter((d) => d.code === "COV-SCORE-OVERLAP");
+    const refOverlap = refAnalysis.diagnostics.find((d) => d.code === "WRT-SCORE-OVERLAP");
+    const canonOverlaps = canonicalDiags.filter((d) => d.code === "WRT-SCORE-OVERLAP");
     expect(refOverlap).toBeDefined();
     expect(canonOverlaps.some((o) => deepEqual(o.witness, refOverlap?.witness))).toBe(true);
   });
@@ -97,8 +97,8 @@ describe("canonical vs reference-core parity (AI-for-SMEs)", () => {
       analyzeCase.input.program,
       analyzeCase.input.domains,
     );
-    const refOverlap = refAnalysis.diagnostics.find((d) => d.code === "COV-SCORE-OVERLAP");
-    const canonOverlaps = canonicalDiags.filter((d) => d.code === "COV-SCORE-OVERLAP");
+    const refOverlap = refAnalysis.diagnostics.find((d) => d.code === "WRT-SCORE-OVERLAP");
+    const canonOverlaps = canonicalDiags.filter((d) => d.code === "WRT-SCORE-OVERLAP");
     expect(refOverlap).toBeDefined();
     expect(canonOverlaps.some((o) => deepEqual(o.witness, refOverlap?.witness))).toBe(true);
   });
@@ -110,7 +110,7 @@ describe("canonical vs reference-core parity (AI-for-SMEs)", () => {
       analyzeCase.input.program,
       analyzeCase.input.domains,
     );
-    for (const code of ["COV-SCORE-GAP", "COV-SCORE-OVERLAP"]) {
+    for (const code of ["WRT-SCORE-GAP", "WRT-SCORE-OVERLAP"]) {
       expect(canonicalDiags.some((d) => d.code === code)).toBe(false);
       expect(refAnalysis.diagnostics.some((d) => d.code === code)).toBe(false);
     }

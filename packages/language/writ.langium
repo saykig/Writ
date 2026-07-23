@@ -1,11 +1,11 @@
-grammar Covenant
+grammar Writ
 
 // -----------------------------------------------------------------------------
-// Covenant 0.1 grammar.
+// Writ 0.1 grammar.
 //
 // This grammar covers the full concrete surface exercised by the checked-in
-// example methodologies (`examples/*.covenant`) and the design-target grammar in
-// `specs/covenant.ebnf` / `docs/plan/03_LANGUAGE_SPEC.md`. Where the spec's §16
+// example methodologies (`examples/*.writ`) and the design-target grammar in
+// `specs/writ.ebnf` / `docs/plan/03_LANGUAGE_SPEC.md`. Where the spec's §16
 // `rule … => …` sugar diverges from the example files, the example files are the
 // compile target, so the concrete syntax here follows them (`result "+1" priority
 // 10 when … id …;`). References are kept as plain qualified-name strings; symbol
@@ -14,7 +14,7 @@ grammar Covenant
 // -----------------------------------------------------------------------------
 
 entry Model:
-    'language' 'covenant' languageVersion=STRING
+    'language' 'writ' languageVersion=STRING
     'package' packageName=QualifiedName 'version' packageVersion=STRING
     (';' | '{' imports+=Import* '}')
     declarations+=Declaration*;

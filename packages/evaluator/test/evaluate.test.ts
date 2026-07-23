@@ -1,13 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { canonicalJson } from "@covenant/provenance";
+import { canonicalJson } from "@writ/provenance";
 import {
   validate,
   type CanonicalIr,
   type Evidence,
   type InterpretationProfile,
-} from "@covenant/domain";
+} from "@writ/domain";
 import { actionEligible, claimEligible, evaluateCommitment, verifyReceipt } from "../src/index.js";
 
 function loadExample<T>(name: string): T {
@@ -34,7 +34,7 @@ describe("evaluateCommitment — AI-for-SMEs literal example", () => {
     expect(receipt.result).toBe("unresolved");
     expect(receipt.result_status).toBe("incomplete");
     expect(receipt.matched_rule_id).toBeUndefined();
-    expect((receipt.diagnostics ?? []).map((d) => d.code)).toContain("COV-EVAL-DECISIVE-UNKNOWN");
+    expect((receipt.diagnostics ?? []).map((d) => d.code)).toContain("WRT-EVAL-DECISIVE-UNKNOWN");
   });
 
   test("the proof root is the score selection node", () => {

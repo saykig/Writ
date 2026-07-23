@@ -1,4 +1,4 @@
-# `@covenant/domain`
+# `@writ/domain`
 
 Canonical domain types, JSON Schema validation, stable identifiers, canonical serialization, and package hashes.
 

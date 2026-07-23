@@ -2,7 +2,7 @@
 
 ## 1. Product definition
 
-Covenant is a policy-compliance authoring, evidence, evaluation, and publication system. It converts source-linked commitment methodology into executable rules and converts reviewed public evidence into deterministic compliance receipts.
+Writ is a policy-compliance authoring, evidence, evaluation, and publication system. It converts source-linked commitment methodology into executable rules and converts reviewed public evidence into deterministic compliance receipts.
 
 ### Primary output
 

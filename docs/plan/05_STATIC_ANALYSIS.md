@@ -22,15 +22,15 @@ A waiver is a signed, versioned decision with a rationale and scope. It is not a
 
 ## 3. Required diagnostics
 
-### COV-SYN-001 Invalid syntax
+### WRT-SYN-001 Invalid syntax
 
 The parser cannot construct an AST.
 
-### COV-NAME-001 Unresolved symbol
+### WRT-NAME-001 Unresolved symbol
 
 A commitment, dimension, goal, source, parameter, or predicate is referenced but not declared or imported.
 
-### COV-TYPE-001 Type mismatch
+### WRT-TYPE-001 Type mismatch
 
 Examples:
 
@@ -39,25 +39,25 @@ Examples:
 - comparing incompatible units;
 - using a date where a date-time is required without an explicit conversion.
 
-### COV-TIME-001 Ambiguous time axis
+### WRT-TIME-001 Ambiguous time axis
 
 A rule uses `date` without declaring announcement, validity, legal effect, implementation, or recorded time.
 
-### COV-EVID-001 Closed-world assumption not declared
+### WRT-EVID-001 Closed-world assumption not declared
 
 A rule concludes false from lack of evidence in an open-world domain.
 
-### COV-EVID-002 Negative claim lacks search protocol
+### WRT-EVID-002 Negative claim lacks search protocol
 
 A score depends on absence, but no accepted negative-search record defines sources, terms, date range, and completeness standard.
 
-### COV-SCORE-001 Non-exhaustive score table
+### WRT-SCORE-001 Non-exhaustive score table
 
 A declared analysis domain contains an assignment for which no score branch is definitely true and no explicit unresolved branch covers it.
 
 AI-for-SMEs ambiguity fixture: if “up to four strong actions” is normalized as one through four, zero strong actions with five or more weak actions produces a gap. If it is normalized arithmetically as zero through four, zero strong actions with two or fewer weak actions overlaps the non-compliance branch. The analyzer must surface both consequences rather than silently choosing one.
 
-### COV-SCORE-002 Overlapping score branches
+### WRT-SCORE-002 Overlapping score branches
 
 Two score rules can both be true for the same assignment.
 
@@ -65,69 +65,69 @@ The diagnostic states whether the results agree and whether priority resolves th
 
 Known benchmark fixture: a counteraction and five strong actions can satisfy both non-compliance and full-compliance rules unless precedence is explicit.
 
-### COV-SCORE-003 Unreachable score branch
+### WRT-SCORE-003 Unreachable score branch
 
 No assignment in the declared domain can satisfy a branch, often because a higher-priority rule subsumes it or the condition is contradictory.
 
-### COV-SCORE-004 Missing unknown policy
+### WRT-SCORE-004 Missing unknown policy
 
 A score depends on a predicate that can be unknown or contested, but the methodology has no explicit propagation or resolution policy.
 
-### COV-SCORE-005 Ambiguous equal priority
+### WRT-SCORE-005 Ambiguous equal priority
 
 Different results can be selected at the same priority.
 
-### COV-SCORE-006 Non-monotonicity violation
+### WRT-SCORE-006 Non-monotonicity violation
 
 A methodology asserts that more strong actions cannot reduce compliance, but bounded analysis finds a counterexample. Declared counteraction exceptions are respected.
 
-### COV-SCORE-007 Threshold gap or off-by-one
+### WRT-SCORE-007 Threshold gap or off-by-one
 
 Adjacent integer ranges do not cover a boundary or cover it twice.
 
-### COV-CLASS-001 Overlapping exclusive classifications
+### WRT-CLASS-001 Overlapping exclusive classifications
 
 An action can be both strong and weak, or counter and strong, with no priority or multi-label declaration.
 
-### COV-CLASS-002 Unreachable classification
+### WRT-CLASS-002 Unreachable classification
 
 A label rule can never be selected.
 
-### COV-ID-001 Count without identity policy
+### WRT-ID-001 Count without identity policy
 
 The methodology counts actions but does not specify the count unit.
 
-### COV-ID-002 Possible action splitting
+### WRT-ID-002 Possible action splitting
 
 Several labels or rule clauses count announcements, outputs, and programs without a declared relationship or deduplication rule.
 
-### COV-ATTR-001 Attribution policy missing
+### WRT-ATTR-001 Attribution policy missing
 
 Joint, collective, or supranational actions can enter the evidence domain but the methodology does not state how they affect member scores.
 
-### COV-DIM-001 Declared dimension never used
+### WRT-DIM-001 Declared dimension never used
 
 A dimension is described in prose or declared in the DSL but never influences classification or scoring.
 
-### COV-DIM-002 Used dimension not declared
+### WRT-DIM-002 Used dimension not declared
 
 A scoring condition references undeclared dimensions, goals, or partner classes.
 
-### COV-ART-001 Artifact completeness under-specified
+### WRT-ART-001 Artifact completeness under-specified
 
 A rule requires a complete roadmap, plan, or framework without defining required fields.
 
-### COV-SRC-001 Rule lacks source or rationale
+### WRT-SRC-001 Rule lacks source or rationale
 
 A normative definition, exclusion, or score branch has neither an authoritative source anchor nor an explicit methodologist rationale.
 
-### COV-PROSE-001 Prose and formal rule discrepancy
+### WRT-PROSE-001 Prose and formal rule discrepancy
 
 A machine or reviewer-provided prose assertion conflicts with the executable score table.
 
 Known benchmark fixture: the transnational-crime chapter contains language that can be read differently from the score thresholds.
 
-### COV-VERS-001 Semantic change without major version
+### WRT-VERS-001 Semantic change without major version
 
 A methodology update changes a possible result but does not increment the major methodology version.
 
@@ -168,7 +168,7 @@ The bounds are analysis bounds, not runtime caps.
 A diagnostic must include a concrete witness:
 
 ```text
-COV-SCORE-001 Non-exhaustive score table
+WRT-SCORE-001 Non-exhaustive score table
 Witness:
   strong_count = 0
   weak_count = 5

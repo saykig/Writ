@@ -14,7 +14,7 @@
 // are superseded, never edited in place (invariant 7) — `supersede` closes the
 // prior row and inserts a replacement in one repository transaction.
 
-import { sha256Canonical } from "@covenant/provenance";
+import { sha256Canonical } from "@writ/provenance";
 import type { DbClient } from "../db/client.js";
 import { createRepositories, type Repositories } from "../db/repositories/index.js";
 import { withTransaction } from "../db/repositories/shared.js";

@@ -1,4 +1,4 @@
-# `@covenant/api`
+# `@writ/api`
 
 Fastify and OpenAPI service for sources, evidence, methodology bundles, evaluations, discrepancies, and releases.
 

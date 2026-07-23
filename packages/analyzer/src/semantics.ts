@@ -9,7 +9,7 @@
  * must not import).
  */
 
-import type { Expr } from "@covenant/domain";
+import type { Expr } from "@writ/domain";
 import { all, any, not, truth, truthName, type Truth, type TruthName } from "./truth.js";
 
 export interface CountInterval {

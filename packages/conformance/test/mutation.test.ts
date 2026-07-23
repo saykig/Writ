@@ -64,7 +64,7 @@ describe("mutation sensitivity", () => {
   test("dropping the gap witness from a score analysis makes the case fail", async () => {
     const original = byId("score.analyze.ai-sme.literal");
     const diagnostics = original.expected as ReadonlyArray<{ code: string }>;
-    const withoutGap = diagnostics.filter((diagnostic) => diagnostic.code !== "COV-SCORE-GAP");
+    const withoutGap = diagnostics.filter((diagnostic) => diagnostic.code !== "WRT-SCORE-GAP");
     expect(withoutGap.length).toBeLessThan(diagnostics.length);
     const mutated: ConformanceCase = { ...original, expected: withoutGap };
     const result = await runCase(mutated);

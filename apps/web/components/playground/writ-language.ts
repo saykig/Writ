@@ -1,16 +1,16 @@
 import type { Monaco } from "@monaco-editor/react";
 
 /**
- * The `covenant` editor language, ported verbatim from the original studio
- * (`apps/studio/public/app.js` → `registerCovenant`). One Monarch grammar for
- * the DSL and two themes keyed to the Seam palette — `covenant-paper` (light)
- * and `covenant-sumi` (dark). Registration is idempotent: calling it twice is a
+ * The `writ` editor language, ported verbatim from the original studio
+ * (`apps/studio/public/app.js` → `registerWrit`). One Monarch grammar for
+ * the DSL and two themes keyed to the Seam palette — `writ-paper` (light)
+ * and `writ-sumi` (dark). Registration is idempotent: calling it twice is a
  * no-op, so it is safe to run in Monaco's `beforeMount` on every editor mount.
  */
 
-export const COVENANT_LANGUAGE_ID = "covenant";
-export const COVENANT_THEME_LIGHT = "covenant-paper";
-export const COVENANT_THEME_DARK = "covenant-sumi";
+export const WRIT_LANGUAGE_ID = "writ";
+export const WRIT_THEME_LIGHT = "writ-paper";
+export const WRIT_THEME_DARK = "writ-sumi";
 
 const KEYWORDS = [
   "language",
@@ -104,19 +104,19 @@ function themeRules(fg: ThemePalette) {
   ];
 }
 
-/** Register the `covenant` language and both Seam themes on a Monaco instance. */
-export function registerCovenant(monaco: Monaco): void {
+/** Register the `writ` language and both Seam themes on a Monaco instance. */
+export function registerWrit(monaco: Monaco): void {
   if (
     monaco.languages
       .getLanguages()
-      .some((language: { id: string }) => language.id === COVENANT_LANGUAGE_ID)
+      .some((language: { id: string }) => language.id === WRIT_LANGUAGE_ID)
   ) {
     return;
   }
 
-  monaco.languages.register({ id: COVENANT_LANGUAGE_ID });
+  monaco.languages.register({ id: WRIT_LANGUAGE_ID });
 
-  monaco.languages.setMonarchTokensProvider(COVENANT_LANGUAGE_ID, {
+  monaco.languages.setMonarchTokensProvider(WRIT_LANGUAGE_ID, {
     keywords: KEYWORDS,
     builtins: BUILTINS,
     types: TYPES,
@@ -152,7 +152,7 @@ export function registerCovenant(monaco: Monaco): void {
     },
   });
 
-  monaco.editor.defineTheme(COVENANT_THEME_LIGHT, {
+  monaco.editor.defineTheme(WRIT_THEME_LIGHT, {
     base: "vs",
     inherit: true,
     rules: themeRules({
@@ -176,7 +176,7 @@ export function registerCovenant(monaco: Monaco): void {
     },
   });
 
-  monaco.editor.defineTheme(COVENANT_THEME_DARK, {
+  monaco.editor.defineTheme(WRIT_THEME_DARK, {
     base: "vs-dark",
     inherit: true,
     rules: themeRules({

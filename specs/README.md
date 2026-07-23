@@ -1,6 +1,6 @@
 # Contract schemas
 
-These JSON Schemas are the external contracts for Covenant version 1 planning artifacts.
+These JSON Schemas are the external contracts for Writ version 1 planning artifacts.
 
 Normative principles:
 

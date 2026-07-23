@@ -10,7 +10,7 @@ import {
   resolvedProgram,
   smallAxisDomains,
 } from "./programs.js";
-import type { ScoreProgram } from "@covenant/domain";
+import type { ScoreProgram } from "@writ/domain";
 
 const counterOverlapDomains: FiniteDomains = {
   strong_count: [0, 5],

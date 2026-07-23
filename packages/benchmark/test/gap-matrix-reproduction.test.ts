@@ -1,7 +1,7 @@
 /**
  * Faithful-encoding check for the ported Gap Matrix (Sara Kim, cepheus).
  *
- * Covenant compiles `examples/ai-governance-gap-matrix.covenant`, evaluates it
+ * Writ compiles `examples/ai-governance-gap-matrix.writ`, evaluates it
  * against evidence carrying her actual analyst assessments (component-assessments
  * .json), and must reproduce her `deriveAssessment` outputs exactly:
  *   - publicAuthority: all five components at level 2 ⇒ round(100·Σ 0.2·2/4) = 50;
@@ -12,10 +12,10 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { compileSource } from "@covenant/language";
-import { evaluateCommitment } from "@covenant/evaluator";
-import { analyzeMeasures } from "@covenant/analyzer";
-import type { CanonicalIr, Evidence } from "@covenant/domain";
+import { compileSource } from "@writ/language";
+import { evaluateCommitment } from "@writ/evaluator";
+import { analyzeMeasures } from "@writ/analyzer";
+import type { CanonicalIr, Evidence } from "@writ/domain";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CUTOFF = "2026-07-21T00:00:00Z";
@@ -92,11 +92,8 @@ function snapshot(): Evidence {
 }
 
 function compileGapMatrix(): CanonicalIr {
-  const source = readFileSync(
-    join(REPO_ROOT, "examples", "ai-governance-gap-matrix.covenant"),
-    "utf8",
-  );
-  const result = compileSource(source, { fileName: "ai-governance-gap-matrix.covenant" });
+  const source = readFileSync(join(REPO_ROOT, "examples", "ai-governance-gap-matrix.writ"), "utf8");
+  const result = compileSource(source, { fileName: "ai-governance-gap-matrix.writ" });
   if (!result.ir) throw new Error("Gap Matrix methodology failed to compile.");
   return result.ir;
 }
@@ -145,9 +142,9 @@ describe("Gap Matrix reproduction (faithful encoding)", () => {
     const findings = analyzeMeasures(commitment.measures ?? [], {}, { objectId: commitment.id });
     const codes = findings.map((f) => f.code);
     // Weights are well-formed (0.2 × 5 = 1), so no weight finding.
-    expect(codes).not.toContain("COV-MEASURE-WEIGHTS");
+    expect(codes).not.toContain("WRT-MEASURE-WEIGHTS");
     // Both measures are all-or-nothing: the index depends on every component.
-    expect(codes.filter((c) => c === "COV-MEASURE-PENDING-DECISIVE")).toHaveLength(2);
+    expect(codes.filter((c) => c === "WRT-MEASURE-PENDING-DECISIVE")).toHaveLength(2);
   });
 
   test("the receipt is deterministic (byte-identical canonical hash across runs)", () => {

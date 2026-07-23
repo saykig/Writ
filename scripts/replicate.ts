@@ -1,8 +1,8 @@
 /**
  * Frozen-evidence re-derivation runner. Prints one line per check and exits
- * non-zero on any divergence. The logic lives in `@covenant/benchmark`
+ * non-zero on any divergence. The logic lives in `@writ/benchmark`
  * (`src/replicate.ts`); this thin wrapper imports it by relative path so the
- * workspace `@covenant/*` dependencies resolve from the package.
+ * workspace `@writ/*` dependencies resolve from the package.
  *
  * Run: `bun scripts/replicate.ts`
  */

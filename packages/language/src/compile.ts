@@ -1,12 +1,12 @@
 /**
  * AST → canonical IR compiler (LANG-003).
  *
- * Lowers Covenant surface syntax to the normalized `@covenant/domain` canonical
+ * Lowers Writ surface syntax to the normalized `@writ/domain` canonical
  * IR: language sugar (`between {a,b}`, named subject sets, inclusive-interval
  * brackets) is expanded, boolean trees are flattened to n-ary form, and bare
  * identifiers are resolved to `ref`s (declared symbols and field paths) or string
  * `literal`s (enum/category values in value position). Compilation is pure and
- * deterministic and never touches the DB or `@covenant/api`.
+ * deterministic and never touches the DB or `@writ/api`.
  *
  * The IR's own `source_map` field is left empty (`{}`) — a richer node→span map
  * is returned alongside the IR so callers can offer source navigation without
@@ -31,7 +31,7 @@ import type {
   Source as IrSource,
   TypeDecl,
   Variable as IrVariable,
-} from "@covenant/domain";
+} from "@writ/domain";
 import type {
   Assertion,
   BinaryExpression,
@@ -246,7 +246,7 @@ function lowerBinary(node: BinaryExpression, ctx: LowerContext): Expr {
       ]);
     }
     ctx.diagnostics.push({
-      code: "COV-EXPR-BETWEEN-ARITY",
+      code: "WRT-EXPR-BETWEEN-ARITY",
       severity: "error",
       message: "`between` requires a two-element set of bounds, e.g. `between {1, 4}`.",
       ...(spanOf(node) ? { span: spanOf(node)! } : {}),
@@ -263,7 +263,7 @@ function lowerBinary(node: BinaryExpression, ctx: LowerContext): Expr {
   const compareOp = COMPARE_OP[op];
   if (!compareOp) {
     ctx.diagnostics.push({
-      code: "COV-EXPR-UNKNOWN-OP",
+      code: "WRT-EXPR-UNKNOWN-OP",
       severity: "error",
       message: `Unsupported operator \`${op}\`.`,
       ...(spanOf(node) ? { span: spanOf(node)! } : {}),
@@ -342,7 +342,7 @@ function resolveSubjects(commitment: Commitment, ctx: LowerContext): string[] {
     const set = PRELUDE_SETS[value.path];
     if (set) return [...set];
     ctx.diagnostics.push({
-      code: "COV-LINK-UNKNOWN-SET",
+      code: "WRT-LINK-UNKNOWN-SET",
       severity: "error",
       message: `Unknown subject set \`${value.path}\`. Declare it or import a standard set.`,
       ...(spanOf(value) ? { span: spanOf(value)! } : {}),
@@ -355,7 +355,7 @@ function resolveSubjects(commitment: Commitment, ctx: LowerContext): string[] {
     );
   }
   ctx.diagnostics.push({
-    code: "COV-LINK-SUBJECTS",
+    code: "WRT-LINK-SUBJECTS",
     severity: "error",
     message: "`subjects` must be a named set or a set literal of institutions.",
     ...(spanOf(value) ? { span: spanOf(value)! } : {}),
@@ -572,7 +572,7 @@ function lowerCommitment(
   }
   if (!scoreBlock) {
     ctx.diagnostics.push({
-      code: "COV-SCORE-MISSING",
+      code: "WRT-SCORE-MISSING",
       severity: "error",
       message: `Commitment \`${commitment.name}\` declares no score block.`,
       ...(spanOf(commitment) ? { span: spanOf(commitment)! } : {}),
@@ -598,7 +598,7 @@ function lowerCommitment(
   } else {
     actionIdentity = { policy: "review_required", key_paths: ["id"] };
     ctx.diagnostics.push({
-      code: "COV-IDENTITY-MISSING",
+      code: "WRT-IDENTITY-MISSING",
       severity: "warning",
       message: `Commitment \`${commitment.name}\` declares no action_identity; defaulting to review_required by id.`,
       ...(spanOf(commitment) ? { span: spanOf(commitment)! } : {}),
@@ -708,7 +708,7 @@ export function compileModel(model: Model, options: CompileOptions = {}): Compil
 
   if (commitments.length === 0) {
     diagnostics.push({
-      code: "COV-COMPILE-NO-COMMITMENT",
+      code: "WRT-COMPILE-NO-COMMITMENT",
       severity: "error",
       message: "A methodology must declare at least one commitment.",
     });

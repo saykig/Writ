@@ -12,7 +12,7 @@
  * findings), applies waivers, and fails if any unwaived error remains.
  */
 
-import type { CanonicalIr, Diagnostic } from "@covenant/domain";
+import type { CanonicalIr, Diagnostic } from "@writ/domain";
 import { lintIr, type ProseClaim } from "./lint.js";
 
 /** A signed waiver. Structurally compatible with the IR `Waiver` type. */

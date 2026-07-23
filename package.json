@@ -1,5 +1,5 @@
 {
-  "name": "covenant-monorepo",
+  "name": "writ-monorepo",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,11 +19,11 @@
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "conformance": "bun test packages/conformance",
-    "conformance:reference": "bun run --filter '@covenant/reference-core' test",
+    "conformance:reference": "bun run --filter '@writ/reference-core' test",
     "replicate": "bun scripts/replicate.ts",
-    "dev": "bun run --filter '@covenant/api' --filter '@covenant/web' dev",
-    "studio": "bun run --filter '@covenant/web' dev",
-    "web": "bun run --filter '@covenant/web' dev",
+    "dev": "bun run --filter '@writ/api' --filter '@writ/web' dev",
+    "studio": "bun run --filter '@writ/web' dev",
+    "web": "bun run --filter '@writ/web' dev",
     "db:up": "docker compose up -d postgres minio",
     "db:down": "docker compose down"
   },

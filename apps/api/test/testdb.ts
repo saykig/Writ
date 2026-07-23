@@ -20,7 +20,7 @@ export interface TempDb {
 
 /** Create a fresh schema, apply all migrations into it, and bind a connection. */
 export async function createTempDb(pool: Sql): Promise<TempDb> {
-  const schema = `covenant_test_${randomUUID().replace(/-/g, "")}`;
+  const schema = `writ_test_${randomUUID().replace(/-/g, "")}`;
   const conn = await pool.reserve();
   await conn.unsafe(`CREATE SCHEMA "${schema}"`);
   await conn.unsafe(`SET search_path TO "${schema}", public`);
