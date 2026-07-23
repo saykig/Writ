@@ -12,6 +12,7 @@ import { TruthBadge } from "@/components/site/truth-badge";
 import type { TruthBadgeValue } from "@/components/site/truth-badge";
 import { ArchitectureDiagram } from "@/components/how-it-works/architecture-diagram";
 import { EssayIndex, type EssaySection } from "@/components/how-it-works/essay-index";
+import { Faq } from "@/components/how-it-works/faq";
 import { GITHUB_URL } from "@/components/site/nav-items";
 import { loadCoverage } from "@/lib/conformance";
 import { analyze, compile, evaluateMember, exampleSource, verify } from "@/lib/toolchain";
@@ -31,6 +32,7 @@ const SECTIONS: readonly EssaySection[] = [
   { id: "language", title: "The language" },
   { id: "evidence", title: "Governed evidence" },
   { id: "conformance", title: "Conformance" },
+  { id: "faq", title: "Questions" },
 ];
 
 // ── Four-valued kernel (04_FORMAL_SEMANTICS.md §2) ───────────────────────────
@@ -780,6 +782,17 @@ export default function HowItWorksPage() {
                     </tr>
                   </tfoot>
                 </table>
+              </div>
+            </section>
+
+            {/* ── Questions ───────────────────────────────────────────────── */}
+            <section id="faq" className="mt-20 scroll-mt-24 sm:mt-24">
+              <SectionLabel>Questions</SectionLabel>
+              <SectionHeading className="mt-3 max-w-[24ch]">
+                The honest answers, up front.
+              </SectionHeading>
+              <div className="mt-7 max-w-[62ch]">
+                <Faq />
               </div>
             </section>
 

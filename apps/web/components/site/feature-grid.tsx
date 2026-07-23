@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ScanSearch, Scale, Fingerprint, GitFork } from "lucide-react";
 
 import { TruthBadge } from "@/components/site/truth-badge";
+import { Term } from "@/components/site/term";
 
 /**
  * FeatureGrid — the four things that make Covenant different, as a bento of
@@ -63,8 +64,11 @@ export function FeatureGrid() {
           </span>
         }
       >
-        Evidence can be true, false, unknown, or contested.{" "}
-        <em className="not-italic text-foreground">Unknown</em> never silently becomes false, so a
+        Evidence can be true, false, unknown, or{" "}
+        <Term definition="Contested: the evidence genuinely supports both true and false at once (conflicting reviewed sources). It is kept distinct, not averaged away.">
+          contested
+        </Term>
+        . <em className="not-italic text-foreground">Unknown</em> never silently becomes false, so a
         score is never a guess.
       </Card>
 

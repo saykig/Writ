@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { gapMatrix, type GapMatrixAxis } from "@/lib/gap-matrix";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { Term } from "@/components/site/term";
 import { Reveal } from "@/components/site/reveal";
 
 export const metadata: Metadata = {
@@ -122,9 +123,11 @@ export default function GapMatrixPage() {
             </SectionHeading>
             <Prose className="mt-4">
               Before any more evidence is gathered, the analyzer reports each axis{" "}
-              <em className="text-foreground not-italic">pending-decisive</em>: the index turns on
-              every component, so any one unresolved judgment blocks it. Here, two components hold
-              the whole knowledge-concentration axis pending.
+              <Term definition="Pending-decisive: the index depends on every component, so a single unresolved (pending) component holds the whole axis pending — it localizes where one judgment carries the result.">
+                <span className="text-foreground">pending-decisive</span>
+              </Term>
+              : the index turns on every component, so any one unresolved judgment blocks it. Here,
+              two components hold the whole knowledge-concentration axis pending.
             </Prose>
           </Reveal>
 
