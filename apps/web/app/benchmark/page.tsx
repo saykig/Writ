@@ -190,7 +190,7 @@ export default function BenchmarkPage() {
               <TruthBadge value="0" className="mx-0.5 align-middle" /> only under a strict reading
               of the rubric. Read general, non-SME AI legislation as strong and both flip to{" "}
               <TruthBadge value="+1" className="mx-0.5 align-middle" />. Where a score turns on a
-              reading rather than a fact, the matrix marks it in gold.
+              reading rather than a fact, the matrix marks it in amber.
             </Prose>
           </div>
 

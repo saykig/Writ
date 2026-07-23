@@ -285,8 +285,8 @@ export function Playground({ initialExample }: PlaygroundProps) {
                   className={cn(
                     "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-[0.92rem] transition-colors focus-visible:outline-none",
                     active
-                      ? "bg-paper-bright text-foreground [box-shadow:var(--edge),var(--sheen)]"
-                      : "text-ink-muted hover:text-ink-soft",
+                      ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <span

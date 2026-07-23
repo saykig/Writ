@@ -5,17 +5,14 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Covenant design system — antique-paper editorial, ported from ~/personal/cepheus.
- * Warm-paper OKLCH neutrals (never pure black/white), letterpress elevation (hairline
- * edge + sheen + soft shadow, no glass), IM Fell English (display) + Libre Baskerville
- * (text) with IBM Plex Mono reserved for real code/hashes. ONE load-bearing accent —
- * gold — which marks exactly where a score turns on judgment (the score gap, the two
- * interpretation-sensitive benchmark cells). See ~/personal/cepheus/DESIGN.md §8 for
- * the do/don't discipline this follows.
+ * Covenant design system — clean, modern, professional (Geist + a crisp neutral
+ * palette, the shadcn / Vercel / Linear lane). Amber is the single functional
+ * accent, used sparingly to mark where a score turns on judgment (the score gap,
+ * the two interpretation-sensitive benchmark cells). Monospace (Geist Mono) is
+ * reserved for code, the DSL, and content hashes.
  */
 
 @theme inline {
-  /* shadcn semantic tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -35,224 +32,179 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* fonts */
-  --font-sans: var(--font-text);
-  --font-text: var(--font-text);
-  --font-display: var(--font-display);
-  --font-heading: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-sans);
+  --font-heading: var(--font-sans);
   --font-mono: var(--font-mono);
 
-  /* material utilities (paper / ink / rules) */
-  --color-paper: var(--paper);
-  --color-paper-bright: var(--paper-bright);
-  --color-paper-raise: var(--paper-raise);
-  --color-paper-deep: var(--paper-deep);
-  --color-paper-sink: var(--paper-sink);
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
-  --color-ink-muted: var(--ink-muted);
-  --color-ink-faint: var(--ink-faint);
-  --color-rule: var(--rule);
-  --color-rule-soft: var(--rule-soft);
-  --color-rule-strong: var(--rule-strong);
-
   /* accent + truth palette */
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-gold-deep: var(--gold-deep);
-  --color-gold-wash: var(--gold-wash);
+  --color-gold: var(--accent-strong);
+  --color-gold-soft: var(--accent-strong);
+  --color-gold-deep: var(--accent-strong);
+  --color-gold-wash: var(--accent-wash);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-wash: var(--accent-wash);
   --color-true: var(--t-true);
   --color-false: var(--t-false);
   --color-unknown: var(--t-unknown);
-  --color-contested: var(--t-contested);
+  --color-contested: var(--accent-strong);
 
-  /* backward-compatible aliases (retired gradually) */
-  --color-surface: var(--paper-raise);
-  --color-surface-2: var(--paper-deep);
-  --color-indigo: var(--ink-soft);
+  /* material aliases mapped to the neutral scale (retire gradually) */
+  --color-ink: var(--foreground);
+  --color-ink-soft: var(--muted-foreground);
+  --color-ink-muted: var(--muted-foreground);
+  --color-ink-faint: var(--muted-foreground);
+  --color-paper: var(--background);
+  --color-paper-bright: var(--card);
+  --color-paper-raise: var(--card);
+  --color-paper-deep: var(--muted);
+  --color-surface: var(--card);
+  --color-surface-2: var(--muted);
+  --color-rule: var(--border);
+  --color-rule-strong: var(--border);
+  --color-indigo: var(--primary);
 
-  /* radii — softened from the old 2–4px squares */
-  --radius-sm: 7px;
-  --radius-md: 9px;
-  --radius-lg: 11px;
-  --radius-xl: 16px;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Light — "paper" */
 :root {
-  --paper: oklch(0.949 0.02 84);
-  --paper-bright: oklch(0.976 0.013 86);
-  --paper-raise: oklch(0.963 0.016 85);
-  --paper-deep: oklch(0.905 0.028 82);
-  --paper-sink: oklch(0.886 0.03 81);
-  --ink: oklch(0.285 0.043 47);
-  --ink-soft: oklch(0.405 0.05 44);
-  --ink-muted: oklch(0.46 0.038 46);
-  --ink-faint: oklch(0.545 0.028 50);
+  --radius: 0.625rem;
 
-  --rule: color-mix(in oklab, var(--ink) 15%, transparent);
-  --rule-soft: color-mix(in oklab, var(--ink) 8%, transparent);
-  --rule-strong: color-mix(in oklab, var(--ink) 26%, transparent);
+  /* modern fluid type scale — restrained, product-grade (not editorial) */
+  --t-hero: clamp(2.5rem, 1.85rem + 2.9vw, 3.75rem);
+  --t-h2: clamp(1.65rem, 1.35rem + 1.4vw, 2.25rem);
+  --t-h3: clamp(1.2rem, 1.08rem + 0.55vw, 1.45rem);
+  --t-lead: clamp(1.05rem, 1rem + 0.32vw, 1.2rem);
+  --t-body: 1rem;
+  --t-label: 0.75rem;
 
-  /* gold — the single accent (cepheus's olive role) */
-  --gold: oklch(0.585 0.084 80);
-  --gold-soft: oklch(0.7 0.086 84);
-  --gold-deep: oklch(0.5 0.08 77);
-  --gold-wash: color-mix(in oklab, var(--gold) 10%, transparent);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
 
-  /* truth palette — muted, earthen; TruthBadge only */
-  --t-true: oklch(0.52 0.082 146);
-  --t-false: oklch(0.535 0.11 40);
-  --t-unknown: var(--ink-faint);
-  --t-contested: var(--gold);
+  /* single functional accent — amber, for "where judgment enters" */
+  --accent-strong: oklch(0.66 0.14 62);
+  --accent-wash: color-mix(in oklab, var(--accent-strong) 12%, transparent);
 
-  /* type / space / elevation / motion (cepheus) */
-  --t-hero: clamp(2.75rem, 6vw, 4.4rem);
-  --t-h2: clamp(1.95rem, 3.4vw, 2.55rem);
-  --t-h3: clamp(1.35rem, 2.1vw, 1.62rem);
-  --t-lead: 1.2rem;
-  --t-body: 1.02rem;
-  --t-small: 0.9rem;
-  --t-label: 0.72rem;
-  --t-tick: 0.66rem;
-  --space-xl: 3.5rem;
-  --space-2xl: 5.5rem;
-  --edge: inset 0 0 0 1px var(--rule);
-  --sheen: inset 0 1px 0 color-mix(in oklab, var(--paper-bright) 85%, transparent);
-  --shadow-card: 0 1px 1px color-mix(in oklab, var(--ink) 5%, transparent),
-    0 14px 34px -18px color-mix(in oklab, var(--ink) 16%, transparent);
-  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --dur-1: 160ms;
-  --dur-2: 320ms;
-  --dur-3: 620ms;
+  /* truth palette — clean functional */
+  --t-true: oklch(0.6 0.13 152);
+  --t-false: oklch(0.585 0.22 25);
+  --t-unknown: oklch(0.556 0 0);
 
-  --radius: 11px;
-
-  /* shadcn tokens sourced from the material */
-  --background: var(--paper);
-  --foreground: var(--ink);
-  --card: var(--paper-raise);
-  --card-foreground: var(--ink);
-  --popover: var(--paper-bright);
-  --popover-foreground: var(--ink);
-  --primary: var(--gold);
-  --primary-foreground: var(--paper-bright);
-  --secondary: var(--paper-deep);
-  --secondary-foreground: var(--ink);
-  --muted: var(--paper-deep);
-  --muted-foreground: var(--ink-muted);
-  --accent: var(--paper-deep);
-  --accent-foreground: var(--ink);
-  --destructive: var(--t-false);
-  --border: var(--rule);
-  --input: var(--rule);
-  --ring: var(--gold);
+  /* raw-var compatibility aliases (referenced directly in a few components).
+     They point at the new tokens, so they follow the active theme automatically. */
+  --gold: var(--accent-strong);
+  --gold-wash: var(--accent-wash);
+  --ink-faint: var(--muted-foreground);
+  --rule: var(--border);
+  --paper: var(--background);
 }
 
-/* Dark — "sumi" (warm ink, per cepheus) */
 .dark {
-  color-scheme: dark;
-  --paper: #1f1e1d;
-  --paper-bright: #2b2927;
-  --paper-raise: #262422;
-  --paper-deep: #191817;
-  --paper-sink: #151413;
-  --ink: #f0eee6;
-  --ink-soft: #d8d3c9;
-  --ink-muted: #b9b3a8;
-  --ink-faint: #928d83;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
 
-  --rule: color-mix(in oklab, var(--ink) 14%, transparent);
-  --rule-soft: color-mix(in oklab, var(--ink) 8%, transparent);
-  --rule-strong: color-mix(in oklab, var(--ink) 26%, transparent);
+  --accent-strong: oklch(0.82 0.13 82);
+  --accent-wash: color-mix(in oklab, var(--accent-strong) 15%, transparent);
 
-  --gold: oklch(0.77 0.1 85);
-  --gold-soft: oklch(0.68 0.09 82);
-  --gold-deep: oklch(0.83 0.09 88);
-  --gold-wash: color-mix(in oklab, var(--gold) 13%, transparent);
-
-  --t-true: #9fbd8c;
-  --t-false: #cf9d8a;
-  --t-unknown: var(--ink-faint);
-  --t-contested: var(--gold);
-
-  --primary-foreground: #1f1e1d;
+  --t-true: oklch(0.75 0.15 152);
+  --t-false: oklch(0.7 0.17 22);
+  --t-unknown: oklch(0.708 0 0);
 }
 
 @layer base {
   * {
-    @apply border-border;
-    outline-color: color-mix(in oklab, var(--gold) 55%, transparent);
-  }
-  html {
-    background: var(--paper);
-    color-scheme: light;
+    @apply border-border outline-ring/40;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-text), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-    font-size: 17px;
-    line-height: 1.72;
-    text-rendering: optimizeLegibility;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
-    font-variant-numeric: tabular-nums lining-nums;
   }
   h1,
   h2,
   h3,
-  .font-display {
-    font-family: var(--font-display), "Iowan Old Style", Georgia, serif;
-    letter-spacing: -0.008em;
-  }
-  a {
-    text-decoration-thickness: 0.06em;
-    text-underline-offset: 0.22em;
+  h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
-  /* The label voice: the TEXT face in tracked caps — not decorative monospace. */
+  /* a clean, quiet section label (not decorative mono) */
   .label {
-    font-family: var(--font-text), Georgia, serif;
-    font-size: var(--t-label);
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-muted);
+    color: var(--muted-foreground);
   }
-  /* compat: existing `.label-mono` usages inherit the calmer label voice */
   .label-mono {
-    font-family: var(--font-text), Georgia, serif;
-    font-size: var(--t-label);
-    font-weight: 700;
-    letter-spacing: 0.13em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-muted);
+    color: var(--muted-foreground);
   }
 
-  /* letterpress card (cepheus .tool) */
+  /* clean modern card (no letterpress) */
   .tool {
-    background: var(--paper-raise);
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: var(--edge), var(--sheen), var(--shadow-card);
+    box-shadow: 0 1px 2px 0 color-mix(in oklab, var(--foreground) 5%, transparent);
   }
 
-  /* the gold seam — reserved for genuine judgment moments, no longer a default */
+  /* judgment marker: a restrained amber wash + hairline, used sparingly */
   .seam {
-    border-left: 2px solid var(--gold);
-    background: var(--gold-wash);
+    border-left: 2px solid var(--accent-strong);
+    background: var(--accent-wash);
   }
 
-  /* reveal-once on scroll (paired with useInView); at-rest if it never fires */
   .reveal {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(8px);
   }
   .reveal.is-in {
     opacity: 1;
     transform: none;
     transition:
-      opacity var(--dur-3) var(--ease-expo),
-      transform var(--dur-3) var(--ease-expo);
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -260,7 +212,6 @@
     *::before,
     *::after {
       animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
       scroll-behavior: auto !important;
     }

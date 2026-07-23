@@ -57,8 +57,8 @@ export function Prose({ children, className }: { children: ReactNode; className?
   return (
     <div
       className={cn(
-        "max-w-[64ch] text-[length:var(--t-body)] leading-[1.72] text-ink-soft [text-wrap:pretty]",
-        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-gold/45 [&_a]:underline-offset-4 [&_a:hover]:decoration-gold [&_a:hover]:text-gold",
+        "max-w-[64ch] text-[length:var(--t-body)] leading-[1.7] text-muted-foreground [text-wrap:pretty]",
+        "[&_a]:font-medium [&_a]:text-foreground [&_a]:underline [&_a]:decoration-border [&_a]:underline-offset-4 [&_a:hover]:decoration-foreground",
         "[&_strong]:font-semibold [&_strong]:text-foreground",
         className,
       )}

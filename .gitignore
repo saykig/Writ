@@ -13,3 +13,4 @@ __pycache__/
 storage/
 minio-data/
 postgres-data/
+.vercel

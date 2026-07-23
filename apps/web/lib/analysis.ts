@@ -5,7 +5,12 @@
  * pure TS with no solver/Bun dependency, safe on the Node runtime.
  */
 
-import { analyzeScoreProgramByEnumeration, type FiniteDomains } from "@covenant/analyzer";
+// Deep imports of the pure-TS enumeration analyzer: the barrel (`@covenant/analyzer`)
+// eagerly loads the z3-solver WASM package, which fails in a Node serverless
+// runtime (Vercel). enumerate.ts references the z3 path only as an erased type,
+// so this path carries no z3 dependency.
+import { analyzeScoreProgramByEnumeration } from "@covenant/analyzer/enumerate";
+import type { FiniteDomains } from "@covenant/analyzer/types";
 import type { Assertion, Commitment, Diagnostic, Expr } from "@covenant/domain";
 
 type DomainValue = string | number | boolean;

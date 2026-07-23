@@ -45,19 +45,15 @@ export function SiteNav() {
         {/* Wordmark */}
         <Link
           href="/"
-          className="group flex shrink-0 items-center gap-2.5"
+          className="group flex shrink-0 items-center gap-2"
           aria-label="Covenant — home"
         >
           <span
             aria-hidden
-            className="h-4 w-px bg-gold transition-all duration-300 group-hover:h-5"
+            className="size-2 rounded-[2px] bg-gold transition-transform duration-300 group-hover:scale-110"
           />
-          <span className="font-mono text-[0.92rem] font-medium tracking-[0.22em] text-foreground">
-            COVENANT
-          </span>
-          <span aria-hidden className="hidden h-3.5 w-px bg-border md:inline-block" />
-          <span className="hidden font-mono text-[0.66rem] tracking-[0.08em] text-ink-faint md:inline">
-            policy-evaluation compiler
+          <span className="text-[0.95rem] font-semibold tracking-tight text-foreground">
+            Covenant
           </span>
         </Link>
 
@@ -125,9 +121,9 @@ export function SiteNav() {
             </Button>
             <SheetContent side="right" className="w-72 gap-0">
               <SheetHeader className="border-b border-border">
-                <SheetTitle className="flex items-center gap-2 font-mono text-sm tracking-[0.22em]">
-                  <span aria-hidden className="h-3.5 w-px bg-gold" />
-                  COVENANT
+                <SheetTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight">
+                  <span aria-hidden className="size-2 rounded-[2px] bg-gold" />
+                  Covenant
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col p-2" aria-label="Primary">
