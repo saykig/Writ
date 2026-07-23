@@ -253,12 +253,14 @@ export function Playground({ initialExample }: PlaygroundProps) {
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:py-24">
         {/* Header */}
         <Reveal className="max-w-2xl">
-          <SectionLabel>Playground</SectionLabel>
-          <SectionHeading className="mt-4">Three readings of the same five words.</SectionHeading>
+          <SectionLabel>Playground · the live compiler</SectionLabel>
+          <SectionHeading className="mt-4">Try it: one phrase, three readings.</SectionHeading>
           <Prose className="mt-5">
-            Covenant asks each member to take up to four strong actions. Read that phrase three ways
-            and it compiles to three different score programs: one total, one with a gap, one with
-            an overlap. The analyzer proves which, before any evidence exists.
+            The 2025 G7 rubric asks each member for &ldquo;up to four strong actions.&rdquo; That
+            phrase can be read three ways, and each compiles to a different scoring program. Pick a
+            reading below — Covenant compiles it, checks it for ambiguity before any evidence, and
+            the verdict tells you what it found. Everything runs live, through the same engine as
+            the benchmark.
           </Prose>
         </Reveal>
 
