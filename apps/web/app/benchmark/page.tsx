@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import type { Route } from "next";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { benchmark, benchmarkLedger, evaluateMember, memberSnapshot } from "@/lib/toolchain";
-import { Button } from "@/components/ui/button";
-import { HashPill } from "@/components/site/hash-pill";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
-import { Stat } from "@/components/site/stat";
+import { Reveal } from "@/components/site/reveal";
 import { TruthBadge } from "@/components/site/truth-badge";
 import { BenchmarkExplorer } from "@/components/benchmark/benchmark-explorer";
 import type { ActionView, MemberView, Score } from "@/components/benchmark/types";
 
 export const metadata: Metadata = {
-  title: "Benchmark — Covenant",
+  title: "Benchmark · Covenant",
   description:
     "The 2025 G7 AI-for-SMEs benchmark: all eight members' published scores reproduced from one frozen, reviewed evidence snapshot, with the two interpretation-sensitive cells named.",
 };
@@ -142,6 +137,18 @@ function buildMember(
   };
 }
 
+/** A single quiet fact in the hero ledger line. */
+function Fact({ value, label }: { value: number; label: string }) {
+  return (
+    <span className="inline-flex items-baseline gap-1.5">
+      <span className="font-display text-[1.35rem] leading-none tabular-nums text-foreground">
+        {value}
+      </span>
+      <span className="text-ink-muted">{label}</span>
+    </span>
+  );
+}
+
 export default function BenchmarkPage() {
   const bench = benchmark();
   const ledger = benchmarkLedger();
@@ -155,25 +162,20 @@ export default function BenchmarkPage() {
     .map((cell) => buildMember(cell, notesByMember.get(cell.member) ?? cell.note))
     .filter((m): m is MemberView => m !== null);
 
-  const sensitive = members.filter((m) => m.sensitive);
-  const sensitiveNames = sensitive.map((m) => m.label);
+  // "the United States" / "the United Kingdom" / "the European Union" read naturally in prose.
+  const withArticle = (label: string) =>
+    /^(United|European)/.test(label) ? `the ${label}` : label;
+  const sensitiveNames = members.filter((m) => m.sensitive).map((m) => withArticle(m.label));
 
   return (
     <main className="flex-1">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-40 right-[-12%] h-[30rem] w-[30rem] rounded-full opacity-[0.06] blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)" }}
-        />
-        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-24">
-          <SectionLabel seam className={reveal}>
-            2025 G7 AI-for-SMEs · discrepancy ledger
-          </SectionLabel>
+      <section className="border-b border-rule">
+        <div className="mx-auto max-w-[72rem] px-5 pt-20 pb-16 sm:px-8 lg:pt-28 lg:pb-20">
+          <SectionLabel className={reveal}>2025 G7 AI-for-SMEs · discrepancy ledger</SectionLabel>
 
           <h1
-            className={`mt-6 max-w-4xl font-serif text-[2.5rem] leading-[1.04] tracking-tight text-balance sm:text-5xl lg:text-[3.4rem] ${reveal}`}
+            className={`mt-6 max-w-[20ch] font-display text-[length:var(--t-hero)] leading-[1.05] tracking-[-0.01em] text-balance ${reveal}`}
             style={{ animationDelay: "80ms" }}
           >
             All eight members, reproduced from one frozen snapshot.
@@ -182,173 +184,69 @@ export default function BenchmarkPage() {
           <div className={`mt-7 ${reveal}`} style={{ animationDelay: "160ms" }}>
             <Prose>
               Every 2025 published AI-for-SMEs score was recomputed by the deterministic evaluator
-              over reviewed, page-anchored evidence under a single interpretation profile. All eight
-              computed scores equal the published record. Two of them —{" "}
-              <strong>{sensitiveNames.join(" and ")}</strong> — hold that{" "}
+              over reviewed, page-anchored evidence under a single interpretation profile, and all
+              eight computed scores equal the published record. Two of them,{" "}
+              {sensitiveNames.join(" and ")}, hold a published{" "}
               <TruthBadge value="0" className="mx-0.5 align-middle" /> only under a strict reading
-              of the rubric; read general, non-SME AI legislation as strong and both flip to{" "}
+              of the rubric. Read general, non-SME AI legislation as strong and both flip to{" "}
               <TruthBadge value="+1" className="mx-0.5 align-middle" />. Where a score turns on a
-              reading rather than a fact, the ledger marks it in gold.
+              reading rather than a fact, the matrix marks it in gold.
             </Prose>
           </div>
-        </div>
-      </section>
 
-      {/* ── Figures band ─────────────────────────────────────────────────── */}
-      <section className="border-b border-border">
-        <div className="mx-auto grid max-w-[76rem] grid-cols-2 gap-x-6 gap-y-10 px-5 py-14 sm:px-6 lg:grid-cols-4">
-          <Stat
-            value={summary.cells}
-            label="Cells reproduced"
-            sub="All eight G7 members, recomputed from frozen evidence."
-          />
-          <Stat
-            value={summary.matches}
-            label="Match published"
-            sub="Every computed score equals the 2025 published score."
-          />
-          <Stat
-            tone="gold"
-            value={summary.interpretation_sensitive_cells}
-            label="Interpretation-sensitive"
-            sub={`${sensitiveNames.join(" and ")} hold a published 0 only under a strict reading.`}
-          />
-          <Stat
-            value={
-              <span className="font-mono text-2xl tracking-tight sm:text-3xl">AI_SME_ADOPTION</span>
-            }
-            label="Commitment"
-            sub={
-              <span className="font-mono text-[0.72rem] leading-snug text-ink-faint">
-                {bench.methodologyVersionId}
-              </span>
-            }
-          />
+          <div
+            className={`mt-9 flex flex-wrap items-baseline gap-x-4 gap-y-2 border-t border-rule pt-6 text-[0.95rem] ${reveal}`}
+            style={{ animationDelay: "240ms" }}
+          >
+            <Fact value={summary.cells} label="reproduced" />
+            <span aria-hidden className="text-ink-faint">
+              ·
+            </span>
+            <Fact value={summary.matches} label="match published" />
+            <span aria-hidden className="text-ink-faint">
+              ·
+            </span>
+            <Fact value={summary.interpretation_sensitive_cells} label="interpretation-sensitive" />
+          </div>
         </div>
       </section>
 
       {/* ── The matrix ───────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6">
-        <div className="max-w-2xl">
-          <SectionLabel seam>The matrix</SectionLabel>
+      <section className="mx-auto max-w-[72rem] px-5 py-20 sm:px-8 lg:py-24">
+        <Reveal className="max-w-[52ch]">
+          <SectionLabel>The matrix</SectionLabel>
           <SectionHeading className="mt-4">
-            One row per member. Click any row to open its evidence.
+            Eight rows, one snapshot each. Open a row for its evidence.
           </SectionHeading>
-          <Prose className="mt-4">
+          <Prose className="mt-5">
             Published is the 2025 score of record. Computed is what the evaluator returns from the
-            frozen snapshot. Generous re-runs the same evaluation with general AI measures read as
-            strong. The strong-action count is what the score rule reads: five or more strong
-            actions is <TruthBadge value="+1" className="mx-0.5 align-middle" />, one to four is{" "}
-            <TruthBadge value="0" className="mx-0.5 align-middle" />.
+            frozen, reviewed evidence. Generous re-runs the same evaluation with general, non-SME AI
+            measures read as strong. Only Japan and the United States move: their published{" "}
+            <TruthBadge value="0" className="mx-0.5 align-middle" /> rests on a strict reading, and
+            both cross to <TruthBadge value="+1" className="mx-0.5 align-middle" /> once five
+            actions read strong.
           </Prose>
-        </div>
+        </Reveal>
 
-        <div className="mt-9">
+        <Reveal className="mt-10" delay={80}>
           <BenchmarkExplorer members={members} />
-        </div>
+        </Reveal>
       </section>
 
-      {/* ── The seam ─────────────────────────────────────────────────────── */}
-      <section className="border-t border-border bg-surface/40">
-        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6">
-          <div className="grid items-start gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-            <div className="flex flex-col">
-              <SectionLabel seam>The two seams</SectionLabel>
-              <SectionHeading className="mt-4">A match can still turn on a reading.</SectionHeading>
-              <Prose className="mt-4">
-                Six members carry a score that no interpretation moves. The other two agree with the
-                published record only because one governed decision — how to classify general,
-                non-SME AI legislation — was resolved as weak. That decision is a judgment, not a
-                fact of the record, and the ledger keeps it in the open rather than folding it into
-                the number.
-              </Prose>
-            </div>
-
-            <ul className="flex flex-col gap-px overflow-hidden rounded-[4px] border border-border">
-              {sensitive.map((m) => (
-                <li key={m.id} className="bg-gold-wash p-5 [border-left:2px_solid_var(--gold)]">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="font-serif text-xl tracking-tight">{m.label}</h3>
-                    <span className="inline-flex items-center gap-1.5 font-mono text-[0.78rem] tabular-nums text-gold">
-                      <TruthBadge value={m.published} />
-                      <ArrowRight className="size-3.5" aria-hidden />
-                      <TruthBadge value={m.generous} />
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{m.note}</p>
-                  <p className="mt-3 font-mono text-[0.72rem] tabular-nums text-ink-faint">
-                    {m.strongCount} strong under <span className="text-ink-soft">published</span>
-                    <span className="text-gold"> → </span>
-                    {m.generousStrongCount} strong under{" "}
-                    <span className="text-ink-soft">generous</span> · {m.sensitiveCount} general AI{" "}
-                    {m.sensitiveCount === 1 ? "measure" : "measures"}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Closing: the ledger is the product ───────────────────────────── */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6">
-          <div className="max-w-2xl">
-            <SectionLabel seam>The real product</SectionLabel>
-            <SectionHeading className="mt-4">The ledger, not the leaderboard.</SectionHeading>
-            <Prose className="mt-4">
-              A table of eight matching scores is the easy part. What Covenant ships is the record
-              beneath it: for every cell, the actions that qualified, the passage each
-              classification rests on, the reviewer who accepted it, and the content hash that pins
-              the whole snapshot. Where a score depends on judgment rather than public fact, the
-              ledger says so by name — and hands you the two receipts so you can watch it move.
-            </Prose>
-          </div>
-
-          <figure className="mt-9 max-w-3xl overflow-hidden rounded-[4px] border border-border bg-surface-2/30 [border-left:2px_solid_var(--gold)]">
-            <figcaption className="flex items-center justify-between gap-4 border-b border-border/80 bg-gold-wash px-4 py-2">
-              <span className="label-mono">Discrepancy ledger · generated note</span>
-              <span className="font-mono text-[0.7rem] text-ink-faint">
-                {ledger.benchmark_reference}
-              </span>
-            </figcaption>
-            <blockquote className="px-4 py-4 font-serif text-[1.02rem] leading-relaxed text-foreground/90 [text-wrap:pretty]">
+      {/* ── Closing: the generated note ──────────────────────────────────── */}
+      <section className="border-t border-rule">
+        <div className="mx-auto max-w-[72rem] px-5 py-20 sm:px-8">
+          <Reveal className="max-w-[60ch]">
+            <SectionLabel>Discrepancy ledger</SectionLabel>
+            <p className="mt-5 font-display text-[length:var(--t-h3)] leading-[1.42] tracking-[-0.005em] text-ink-soft [text-wrap:pretty]">
               {ledger.generated_note}
-            </blockquote>
-            <div className="flex flex-wrap items-center gap-3 border-t border-border/80 px-4 py-3">
-              <span className="label-mono">Methodology</span>
-              <span className="font-mono text-[0.72rem] text-ink-soft">
-                {ledger.methodology_version_id}
-              </span>
-              {members[0]?.snapshot.contentHash ? (
-                <HashPill hash={members[0].snapshot.contentHash} label="snapshot" chars={10} />
-              ) : null}
-            </div>
-          </figure>
-
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              nativeButton={false}
-              render={
-                <Link href={"/playground" as Route}>
-                  Open the playground
-                  <ArrowRight />
-                </Link>
-              }
-            />
-            <Button
-              variant="outline"
-              size="lg"
-              nativeButton={false}
-              render={
-                <Link href={"/governance" as Route}>
-                  How evidence is governed
-                  <ArrowUpRight />
-                </Link>
-              }
-            />
-          </div>
+            </p>
+            <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.72rem] text-ink-faint">
+              <span className="tabular-nums">{ledger.benchmark_reference}</span>
+              <span aria-hidden>·</span>
+              <span className="tabular-nums">{ledger.methodology_version_id}</span>
+            </p>
+          </Reveal>
         </div>
       </section>
     </main>

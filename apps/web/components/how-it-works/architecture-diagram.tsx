@@ -13,12 +13,17 @@ import { cn } from "@/lib/utils";
  * Mirrors docs/architecture.mmd.
  */
 
-type Accent = "plain" | "gold" | "indigo";
+type Accent = "plain" | "gold" | "machine" | "emphasis";
 
 const ACCENT: Record<Accent, string> = {
   plain: "border-border bg-surface-2/40",
-  gold: "border-gold/40 bg-gold-wash",
-  indigo: "border-indigo/40 bg-indigo/[0.06]",
+  // Gold marks only the two judgment points: human review and the static
+  // analyzer catching gaps before evidence exists.
+  gold: "border-gold/45 bg-gold-wash",
+  // The deterministic engine: a neutral, slightly firmer treatment.
+  machine: "border-ink-soft/40 bg-ink-soft/[0.05]",
+  // The receipt: the climax artifact, emphasized without borrowing the accent.
+  emphasis: "border-rule-strong bg-paper-bright",
 };
 
 function Node({
@@ -45,7 +50,7 @@ function Node({
       <span
         className={cn(
           "font-mono text-[0.6rem] tracking-[0.14em] uppercase",
-          accent === "gold" ? "text-gold" : accent === "indigo" ? "text-indigo" : "text-ink-faint",
+          accent === "gold" ? "text-gold" : "text-ink-faint",
         )}
       >
         {kicker}
@@ -145,16 +150,16 @@ export function ArchitectureDiagram() {
         kicker="derive"
         title="Deterministic evaluator"
         sub="No network · no wall-clock · no randomness · no mutation."
-        accent="indigo"
+        accent="machine"
         className="mx-auto max-w-xl text-center [&>span]:mx-auto"
       />
 
       <Arrow />
 
       {/* Receipt with proof tree + five hashes */}
-      <div className="mx-auto max-w-xl rounded-[5px] border border-gold/40 bg-gold-wash p-4 ring-1 ring-foreground/[0.02]">
+      <div className="mx-auto max-w-xl rounded-[5px] border border-rule-strong bg-paper-bright p-4 ring-1 ring-foreground/[0.02]">
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-[0.6rem] tracking-[0.14em] text-gold uppercase">
+          <span className="font-mono text-[0.6rem] tracking-[0.14em] text-ink-faint uppercase">
             emit
           </span>
           <span className="font-serif text-[0.98rem] leading-tight tracking-tight text-foreground">
@@ -164,7 +169,7 @@ export function ArchitectureDiagram() {
             Result, result-status, matched rule, and a proof tree of four-valued nodes.
           </span>
         </div>
-        <div className="mt-3 border-t border-gold/25 pt-3">
+        <div className="mt-3 border-t border-rule pt-3">
           <span className="label-mono">Five content hashes</span>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {HASHES.map((h) => (

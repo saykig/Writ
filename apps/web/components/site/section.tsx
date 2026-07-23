@@ -3,8 +3,9 @@ import type { ElementType, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * SectionLabel — mono uppercase eyebrow set above a heading. `seam` prefixes a
- * short gold kintsugi tick, used where a section names a point of judgment.
+ * SectionLabel — a restrained tracked-caps eyebrow in the TEXT face (not
+ * decorative mono). `seam` prepends a short gold tick; use it only where a
+ * section genuinely names a point of judgment, never as a default flourish.
  */
 export function SectionLabel({
   children,
@@ -16,7 +17,7 @@ export function SectionLabel({
   seam?: boolean;
 }) {
   return (
-    <p className={cn("label-mono flex items-center gap-2", className)}>
+    <p className={cn("label flex items-center gap-2", className)}>
       {seam ? <span aria-hidden className="inline-block h-3 w-px shrink-0 bg-gold" /> : null}
       <span>{children}</span>
     </p>
@@ -24,8 +25,8 @@ export function SectionLabel({
 }
 
 /**
- * SectionHeading — serif display heading for a section (renders `<h2>` by
- * default). Pass `as` for a different level and `className` to resize.
+ * SectionHeading — display-face (IM Fell English) section heading, `<h2>` by
+ * default. Sized on the fluid cepheus scale.
  */
 export function SectionHeading({
   children,
@@ -39,7 +40,7 @@ export function SectionHeading({
   return (
     <Tag
       className={cn(
-        "font-serif text-2xl leading-[1.12] tracking-tight text-balance sm:text-3xl",
+        "font-display text-[length:var(--t-h2)] leading-[1.1] tracking-[-0.01em] text-balance",
         className,
       )}
     >
@@ -49,16 +50,16 @@ export function SectionHeading({
 }
 
 /**
- * Prose — a measured serif reading column (muted ink, restrained link styling)
- * for body copy beneath a SectionHeading.
+ * Prose — a measured reading column in the text face (Libre Baskerville), warm
+ * soft ink, with restrained gold link styling.
  */
 export function Prose({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        "max-w-[62ch] text-[1.02rem] leading-relaxed text-ink-soft [text-wrap:pretty]",
-        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-gold/50 [&_a]:underline-offset-4 [&_a:hover]:decoration-gold",
-        "[&_strong]:font-medium [&_strong]:text-foreground",
+        "max-w-[64ch] text-[length:var(--t-body)] leading-[1.72] text-ink-soft [text-wrap:pretty]",
+        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-gold/45 [&_a]:underline-offset-4 [&_a:hover]:decoration-gold [&_a:hover]:text-gold",
+        "[&_strong]:font-semibold [&_strong]:text-foreground",
         className,
       )}
     >

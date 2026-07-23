@@ -9,12 +9,9 @@ export interface NavItem {
 }
 
 export const PRIMARY_NAV: readonly NavItem[] = [
-  { href: "/how-it-works", label: "How it works", hint: "The pipeline, end to end" },
   { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
   { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
-  { href: "/methodologies", label: "Methodologies", hint: "Rubrics compiled to canonical IR" },
-  { href: "/governance", label: "Governance", hint: "Frozen, reviewed evidence" },
-  { href: "/conformance", label: "Conformance", hint: "Cross-implementation semantics" },
+  { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 
 export interface ExampleItem {

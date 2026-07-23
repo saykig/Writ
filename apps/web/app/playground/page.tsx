@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Playground } from "@/components/playground/playground";
 
 export const metadata: Metadata = {
-  title: "Playground — Covenant",
+  title: "Playground · Covenant",
   description:
     "Write a methodology in the Covenant DSL and watch it compile, get analyzed for scoring gaps and overlaps, and evaluate against a frozen member snapshot into a receipt.",
 };

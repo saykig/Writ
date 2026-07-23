@@ -73,7 +73,7 @@ function TreeNode({ node, byId, depth, ancestors }: NodeProps) {
           <span className="text-ink-faint">{node.kind}</span>
           <span className="mx-1 text-ink-faint/50">·</span>
           <span className="text-foreground/90">{node.label || "—"}</span>
-          {value !== null ? <span className="text-gold"> = {value}</span> : null}
+          {value !== null ? <span className="text-foreground"> = {value}</span> : null}
         </span>
       </div>
 
