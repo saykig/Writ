@@ -25,8 +25,13 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
     "/api/**": ["../../examples/**", "../../benchmark/2025-ai-sme/**"],
-    "/benchmark/**": ["../../benchmark/2025-ai-sme/**"],
-    "/methodologies/**": ["../../examples/**"],
+    "/playground": ["../../examples/**", "../../benchmark/2025-ai-sme/**"],
+    "/benchmark": ["../../benchmark/2025-ai-sme/**"],
+    "/how-it-works": [
+      "../../examples/**",
+      "../../benchmark/2025-ai-sme/**",
+      "../../conformance/**",
+    ],
   },
   // The @covenant/* packages are NodeNext TS source: relative imports carry a
   // `.js` extension that must resolve to the `.ts` file. Webpack's extensionAlias
