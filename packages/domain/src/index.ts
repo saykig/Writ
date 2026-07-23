@@ -30,9 +30,11 @@ export {
   type ValidationResult,
 } from "./validation.js";
 
-// Generated types + kind-to-type map.
+// Ergonomic canonical-IR types (hand-authored, aligned to canonical-ir.schema.json).
+export * from "./ir.js";
+
+// Generated types for the non-IR schemas + kind-to-type map.
 export type {
-  CanonicalIr,
   Evidence,
   EvaluationReceipt,
   InterpretationProfile,

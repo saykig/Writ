@@ -3,7 +3,7 @@
  * schema kind to its root interface. The generated files under `./generated`
  * are produced by `bun run generate`; a test guards them against drift.
  */
-import type { CanonicalIr } from "./generated/canonical-ir.js";
+import type { CanonicalIr } from "./ir.js";
 import type { Evidence } from "./generated/evidence.js";
 import type { EvaluationReceipt } from "./generated/evaluation-receipt.js";
 import type { InterpretationProfile } from "./generated/interpretation-profile.js";
@@ -15,7 +15,6 @@ import type { Release } from "./generated/release.js";
 import type { SchemaKind } from "./schemas.js";
 
 export type {
-  CanonicalIr,
   Evidence,
   EvaluationReceipt,
   InterpretationProfile,
