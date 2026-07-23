@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "id": "search-us-ai-sme-example",
+  "commitment_id": "AI_SME_ADOPTION",
+  "subject_id": "UnitedStates",
+  "evaluation_window": {
+    "start": "2025-06-18",
+    "end": "2026-06-01"
+  },
+  "cutoff": "2025-10-31T23:59:59Z",
+  "source_registry_ids": [
+    "us.federal-register",
+    "us.grants",
+    "us.usaspending"
+  ],
+  "queries": [
+    {
+      "query": "SME OR small business artificial intelligence compute adoption program",
+      "language": "en",
+      "executed_at": "2025-10-31T17:00:00Z",
+      "source_registry_id": "us.federal-register",
+      "result_count": 3,
+      "notes": "Illustrative only."
+    },
+    {
+      "query": "AI compute small business grant",
+      "language": "en",
+      "executed_at": "2025-10-31T17:10:00Z",
+      "source_registry_id": "us.grants",
+      "result_count": 1,
+      "notes": "Illustrative only."
+    }
+  ],
+  "languages": [
+    "en"
+  ],
+  "coverage_assessment": {
+    "status": "insufficient",
+    "known_gaps": [
+      "Agency program pages not yet fully searched."
+    ],
+    "rationale": "This fixture demonstrates why a negative claim must remain inconclusive."
+  },
+  "result": "inconclusive",
+  "candidate_action_ids": [],
+  "review": {
+    "reviewer_id": "reviewer-example",
+    "decision": "request_changes",
+    "rationale": "Expand agency coverage before accepting a negative finding.",
+    "reviewed_at": "2025-10-31T18:00:00Z"
+  },
+  "content_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+}

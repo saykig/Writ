@@ -1,0 +1,12 @@
+{
+  "name": "@covenant/reference-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dependency-light semantic reference for Covenant truth, score evaluation, and bounded analysis.",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun ./test/run-tests.ts"
+  }
+}

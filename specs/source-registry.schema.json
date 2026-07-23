@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://covenant.example/schemas/source-registry.schema.json",
+  "title": "Covenant Source Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "jurisdictions",
+        "source_tier",
+        "source_types",
+        "base_uri",
+        "discovery_method",
+        "fetch_method",
+        "enabled",
+        "verification_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "jurisdictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "issue_areas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "source_tier": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6
+        },
+        "source_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "commitment",
+              "methodology",
+              "evaluation",
+              "executive",
+              "law",
+              "regulation",
+              "budget",
+              "spending",
+              "procurement",
+              "grant",
+              "parliament",
+              "audit",
+              "statistics",
+              "open_data",
+              "international_organization",
+              "media",
+              "research",
+              "archive",
+              "search"
+            ]
+          }
+        },
+        "base_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "api_spec_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "discovery_method": {
+          "enum": [
+            "api",
+            "rss",
+            "atom",
+            "sitemap",
+            "crawl",
+            "search",
+            "bulk_download",
+            "manual",
+            "hybrid",
+            "licensed_feed"
+          ]
+        },
+        "fetch_method": {
+          "enum": [
+            "http",
+            "api",
+            "browser",
+            "bulk_download",
+            "manual",
+            "licensed_feed"
+          ]
+        },
+        "authentication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "none",
+                "api_key",
+                "oauth2",
+                "basic",
+                "session",
+                "licensed"
+              ]
+            },
+            "secret_ref": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "rate_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "period_seconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "crawl_schedule": {
+          "type": "string"
+        },
+        "robots_policy": {
+          "enum": [
+            "respect",
+            "api_only",
+            "manual_review",
+            "not_applicable"
+          ]
+        },
+        "terms_status": {
+          "enum": [
+            "reviewed",
+            "review_required",
+            "restricted",
+            "unknown"
+          ]
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connector": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "verification_status": {
+          "enum": [
+            "verified",
+            "catalogued",
+            "verify_before_enable",
+            "disabled"
+          ]
+        },
+        "last_verified": {
+          "type": "string",
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

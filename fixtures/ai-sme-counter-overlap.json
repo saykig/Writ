@@ -1,0 +1,33 @@
+{
+  "id": "ai-sme-counter-overlap",
+  "program": "2025-ai-sme-literal",
+  "domains": {
+    "strong_count": [
+      0,
+      5
+    ],
+    "weak_count": [
+      0,
+      2,
+      5
+    ],
+    "counter_exists": [
+      false,
+      true
+    ]
+  },
+  "expect": [
+    {
+      "code": "COV-SCORE-OVERLAP",
+      "witness": {
+        "strong_count": 5,
+        "weak_count": 0,
+        "counter_exists": true
+      },
+      "matched_results": [
+        "+1",
+        "-1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "transnational-prose-mismatch",
+  "commitment": "TRANSNATIONAL_CRIME",
+  "inputs": {
+    "guideline_text": "Full compliance requires all listed elements.",
+    "metric_text": "Full compliance requires a threshold subset."
+  },
+  "expect": [
+    {
+      "code": "COV-PROSE-METRIC-MISMATCH",
+      "severity": "error"
+    }
+  ]
+}

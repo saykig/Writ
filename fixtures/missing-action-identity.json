@@ -1,0 +1,15 @@
+{
+  "id": "missing-action-identity",
+  "commitment": "AI_SME_ADOPTION",
+  "uses_operations": [
+    "count",
+    "count_distinct"
+  ],
+  "action_identity": null,
+  "expect": [
+    {
+      "code": "COV-IDENTITY-MISSING",
+      "severity": "error"
+    }
+  ]
+}

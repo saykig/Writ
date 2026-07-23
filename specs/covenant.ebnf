@@ -1,0 +1,111 @@
+(* Covenant 0.1 reference grammar. This is the language design target, not a generated parser. *)
+
+Document        = Header, { Import | Source | TypeDecl | SetDecl | Rationale |
+                            Commitment | Profile | Scenario } ;
+Header          = "language", "covenant", String, "package", QName,
+                  "version", String, ";" ;
+Import          = "import", QName, "version", String,
+                  [ "hash", String ], ";" ;
+Source          = "source", Identifier, "{", { Property }, "}" ;
+TypeDecl        = EnumDecl | ConceptDecl ;
+EnumDecl        = "enum", Identifier, "{", Identifier,
+                  { ",", Identifier }, [ "," ], "}" ;
+ConceptDecl     = "concept", Identifier, [ ":", TypeRef ], "{",
+                  { Property | Support }, "}" ;
+SetDecl         = "set", Identifier, ":", TypeRef, "=", SetLiteral, ";" ;
+Rationale       = "rationale", Identifier, "{", "text", String, ";",
+                  { Support }, "}" ;
+
+Commitment      = "commitment", Identifier, "{", { CommitmentMember }, "}" ;
+CommitmentMember= Property | Authority | Subjects | Window | EvidencePolicy |
+                  UnknownPolicy | Dimension | Goal | PartnerClass | Parameter |
+                  Identity | Predicate | Classification | Variable | Score |
+                  Assertion | Support ;
+Authority       = "authority", Citation, ";" ;
+Subjects        = "subjects", Expr, ";" ;
+Window          = "evaluation_window", Interval, ";" ;
+EvidencePolicy  = "evidence_policy", ( "open_world" | "closed_world" ), ";" ;
+UnknownPolicy   = "unknown_policy", ( "propagate" | "explicit_rules_only" |
+                  "treat_false" | "treat_true" ), ";" ;
+Dimension       = "dimension", Identifier, [ String ], ";" ;
+Goal            = "goal", Identifier, [ String ], ";" ;
+PartnerClass    = "partner_class", Identifier, [ String ], ";" ;
+Parameter       = "parameter", Identifier, ":", TypeRef, "=", Literal,
+                  [ "allowed", SetLiteral ], ";" ;
+Identity        = "action_identity", ( "review_required" | "strict_deduplicate" |
+                  "strict_separate" | "propagate_uncertainty" ), "by",
+                  Path, { ",", Path }, ";" ;
+
+Predicate       = "predicate", Identifier, "(", [ ParamList ], ")", "->", "Truth",
+                  "{", { DeriveRule }, "}" ;
+DeriveRule      = "derive", TruthLiteral, [ "priority", Integer ], "when", Expr,
+                  [ "because", Identifier ], [ Support ], ";" ;
+Classification  = "classify", Identifier, ( "exclusive" | "multi_label" ), "{",
+                  { ClassRule }, [ OtherwiseClass ], "}" ;
+ClassRule       = "label", Identifier, "priority", Integer, "when", Expr,
+                  [ "because", Identifier ], [ Support ], ";" ;
+OtherwiseClass  = "otherwise", Identifier, [ "safe_under_open_world" ], ";" ;
+Variable        = "let", Identifier, ":", TypeRef, "=", Expr, ";" ;
+
+Score           = "score", "{", { ScoreRule }, OtherwiseScore, "}" ;
+ScoreRule       = "result", ScoreValue, "priority", Integer, "when", Expr,
+                  [ "id", Identifier ], [ "intentional_overlap" ],
+                  [ "because", Identifier ], [ Support ], ";" ;
+OtherwiseScore  = "otherwise", ( ScoreValue | "unresolved" | "not_applicable" ),
+                  String, ";" ;
+Assertion       = "assert", ( "exhaustive" | "non_overlapping" | "monotonic" |
+                  "no_unanchored_claims" | "all_score_inputs_reviewed" ),
+                  [ "over", DomainList ], [ "except", Expr ], ";" ;
+
+Profile         = "profile", Identifier, "for", QName, "{", { ProfileMember }, "}" ;
+ProfileMember   = "set", Path, "=", Literal, ";" | "waive", Identifier,
+                  "because", String, ";" ;
+Scenario        = "scenario", Identifier, "for", QName, "{", { Given }, Expect, "}" ;
+Given           = "given", Path, "=", Literal, ";" ;
+Expect          = "expect", ( "result", ScoreValue | "diagnostic", Identifier ), ";" ;
+
+Expr            = OrExpr ;
+OrExpr          = AndExpr, { "or", AndExpr } ;
+AndExpr         = NotExpr, { "and", NotExpr } ;
+NotExpr         = [ "not" ], CompareExpr ;
+CompareExpr     = AddExpr, [ CompareOp, AddExpr ] ;
+AddExpr         = Primary, { ( "+" | "-" ), Primary } ;
+Primary         = Literal | Path | Call | Query | SetLiteral | Interval |
+                  "(", Expr, ")" ;
+Call            = QName, "(", [ ArgList ], ")" ;
+Query           = ( "count" | "count_distinct" | "exists" | "forall" | "sum" |
+                  "ratio" | "coverage" | "min" | "max" ), "(", QName,
+                  [ "where", Expr ], [ "distinct_by", Path ],
+                  [ "select", Expr ], ")" ;
+CompareOp       = "==" | "!=" | ">" | ">=" | "<" | "<=" | "in" |
+                  "between" | "overlaps" | "before" | "after" | "contains" ;
+
+Citation        = Identifier, ( "page", Integer | "pages", Range |
+                  "lines", Range | "quote", String | "dom", String |
+                  "json_pointer", String ) ;
+Support         = "support", Citation, ";" ;
+Property        = Identifier, ( String | Number | Date | DateTime | QName ), ";" ;
+Interval        = ( "[" | "(" ), ( Date | DateTime ), ",", ( Date | DateTime ),
+                  ( "]" | ")" ) ;
+DomainList      = Domain, { ",", Domain } ;
+Domain          = Path, "in", ( SetLiteral | Range ) ;
+SetLiteral      = "{", [ Literal, { ",", Literal } ], "}" ;
+Range           = Literal, "..", Literal ;
+ParamList       = Param, { ",", Param } ;
+Param           = Identifier, ":", TypeRef ;
+ArgList         = Expr, { ",", Expr } ;
+TypeRef         = QName, [ "<", TypeRef, { ",", TypeRef }, ">" ] ;
+Path            = QName ;
+QName           = Identifier, { ".", Identifier } ;
+Literal         = String | Number | Integer | Date | DateTime | TruthLiteral |
+                  "true" | "false" | "null" ;
+TruthLiteral    = "true" | "false" | "unknown" | "contested" ;
+ScoreValue      = '"-1"' | '"0"' | '"+1"' ;
+Identifier      = Letter, { Letter | Digit | "_" | "-" } ;
+String          = '"', { ? any character except unescaped quote ? }, '"' ;
+Integer         = [ "-" ], Digit, { Digit } ;
+Number          = Integer, [ ".", Digit, { Digit } ] ;
+Date            = Digit, Digit, Digit, Digit, "-", Digit, Digit, "-", Digit, Digit ;
+DateTime        = Date, "T", ? RFC 3339 time and offset ? ;
+Letter          = "A" | ... | "Z" | "a" | ... | "z" ;
+Digit           = "0" | ... | "9" ;

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "id": "receipt-canada-ai-sme-example",
+  "run": {
+    "commitment_version_id": "g7.kananaskis_2025.ai_sme.resolved@1.0.0",
+    "subject_id": "Canada",
+    "interpretation_profile_id": "resolved-default@1.0.0",
+    "as_of": "2025-10-31T23:59:59Z",
+    "cutoff": "2025-10-31T23:59:59Z",
+    "started_at": "2025-11-01T00:00:00Z",
+    "completed_at": "2025-11-01T00:00:01Z"
+  },
+  "result": "+1",
+  "result_status": "supported",
+  "confidence": {
+    "value": "0.86",
+    "method": "illustrative-review-coverage",
+    "factors": [
+      {
+        "name": "reviewed_inputs",
+        "value": 1.0
+      }
+    ]
+  },
+  "matched_rule_id": "full",
+  "rule_evaluations": [
+    {
+      "rule_id": "counter_override",
+      "priority": 30,
+      "result": "-1",
+      "truth_value": "false",
+      "proof_id": "proof-counter"
+    },
+    {
+      "rule_id": "full",
+      "priority": 20,
+      "result": "+1",
+      "truth_value": "true",
+      "proof_id": "proof-full"
+    }
+  ],
+  "proof": {
+    "root_id": "proof-selection",
+    "nodes": [
+      {
+        "id": "proof-counter",
+        "kind": "score_rule",
+        "label": "counter_override",
+        "truth_value": "false",
+        "rule_id": "counter_override",
+        "child_ids": []
+      },
+      {
+        "id": "proof-full",
+        "kind": "score_rule",
+        "label": "strong_count >= 5",
+        "truth_value": "true",
+        "value": 7,
+        "rule_id": "full",
+        "action_ids": [
+          "action-ca-compute-fund"
+        ],
+        "child_ids": []
+      },
+      {
+        "id": "proof-selection",
+        "kind": "selection",
+        "label": "Selected unique highest-priority true score branch",
+        "truth_value": "true",
+        "rule_id": "full",
+        "child_ids": [
+          "proof-counter",
+          "proof-full"
+        ]
+      }
+    ]
+  },
+  "qualifying_action_ids": [
+    "action-ca-compute-fund"
+  ],
+  "excluded_actions": [],
+  "unresolved_claim_ids": [],
+  "contested_claim_ids": [],
+  "diagnostics": [],
+  "dependencies": {
+    "methodology_bundle_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "evidence_snapshot_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "interpretation_profile_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "evaluator_build_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "source_snapshot_ids": [
+      "snapshot-canada-ai-sme-2025-10-31"
+    ],
+    "claim_ids": [
+      "claim-ca-compute-fund-targets-smes"
+    ],
+    "action_ids": [
+      "action-ca-compute-fund"
+    ]
+  },
+  "canonical_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+.pnpm-store/
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+.DS_Store
+storage/
+minio-data/
+postgres-data/

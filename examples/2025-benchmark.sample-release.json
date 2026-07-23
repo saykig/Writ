@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "id": "release-2025-benchmark-example",
+  "name": "G7 2025 Compliance Benchmark",
+  "version": "0.1.0-example",
+  "status": "candidate",
+  "created_at": "2026-07-22T20:00:00Z",
+  "created_by": "release-manager-example",
+  "evaluator_build_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "methodology_bundles": [
+    {
+      "id": "g7.kananaskis_2025.ai_sme.resolved@1.0.0",
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "interpretation_profiles": [
+    {
+      "id": "profile-ai-sme-resolved-default",
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "evidence_snapshots": [
+    {
+      "id": "snapshot-canada-ai-sme-2025-10-31",
+      "hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "receipts": [
+    {
+      "id": "receipt-canada-ai-sme-example",
+      "hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ],
+  "discrepancies": [
+    {
+      "id": "disc-ai-sme-weak-five",
+      "hash": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "source_objects": [
+    {
+      "id": "docv-ca-compute-fund-2025-06-25",
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "aggregate_outputs": [],
+  "validation": {
+    "schema_valid": true,
+    "conformance_passed": true,
+    "unwaived_error_count": 0,
+    "blocking_discrepancy_count": 1,
+    "reproducibility_verified": true
+  },
+  "manifest_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+}

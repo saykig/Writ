@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://covenant.example/schemas/evidence.schema.json",
+  "title": "Covenant Evidence Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "snapshot", "document_versions", "passages",
+    "claims", "actions", "reviews"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "snapshot": {"$ref": "#/$defs/snapshot"},
+    "document_versions": {"type": "array", "items": {"$ref": "#/$defs/documentVersion"}},
+    "passages": {"type": "array", "items": {"$ref": "#/$defs/passage"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/claim"}},
+    "actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+    "reviews": {"type": "array", "items": {"$ref": "#/$defs/review"}}
+  },
+  "$defs": {
+    "truth": {"enum": ["true", "false", "unknown", "contested"]},
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "frozen_at", "cutoff", "content_hash"],
+      "properties": {
+        "id": {"type": "string"},
+        "frozen_at": {"type": "string", "format": "date-time"},
+        "cutoff": {"type": "string", "format": "date-time"},
+        "content_hash": {"type": "string"},
+        "description": {"type": "string"}
+      }
+    },
+    "documentVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "document_id", "uri", "media_type", "retrieved_at", "sha256"],
+      "properties": {
+        "id": {"type": "string"},
+        "document_id": {"type": "string"},
+        "uri": {"type": "string", "format": "uri"},
+        "media_type": {"type": "string"},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "issued_at": {"type": "string", "format": "date-time"},
+        "sha256": {"type": "string"},
+        "storage_uri": {"type": "string"},
+        "warc_record_id": {"type": "string"},
+        "publisher": {"type": "string"},
+        "source_tier": {"type": "integer", "minimum": 0, "maximum": 6}
+      }
+    },
+    "passage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "document_version_id", "anchor_type", "quote", "anchor_hash"],
+      "properties": {
+        "id": {"type": "string"},
+        "document_version_id": {"type": "string"},
+        "anchor_type": {
+          "enum": ["pdf_text", "pdf_bbox", "html_dom", "json_pointer", "table_cell", "whole_document"]
+        },
+        "page_number": {"type": "integer", "minimum": 1},
+        "bounding_boxes": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {"type": "number"}, {"type": "number"},
+              {"type": "number"}, {"type": "number"}
+            ],
+            "minItems": 4,
+            "maxItems": 4
+          }
+        },
+        "dom_path": {"type": "string"},
+        "json_pointer": {"type": "string"},
+        "table_coordinates": {"type": "object"},
+        "quote": {"type": "string"},
+        "normalized_quote": {"type": "string"},
+        "anchor_hash": {"type": "string"},
+        "language": {"type": "string"}
+      }
+    },
+    "evidenceLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passage_id", "stance", "support_type"],
+      "properties": {
+        "passage_id": {"type": "string"},
+        "stance": {"enum": ["supports", "contradicts", "qualifies", "context_only"]},
+        "support_type": {"enum": ["direct", "derived", "corroborating", "negative_search"]}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "claim_type", "subject_ref", "predicate", "object", "truth_value",
+        "status", "valid_time", "recorded_at", "origin", "evidence_links"
+      ],
+      "properties": {
+        "id": {"type": "string"},
+        "claim_type": {
+          "enum": ["fact", "negative_search_result", "translation", "entity_resolution", "measurement", "relationship"]
+        },
+        "subject_ref": {"type": "string"},
+        "predicate": {"type": "string"},
+        "object": {},
+        "qualifiers": {"type": "object"},
+        "truth_value": {"$ref": "#/$defs/truth"},
+        "status": {"enum": ["candidate", "accepted", "rejected", "contested", "superseded", "withdrawn"]},
+        "valid_time": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {"type": "string", "format": "date-time"},
+            "end": {"type": "string", "format": "date-time"}
+          }
+        },
+        "recorded_at": {"type": "string", "format": "date-time"},
+        "created_by": {"type": "string"},
+        "origin": {"enum": ["human", "extractor", "model", "import"]},
+        "evidence_links": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidenceLink"},
+          "minItems": 1
+        },
+        "supersedes_claim_id": {"type": "string"}
+      }
+    },
+    "money": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "currency", "bound"],
+      "properties": {
+        "value": {"type": "string", "pattern": "^-?[0-9]+(\\.[0-9]+)?$"},
+        "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "bound": {"enum": ["exact", "up_to", "at_least", "approximate"]},
+        "price_basis_date": {"type": "string", "format": "date"}
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "target_id"],
+      "properties": {
+        "type": {
+          "enum": [
+            "announcement_of", "implementation_of", "funding_for", "amends",
+            "supersedes", "repeals", "continues", "part_of", "duplicate_of", "counteracts"
+          ]
+        },
+        "target_id": {"type": "string"},
+        "claim_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "label", "actors", "jurisdiction", "kind", "implementation_stage",
+        "beneficiary_targeting", "attribution", "status", "claim_ids"
+      ],
+      "properties": {
+        "id": {"type": "string"},
+        "label": {"type": "string"},
+        "actors": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "jurisdiction": {"type": "string"},
+        "kind": {"type": "string"},
+        "instrument_type": {"type": "string"},
+        "announcement_time": {"type": "string", "format": "date-time"},
+        "valid_time": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {"type": "string", "format": "date-time"},
+            "end": {"type": "string", "format": "date-time"}
+          }
+        },
+        "implementation_stage": {
+          "enum": [
+            "proposed", "announced", "authorized", "budgeted", "funded", "contracted",
+            "launched", "operational", "disbursing", "evaluated", "completed", "suspended", "repealed"
+          ]
+        },
+        "beneficiaries": {"type": "array", "items": {"type": "string"}},
+        "beneficiary_targeting": {
+          "enum": ["explicit", "materially_inclusive", "indirect", "general", "absent", "contested"]
+        },
+        "amounts": {"type": "array", "items": {"$ref": "#/$defs/money"}},
+        "durability": {"enum": ["one_off", "fixed_term", "recurring", "institutionalized", "unknown"]},
+        "attribution": {"enum": ["unilateral", "joint", "collective", "implementing_partner", "external", "disputed"]},
+        "partner_classes": {"type": "array", "items": {"type": "string"}},
+        "dimensions": {"type": "array", "items": {"type": "string"}},
+        "program_family_id": {"type": "string"},
+        "underlying_instrument_id": {"type": "string"},
+        "relationships": {"type": "array", "items": {"$ref": "#/$defs/relationship"}},
+        "status": {"enum": ["candidate", "accepted", "rejected", "contested", "superseded"]},
+        "claim_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "object_type", "object_id", "reviewer_id", "decision", "rationale", "created_at"],
+      "properties": {
+        "id": {"type": "string"},
+        "object_type": {"enum": ["claim", "action", "relationship", "classification", "methodology", "receipt"]},
+        "object_id": {"type": "string"},
+        "reviewer_id": {"type": "string"},
+        "decision": {"enum": ["accept", "reject", "contest", "request_changes", "approve", "withdraw"]},
+        "rationale": {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "supersedes_review_id": {"type": "string"},
+        "conflict_of_interest": {"type": "string"}
+      }
+    }
+  }
+}

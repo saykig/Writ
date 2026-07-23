@@ -1,0 +1,15 @@
+# Examples
+
+The examples serve different purposes:
+
+- `2025-ai-sme-literal.covenant` normalizes “up to four strong actions” as one through four, exposing a weak-count gap and the independent counteraction overlap.
+- `2025-ai-sme-inclusive-up-to.covenant` normalizes the same phrase as zero through four, removing that gap but producing an overlap with the non-compliance branch.
+- `2025-ai-sme-resolved.covenant` demonstrates an explicit interpretation profile with counteraction precedence and complete weak-action coverage.
+- `2025-middle-east.covenant` demonstrates dimensional scoring.
+- `2025-critical-minerals.covenant` demonstrates dimensions, partner classes, and required artifact completeness.
+- `2025-infrastructure.covenant` demonstrates partner-attribution and exclusion of domestic-only action.
+- `2025-ai-sme-literal.ir.json` is a schema-valid canonical IR example.
+- `2025-ai-sme.sample-evidence.json` is illustrative evidence data, not a claim about the live state of Canadian policy.
+- `2025-ai-sme.sample-receipt.json` is an illustrative output contract.
+
+The `.covenant` syntax is a design target until the Langium parser is implemented and its examples are promoted into the conformance suite.

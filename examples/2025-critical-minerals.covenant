@@ -1,0 +1,35 @@
+language covenant "0.1"
+package g7.kananaskis_2025.critical_minerals version "1.0.0";
+
+commitment CRITICAL_MINERALS_ACTION_PLAN {
+  title "Implement the G7 Critical Minerals Action Plan";
+  subjects G7Members;
+  evaluation_window [2025-06-18, 2026-06-01];
+  evidence_policy open_world;
+  unknown_policy propagate;
+
+  dimension standards_and_traceability;
+  dimension market_support_and_investment;
+  dimension innovation_and_circularity;
+
+  partner_class producer_countries;
+  partner_class emerging_markets;
+  partner_class developing_economies;
+  partner_class indigenous_peoples;
+  partner_class local_communities;
+  partner_class private_sector;
+  partner_class international_organizations;
+
+  let dimension_coverage: Int = coverage(actions, dimensions);
+  let partner_coverage: Int = coverage(actions, partner_classes);
+  let required_artifacts_complete: Truth = artifact_set_complete(action_plan_outputs);
+
+  score {
+    result "+1" priority 10 when dimension_coverage == 3 and partner_coverage >= 5 and required_artifacts_complete id full;
+    result "0" priority 10 when dimension_coverage >= 2 and partner_coverage >= 3 id partial;
+    result "-1" priority 10 when dimension_coverage <= 1 or partner_coverage <= 2 id none;
+    otherwise unresolved "Artifact completeness or coverage evidence is unknown or contested.";
+  }
+
+  assert non_overlapping over dimension_coverage in 0..3, partner_coverage in 0..7, required_artifacts_complete in {true, false};
+}

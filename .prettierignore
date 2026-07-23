@@ -1,0 +1,26 @@
+# Build + tooling artifacts
+node_modules/
+dist/
+coverage/
+bun.lock
+bun.lockb
+*.langium
+
+# Authored specification + evidence content — kept byte-stable (golden JSON,
+# canonical IR, receipts, and governance docs must never be reformatted).
+specs/
+examples/
+fixtures/
+data/
+docs/
+adr/
+codex-tasks/
+.agents/
+db/
+scripts/
+MANIFEST.sha256
+AGENTS.md
+TASKS.yaml
+START_HERE.md
+VALIDATION.md
+VERSION_POLICY.md
