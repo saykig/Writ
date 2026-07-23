@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { gapMatrix, type GapMatrixAxis } from "@/lib/gap-matrix";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { Reveal } from "@/components/site/reveal";
 
 export const metadata: Metadata = {
@@ -67,8 +68,9 @@ export default function GapMatrixPage() {
   return (
     <main>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section>
-        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 sm:py-28">
+      <section className="relative overflow-hidden">
+        <HeroBackdrop />
+        <div className="relative mx-auto max-w-[76rem] px-5 py-20 sm:px-6 sm:py-28">
           <Reveal className="max-w-3xl">
             <SectionLabel>Second methodology · AI governance</SectionLabel>
             <h1 className="mt-6 text-[length:var(--t-hero)] leading-[1.05] font-semibold tracking-[-0.02em] text-balance">

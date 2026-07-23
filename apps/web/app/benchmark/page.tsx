@@ -4,6 +4,8 @@ import { benchmark, benchmarkLedger, evaluateMember, memberSnapshot } from "@/li
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { Reveal } from "@/components/site/reveal";
 import { TruthBadge } from "@/components/site/truth-badge";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { NumberTicker } from "@/components/site/number-ticker";
 import { BenchmarkExplorer } from "@/components/benchmark/benchmark-explorer";
 import type { ActionView, MemberView, Score } from "@/components/benchmark/types";
 
@@ -141,9 +143,10 @@ function buildMember(
 function Fact({ value, label }: { value: number; label: string }) {
   return (
     <span className="inline-flex items-baseline gap-1.5">
-      <span className="font-display text-[1.35rem] leading-none tabular-nums text-foreground">
-        {value}
-      </span>
+      <NumberTicker
+        value={value}
+        className="font-display text-[1.35rem] leading-none tabular-nums text-foreground"
+      />
       <span className="text-ink-muted">{label}</span>
     </span>
   );
@@ -170,8 +173,9 @@ export default function BenchmarkPage() {
   return (
     <main className="flex-1">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="border-b border-rule">
-        <div className="mx-auto max-w-[72rem] px-5 pt-20 pb-16 sm:px-8 lg:pt-28 lg:pb-20">
+      <section className="relative overflow-hidden border-b border-rule">
+        <HeroBackdrop />
+        <div className="relative mx-auto max-w-[72rem] px-5 pt-20 pb-16 sm:px-8 lg:pt-28 lg:pb-20">
           <SectionLabel className={reveal}>2025 G7 AI-for-SMEs · discrepancy ledger</SectionLabel>
 
           <h1

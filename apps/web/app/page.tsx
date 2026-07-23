@@ -9,7 +9,8 @@ import { CodeArtifact } from "@/components/site/code-artifact";
 import { Pipeline } from "@/components/site/pipeline";
 import { FeatureGrid } from "@/components/site/feature-grid";
 import { ReceiptVisual } from "@/components/site/receipt-visual";
-import { FlickeringGrid } from "@/components/ui/flickering-grid";
+import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { NumberTicker } from "@/components/site/number-ticker";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { TruthBadge } from "@/components/site/truth-badge";
 import { Reveal } from "@/components/site/reveal";
@@ -48,7 +49,8 @@ export default function Home() {
     kicker: string;
     title: string;
     blurb: string;
-    stat: string;
+    statValue: number | null;
+    statSuffix: string;
     statNote: string;
   }[] = [
     {
@@ -56,7 +58,8 @@ export default function Home() {
       kicker: "2025 G7 AI-for-SMEs",
       title: "Reproduced on real data",
       blurb: `All ${summary.cells} published member scores recomputed from frozen, reviewed evidence. ${summary.interpretation_sensitive_cells} of them turn on how one phrase is read.`,
-      stat: `${summary.matches}/${summary.cells}`,
+      statValue: summary.matches,
+      statSuffix: `/${summary.cells}`,
       statNote: "scores reproduced",
     },
     {
@@ -65,7 +68,8 @@ export default function Home() {
       title: "A different scoring shape",
       blurb:
         "A weighted-ordinal index across four jurisdictions, reproduced exactly — including an axis left honestly pending because two components are unassessed.",
-      stat: authority?.index != null ? String(authority.index) : "—",
+      statValue: authority?.index ?? null,
+      statSuffix: "",
       statNote: "public-authority index",
     },
   ];
@@ -74,20 +78,7 @@ export default function Home() {
     <main>
       {/* ── Hero: what Covenant is, plainly + the signature artifact ─────── */}
       <section className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_75%_60%_at_50%_0%,#000_30%,transparent_95%)]"
-        >
-          <FlickeringGrid
-            className="absolute inset-0 size-full"
-            squareSize={3}
-            gridGap={10}
-            flickerChance={0.08}
-            maxOpacity={0.28}
-            color="#9ca3af"
-          />
-        </div>
-        <div aria-hidden className="absolute inset-0 backdrop-glow" />
+        <HeroBackdrop flickerChance={0.08} />
         <div className="relative mx-auto grid max-w-[76rem] items-center gap-12 px-5 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:py-28">
           <Reveal>
             <SectionLabel>Auditable policy scoring</SectionLabel>
@@ -222,7 +213,14 @@ export default function Home() {
                   </div>
                   <div className="text-right">
                     <span className="text-2xl font-semibold tracking-tight tabular-nums">
-                      {proof.stat}
+                      {proof.statValue != null ? (
+                        <>
+                          <NumberTicker value={proof.statValue} />
+                          {proof.statSuffix}
+                        </>
+                      ) : (
+                        "—"
+                      )}
                     </span>
                     <p className="label mt-0.5">{proof.statNote}</p>
                   </div>
