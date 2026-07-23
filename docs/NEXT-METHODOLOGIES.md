@@ -20,20 +20,30 @@ graded against itself.
 Each notes the phrase it would stress and which Covenant capability it exercises
 (the three-point gap/overlap path, or the graded-measure path).
 
-### 1. FATF Mutual Evaluations (AML/CFT) — *recommended*
+### 1. FATF Mutual Evaluations (AML/CFT) — *chosen; scaffold landed, source-gated*
 - **What:** the Financial Action Task Force rates each country **Compliant /
   Largely Compliant / Partially Compliant / Non-Compliant** on 40 Recommendations
   (technical compliance) and **High / Substantial / Moderate / Low** on 11
   Immediate Outcomes (effectiveness). Published in full, per country.
 - **Soft quantifier:** **"largely" vs "partially"** compliant — the boundary is a
   documented judgment call, exactly the analog of "up to four".
-- **Stresses:** the discrete ordinal / gap-overlap path at scale (40 items × a
-  4-point scale, per country), plus an overall roll-up. Clean, public, unambiguous
-  to source.
+- **Stresses:** the discrete three-point score path (the AI-for-SMEs shape).
+  Covenant reproduces the **derived** published outcome — the country's
+  regular/enhanced **follow-up stream** — from the ratings, rather than the
+  ratings themselves. `+1` = regular, `-1` = enhanced.
 - **Independence:** high (a standing intergovernmental body; nothing to do with us).
-- **Why recommended:** fully published ratings, a bounded rubric, a genuine
-  soft-quantifier boundary, and an author we have no connection to. Lowest risk of
-  "we graded our own encoding."
+- **Status (2026-07-23):** encoded and analyzed clean, with the follow-up rule's
+  regular/enhanced branches statically verified to partition the rating space and
+  computed over synthetic evidence. See
+  [`examples/fatf-mutual-evaluation.covenant`](../examples/fatf-mutual-evaluation.covenant),
+  the corpus [README](../benchmark/fatf-mutual-evaluation/README.md), and
+  `packages/benchmark/test/fatf-reproduction.test.ts`. **Still source-gated**
+  (held pending, no real ratings committed): (1) the enhanced-follow-up trigger
+  constants must be verified verbatim against the FATF *Procedures*; (2) the
+  per-country ratings sourced from the Consolidated Assessment Ratings table; and
+  (3) the actual assigned follow-up streams to reproduce against. The FATF site
+  blocks automated fetch, so this last mile awaits a reachable source or a clean
+  export.
 
 ### 2. World Bank CPIA
 - **What:** the Country Policy and Institutional Assessment scores IDA countries
