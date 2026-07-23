@@ -29,6 +29,6 @@ if (typeof import.meta.main === "boolean" && import.meta.main) {
   const { getSql } = await import("./db/client.js");
   const { buildApp } = await import("./http/app.js");
   const app = buildApp({ client: getSql(), logger: true });
-  const port = Number(process.env.PORT ?? 3000);
+  const port = Number(process.env.PORT ?? 4318);
   await app.listen({ port, host: "0.0.0.0" });
 }

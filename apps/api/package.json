@@ -9,7 +9,7 @@
     "test": "bun test --timeout 20000",
     "lint": "eslint .",
     "format": "prettier --check .",
-    "dev": "bun --watch src/index.ts"
+    "dev": "bun --env-file=../../.env --watch src/index.ts"
   },
   "dependencies": {
     "@covenant/analyzer": "workspace:*",
