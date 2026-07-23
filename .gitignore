@@ -14,3 +14,4 @@ storage/
 minio-data/
 postgres-data/
 .vercel
+.env*.local
