@@ -27,18 +27,6 @@
         "postgres": "^3.4.9",
       },
     },
-    "apps/studio": {
-      "name": "@covenant/studio",
-      "version": "0.1.0",
-      "dependencies": {
-        "@covenant/analyzer": "workspace:*",
-        "@covenant/benchmark": "workspace:*",
-        "@covenant/domain": "workspace:*",
-        "@covenant/evaluator": "workspace:*",
-        "@covenant/language": "workspace:*",
-        "@covenant/provenance": "workspace:*",
-      },
-    },
     "apps/web": {
       "name": "@covenant/web",
       "version": "0.1.0",
@@ -254,8 +242,6 @@
     "@covenant/provenance": ["@covenant/provenance@workspace:packages/provenance"],
 
     "@covenant/reference-core": ["@covenant/reference-core@workspace:reference-core"],
-
-    "@covenant/studio": ["@covenant/studio@workspace:apps/studio"],
 
     "@covenant/web": ["@covenant/web@workspace:apps/web"],
 

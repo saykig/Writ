@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "studio",
+      "name": "web",
       "runtimeExecutable": "bun",
-      "runtimeArgs": ["run", "apps/studio/src/index.ts"],
+      "runtimeArgs": ["run", "--filter", "@covenant/web", "dev"],
       "port": 4317
     }
   ]
