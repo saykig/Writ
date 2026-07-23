@@ -26,6 +26,8 @@ const rels: string[] = [
   "examples/2025-ai-sme-literal.covenant",
   "examples/2025-ai-sme-resolved.covenant",
   "examples/2025-ai-sme-inclusive-up-to.covenant",
+  "examples/ai-governance-gap-matrix.covenant",
+  "benchmark/ai-governance-gap-matrix/assessments.json",
   `${BENCH}/discrepancy-ledger.json`,
   ...readdirSync(join(repoRoot, BENCH, "evidence"))
     .filter((f) => f.endsWith(".snapshot.json"))

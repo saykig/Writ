@@ -11,6 +11,7 @@ export interface NavItem {
 export const PRIMARY_NAV: readonly NavItem[] = [
   { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
   { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
+  { href: "/gap-matrix", label: "Gap Matrix", hint: "A second methodology: AI governance" },
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 
