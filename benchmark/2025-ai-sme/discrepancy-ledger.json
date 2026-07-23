@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "benchmark_reference": "2025-ai-sme",
+  "commitment_id": "AI_SME_ADOPTION",
+  "methodology_version_id": "g7.kananaskis_2025.ai_sme.resolved@1.0.0",
+  "profile": "published",
+  "generated_note": "Every computed cell is produced by evaluateCommitment over reviewed, page-anchored evidence under the published profile. Sensitivity records the generous reading.",
+  "summary": {
+    "cells": 8,
+    "matches": 8,
+    "mismatches": 0,
+    "interpretation_sensitive_cells": 2
+  },
+  "cells": [
+    {
+      "member": "canada",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 20 distinct strong actions; interpretation-independent."
+    },
+    {
+      "member": "france",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 7 distinct strong actions; interpretation-independent."
+    },
+    {
+      "member": "germany",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 11 distinct strong actions; interpretation-independent."
+    },
+    {
+      "member": "italy",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 11 distinct strong actions; interpretation-independent."
+    },
+    {
+      "member": "japan",
+      "published": "0",
+      "computed": "0",
+      "match": true,
+      "category": "implicit_analyst_interpretation",
+      "note": "Match depends on reading general non-SME AI measures as weak; the generous reading yields +1."
+    },
+    {
+      "member": "united_kingdom",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 14 distinct strong actions; interpretation-independent."
+    },
+    {
+      "member": "united_states",
+      "published": "0",
+      "computed": "0",
+      "match": true,
+      "category": "implicit_analyst_interpretation",
+      "note": "Match depends on reading general non-SME AI measures as weak; the generous reading yields +1."
+    },
+    {
+      "member": "european_union",
+      "published": "+1",
+      "computed": "+1",
+      "match": true,
+      "category": "none",
+      "note": "Computed from 11 distinct strong actions; interpretation-independent."
+    }
+  ],
+  "interpretation_sensitivity": [
+    {
+      "member": "canada",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    },
+    {
+      "member": "france",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    },
+    {
+      "member": "germany",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    },
+    {
+      "member": "italy",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    },
+    {
+      "member": "japan",
+      "published_profile_result": "0",
+      "generous_profile_result": "+1",
+      "flips": true,
+      "note": "Flips 0 → +1 when general AI measures are read as strong."
+    },
+    {
+      "member": "united_kingdom",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    },
+    {
+      "member": "united_states",
+      "published_profile_result": "0",
+      "generous_profile_result": "+1",
+      "flips": true,
+      "note": "Flips 0 → +1 when general AI measures are read as strong."
+    },
+    {
+      "member": "european_union",
+      "published_profile_result": "+1",
+      "generous_profile_result": "+1",
+      "flips": false,
+      "note": "Stable across the published and generous readings."
+    }
+  ]
+}

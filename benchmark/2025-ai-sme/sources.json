@@ -1,0 +1,835 @@
+{
+  "schema_version": "1.0.0",
+  "document_version": {
+    "id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+    "document_id": "doc-g7-2025-kananaskis-final-compliance",
+    "uri": "https://www.g7.utoronto.ca/evaluations/2025compliance-final/04-2025-G7-final-compliance-ai.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-01T00:00:00Z",
+    "issued_at": "2026-06-13T00:00:00Z",
+    "sha256": "sha256:9e88bb3633d97fe906405f23f63031416c3ea4cf75d8cbc916685ea552e2c85a",
+    "publisher": "G7 Research Group",
+    "source_tier": 2
+  },
+  "passages": [
+    {
+      "id": "passage-commitment-text",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 170,
+      "quote": "We commit to … sustain investments in AI [artificial intelligence] adoption programs for SMEs [small and medium-sized enterprises], including supporting access to compute and digital infrastructure.",
+      "anchor_hash": "sha256:16f44b4054400969b3bb27e9bb7d662b12acb1477763ccd4a887bc76649e95a3",
+      "language": "en"
+    },
+    {
+      "id": "passage-definition-strong",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 172,
+      "quote": "Strong domestic actions include allocating funding for SME AI adoption, enacting legislation that facilitates integration, establishing privacy or consumer protection frameworks, subsidizing access to compute and digital infrastructure, creating SME-specific training centers, publishing toolkits or case studies, and supporting talent exchanges.",
+      "anchor_hash": "sha256:e01888aa1c606fec44ea9a028e24cbb3b859ed3c22c7f8ec88d0e4913952e7f3",
+      "language": "en"
+    },
+    {
+      "id": "passage-definition-weak",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 172,
+      "quote": "Weaker actions include attending conferences, issuing verbal statements of support, endorsing other countries' SME AI policies, launching short-term pilots or one-off grants, creating general AI programs not tailored to SMEs, hosting awareness events without resources, or providing outdated or impractical tools.",
+      "anchor_hash": "sha256:ab13daf1bfd0683c65475d4b585b9f9986b09d0ce4661acad0a42818bcb3da4a",
+      "language": "en"
+    },
+    {
+      "id": "passage-scoring-guidelines",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 173,
+      "quote": "+1: five or more strong actions. 0: three or four weak actions, or up to four strong actions. −1: two or fewer weak actions, or acts that counter investments in AI adoption programs.",
+      "anchor_hash": "sha256:1c6858943e07ae8c1547a0edf5e10baa0f51ac150811ffc2800bf4d11a1cc2a4",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-ai-compute-access-fund",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 173,
+      "quote": "Canada opened applications for the AI Compute Access Fund, up to CAD300 million to SMEs developing Canadian-based AI products.",
+      "anchor_hash": "sha256:8d2a78cf48ab4041172a4ca167ccdb02d33db23fea99b48d0bcb928fa66a9192",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-japan-canada-tech-accelerator",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 173,
+      "quote": "The Japan-Canada Technology Accelerator and NRC IRAP announced an AI Solutions for Manufacturing and Clean Technologies program introducing Canadian SMEs to Japanese firms.",
+      "anchor_hash": "sha256:cfbf561c7653345a39f198a0fb62f0678786d0ec5066c06aeb2b89f5e1cb5552",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-toronto-region-ai-business-catalyst",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 173,
+      "quote": "A CAD2.4 million investment for the Toronto Region Board of Trade AI Business Catalyst program to give Toronto businesses tools to adopt AI.",
+      "anchor_hash": "sha256:11fbaf29f854e7bd386018feac342785172084d9630744af4aa180c05c01ad4a",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-fcac-gri-workshop",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 173,
+      "quote": "The Financial Consumer Agency of Canada and the Global Risk Institute organized a workshop examining how emerging AI affects financial well-being and consumer protection.",
+      "anchor_hash": "sha256:73ec069ffe69e7dac0dfddf4649d10e508fd9bb2954c9ce51442c6ad78023c60",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-canada-germany-digital-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 174,
+      "quote": "Ministers Solomon and Wildberger advanced a Canada-Germany Digital Alliance committing to a Joint Declaration of Intent on AI covering compute infrastructure, AI adoption and talent mobility, including SMEs.",
+      "anchor_hash": "sha256:5ec48990b61b6d1aa2afee26b5466e98a9c833c0414526a84322b54250bb84b9",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-national-ai-compute-925m",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 174,
+      "quote": "Canada highlighted a CAD925.6 million commitment to expand national AI compute capacity and establish sovereign public supercomputing infrastructure, broadening compute available to Canadian SMEs.",
+      "anchor_hash": "sha256:664c29a4f48927604a514cda90517aa1f981f3d4fcf174ef7a8d6ed24c7ef4b5",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-g7-ai-adoption-roadmap-declaration",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 174,
+      "quote": "The G7 Industry, Digital and Technology Ministers' declaration commits members to expanding training and talent-exchange initiatives and encouraging open-source AL to help SMEs build skills.",
+      "anchor_hash": "sha256:3c78f02c94dec1a0e0f70838d8493e07a775bbcf6c8044134f4210250a8b28aa",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-sme-ai-adoption-blueprint",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 174,
+      "quote": "The G7 SME AI Adoption Blueprint set out policy recommendations on infrastructure, datasets, open-source tools, AI literacy, workforce development and financial supports for resilient SME-focused AI ecosystems.",
+      "anchor_hash": "sha256:b1251ebeca7ee471934814f9df414176ea82e88f0dd52372dd6336a1ef695839",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-g7-sme-ai-toolkit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 174,
+      "quote": "The G7 published the Toolkit for Small- and Medium-Sized Enterprises Deploying Artificial Intelligence, tailored implementation-focused resources for SME AI deployers.",
+      "anchor_hash": "sha256:a34530771e2d9ff6055082fe636ecaeca3467c3f1437782b7430f043d144f65b",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-quebec-vector-amii-case-studies",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "Canada released a comparative report by the Quebec AI Institute, the Vector Institute and the Alberta Machine Intelligence Institute synthesizing SME AI adoption case studies from all G7 members.",
+      "anchor_hash": "sha256:e72ec7dc0bffc11762a4addbadd8951b59bdabf56ee4d9cd5896300941b613da",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-italy-canada-jag-declaration",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "A declaration between Italy and Canada reaffirmed their Joint Advisory Group commitment, which is developing a collaborative project on AI in SMEs.",
+      "anchor_hash": "sha256:f159b97c4a1276cd170b96b4fe864168bca7ae13ce3f8bbee930f6cc4b0b3410",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-feddev-coralus-toronto-resiliency",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "A CAD6.7 million FedDev Ontario investment supported the Toronto Economic Resiliency Initiative and Coralus to help small businesses adapt, upgrade and remain competitive.",
+      "anchor_hash": "sha256:58434eb728b8f6136549b9a77078fcab20ffeb999b52a29593300489486b3a03",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-feddev-ai-growth-19m",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "A funding package of over CAD19 million through FedDev Ontario helps 20 AI-focused businesses develop new AI technologies and accelerate adoption.",
+      "anchor_hash": "sha256:42ffbf9ae71e42ff1381f6ca023431d772e1e57fbab53aa99ea1f8a83391de73",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-cannor-ai-entrepreneurship-centre",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "Over CAD2.8 million supports an AI-Driven Entrepreneurship and Business Support Centre helping northern SMEs develop and integrate AI tools.",
+      "anchor_hash": "sha256:ad14ac98dfbe5b257e99d3fedd009e8b01f1deba8da2a8be302fb60f73c538f4",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-canada-germany-jdi-sovereign-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 175,
+      "quote": "Canada and Germany signed a Joint Declaration of Intent on AI and launched the Sovereign Technology Alliance for cooperation on AI infrastructure, research, commercialization and talent.",
+      "anchor_hash": "sha256:b9707cd4511d32360e34bab77ef4a799c84cba7d6d985e9bd398bb5e3ce3a0e4",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-acoa-regional-ai-initiative",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 176,
+      "quote": "ACOA's plan pledged tailored assistance to SMEs, expanding the Regional Artificial Intelligence Initiative with CAD200 million to grant chosen SMEs for AI adoption.",
+      "anchor_hash": "sha256:fe2c16a99a61ba8b1fc55d109ca4dc281ac5265fe00ab6c71f4defdde37c6ba0",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-nrc-emerging-tech-900m",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 176,
+      "quote": "The National Research Council announced investing over CAD900 million in emerging technologies including quantum computing, sensing and communications.",
+      "anchor_hash": "sha256:7bd33ef42bd33653168f352249039057c2ddd7ecaa744e4833474648e40efd8a",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-canada-finland-joint-statement",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 176,
+      "quote": "Canada and Finland reaffirmed a commitment to enhance bilateral cooperation including promoting the integration of AI into SMEs.",
+      "anchor_hash": "sha256:34c735f2a095e35f36d4fd96cbf3c3d75b70588b46e364ee702b3f067f53bb67",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-ai-sovereign-compute-infrastructure-program",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 176,
+      "quote": "Canada launched the AI Sovereign Compute Infrastructure Program, opening applications to develop large-scale Canadian-based supercomputing systems.",
+      "anchor_hash": "sha256:e40cd0f5d42c676b5f20cb9a155742f7f8861f5880630c6be31306481baef204",
+      "language": "en"
+    },
+    {
+      "id": "passage-canada-siemens-ai-manufacturing-centre",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 176,
+      "quote": "Minister Joly announced a CAD23 million investment to Siemens Canada to expand a Global AI Manufacturing Technologies R&D Centre for battery production.",
+      "anchor_hash": "sha256:8405cbd9d6adafed2edebc93bf0d3b1629fb19208e8fcb44d0d87d45d9c429ef",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-ai-pioneers",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "France launched the AI Pioneers program financing domestic project proposals, providing between EUR3 million and EUR8 million to selected enterprises over three years.",
+      "anchor_hash": "sha256:4d6ed71845c499857d6303c0232a4b86fd08146a8eb1319620f1a3ccccbb05be",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-osez-lia",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "The Osez l'IA plan accelerates AI adoption in SMEs through networking events, an AI academy training professionals, and help identifying relevant AI solutions.",
+      "anchor_hash": "sha256:c5e9099dbbf12e03f556dd4f5623a61aaeec83556a24a9f77e3b2e7a3de6ad91",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-ai-academy-small-business",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "An action plan to revitalize small businesses added an AI Academy letting SMEs access user-friendly AI tools with a network of ambassadors.",
+      "anchor_hash": "sha256:a1f2a0f5224248e7a6bd097586d31b49898fb7c56929d679c0378143a4e87750",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-piiec-ai-innovation",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "France launched the PIIEC framework letting EU member states finance private AI innovation projects, helping local French SMEs access funding for advanced AI technology.",
+      "anchor_hash": "sha256:85b6d697b69917622d93e93a50564eb3342d378ca7ad1e785e97e77a15654dda",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-data-center-sme-deployment",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "Minister Le Henanff reconvened stakeholders on increasing AI adoption in SMEs through data center sites, providing support to 52 companies implementing AI.",
+      "anchor_hash": "sha256:6472a9cac9436e8cc46b3918bc2054f7ad7aa689eee769f31d7401bbdd2cc60e",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-bull-acquisition",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "France announced the state's EUR404 million acquisition of the AI computing brand Bull to facilitate AI integration into SMEs.",
+      "anchor_hash": "sha256:8b9d247a4ea74d0461334358a1e2e9222419e1d0e106f6fdd89e42114f3ff0c7",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-amd-compute-loi",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "France and AMD signed a letter of intent to expand access to AI compute, supporting the Alice Recoque exascale supercomputer with hardware, software and training for startups.",
+      "anchor_hash": "sha256:2484d1f56a18a0be29a0a40dce4ccfc97339fb27c650ae201f1994c3edd016c3",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-bmz-data-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The BMZ Data Strategy announced a ministry-wide plan to introduce AI in administration and data analysis, but was based on data collected in September 2024, indicating limited recent progress.",
+      "anchor_hash": "sha256:415f0b6c8078c1cc1ebae1bf1d7c5406d1a21c9d32fc22a17323db579cfa6951",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-mittelstand-digital-congress",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The Mittelstand Digital Congress had AI experts educate SMEs on how to safely integrate AI technology into their businesses.",
+      "anchor_hash": "sha256:3df8455c321d8dcf9e59bfdd02bde40c74b7fcc61faa757ac6ded6d977658707",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-european-digital-sovereignty-summit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "Germany and France co-hosted the European Summit on Digital Sovereignty in Berlin with over 1,000 participants including digital ministers from 23 EU member states.",
+      "anchor_hash": "sha256:d9a05460f2a02be1b0d9196888c9563d23a62da9bf2395b31086382300cecbf7",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-canada-germany-digital-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "Minister Wildberger and Minister Solomon advanced a Canada-Germany Digital Alliance committing to a Joint Declaration of Intent on AI covering compute infrastructure, AI adoption and talent mobility, including SMEs.",
+      "anchor_hash": "sha256:a48d8b5b7a3cef5fee5d0ebe3a86b09f6eed2f18991865e9497ada96ee995ecb",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-sme-ai-adoption-blueprint",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The G7 SME AI Adoption Blueprint set out coordinated measures and financial supports for resilient SME-focused AI adoption ecosystems.",
+      "anchor_hash": "sha256:f72484971113742e51dfe5556fac9f6632e314878c1779c91076977cc915f05b",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-g7-sme-ai-toolkit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "The G7 published the Toolkit for Small- and Medium-Sized Enterprises Deploying Artificial Intelligence with tailored resources for SME AI deployers.",
+      "anchor_hash": "sha256:0f09e572722197c12f4390266268d0771a06a0bd3f13cf07b7135840854ddc45",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-eif-german-equity",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "The BMWE and the European Investment Fund expanded the EIF German Equity program, providing EUR1.6 billion in additional financing for technology-based startups and SMEs.",
+      "anchor_hash": "sha256:cc6b3d610a26f65be0b7668fff3a2c75c022e3a1e2ceee2f65989d4acf6b933f",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-canada-germany-jdi-sovereign-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "Canada and Germany signed a Joint Declaration of Intent on AI and launched the Sovereign Technology Alliance, although they do not provide direct, targeted support for SME AI adoption.",
+      "anchor_hash": "sha256:f012258c464a944722fb9e0029b1b7a7c77f0fd907b4379b26a3e8a5f48ba638",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-india-germany-ai-pact",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "Ministers Wildberger and Vaishnaw agreed to establish the India-Germany AI Pact, aiming to increase the rapid adoption of AI for start-ups, tech firms and SMEs.",
+      "anchor_hash": "sha256:dc572512be1ac8d85666859850943c08e86a22dd0d3cef2037e3067c40688771",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-ai-funding-guideline-consultation",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "The Federal Ministry for Digital Affairs initiated a public consultation for SMEs, research centers and public institutions to create a funding guideline promoting AI for commercial applications.",
+      "anchor_hash": "sha256:bc99eada8e10c34b005028baa040febf1adcc3b65c1bf600ebc5fc2ec293f015",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-zukunftstag-mittelstand",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "The Zukunftstag Mittelstand 2026 showcased practical AI and data solutions and digital transformation tools tailored to SMEs to advance adoption of AI, cloud computing and digital infrastructure.",
+      "anchor_hash": "sha256:4917c4dec02b7325da57f7a2aa089b80e1142b69e169c6dbaff2dbad4b95e770",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-congo-mou-startups",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "Minister Urso signed a Memorandum of Understanding with the Republic of Congo to support local startups incorporating AI, helping SMEs reduce barriers to AI.",
+      "anchor_hash": "sha256:0c6a2f93a31f13c8bf1ed4059a966d30c3897111b16c9817ab725093f473f147",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-ai-hub-sustainable-development",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "Italy and the UNDP opened the AI Hub for Sustainable Development to strengthen energy-efficient AI infrastructure so that African SMEs may use it to promote economic growth.",
+      "anchor_hash": "sha256:f2f7d0078fd83501ff179a1eafe8ce2345c014383b84de49a78881e528360c66",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-ai4industry-virkkunen-meeting",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 182,
+      "quote": "Minister Urso met Executive Vice-President Virkkunen, highlighting the AI4Industry foundation in Turin and reaffirming Italy's commitment to SME AI adoption.",
+      "anchor_hash": "sha256:0b433287c5092c13461977010ca91484915d90cb97b7f81c3ceaa5a6a30fa497",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-smau-2025-innovation-award",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 182,
+      "quote": "MIMIT announced recipients of the SMAU 2025 Innovation Award, with the Turin tech hub CTE Next recognized for leveraging AI to optimize vehicle mobility.",
+      "anchor_hash": "sha256:93e841f3153716e9299759f20aeea95a00f0b5f3e8d649b0afde97622c176c21",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-ai-match-pilot",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 182,
+      "quote": "AI4I, the Chamber of Commerce of Turin and Piemonte Innova launched AI Match, a national pilot making AI accessible to SMEs with training, matching and voucher-based financial support.",
+      "anchor_hash": "sha256:48100d66a5243f2faa69ff79a4fb0a4c7729a3e2303d508818e0fd7bba98f33b",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-lobito-corridor-dialogue",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 182,
+      "quote": "Prime Minister Meloni discussed building AI infrastructure value chains throughout the Lobito corridor at the African Union-European Union Business Forum.",
+      "anchor_hash": "sha256:3034f84a070d9c35e0602b1c2c2cddae4f662f5be22b67bfe11972d10fca5449",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-it4lia-ai-factory",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 182,
+      "quote": "The operational opening of the IT4LIA AI Factory, one of Europe's first AI-dedicated factories, promotes AI adoption in SMEs through better access to compute and digital infrastructure.",
+      "anchor_hash": "sha256:afce8b41b63e69c235ff04deff0f775c19bb5411b8c329e89f77bdc186220fb9",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-italy-canada-jag-declaration",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 183,
+      "quote": "A declaration between Italy and Canada is developing a collaborative project fostering the adoption of AI solutions in SMEs, to be presented at a 2026 workshop hosted in Italy.",
+      "anchor_hash": "sha256:a489fa62a56ecbaf48a9c0e303fe693af575fb5559cb6b615ff82c9267b95790",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-nairobi-harmonic-africa",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 183,
+      "quote": "At the Nairobi AI Forum, Italy, Kenya and the UNDP launched the Harmonic Africa Startup Acceleration Program with a EUR50 million endowment and an Italian incubator to fund African AI startups.",
+      "anchor_hash": "sha256:a03aa27e06ceb5fde92264a5416d6fd5176314ff2991c688a79e547021f46f71",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-innoconnect-greece-italy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 183,
+      "quote": "Interreg reviewed the SME-centred InnoConnect project, an AI-based matchmaking platform pairing SMEs with investors to provide access to funding and partnerships.",
+      "anchor_hash": "sha256:cd8f47e965e37ad660dceba69bc8d19ffa50e6a6e1275b3b31ffdbae8450ad37",
+      "language": "en"
+    },
+    {
+      "id": "passage-italy-ai4i-accenture-partnership",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 183,
+      "quote": "AI4I announced a strategic partnership with Accenture to accelerate AI adoption across Italian SMEs, offloading document management, inventory forecasting and demand prediction.",
+      "anchor_hash": "sha256:30046a3ee0d3f23330ab61d3a9626f6fc8cfa063e39331fc116a4f8ea3146f6d",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-ai-act",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 184,
+      "quote": "Japan fully enforced the Act on Promotion of Research and Development, and Utilization of AI-related Technology, a general AI law formulating AI regulations and supporting responsible AI integration within SMEs and the wider private sector.",
+      "anchor_hash": "sha256:b068a2b5245cb460415f87d74d2e2539e4476da77653f3c4183881eeceb44a64",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-ai-strategy-headquarters",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 184,
+      "quote": "Japan established the AI Strategy Headquarters to promote secure integration of AI into businesses, particularly SMEs, addressing labor shortages, supply-chain analytics and market access.",
+      "anchor_hash": "sha256:48d84b28197f4d4ecf7b18565812d483c83db97510e51c335f44669ad65dcc32",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-oecd-labour-market-report",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 184,
+      "quote": "An OECD report identified barriers to SME AI adoption and listed Japanese measures ranging from 2015 to 2025, indicating limited recent progress and not fulfilling compute access.",
+      "anchor_hash": "sha256:596eaf1ca82bdf0a547901503768d6e8fd3909b7d68f3940c64a5ba7ed8cc2bc",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-sme-ai-adoption-blueprint",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 184,
+      "quote": "The G7 SME AI Adoption Blueprint set out coordinated measures for resilient SME-focused AI adoption ecosystems.",
+      "anchor_hash": "sha256:8e7b127bd0bcd0bca028b44ab8390958e4215ba9a25717b174c0cf863e96aff1",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-g7-sme-ai-toolkit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 185,
+      "quote": "The G7 published the Toolkit for Small- and Medium-Sized Enterprises Deploying Artificial Intelligence with tailored resources for SME AI deployers.",
+      "anchor_hash": "sha256:4cf1eaaf1dd10ded1a5105caa034238247dd0c8a26b99dfb703a337cdeb22c8d",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-first-basic-ai-plan",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 185,
+      "quote": "Japan approved its first basic plan on AI, a national framework to expand AI use including measures supporting the uptake of AI tools within enterprises.",
+      "anchor_hash": "sha256:064fb557331eaacb410698dbbc1b9cca5e27e82df53e6ebde4c417145518381b",
+      "language": "en"
+    },
+    {
+      "id": "passage-japan-gennai-government-pilot",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 185,
+      "quote": "The Digital Agency launched a large-scale pilot for the government AI system GENNAI across ministries, whose impact on private-sector SMEs remains indirect.",
+      "anchor_hash": "sha256:4a1d459d02f3430096efe37bb111bf4eaf23ce97d29ad90af157258efa58ee81",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-made-in-uk-awards",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "The Department for Business and Trade announced 12 SMEs as recipients of the 2025 Made in the UK, Sold to the World Awards, including firms utilizing AI in their products.",
+      "anchor_hash": "sha256:b359da5ae5b311f2005fe1c9aefc6d8ad6be636530676434b9bf97a914b2ad72",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-regulatory-innovation-office",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "Technology Secretary Kyle announced plans for the Regulatory Innovation Office to reduce stringent regulations on AI adoption for SMEs in fintech via a unified digital library.",
+      "anchor_hash": "sha256:bd9354345c911e850f4bb6db856991e28d3f30bfc1eda82cf1c5784927d58abb",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-compute-roadmap",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "The DSIT and UKRI Compute Roadmap pledges to expand the UK's AI Research Resource system twenty-fold over the next five years, supporting SME access to compute and AI.",
+      "anchor_hash": "sha256:ab499565721d9606c651521f062f15f5ae7b82e8f82f20ce2aa39d486da54b41",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-uk-us-tech-prosperity-deal",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "The UK and US agreed the Tech Prosperity Deal to boost data centres and AI startups and create a North East AI Growth Zone expanding SME access to affordable compute.",
+      "anchor_hash": "sha256:0e76630bf1dfa515fdc061c03fbbc5dcbce49005d69652c6834ad2556ddcb165",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-regional-tech-booster",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "The DSIT launched the Regional Tech Booster programme supporting projects that help SMEs adopt AI through investment events and a start-up support scheme.",
+      "anchor_hash": "sha256:c3ae1ed7ccd8663f4e110ce99b4b000e0bbb23d7f0c906d69134406278e3fdec",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-local-innovation-partnerships-fund",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 186,
+      "quote": "Science and Technology Secretary Kendall announced GBP20 million each for Greater Manchester, the West Midlands and Glasgow for AI-based SMEs.",
+      "anchor_hash": "sha256:918e630304bba915022813d3b0b76bdcbb38c8ed7ba0a54869a48f1687275d69",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-ai-growth-lab",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "Technology Secretary Kendall announced the AI Growth Lab to cut red tape by piloting responsible AI to be adopted by people and businesses.",
+      "anchor_hash": "sha256:4e977189f7226baa388166ca3001693f64bc2ef734f6c69fb842491ecaf3436a",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-ai-skills-framework",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "Skills England announced the AI Skills Framework, Adoption Pathway and Employer Checklist to support AI adoption in various sectors, including for SMEs.",
+      "anchor_hash": "sha256:7f7fa3ae0422a08b8949bc90d0a65f4155c6791abddd62bc184180bdf2b368bb",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-dawn-supercomputer",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "The DSIT announced a GBP36 million injection into Cambridge's DAWN supercomputer under the AI Opportunities Action Plan to help SMEs access supercomputing capabilities.",
+      "anchor_hash": "sha256:195b4303ea701067da844435394c882e7827cddc34e74fe5340c01bd375e270f",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-free-ai-foundations-training",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "The DSIT expanded free AI foundations training for all workers, including at least 2 million employees from SMEs.",
+      "anchor_hash": "sha256:10b2d9ddb9c870de6c4b86c5f176fb9457394244bf34b85778ae91e3893dd885",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-youth-employment-ai-apprenticeship",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "Work and Pensions Secretary McFadden announced a GBP1 billion youth employment investment including an 18-month AI and automation practitioner apprenticeship.",
+      "anchor_hash": "sha256:6a31d1555cf4b6b0fec6033a430830db08cf938eb58e31d8dfb058575d623858",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-ai-upskilling-challenge-fund",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 187,
+      "quote": "The DSIT launched an GBP800,000 AI Upskilling Challenge Fund and a Healthcare Living Lab with Cisco to provide SME workers with training in the usage of AI technology.",
+      "anchor_hash": "sha256:ce1dbcf73f29f7f33eba5331f01419b175ca2f8bd4ec6141ce571df02d62a04f",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-frontier-ai-discovery",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 188,
+      "quote": "Innovate UK launched the Frontier AI Discovery funding competition, making up to GBP2.5 million available to UK organizations including SMEs for AI feasibility studies.",
+      "anchor_hash": "sha256:d6b967ba860288db770ce2352d7655d2d21b22e30822df64c6ceeeb3ddada8b7",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_kingdom-sovereign-ai-initiative",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 188,
+      "quote": "The DSIT launched the GBP500 million Sovereign AI initiative supporting domestic AI companies including startups and SMEs with direct investment, supercomputing access and one million GPU hours.",
+      "anchor_hash": "sha256:c807fd6280c47f733605e8f5cfd35f5d72444417c709a8bfa8c34c8d5b5161b4",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-ai-technology-stack-export-eo",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 188,
+      "quote": "An Executive Order established the AI Exports Program and coordinates with the Small Business Administration's Office of Investment and Innovation to channel investment into US small businesses developing AI technology.",
+      "anchor_hash": "sha256:ccddd5119ef86ae1fbb7bb805dff9635e10aad851aac8144c341204188a8b780",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-americas-ai-action-plan",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 188,
+      "quote": "America's AI Action Plan, a general strategy to accelerate US AI innovation, suggests supporting SME participation in open-source models and encourages SME access to large-scale computing power.",
+      "anchor_hash": "sha256:91b5e52edb000018ff24ff5ba9bca4d9e9f1d5954d16a6444ad0fc3af1f9615a",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-genesis-mission",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 189,
+      "quote": "The White House launched the Genesis Mission, an integrated AI platform using Federal scientific datasets, which will help private-sector businesses like SMEs automate research workflows.",
+      "anchor_hash": "sha256:d170e344e6ac0645a74669b05a6ae4a29745e8dfe0e79f3e1e025f99e1fb6446",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-dol-ai-literacy-framework",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 189,
+      "quote": "The Department of Labor released an AI Literacy Framework with five content areas and seven delivery principles to guide AI literacy across workforce systems, including SMEs.",
+      "anchor_hash": "sha256:8fb32a65478966885f42cb4e532a297670f3c98175509ab65cf5b774114d8761",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-india-summit-world-bank-fund",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 189,
+      "quote": "Michael Kratsios announced sending the US Tech Corps to partner nations and opening a World Bank fund to help countries overcome barriers to adopting AI in SMEs.",
+      "anchor_hash": "sha256:4a3bb114c20b5810b0e0e7029ae21c4d70a6b57e993139ccb2d61465051cd4f0",
+      "language": "en"
+    },
+    {
+      "id": "passage-united_states-national-policy-framework-ai",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 189,
+      "quote": "The National Policy Framework for AI calls for Congress to provide grants, tax incentives and technical assistance to support AI adoption; these measures remain in the recommendation phase.",
+      "anchor_hash": "sha256:bfea23e555686163855dbf285c95d909c23e3cc7ab1abc1d5a2ba3857bed56fe",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-act-advisory-forum",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The European Commission launched a call for stakeholders to join the AI Act Advisory Forum, a platform for SMEs to voice concerns and suggestions.",
+      "anchor_hash": "sha256:4a563867c0cea4c8574feb658f4feb8c5d5c1f0ea19a0b37d427655d18f74efb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission launched the Apply AI Strategy with sector-specific investment initiatives to support SMEs implementing and scaling AI solutions using European open-source AI.",
+      "anchor_hash": "sha256:ccc85efade3783afed1fa49ae7fb2f7402ba43252bae3267ad6245b784988b9c",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-in-science-raise",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The AI in Science strategy uses the RAISE virtual institute, with EUR600 million from Horizon Europe to support startup access to computational power.",
+      "anchor_hash": "sha256:e14229e7202b4741d4d2cfd71c33356cea9b8ad5f6f7d3edbf2d69dc2415f9de",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-act-service-desk",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission launched the AI Act Service Desk and Single Information Platform with a Compliance Checker and AI Act Explorer to help SMEs navigate AI regulations.",
+      "anchor_hash": "sha256:28bdff7fd61b5969ef7b81a38b28088b73f25a8104ad9fd74b1f4c8ca0872da7",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-factories-six-new",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission announced building six new AI Factories providing AI-optimized supercomputers and technical support to startups and SMEs.",
+      "anchor_hash": "sha256:3f7c2c3fc42e1d3925d95aa8899b70388c3dba68e1cc73f170d0a1a687faf0cb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-seventh-ai-pact-webinar",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission announced the seventh AI Pact webinar on AI Innovation for SMEs and startups, explaining how to navigate regulatory compliance.",
+      "anchor_hash": "sha256:490b45da63e0773bb3167168894dee4fe589cba500cf87c92f932098972971bb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-european-data-union-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The European Data Union Strategy increases the availability of cheap, high-quality data sets to train AI tools in SMEs and streamlines data regulations.",
+      "anchor_hash": "sha256:9f0e9f3bdfd5e750cf512e85609def194170eef439aa49ada8d9711a2ae2242b",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-manufacturing-tef",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission funded Acceleration Pipelines and Testing and Experimentation Facilities allowing SMEs to trial, validate and certify AI-enabled technologies.",
+      "anchor_hash": "sha256:3231a2f981d7e78ca7a861b558a0fdd1d2acf66ac689ce6535d7af327e111dcd",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-eesc-commercialization-call",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The European Economic and Social Committee called for rapid measures to accelerate AI commercialization for SMEs, endorsing the Apply AI Strategy.",
+      "anchor_hash": "sha256:9e755202f5bdcbd1b2ce7332d34ce029d7e7d52e9ba970d37966565b3431f419",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-framework-innovation-hubs",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission advanced the Apply AI Strategy with sector-specific measures, European Digital Innovation Hubs, AI Factories and regulatory sandboxes to boost AI adoption among SMEs.",
+      "anchor_hash": "sha256:63c7bc9f304bb9602071e92f6be75d147dd235949dd520b80779f41ec86464df",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-continent-action-plan",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 192,
+      "quote": "The AI Continent Action Plan expands AI computing infrastructure through AI Factories and Gigafactories and supports AI adoption among enterprises via the AI Skills Academy and Digital Innovation Hubs.",
+      "anchor_hash": "sha256:4fc9f23493968279944b23dd4fea4611b47dced67ef44a9f26a7f841cec3658e",
+      "language": "en"
+    }
+  ]
+}

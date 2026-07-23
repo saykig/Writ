@@ -1,0 +1,808 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot": {
+    "id": "snapshot-european_union-ai-sme-2025",
+    "frozen_at": "2026-06-13T00:00:00Z",
+    "cutoff": "2026-06-01T00:00:00Z",
+    "content_hash": "sha256:c7b9a8cb66d8e1dbb81df4c574bd0b46fca32694eaec0d6333b4cbb72abf5639",
+    "description": "Reviewed AI-for-SMEs evidence for European Union, 2025 G7 Kananaskis final compliance chapter 4."
+  },
+  "document_versions": [
+    {
+      "id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "document_id": "doc-g7-2025-kananaskis-final-compliance",
+      "uri": "https://www.g7.utoronto.ca/evaluations/2025compliance-final/04-2025-G7-final-compliance-ai.pdf",
+      "media_type": "application/pdf",
+      "retrieved_at": "2026-07-01T00:00:00Z",
+      "issued_at": "2026-06-13T00:00:00Z",
+      "sha256": "sha256:9e88bb3633d97fe906405f23f63031416c3ea4cf75d8cbc916685ea552e2c85a",
+      "publisher": "G7 Research Group",
+      "source_tier": 2
+    }
+  ],
+  "passages": [
+    {
+      "id": "passage-european_union-ai-act-advisory-forum",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The European Commission launched a call for stakeholders to join the AI Act Advisory Forum, a platform for SMEs to voice concerns and suggestions.",
+      "anchor_hash": "sha256:4a563867c0cea4c8574feb658f4feb8c5d5c1f0ea19a0b37d427655d18f74efb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission launched the Apply AI Strategy with sector-specific investment initiatives to support SMEs implementing and scaling AI solutions using European open-source AI.",
+      "anchor_hash": "sha256:ccc85efade3783afed1fa49ae7fb2f7402ba43252bae3267ad6245b784988b9c",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-in-science-raise",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The AI in Science strategy uses the RAISE virtual institute, with EUR600 million from Horizon Europe to support startup access to computational power.",
+      "anchor_hash": "sha256:e14229e7202b4741d4d2cfd71c33356cea9b8ad5f6f7d3edbf2d69dc2415f9de",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-act-service-desk",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission launched the AI Act Service Desk and Single Information Platform with a Compliance Checker and AI Act Explorer to help SMEs navigate AI regulations.",
+      "anchor_hash": "sha256:28bdff7fd61b5969ef7b81a38b28088b73f25a8104ad9fd74b1f4c8ca0872da7",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-factories-six-new",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 190,
+      "quote": "The Commission announced building six new AI Factories providing AI-optimized supercomputers and technical support to startups and SMEs.",
+      "anchor_hash": "sha256:3f7c2c3fc42e1d3925d95aa8899b70388c3dba68e1cc73f170d0a1a687faf0cb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-seventh-ai-pact-webinar",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission announced the seventh AI Pact webinar on AI Innovation for SMEs and startups, explaining how to navigate regulatory compliance.",
+      "anchor_hash": "sha256:490b45da63e0773bb3167168894dee4fe589cba500cf87c92f932098972971bb",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-european-data-union-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The European Data Union Strategy increases the availability of cheap, high-quality data sets to train AI tools in SMEs and streamlines data regulations.",
+      "anchor_hash": "sha256:9f0e9f3bdfd5e750cf512e85609def194170eef439aa49ada8d9711a2ae2242b",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-manufacturing-tef",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission funded Acceleration Pipelines and Testing and Experimentation Facilities allowing SMEs to trial, validate and certify AI-enabled technologies.",
+      "anchor_hash": "sha256:3231a2f981d7e78ca7a861b558a0fdd1d2acf66ac689ce6535d7af327e111dcd",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-eesc-commercialization-call",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The European Economic and Social Committee called for rapid measures to accelerate AI commercialization for SMEs, endorsing the Apply AI Strategy.",
+      "anchor_hash": "sha256:9e755202f5bdcbd1b2ce7332d34ce029d7e7d52e9ba970d37966565b3431f419",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-apply-ai-framework-innovation-hubs",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 191,
+      "quote": "The Commission advanced the Apply AI Strategy with sector-specific measures, European Digital Innovation Hubs, AI Factories and regulatory sandboxes to boost AI adoption among SMEs.",
+      "anchor_hash": "sha256:63c7bc9f304bb9602071e92f6be75d147dd235949dd520b80779f41ec86464df",
+      "language": "en"
+    },
+    {
+      "id": "passage-european_union-ai-continent-action-plan",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 192,
+      "quote": "The AI Continent Action Plan expands AI computing infrastructure through AI Factories and Gigafactories and supports AI adoption among enterprises via the AI Skills Academy and Digital Innovation Hubs.",
+      "anchor_hash": "sha256:4fc9f23493968279944b23dd4fea4611b47dced67ef44a9f26a7f841cec3658e",
+      "language": "en"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-european_union-ai-act-advisory-forum",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-ai-act-advisory-forum",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-07-17T00:00:00Z"
+      },
+      "recorded_at": "2025-07-17T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-ai-act-advisory-forum",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-apply-ai-strategy",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-apply-ai-strategy",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "recorded_at": "2025-10-08T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-apply-ai-strategy",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-ai-in-science-raise",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-ai-in-science-raise",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "recorded_at": "2025-10-08T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-ai-in-science-raise",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-ai-act-service-desk",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-ai-act-service-desk",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "recorded_at": "2025-10-08T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-ai-act-service-desk",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-ai-factories-six-new",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-ai-factories-six-new",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-10-10T00:00:00Z"
+      },
+      "recorded_at": "2025-10-10T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-ai-factories-six-new",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-seventh-ai-pact-webinar",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-seventh-ai-pact-webinar",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-10-21T00:00:00Z"
+      },
+      "recorded_at": "2025-10-21T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-seventh-ai-pact-webinar",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-european-data-union-strategy",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-european-data-union-strategy",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-19T00:00:00Z"
+      },
+      "recorded_at": "2025-11-19T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-european-data-union-strategy",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-apply-ai-manufacturing-tef",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-apply-ai-manufacturing-tef",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-28T00:00:00Z"
+      },
+      "recorded_at": "2025-11-28T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-apply-ai-manufacturing-tef",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-eesc-commercialization-call",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-eesc-commercialization-call",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-01-21T00:00:00Z"
+      },
+      "recorded_at": "2026-01-21T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-eesc-commercialization-call",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-apply-ai-framework-innovation-hubs",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-apply-ai-framework-innovation-hubs",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-03-27T00:00:00Z"
+      },
+      "recorded_at": "2026-03-27T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-apply-ai-framework-innovation-hubs",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-european_union-ai-continent-action-plan",
+      "claim_type": "fact",
+      "subject_ref": "action-european_union-ai-continent-action-plan",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-04-09T00:00:00Z"
+      },
+      "recorded_at": "2026-04-09T00:00:00Z",
+      "created_by": "jeanne-brownewell",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-european_union-ai-continent-action-plan",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action-european_union-ai-act-advisory-forum",
+      "label": "AI Act Advisory Forum call",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "advisory_forum",
+      "instrument_type": "advisory_forum",
+      "announcement_time": "2025-07-17T00:00:00Z",
+      "valid_time": {
+        "start": "2025-07-17T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "indirect",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-ai-act-advisory-forum",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-ai-act-advisory-forum"]
+    },
+    {
+      "id": "action-european_union-apply-ai-strategy",
+      "label": "Apply AI Strategy",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "strategy_document",
+      "instrument_type": "strategy_document",
+      "announcement_time": "2025-10-08T00:00:00Z",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "implementation_stage": "launched",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-apply-ai-strategy",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-apply-ai-strategy"]
+    },
+    {
+      "id": "action-european_union-ai-in-science-raise",
+      "label": "AI in Science strategy + RAISE (EUR600M Horizon compute)",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "compute_funding_program",
+      "instrument_type": "compute_funding_program",
+      "announcement_time": "2025-10-08T00:00:00Z",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "implementation_stage": "funded",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-ai-in-science-raise",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-ai-in-science-raise"],
+      "amounts": [
+        {
+          "value": "600000000",
+          "currency": "EUR",
+          "bound": "at_least"
+        }
+      ]
+    },
+    {
+      "id": "action-european_union-ai-act-service-desk",
+      "label": "AI Act Service Desk and Single Information Platform",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "toolkit",
+      "instrument_type": "toolkit",
+      "announcement_time": "2025-10-08T00:00:00Z",
+      "valid_time": {
+        "start": "2025-10-08T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-ai-act-service-desk",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-ai-act-service-desk"]
+    },
+    {
+      "id": "action-european_union-ai-factories-six-new",
+      "label": "Six new AI Factories",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2025-10-10T00:00:00Z",
+      "valid_time": {
+        "start": "2025-10-10T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-ai-factories-six-new",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-ai-factories-six-new"]
+    },
+    {
+      "id": "action-european_union-seventh-ai-pact-webinar",
+      "label": "Seventh AI Pact webinar for SMEs",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "webinar",
+      "instrument_type": "webinar",
+      "announcement_time": "2025-10-21T00:00:00Z",
+      "valid_time": {
+        "start": "2025-10-21T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "indirect",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-seventh-ai-pact-webinar",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-seventh-ai-pact-webinar"]
+    },
+    {
+      "id": "action-european_union-european-data-union-strategy",
+      "label": "European Data Union Strategy",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "data_infrastructure",
+      "instrument_type": "data_infrastructure",
+      "announcement_time": "2025-11-19T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-19T00:00:00Z"
+      },
+      "implementation_stage": "launched",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-european-data-union-strategy",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-european-data-union-strategy"]
+    },
+    {
+      "id": "action-european_union-apply-ai-manufacturing-tef",
+      "label": "Apply AI manufacturing actions + Testing and Experimentation Facilities",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2025-11-28T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-28T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-apply-ai-manufacturing-tef",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-apply-ai-manufacturing-tef"]
+    },
+    {
+      "id": "action-european_union-eesc-commercialization-call",
+      "label": "EESC call for AI commercialization measures",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "advisory_opinion",
+      "instrument_type": "advisory_opinion",
+      "announcement_time": "2026-01-21T00:00:00Z",
+      "valid_time": {
+        "start": "2026-01-21T00:00:00Z"
+      },
+      "implementation_stage": "proposed",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "indirect",
+      "attribution": "external",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-eesc-commercialization-call",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-eesc-commercialization-call"]
+    },
+    {
+      "id": "action-european_union-apply-ai-framework-innovation-hubs",
+      "label": "Apply AI Strategy framework + European Digital Innovation Hubs",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "policy_framework",
+      "instrument_type": "policy_framework",
+      "announcement_time": "2026-03-27T00:00:00Z",
+      "valid_time": {
+        "start": "2026-03-27T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-apply-ai-framework-innovation-hubs",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-apply-ai-framework-innovation-hubs"]
+    },
+    {
+      "id": "action-european_union-ai-continent-action-plan",
+      "label": "AI Continent Action Plan",
+      "actors": ["European Union"],
+      "jurisdiction": "European Union",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2026-04-09T00:00:00Z",
+      "valid_time": {
+        "start": "2026-04-09T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "materially_inclusive",
+      "attribution": "unilateral",
+      "program_family_id": "eu-ai-sme",
+      "underlying_instrument_id": "eu-ai-continent-action-plan",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-european_union-ai-continent-action-plan"]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-claim-european_union-ai-act-advisory-forum",
+      "object_type": "claim",
+      "object_id": "claim-european_union-ai-act-advisory-forum",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for AI Act Advisory Forum call (report p.190, fn.990).",
+      "created_at": "2025-07-17T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-ai-act-advisory-forum",
+      "object_type": "action",
+      "object_id": "action-european_union-ai-act-advisory-forum",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.190.",
+      "created_at": "2025-07-17T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-apply-ai-strategy",
+      "object_type": "claim",
+      "object_id": "claim-european_union-apply-ai-strategy",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Apply AI Strategy (report p.190, fn.991).",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-apply-ai-strategy",
+      "object_type": "action",
+      "object_id": "action-european_union-apply-ai-strategy",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.190.",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-ai-in-science-raise",
+      "object_type": "claim",
+      "object_id": "claim-european_union-ai-in-science-raise",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for AI in Science strategy + RAISE (EUR600M Horizon compute) (report p.190, fn.992).",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-ai-in-science-raise",
+      "object_type": "action",
+      "object_id": "action-european_union-ai-in-science-raise",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.190.",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-ai-act-service-desk",
+      "object_type": "claim",
+      "object_id": "claim-european_union-ai-act-service-desk",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for AI Act Service Desk and Single Information Platform (report p.190, fn.993).",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-ai-act-service-desk",
+      "object_type": "action",
+      "object_id": "action-european_union-ai-act-service-desk",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.190.",
+      "created_at": "2025-10-08T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-ai-factories-six-new",
+      "object_type": "claim",
+      "object_id": "claim-european_union-ai-factories-six-new",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Six new AI Factories (report p.190, fn.994).",
+      "created_at": "2025-10-10T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-ai-factories-six-new",
+      "object_type": "action",
+      "object_id": "action-european_union-ai-factories-six-new",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.190.",
+      "created_at": "2025-10-10T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-seventh-ai-pact-webinar",
+      "object_type": "claim",
+      "object_id": "claim-european_union-seventh-ai-pact-webinar",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for Seventh AI Pact webinar for SMEs (report p.191, fn.995).",
+      "created_at": "2025-10-21T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-seventh-ai-pact-webinar",
+      "object_type": "action",
+      "object_id": "action-european_union-seventh-ai-pact-webinar",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.191.",
+      "created_at": "2025-10-21T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-european-data-union-strategy",
+      "object_type": "claim",
+      "object_id": "claim-european_union-european-data-union-strategy",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for European Data Union Strategy (report p.191, fn.996).",
+      "created_at": "2025-11-19T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-european-data-union-strategy",
+      "object_type": "action",
+      "object_id": "action-european_union-european-data-union-strategy",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.191.",
+      "created_at": "2025-11-19T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-apply-ai-manufacturing-tef",
+      "object_type": "claim",
+      "object_id": "claim-european_union-apply-ai-manufacturing-tef",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Apply AI manufacturing actions + Testing and Experimentation Facilities (report p.191, fn.997).",
+      "created_at": "2025-11-28T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-apply-ai-manufacturing-tef",
+      "object_type": "action",
+      "object_id": "action-european_union-apply-ai-manufacturing-tef",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.191.",
+      "created_at": "2025-11-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-eesc-commercialization-call",
+      "object_type": "claim",
+      "object_id": "claim-european_union-eesc-commercialization-call",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for EESC call for AI commercialization measures (report p.191, fn.998).",
+      "created_at": "2026-01-21T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-eesc-commercialization-call",
+      "object_type": "action",
+      "object_id": "action-european_union-eesc-commercialization-call",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.191.",
+      "created_at": "2026-01-21T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-apply-ai-framework-innovation-hubs",
+      "object_type": "claim",
+      "object_id": "claim-european_union-apply-ai-framework-innovation-hubs",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Apply AI Strategy framework + European Digital Innovation Hubs (report p.191, fn.999).",
+      "created_at": "2026-03-27T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-apply-ai-framework-innovation-hubs",
+      "object_type": "action",
+      "object_id": "action-european_union-apply-ai-framework-innovation-hubs",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.191.",
+      "created_at": "2026-03-27T00:00:00Z"
+    },
+    {
+      "id": "review-claim-european_union-ai-continent-action-plan",
+      "object_type": "claim",
+      "object_id": "claim-european_union-ai-continent-action-plan",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for AI Continent Action Plan (report p.192, fn.1000).",
+      "created_at": "2026-04-09T00:00:00Z"
+    },
+    {
+      "id": "review-action-european_union-ai-continent-action-plan",
+      "object_type": "action",
+      "object_id": "action-european_union-ai-continent-action-plan",
+      "reviewer_id": "jeanne-brownewell",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.192.",
+      "created_at": "2026-04-09T00:00:00Z"
+    }
+  ]
+}

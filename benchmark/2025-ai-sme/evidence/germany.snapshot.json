@@ -1,0 +1,808 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot": {
+    "id": "snapshot-germany-ai-sme-2025",
+    "frozen_at": "2026-06-13T00:00:00Z",
+    "cutoff": "2026-06-01T00:00:00Z",
+    "content_hash": "sha256:1544fec423646262d16ef69af802cc1b8ea386500bc196064658f11a57e6e681",
+    "description": "Reviewed AI-for-SMEs evidence for Germany, 2025 G7 Kananaskis final compliance chapter 4."
+  },
+  "document_versions": [
+    {
+      "id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "document_id": "doc-g7-2025-kananaskis-final-compliance",
+      "uri": "https://www.g7.utoronto.ca/evaluations/2025compliance-final/04-2025-G7-final-compliance-ai.pdf",
+      "media_type": "application/pdf",
+      "retrieved_at": "2026-07-01T00:00:00Z",
+      "issued_at": "2026-06-13T00:00:00Z",
+      "sha256": "sha256:9e88bb3633d97fe906405f23f63031416c3ea4cf75d8cbc916685ea552e2c85a",
+      "publisher": "G7 Research Group",
+      "source_tier": 2
+    }
+  ],
+  "passages": [
+    {
+      "id": "passage-germany-bmz-data-strategy",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The BMZ Data Strategy announced a ministry-wide plan to introduce AI in administration and data analysis, but was based on data collected in September 2024, indicating limited recent progress.",
+      "anchor_hash": "sha256:415f0b6c8078c1cc1ebae1bf1d7c5406d1a21c9d32fc22a17323db579cfa6951",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-mittelstand-digital-congress",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The Mittelstand Digital Congress had AI experts educate SMEs on how to safely integrate AI technology into their businesses.",
+      "anchor_hash": "sha256:3df8455c321d8dcf9e59bfdd02bde40c74b7fcc61faa757ac6ded6d977658707",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-european-digital-sovereignty-summit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "Germany and France co-hosted the European Summit on Digital Sovereignty in Berlin with over 1,000 participants including digital ministers from 23 EU member states.",
+      "anchor_hash": "sha256:d9a05460f2a02be1b0d9196888c9563d23a62da9bf2395b31086382300cecbf7",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-canada-germany-digital-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "Minister Wildberger and Minister Solomon advanced a Canada-Germany Digital Alliance committing to a Joint Declaration of Intent on AI covering compute infrastructure, AI adoption and talent mobility, including SMEs.",
+      "anchor_hash": "sha256:a48d8b5b7a3cef5fee5d0ebe3a86b09f6eed2f18991865e9497ada96ee995ecb",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-sme-ai-adoption-blueprint",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 179,
+      "quote": "The G7 SME AI Adoption Blueprint set out coordinated measures and financial supports for resilient SME-focused AI adoption ecosystems.",
+      "anchor_hash": "sha256:f72484971113742e51dfe5556fac9f6632e314878c1779c91076977cc915f05b",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-g7-sme-ai-toolkit",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "The G7 published the Toolkit for Small- and Medium-Sized Enterprises Deploying Artificial Intelligence with tailored resources for SME AI deployers.",
+      "anchor_hash": "sha256:0f09e572722197c12f4390266268d0771a06a0bd3f13cf07b7135840854ddc45",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-eif-german-equity",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "The BMWE and the European Investment Fund expanded the EIF German Equity program, providing EUR1.6 billion in additional financing for technology-based startups and SMEs.",
+      "anchor_hash": "sha256:cc6b3d610a26f65be0b7668fff3a2c75c022e3a1e2ceee2f65989d4acf6b933f",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-canada-germany-jdi-sovereign-alliance",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "Canada and Germany signed a Joint Declaration of Intent on AI and launched the Sovereign Technology Alliance, although they do not provide direct, targeted support for SME AI adoption.",
+      "anchor_hash": "sha256:f012258c464a944722fb9e0029b1b7a7c77f0fd907b4379b26a3e8a5f48ba638",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-india-germany-ai-pact",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 180,
+      "quote": "Ministers Wildberger and Vaishnaw agreed to establish the India-Germany AI Pact, aiming to increase the rapid adoption of AI for start-ups, tech firms and SMEs.",
+      "anchor_hash": "sha256:dc572512be1ac8d85666859850943c08e86a22dd0d3cef2037e3067c40688771",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-ai-funding-guideline-consultation",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "The Federal Ministry for Digital Affairs initiated a public consultation for SMEs, research centers and public institutions to create a funding guideline promoting AI for commercial applications.",
+      "anchor_hash": "sha256:bc99eada8e10c34b005028baa040febf1adcc3b65c1bf600ebc5fc2ec293f015",
+      "language": "en"
+    },
+    {
+      "id": "passage-germany-zukunftstag-mittelstand",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 181,
+      "quote": "The Zukunftstag Mittelstand 2026 showcased practical AI and data solutions and digital transformation tools tailored to SMEs to advance adoption of AI, cloud computing and digital infrastructure.",
+      "anchor_hash": "sha256:4917c4dec02b7325da57f7a2aa089b80e1142b69e169c6dbaff2dbad4b95e770",
+      "language": "en"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-germany-bmz-data-strategy",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-bmz-data-strategy",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-09-30T00:00:00Z"
+      },
+      "recorded_at": "2025-09-30T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-bmz-data-strategy",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-mittelstand-digital-congress",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-mittelstand-digital-congress",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-13T00:00:00Z"
+      },
+      "recorded_at": "2025-11-13T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-mittelstand-digital-congress",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-european-digital-sovereignty-summit",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-european-digital-sovereignty-summit",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-18T00:00:00Z"
+      },
+      "recorded_at": "2025-11-18T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-european-digital-sovereignty-summit",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-canada-germany-digital-alliance",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-canada-germany-digital-alliance",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-12-08T00:00:00Z"
+      },
+      "recorded_at": "2025-12-08T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-canada-germany-digital-alliance",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-sme-ai-adoption-blueprint",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-sme-ai-adoption-blueprint",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-12-09T00:00:00Z"
+      },
+      "recorded_at": "2025-12-09T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-sme-ai-adoption-blueprint",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-g7-sme-ai-toolkit",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-g7-sme-ai-toolkit",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-12-09T00:00:00Z"
+      },
+      "recorded_at": "2025-12-09T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-g7-sme-ai-toolkit",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-eif-german-equity",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-eif-german-equity",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-01-13T00:00:00Z"
+      },
+      "recorded_at": "2026-01-13T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-eif-german-equity",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-canada-germany-jdi-sovereign-alliance",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-canada-germany-jdi-sovereign-alliance",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-02-14T00:00:00Z"
+      },
+      "recorded_at": "2026-02-14T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-canada-germany-jdi-sovereign-alliance",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-india-germany-ai-pact",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-india-germany-ai-pact",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-02-18T00:00:00Z"
+      },
+      "recorded_at": "2026-02-18T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-india-germany-ai-pact",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-ai-funding-guideline-consultation",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-ai-funding-guideline-consultation",
+      "predicate": "rubric_classification",
+      "object": "weak",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-03-02T00:00:00Z"
+      },
+      "recorded_at": "2026-03-02T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-ai-funding-guideline-consultation",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-germany-zukunftstag-mittelstand",
+      "claim_type": "fact",
+      "subject_ref": "action-germany-zukunftstag-mittelstand",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-04-15T00:00:00Z"
+      },
+      "recorded_at": "2026-04-15T00:00:00Z",
+      "created_by": "ece-onal",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-germany-zukunftstag-mittelstand",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action-germany-bmz-data-strategy",
+      "label": "BMZ Data Strategy (based on Sept 2024 data)",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "strategy_document",
+      "instrument_type": "strategy_document",
+      "announcement_time": "2025-09-30T00:00:00Z",
+      "valid_time": {
+        "start": "2025-09-30T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "general",
+      "attribution": "unilateral",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-bmz-data-strategy",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-bmz-data-strategy"]
+    },
+    {
+      "id": "action-germany-mittelstand-digital-congress",
+      "label": "Mittelstand Digital Congress 2025",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "training_program",
+      "instrument_type": "training_program",
+      "announcement_time": "2025-11-13T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-13T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-mittelstand-digital-congress",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-mittelstand-digital-congress"]
+    },
+    {
+      "id": "action-germany-european-digital-sovereignty-summit",
+      "label": "European Summit on Digital Sovereignty (Berlin)",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "conference",
+      "instrument_type": "conference",
+      "announcement_time": "2025-11-18T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-18T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "general",
+      "attribution": "joint",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-european-digital-sovereignty-summit",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-european-digital-sovereignty-summit"]
+    },
+    {
+      "id": "action-germany-canada-germany-digital-alliance",
+      "label": "Canada-Germany Digital Alliance joint statement",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "partnership",
+      "instrument_type": "partnership",
+      "announcement_time": "2025-12-08T00:00:00Z",
+      "valid_time": {
+        "start": "2025-12-08T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "materially_inclusive",
+      "attribution": "joint",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-canada-germany-digital-alliance",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-canada-germany-digital-alliance"]
+    },
+    {
+      "id": "action-germany-sme-ai-adoption-blueprint",
+      "label": "SME AI Adoption Blueprint (G7 statement)",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "policy_framework",
+      "instrument_type": "policy_framework",
+      "announcement_time": "2025-12-09T00:00:00Z",
+      "valid_time": {
+        "start": "2025-12-09T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "collective",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-sme-ai-adoption-blueprint",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-sme-ai-adoption-blueprint"]
+    },
+    {
+      "id": "action-germany-g7-sme-ai-toolkit",
+      "label": "Toolkit for SMEs Deploying AI",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "toolkit",
+      "instrument_type": "toolkit",
+      "announcement_time": "2025-12-09T00:00:00Z",
+      "valid_time": {
+        "start": "2025-12-09T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "collective",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-g7-sme-ai-toolkit",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-g7-sme-ai-toolkit"]
+    },
+    {
+      "id": "action-germany-eif-german-equity",
+      "label": "EIF German Equity program (EUR1.6B for startups + SMEs)",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "financing_program",
+      "instrument_type": "financing_program",
+      "announcement_time": "2026-01-13T00:00:00Z",
+      "valid_time": {
+        "start": "2026-01-13T00:00:00Z"
+      },
+      "implementation_stage": "funded",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "joint",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-eif-german-equity",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-eif-german-equity"],
+      "amounts": [
+        {
+          "value": "1600000000",
+          "currency": "EUR",
+          "bound": "at_least"
+        }
+      ]
+    },
+    {
+      "id": "action-germany-canada-germany-jdi-sovereign-alliance",
+      "label": "Canada-Germany Joint Declaration of Intent on AI + Sovereign Technology Alliance",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "partnership",
+      "instrument_type": "partnership",
+      "announcement_time": "2026-02-14T00:00:00Z",
+      "valid_time": {
+        "start": "2026-02-14T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "indirect",
+      "attribution": "joint",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-canada-germany-jdi-sovereign-alliance",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-canada-germany-jdi-sovereign-alliance"]
+    },
+    {
+      "id": "action-germany-india-germany-ai-pact",
+      "label": "India-Germany AI Pact",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "partnership",
+      "instrument_type": "partnership",
+      "announcement_time": "2026-02-18T00:00:00Z",
+      "valid_time": {
+        "start": "2026-02-18T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "materially_inclusive",
+      "attribution": "joint",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-india-germany-ai-pact",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-india-germany-ai-pact"]
+    },
+    {
+      "id": "action-germany-ai-funding-guideline-consultation",
+      "label": "Public consultation on an AI funding guideline",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "consultation",
+      "instrument_type": "consultation",
+      "announcement_time": "2026-03-02T00:00:00Z",
+      "valid_time": {
+        "start": "2026-03-02T00:00:00Z"
+      },
+      "implementation_stage": "proposed",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "indirect",
+      "attribution": "unilateral",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-ai-funding-guideline-consultation",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-ai-funding-guideline-consultation"]
+    },
+    {
+      "id": "action-germany-zukunftstag-mittelstand",
+      "label": "Zukunftstag Mittelstand 2026",
+      "actors": ["Germany"],
+      "jurisdiction": "Germany",
+      "kind": "training_program",
+      "instrument_type": "training_program",
+      "announcement_time": "2026-04-15T00:00:00Z",
+      "valid_time": {
+        "start": "2026-04-15T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "de-ai-sme",
+      "underlying_instrument_id": "de-zukunftstag-mittelstand",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-germany-zukunftstag-mittelstand"]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-claim-germany-bmz-data-strategy",
+      "object_type": "claim",
+      "object_id": "claim-germany-bmz-data-strategy",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for BMZ Data Strategy (based on Sept 2024 data) (report p.179, fn.941).",
+      "created_at": "2025-09-30T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-bmz-data-strategy",
+      "object_type": "action",
+      "object_id": "action-germany-bmz-data-strategy",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.179.",
+      "created_at": "2025-09-30T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-mittelstand-digital-congress",
+      "object_type": "claim",
+      "object_id": "claim-germany-mittelstand-digital-congress",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Mittelstand Digital Congress 2025 (report p.179, fn.942).",
+      "created_at": "2025-11-13T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-mittelstand-digital-congress",
+      "object_type": "action",
+      "object_id": "action-germany-mittelstand-digital-congress",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.179.",
+      "created_at": "2025-11-13T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-european-digital-sovereignty-summit",
+      "object_type": "claim",
+      "object_id": "claim-germany-european-digital-sovereignty-summit",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for European Summit on Digital Sovereignty (Berlin) (report p.179, fn.943).",
+      "created_at": "2025-11-18T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-european-digital-sovereignty-summit",
+      "object_type": "action",
+      "object_id": "action-germany-european-digital-sovereignty-summit",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.179.",
+      "created_at": "2025-11-18T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-canada-germany-digital-alliance",
+      "object_type": "claim",
+      "object_id": "claim-germany-canada-germany-digital-alliance",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Canada-Germany Digital Alliance joint statement (report p.179, fn.944).",
+      "created_at": "2025-12-08T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-canada-germany-digital-alliance",
+      "object_type": "action",
+      "object_id": "action-germany-canada-germany-digital-alliance",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.179.",
+      "created_at": "2025-12-08T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-sme-ai-adoption-blueprint",
+      "object_type": "claim",
+      "object_id": "claim-germany-sme-ai-adoption-blueprint",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for SME AI Adoption Blueprint (G7 statement) (report p.179, fn.945).",
+      "created_at": "2025-12-09T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-sme-ai-adoption-blueprint",
+      "object_type": "action",
+      "object_id": "action-germany-sme-ai-adoption-blueprint",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.179.",
+      "created_at": "2025-12-09T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-g7-sme-ai-toolkit",
+      "object_type": "claim",
+      "object_id": "claim-germany-g7-sme-ai-toolkit",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Toolkit for SMEs Deploying AI (report p.180, fn.946).",
+      "created_at": "2025-12-09T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-g7-sme-ai-toolkit",
+      "object_type": "action",
+      "object_id": "action-germany-g7-sme-ai-toolkit",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.180.",
+      "created_at": "2025-12-09T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-eif-german-equity",
+      "object_type": "claim",
+      "object_id": "claim-germany-eif-german-equity",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for EIF German Equity program (EUR1.6B for startups + SMEs) (report p.180, fn.947).",
+      "created_at": "2026-01-13T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-eif-german-equity",
+      "object_type": "action",
+      "object_id": "action-germany-eif-german-equity",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.180.",
+      "created_at": "2026-01-13T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-canada-germany-jdi-sovereign-alliance",
+      "object_type": "claim",
+      "object_id": "claim-germany-canada-germany-jdi-sovereign-alliance",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for Canada-Germany Joint Declaration of Intent on AI + Sovereign Technology Alliance (report p.180, fn.948).",
+      "created_at": "2026-02-14T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-canada-germany-jdi-sovereign-alliance",
+      "object_type": "action",
+      "object_id": "action-germany-canada-germany-jdi-sovereign-alliance",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.180.",
+      "created_at": "2026-02-14T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-india-germany-ai-pact",
+      "object_type": "claim",
+      "object_id": "claim-germany-india-germany-ai-pact",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for India-Germany AI Pact (report p.180, fn.949).",
+      "created_at": "2026-02-18T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-india-germany-ai-pact",
+      "object_type": "action",
+      "object_id": "action-germany-india-germany-ai-pact",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.180.",
+      "created_at": "2026-02-18T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-ai-funding-guideline-consultation",
+      "object_type": "claim",
+      "object_id": "claim-germany-ai-funding-guideline-consultation",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"weak\" for Public consultation on an AI funding guideline (report p.181, fn.950).",
+      "created_at": "2026-03-02T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-ai-funding-guideline-consultation",
+      "object_type": "action",
+      "object_id": "action-germany-ai-funding-guideline-consultation",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.181.",
+      "created_at": "2026-03-02T00:00:00Z"
+    },
+    {
+      "id": "review-claim-germany-zukunftstag-mittelstand",
+      "object_type": "claim",
+      "object_id": "claim-germany-zukunftstag-mittelstand",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Zukunftstag Mittelstand 2026 (report p.181, fn.951).",
+      "created_at": "2026-04-15T00:00:00Z"
+    },
+    {
+      "id": "review-action-germany-zukunftstag-mittelstand",
+      "object_type": "action",
+      "object_id": "action-germany-zukunftstag-mittelstand",
+      "reviewer_id": "ece-onal",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.181.",
+      "created_at": "2026-04-15T00:00:00Z"
+    }
+  ]
+}

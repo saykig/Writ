@@ -1,0 +1,535 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot": {
+    "id": "snapshot-france-ai-sme-2025",
+    "frozen_at": "2026-06-13T00:00:00Z",
+    "cutoff": "2026-06-01T00:00:00Z",
+    "content_hash": "sha256:9f32cbe83f8f2f2705219081360bfe3a1ebb3af6028f88c57f642299d74706f5",
+    "description": "Reviewed AI-for-SMEs evidence for France, 2025 G7 Kananaskis final compliance chapter 4."
+  },
+  "document_versions": [
+    {
+      "id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "document_id": "doc-g7-2025-kananaskis-final-compliance",
+      "uri": "https://www.g7.utoronto.ca/evaluations/2025compliance-final/04-2025-G7-final-compliance-ai.pdf",
+      "media_type": "application/pdf",
+      "retrieved_at": "2026-07-01T00:00:00Z",
+      "issued_at": "2026-06-13T00:00:00Z",
+      "sha256": "sha256:9e88bb3633d97fe906405f23f63031416c3ea4cf75d8cbc916685ea552e2c85a",
+      "publisher": "G7 Research Group",
+      "source_tier": 2
+    }
+  ],
+  "passages": [
+    {
+      "id": "passage-france-ai-pioneers",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "France launched the AI Pioneers program financing domestic project proposals, providing between EUR3 million and EUR8 million to selected enterprises over three years.",
+      "anchor_hash": "sha256:4d6ed71845c499857d6303c0232a4b86fd08146a8eb1319620f1a3ccccbb05be",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-osez-lia",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "The Osez l'IA plan accelerates AI adoption in SMEs through networking events, an AI academy training professionals, and help identifying relevant AI solutions.",
+      "anchor_hash": "sha256:c5e9099dbbf12e03f556dd4f5623a61aaeec83556a24a9f77e3b2e7a3de6ad91",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-ai-academy-small-business",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "An action plan to revitalize small businesses added an AI Academy letting SMEs access user-friendly AI tools with a network of ambassadors.",
+      "anchor_hash": "sha256:a1f2a0f5224248e7a6bd097586d31b49898fb7c56929d679c0378143a4e87750",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-piiec-ai-innovation",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 177,
+      "quote": "France launched the PIIEC framework letting EU member states finance private AI innovation projects, helping local French SMEs access funding for advanced AI technology.",
+      "anchor_hash": "sha256:85b6d697b69917622d93e93a50564eb3342d378ca7ad1e785e97e77a15654dda",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-data-center-sme-deployment",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "Minister Le Henanff reconvened stakeholders on increasing AI adoption in SMEs through data center sites, providing support to 52 companies implementing AI.",
+      "anchor_hash": "sha256:6472a9cac9436e8cc46b3918bc2054f7ad7aa689eee769f31d7401bbdd2cc60e",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-bull-acquisition",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "France announced the state's EUR404 million acquisition of the AI computing brand Bull to facilitate AI integration into SMEs.",
+      "anchor_hash": "sha256:8b9d247a4ea74d0461334358a1e2e9222419e1d0e106f6fdd89e42114f3ff0c7",
+      "language": "en"
+    },
+    {
+      "id": "passage-france-amd-compute-loi",
+      "document_version_id": "dv-g7-2025-kananaskis-ai-sme-ch4",
+      "anchor_type": "pdf_text",
+      "page_number": 178,
+      "quote": "France and AMD signed a letter of intent to expand access to AI compute, supporting the Alice Recoque exascale supercomputer with hardware, software and training for startups.",
+      "anchor_hash": "sha256:2484d1f56a18a0be29a0a40dce4ccfc97339fb27c650ae201f1994c3edd016c3",
+      "language": "en"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-france-ai-pioneers",
+      "claim_type": "fact",
+      "subject_ref": "action-france-ai-pioneers",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-09-18T00:00:00Z"
+      },
+      "recorded_at": "2025-09-18T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-ai-pioneers",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-osez-lia",
+      "claim_type": "fact",
+      "subject_ref": "action-france-osez-lia",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-09-18T00:00:00Z"
+      },
+      "recorded_at": "2025-09-18T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-osez-lia",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-ai-academy-small-business",
+      "claim_type": "fact",
+      "subject_ref": "action-france-ai-academy-small-business",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-07T00:00:00Z"
+      },
+      "recorded_at": "2025-11-07T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-ai-academy-small-business",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-piiec-ai-innovation",
+      "claim_type": "fact",
+      "subject_ref": "action-france-piiec-ai-innovation",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-11-26T00:00:00Z"
+      },
+      "recorded_at": "2025-11-26T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-piiec-ai-innovation",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-data-center-sme-deployment",
+      "claim_type": "fact",
+      "subject_ref": "action-france-data-center-sme-deployment",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-01-30T00:00:00Z"
+      },
+      "recorded_at": "2026-01-30T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-data-center-sme-deployment",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-bull-acquisition",
+      "claim_type": "fact",
+      "subject_ref": "action-france-bull-acquisition",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-03-31T00:00:00Z"
+      },
+      "recorded_at": "2026-03-31T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-bull-acquisition",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-france-amd-compute-loi",
+      "claim_type": "fact",
+      "subject_ref": "action-france-amd-compute-loi",
+      "predicate": "rubric_classification",
+      "object": "strong",
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-04-16T00:00:00Z"
+      },
+      "recorded_at": "2026-04-16T00:00:00Z",
+      "created_by": "mai-linh-pham-dac",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-france-amd-compute-loi",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action-france-ai-pioneers",
+      "label": "AI Pioneers program (EUR3-8M per enterprise)",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "funding_program",
+      "instrument_type": "funding_program",
+      "announcement_time": "2025-09-18T00:00:00Z",
+      "valid_time": {
+        "start": "2025-09-18T00:00:00Z"
+      },
+      "implementation_stage": "launched",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-ai-pioneers",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-ai-pioneers"],
+      "amounts": [
+        {
+          "value": "8000000",
+          "currency": "EUR",
+          "bound": "up_to"
+        }
+      ]
+    },
+    {
+      "id": "action-france-osez-lia",
+      "label": "Osez l'IA plan for SME AI adoption",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "training_program",
+      "instrument_type": "training_program",
+      "announcement_time": "2025-09-18T00:00:00Z",
+      "valid_time": {
+        "start": "2025-09-18T00:00:00Z"
+      },
+      "implementation_stage": "launched",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-osez-lia",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-osez-lia"]
+    },
+    {
+      "id": "action-france-ai-academy-small-business",
+      "label": "AI Academy small-business revitalization plan",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "training_program",
+      "instrument_type": "training_program",
+      "announcement_time": "2025-11-07T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-07T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-ai-academy-small-business",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-ai-academy-small-business"]
+    },
+    {
+      "id": "action-france-piiec-ai-innovation",
+      "label": "Important Projects of Common European Interest (PIIEC) AI framework",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "funding_program",
+      "instrument_type": "funding_program",
+      "announcement_time": "2025-11-26T00:00:00Z",
+      "valid_time": {
+        "start": "2025-11-26T00:00:00Z"
+      },
+      "implementation_stage": "launched",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "joint",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-piiec-ai-innovation",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-piiec-ai-innovation"]
+    },
+    {
+      "id": "action-france-data-center-sme-deployment",
+      "label": "Data-center support for 52 SMEs deploying AI",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2026-01-30T00:00:00Z",
+      "valid_time": {
+        "start": "2026-01-30T00:00:00Z"
+      },
+      "implementation_stage": "operational",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "explicit",
+      "attribution": "unilateral",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-data-center-sme-deployment",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-data-center-sme-deployment"]
+    },
+    {
+      "id": "action-france-bull-acquisition",
+      "label": "EUR404M state acquisition of AI computing brand Bull",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2026-03-31T00:00:00Z",
+      "valid_time": {
+        "start": "2026-03-31T00:00:00Z"
+      },
+      "implementation_stage": "contracted",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "materially_inclusive",
+      "attribution": "unilateral",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-bull-acquisition",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-bull-acquisition"],
+      "amounts": [
+        {
+          "value": "404000000",
+          "currency": "EUR",
+          "bound": "exact"
+        }
+      ]
+    },
+    {
+      "id": "action-france-amd-compute-loi",
+      "label": "France-AMD letter of intent on AI compute + Alice Recoque supercomputer",
+      "actors": ["France"],
+      "jurisdiction": "France",
+      "kind": "compute_infrastructure",
+      "instrument_type": "compute_infrastructure",
+      "announcement_time": "2026-04-16T00:00:00Z",
+      "valid_time": {
+        "start": "2026-04-16T00:00:00Z"
+      },
+      "implementation_stage": "announced",
+      "beneficiaries": ["SME"],
+      "beneficiary_targeting": "materially_inclusive",
+      "attribution": "joint",
+      "program_family_id": "fr-ai-sme",
+      "underlying_instrument_id": "fr-amd-compute-loi",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": ["claim-france-amd-compute-loi"]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-claim-france-ai-pioneers",
+      "object_type": "claim",
+      "object_id": "claim-france-ai-pioneers",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for AI Pioneers program (EUR3-8M per enterprise) (report p.177, fn.934).",
+      "created_at": "2025-09-18T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-ai-pioneers",
+      "object_type": "action",
+      "object_id": "action-france-ai-pioneers",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.177.",
+      "created_at": "2025-09-18T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-osez-lia",
+      "object_type": "claim",
+      "object_id": "claim-france-osez-lia",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Osez l'IA plan for SME AI adoption (report p.177, fn.935).",
+      "created_at": "2025-09-18T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-osez-lia",
+      "object_type": "action",
+      "object_id": "action-france-osez-lia",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.177.",
+      "created_at": "2025-09-18T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-ai-academy-small-business",
+      "object_type": "claim",
+      "object_id": "claim-france-ai-academy-small-business",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for AI Academy small-business revitalization plan (report p.177, fn.936).",
+      "created_at": "2025-11-07T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-ai-academy-small-business",
+      "object_type": "action",
+      "object_id": "action-france-ai-academy-small-business",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.177.",
+      "created_at": "2025-11-07T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-piiec-ai-innovation",
+      "object_type": "claim",
+      "object_id": "claim-france-piiec-ai-innovation",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Important Projects of Common European Interest (PIIEC) AI framework (report p.177, fn.937).",
+      "created_at": "2025-11-26T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-piiec-ai-innovation",
+      "object_type": "action",
+      "object_id": "action-france-piiec-ai-innovation",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.177.",
+      "created_at": "2025-11-26T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-data-center-sme-deployment",
+      "object_type": "claim",
+      "object_id": "claim-france-data-center-sme-deployment",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for Data-center support for 52 SMEs deploying AI (report p.178, fn.938).",
+      "created_at": "2026-01-30T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-data-center-sme-deployment",
+      "object_type": "action",
+      "object_id": "action-france-data-center-sme-deployment",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.178.",
+      "created_at": "2026-01-30T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-bull-acquisition",
+      "object_type": "claim",
+      "object_id": "claim-france-bull-acquisition",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for EUR404M state acquisition of AI computing brand Bull (report p.178, fn.939).",
+      "created_at": "2026-03-31T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-bull-acquisition",
+      "object_type": "action",
+      "object_id": "action-france-bull-acquisition",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.178.",
+      "created_at": "2026-03-31T00:00:00Z"
+    },
+    {
+      "id": "review-claim-france-amd-compute-loi",
+      "object_type": "claim",
+      "object_id": "claim-france-amd-compute-loi",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Reviewed classification \"strong\" for France-AMD letter of intent on AI compute + Alice Recoque supercomputer (report p.178, fn.940).",
+      "created_at": "2026-04-16T00:00:00Z"
+    },
+    {
+      "id": "review-action-france-amd-compute-loi",
+      "object_type": "action",
+      "object_id": "action-france-amd-compute-loi",
+      "reviewer_id": "mai-linh-pham-dac",
+      "decision": "accept",
+      "rationale": "Action verified against the frozen source chapter, report p.178.",
+      "created_at": "2026-04-16T00:00:00Z"
+    }
+  ]
+}

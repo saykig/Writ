@@ -39,6 +39,17 @@
         "z3-solver": "^5.0.0",
       },
     },
+    "packages/benchmark": {
+      "name": "@covenant/benchmark",
+      "version": "0.1.0",
+      "dependencies": {
+        "@covenant/analyzer": "workspace:*",
+        "@covenant/domain": "workspace:*",
+        "@covenant/evaluator": "workspace:*",
+        "@covenant/language": "workspace:*",
+        "@covenant/provenance": "workspace:*",
+      },
+    },
     "packages/cli": {
       "name": "@covenant/cli",
       "version": "0.1.0",
@@ -114,6 +125,8 @@
     "@covenant/analyzer": ["@covenant/analyzer@workspace:packages/analyzer"],
 
     "@covenant/api": ["@covenant/api@workspace:apps/api"],
+
+    "@covenant/benchmark": ["@covenant/benchmark@workspace:packages/benchmark"],
 
     "@covenant/cli": ["@covenant/cli@workspace:packages/cli"],
 
