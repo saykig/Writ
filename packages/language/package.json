@@ -14,5 +14,12 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@covenant/domain": "workspace:*",
+    "langium": "^4.3.1"
+  },
+  "devDependencies": {
+    "langium-cli": "^4.3.0"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "projectName": "Covenant",
+  "languages": [
+    {
+      "id": "covenant",
+      "grammar": "covenant.langium",
+      "fileExtensions": [".covenant", ".covenant.md"]
+    }
+  ],
+  "mode": "production",
+  "out": "src/generated"
+}

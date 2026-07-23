@@ -1,15 +1,23 @@
-// CORE-009 — the Covenant evaluator CLI.
+// The Covenant CLI.
 //
-// Two offline commands (no DB, no network):
+// Evaluator commands (CORE-009, no DB, no network):
 //
 //   covenant evaluate --ir <file> --evidence <file> --subject <id>
 //                     [--profile <file>] [--as-of <date>] [--cutoff <date>] [--json]
 //   covenant receipt verify <receipt.json>
 //
-// `evaluate` runs the deterministic commitment evaluator and prints the receipt
-// (a human summary, or the full JSON under `--json`). `receipt verify` recomputes
-// the canonical hash and exits non-zero on tamper. Argument parsing uses the
-// Node built-in `parseArgs` — no third-party dependency.
+// Language commands (LANG-004, no DB, no network):
+//
+//   covenant fmt <files...> [--write] [--check]
+//   covenant check <files...> [--json]
+//   covenant compile <file> [--out <file>] [--json]
+//   covenant analyze <file> [--json]
+//   covenant test <files...> [--json]
+//
+// `evaluate` runs the deterministic commitment evaluator and prints the receipt.
+// `receipt verify` recomputes the canonical hash and exits non-zero on tamper.
+// The language commands drive `@covenant/language` and `@covenant/analyzer`.
+// Argument parsing uses the Node built-in `parseArgs` — no third-party dependency.
 
 import { parseArgs } from "node:util";
 import { readFileSync } from "node:fs";
@@ -26,25 +34,23 @@ import {
   type InterpretationProfile,
   type SchemaKind,
 } from "@covenant/domain";
+import { processIO, type CliIO } from "./io.js";
+import { runAnalyze, runCheck, runCompile, runFmt, runTest } from "./language-commands.js";
 
-/** Sink for CLI output, injectable so tests can capture without touching stdio. */
-export interface CliIO {
-  out(line: string): void;
-  err(line: string): void;
-}
-
-const processIO: CliIO = {
-  out: (line) => process.stdout.write(line + "\n"),
-  err: (line) => process.stderr.write(line + "\n"),
-};
+export type { CliIO } from "./io.js";
 
 const USAGE = [
-  "covenant — offline Covenant evaluator",
+  "covenant — Covenant toolchain",
   "",
   "Usage:",
   "  covenant evaluate --ir <file> --evidence <file> --subject <id>",
   "                    [--profile <file>] [--as-of <date>] [--cutoff <date>] [--json]",
   "  covenant receipt verify <receipt.json>",
+  "  covenant fmt <files...> [--write] [--check]",
+  "  covenant check <files...> [--json]",
+  "  covenant compile <file> [--out <file>] [--json]",
+  "  covenant analyze <file> [--json]",
+  "  covenant test <files...> [--json]",
 ].join("\n");
 
 /**
@@ -56,6 +62,11 @@ export async function runCli(argv: readonly string[], io: CliIO = processIO): Pr
   try {
     if (command === "evaluate") return runEvaluate(rest, io);
     if (command === "receipt") return runReceipt(rest, io);
+    if (command === "fmt") return runFmt(rest, io);
+    if (command === "check") return runCheck(rest, io);
+    if (command === "compile") return runCompile(rest, io);
+    if (command === "analyze") return runAnalyze(rest, io);
+    if (command === "test") return runTest(rest, io);
     if (command === "help" || command === "--help" || command === "-h" || command === undefined) {
       io.out(USAGE);
       return command === undefined ? 2 : 0;
