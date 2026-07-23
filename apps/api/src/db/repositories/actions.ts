@@ -56,6 +56,33 @@ export function actionsRepository(sql: DbClient) {
         ORDER BY announcement_time DESC NULLS LAST`;
     },
 
+    /** Transition a candidate/contested action to accepted. */
+    async accept(id: string): Promise<ActionRow> {
+      const rows = await sql<ActionRow[]>`
+        UPDATE actions SET status = 'accepted'
+        WHERE id = ${id} AND status IN ('candidate', 'contested')
+        RETURNING *`;
+      return one(rows, "action");
+    },
+
+    /** Reject a candidate/contested action. */
+    async reject(id: string): Promise<ActionRow> {
+      const rows = await sql<ActionRow[]>`
+        UPDATE actions SET status = 'rejected'
+        WHERE id = ${id} AND status IN ('candidate', 'contested')
+        RETURNING *`;
+      return one(rows, "action");
+    },
+
+    /** Mark a candidate action contested. */
+    async contest(id: string): Promise<ActionRow> {
+      const rows = await sql<ActionRow[]>`
+        UPDATE actions SET status = 'contested'
+        WHERE id = ${id} AND status = 'candidate'
+        RETURNING *`;
+      return one(rows, "action");
+    },
+
     async supersede(
       oldActionId: string,
       replacement: ActionInput,

@@ -66,6 +66,24 @@ export function claimsRepository(sql: DbClient) {
       return one(rows, "claim");
     },
 
+    /** Reject a candidate/contested claim (no acceptance, never applied to accepted rows). */
+    async reject(id: string): Promise<ClaimRow> {
+      const rows = await sql<ClaimRow[]>`
+        UPDATE claims SET status = 'rejected'
+        WHERE id = ${id} AND status IN ('candidate', 'contested')
+        RETURNING *`;
+      return one(rows, "claim");
+    },
+
+    /** Mark a candidate claim contested (a dispute short of rejection). */
+    async contest(id: string): Promise<ClaimRow> {
+      const rows = await sql<ClaimRow[]>`
+        UPDATE claims SET status = 'contested'
+        WHERE id = ${id} AND status = 'candidate'
+        RETURNING *`;
+      return one(rows, "claim");
+    },
+
     /**
      * Supersede a claim: close the old row's system-time interval (status ->
      * superseded) and insert a replacement sharing the logical_id. Runs in one
