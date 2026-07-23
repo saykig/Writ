@@ -9,6 +9,7 @@ bun.lockb
 # Authored specification + evidence content — kept byte-stable (golden JSON,
 # canonical IR, receipts, and governance docs must never be reformatted).
 specs/
+packages/domain/schemas/
 examples/
 fixtures/
 data/

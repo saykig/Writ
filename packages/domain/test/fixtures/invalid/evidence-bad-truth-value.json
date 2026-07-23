@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot": {
+    "id": "snapshot-canada-ai-sme-2025-10-31",
+    "frozen_at": "2025-10-31T23:59:59Z",
+    "cutoff": "2025-10-31T23:59:59Z",
+    "content_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "description": "Illustrative, non-authoritative evidence snapshot."
+  },
+  "document_versions": [
+    {
+      "id": "docv-ca-compute-fund-2025-06-25",
+      "document_id": "doc-ca-compute-fund",
+      "uri": "https://example.invalid/canada/compute-access-fund",
+      "media_type": "text/html",
+      "retrieved_at": "2025-10-31T12:00:00Z",
+      "issued_at": "2025-06-25T00:00:00Z",
+      "sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "publisher": "Government of Canada",
+      "source_tier": 1
+    }
+  ],
+  "passages": [
+    {
+      "id": "passage-ca-compute-fund-1",
+      "document_version_id": "docv-ca-compute-fund-2025-06-25",
+      "anchor_type": "html_dom",
+      "quote": "Illustrative passage describing a funded compute access program for eligible SMEs.",
+      "normalized_quote": "illustrative passage describing a funded compute access program for eligible smes",
+      "anchor_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "language": "en",
+      "dom_path": "main article p:nth-of-type(1)"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-ca-compute-fund-targets-smes",
+      "claim_type": "fact",
+      "subject_ref": "action-ca-compute-fund",
+      "predicate": "beneficiary_targeting",
+      "object": "explicit",
+      "truth_value": "maybe",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-06-25T00:00:00Z"
+      },
+      "recorded_at": "2025-10-31T12:30:00Z",
+      "created_by": "researcher-example",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-ca-compute-fund-1",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action-ca-compute-fund",
+      "label": "Illustrative AI Compute Access Fund",
+      "actors": [
+        "Canada"
+      ],
+      "jurisdiction": "Canada",
+      "kind": "compute_subsidy",
+      "instrument_type": "grant_program",
+      "announcement_time": "2025-06-25T00:00:00Z",
+      "valid_time": {
+        "start": "2025-06-25T00:00:00Z"
+      },
+      "implementation_stage": "funded",
+      "beneficiaries": [
+        "SME"
+      ],
+      "beneficiary_targeting": "explicit",
+      "amounts": [
+        {
+          "value": "300000000",
+          "currency": "CAD",
+          "bound": "up_to"
+        }
+      ],
+      "durability": "fixed_term",
+      "attribution": "unilateral",
+      "program_family_id": "canada-ai-compute",
+      "underlying_instrument_id": "ca-ai-compute-access-fund",
+      "relationships": [],
+      "status": "accepted",
+      "claim_ids": [
+        "claim-ca-compute-fund-targets-smes"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-claim-ca-compute-fund-1",
+      "object_type": "claim",
+      "object_id": "claim-ca-compute-fund-targets-smes",
+      "reviewer_id": "reviewer-example",
+      "decision": "accept",
+      "rationale": "The cited passage directly states the beneficiary and program status in this illustrative fixture.",
+      "created_at": "2025-10-31T13:00:00Z"
+    }
+  ]
+}
