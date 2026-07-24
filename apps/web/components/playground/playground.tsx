@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
+import type { EvaluationReceipt } from "@writ/domain";
 
+import type { G7EvidenceView } from "@/components/g7/types";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { AnalysisPanel } from "./analysis-panel";
+import { EvidencePanel } from "./evidence-panel";
 import { IrPanel } from "./ir-panel";
 import { ReceiptPanel } from "./receipt-panel";
 import { VerdictInline } from "./verdict";
@@ -16,6 +19,7 @@ import type {
   CompileResponse,
   ExampleOutcome,
   ExamplesResponse,
+  Member,
   PlaygroundExample,
 } from "./types";
 
@@ -61,18 +65,42 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 export interface PlaygroundProps {
   /** Example to open first, from `?example=` — validated server-side. */
   initialExample: string | null;
+  /** Optional frozen examples for a contextual Lab route. */
+  initialExamples?: readonly PlaygroundExample[];
+  /** Optional member and receipt to open without a second selection step. */
+  initialMember?: Member;
+  initialReceipt?: EvaluationReceipt;
+  initialEvidence?: G7EvidenceView;
+  lockInitialMember?: boolean;
+  initialResultTab?: "analysis" | "ir" | "receipt";
+  initialCompile?: CompileResponse;
+  initialAnalysis?: AnalyzeResponse;
 }
 
-export function Playground({ initialExample }: PlaygroundProps) {
+export function Playground({
+  initialExample,
+  initialExamples,
+  initialMember,
+  initialReceipt,
+  initialEvidence,
+  lockInitialMember = false,
+  initialResultTab = "analysis",
+  initialCompile,
+  initialAnalysis,
+}: PlaygroundProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
-  const [examples, setExamples] = useState<PlaygroundExample[]>([]);
-  const [exampleId, setExampleId] = useState<string | null>(null);
-  const [source, setSource] = useState<string>("");
+  const seededExample =
+    initialExamples?.find((example) => example.id === initialExample) ?? initialExamples?.[0];
+  const [examples, setExamples] = useState<PlaygroundExample[]>(
+    initialExamples ? [...initialExamples] : [],
+  );
+  const [exampleId, setExampleId] = useState<string | null>(seededExample?.id ?? null);
+  const [source, setSource] = useState<string>(seededExample?.source ?? "");
 
-  const [compile, setCompile] = useState<CompileResponse | null>(null);
-  const [analysis, setAnalysis] = useState<AnalyzeResponse | null>(null);
+  const [compile, setCompile] = useState<CompileResponse | null>(initialCompile ?? null);
+  const [analysis, setAnalysis] = useState<AnalyzeResponse | null>(initialAnalysis ?? null);
   const [analyzing, setAnalyzing] = useState(false);
 
   const [isDesktop, setIsDesktop] = useState(true);
@@ -90,6 +118,7 @@ export function Playground({ initialExample }: PlaygroundProps) {
 
   // Load the seeded readings; open the requested one (or the first).
   useEffect(() => {
+    if (initialExamples) return;
     let active = true;
     fetch("/api/examples")
       .then((r) => r.json() as Promise<ExamplesResponse>)
@@ -107,7 +136,7 @@ export function Playground({ initialExample }: PlaygroundProps) {
     return () => {
       active = false;
     };
-  }, [initialExample]);
+  }, [initialExample, initialExamples]);
 
   // Debounced compile + analyze on every source change.
   useEffect(() => {
@@ -219,7 +248,7 @@ export function Playground({ initialExample }: PlaygroundProps) {
 
   const resultsPane = (
     <div className="flex h-full min-h-0 flex-col">
-      <Tabs defaultValue="analysis" className="flex h-full min-h-0 flex-col gap-0">
+      <Tabs defaultValue={initialResultTab} className="flex h-full min-h-0 flex-col gap-0">
         <TabsList
           variant="line"
           className="h-auto w-full justify-start gap-5 border-b border-rule px-5 py-0"
@@ -238,6 +267,14 @@ export function Playground({ initialExample }: PlaygroundProps) {
           <TabsTrigger value="receipt" className="flex-none px-0 py-3">
             Receipt
           </TabsTrigger>
+          {initialEvidence ? (
+            <TabsTrigger value="evidence" className="flex-none px-0 py-3">
+              Evidence
+              <span className="ml-1.5 text-[0.7rem] text-ink-faint tabular-nums">
+                {initialEvidence.actions.length}
+              </span>
+            </TabsTrigger>
+          ) : null}
         </TabsList>
 
         <div className="min-h-0 flex-1 overflow-auto px-5 py-5">
@@ -252,15 +289,26 @@ export function Playground({ initialExample }: PlaygroundProps) {
             />
           </TabsContent>
           <TabsContent value="receipt">
-            <ReceiptPanel source={source} canEvaluate={canEvaluate} />
+            <ReceiptPanel
+              source={source}
+              canEvaluate={canEvaluate}
+              initialMember={initialMember}
+              initialReceipt={initialReceipt}
+              lockMember={lockInitialMember}
+            />
           </TabsContent>
+          {initialEvidence ? (
+            <TabsContent value="evidence">
+              <EvidencePanel evidence={initialEvidence} />
+            </TabsContent>
+          ) : null}
         </div>
       </Tabs>
     </div>
   );
 
   return (
-    <main className="flex-1">
+    <div className="flex-1">
       <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[112rem] flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
         {/* Slim toolbar: the reading switch on the left, the live verdict on the right. */}
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
@@ -348,6 +396,6 @@ export function Playground({ initialExample }: PlaygroundProps) {
           </ResizablePanelGroup>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -59,6 +59,66 @@ describe("resolved methodology", () => {
 });
 
 describe("reviewed evidence catalog", () => {
+  test("all eight members retain their approved homepage marker anchors", () => {
+    expect(
+      MEMBERS.map(({ id, name, markerAnchor, markerCoordinates }) => ({
+        id,
+        name,
+        markerAnchor,
+        markerCoordinates,
+      })),
+    ).toEqual([
+      {
+        id: "canada",
+        name: "Canada",
+        markerAnchor: "Ottawa",
+        markerCoordinates: [-75.6972, 45.4215],
+      },
+      {
+        id: "france",
+        name: "France",
+        markerAnchor: "Paris",
+        markerCoordinates: [2.3522, 48.8566],
+      },
+      {
+        id: "germany",
+        name: "Germany",
+        markerAnchor: "Berlin",
+        markerCoordinates: [13.405, 52.52],
+      },
+      {
+        id: "italy",
+        name: "Italy",
+        markerAnchor: "Rome",
+        markerCoordinates: [12.4964, 41.9028],
+      },
+      {
+        id: "japan",
+        name: "Japan",
+        markerAnchor: "Tokyo",
+        markerCoordinates: [139.6917, 35.6895],
+      },
+      {
+        id: "united_kingdom",
+        name: "United Kingdom",
+        markerAnchor: "London",
+        markerCoordinates: [-0.1276, 51.5072],
+      },
+      {
+        id: "united_states",
+        name: "United States",
+        markerAnchor: "Washington, D.C.",
+        markerCoordinates: [-77.0369, 38.9072],
+      },
+      {
+        id: "european_union",
+        name: "European Union",
+        markerAnchor: "Brussels",
+        markerCoordinates: [4.3517, 50.8503],
+      },
+    ]);
+  });
+
   test("each member's strong/weak counts reproduce the reviewed tally", () => {
     for (const member of MEMBERS) {
       const strong = member.actions.filter((a) => a.classification === "strong").length;

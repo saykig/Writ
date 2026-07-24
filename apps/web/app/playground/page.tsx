@@ -21,13 +21,13 @@ export default async function PlaygroundPage({
   const initialExample = typeof raw === "string" && VALID_EXAMPLES.has(raw) ? raw : null;
 
   return (
-    <div>
+    <main>
       <PageHeader
         eyebrow="Writ Lab"
         title="Write and test a policy methodology."
         description="The Writ Lab shows how Writ turns a written methodology into rules that can be checked and run. You can revise the example, review any problems in the logic, and see how the final result is produced."
       />
       <Playground initialExample={initialExample} />
-    </div>
+    </main>
   );
 }

@@ -16,18 +16,41 @@ export function clampLatitude(value: number): number {
   return Math.max(-72, Math.min(72, value));
 }
 
+export interface GlobeMarker {
+  readonly id: string;
+  readonly label: string;
+  readonly coordinates: readonly [number, number];
+  /** Presentation-only offset from the geographic anchor, used to separate dense clusters. */
+  readonly displayOffset?: readonly [number, number];
+}
+
 export interface WireframeDottedGlobeProps {
   className?: string;
   initialRotation?: [number, number, number];
+  markers?: readonly GlobeMarker[];
+  selectedMarkerId?: string | null;
+  onMarkerSelect?: (markerId: string) => void;
 }
 
 export function WireframeDottedGlobe({
   className,
   initialRotation = DEFAULT_ROTATION,
+  markers = [],
+  selectedMarkerId = null,
+  onMarkerSelect,
 }: WireframeDottedGlobeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const markerElementsRef = useRef(new Map<string, HTMLButtonElement>());
+  const markerPausedRef = useRef(false);
   const [loadError, setLoadError] = useState(false);
+  const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
+  const [focusedMarkerId, setFocusedMarkerId] = useState<string | null>(null);
+  const emphasizedMarkerId = focusedMarkerId ?? hoveredMarkerId ?? selectedMarkerId;
+
+  useEffect(() => {
+    markerPausedRef.current = hoveredMarkerId !== null || focusedMarkerId !== null;
+  }, [focusedMarkerId, hoveredMarkerId]);
 
   useEffect(() => {
     const containerElement = containerRef.current;
@@ -133,12 +156,38 @@ export function WireframeDottedGlobe({
       }
 
       context.restore();
+
+      for (const marker of markers) {
+        const markerElement = markerElementsRef.current.get(marker.id);
+        if (!markerElement) continue;
+        const markerCoordinates: [number, number] = [
+          marker.coordinates[0],
+          marker.coordinates[1],
+        ];
+        const markerIsVisible = d3.geoDistance(markerCoordinates, center) <= Math.PI / 2;
+        const projected = markerIsVisible ? projection(markerCoordinates) : null;
+        markerElement.style.visibility = projected ? "visible" : "hidden";
+        markerElement.style.opacity = projected ? "1" : "0";
+        markerElement.tabIndex = projected ? 0 : -1;
+        if (projected) {
+          const [offsetX, offsetY] = marker.displayOffset ?? [0, 0];
+          markerElement.style.left = `${projected[0] + offsetX}px`;
+          markerElement.style.top = `${projected[1] + offsetY}px`;
+        }
+      }
     }
 
     function animate(now: number) {
       const elapsed = Math.min((now - lastFrame) / 1000, 0.1);
       lastFrame = now;
-      if (!reduceMotion && !interacting && visible && pageVisible && land) {
+      if (
+        !reduceMotion &&
+        !interacting &&
+        !markerPausedRef.current &&
+        visible &&
+        pageVisible &&
+        land
+      ) {
         rotation[0] += ROTATION_DEGREES_PER_SECOND * elapsed;
         projection.rotate(rotation);
         draw();
@@ -243,7 +292,7 @@ export function WireframeDottedGlobe({
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
     };
-  }, [initialRotation]);
+  }, [initialRotation, markers]);
 
   return (
     <div
@@ -259,6 +308,68 @@ export function WireframeDottedGlobe({
         role="img"
         className="block max-w-full cursor-grab touch-pan-y select-none active:cursor-grabbing"
       />
+      {markers.length ? (
+        <div className="pointer-events-none absolute inset-0 z-10" aria-label="G7 assessments">
+          {markers.map((marker) => {
+            const emphasized = marker.id === emphasizedMarkerId;
+            const selected = marker.id === selectedMarkerId;
+            return (
+              <button
+                key={marker.id}
+                ref={(element) => {
+                  if (element) markerElementsRef.current.set(marker.id, element);
+                  else markerElementsRef.current.delete(marker.id);
+                }}
+                type="button"
+                tabIndex={-1}
+                aria-label={`Preview assessment for ${marker.label}`}
+                aria-pressed={selected}
+                onPointerEnter={() => setHoveredMarkerId(marker.id)}
+                onPointerLeave={() =>
+                  setHoveredMarkerId((current) => (current === marker.id ? null : current))
+                }
+                onFocus={() => setFocusedMarkerId(marker.id)}
+                onBlur={() =>
+                  setFocusedMarkerId((current) => (current === marker.id ? null : current))
+                }
+                onClick={() => onMarkerSelect?.(marker.id)}
+                className="pointer-events-auto absolute size-11 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 outline-none transition-[opacity] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {marker.displayOffset &&
+                (marker.displayOffset[0] !== 0 || marker.displayOffset[1] !== 0) ? (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-px origin-left bg-primary/45"
+                    style={{
+                      width: Math.hypot(marker.displayOffset[0], marker.displayOffset[1]),
+                      transform: `rotate(${Math.atan2(
+                        -marker.displayOffset[1],
+                        -marker.displayOffset[0],
+                      )}rad)`,
+                    }}
+                  />
+                ) : null}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute top-1/2 left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary-foreground/70 bg-primary [box-shadow:0_0_0_3px_color-mix(in_oklab,var(--primary)_24%,transparent),0_0_14px_var(--primary)] transition-transform",
+                    emphasized && "scale-150",
+                  )}
+                />
+                <span
+                  aria-hidden
+                  className={cn(
+                    "pointer-events-none absolute bottom-[calc(100%+0.35rem)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-background/95 px-2 py-1 text-xs font-medium text-foreground shadow-sm transition-opacity",
+                    emphasized ? "opacity-100" : "opacity-0",
+                  )}
+                >
+                  {marker.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
       {loadError ? (
         <p
           role="status"

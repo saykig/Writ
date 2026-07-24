@@ -16,9 +16,10 @@ import {
 } from "lucide-react";
 
 import { benchmark, evaluateMember, memberSnapshot } from "@/lib/toolchain";
+import { g7AssessmentPreviews } from "@/lib/g7-assessments";
+import { G7GlobeSelector } from "@/components/g7/g7-globe-selector";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
-import { WireframeDottedGlobe } from "@/components/ui/wireframe-dotted-globe";
 import { TruthBadge } from "@/components/site/truth-badge";
 import type { TruthBadgeValue } from "@/components/site/truth-badge";
 
@@ -80,11 +81,12 @@ export default function Home() {
   const canada = bench.cells.find((cell) => cell.member === "canada");
   const receipt = evaluateMember("canada", "published");
   const snapshot = memberSnapshot("canada");
+  const g7Members = g7AssessmentPreviews();
 
   return (
     <main>
       <Reveal as="section" className="min-h-[calc(100svh-4.5rem)]">
-        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8">
+        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8 min-[1400px]:max-w-[92rem] min-[1400px]:grid-cols-[minmax(24rem,1fr)_58rem]">
           <div className="relative z-10 py-4 lg:py-10">
             <h1 className="whitespace-nowrap text-[length:var(--t-hero)] leading-[0.98] font-semibold tracking-[-0.04em]">
               Write in Writ.
@@ -114,8 +116,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-[42rem] lg:justify-self-end">
-            <WireframeDottedGlobe className="mx-auto" />
+          <div className="mx-auto w-full max-w-[42rem] lg:justify-self-end min-[1400px]:max-w-[58rem]">
+            <G7GlobeSelector members={g7Members} />
           </div>
         </div>
       </Reveal>
@@ -129,14 +131,14 @@ export default function Home() {
           </div>
           <div className="max-w-[64ch] space-y-5 text-[length:var(--t-lead)] leading-8 text-muted-foreground">
             <p>
-              Institutional compliance methodologies are written for human analysts. Their prose can
-              leave thresholds, precedence, missing evidence, and exceptional cases open to
-              interpretation.
+              Compliance methods are usually written for people to interpret. That can leave
+              uncertainty about which rule takes priority, or how missing evidence should be
+              handled.
             </p>
             <p>
-              Writ makes those decisions explicit, checks the resulting rules for gaps and overlaps,
-              and evaluates only against frozen, reviewed evidence. Unknown evidence remains
-              unknown.
+              Writ turns the method into a clear set of rules before producing a result. It checks
+              whether those rules conflict or leave cases unresolved, then applies them to a fixed
+              body of reviewed evidence. When the evidence is not enough, Writ does not guess.
             </p>
           </div>
         </div>

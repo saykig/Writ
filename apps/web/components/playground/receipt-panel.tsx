@@ -80,6 +80,9 @@ function HashRow({ label, hash, emphasize }: { label: string; hash: string; emph
 export interface ReceiptPanelProps {
   source: string;
   canEvaluate: boolean;
+  initialMember?: Member;
+  initialReceipt?: EvaluationReceipt;
+  lockMember?: boolean;
 }
 
 /**
@@ -88,11 +91,22 @@ export interface ReceiptPanelProps {
  * a verify/tamper affordance. The heavier evidence (rule evaluations, the proof
  * tree, the dependency hashes) sits behind disclosures, opened on demand.
  */
-export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
-  const [member, setMember] = useState<Member>("japan");
+export function ReceiptPanel({
+  source,
+  canEvaluate,
+  initialMember = "japan",
+  initialReceipt,
+  lockMember = false,
+}: ReceiptPanelProps) {
+  const [member, setMember] = useState<Member>(initialMember);
   const [profile, setProfile] = useState<Profile>("published");
-  const [receipt, setReceipt] = useState<EvaluationReceipt | null>(null);
-  const [evaluatedSource, setEvaluatedSource] = useState<string | null>(null);
+  const [receipt, setReceipt] = useState<EvaluationReceipt | null>(initialReceipt ?? null);
+  const [evaluatedSource, setEvaluatedSource] = useState<string | null>(
+    initialReceipt ? source : null,
+  );
+  const [evaluatedMember, setEvaluatedMember] = useState<Member | null>(
+    initialReceipt ? initialMember : null,
+  );
   const [evaluatedProfile, setEvaluatedProfile] = useState<string>("published");
   const [evalError, setEvalError] = useState<string | null>(null);
   const [evaluating, setEvaluating] = useState(false);
@@ -103,7 +117,9 @@ export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
 
   // A receipt is only valid for the source it was produced from; a later edit
   // makes it stale rather than resetting state from an effect.
-  const stale = receipt !== null && evaluatedSource !== source;
+  const stale =
+    receipt !== null &&
+    (evaluatedSource !== source || evaluatedMember !== member || evaluatedProfile !== profile);
   const shownReceipt = stale ? null : receipt;
 
   const runVerify = useCallback(async (toVerify: EvaluationReceipt, notify: boolean) => {
@@ -147,10 +163,12 @@ export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
       if (data.ok && data.receipt) {
         setReceipt(data.receipt);
         setEvaluatedSource(source);
+        setEvaluatedMember(member);
         setEvaluatedProfile(data.profile ?? profile);
       } else {
         setReceipt(null);
         setEvaluatedSource(null);
+        setEvaluatedMember(null);
         setEvalError(data.error ?? "Evaluation failed.");
       }
     } catch {
@@ -188,18 +206,24 @@ export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5">
           <FieldLabel>Member</FieldLabel>
-          <Select value={member} onValueChange={(value) => setMember(value as Member)}>
-            <SelectTrigger className="w-44" aria-label="Member">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {MEMBERS.map((id) => (
-                <SelectItem key={id} value={id}>
-                  {MEMBER_LABELS[id]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {lockMember ? (
+            <span className="flex h-8 min-w-44 items-center rounded-md border border-rule bg-paper-deep/30 px-3 text-sm text-foreground">
+              {MEMBER_LABELS[member]}
+            </span>
+          ) : (
+            <Select value={member} onValueChange={(value) => setMember(value as Member)}>
+              <SelectTrigger className="w-44" aria-label="Member">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {MEMBERS.map((id) => (
+                  <SelectItem key={id} value={id}>
+                    {MEMBER_LABELS[id]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </label>
 
         <label className="flex flex-col gap-1.5">
@@ -224,7 +248,7 @@ export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
         </Button>
       </div>
 
-      {!canEvaluate ? (
+      {!canEvaluate && !shownReceipt ? (
         <p className="text-[0.9rem] text-ink-soft">
           The source must compile before it can be evaluated. Resolve the diagnostics first.
         </p>
@@ -245,7 +269,9 @@ export function ReceiptPanel({ source, canEvaluate }: ReceiptPanelProps) {
             </TruthBadge>
             <div className="min-w-0 space-y-1.5 text-[0.9rem]">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <strong className="font-medium text-foreground">{MEMBER_LABELS[member]}</strong>
+                <strong className="font-medium text-foreground">
+                  {evaluatedMember ? MEMBER_LABELS[evaluatedMember] : MEMBER_LABELS[member]}
+                </strong>
                 <span
                   className={cn(
                     "inline-flex items-center rounded-md border px-1.5 py-0.5 text-[0.68rem]",

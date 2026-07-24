@@ -41,9 +41,15 @@ describe("frontend architecture", () => {
   });
 
   test("about is explained on the homepage rather than exposed as a route", () => {
+    const home = read("app/page.tsx");
     expect(existsSync(resolve(WEB_ROOT, "app/about/page.tsx"))).toBe(false);
-    expect(read("app/page.tsx")).toContain("From ambiguous prose to reviewable decisions.");
-    expect(read("app/page.tsx")).not.toContain("Why Writ?");
+    expect(home).toContain("From ambiguous prose to reviewable decisions.");
+    expect(home).toContain("Compliance methods are usually written for people to interpret.");
+    expect(home).toContain("When the evidence is not enough, Writ does not guess.");
+    expect(home).not.toContain(
+      "Institutional compliance methodologies are written for human analysts.",
+    );
+    expect(home).not.toContain("Why Writ?");
     expect(read("components/site/nav-items.ts").toLowerCase()).not.toContain("about");
   });
 
@@ -68,6 +74,52 @@ describe("frontend architecture", () => {
     expect(globe).toContain("setPointerCapture");
     expect(globe).toContain("ResizeObserver");
     expect(globe).toContain("prefers-reduced-motion");
+  });
+
+  test("the homepage globe exposes all G7 assessments without immediate navigation", () => {
+    const home = read("app/page.tsx");
+    const selector = read("components/g7/g7-globe-selector.tsx");
+    const globe = read("components/ui/wireframe-dotted-globe.tsx");
+
+    expect(home).toContain("<G7GlobeSelector");
+    expect(selector).toContain("Choose a member");
+    expect(selector).toContain("Published result");
+    expect(selector).toContain("Writ result");
+    expect(selector).toContain("Result status");
+    expect(selector).toContain("Reviewed actions");
+    expect(selector).toContain("View the rules, evidence, and result in Writ Lab.");
+    expect(selector).toContain("/lab/g7-2025/");
+    expect(globe).toContain("onPointerEnter");
+    expect(globe).toContain("onFocus");
+    expect(globe).toContain("markerPausedRef.current");
+    expect(globe).toContain("size-11");
+    expect(selector).toContain("MARKER_DISPLAY_OFFSETS");
+    expect(selector).toContain("h-11");
+    expect(selector).not.toContain("lg:absolute");
+  });
+
+  test("member-specific Lab routes preload the resolved fixture, evidence, and receipt", () => {
+    const lab = read("app/lab/g7-2025/[member]/page.tsx");
+    const playground = read("components/playground/playground.tsx");
+    expect(lab).toContain("generateStaticParams");
+    expect(lab).toContain('initialExample="resolved"');
+    expect(lab).toContain("initialMember={assessment.id}");
+    expect(lab).toContain("initialReceipt={receipt}");
+    expect(lab).toContain("initialEvidence={evidence}");
+    expect(lab).toContain("lockInitialMember");
+    expect(lab).toContain('initialResultTab="receipt"');
+    expect(lab).toContain("initialCompile={initialCompile}");
+    expect(lab).toContain("initialAnalysis={initialAnalysis}");
+    expect(lab).toContain("See how the G7 methodology was translated into Writ");
+    expect(playground).toContain("<EvidencePanel evidence={initialEvidence}");
+    expect(playground).not.toContain('<main className="flex-1">');
+  });
+
+  test("changing a receipt input cannot relabel a stale receipt", () => {
+    const receipt = read("components/playground/receipt-panel.tsx");
+    expect(receipt).toContain("evaluatedMember !== member");
+    expect(receipt).toContain("evaluatedProfile !== profile");
+    expect(receipt).toContain("MEMBER_LABELS[evaluatedMember]");
   });
 
   test("dark is the explicit default and system switching is disabled", () => {

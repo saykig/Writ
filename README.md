@@ -68,7 +68,7 @@ bun run db:down
 ## Web interface
 
 The Next.js interface in `apps/web` defaults to a near-black research theme, with an explicit
-light/dark toggle. Its shared navigation and page-header system cover the Playground, checked-in
+light/dark toggle. Its shared navigation and page-header system cover the Writ Lab, checked-in
 methodologies, G7 benchmark, Gap Matrix, receipts, and explanatory material. The homepage explains
 why Writ is needed before introducing the process. Archive is intentionally not exposed until
 normalized corpus records are available.
@@ -77,6 +77,10 @@ The homepage globe is a first-party D3 canvas component at
 `apps/web/components/ui/wireframe-dotted-globe.tsx`. It reads the checked-in Natural Earth 1:110m
 land geometry from `/data/ne_110m_land.json`; there is no remote runtime geometry request. The
 component supports pointer capture, mouse and touch rotation, page-safe vertical touch scrolling,
-reduced motion, and responsive resizing. The local GeoJSON was retrieved from the
+reduced motion, and responsive resizing. Eight interactive markers and the adjacent selector are
+derived from the frozen G7 benchmark members; their approved capital or institutional-seat anchors
+are recorded in `packages/benchmark/src/members.ts`. Each preview links to a shareable
+`/lab/g7-2025/<member>` route that opens the member's existing methodology, reviewed evidence,
+diagnostics, result, and receipt in Writ Lab. The local GeoJSON was retrieved from the
 `martynafford/natural-earth-geojson` distribution and is derived from Natural Earth public-domain
 map data.

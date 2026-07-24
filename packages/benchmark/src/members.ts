@@ -76,6 +76,10 @@ export interface MemberSeed {
   readonly code: string;
   /** Display name / evidence `action.jurisdiction` + actor. */
   readonly name: string;
+  /** Approved homepage marker anchor as [longitude, latitude]. */
+  readonly markerCoordinates: readonly [number, number];
+  /** Human-readable capital or institutional-seat anchor used by the marker. */
+  readonly markerAnchor: string;
   /** Published cell from the report Assessment table (p.170). */
   readonly published: "-1" | "0" | "+1";
   /** The report's named analyst for this member. */
@@ -90,6 +94,8 @@ const canada: MemberSeed = {
   id: "canada",
   code: "ca",
   name: "Canada",
+  markerCoordinates: [-75.6972, 45.4215],
+  markerAnchor: "Ottawa",
   published: "+1",
   analyst: "Mai Linh Pham Dac",
   sectionPage: 173,
@@ -391,6 +397,8 @@ const france: MemberSeed = {
   id: "france",
   code: "fr",
   name: "France",
+  markerCoordinates: [2.3522, 48.8566],
+  markerAnchor: "Paris",
   published: "+1",
   analyst: "Mai Linh Pham Dac",
   sectionPage: 177,
@@ -503,6 +511,8 @@ const germany: MemberSeed = {
   id: "germany",
   code: "de",
   name: "Germany",
+  markerCoordinates: [13.405, 52.52],
+  markerAnchor: "Berlin",
   published: "+1",
   analyst: "Ece Onal",
   sectionPage: 179,
@@ -670,6 +680,8 @@ const italy: MemberSeed = {
   id: "italy",
   code: "it",
   name: "Italy",
+  markerCoordinates: [12.4964, 41.9028],
+  markerAnchor: "Rome",
   published: "+1",
   analyst: "Anson Hu",
   sectionPage: 181,
@@ -837,6 +849,8 @@ const japan: MemberSeed = {
   id: "japan",
   code: "jp",
   name: "Japan",
+  markerCoordinates: [139.6917, 35.6895],
+  markerAnchor: "Tokyo",
   published: "0",
   analyst: "Ece Onal",
   sectionPage: 184,
@@ -949,6 +963,8 @@ const unitedKingdom: MemberSeed = {
   id: "united_kingdom",
   code: "uk",
   name: "United Kingdom",
+  markerCoordinates: [-0.1276, 51.5072],
+  markerAnchor: "London",
   published: "+1",
   analyst: "Anson Hu",
   sectionPage: 185,
@@ -1163,6 +1179,8 @@ const unitedStates: MemberSeed = {
   id: "united_states",
   code: "us",
   name: "United States",
+  markerCoordinates: [-77.0369, 38.9072],
+  markerAnchor: "Washington, D.C.",
   published: "0",
   analyst: "Jeanne Brownewell",
   sectionPage: 188,
@@ -1262,6 +1280,8 @@ const europeanUnion: MemberSeed = {
   id: "european_union",
   code: "eu",
   name: "European Union",
+  markerCoordinates: [4.3517, 50.8503],
+  markerAnchor: "Brussels",
   published: "+1",
   analyst: "Jeanne Brownewell",
   sectionPage: 190,
