@@ -76,6 +76,8 @@ describe("frontend architecture", () => {
     expect(globe).toContain("prefers-reduced-motion");
     expect(globe).toContain(".toFixed(4)");
     expect(globe).toContain(".toFixed(5)");
+    expect(globe).toContain("overflow-visible rounded-full");
+    expect(globe).not.toContain("overflow-hidden rounded-full");
   });
 
   test("the homepage globe exposes all G7 assessments without immediate navigation", () => {

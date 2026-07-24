@@ -308,7 +308,7 @@ export function WireframeDottedGlobe({
     <div
       ref={containerRef}
       className={cn(
-        "relative aspect-square min-h-[280px] w-full overflow-hidden rounded-full",
+        "relative aspect-square min-h-[280px] w-full overflow-visible rounded-full",
         className,
       )}
     >
