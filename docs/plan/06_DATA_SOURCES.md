@@ -6,7 +6,8 @@ Evidence collection must be driven by a versioned source registry, not ad hoc se
 
 The G7 compliance coding manual prioritizes national government sources, then international organizations, then reliable major news sources. Writ preserves that hierarchy while allowing issue-specific exceptions.
 
-The machine-readable registry is in `data/source-registry.json`.
+The canonical machine-readable registry is in `config/source_registry.yml`.
+`data/source-registry.json` is a generated compatibility projection for existing consumers.
 
 ## 2. Source classes
 

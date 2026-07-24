@@ -1,0 +1,45 @@
+{
+  "schema_version": "2.0.0",
+  "manifest_id": "sha256:200bf5f1e0ac9fc47d7257d93357e8ca3c5950faf8073f4efae516bae177de83",
+  "source_id": "g20_research_group",
+  "institution": "G20",
+  "summit_slug": "2024-rio",
+  "live_fetch_authorized": false,
+  "raw_files_available": false,
+  "access_observations": [
+    {
+      "access_method": "browser",
+      "status": "failed",
+      "observed_at": "2026-07-24",
+      "failure_reason": "iso_8859_1_decode_error",
+      "notes": "Browser fetch could not decode the seed page."
+    },
+    {
+      "access_method": "direct_http",
+      "status": "succeeded",
+      "observed_at": "2026-07-24",
+      "failure_reason": null,
+      "notes": "Bounded inspection succeeded previously; live corpus fetching is not authorized."
+    }
+  ],
+  "documents": [
+    {
+      "document_id": "g20_research_group.seed_index",
+      "category": "seed_index",
+      "source_url": "https://www.g20.utoronto.ca/analysis/index.html",
+      "section_anchor": "commitments",
+      "report_stage": null,
+      "fetch_status": "blocked",
+      "skip_reason": "live_access_not_approved_and_no_source_file_provided",
+      "storage_backend": null,
+      "storage_object_id": null,
+      "sha256": null,
+      "byte_size": null,
+      "media_type": null,
+      "warnings": [
+        "browser_access_failed",
+        "raw_source_unavailable"
+      ]
+    }
+  ]
+}

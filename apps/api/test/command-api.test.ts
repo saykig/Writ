@@ -2,11 +2,11 @@
 // optimistic concurrency, idempotency, and the immutable audit trail.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import type { FastifyInstance } from "fastify";
-import { createSql, type Sql } from "../src/db/client.js";
+import type { Sql } from "../src/db/client.js";
 import { createRepositories, type Repositories } from "../src/db/repositories/index.js";
 import { buildApp } from "../src/http/app.js";
 import { StaticTokenVerifier, type Actor } from "../src/http/auth.js";
-import { createTempDb, hasDatabase, type TempDb } from "./testdb.js";
+import { createTempDb, createTestSql, hasDatabase, type TempDb } from "./testdb.js";
 
 const suite = hasDatabase ? describe : describe.skip;
 
@@ -41,7 +41,7 @@ suite("DATA-002 command API", () => {
   let app: FastifyInstance;
 
   beforeAll(async () => {
-    pool = createSql({ max: 3 });
+    pool = createTestSql({ max: 3 });
     db = await createTempDb(pool);
     repos = createRepositories(db.sql);
     app = buildApp({ client: db.sql, verifier: new StaticTokenVerifier(TOKENS) });

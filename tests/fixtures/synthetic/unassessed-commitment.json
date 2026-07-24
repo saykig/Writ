@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "record_type": "identified_commitment",
+  "institution": "G20",
+  "summit_id": "G20.synthetic-summit",
+  "commitment_id": "synthetic.commitment.1",
+  "exact_text": "Synthetic commitment wording for schema tests only.",
+  "issue_areas": [
+    {
+      "source_term": "Synthetic issue area",
+      "vocabulary_mapping_id": null
+    }
+  ],
+  "source_passage_ids": ["synthetic.commitment.passage"],
+  "parser_version": "synthetic-test-2",
+  "retrieval_date": "2026-07-24",
+  "extraction_warnings": ["synthetic_fixture"]
+}

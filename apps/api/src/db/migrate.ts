@@ -108,6 +108,12 @@ export async function applyMigrations(sql: Sql, options: ApplyOptions = {}): Pro
     await conn.unsafe(`SET search_path TO ${searchPath}`);
     try {
       return await applyPendingOnConnection(conn, files);
+    } catch (error) {
+      // Migration files are transactional. A failed multi-statement migration
+      // leaves PostgreSQL in an aborted transaction, so roll it back before
+      // attempting the advisory-unlock query and preserve the original error.
+      await conn.unsafe("ROLLBACK");
+      throw error;
     } finally {
       await conn`SELECT pg_advisory_unlock(hashtext('writ.migrations.' || ${schema}))`;
     }

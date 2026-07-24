@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/source_registry_config.schema.json",
+  "title": "Writ Canonical Source Registry Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sources"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "jurisdictions",
+        "source_tier",
+        "source_types",
+        "base_uri",
+        "discovery_method",
+        "fetch_method",
+        "enabled",
+        "verification_status"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "publisher": { "type": "string" },
+        "institution": { "enum": ["G7", "G20"] },
+        "corpus_role": { "type": "string" },
+        "jurisdictions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "issue_areas": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "source_tier": { "type": "integer", "minimum": 0, "maximum": 6 },
+        "source_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "commitment",
+              "methodology",
+              "evaluation",
+              "executive",
+              "law",
+              "regulation",
+              "budget",
+              "spending",
+              "procurement",
+              "grant",
+              "parliament",
+              "audit",
+              "statistics",
+              "open_data",
+              "international_organization",
+              "media",
+              "research",
+              "archive",
+              "search"
+            ]
+          }
+        },
+        "base_uri": { "type": "string", "format": "uri" },
+        "api_spec_uri": { "type": "string", "format": "uri" },
+        "discovery_method": {
+          "enum": [
+            "api",
+            "rss",
+            "atom",
+            "sitemap",
+            "crawl",
+            "search",
+            "bulk_download",
+            "manual",
+            "hybrid",
+            "licensed_feed"
+          ]
+        },
+        "fetch_method": {
+          "enum": ["http", "api", "browser", "bulk_download", "manual", "licensed_feed"]
+        },
+        "authentication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": ["none", "api_key", "oauth2", "basic", "session", "licensed"]
+            },
+            "secret_ref": { "type": "string" },
+            "notes": { "type": "string" }
+          }
+        },
+        "rate_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests": { "type": "integer", "minimum": 1 },
+            "period_seconds": { "type": "integer", "minimum": 1 },
+            "concurrency": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "crawl_schedule": { "type": "string" },
+        "robots_policy": {
+          "enum": ["respect", "api_only", "manual_review", "not_applicable"]
+        },
+        "terms_status": {
+          "enum": ["reviewed", "review_required", "restricted", "unknown"]
+        },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "expected_formats": { "type": "array", "items": { "type": "string" } },
+        "connector": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "verification_status": {
+          "enum": ["verified", "catalogued", "verify_before_enable", "disabled"]
+        },
+        "last_verified": { "type": "string", "format": "date" },
+        "notes": { "type": "string" },
+        "discovery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["seed_url", "section_anchor", "allowed_domains"],
+          "properties": {
+            "seed_url": { "type": "string", "format": "uri" },
+            "section_anchor": { "type": "string", "minLength": 1 },
+            "allowed_domains": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9.-]+$"
+              }
+            },
+            "category_sections": {
+              "type": "object",
+              "additionalProperties": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "include": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "exclude": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "related_source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "data_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "preserve_exact_commitment_text",
+            "preserve_source_url",
+            "preserve_source_document",
+            "preserve_page_or_section",
+            "preserve_retrieval_date",
+            "preserve_parser_version",
+            "preserve_interim_and_final_separately",
+            "preserve_member_and_aggregate_scores_separately",
+            "historical_score_type",
+            "allow_automatic_score_transfer",
+            "allow_historical_score_to_replace_new_evidence",
+            "selection_policy"
+          ],
+          "properties": {
+            "preserve_exact_commitment_text": { "const": true },
+            "preserve_source_url": { "const": true },
+            "preserve_source_document": { "const": true },
+            "preserve_page_or_section": { "const": true },
+            "preserve_retrieval_date": { "const": true },
+            "preserve_parser_version": { "const": true },
+            "preserve_interim_and_final_separately": { "const": true },
+            "preserve_member_and_aggregate_scores_separately": { "const": true },
+            "historical_score_type": { "const": "expert_assigned_historical_score" },
+            "allow_automatic_score_transfer": { "const": false },
+            "allow_historical_score_to_replace_new_evidence": { "const": false },
+            "selection_policy": { "$ref": "#/$defs/selectionPolicy" }
+          }
+        },
+        "historical_label": { "$ref": "#/$defs/historicalLabel" }
+      }
+    },
+    "selectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default_status",
+        "not_selected_requires_valid_reconciliation",
+        "allow_member_assessment_for_unknown"
+      ],
+      "properties": {
+        "default_status": { "const": "unknown" },
+        "not_selected_requires_valid_reconciliation": { "const": true },
+        "allow_member_assessment_for_unknown": { "const": false }
+      }
+    },
+    "historicalLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label_type",
+        "label_authority",
+        "usable_for_training_examples",
+        "usable_for_evaluation",
+        "usable_for_automatic_score_transfer"
+      ],
+      "properties": {
+        "label_type": { "const": "expert_assigned_historical_score" },
+        "label_authority": { "const": "G20 Research Group" },
+        "usable_for_training_examples": { "const": true },
+        "usable_for_evaluation": { "const": true },
+        "usable_for_automatic_score_transfer": { "const": false }
+      }
+    }
+  }
+}

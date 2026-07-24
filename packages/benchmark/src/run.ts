@@ -19,7 +19,7 @@ import type {
   MethodologyInventory,
 } from "@writ/domain";
 import { resolvedIr, methodologyVersionId } from "./methodology.js";
-import { enrichSnapshotForProfile } from "./evidence.js";
+import { projectSnapshotForProfile, type ClassificationProjectionDiagnostic } from "./evidence.js";
 import { INVENTORY_PATH, LEDGER_PATH, profilePath, snapshotPath } from "./paths.js";
 
 const COMMITMENT_ID = "AI_SME_ADOPTION";
@@ -69,6 +69,11 @@ export interface BenchmarkRun {
   readonly receipts: ReadonlyMap<string, EvaluationReceipt>;
   /** Generous-profile receipts, keyed by subject id. */
   readonly generousReceipts: ReadonlyMap<string, EvaluationReceipt>;
+  /** Explicit classification-projection diagnostics, keyed by subject id. */
+  readonly classificationDiagnostics: ReadonlyMap<
+    string,
+    readonly ClassificationProjectionDiagnostic[]
+  >;
 }
 
 function loadJson<T>(path: string): T {
@@ -86,6 +91,10 @@ export function runBenchmark(): BenchmarkRun {
   const generousReceipts = new Map<string, EvaluationReceipt>();
   const cells: LedgerCell[] = [];
   const sensitivity: SensitivityEntry[] = [];
+  const classificationDiagnostics = new Map<
+    string,
+    readonly ClassificationProjectionDiagnostic[]
+  >();
 
   for (const subject of inventory.subjects) {
     const snapshot = loadJson<Evidence>(snapshotPath(subject));
@@ -94,22 +103,25 @@ export function runBenchmark(): BenchmarkRun {
       throw new Error(`Methodology inventory has no ±1/0 published result for "${subject}".`);
     }
 
+    const publishedProjection = projectSnapshotForProfile(snapshot, published);
+    const generousProjection = projectSnapshotForProfile(snapshot, generous);
     const receipt = evaluateCommitment({
       ir,
       commitmentId: COMMITMENT_ID,
-      snapshot: enrichSnapshotForProfile(snapshot, published),
+      snapshot: publishedProjection.snapshot,
       subject,
       profile: published,
     });
     const generousReceipt = evaluateCommitment({
       ir,
       commitmentId: COMMITMENT_ID,
-      snapshot: enrichSnapshotForProfile(snapshot, generous),
+      snapshot: generousProjection.snapshot,
       subject,
       profile: generous,
     });
     receipts.set(subject, receipt);
     generousReceipts.set(subject, generousReceipt);
+    classificationDiagnostics.set(subject, publishedProjection.diagnostics);
 
     const computed = receipt.result as LedgerCell["computed"];
     const generousResult = generousReceipt.result;
@@ -159,7 +171,7 @@ export function runBenchmark(): BenchmarkRun {
     interpretation_sensitivity: sensitivity,
   };
 
-  return { ledger, receipts, generousReceipts };
+  return { ledger, receipts, generousReceipts, classificationDiagnostics };
 }
 
 /** Number of distinct strong actions a receipt's qualifying set implies. */

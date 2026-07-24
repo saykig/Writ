@@ -1,8 +1,8 @@
 // DATA-001: referential integrity, immutability, supersession, bitemporality.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createSql, type Sql } from "../src/db/client.js";
+import type { Sql } from "../src/db/client.js";
 import { createRepositories, type Repositories } from "../src/db/repositories/index.js";
-import { createTempDb, hasDatabase, type TempDb } from "./testdb.js";
+import { createTempDb, createTestSql, hasDatabase, type TempDb } from "./testdb.js";
 
 const SHA = `sha256:${"a".repeat(64)}`;
 let counter = 0;
@@ -32,7 +32,7 @@ suite("DATA-001 integrity", () => {
   let repos: Repositories;
 
   beforeAll(async () => {
-    pool = createSql({ max: 3 });
+    pool = createTestSql({ max: 3 });
     db = await createTempDb(pool);
     repos = createRepositories(db.sql);
   });

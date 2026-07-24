@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/assessment.schema.json",
+  "title": "Corpus Assessment Record",
+  "oneOf": [
+    { "$ref": "#/$defs/assessmentSelection" },
+    { "$ref": "#/$defs/memberComplianceAssessment" }
+  ],
+  "$defs": {
+    "publishedComplianceResult": {
+      "enum": ["-1", "0", "+1", "not_applicable", null]
+    },
+    "historicalLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label_type",
+        "label_authority",
+        "usable_for_training_examples",
+        "usable_for_evaluation",
+        "usable_for_automatic_score_transfer"
+      ],
+      "properties": {
+        "label_type": { "const": "expert_assigned_historical_score" },
+        "label_authority": { "type": "string", "minLength": 1 },
+        "usable_for_training_examples": { "const": true },
+        "usable_for_evaluation": { "const": true },
+        "usable_for_automatic_score_transfer": { "const": false }
+      }
+    },
+    "assessmentSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "institution",
+        "summit_id",
+        "commitment_id",
+        "selection_status",
+        "selection_source_id",
+        "selection_date",
+        "reconciliation_manifest_id",
+        "parser_version",
+        "retrieval_date",
+        "extraction_warnings"
+      ],
+      "properties": {
+        "schema_version": { "const": "2.0.0" },
+        "record_type": { "const": "assessment_selection" },
+        "institution": { "enum": ["G7", "G20"] },
+        "summit_id": { "type": "string", "minLength": 1 },
+        "commitment_id": { "type": "string", "minLength": 1 },
+        "selection_status": { "enum": ["selected", "not_selected", "unknown"] },
+        "selection_source_id": { "type": "string", "minLength": 1 },
+        "selection_date": { "type": ["string", "null"], "format": "date" },
+        "reconciliation_manifest_id": { "type": ["string", "null"], "minLength": 1 },
+        "parser_version": { "type": "string", "minLength": 1 },
+        "retrieval_date": { "type": "string", "format": "date" },
+        "extraction_warnings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "selection_date": { "type": "null" } },
+            "required": ["selection_date"]
+          },
+          "then": {
+            "properties": { "extraction_warnings": { "minItems": 1 } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "selection_status": { "const": "not_selected" } },
+            "required": ["selection_status"]
+          },
+          "then": {
+            "properties": {
+              "reconciliation_manifest_id": { "type": "string", "minLength": 1 }
+            }
+          },
+          "else": {
+            "properties": { "reconciliation_manifest_id": { "type": "null" } }
+          }
+        }
+      ]
+    },
+    "memberComplianceAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "assessment_id",
+        "report_id",
+        "commitment_id",
+        "member_id",
+        "published_result",
+        "score_status",
+        "source_passage_ids",
+        "analyst_reasoning",
+        "dispute_reason",
+        "current_view_status",
+        "historical_label",
+        "parser_version",
+        "retrieval_date",
+        "extraction_warnings"
+      ],
+      "properties": {
+        "schema_version": { "const": "2.0.0" },
+        "record_type": { "const": "member_compliance_assessment" },
+        "assessment_id": { "type": "string", "minLength": 1 },
+        "report_id": { "type": "string", "minLength": 1 },
+        "commitment_id": { "type": "string", "minLength": 1 },
+        "member_id": { "type": "string", "minLength": 1 },
+        "published_result": { "$ref": "#/$defs/publishedComplianceResult" },
+        "score_status": { "enum": ["published", "missing", "disputed", "withdrawn"] },
+        "source_passage_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "analyst_reasoning": { "type": ["string", "null"] },
+        "dispute_reason": { "type": ["string", "null"] },
+        "current_view_status": { "enum": ["included", "excluded"] },
+        "historical_label": { "$ref": "#/$defs/historicalLabel" },
+        "parser_version": { "type": "string", "minLength": 1 },
+        "retrieval_date": { "type": "string", "format": "date" },
+        "extraction_warnings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "score_status": { "const": "published" } },
+            "required": ["score_status"]
+          },
+          "then": {
+            "properties": {
+              "published_result": { "enum": ["-1", "0", "+1", "not_applicable"] },
+              "dispute_reason": { "type": "null" },
+              "current_view_status": { "const": "included" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "score_status": { "const": "missing" } },
+            "required": ["score_status"]
+          },
+          "then": {
+            "properties": {
+              "published_result": { "type": "null" },
+              "dispute_reason": { "type": "null" },
+              "current_view_status": { "const": "included" },
+              "extraction_warnings": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "score_status": { "const": "disputed" } },
+            "required": ["score_status"]
+          },
+          "then": {
+            "properties": {
+              "published_result": { "enum": ["-1", "0", "+1", "not_applicable"] },
+              "dispute_reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "score_status": { "const": "withdrawn" } },
+            "required": ["score_status"]
+          },
+          "then": {
+            "properties": {
+              "published_result": { "enum": ["-1", "0", "+1", "not_applicable"] },
+              "current_view_status": { "const": "excluded" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

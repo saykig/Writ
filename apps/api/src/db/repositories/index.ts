@@ -6,6 +6,7 @@ import type { DbClient } from "../client.js";
 import { actionsRepository } from "./actions.js";
 import { auditRepository } from "./audit.js";
 import { claimsRepository } from "./claims.js";
+import { corpusRepository } from "./corpus.js";
 import { documentsRepository } from "./documents.js";
 import { evaluationsRepository } from "./evaluations.js";
 import { institutionsRepository } from "./institutions.js";
@@ -26,6 +27,7 @@ export function createRepositories(sql: DbClient) {
     releases: releasesRepository(sql),
     audit: auditRepository(sql),
     sourceRegistry: sourceRegistryRepository(sql),
+    corpus: corpusRepository(sql),
   };
 }
 
@@ -34,6 +36,7 @@ export type Repositories = ReturnType<typeof createRepositories>;
 export * from "./actions.js";
 export * from "./audit.js";
 export * from "./claims.js";
+export * from "./corpus.js";
 export * from "./documents.js";
 export * from "./evaluations.js";
 export * from "./institutions.js";

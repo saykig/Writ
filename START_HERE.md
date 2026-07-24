@@ -47,4 +47,7 @@ The first milestone is complete only when:
 
 ## Evidence warning
 
-`data/source-registry.json` contains connector candidates and research leads. Its `verification_status` field is authoritative for operational readiness. Codex must not treat an entry as production-ready merely because it appears in the registry.
+`config/source_registry.yml` contains connector candidates and research leads.
+`data/source-registry.json` is its generated compatibility projection. A source's
+`verification_status` is authoritative for operational readiness. Codex must not treat an entry
+as production-ready merely because it appears in the registry.

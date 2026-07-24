@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/corpus_vocabulary.schema.json",
+  "title": "Corpus Controlled Vocabulary Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "mappings"],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "mappings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/mapping" }
+    }
+  },
+  "$defs": {
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapping_id",
+        "namespace",
+        "source_term",
+        "canonical_term",
+        "mapping_status",
+        "source_id",
+        "reviewer_id"
+      ],
+      "properties": {
+        "mapping_id": { "type": "string", "minLength": 1 },
+        "namespace": {
+          "enum": [
+            "issue_area",
+            "institution",
+            "member_name",
+            "report_terminology",
+            "document_classification",
+            "policy_instrument"
+          ]
+        },
+        "source_term": { "type": "string", "minLength": 1 },
+        "canonical_term": { "type": ["string", "null"], "minLength": 1 },
+        "mapping_status": { "enum": ["reviewed", "proposed", "unmapped"] },
+        "source_id": { "type": "string", "minLength": 1 },
+        "reviewer_id": { "type": ["string", "null"], "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "mapping_status": { "const": "reviewed" } },
+            "required": ["mapping_status"]
+          },
+          "then": {
+            "properties": {
+              "canonical_term": { "type": "string", "minLength": 1 },
+              "reviewer_id": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "mapping_status": { "const": "unmapped" } },
+            "required": ["mapping_status"]
+          },
+          "then": {
+            "properties": { "canonical_term": { "type": "null" } }
+          }
+        }
+      ]
+    }
+  }
+}

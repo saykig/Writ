@@ -8,7 +8,9 @@ export { MEMBERS, type MemberSeed, type ActionSeed, type Classification } from "
 
 export {
   buildMemberSnapshot,
+  baseClassificationState,
   enrichSnapshotForProfile,
+  projectSnapshotForProfile,
   buildSourceManifest,
   sourceDocumentVersion,
   generalMeasureChoice,
@@ -21,6 +23,9 @@ export {
   RUBRIC_PREDICATE,
   GENERAL_MEASURE_DECISION_ID,
   METHODOLOGY_PASSAGES,
+  type ClassificationProjectionDiagnostic,
+  type RubricClassificationState,
+  type ProfileProjection,
 } from "./evidence.js";
 
 export {

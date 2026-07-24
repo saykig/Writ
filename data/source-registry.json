@@ -1,7 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-07-22T00:00:00Z",
   "entries": [
+    {
+      "id": "g20_research_group",
+      "name": "G20 Research Group",
+      "publisher": "University of Toronto",
+      "jurisdictions": [
+        "G20"
+      ],
+      "source_tier": 0,
+      "source_types": [
+        "commitment",
+        "methodology",
+        "evaluation",
+        "open_data"
+      ],
+      "base_uri": "https://www.g20.utoronto.ca/analysis/index.html",
+      "discovery_method": "crawl",
+      "fetch_method": "http",
+      "authentication": {
+        "type": "none"
+      },
+      "robots_policy": "respect",
+      "terms_status": "review_required",
+      "languages": [
+        "en"
+      ],
+      "expected_formats": [
+        "text/html",
+        "application/pdf"
+      ],
+      "enabled": false,
+      "verification_status": "verify_before_enable"
+    },
     {
       "id": "g7.compliance.index",
       "name": "G7 Research Group Compliance Index",

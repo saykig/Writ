@@ -1,8 +1,13 @@
 # Writ
 
-Writ is an auditable policy-evaluation compiler for G7 commitment compliance. It turns a
-normative methodology, a reviewed evidence ledger, and explicit interpretation rules into a
+Writ is an auditable policy-evaluation compiler for institutional commitment compliance. It turns
+a normative methodology, a reviewed evidence ledger, and explicit interpretation rules into a
 deterministic, reproducible evaluation receipt with a proof tree and content hashes.
+
+Its normalized historical corpus contracts support distinct G7 and G20 source adapters while
+keeping identified commitments, assessment selections, compliance reports, and member assessments
+separate. Historical analyst scores are expert-assigned reference labels, never universal scoring
+rules or substitutes for current evidence.
 
 The textual DSL compiles into a typed canonical intermediate representation (IR). The IR,
 the deterministic evaluator, the frozen evidence snapshot, and the receipt are the source of
@@ -22,11 +27,15 @@ truth — a rendered report is a view, never the record.
 - `packages/cli` — author and operator commands.
 - `apps/api` — governed evidence + evaluation service (Fastify + OpenAPI).
 - `apps/studio` — review and methodology authoring UI.
-- `apps/ingest` — Python acquisition, parsing, anchoring, and candidate extraction.
+- `apps/ingest` — source-specific acquisition, parsing, anchoring, normalization, and corpus
+  validation.
 - `db/migrations` — PostgreSQL schema and controlled migrations.
 - `reference-core` — dependency-light executable specification for the hardest semantics (kept until `packages/evaluator` supersedes it).
 - `specs/` — JSON Schemas, the EBNF, and the OpenAPI contract (interchange authority).
-- `examples/`, `fixtures/`, `data/` — golden `.writ`/IR/receipt examples, seeded defect fixtures, and the source registry.
+- `examples/`, `fixtures/`, `data/` — golden `.writ`/IR/receipt examples, seeded defect fixtures,
+  source manifests, and generated registry artifacts.
+- `config/` — canonical source and controlled-vocabulary registries.
+- `schemas/` — normalized compliance-corpus interchange contracts.
 - `docs/plan/` — the numbered product, semantics, and architecture specifications.
 - `adr/` — architecture decision records.
 

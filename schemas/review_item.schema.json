@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/review_item.schema.json",
+  "title": "CorpusReviewItem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "review_item_id",
+    "source_id",
+    "source_location",
+    "issue_type",
+    "parser_version",
+    "affected_record_ids",
+    "original_source_text",
+    "review_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "record_type": { "const": "corpus_review_item" },
+    "review_item_id": { "type": "string", "minLength": 1 },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passage_id", "page_or_section"],
+      "properties": {
+        "passage_id": { "type": ["string", "null"], "minLength": 1 },
+        "page_or_section": { "type": ["string", "null"], "minLength": 1 }
+      },
+      "anyOf": [
+        { "properties": { "passage_id": { "type": "string", "minLength": 1 } } },
+        { "properties": { "page_or_section": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "issue_type": {
+      "enum": [
+        "ambiguous_member_identity",
+        "ambiguous_commitment_identity",
+        "ambiguous_row_identity",
+        "missing_score",
+        "failed_score_extraction",
+        "missing_required_date",
+        "incomplete_reconciliation",
+        "conflicted_reconciliation",
+        "conflicting_source_records",
+        "proposed_vocabulary_mapping",
+        "unmapped_vocabulary",
+        "identity_affecting_parser_warning",
+        "scoring_affecting_parser_warning"
+      ]
+    },
+    "parser_version": { "type": "string", "minLength": 1 },
+    "affected_record_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "original_source_text": { "type": ["string", "null"] },
+    "review_status": { "enum": ["pending", "in_review", "resolved", "dismissed"] }
+  }
+}

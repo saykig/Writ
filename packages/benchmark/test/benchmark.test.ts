@@ -1,13 +1,17 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { analyzeScoreProgram, type FiniteDomains } from "@writ/analyzer";
 import { canonicalJson } from "@writ/provenance";
 import { validate, type Evidence, type InterpretationProfile } from "@writ/domain";
-import { verifyReceipt } from "@writ/evaluator";
+import { evaluateCommitment, verifyReceipt } from "@writ/evaluator";
 import {
   MEMBERS,
+  buildProfile,
   buildMemberSnapshot,
   compileResolvedWrit,
+  projectSnapshotForProfile,
+  resolvedIr,
   resolvedCommitment,
   runBenchmark,
   profilePath,
@@ -196,7 +200,9 @@ describe("discrepancy ledger is well-formed", () => {
 
   test("the persisted ledger on disk matches a fresh run", () => {
     const onDisk = loadJson<typeof ledger>(
-      new URL("../../../benchmark/2025-ai-sme/discrepancy-ledger.json", import.meta.url).pathname,
+      fileURLToPath(
+        new URL("../../../benchmark/2025-ai-sme/discrepancy-ledger.json", import.meta.url),
+      ),
     );
     expect(onDisk.cells).toEqual(ledger.cells as never);
     expect(onDisk.summary).toEqual(ledger.summary as never);
@@ -222,5 +228,61 @@ describe("evidence enrichment is faithful", () => {
     );
     // 2 Japanese measures + 3 US strategy documents.
     expect(sensitive.length).toBe(5);
+  });
+
+  test("missing classification remains explicit and decisive unknown is unresolved", () => {
+    const member = MEMBERS[0]!;
+    const base = buildMemberSnapshot(member);
+    const action = base.actions[0]!;
+    const snapshot = {
+      ...base,
+      actions: [action],
+      claims: base.claims.filter((claim) => claim.subject_ref !== action.id),
+    };
+    const profile = buildProfile("published");
+    const projection = projectSnapshotForProfile(snapshot, profile);
+    const projectedAction = projection.snapshot.actions[0] as unknown as Record<string, unknown>;
+    expect(projection.diagnostics).toHaveLength(1);
+    expect(projection.diagnostics[0]?.code).toBe("WRT-BENCH-CLASSIFICATION-UNKNOWN");
+    expect(projectedAction.rubric_classification_state).toMatchObject({
+      status: "unknown",
+      value: null,
+    });
+    expect("classification" in projectedAction).toBe(false);
+
+    const receipt = evaluateCommitment({
+      ir: resolvedIr(),
+      commitmentId: "AI_SME_ADOPTION",
+      snapshot: projection.snapshot,
+      subject: member.id,
+      profile,
+    });
+    expect(receipt.result).toBe("unresolved");
+    expect(receipt.result_status).toBe("incomplete");
+  });
+
+  test("non-decisive unknown classification preserves a supported result", () => {
+    const member = MEMBERS[0]!;
+    const base = buildMemberSnapshot(member);
+    const action = base.actions[0]!;
+    const snapshot = {
+      ...base,
+      actions: base.actions.map((candidate) =>
+        candidate.id === action.id ? { ...candidate, status: "rejected" as const } : candidate,
+      ),
+      claims: base.claims.filter((claim) => claim.subject_ref !== action.id),
+    };
+    const profile = buildProfile("published");
+    const projection = projectSnapshotForProfile(snapshot, profile);
+    expect(projection.diagnostics).toHaveLength(1);
+    const receipt = evaluateCommitment({
+      ir: resolvedIr(),
+      commitmentId: "AI_SME_ADOPTION",
+      snapshot: projection.snapshot,
+      subject: member.id,
+      profile,
+    });
+    expect(receipt.result).toBe("+1");
+    expect(receipt.result_status).toBe("supported");
   });
 });

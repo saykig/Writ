@@ -209,17 +209,63 @@ export function generalMeasureChoice(
 }
 
 /** The rubric classification an action carries in its supporting claim. */
-function baseClassification(
+export interface ClassificationProjectionDiagnostic {
+  readonly code: "WRT-BENCH-CLASSIFICATION-UNKNOWN";
+  readonly actionId: string;
+  readonly claimIds: readonly string[];
+  readonly reason: string;
+}
+
+export type RubricClassificationState =
+  | { readonly status: "known"; readonly value: Classification }
+  | {
+      readonly status: "unknown";
+      readonly value: null;
+      readonly diagnostic: ClassificationProjectionDiagnostic;
+    };
+
+export interface ProfileProjection {
+  readonly snapshot: Evidence;
+  readonly diagnostics: readonly ClassificationProjectionDiagnostic[];
+}
+
+function isClassification(value: unknown): value is Classification {
+  return value === "strong" || value === "weak" || value === "counter";
+}
+
+/** Preserve a missing or unusable rubric claim as an explicit unknown state. */
+export function baseClassificationState(
   snapshot: Evidence,
   action: Evidence["actions"][number],
-): Classification {
+): RubricClassificationState {
   const claim = snapshot.claims.find(
     (c) =>
       c.predicate === RUBRIC_PREDICATE &&
       (action.claim_ids ?? []).includes(c.id) &&
       c.subject_ref === action.id,
   );
-  return (claim?.object as Classification | undefined) ?? "weak";
+  if (
+    claim !== undefined &&
+    claim.status === "accepted" &&
+    claim.truth_value === "true" &&
+    isClassification(claim.object)
+  ) {
+    return { status: "known", value: claim.object };
+  }
+  const reason =
+    claim === undefined
+      ? "No rubric-classification claim is linked to the action."
+      : "The linked rubric-classification claim is not accepted, true, and usable.";
+  return {
+    status: "unknown",
+    value: null,
+    diagnostic: {
+      code: "WRT-BENCH-CLASSIFICATION-UNKNOWN",
+      actionId: action.id,
+      claimIds: [...(action.claim_ids ?? [])],
+      reason,
+    },
+  };
 }
 
 /**
@@ -230,19 +276,52 @@ function baseClassification(
  * schema-valid `evidence` document (it carries the extra `classification`
  * field); it is the in-memory collection `evaluateCommitment` ranges over.
  */
+export function projectSnapshotForProfile(
+  snapshot: Evidence,
+  profile: InterpretationProfile,
+): ProfileProjection {
+  const choice = generalMeasureChoice(profile);
+  const overridden = new Set(choice?.instruments ?? []);
+  const diagnostics: ClassificationProjectionDiagnostic[] = [];
+  const actions = snapshot.actions.map((action) => {
+    const base = baseClassificationState(snapshot, action);
+    const instrument = String(action.underlying_instrument_id ?? "");
+    if (overridden.has(instrument)) {
+      return {
+        ...action,
+        classification: choice!.classification,
+        rubric_classification_state: {
+          status: "known",
+          value: choice!.classification,
+          source: "interpretation_profile",
+        },
+      };
+    }
+    if (base.status === "known") {
+      return {
+        ...action,
+        classification: base.value,
+        rubric_classification_state: base,
+      };
+    }
+    diagnostics.push(base.diagnostic);
+    return {
+      ...action,
+      rubric_classification_state: base,
+    };
+  });
+  return {
+    snapshot: { ...snapshot, actions } as Evidence,
+    diagnostics,
+  };
+}
+
+/** Compatibility projection for the frozen benchmark's existing callers. */
 export function enrichSnapshotForProfile(
   snapshot: Evidence,
   profile: InterpretationProfile,
 ): Evidence {
-  const choice = generalMeasureChoice(profile);
-  const overridden = new Set(choice?.instruments ?? []);
-  const actions = snapshot.actions.map((action) => {
-    const base = baseClassification(snapshot, action);
-    const instrument = String(action.underlying_instrument_id ?? "");
-    const classification = overridden.has(instrument) ? choice!.classification : base;
-    return { ...action, classification };
-  });
-  return { ...snapshot, actions } as Evidence;
+  return projectSnapshotForProfile(snapshot, profile).snapshot;
 }
 
 // --- Source manifest ---------------------------------------------------------

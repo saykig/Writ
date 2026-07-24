@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/source_document.schema.json",
+  "title": "Historical Compliance Source Document",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "source_id",
+    "source_url",
+    "institution",
+    "document_category",
+    "fetch_status",
+    "parser_version",
+    "warnings",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "id": { "type": "string", "minLength": 1 },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_url": { "type": "string", "format": "uri" },
+    "institution": { "enum": ["G7", "G20"] },
+    "summit_id": { "type": ["string", "null"] },
+    "summit_name": { "type": ["string", "null"] },
+    "summit_year": { "type": ["integer", "null"], "minimum": 2008 },
+    "host": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "publisher": { "type": ["string", "null"] },
+    "report_author": { "type": ["string", "null"] },
+    "document_category": {
+      "enum": [
+        "seed_index",
+        "commitment_inventory",
+        "assessment_report",
+        "methodology",
+        "compliance_dataset",
+        "coded_source_document",
+        "selected_commitments"
+      ]
+    },
+    "report_stage": { "enum": ["preliminary", "interim", "final", "special", null] },
+    "source_page_or_section": { "type": ["string", "null"] },
+    "media_type": { "type": ["string", "null"] },
+    "fetch_status": {
+      "enum": ["planned", "retrieved", "imported", "skipped", "failed", "blocked"]
+    },
+    "storage_backend": { "enum": ["neon_postgres", null] },
+    "storage_object_id": { "type": ["string", "null"] },
+    "sha256": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }]
+    },
+    "byte_size": { "type": ["integer", "null"], "minimum": 0 },
+    "retrieved_at": { "type": ["string", "null"], "format": "date-time" },
+    "parser_version": { "type": ["string", "null"] },
+    "extraction_confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_id"],
+      "properties": {
+        "manifest_id": { "type": "string" },
+        "requested_url": { "type": ["string", "null"], "format": "uri" },
+        "resolved_url": { "type": ["string", "null"], "format": "uri" },
+        "redirect_chain": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "fetch_status": { "enum": ["retrieved", "imported"] } },
+        "required": ["fetch_status"]
+      },
+      "then": {
+        "properties": {
+          "storage_backend": { "const": "neon_postgres" },
+          "storage_object_id": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+        },
+        "required": ["storage_backend", "storage_object_id", "sha256"]
+      }
+    }
+  ]
+}

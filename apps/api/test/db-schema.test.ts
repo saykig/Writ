@@ -1,8 +1,8 @@
 // DATA-001: migrations apply from clean and produce the full schema.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createSql, type Sql } from "../src/db/client.js";
+import type { Sql } from "../src/db/client.js";
 import { applyPendingOnConnection, loadMigrationFiles } from "../src/db/migrate.js";
-import { createTempDb, hasDatabase, type TempDb } from "./testdb.js";
+import { createTempDb, createTestSql, hasDatabase, type TempDb } from "./testdb.js";
 
 const REQUIRED_TABLES = [
   "institutions",
@@ -24,6 +24,8 @@ const REQUIRED_TABLES = [
   "releases",
   "audit_events",
   "source_registry_entries",
+  "corpus_blobs",
+  "corpus_objects",
   "schema_migrations",
 ];
 
@@ -32,6 +34,7 @@ const REQUIRED_VIEWS = [
   "source_coverage_by_jurisdiction",
   "source_coverage_by_tier",
   "source_coverage_by_status",
+  "corpus_current_objects",
 ];
 
 const suite = hasDatabase ? describe : describe.skip;
@@ -41,7 +44,7 @@ suite("DATA-001 schema", () => {
   let db: TempDb;
 
   beforeAll(async () => {
-    pool = createSql({ max: 3 });
+    pool = createTestSql({ max: 3 });
     db = await createTempDb(pool);
   });
 

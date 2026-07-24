@@ -1,7 +1,7 @@
 // DATA-004: source registry verification gate, secret handling, seed import.
 import { readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createSql, type Sql } from "../src/db/client.js";
+import type { Sql } from "../src/db/client.js";
 import { createRepositories, type Repositories } from "../src/db/repositories/index.js";
 import {
   evaluateEnablement,
@@ -9,7 +9,7 @@ import {
   type RegistryEntry,
   sanitizeEntry,
 } from "../src/db/repositories/sourceRegistry.js";
-import { createTempDb, hasDatabase, type TempDb } from "./testdb.js";
+import { createTempDb, createTestSql, hasDatabase, type TempDb } from "./testdb.js";
 
 function makeEntry(overrides: Partial<RegistryEntry> & { id: string }): RegistryEntry {
   return {
@@ -116,7 +116,7 @@ suite("DATA-004 registry import", () => {
   let repos: Repositories;
 
   beforeAll(async () => {
-    pool = createSql({ max: 3 });
+    pool = createTestSql({ max: 3 });
     db = await createTempDb(pool);
     repos = createRepositories(db.sql);
   });
@@ -126,18 +126,18 @@ suite("DATA-004 registry import", () => {
     await pool?.end({ timeout: 5 });
   });
 
-  test("the 103-entry seed imports and only verified+ready connectors enable", async () => {
+  test("the 104-entry seed imports and only verified+ready connectors enable", async () => {
     const doc = JSON.parse(
       readFileSync(new URL("../../../data/source-registry.json", import.meta.url), "utf8"),
     ) as RegistryDocument;
 
     const summary = await repos.sourceRegistry.importRegistry(doc);
-    expect(summary.total).toBe(103);
-    expect(summary.imported).toBe(103);
+    expect(summary.total).toBe(104);
+    expect(summary.imported).toBe(104);
     expect(summary.enabled).toBe(5);
     expect(summary.eligible).toBe(6);
-    expect(summary.verificationPending).toBe(91);
-    expect(summary.disabled).toBe(98);
+    expect(summary.verificationPending).toBe(92);
+    expect(summary.disabled).toBe(99);
 
     const enabled = await repos.sourceRegistry.listEnabled();
     expect(enabled.length).toBe(5);
@@ -153,6 +153,11 @@ suite("DATA-004 registry import", () => {
     expect(Number(verified?.total)).toBe(11);
     expect(Number(verified?.enabled)).toBe(5);
     expect(Number(verified?.eligible)).toBe(6);
+
+    const g20 = await repos.sourceRegistry.getEntry("g20_research_group");
+    expect(g20?.verification_status).toBe("verify_before_enable");
+    expect(g20?.enabled).toBe(false);
+    expect(g20?.disabled_reason).toContain("not_verified");
   });
 
   test("an incomplete production connector is imported DISABLED with a reason", async () => {

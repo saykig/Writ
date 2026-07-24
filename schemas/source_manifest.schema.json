@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/source_manifest.schema.json",
+  "title": "Historical Compliance Source Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "source_id",
+    "institution",
+    "summit_slug",
+    "live_fetch_authorized",
+    "raw_files_available",
+    "access_observations",
+    "documents"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "manifest_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "source_id": { "type": "string", "minLength": 1 },
+    "institution": { "enum": ["G7", "G20"] },
+    "summit_slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+    "live_fetch_authorized": { "type": "boolean" },
+    "raw_files_available": { "type": "boolean" },
+    "access_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["access_method", "status"],
+        "properties": {
+          "access_method": { "enum": ["browser", "direct_http", "provided_file"] },
+          "status": { "enum": ["succeeded", "failed", "not_attempted"] },
+          "observed_at": { "type": ["string", "null"], "format": "date" },
+          "failure_reason": { "type": ["string", "null"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "document_id",
+          "category",
+          "source_url",
+          "section_anchor",
+          "fetch_status",
+          "storage_backend",
+          "storage_object_id",
+          "sha256",
+          "warnings"
+        ],
+        "properties": {
+          "document_id": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "candidate_categories": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string" }
+          },
+          "source_url": { "type": "string", "format": "uri" },
+          "section_anchor": { "type": ["string", "null"] },
+          "report_stage": {
+            "enum": ["preliminary", "interim", "final", "special", null]
+          },
+          "fetch_status": {
+            "enum": ["planned", "retrieved", "imported", "skipped", "failed", "blocked"]
+          },
+          "skip_reason": { "type": ["string", "null"] },
+          "storage_backend": { "enum": ["neon_postgres", null] },
+          "storage_object_id": { "type": ["string", "null"] },
+          "sha256": {
+            "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }]
+          },
+          "byte_size": { "type": ["integer", "null"], "minimum": 0 },
+          "media_type": { "type": ["string", "null"] },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "fetch_status": { "enum": ["retrieved", "imported"] } },
+              "required": ["fetch_status"]
+            },
+            "then": {
+              "properties": {
+                "storage_backend": { "const": "neon_postgres" },
+                "storage_object_id": { "type": "string", "minLength": 1 },
+                "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

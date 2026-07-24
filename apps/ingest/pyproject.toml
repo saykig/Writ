@@ -6,6 +6,8 @@ dependencies = [
   "fastapi",
   "uvicorn[standard]",
   "pydantic>=2",
+  "PyYAML>=6",
+  "jsonschema>=4.23",
   "httpx",
   "scrapy",
   "playwright",
@@ -22,7 +24,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-asyncio", "ruff", "mypy", "respx"]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "ruff",
+  "mypy",
+  "respx",
+  "types-PyYAML",
+  "types-jsonschema"
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

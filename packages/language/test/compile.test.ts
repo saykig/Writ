@@ -1,5 +1,6 @@
 import { test, expect, describe } from "bun:test";
 import { readFileSync, readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import {
   compileSource,
   isClean,
@@ -12,7 +13,7 @@ import { isValid } from "@writ/domain";
 import { sha256Canonical } from "@writ/provenance";
 import golden from "../../../examples/2025-ai-sme-literal.ir.json" with { type: "json" };
 
-const EXAMPLE_DIR = "examples";
+const EXAMPLE_DIR = fileURLToPath(new URL("../../../examples/", import.meta.url));
 const examples = readdirSync(EXAMPLE_DIR)
   .filter((f) => f.endsWith(".writ"))
   .sort();

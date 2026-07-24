@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/compliance_report.schema.json",
+  "title": "ComplianceReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "report_id",
+    "institution",
+    "summit_id",
+    "report_stage",
+    "assessment_window_start",
+    "assessment_window_end",
+    "publication_date",
+    "supersedes_report_id",
+    "source_document_id",
+    "parser_version",
+    "retrieval_date",
+    "extraction_warnings"
+  ],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "record_type": { "const": "compliance_report" },
+    "report_id": { "type": "string", "minLength": 1 },
+    "institution": { "enum": ["G7", "G20"] },
+    "summit_id": { "type": "string", "minLength": 1 },
+    "report_stage": { "enum": ["preliminary", "interim", "final", "special"] },
+    "assessment_window_start": { "type": ["string", "null"], "format": "date" },
+    "assessment_window_end": { "type": ["string", "null"], "format": "date" },
+    "publication_date": { "type": ["string", "null"], "format": "date" },
+    "supersedes_report_id": { "type": ["string", "null"], "minLength": 1 },
+    "source_document_id": { "type": "string", "minLength": 1 },
+    "parser_version": { "type": "string", "minLength": 1 },
+    "retrieval_date": { "type": "string", "format": "date" },
+    "extraction_warnings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": { "assessment_window_start": { "type": "null" } },
+            "required": ["assessment_window_start"]
+          },
+          {
+            "properties": { "assessment_window_end": { "type": "null" } },
+            "required": ["assessment_window_end"]
+          },
+          {
+            "properties": { "publication_date": { "type": "null" } },
+            "required": ["publication_date"]
+          }
+        ]
+      },
+      "then": {
+        "properties": { "extraction_warnings": { "minItems": 1 } }
+      }
+    }
+  ]
+}

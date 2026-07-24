@@ -1,0 +1,86 @@
+schema_version: 2.0.0
+mappings:
+  - mapping_id: g7.2025.institution.g7
+    namespace: institution
+    source_term: G7
+    canonical_term: G7
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.canada
+    namespace: member_name
+    source_term: canada
+    canonical_term: canada
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.france
+    namespace: member_name
+    source_term: france
+    canonical_term: france
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.germany
+    namespace: member_name
+    source_term: germany
+    canonical_term: germany
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.italy
+    namespace: member_name
+    source_term: italy
+    canonical_term: italy
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.japan
+    namespace: member_name
+    source_term: japan
+    canonical_term: japan
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.united_kingdom
+    namespace: member_name
+    source_term: united_kingdom
+    canonical_term: united_kingdom
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.united_states
+    namespace: member_name
+    source_term: united_states
+    canonical_term: united_states
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.member.european_union
+    namespace: member_name
+    source_term: european_union
+    canonical_term: european_union
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.report.final_compliance
+    namespace: report_terminology
+    source_term: final compliance
+    canonical_term: final
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.document.final_compliance_chapter
+    namespace: document_classification
+    source_term: final compliance chapter
+    canonical_term: final_compliance_report
+    mapping_status: reviewed
+    source_id: g7.evaluations.2025.final
+    reviewer_id: benchmark_fixture_maintainers
+  - mapping_id: g7.2025.issue.ai_for_smes
+    namespace: issue_area
+    source_term: "Digital Economy: Artificial Intelligence for Small and Medium-Sized Enterprises"
+    canonical_term: digital_economy_ai_for_smes
+    mapping_status: proposed
+    source_id: g7.evaluations.2025.final
+    reviewer_id:

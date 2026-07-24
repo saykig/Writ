@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/corpus/methodology.schema.json",
+  "title": "Historical Compliance Methodology Version",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "institution",
+    "methodology_version",
+    "source_document_id",
+    "source_url",
+    "score_scale",
+    "scope",
+    "parser_version",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "id": { "type": "string", "minLength": 1 },
+    "institution": { "enum": ["G7", "G20"] },
+    "methodology_version": { "type": "string", "minLength": 1 },
+    "source_document_id": { "type": "string", "minLength": 1 },
+    "source_url": { "type": "string", "format": "uri" },
+    "source_page_or_section": { "type": ["string", "null"] },
+    "report_author": { "type": ["string", "null"] },
+    "score_scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original_values", "normalized_values"],
+      "properties": {
+        "original_values": { "type": "array", "items": { "type": "string" } },
+        "normalized_values": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["institution_specific", "automatic_transfer_allowed"],
+      "properties": {
+        "institution_specific": { "const": true },
+        "summit_ids": { "type": "array", "items": { "type": "string" } },
+        "valid_from": { "type": ["string", "null"], "format": "date" },
+        "valid_to": { "type": ["string", "null"], "format": "date" },
+        "automatic_transfer_allowed": { "const": false }
+      }
+    },
+    "parser_version": { "type": "string", "minLength": 1 },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,2423 @@
+---
+schema_version: 1.0.0
+sources:
+  - id: g20_research_group
+    name: G20 Research Group
+    publisher: University of Toronto
+    institution: G20
+    corpus_role: expert_labelled_historical_reference
+    jurisdictions:
+      - G20
+    source_tier: 0
+    source_types:
+      - commitment
+      - methodology
+      - evaluation
+      - open_data
+    base_uri: https://www.g20.utoronto.ca/analysis/index.html
+    discovery_method: crawl
+    fetch_method: http
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    enabled: false
+    verification_status: verify_before_enable
+    discovery:
+      seed_url: https://www.g20.utoronto.ca/analysis/index.html
+      section_anchor: commitments
+      allowed_domains:
+        - g20.utoronto.ca
+        - www.g20.utoronto.ca
+      category_sections:
+        commitment_inventories: commitments
+        commitments_selected_for_assessment: compliance
+        interim_compliance_reports: compliance
+        final_compliance_reports: compliance
+        compliance_methodology: method
+        compliance_datasets: datasets
+        source_documents_used_for_coding: commitments
+    include:
+      - commitment_inventories
+      - commitments_selected_for_assessment
+      - interim_compliance_reports
+      - final_compliance_reports
+      - compliance_methodology
+      - compliance_datasets
+      - source_documents_used_for_coding
+    exclude:
+      - general_news
+      - interviews
+      - advocacy_content
+      - advertisements
+      - promotional_material
+      - unrelated_commentary
+    related_source_ids:
+      - g7.compliance.manual.2020
+    data_policy:
+      preserve_exact_commitment_text: true
+      preserve_source_url: true
+      preserve_source_document: true
+      preserve_page_or_section: true
+      preserve_retrieval_date: true
+      preserve_parser_version: true
+      preserve_interim_and_final_separately: true
+      preserve_member_and_aggregate_scores_separately: true
+      historical_score_type: expert_assigned_historical_score
+      allow_automatic_score_transfer: false
+      allow_historical_score_to_replace_new_evidence: false
+      selection_policy:
+        default_status: unknown
+        not_selected_requires_valid_reconciliation: true
+        allow_member_assessment_for_unknown: false
+    historical_label:
+      label_type: expert_assigned_historical_score
+      label_authority: G20 Research Group
+      usable_for_training_examples: true
+      usable_for_evaluation: true
+      usable_for_automatic_score_transfer: false
+  - id: g7.compliance.index
+    name: G7 Research Group Compliance Index
+    jurisdictions:
+      - G7
+    source_tier: 0
+    source_types:
+      - methodology
+      - evaluation
+    base_uri: https://www.g7.utoronto.ca/compliance/index.html
+    discovery_method: crawl
+    fetch_method: http
+    enabled: true
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    last_verified: "2026-07-22"
+  - id: g7.compliance.dataset
+    name: G7 Research Group Historical Compliance Dataset
+    jurisdictions:
+      - G7
+    source_tier: 1
+    source_types:
+      - evaluation
+      - open_data
+    base_uri: https://www.g7.utoronto.ca/compliance/dataset/index.html
+    discovery_method: crawl
+    fetch_method: http
+    enabled: true
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    last_verified: "2026-07-22"
+  - id: g7.compliance.manual.2020
+    name: G7 Compliance Coding Manual 2020
+    jurisdictions:
+      - G7
+    source_tier: 0
+    source_types:
+      - methodology
+    base_uri: https://www.g7.utoronto.ca/compliance/Compliance_Coding_Manual_2020.pdf
+    discovery_method: crawl
+    fetch_method: http
+    enabled: true
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    last_verified: "2026-07-22"
+  - id: g7.evaluations.2025.final
+    name: G7 2025 Final Compliance Report Index
+    jurisdictions:
+      - G7
+    source_tier: 0
+    source_types:
+      - evaluation
+    base_uri: https://www.g7.utoronto.ca/evaluations/2025compliance-final/index.html
+    discovery_method: crawl
+    fetch_method: http
+    enabled: true
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    last_verified: "2026-07-22"
+  - id: g7.summit.documents
+    name: G7 Information Centre Summit Documents
+    jurisdictions:
+      - G7
+    source_tier: 0
+    source_types:
+      - commitment
+    base_uri: https://www.g7.utoronto.ca/summit/index.html
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: catalogued
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.news
+    name: Government of Canada News
+    jurisdictions:
+      - Canada
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.canada.ca/en/news.html
+    discovery_method: rss
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.open.data
+    name: Canada Open Government Portal
+    jurisdictions:
+      - Canada
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://open.canada.ca/data/en/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://open.canada.ca/data/en/dataset
+  - id: ca.gazette
+    name: Canada Gazette
+    jurisdictions:
+      - Canada
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://gazette.gc.ca/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.justice.laws
+    name: Justice Laws Website
+    jurisdictions:
+      - Canada
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://laws-lois.justice.gc.ca/eng/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.finance.budget
+    name: Department of Finance Federal Budget Publications
+    jurisdictions:
+      - Canada
+    source_tier: 1
+    source_types:
+      - budget
+    base_uri: https://www.canada.ca/en/department-finance/services/publications/federal-budget.html
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.public.accounts
+    name: Public Accounts of Canada
+    jurisdictions:
+      - Canada
+    source_tier: 0
+    source_types:
+      - spending
+      - audit
+    base_uri: https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.canadabuys
+    name: CanadaBuys
+    jurisdictions:
+      - Canada
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://canadabuys.canada.ca/en
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.parliament.legisinfo
+    name: LEGISinfo
+    jurisdictions:
+      - Canada
+    source_tier: 0
+    source_types:
+      - parliament
+      - law
+    base_uri: https://www.parl.ca/legisinfo/en/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: ca.infobase
+    name: GC InfoBase
+    jurisdictions:
+      - Canada
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+      - statistics
+    base_uri: https://www.tbs-sct.canada.ca/ems-sgd/edb-bdd/index-eng.html
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.gouvernement
+    name: French Government
+    jurisdictions:
+      - France
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.gouvernement.fr/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.legifrance
+    name: Légifrance
+    jurisdictions:
+      - France
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.legifrance.gouv.fr/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.piste
+    name: PISTE API Platform
+    jurisdictions:
+      - France
+    source_tier: 0
+    source_types:
+      - law
+      - open_data
+    base_uri: https://piste.gouv.fr/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: oauth2
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Includes Légifrance APIs; connector requires account and current API contract review.
+  - id: fr.data.gouv
+    name: data.gouv.fr
+    jurisdictions:
+      - France
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://www.data.gouv.fr/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://www.data.gouv.fr/fr/apidoc/
+  - id: fr.budget
+    name: French Budget Portal
+    jurisdictions:
+      - France
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.budget.gouv.fr/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.boamp
+    name: BOAMP Public Procurement Notices
+    jurisdictions:
+      - France
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.boamp.fr/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.place
+    name: PLACE Public Procurement Platform
+    jurisdictions:
+      - France
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.marches-publics.gouv.fr/
+    discovery_method: search
+    fetch_method: browser
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.assemblee.data
+    name: Assemblée nationale Open Data
+    jurisdictions:
+      - France
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://data.assemblee-nationale.fr/
+    discovery_method: bulk_download
+    fetch_method: bulk_download
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: fr.senat.data
+    name: Sénat Open Data
+    jurisdictions:
+      - France
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://data.senat.fr/
+    discovery_method: bulk_download
+    fetch_method: bulk_download
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.bundesregierung
+    name: German Federal Government
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.bundesregierung.de/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.recht.bund
+    name: Federal Legal Information Portal
+    jurisdictions:
+      - Germany
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.recht.bund.de/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.gesetze
+    name: Gesetze im Internet
+    jurisdictions:
+      - Germany
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.gesetze-im-internet.de/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.govdata
+    name: GovData Germany
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://www.govdata.de/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.bundeshaushalt
+    name: Federal Budget Portal
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.bundeshaushalt.de/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.evergabe
+    name: e-Vergabe Online
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.evergabe-online.de/
+    discovery_method: search
+    fetch_method: browser
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.service.bund
+    name: Service.Bund Procurement and Administration
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - procurement
+      - executive
+    base_uri: https://www.service.bund.de/
+    discovery_method: search
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: de.bundestag.dip
+    name: Bundestag DIP API
+    jurisdictions:
+      - Germany
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://dip.bundestag.de/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://dip.bundestag.de/%C3%BCber-dip/hilfe/api
+  - id: de.destatis.genesis
+    name: Destatis GENESIS-Online
+    jurisdictions:
+      - Germany
+    source_tier: 1
+    source_types:
+      - statistics
+      - open_data
+    base_uri: https://www-genesis.destatis.de/genesis/online
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - de
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.governo
+    name: Italian Government
+    jurisdictions:
+      - Italy
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.governo.it/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.gazzetta
+    name: Gazzetta Ufficiale
+    jurisdictions:
+      - Italy
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.gazzettaufficiale.it/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.normattiva
+    name: Normattiva
+    jurisdictions:
+      - Italy
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.normattiva.it/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.dati
+    name: dati.gov.it
+    jurisdictions:
+      - Italy
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://www.dati.gov.it/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.openbdap
+    name: OpenBDAP
+    jurisdictions:
+      - Italy
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+      - open_data
+    base_uri: https://openbdap.rgs.mef.gov.it/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.rgs
+    name: Ragioneria Generale dello Stato
+    jurisdictions:
+      - Italy
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.rgs.mef.gov.it/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.anac.data
+    name: ANAC Open Data and BDNCP
+    jurisdictions:
+      - Italy
+    source_tier: 1
+    source_types:
+      - procurement
+      - open_data
+    base_uri: https://dati.anticorruzione.it/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.camera.data
+    name: Camera dei deputati Open Data
+    jurisdictions:
+      - Italy
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://dati.camera.it/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: it.senato.data
+    name: Senato Open Data
+    jurisdictions:
+      - Italy
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://dati.senato.it/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.kantei
+    name: Prime Minister of Japan and Cabinet
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://japan.kantei.go.jp/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.egov.laws
+    name: e-Gov Law Search
+    jurisdictions:
+      - Japan
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://elaws.e-gov.go.jp/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.egov
+    name: e-Gov Portal
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - executive
+      - regulation
+      - open_data
+    base_uri: https://www.e-gov.go.jp/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.data
+    name: data.go.jp
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://www.data.go.jp/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - ja
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.mof.budget
+    name: Japan Ministry of Finance Budget
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.mof.go.jp/english/policy/budget/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.procurement.portal
+    name: Japan Government Procurement Portal
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.p-portal.go.jp/
+    discovery_method: search
+    fetch_method: browser
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.diet.records
+    name: National Diet Proceedings Database
+    jurisdictions:
+      - Japan
+    source_tier: 0
+    source_types:
+      - parliament
+    base_uri: https://kokkai.ndl.go.jp/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.cao.evaluation
+    name: Cabinet Office Policy Evaluation
+    jurisdictions:
+      - Japan
+    source_tier: 1
+    source_types:
+      - audit
+      - executive
+    base_uri: https://www8.cao.go.jp/hyouka/english/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: jp.board.audit
+    name: Board of Audit of Japan
+    jurisdictions:
+      - Japan
+    source_tier: 2
+    source_types:
+      - audit
+    base_uri: https://www.jbaudit.go.jp/english/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - ja
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.gov
+    name: GOV.UK
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.gov.uk/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.gov.content_api
+    name: GOV.UK Content API
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - executive
+      - open_data
+    base_uri: https://content-api.publishing.service.gov.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://content-api.publishing.service.gov.uk/
+  - id: uk.legislation
+    name: legislation.gov.uk
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://www.legislation.gov.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.data
+    name: data.gov.uk
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://www.data.gov.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.treasury.budget
+    name: HM Treasury Budget Collection
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.gov.uk/government/collections/budget
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.contracts_finder
+    name: Contracts Finder
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.contractsfinder.service.gov.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://www.contractsfinder.service.gov.uk/apidocumentation
+    last_verified: "2026-07-22"
+  - id: uk.find_tender
+    name: Find a Tender
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://www.find-tender.service.gov.uk/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.parliament.api
+    name: UK Parliament Developer APIs
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://developer.parliament.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.hansard
+    name: UK Parliament Hansard
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 0
+    source_types:
+      - parliament
+    base_uri: https://hansard.parliament.uk/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: uk.ons.api
+    name: Office for National Statistics APIs
+    jurisdictions:
+      - UnitedKingdom
+    source_tier: 1
+    source_types:
+      - statistics
+      - open_data
+    base_uri: https://developer.ons.gov.uk/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: us.whitehouse
+    name: White House
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.whitehouse.gov/
+    discovery_method: rss
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: us.omb.budget
+    name: Office of Management and Budget
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - budget
+      - spending
+    base_uri: https://www.whitehouse.gov/omb/budget/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: us.federal_register
+    name: Federal Register API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - regulation
+      - executive
+    base_uri: https://www.federalregister.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: true
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://www.federalregister.gov/developers/documentation/api/v1
+    notes: FederalRegister.gov is an informational XML rendition; official legal PDFs are linked through GovInfo.
+    last_verified: "2026-07-22"
+  - id: us.govinfo
+    name: GovInfo API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+      - parliament
+    base_uri: https://www.govinfo.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: api_key
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://api.govinfo.gov/docs/
+  - id: us.congress
+    name: Congress.gov API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 0
+    source_types:
+      - parliament
+      - law
+    base_uri: https://www.congress.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: api_key
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://api.congress.gov/
+    last_verified: "2026-07-22"
+  - id: us.regulations
+    name: Regulations.gov API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - regulation
+    base_uri: https://www.regulations.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: api_key
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://open.gsa.gov/api/regulationsgov/
+    last_verified: "2026-07-22"
+  - id: us.usaspending
+    name: USAspending API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - spending
+      - procurement
+      - grant
+    base_uri: https://www.usaspending.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://api.usaspending.gov/docs/
+  - id: us.data
+    name: Data.gov Catalog API
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://data.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://catalog.data.gov/api/3/
+  - id: us.sam
+    name: SAM.gov
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - procurement
+      - grant
+    base_uri: https://sam.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: api_key
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://open.gsa.gov/api/
+    notes: Enable only specific SAM APIs after current terms and key requirements are reviewed.
+  - id: us.grants
+    name: Grants.gov
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - grant
+    base_uri: https://www.grants.gov/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://www.grants.gov/api
+  - id: us.gao
+    name: Government Accountability Office
+    jurisdictions:
+      - UnitedStates
+    source_tier: 2
+    source_types:
+      - audit
+    base_uri: https://www.gao.gov/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.commission.press
+    name: European Commission Press Corner
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://ec.europa.eu/commission/presscorner/home/en
+    discovery_method: search
+    fetch_method: browser
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.council.press
+    name: Council of the EU Press Releases
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - executive
+    base_uri: https://www.consilium.europa.eu/en/press/
+    discovery_method: rss
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.eurlex
+    name: EUR-Lex
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 0
+    source_types:
+      - law
+      - regulation
+    base_uri: https://eur-lex.europa.eu/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.publications
+    name: Publications Office and CELLAR
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 0
+    source_types:
+      - law
+      - open_data
+    base_uri: https://op.europa.eu/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.data
+    name: data.europa.eu
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - open_data
+      - statistics
+    base_uri: https://data.europa.eu/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.ted
+    name: Tenders Electronic Daily
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - procurement
+    base_uri: https://ted.europa.eu/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://docs.ted.europa.eu/api/latest/
+  - id: eu.fts
+    name: EU Financial Transparency System
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - spending
+      - grant
+    base_uri: https://commission.europa.eu/strategy-and-policy/eu-budget/how-it-works/annual-lifecycle/implementation/financial-transparency-system_en
+    discovery_method: bulk_download
+    fetch_method: bulk_download
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.parliament.oeil
+    name: European Parliament Legislative Observatory
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 0
+    source_types:
+      - parliament
+      - law
+    base_uri: https://oeil.secure.europarl.europa.eu/oeil/home/home.do
+    discovery_method: search
+    fetch_method: browser
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.parliament.data
+    name: European Parliament Open Data
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 0
+    source_types:
+      - parliament
+      - open_data
+    base_uri: https://data.europarl.europa.eu/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: eu.eurostat
+    name: Eurostat Data APIs
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 1
+    source_types:
+      - statistics
+      - open_data
+    base_uri: https://ec.europa.eu/eurostat/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-introduction
+  - id: eu.eca
+    name: European Court of Auditors
+    jurisdictions:
+      - EuropeanUnion
+    source_tier: 2
+    source_types:
+      - audit
+    base_uri: https://www.eca.europa.eu/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - de
+      - it
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.oecd
+    name: OECD Publications and Data
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+      - research
+    base_uri: https://www.oecd.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.oecd.ai
+    name: OECD AI Policy Observatory
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - research
+    base_uri: https://oecd.ai/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.worldbank
+    name: World Bank Data, Projects, and Documents
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+      - spending
+      - research
+    base_uri: https://www.worldbank.org/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.imf
+    name: International Monetary Fund
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+      - research
+    base_uri: https://www.imf.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.wto
+    name: World Trade Organization Documents and Data
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+    base_uri: https://www.wto.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.who
+    name: World Health Organization
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+      - research
+    base_uri: https://www.who.int/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.un.digital.library
+    name: United Nations Digital Library
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+    base_uri: https://digitallibrary.un.org/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.unfccc
+    name: UNFCCC Documents and Registries
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+    base_uri: https://unfccc.int/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.cbd
+    name: Convention on Biological Diversity
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+    base_uri: https://www.cbd.int/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.unodc
+    name: United Nations Office on Drugs and Crime
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - research
+    base_uri: https://www.unodc.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.iaea
+    name: International Atomic Energy Agency
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+    base_uri: https://www.iaea.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.ilo.normlex
+    name: ILO NORMLEX
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - law
+    base_uri: https://normlex.ilo.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.iati
+    name: International Aid Transparency Initiative
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - open_data
+      - spending
+    base_uri: https://iatistandard.org/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://iatistandard.org/en/iati-standard/
+    last_verified: "2026-07-22"
+  - id: io.ocds.registry
+    name: Open Contracting Data Registry
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - open_data
+      - procurement
+    base_uri: https://data.open-contracting.org/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+      - es
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://standard.open-contracting.org/latest/en/
+    last_verified: "2026-07-22"
+  - id: io.iea.critical_minerals
+    name: International Energy Agency Critical Minerals
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - statistics
+      - research
+    base_uri: https://www.iea.org/topics/critical-minerals
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.fatf
+    name: Financial Action Task Force
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+      - research
+    base_uri: https://www.fatf-gafi.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: io.parisclub
+    name: Paris Club
+    jurisdictions:
+      - International
+    source_tier: 3
+    source_types:
+      - international_organization
+    base_uri: https://clubdeparis.org/
+    discovery_method: hybrid
+    fetch_method: http
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+  - id: archive.internet
+    name: Internet Archive APIs
+    jurisdictions:
+      - International
+    source_tier: 5
+    source_types:
+      - archive
+      - search
+    base_uri: https://archive.org/
+    discovery_method: api
+    fetch_method: api
+    enabled: false
+    verification_status: verified
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: reviewed
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    api_spec_uri: https://archive.org/developers/
+    last_verified: "2026-07-22"
+  - id: media.reuters
+    name: Reuters
+    jurisdictions:
+      - International
+    source_tier: 4
+    source_types:
+      - media
+    base_uri: https://www.reuters.com/
+    discovery_method: licensed_feed
+    fetch_method: licensed_feed
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: licensed
+    robots_policy: manual_review
+    terms_status: restricted
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Use licensed feed or links; do not redistribute full articles.
+  - id: media.ap
+    name: Associated Press
+    jurisdictions:
+      - International
+    source_tier: 4
+    source_types:
+      - media
+    base_uri: https://apnews.com/
+    discovery_method: licensed_feed
+    fetch_method: licensed_feed
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: licensed
+    robots_policy: manual_review
+    terms_status: restricted
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Use licensed feed or links; do not redistribute full articles.
+  - id: media.afp
+    name: Agence France-Presse
+    jurisdictions:
+      - International
+    source_tier: 4
+    source_types:
+      - media
+    base_uri: https://www.afp.com/
+    discovery_method: licensed_feed
+    fetch_method: licensed_feed
+    enabled: false
+    verification_status: verify_before_enable
+    authentication:
+      type: licensed
+    robots_policy: manual_review
+    terms_status: restricted
+    languages:
+      - en
+      - fr
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Use licensed feed or links; do not redistribute full articles.
