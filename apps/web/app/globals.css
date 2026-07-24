@@ -4,13 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Writ design system — clean, modern, professional (Geist + a crisp neutral
- * palette, the shadcn / Vercel / Linear lane). Amber is the single functional
- * accent, used sparingly to mark where a score turns on judgment (the score gap,
- * the two interpretation-sensitive benchmark cells). Monospace (Geist Mono) is
- * reserved for code, the DSL, and content hashes.
- */
+/* Writ: a restrained research interface. Dark is the default; blue marks action. */
 
 @theme inline {
   --color-background: var(--background);
@@ -71,46 +65,43 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  /* modern fluid type scale — restrained, product-grade (not editorial) */
-  --t-hero: clamp(2.5rem, 1.85rem + 2.9vw, 3.75rem);
-  --t-h2: clamp(1.65rem, 1.35rem + 1.4vw, 2.25rem);
+  --t-hero: clamp(2.65rem, 1.75rem + 4.7vw, 5.5rem);
+  --t-page: clamp(2.55rem, 1.9rem + 2.8vw, 4.6rem);
+  --t-h2: clamp(1.8rem, 1.4rem + 1.5vw, 2.6rem);
   --t-h3: clamp(1.2rem, 1.08rem + 0.55vw, 1.45rem);
   --t-lead: clamp(1.05rem, 1rem + 0.32vw, 1.2rem);
   --t-body: 1rem;
   --t-label: 0.75rem;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.985 0.003 255);
+  --foreground: oklch(0.17 0.012 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.56 0.18 259);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.009 255);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.95 0.007 255);
+  --muted-foreground: oklch(0.43 0.015 255);
+  --accent: oklch(0.93 0.025 255);
+  --accent-foreground: var(--foreground);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.86 0.012 255);
+  --input: oklch(0.86 0.012 255);
+  --ring: var(--primary);
 
-  /* single functional accent — amber, for "where judgment enters" */
-  --accent-strong: oklch(0.66 0.14 62);
+  --accent-strong: var(--primary);
   --accent-wash: color-mix(in oklab, var(--accent-strong) 12%, transparent);
-
-  /* truth palette — clean functional */
   --t-true: oklch(0.6 0.13 152);
   --t-false: oklch(0.585 0.22 25);
   --t-unknown: oklch(0.556 0 0);
-
-  /* raw-var compatibility aliases (referenced directly in a few components).
-     They point at the new tokens, so they follow the active theme automatically. */
+  --globe-line: oklch(0.42 0.025 255 / 35%);
+  --globe-dot: oklch(0.28 0.018 255 / 78%);
+  --globe-accent: oklch(0.56 0.18 259 / 32%);
   --gold: var(--accent-strong);
   --gold-wash: var(--accent-wash);
   --ink-faint: var(--muted-foreground);
@@ -119,31 +110,33 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.105 0.012 255);
+  --foreground: oklch(0.975 0.004 255);
+  --card: oklch(0.145 0.014 255);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.155 0.014 255);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.65 0.17 259);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.18 0.016 255);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.175 0.014 255);
+  --muted-foreground: oklch(0.72 0.015 255);
+  --accent: oklch(0.205 0.035 255);
+  --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: oklch(0.94 0.01 255 / 12%);
+  --input: oklch(0.94 0.01 255 / 16%);
+  --ring: var(--primary);
 
-  --accent-strong: oklch(0.82 0.13 82);
-  --accent-wash: color-mix(in oklab, var(--accent-strong) 15%, transparent);
-
+  --accent-strong: var(--primary);
+  --accent-wash: color-mix(in oklab, var(--primary) 13%, transparent);
   --t-true: oklch(0.75 0.15 152);
   --t-false: oklch(0.7 0.17 22);
   --t-unknown: oklch(0.708 0 0);
+  --globe-line: oklch(0.82 0.025 255 / 24%);
+  --globe-dot: oklch(0.91 0.014 255 / 76%);
+  --globe-accent: oklch(0.67 0.17 259 / 38%);
 }
 
 @layer base {
@@ -152,6 +145,7 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    min-width: 320px;
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "cv11", "ss01";
     font-variant-numeric: tabular-nums;
@@ -162,7 +156,8 @@
   h3,
   h4 {
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 
   /* a clean, quiet section label (not decorative mono) */
@@ -181,39 +176,16 @@
     color: var(--muted-foreground);
   }
 
-  /* clean modern card (no letterpress) */
   .tool {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: 0 1px 2px 0 color-mix(in oklab, var(--foreground) 5%, transparent);
   }
 
   /* judgment marker: a restrained amber wash + hairline, used sparingly */
   .seam {
     border-left: 2px solid var(--accent-strong);
     background: var(--accent-wash);
-  }
-
-  /* Atmospheric backdrops (used sparingly, on the landing) */
-  .backdrop-grid {
-    background-image:
-      linear-gradient(
-        to right,
-        color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to bottom,
-        color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
-        transparent 1px
-      );
-    background-size: 3rem 3rem;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-  }
-  .backdrop-glow {
-    background: radial-gradient(ellipse 60% 50% at 70% 20%, var(--accent-wash), transparent 70%);
   }
 
   .reveal {

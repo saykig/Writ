@@ -10,9 +10,18 @@ export interface NavItem {
 
 export const PRIMARY_NAV: readonly NavItem[] = [
   { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
-  { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
-  { href: "/gap-matrix", label: "Gap Matrix", hint: "A second methodology: AI governance" },
+  {
+    href: "/methodologies" as Route,
+    label: "Methodologies",
+    hint: "Source, structure, and diagnostics",
+  },
+  { href: "/receipts" as Route, label: "Receipts", hint: "How each assessment was reached" },
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
+];
+
+export const RESEARCH_NAV: readonly NavItem[] = [
+  { href: "/benchmark", label: "G7 benchmark", hint: "The 2025 G7 discrepancy ledger" },
+  { href: "/gap-matrix", label: "Gap Matrix", hint: "A second methodology: AI governance" },
 ];
 
 export interface ExampleItem {
@@ -27,4 +36,4 @@ export const EXAMPLE_ITEMS: readonly ExampleItem[] = [
   { id: "inclusive", label: "Inclusive reading", reading: "up to four → 0–4 strong" },
 ];
 
-export const GITHUB_URL = "https://github.com/saykig";
+export const GITHUB_URL = "https://github.com/saykig/Writ";

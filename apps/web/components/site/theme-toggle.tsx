@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 /**
- * ThemeToggle — flips between the paper (light) and sumi (dark) themes via
+ * ThemeToggle — flips between the explicit light and dark themes via
  * next-themes. Both icons render server-side and swap purely on the `.dark`
  * class (Tailwind `dark:` variant), so there is no mount flash or hydration
  * mismatch; the click handler reads the resolved theme to decide the flip.
@@ -18,7 +18,7 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon-sm"
-      aria-label="Toggle paper / sumi theme"
+      aria-label="Toggle light and dark theme"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
       <Moon className="size-4 dark:hidden" />

@@ -1,106 +1,105 @@
-import type { Route } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import {
+  ArrowRight,
+  Code2,
+  Database,
+  Eye,
+  FileText,
+  Fingerprint,
+  GitBranch,
+  ListChecks,
+  ReceiptText,
+  Repeat2,
+  Scale,
+  SearchCheck,
+  ShieldCheck,
+} from "lucide-react";
 
-import { benchmark, loadExamples } from "@/lib/toolchain";
-import { gapMatrix } from "@/lib/gap-matrix";
+import { benchmark, evaluateMember, memberSnapshot } from "@/lib/toolchain";
 import { Button } from "@/components/ui/button";
-import { CodeArtifact } from "@/components/site/code-artifact";
-import { Pipeline } from "@/components/site/pipeline";
-import { FeatureGrid } from "@/components/site/feature-grid";
-import { ReceiptVisual } from "@/components/site/receipt-visual";
-import { HeroBackdrop } from "@/components/site/hero-backdrop";
-import { NumberTicker } from "@/components/site/number-ticker";
-import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
+import { WireframeDottedGlobe } from "@/components/ui/wireframe-dotted-globe";
 import { TruthBadge } from "@/components/site/truth-badge";
-import { Reveal } from "@/components/site/reveal";
+import type { TruthBadgeValue } from "@/components/site/truth-badge";
 
-/**
- * Slice the `score { … }` block out of a methodology source and locate its
- * `otherwise` line (1-based) so the CodeArtifact can mark only that line gold.
- */
-function extractScoreBlock(source: string): { code: string; seamLine: number } {
-  const lines = source.split("\n");
-  const start = lines.findIndex((line) => line.trimStart().startsWith("score {"));
-  if (start === -1) return { code: source.trim(), seamLine: 0 };
-  let end = start;
-  for (let i = start + 1; i < lines.length; i += 1) {
-    if (lines[i].trim() === "}") {
-      end = i;
-      break;
-    }
-  }
-  const slice = lines.slice(start, end + 1);
-  const indent = slice[0].length - slice[0].trimStart().length;
-  const dedented = slice.map((line) => line.slice(indent));
-  const seamLine = dedented.findIndex((line) => line.trimStart().startsWith("otherwise")) + 1;
-  return { code: dedented.join("\n"), seamLine };
-}
+const PROCESS = [
+  {
+    icon: FileText,
+    title: "Methodology in prose",
+    text: "Start with an existing policy evaluation framework.",
+  },
+  {
+    icon: ListChecks,
+    title: "Explicit rules",
+    text: "Define its criteria, thresholds, and unresolved cases precisely.",
+  },
+  {
+    icon: SearchCheck,
+    title: "Reviewed evidence",
+    text: "Apply the rules only to evidence that has been sourced and reviewed.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Assessment receipt",
+    text: "Return the result with the rule, evidence, interpretation, and version used.",
+  },
+] as const;
+
+const PRINCIPLES = [
+  {
+    icon: Eye,
+    title: "Transparent",
+    text: "See which rule was applied, which evidence was used, and how the result was interpreted.",
+  },
+  {
+    icon: Repeat2,
+    title: "Consistent",
+    text: "Apply the same methodology the same way, every time.",
+  },
+  {
+    icon: Fingerprint,
+    title: "Auditable",
+    text: "Record every decision with sources, versions, and content hashes.",
+  },
+  {
+    icon: Scale,
+    title: "Meaningful",
+    text: "Preserve true, false, unknown, and contested evidence without forcing false precision.",
+  },
+] as const;
+
+const CAPABILITIES = [
+  { icon: Code2, text: "A dedicated language for policy evaluation" },
+  { icon: Database, text: "Designed for frozen, reviewed evidence" },
+  { icon: GitBranch, text: "Static checks for gaps and conflicts" },
+  { icon: ReceiptText, text: "Deterministic receipts for every assessment" },
+] as const;
 
 export default function Home() {
-  const literal = loadExamples().find((example) => example.id === "literal");
-  const { code, seamLine } = extractScoreBlock(literal?.source ?? "");
-  const summary = benchmark().summary;
-  const gap = gapMatrix();
-  const authority = gap.axes.find((axis) => axis.id === "public_authority");
-
-  const proofs: {
-    href: Route;
-    kicker: string;
-    title: string;
-    blurb: string;
-    statValue: number | null;
-    statSuffix: string;
-    statNote: string;
-  }[] = [
-    {
-      href: "/benchmark",
-      kicker: "2025 G7 AI-for-SMEs",
-      title: "Reproduced on real data",
-      blurb: `All ${summary.cells} published member scores recomputed from frozen, reviewed evidence. ${summary.interpretation_sensitive_cells} of them turn on how one phrase is read.`,
-      statValue: summary.matches,
-      statSuffix: `/${summary.cells}`,
-      statNote: "scores reproduced",
-    },
-    {
-      href: "/gap-matrix",
-      kicker: "AI-governance Gap Matrix",
-      title: "A different scoring shape",
-      blurb:
-        "A weighted-ordinal index across four jurisdictions, reproduced exactly — including an axis left honestly pending because two components are unassessed.",
-      statValue: authority?.index ?? null,
-      statSuffix: "",
-      statNote: "public-authority index",
-    },
-  ];
+  const bench = benchmark();
+  const canada = bench.cells.find((cell) => cell.member === "canada");
+  const receipt = evaluateMember("canada", "published");
+  const snapshot = memberSnapshot("canada");
 
   return (
     <main>
-      {/* ── Hero: what Writ is, plainly + the signature artifact ─────── */}
-      <section className="relative overflow-hidden">
-        <HeroBackdrop flickerChance={0.08} />
-        <div className="relative mx-auto grid max-w-[76rem] items-center gap-12 px-5 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:py-28">
-          <Reveal>
-            <SectionLabel>Auditable policy scoring</SectionLabel>
-            <h1 className="mt-6 text-[length:var(--t-hero)] leading-[1.05] font-semibold tracking-[-0.02em] text-balance">
-              Make a policy score show its work.
+      <section className="min-h-[calc(100svh-4.5rem)]">
+        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8">
+          <div className="relative z-10 py-4 lg:py-10">
+            <h1 className="whitespace-nowrap text-[length:var(--t-hero)] leading-[0.98] font-semibold tracking-[-0.04em]">
+              Write in Writ.
             </h1>
-            <Prose className="mt-7">
-              A compliance score is a single number, but behind it sits a rubric full of reading
-              calls you usually cannot see or reproduce. Writ compiles the rubric into a program: it{" "}
-              <strong>catches ambiguity before any evidence exists</strong>, scores against a
-              frozen, reviewed record, and returns every number as a{" "}
-              <strong>receipt anyone can recompute</strong>. Where a score turns on a reading rather
-              than a fact, it says so.
-            </Prose>
-            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-3">
+            <p className="mt-7 max-w-[36rem] text-[length:var(--t-lead)] leading-8 text-muted-foreground text-pretty">
+              Writ is a Domain-Specific Language (DSL) for expressing rule-based policy evaluation
+              methodologies over reviewed evidence and producing reproducible assessment receipts.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
               <Button
-                variant="default"
                 size="lg"
+                className="text-[0.78rem] sm:text-[0.82rem]"
                 nativeButton={false}
                 render={
                   <Link href="/benchmark">
-                    See it on real G7 data
+                    See how it works with 2025 G7 Commitments
                     <ArrowRight />
                   </Link>
                 }
@@ -109,140 +108,181 @@ export default function Home() {
                 variant="outline"
                 size="lg"
                 nativeButton={false}
-                render={<Link href="/playground">Try it live</Link>}
+                render={<Link href="/playground">Try the Playground</Link>}
               />
             </div>
-          </Reveal>
+          </div>
 
-          <Reveal className="flex justify-center lg:justify-end" delay={120}>
-            <ReceiptVisual />
-          </Reveal>
+          <div className="mx-auto w-full max-w-[42rem] lg:justify-self-end">
+            <WireframeDottedGlobe className="mx-auto" />
+          </div>
         </div>
       </section>
 
-      {/* ── The four things it does differently ──────────────────────────── */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[76rem] px-5 py-16 sm:px-6 sm:py-20">
-          <Reveal className="max-w-2xl">
-            <SectionLabel>Why it&rsquo;s different</SectionLabel>
-            <SectionHeading className="mt-4">
-              A compiler&rsquo;s discipline, for policy scoring.
-            </SectionHeading>
-          </Reveal>
-          <Reveal className="mt-9" delay={90}>
-            <FeatureGrid />
-          </Reveal>
+      <section className="bg-card/25">
+        <div className="mx-auto grid max-w-[76rem] items-start gap-8 px-5 py-16 sm:px-6 sm:py-20 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div>
+            <h2 className="text-[length:var(--t-h2)] leading-[1.08]">
+              From ambiguous prose to reviewable decisions.
+            </h2>
+          </div>
+          <div className="max-w-[64ch] space-y-5 text-[length:var(--t-lead)] leading-8 text-muted-foreground">
+            <p>
+              Institutional compliance methodologies are written for human analysts. Their prose can
+              leave thresholds, precedence, missing evidence, and exceptional cases open to
+              interpretation.
+            </p>
+            <p>
+              Writ makes those decisions explicit, checks the resulting rules for gaps and overlaps,
+              and evaluates only against frozen, reviewed evidence. Unknown evidence remains
+              unknown.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── The pipeline, in one glance ──────────────────────────────────── */}
-      <section className="border-t border-border bg-muted/30">
-        <div className="mx-auto max-w-[76rem] px-5 py-16 sm:px-6 sm:py-20">
-          <Reveal className="max-w-2xl">
-            <SectionLabel>How it works</SectionLabel>
-            <SectionHeading className="mt-4">Rubric in, auditable receipt out.</SectionHeading>
-          </Reveal>
-          <Reveal className="mt-9" delay={90}>
-            <Pipeline />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── The decisive example ─────────────────────────────────────────── */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[76rem] px-5 py-16 sm:px-6 sm:py-20">
-          <Reveal className="max-w-2xl">
-            <SectionLabel>See it happen</SectionLabel>
-            <SectionHeading className="mt-4">Five words, and the gap they leave.</SectionHeading>
-            <Prose className="mt-4">
-              The 2025 G7 rubric awards a middle score for &ldquo;up to four strong actions.&rdquo;
-              Read literally, that is the range one to four — so a country with{" "}
-              <em className="text-foreground not-italic">zero</em> strong actions and five weak ones
-              matches no rule at all. Writ proves that gap statically, before any country&rsquo;s
-              evidence is loaded.
-            </Prose>
-          </Reveal>
-
-          <Reveal className="mt-9 max-w-2xl" delay={90}>
-            <CodeArtifact
-              label="Literal reading · score"
-              filename="2025-ai-sme-literal.writ"
-              code={code}
-              seam={seamLine ? [seamLine] : []}
-              caption={
-                <span className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.8rem] leading-relaxed">
-                  <span className="text-foreground">strong 0, weak 5</span>
-                  <span aria-hidden className="text-muted-foreground">
-                    &rarr;
-                  </span>
-                  <span className="text-muted-foreground">no rule matches</span>
-                  <span aria-hidden className="text-muted-foreground">
-                    &rarr;
-                  </span>
-                  <TruthBadge value="unresolved" />
+      <section className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
+        <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
+          The Writ process
+        </h2>
+        <div className="relative mt-14 grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+          <div
+            className="pointer-events-none absolute top-8 right-[12.5%] left-[12.5%] hidden h-px bg-border lg:block"
+            aria-hidden
+          >
+            <span className="absolute top-1/2 left-[16.666%] size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted-foreground" />
+            <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted-foreground" />
+            <span className="absolute top-1/2 left-[83.333%] size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted-foreground" />
+          </div>
+          {PROCESS.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <div key={step.title} className="relative px-0 text-center sm:px-5 lg:px-8">
+                <span className="relative mx-auto flex size-16 items-center justify-center rounded-full border border-border bg-background text-primary">
+                  <Icon className="size-7" strokeWidth={1.7} />
                 </span>
+                <p className="mt-7 text-sm font-semibold">
+                  {index + 1}. {step.title}
+                </p>
+                <p className="mx-auto mt-3 max-w-[15rem] text-sm leading-6 text-muted-foreground">
+                  {step.text}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="bg-card/25">
+        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
+          <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
+            Why Writ
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
+            Policy evaluations should be transparent, consistent, and auditable.
+          </p>
+          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+            {PRINCIPLES.map((principle) => {
+              const Icon = principle.icon;
+              return (
+                <div
+                  key={principle.title}
+                  className="px-0 sm:px-5 lg:px-8 lg:not-first:border-l lg:not-first:border-border"
+                >
+                  <Icon className="size-5 text-primary" />
+                  <h3 className="mt-5 text-base font-semibold">{principle.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{principle.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
+        <div className="grid overflow-hidden rounded-xl border border-border bg-card lg:grid-cols-[1fr_0.9fr]">
+          <div className="p-7 sm:p-10 lg:p-12">
+            <p className="text-sm font-medium text-primary">See it in action</p>
+            <h2 className="mt-4 max-w-[20ch] text-[length:var(--t-h2)] leading-[1.08]">
+              How Writ reproduces a G7 compliance assessment
+            </h2>
+            <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">
+              Explore the checked-in 2025 G7 AI-for-SMEs fixture: one published methodology, eight
+              member assessments, frozen evidence, and reproducible results.
+            </p>
+            <Button
+              className="mt-8"
+              nativeButton={false}
+              render={
+                <Link href="/benchmark">
+                  Explore the G7 example
+                  <ArrowRight />
+                </Link>
               }
             />
-          </Reveal>
+          </div>
+
+          <div className="border-t border-border bg-background/40 p-7 sm:p-10 lg:border-t-0 lg:border-l">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-semibold">AI adoption by SMEs</p>
+                <p className="mt-1 text-sm text-muted-foreground">Canada · 2025 fixture</p>
+              </div>
+              {canada ? <TruthBadge value={canada.published as TruthBadgeValue} /> : null}
+            </div>
+            <dl className="mt-8 divide-y divide-border border-y border-border text-sm">
+              <div className="flex justify-between gap-5 py-3">
+                <dt className="text-muted-foreground">Published result</dt>
+                <dd>{canada?.published ?? "Unavailable"}</dd>
+              </div>
+              <div className="flex justify-between gap-5 py-3">
+                <dt className="text-muted-foreground">Computed result</dt>
+                <dd>{canada?.computed ?? "Unavailable"}</dd>
+              </div>
+              <div className="flex justify-between gap-5 py-3">
+                <dt className="text-muted-foreground">Result status</dt>
+                <dd>{receipt?.result_status ?? "Unavailable"}</dd>
+              </div>
+              <div className="flex justify-between gap-5 py-3">
+                <dt className="text-muted-foreground">Reviewed actions</dt>
+                <dd>{snapshot?.actions.length ?? "Unavailable"}</dd>
+              </div>
+            </dl>
+            <Link
+              href="/benchmark"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              View the benchmark
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ── Proof: two methodologies ─────────────────────────────────────── */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[76rem] px-5 py-16 sm:px-6 sm:py-20">
-          <Reveal className="max-w-2xl">
-            <SectionLabel>Proven, not asserted</SectionLabel>
-            <SectionHeading className="mt-4">Two methodologies, two scoring shapes.</SectionHeading>
-            <Prose className="mt-4">
-              Writ reproduces published scores it did not write, on two genuinely different rubrics
-              — a G7 three-point verdict and a weighted-ordinal governance index.
-            </Prose>
-          </Reveal>
-
-          <Reveal className="mt-9 grid gap-5 md:grid-cols-2" delay={90}>
-            {proofs.map((proof) => (
-              <Link
-                key={proof.href}
-                href={proof.href}
-                className="tool group flex flex-col gap-4 p-6 transition-colors hover:border-foreground/20"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="label">{proof.kicker}</p>
-                    <h3 className="mt-1.5 text-lg font-semibold tracking-tight">{proof.title}</h3>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-semibold tracking-tight tabular-nums">
-                      {proof.statValue != null ? (
-                        <>
-                          <NumberTicker value={proof.statValue} />
-                          {proof.statSuffix}
-                        </>
-                      ) : (
-                        "—"
-                      )}
-                    </span>
-                    <p className="label mt-0.5">{proof.statNote}</p>
-                  </div>
+      <section>
+        <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6">
+          <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
+            Built for rigorous policy evaluation
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
+            Writ brings clarity and structure to complex policy assessments.
+          </p>
+          <div className="mt-12 flex flex-wrap justify-center gap-x-10 gap-y-7">
+            {CAPABILITIES.map((capability) => {
+              const Icon = capability.icon;
+              return (
+                <div
+                  key={capability.text}
+                  className="flex max-w-[16rem] items-center gap-4 text-sm leading-6"
+                >
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-primary">
+                    <Icon className="size-4" />
+                  </span>
+                  <span>{capability.text}</span>
                 </div>
-                <p className="text-[0.9rem] leading-relaxed text-muted-foreground">{proof.blurb}</p>
-                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
-                  Explore
-                  <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
-                </span>
-              </Link>
-            ))}
-          </Reveal>
-
-          <Reveal className="mt-8" delay={140}>
-            <Link
-              href="/how-it-works"
-              className="group inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Read how the language, engine, and evidence fit together
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </Reveal>
+              );
+            })}
+          </div>
         </div>
       </section>
     </main>

@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { gapMatrix, type GapMatrixAxis } from "@/lib/gap-matrix";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
-import { HeroBackdrop } from "@/components/site/hero-backdrop";
+import { PageHeader } from "@/components/site/page-header";
 import { Term } from "@/components/site/term";
 import { Reveal } from "@/components/site/reveal";
 
@@ -68,27 +68,11 @@ export default function GapMatrixPage() {
 
   return (
     <main>
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <HeroBackdrop />
-        <div className="relative mx-auto max-w-[76rem] px-5 py-20 sm:px-6 sm:py-28">
-          <Reveal className="max-w-3xl">
-            <SectionLabel>Second methodology · AI governance</SectionLabel>
-            <h1 className="mt-6 text-[length:var(--t-hero)] leading-[1.05] font-semibold tracking-[-0.02em] text-balance">
-              Who knows, and who decides.
-            </h1>
-            <Prose className="mt-7">
-              Writ&rsquo;s first benchmark scores a G7 rubric on a three-point scale. This is a
-              different methodology and a different scoring shape:{" "}
-              <strong>Sara Kim&rsquo;s Gap Matrix</strong>, a frontier-AI governance index across
-              the EU, US, UK, and China. Each axis is five weighted components, each on a
-              five-anchor ordinal rubric, aggregated as <strong>round(100 · Σ wᵢ·sᵢ / 4)</strong>.
-              Writ reproduces her computation exactly, and the distance between the two axes is the
-              governance gap.
-            </Prose>
-          </Reveal>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Gap Matrix"
+        title="A second methodology, with a different scoring shape."
+        description="Policy researchers can inspect how a weighted-ordinal frontier-AI governance index preserves pending components instead of silently collapsing them to zero."
+      />
 
       {/* ── The two axes (reproduced live) ───────────────────────────────── */}
       <section className="border-t border-border">

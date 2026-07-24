@@ -64,3 +64,19 @@ Database and object storage for the evidence ledger run via Docker Compose:
 bun run db:up          # postgres:17 + minio
 bun run db:down
 ```
+
+## Web interface
+
+The Next.js interface in `apps/web` defaults to a near-black research theme, with an explicit
+light/dark toggle. Its shared navigation and page-header system cover the Playground, checked-in
+methodologies, G7 benchmark, Gap Matrix, receipts, and explanatory material. The homepage explains
+why Writ is needed before introducing the process. Archive is intentionally not exposed until
+normalized corpus records are available.
+
+The homepage globe is a first-party D3 canvas component at
+`apps/web/components/ui/wireframe-dotted-globe.tsx`. It reads the checked-in Natural Earth 1:110m
+land geometry from `/data/ne_110m_land.json`; there is no remote runtime geometry request. The
+component supports pointer capture, mouse and touch rotation, page-safe vertical touch scrolling,
+reduced motion, and responsive resizing. The local GeoJSON was retrieved from the
+`martynafford/natural-earth-geojson` distribution and is derived from Natural Earth public-domain
+map data.

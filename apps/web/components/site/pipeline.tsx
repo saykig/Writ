@@ -57,7 +57,7 @@ otherwise  unresolved`}</code>
           <span className="text-foreground">unknown</span> never silently becomes false.
         </p>
         <div className="mt-auto flex flex-col gap-1.5">
-          <span className="inline-flex w-fit items-center gap-1.5 rounded-md border border-l-2 border-gold/40 border-l-gold bg-gold-wash px-2 py-1 font-mono text-[0.72rem] text-gold">
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-md border border-primary/40 bg-gold-wash px-2 py-1 font-mono text-[0.72rem] text-gold">
             gap: 0 strong, 5 weak → no rule matches
           </span>
           <span className="flex flex-wrap gap-1.5">

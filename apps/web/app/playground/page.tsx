@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { Playground } from "@/components/playground/playground";
+import { PageHeader } from "@/components/site/page-header";
 
 export const metadata: Metadata = {
   title: "Playground · Writ",
@@ -19,5 +20,14 @@ export default async function PlaygroundPage({
   const raw = params.example;
   const initialExample = typeof raw === "string" && VALID_EXAMPLES.has(raw) ? raw : null;
 
-  return <Playground initialExample={initialExample} />;
+  return (
+    <div>
+      <PageHeader
+        eyebrow="Playground"
+        title="Write and test a policy methodology."
+        description="Edit rules, inspect compiler and analyzer diagnostics, and view the assessment receipt produced from the selected frozen example."
+      />
+      <Playground initialExample={initialExample} />
+    </div>
+  );
 }

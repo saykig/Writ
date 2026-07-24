@@ -32,7 +32,7 @@ export function ReceiptVisual() {
                 <TruthBadge value="0" />
               </div>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-l-2 border-gold/40 border-l-gold bg-gold-wash px-2 py-1 text-[0.7rem] font-medium text-gold">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-gold-wash px-2 py-1 text-[0.7rem] font-medium text-gold">
               interpretation-sensitive
             </span>
           </div>

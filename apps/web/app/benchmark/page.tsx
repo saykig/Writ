@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 import { benchmark, benchmarkLedger, evaluateMember, memberSnapshot } from "@/lib/toolchain";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
+import { PageHeader } from "@/components/site/page-header";
 import { Reveal } from "@/components/site/reveal";
 import { TruthBadge } from "@/components/site/truth-badge";
-import { HeroBackdrop } from "@/components/site/hero-backdrop";
 import { NumberTicker } from "@/components/site/number-ticker";
 import { BenchmarkExplorer } from "@/components/benchmark/benchmark-explorer";
 import type { ActionView, MemberView, Score } from "@/components/benchmark/types";
@@ -14,9 +14,6 @@ export const metadata: Metadata = {
   description:
     "The 2025 G7 AI-for-SMEs benchmark: all eight members' published scores reproduced from one frozen, reviewed evidence snapshot, with the two interpretation-sensitive cells named.",
 };
-
-const reveal =
-  "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-3 motion-safe:fill-mode-both motion-safe:duration-700";
 
 const MEMBER_LABELS: Record<string, string> = {
   canada: "Canada",
@@ -165,43 +162,14 @@ export default function BenchmarkPage() {
     .map((cell) => buildMember(cell, notesByMember.get(cell.member) ?? cell.note))
     .filter((m): m is MemberView => m !== null);
 
-  // "the United States" / "the United Kingdom" / "the European Union" read naturally in prose.
-  const withArticle = (label: string) =>
-    /^(United|European)/.test(label) ? `the ${label}` : label;
-  const sensitiveNames = members.filter((m) => m.sensitive).map((m) => withArticle(m.label));
-
   return (
     <main className="flex-1">
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-rule">
-        <HeroBackdrop />
-        <div className="relative mx-auto max-w-[72rem] px-5 pt-20 pb-16 sm:px-8 lg:pt-28 lg:pb-20">
-          <SectionLabel className={reveal}>2025 G7 AI-for-SMEs · discrepancy ledger</SectionLabel>
-
-          <h1
-            className={`mt-6 max-w-[20ch] font-display text-[length:var(--t-hero)] leading-[1.05] tracking-[-0.01em] text-balance ${reveal}`}
-            style={{ animationDelay: "80ms" }}
-          >
-            All eight members, reproduced from one frozen snapshot.
-          </h1>
-
-          <div className={`mt-7 ${reveal}`} style={{ animationDelay: "160ms" }}>
-            <Prose>
-              Every 2025 published AI-for-SMEs score was recomputed by the deterministic evaluator
-              over reviewed, page-anchored evidence under a single interpretation profile, and all
-              eight computed scores equal the published record. Two of them,{" "}
-              {sensitiveNames.join(" and ")}, hold a published{" "}
-              <TruthBadge value="0" className="mx-0.5 align-middle" /> only under a strict reading
-              of the rubric. Read general, non-SME AI legislation as strong and both flip to{" "}
-              <TruthBadge value="+1" className="mx-0.5 align-middle" />. Where a score turns on a
-              reading rather than a fact, the matrix marks it in amber.
-            </Prose>
-          </div>
-
-          <div
-            className={`mt-9 flex flex-wrap items-baseline gap-x-4 gap-y-2 border-t border-rule pt-6 text-[0.95rem] ${reveal}`}
-            style={{ animationDelay: "240ms" }}
-          >
+      <PageHeader
+        eyebrow="2025 G7 AI-for-SMEs benchmark"
+        title="A published compliance result, reproduced from reviewed evidence."
+        description={`Policy researchers can compare all ${summary.cells} published member results with deterministic evaluations from one frozen snapshot and inspect the ${summary.interpretation_sensitive_cells} interpretation-sensitive cases.`}
+        actions={
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 text-[0.95rem]">
             <Fact value={summary.cells} label="reproduced" />
             <span aria-hidden className="text-ink-faint">
               ·
@@ -212,8 +180,8 @@ export default function BenchmarkPage() {
             </span>
             <Fact value={summary.interpretation_sensitive_cells} label="interpretation-sensitive" />
           </div>
-        </div>
-      </section>
+        }
+      />
 
       {/* ── The matrix ───────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-[72rem] px-5 py-20 sm:px-8 lg:py-24">

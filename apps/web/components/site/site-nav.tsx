@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { CommandMenu, OPEN_COMMAND_EVENT } from "@/components/site/command-menu";
+import { CommandMenu } from "@/components/site/command-menu";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
 
@@ -25,30 +25,19 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function openCommand() {
-  window.dispatchEvent(new Event(OPEN_COMMAND_EVENT));
-}
-
 /**
- * SiteNav — sticky top navigation: the WRIT wordmark + tagline, the primary
- * route links with an active underline, a ⌘K trigger, the paper/sumi theme
- * toggle, and a GitHub link. Collapses to a Sheet below `lg`. Mounts the single
- * CommandMenu instance for the whole app.
+ * Shared navigation for every Writ surface.
  */
 export function SiteNav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex h-14 max-w-[76rem] items-center gap-5 px-5 sm:px-6">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/90">
+      <div className="mx-auto flex h-[4.5rem] max-w-[76rem] items-center gap-5 px-5 sm:px-6">
         {/* Wordmark */}
         <Link href="/" className="group flex shrink-0 items-center gap-2" aria-label="Writ — home">
-          <span
-            aria-hidden
-            className="size-2 rounded-[2px] bg-gold transition-transform duration-300 group-hover:scale-110"
-          />
-          <span className="text-[0.95rem] font-semibold tracking-tight text-foreground">Writ</span>
+          <span className="text-2xl font-semibold tracking-[-0.035em] text-foreground">Writ</span>
         </Link>
 
         {/* Desktop nav */}
@@ -61,9 +50,9 @@ export function SiteNav() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex items-center px-3 text-[0.9rem] transition-colors",
+                  "relative flex items-center px-2.5 text-[0.82rem] font-medium transition-colors",
                   active ? "text-foreground" : "text-ink-soft hover:text-foreground",
-                  "after:absolute after:inset-x-3 after:bottom-0 after:h-px after:origin-center after:bg-gold after:transition-transform after:duration-200",
+                  "after:absolute after:inset-x-2.5 after:bottom-0 after:h-px after:origin-center after:bg-primary after:transition-transform after:duration-200",
                   active ? "after:scale-x-100" : "after:scale-x-0",
                 )}
               >
@@ -75,19 +64,6 @@ export function SiteNav() {
 
         {/* Right cluster */}
         <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={openCommand}
-            aria-label="Open command menu"
-            className="hidden h-7 items-center gap-2 rounded-[4px] border border-border bg-surface-2/40 pr-1.5 pl-2.5 text-[0.8rem] text-ink-soft transition-colors hover:border-gold/40 hover:text-foreground sm:inline-flex"
-          >
-            <Search className="size-3.5 opacity-70" />
-            <span className="hidden md:inline">Search</span>
-            <kbd className="rounded-[3px] border border-border bg-background px-1 py-0.5 font-mono text-[0.62rem] leading-none text-ink-faint">
-              ⌘K
-            </kbd>
-          </button>
-
           <ThemeToggle />
 
           <Button
@@ -115,10 +91,7 @@ export function SiteNav() {
             </Button>
             <SheetContent side="right" className="w-72 gap-0">
               <SheetHeader className="border-b border-border">
-                <SheetTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-                  <span aria-hidden className="size-2 rounded-[2px] bg-gold" />
-                  Writ
-                </SheetTitle>
+                <SheetTitle className="text-xl font-semibold tracking-[-0.03em]">Writ</SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col p-2" aria-label="Primary">
                 {PRIMARY_NAV.map((item) => {
@@ -146,19 +119,6 @@ export function SiteNav() {
                 })}
               </nav>
               <div className="mt-auto flex items-center justify-between border-t border-border px-4 py-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    openCommand();
-                  }}
-                  className="inline-flex items-center gap-2 text-sm text-ink-soft hover:text-foreground"
-                >
-                  <Search className="size-3.5" /> Search
-                  <kbd className="rounded-[3px] border border-border bg-background px-1 py-0.5 font-mono text-[0.62rem] text-ink-faint">
-                    ⌘K
-                  </kbd>
-                </button>
                 <a
                   href={GITHUB_URL}
                   target="_blank"

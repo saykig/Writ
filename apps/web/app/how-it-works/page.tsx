@@ -7,6 +7,7 @@ import type { Diagnostic } from "@writ/domain";
 import { Button } from "@/components/ui/button";
 import { CodeArtifact } from "@/components/site/code-artifact";
 import { HashPill } from "@/components/site/hash-pill";
+import { PageHeader } from "@/components/site/page-header";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { TruthBadge } from "@/components/site/truth-badge";
 import type { TruthBadgeValue } from "@/components/site/truth-badge";
@@ -309,25 +310,12 @@ export default function HowItWorksPage() {
 
   return (
     <main className="flex-1">
+      <PageHeader
+        eyebrow="How it works"
+        title="From methodology to reproducible assessment."
+        description="Policy researchers can follow the complete path from prose rules and reviewed evidence to a deterministic receipt, with the technical machinery available when needed."
+      />
       <article className="mx-auto w-[min(100%-2.5rem,72rem)] pt-14 pb-24 sm:pt-20">
-        {/* ── Hero ──────────────────────────────────────────────────────── */}
-        <header className="max-w-[52rem] min-[900px]:pl-[calc(220px+4rem)]">
-          <SectionLabel>How it works</SectionLabel>
-          <SectionHeading
-            as="h1"
-            className="mt-5 text-[length:var(--t-hero)] leading-[1.03] tracking-[-0.012em]"
-          >
-            How a rubric becomes a receipt.
-          </SectionHeading>
-          <Prose className="mt-6 max-w-[42rem] text-[length:var(--t-lead)] leading-[1.55]">
-            Writ is a pipeline with a lattice at its center. A methodology compiles to a canonical
-            intermediate form; a deterministic engine scores a subject over frozen evidence using
-            four truth values rather than two; and every result carries a proof tree and content
-            hashes anyone can recompute. This reading follows the whole path, from the language you
-            write to the corpus that pins its meaning.
-          </Prose>
-        </header>
-
         {/* ── Reading layout: sticky rail + measured column ─────────────────── */}
         <div className="mt-14 grid grid-cols-1 gap-y-4 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-x-16 sm:mt-20">
           <EssayIndex

@@ -44,7 +44,7 @@ export function FeatureGrid() {
         icon={<ScanSearch className="size-4" />}
         title="Catches ambiguity early"
         visual={
-          <span className="inline-flex items-center rounded-md border border-l-2 border-gold/40 border-l-gold bg-gold-wash px-2 py-1 font-mono text-[0.7rem] text-gold">
+          <span className="inline-flex items-center rounded-md border border-primary/40 bg-gold-wash px-2 py-1 font-mono text-[0.7rem] text-gold">
             gap · no rule matches
           </span>
         }
