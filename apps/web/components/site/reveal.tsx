@@ -4,61 +4,61 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Adds an `is-in` reveal once the element scrolls into view, then stops (ported
- * from ~/personal/cepheus/app/components/use-in-view.ts). Purely an enhancement:
- * the `.reveal` class shows content at rest if the observer never fires, and the
- * global `prefers-reduced-motion` block disables the entrance motion.
+ * Arms an element after hydration, then reveals it once when it enters the
+ * viewport. Content is visible before JavaScript runs, and reduced-motion users
+ * never receive the entrance transition.
  */
 export function useInView<T extends HTMLElement>() {
   const ref = React.useRef<T>(null);
-  const [inView, setInView] = React.useState(false);
+  const [status, setStatus] = React.useState<"idle" | "armed" | "in">("idle");
 
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    let timer = 0;
-    // Defer through a macrotask so the reveal is never a synchronous setState in
-    // the effect body (react-hooks/set-state-in-effect). setTimeout (not rAF) is
-    // deliberate: it still fires when the tab is backgrounded or not painting, so
-    // `.reveal` content can never get stranded at opacity 0.
-    const revealSoon = () => {
-      timer = window.setTimeout(() => setInView(true), 0);
-    };
-    if (typeof IntersectionObserver === "undefined") {
-      revealSoon();
-      return () => clearTimeout(timer);
+    let armFrame = 0;
+    let revealFrame = 0;
+    let observer: IntersectionObserver | undefined;
+
+    if (
+      typeof IntersectionObserver === "undefined" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      armFrame = window.requestAnimationFrame(() => setStatus("in"));
+      return () => window.cancelAnimationFrame(armFrame);
     }
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      revealSoon();
-      return () => clearTimeout(timer);
-    }
-    const io = new IntersectionObserver(
-      (entries, observer) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.disconnect();
-            break;
+
+    armFrame = window.requestAnimationFrame(() => {
+      setStatus("armed");
+      const rect = el.getBoundingClientRect();
+
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        revealFrame = window.requestAnimationFrame(() => setStatus("in"));
+        return;
+      }
+
+      observer = new IntersectionObserver(
+        (entries, activeObserver) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              setStatus("in");
+              activeObserver.disconnect();
+              break;
+            }
           }
-        }
-      },
-      { rootMargin: "0px 0px -64px 0px", threshold: 0 },
-    );
-    io.observe(el);
-    // Safety net: if the observer never fires (throttled rAF-based impls, odd
-    // viewports), reveal after a short delay so content is never left hidden.
-    timer = window.setTimeout(() => {
-      setInView(true);
-      io.disconnect();
-    }, 1200);
+        },
+        { rootMargin: "0px 0px -10% 0px", threshold: 0.05 },
+      );
+      observer.observe(el);
+    });
+
     return () => {
-      io.disconnect();
-      clearTimeout(timer);
+      observer?.disconnect();
+      window.cancelAnimationFrame(armFrame);
+      window.cancelAnimationFrame(revealFrame);
     };
   }, []);
 
-  return { ref, inView };
+  return { ref, armed: status !== "idle", inView: status === "in" };
 }
 
 /** A block that fades/rises in once when scrolled into view. */
@@ -73,11 +73,11 @@ export function Reveal({
   delay?: number;
   as?: React.ElementType;
 }) {
-  const { ref, inView } = useInView<HTMLElement>();
+  const { ref, armed, inView } = useInView<HTMLElement>();
   return (
     <Tag
       ref={ref}
-      className={cn("reveal", inView && "is-in", className)}
+      className={cn("reveal", armed && "is-armed", inView && "is-in", className)}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}

@@ -104,7 +104,6 @@ export function WireframeDottedGlobe({
       const foreground = themeColor("--foreground", "#f4f7fb");
       const border = themeColor("--globe-line", "rgba(148,163,184,.24)");
       const dot = themeColor("--globe-dot", "rgba(226,232,240,.76)");
-      const accent = themeColor("--globe-accent", "rgba(96,165,250,.36)");
       const radius = projection.scale();
 
       context.clearRect(0, 0, size, size);
@@ -146,11 +145,6 @@ export function WireframeDottedGlobe({
         }
       }
 
-      context.beginPath();
-      context.ellipse(size / 2, size / 2, radius * 1.31, radius * 0.36, -0.13, 0, Math.PI * 2);
-      context.strokeStyle = accent;
-      context.lineWidth = 0.55;
-      context.stroke();
       context.restore();
     }
 

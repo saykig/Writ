@@ -166,8 +166,8 @@ export default function BenchmarkPage() {
     <main className="flex-1">
       <PageHeader
         eyebrow="2025 G7 AI-for-SMEs benchmark"
-        title="A published compliance result, reproduced from reviewed evidence."
-        description={`Policy researchers can compare all ${summary.cells} published member results with deterministic evaluations from one frozen snapshot and inspect the ${summary.interpretation_sensitive_cells} interpretation-sensitive cases.`}
+        title="See Writ used for policy compliance"
+        description="This demonstration reproduces a published 2025 G7 compliance assessment. It shows how Writ applies a real methodology to reviewed evidence and produces an inspectable result. The G7 example is one application of Writ, not the limit of the language."
         actions={
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 text-[0.95rem]">
             <Fact value={summary.cells} label="reproduced" />

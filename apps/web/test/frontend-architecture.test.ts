@@ -9,10 +9,11 @@ describe("frontend architecture", () => {
   test("all public routes have their approved headings", () => {
     const routes: Record<string, string> = {
       "app/playground/page.tsx": "Write and test a policy methodology.",
-      "app/benchmark/page.tsx": "A published compliance result, reproduced from reviewed evidence.",
+      "app/benchmark/page.tsx": "See Writ used for policy compliance",
       "app/gap-matrix/page.tsx": "A second methodology, with a different scoring shape.",
-      "app/methodologies/page.tsx": "Methodologies, made explicit.",
-      "app/receipts/page.tsx": "See how each assessment was reached.",
+      "app/methodologies/page.tsx":
+        "Inspect the original wording and every diagnostic before a result is produced.",
+      "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
     };
 
@@ -44,6 +45,8 @@ describe("frontend architecture", () => {
     expect(globe).toContain('"/data/ne_110m_land.json"');
     expect(globe).not.toMatch(/https?:\/\//);
     expect(globe).not.toContain('addEventListener("wheel"');
+    expect(globe).not.toContain("context.ellipse");
+    expect(globe).not.toContain("--globe-accent");
     expect(globe).toContain('addEventListener("pointercancel"');
     expect(globe).toContain("setPointerCapture");
     expect(globe).toContain("ResizeObserver");
@@ -56,9 +59,19 @@ describe("frontend architecture", () => {
     expect(layout).toContain("enableSystem={false}");
   });
 
-  test("receipts page does not invent corpus records", () => {
+  test("receipts page presents an honest empty state and working next actions", () => {
     const receipts = read("app/receipts/page.tsx");
-    expect(receipts).toContain("No corpus receipts are published here yet.");
+    expect(receipts).toContain("No public receipts are available yet.");
+    expect(receipts).toContain("Open the G7 example");
+    expect(receipts).toContain("Create a receipt in the Playground");
+  });
+
+  test("methodologies uses the requested heading without a redundant description", () => {
+    const methodologies = read("app/methodologies/page.tsx");
+    expect(methodologies).not.toContain(
+      "Policy researchers can inspect the source wording, the structured rule set, its version, and every diagnostic before a score is produced.",
+    );
+    expect(methodologies).not.toContain("description=");
   });
 
   test("the footer omits retired metadata and links to the Writ repository", () => {
@@ -69,5 +82,14 @@ describe("frontend architecture", () => {
     expect(footer).not.toContain("Archive");
     expect(footer).not.toContain("Documentation");
     expect(navItems).toContain("https://github.com/saykig/Writ");
+  });
+
+  test("every landing-page section uses the reduced-motion-safe scroll reveal", () => {
+    const home = read("app/page.tsx");
+    const reveal = read("components/site/reveal.tsx");
+    expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(6);
+    expect(reveal).toContain("IntersectionObserver");
+    expect(reveal).toContain("prefers-reduced-motion: reduce");
+    expect(reveal).toContain('status === "in"');
   });
 });

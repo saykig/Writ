@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { benchmark, evaluateMember, memberSnapshot } from "@/lib/toolchain";
+import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 import { WireframeDottedGlobe } from "@/components/ui/wireframe-dotted-globe";
 import { TruthBadge } from "@/components/site/truth-badge";
@@ -82,7 +83,7 @@ export default function Home() {
 
   return (
     <main>
-      <section className="min-h-[calc(100svh-4.5rem)]">
+      <Reveal as="section" className="min-h-[calc(100svh-4.5rem)]">
         <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8">
           <div className="relative z-10 py-4 lg:py-10">
             <h1 className="whitespace-nowrap text-[length:var(--t-hero)] leading-[0.98] font-semibold tracking-[-0.04em]">
@@ -117,9 +118,9 @@ export default function Home() {
             <WireframeDottedGlobe className="mx-auto" />
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="bg-card/25">
+      <Reveal as="section" className="bg-card/25">
         <div className="mx-auto grid max-w-[76rem] items-start gap-8 px-5 py-16 sm:px-6 sm:py-20 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
           <div>
             <h2 className="text-[length:var(--t-h2)] leading-[1.08]">
@@ -139,9 +140,9 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
+      <Reveal as="section" className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
         <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
           The Writ process
         </h2>
@@ -171,9 +172,9 @@ export default function Home() {
             );
           })}
         </div>
-      </section>
+      </Reveal>
 
-      <section className="bg-card/25">
+      <Reveal as="section" className="bg-card/25">
         <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
           <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
             Why Writ
@@ -197,9 +198,9 @@ export default function Home() {
             })}
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
+      <Reveal as="section" className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6 lg:py-28">
         <div className="grid overflow-hidden rounded-xl border border-border bg-card lg:grid-cols-[1fr_0.9fr]">
           <div className="p-7 sm:p-10 lg:p-12">
             <p className="text-sm font-medium text-primary">See it in action</p>
@@ -257,9 +258,9 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section>
+      <Reveal as="section">
         <div className="mx-auto max-w-[76rem] px-5 py-20 sm:px-6">
           <h2 className="text-center text-[length:var(--t-h2)] leading-[1.08] font-semibold">
             Built for rigorous policy evaluation
@@ -284,7 +285,7 @@ export default function Home() {
             })}
           </div>
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

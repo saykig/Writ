@@ -19,8 +19,8 @@ export default function MethodologiesPage() {
     <main>
       <PageHeader
         eyebrow="Methodologies"
-        title="Methodologies, made explicit."
-        description="Policy researchers can inspect the source wording, the structured rule set, its version, and every diagnostic before a score is produced."
+        title="Inspect the original wording and every diagnostic before a result is produced."
+        titleClassName="max-w-[26ch]"
       />
 
       <section className="mx-auto max-w-[76rem] px-5 py-14 sm:px-6 sm:py-20">

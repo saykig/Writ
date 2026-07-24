@@ -16,27 +16,24 @@ export default function ReceiptsPage() {
     <main>
       <PageHeader
         eyebrow="Receipts"
-        title="See how each assessment was reached."
-        description="A receipt lets a policy researcher trace a result back to the matched rule, reviewed evidence, interpretation profile, and frozen source version."
+        title="See how each result was reached."
+        description="A receipt shows how Writ reached a result."
       />
 
       <section className="mx-auto max-w-[76rem] px-5 py-14 sm:px-6 sm:py-20">
         <div className="max-w-2xl rounded-xl border border-border bg-card p-7 sm:p-10">
           <ReceiptText className="size-7 text-primary" />
-          <h2 className="mt-6 text-2xl font-semibold">
-            No corpus receipts are published here yet.
-          </h2>
+          <h2 className="mt-6 text-2xl font-semibold">No public receipts are available yet.</h2>
           <p className="mt-4 text-base leading-7 text-muted-foreground">
-            Writ does not fabricate normalized assessments. The existing frozen G7 fixture remains
-            available in the benchmark, and the Playground can generate a receipt from an explicit
-            methodology and evidence snapshot.
+            Writ only publishes results that come from a defined methodology and reviewed evidence.
+            You can explore the existing G7 example or create a receipt in the Playground.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Button
               nativeButton={false}
               render={
                 <Link href="/benchmark">
-                  Open the G7 benchmark
+                  Open the G7 example
                   <ArrowRight />
                 </Link>
               }
@@ -44,7 +41,7 @@ export default function ReceiptsPage() {
             <Button
               variant="outline"
               nativeButton={false}
-              render={<Link href="/playground">Generate a Playground receipt</Link>}
+              render={<Link href="/playground">Create a receipt in the Playground</Link>}
             />
           </div>
         </div>
