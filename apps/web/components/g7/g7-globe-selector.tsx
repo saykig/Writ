@@ -109,33 +109,11 @@ export function G7GlobeSelector({
               </p>
           </aside>
         ) : (
-          <p className="max-w-[30ch] self-start pt-2 text-center text-xs leading-5 whitespace-normal text-muted-foreground">
-            Select an illuminated marker to preview its assessment.
+          <p className="max-w-[34ch] self-start pt-2 text-center text-xs leading-5 whitespace-normal text-muted-foreground">
+            Select a marker to preview its assessment, or tab to the globe and use the arrow keys.
           </p>
         )}
       </div>
-
-      {/* The globe itself is the selector, so no visible dropdown duplicates it.
-          Markers are pointer-only (tabIndex -1) and the ones facing away are
-          hidden, so this control stays in the tab order as the keyboard and
-          screen-reader path; it reveals itself when focused. */}
-      <label className="sr-only block focus-within:not-sr-only">
-        <span className="sr-only">Choose a G7 member assessment</span>
-        <select
-          value={selectedMemberId ?? ""}
-          onChange={(event) => setSelectedMemberId(event.target.value as G7MemberId)}
-          className="h-9 w-auto max-w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
-        >
-          <option value="" disabled>
-            Choose a member
-          </option>
-          {members.map((member) => (
-            <option key={member.id} value={member.id}>
-              {member.name}
-            </option>
-          ))}
-        </select>
-      </label>
     </div>
   );
 }

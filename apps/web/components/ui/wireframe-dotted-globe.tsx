@@ -53,14 +53,68 @@ export function WireframeDottedGlobe({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const markerElementsRef = useRef(new Map<string, HTMLButtonElement>());
   const markerPausedRef = useRef(false);
+  // Assigned by the render effect; turns the globe to face a member's coordinates.
+  const rotateToRef = useRef<((coordinates: readonly [number, number]) => void) | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
   const [focusedMarkerId, setFocusedMarkerId] = useState<string | null>(null);
-  const emphasizedMarkerId = focusedMarkerId ?? hoveredMarkerId ?? selectedMarkerId;
+  // The keyboard cursor. The marker layer is one tab stop and points at this
+  // option via aria-activedescendant, so every member is reachable by keyboard
+  // even when the globe has rotated it out of sight.
+  const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null);
+  const activeMarkerIdRef = useRef<string | null>(null);
+  const emphasizedMarkerId = activeMarkerId ?? focusedMarkerId ?? hoveredMarkerId ?? selectedMarkerId;
 
   useEffect(() => {
-    markerPausedRef.current = hoveredMarkerId !== null || focusedMarkerId !== null;
-  }, [focusedMarkerId, hoveredMarkerId]);
+    activeMarkerIdRef.current = activeMarkerId;
+    markerPausedRef.current =
+      hoveredMarkerId !== null || focusedMarkerId !== null || activeMarkerId !== null;
+  }, [activeMarkerId, focusedMarkerId, hoveredMarkerId]);
+
+  function moveActiveMarker(step: number | "first" | "last") {
+    if (!markers.length) return;
+    const currentIndex = markers.findIndex((marker) => marker.id === activeMarkerId);
+    let nextIndex: number;
+    if (step === "first") nextIndex = 0;
+    else if (step === "last") nextIndex = markers.length - 1;
+    else if (currentIndex < 0) nextIndex = step > 0 ? 0 : markers.length - 1;
+    else nextIndex = (currentIndex + step + markers.length) % markers.length;
+    const next = markers[nextIndex];
+    if (!next) return;
+    setActiveMarkerId(next.id);
+    rotateToRef.current?.(next.coordinates);
+  }
+
+  function onMarkerLayerKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        event.preventDefault();
+        moveActiveMarker(1);
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        event.preventDefault();
+        moveActiveMarker(-1);
+        break;
+      case "Home":
+        event.preventDefault();
+        moveActiveMarker("first");
+        break;
+      case "End":
+        event.preventDefault();
+        moveActiveMarker("last");
+        break;
+      case "Enter":
+      case " ":
+        if (!activeMarkerId) return;
+        event.preventDefault();
+        onMarkerSelect?.(activeMarkerId);
+        break;
+      default:
+        break;
+    }
+  }
 
   useEffect(() => {
     const containerElement = containerRef.current;
@@ -97,6 +151,13 @@ export function WireframeDottedGlobe({
       x: number;
       y: number;
       rotation: [number, number, number];
+    } | null = null;
+
+    let turn: {
+      from: [number, number];
+      to: [number, number];
+      start: number;
+      duration: number;
     } | null = null;
 
     function themeColor(name: string, fallback: string): string {
@@ -176,9 +237,13 @@ export function WireframeDottedGlobe({
         ];
         const markerIsVisible = d3.geoDistance(markerCoordinates, center) <= Math.PI / 2;
         const projected = markerIsVisible ? projection(markerCoordinates) : null;
-        markerElement.style.visibility = projected ? "visible" : "hidden";
+        // The keyboard cursor's marker stays rendered while the globe turns to
+        // face it, so aria-activedescendant never points at a hidden option.
+        const keyboardActive = marker.id === activeMarkerIdRef.current;
+        markerElement.style.visibility = projected || keyboardActive ? "visible" : "hidden";
         markerElement.style.opacity = projected ? "1" : "0";
-        markerElement.tabIndex = projected ? 0 : -1;
+        // The marker layer owns the single tab stop; markers are never tab stops.
+        markerElement.tabIndex = -1;
         if (projected) {
           const [offsetX, offsetY] = marker.displayOffset ?? [0, 0];
           markerElement.style.left = `${projected[0] + offsetX}px`;
@@ -187,10 +252,42 @@ export function WireframeDottedGlobe({
       }
     }
 
+    // Turn the globe so a member's coordinates face the viewer. Keyboard
+    // navigation uses this to bring an off-screen marker into view, which is
+    // what makes every member reachable without a pointer.
+    function turnTo(coordinates: readonly [number, number]) {
+      const targetLambda = -coordinates[0];
+      const targetPhi = clampLatitude(-coordinates[1]);
+      let delta = targetLambda - rotation[0];
+      while (delta > 180) delta -= 360;
+      while (delta < -180) delta += 360;
+      turn = {
+        from: [rotation[0], rotation[1]],
+        to: [rotation[0] + delta, targetPhi],
+        start: performance.now(),
+        duration: reduceMotion ? 0 : 420,
+      };
+      lastFrame = performance.now();
+    }
+    rotateToRef.current = turnTo;
+
     function animate(now: number) {
       const elapsed = Math.min((now - lastFrame) / 1000, 0.1);
       lastFrame = now;
-      if (
+      if (turn && land) {
+        const progress =
+          turn.duration <= 0 ? 1 : Math.min(1, (now - turn.start) / turn.duration);
+        // easeInOutQuad, so the turn settles rather than snapping.
+        const eased =
+          progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        rotation[0] = turn.from[0] + (turn.to[0] - turn.from[0]) * eased;
+        rotation[1] = turn.from[1] + (turn.to[1] - turn.from[1]) * eased;
+        projection.rotate(rotation);
+        draw();
+        if (progress >= 1) turn = null;
+      } else if (
         !reduceMotion &&
         !interacting &&
         !markerPausedRef.current &&
@@ -292,6 +389,7 @@ export function WireframeDottedGlobe({
 
     return () => {
       disposed = true;
+      rotateToRef.current = null;
       window.cancelAnimationFrame(frame);
       window.clearTimeout(resumeTimer);
       resizeObserver.disconnect();
@@ -319,21 +417,44 @@ export function WireframeDottedGlobe({
         className="block max-w-full cursor-grab touch-pan-y select-none active:cursor-grabbing"
       />
       {markers.length ? (
-        <div className="pointer-events-none absolute inset-0 z-10" aria-label="G7 assessments">
+        /* One tab stop for the whole set. Arrow keys move the cursor and turn the
+           globe to face that member, so keyboard users reach every marker even
+           when it is on the far side; Enter or Space opens it. */
+        <div
+          role="listbox"
+          tabIndex={0}
+          aria-label="G7 assessments"
+          aria-activedescendant={
+            activeMarkerId ? `globe-marker-${activeMarkerId}` : undefined
+          }
+          onKeyDown={onMarkerLayerKeyDown}
+          onFocusCapture={() => {
+            // Place the cursor on the first member so the listbox announces an
+            // option as soon as it receives focus.
+            if (!activeMarkerIdRef.current && markers[0]) {
+              setActiveMarkerId(markers[0].id);
+              rotateToRef.current?.(markers[0].coordinates);
+            }
+          }}
+          onBlurCapture={() => setActiveMarkerId(null)}
+          className="pointer-events-none absolute inset-0 z-10 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
           {markers.map((marker) => {
             const emphasized = marker.id === emphasizedMarkerId;
             const selected = marker.id === selectedMarkerId;
             return (
               <button
                 key={marker.id}
+                id={`globe-marker-${marker.id}`}
                 ref={(element) => {
                   if (element) markerElementsRef.current.set(marker.id, element);
                   else markerElementsRef.current.delete(marker.id);
                 }}
                 type="button"
                 tabIndex={-1}
+                role="option"
                 aria-label={`Preview assessment for ${marker.label}`}
-                aria-pressed={selected}
+                aria-selected={selected}
                 onPointerEnter={() => setHoveredMarkerId(marker.id)}
                 onPointerLeave={() =>
                   setHoveredMarkerId((current) => (current === marker.id ? null : current))

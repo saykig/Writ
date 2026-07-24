@@ -86,7 +86,6 @@ describe("frontend architecture", () => {
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
     expect(home).toContain("<G7GlobeSelector");
-    expect(selector).toContain("Choose a member");
     expect(selector).toContain("Published result");
     expect(selector).toContain("Writ result");
     expect(selector).toContain("Result status");
@@ -98,11 +97,38 @@ describe("frontend architecture", () => {
     expect(globe).toContain("markerPausedRef.current");
     expect(globe).toContain("size-11");
     expect(selector).toContain("MARKER_DISPLAY_OFFSETS");
-    expect(selector).toContain("h-9");
     expect(selector).toContain("min-w-0 max-w-full");
     expect(selector).toContain("whitespace-normal");
     expect(selector).not.toContain("lg:absolute");
     expect(selector).not.toContain("min-[1400px]");
+  });
+
+  test("the globe is the only member selector and is keyboard operable", () => {
+    const selector = read("components/g7/g7-globe-selector.tsx");
+    const globe = read("components/ui/wireframe-dotted-globe.tsx");
+
+    // The globe replaced the dropdown, so no control may duplicate it.
+    expect(selector).not.toContain("<select");
+    expect(selector).not.toContain("Choose a member");
+
+    // The marker layer is a single composite tab stop over all members.
+    expect(globe).toContain('role="listbox"');
+    expect(globe).toContain('role="option"');
+    expect(globe).toContain("aria-activedescendant");
+    expect(globe).toContain("tabIndex={0}");
+
+    // Arrow keys move the cursor, Home/End jump, Enter or Space opens.
+    for (const key of ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End", "Enter"]) {
+      expect(globe).toContain(`"${key}"`);
+    }
+
+    // Reaching a member must turn the globe, otherwise the far side is a trap.
+    expect(globe).toContain("rotateToRef.current?.(");
+    expect(globe).toContain("function turnTo(");
+    // Individual markers are never tab stops; the layer owns focus.
+    expect(globe).toContain("markerElement.tabIndex = -1");
+    // The cursor's marker is never hidden while aria-activedescendant names it.
+    expect(globe).toContain("keyboardActive");
   });
 
   test("member-specific Lab routes preload the resolved fixture, evidence, and receipt", () => {
