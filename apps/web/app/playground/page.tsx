@@ -4,7 +4,7 @@ import { Playground } from "@/components/playground/playground";
 import { PageHeader } from "@/components/site/page-header";
 
 export const metadata: Metadata = {
-  title: "Playground · Writ",
+  title: "Writ Lab · Writ",
   description:
     "Write a methodology in the Writ DSL and watch it compile, get analyzed for scoring gaps and overlaps, and evaluate against a frozen member snapshot into a receipt.",
 };
@@ -23,9 +23,9 @@ export default async function PlaygroundPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Playground"
+        eyebrow="Writ Lab"
         title="Write and test a policy methodology."
-        description="Edit rules, inspect compiler and analyzer diagnostics, and view the assessment receipt produced from the selected frozen example."
+        description="The Writ Lab shows how Writ turns a written methodology into rules that can be checked and run. You can revise the example, review any problems in the logic, and see how the final result is produced."
       />
       <Playground initialExample={initialExample} />
     </div>

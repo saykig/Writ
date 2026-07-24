@@ -7,24 +7,13 @@ import type { FeatureCollection, Geometry } from "geojson";
 import { cn } from "@/lib/utils";
 
 const LAND_DATA_URL = "/data/ne_110m_land.json";
+const LAND_DOTS_URL = "/data/ne_110m_land_dots.json";
 const RESUME_DELAY_MS = 900;
 const ROTATION_DEGREES_PER_SECOND = 1.6;
 const DEFAULT_ROTATION: [number, number, number] = [-12, -18, 0];
 
 export function clampLatitude(value: number): number {
   return Math.max(-72, Math.min(72, value));
-}
-
-function makeLandDots(land: FeatureCollection<Geometry>): [number, number][] {
-  const dots: [number, number][] = [];
-  for (let latitude = -84; latitude <= 84; latitude += 1.75) {
-    const longitudeStep = Math.max(1.75, 1.75 / Math.cos((latitude * Math.PI) / 180));
-    for (let longitude = -180; longitude < 180; longitude += longitudeStep) {
-      const point: [number, number] = [longitude, latitude];
-      if (d3.geoContains(land, point)) dots.push(point);
-    }
-  }
-  return dots;
 }
 
 export interface WireframeDottedGlobeProps {
@@ -99,7 +88,7 @@ export function WireframeDottedGlobe({
     }
 
     function draw() {
-      if (!size) return;
+      if (!size || !land) return;
       const background = themeColor("--background", "#070a0e");
       const foreground = themeColor("--foreground", "#f4f7fb");
       const border = themeColor("--globe-line", "rgba(148,163,184,.24)");
@@ -124,25 +113,23 @@ export function WireframeDottedGlobe({
       context.lineWidth = 0.55;
       context.stroke();
 
-      if (land) {
-        context.beginPath();
-        path(land);
-        context.strokeStyle = border;
-        context.lineWidth = 0.65;
-        context.stroke();
+      context.beginPath();
+      path(land);
+      context.strokeStyle = border;
+      context.lineWidth = 0.65;
+      context.stroke();
 
-        const [lambda, phi] = projection.rotate();
-        const center: [number, number] = [-lambda, -phi];
-        const dotRadius = Math.max(0.65, size / 640);
-        context.fillStyle = dot;
-        for (const coordinates of dots) {
-          if (d3.geoDistance(coordinates, center) > Math.PI / 2) continue;
-          const projected = projection(coordinates);
-          if (!projected) continue;
-          context.beginPath();
-          context.arc(projected[0], projected[1], dotRadius, 0, Math.PI * 2);
-          context.fill();
-        }
+      const [lambda, phi] = projection.rotate();
+      const center: [number, number] = [-lambda, -phi];
+      const dotRadius = Math.max(0.65, size / 640);
+      context.fillStyle = dot;
+      for (const coordinates of dots) {
+        if (d3.geoDistance(coordinates, center) > Math.PI / 2) continue;
+        const projected = projection(coordinates);
+        if (!projected) continue;
+        context.beginPath();
+        context.arc(projected[0], projected[1], dotRadius, 0, Math.PI * 2);
+        context.fill();
       }
 
       context.restore();
@@ -219,15 +206,21 @@ export function WireframeDottedGlobe({
     intersectionObserver.observe(container);
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
-    fetch(LAND_DATA_URL)
-      .then((response) => {
+    Promise.all([
+      fetch(LAND_DATA_URL).then((response) => {
         if (!response.ok) throw new Error(`Land data returned ${response.status}`);
         return response.json() as Promise<FeatureCollection<Geometry>>;
-      })
-      .then((data) => {
+      }),
+      fetch(LAND_DOTS_URL).then((response) => {
+        if (!response.ok) throw new Error(`Land dots returned ${response.status}`);
+        return response.json() as Promise<[number, number][]>;
+      }),
+    ])
+      .then(([data, landDots]) => {
         if (disposed || data.type !== "FeatureCollection") return;
         land = data;
-        dots = makeLandDots(data);
+        dots = landDots;
+        lastFrame = performance.now();
         setLoadError(false);
         draw();
       })

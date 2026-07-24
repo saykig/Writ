@@ -265,7 +265,7 @@ export function Playground({ initialExample }: PlaygroundProps) {
         {/* Slim toolbar: the reading switch on the left, the live verdict on the right. */}
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="label hidden shrink-0 md:inline">Playground</span>
+            <span className="label hidden shrink-0 md:inline">Writ Lab</span>
             <div
               role="radiogroup"
               aria-label="Reading of the 2025 AI-for-SMEs rubric"

@@ -26,7 +26,7 @@ export default function ReceiptsPage() {
           <h2 className="mt-6 text-2xl font-semibold">No public receipts are available yet.</h2>
           <p className="mt-4 text-base leading-7 text-muted-foreground">
             Writ only publishes results that come from a defined methodology and reviewed evidence.
-            You can explore the existing G7 example or create a receipt in the Playground.
+            You can explore the existing G7 example or create a receipt in the Writ Lab.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Button
@@ -41,7 +41,7 @@ export default function ReceiptsPage() {
             <Button
               variant="outline"
               nativeButton={false}
-              render={<Link href="/playground">Create a receipt in the Playground</Link>}
+              render={<Link href="/playground">Create a receipt in the Writ Lab</Link>}
             />
           </div>
         </div>

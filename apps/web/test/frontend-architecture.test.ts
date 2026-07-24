@@ -11,8 +11,7 @@ describe("frontend architecture", () => {
       "app/playground/page.tsx": "Write and test a policy methodology.",
       "app/benchmark/page.tsx": "See Writ used for policy compliance",
       "app/gap-matrix/page.tsx": "A second methodology, with a different scoring shape.",
-      "app/methodologies/page.tsx":
-        "Inspect the original wording and every diagnostic before a result is produced.",
+      "app/methodologies/page.tsx": "Every rule, open to review.",
       "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
     };
@@ -20,6 +19,20 @@ describe("frontend architecture", () => {
     for (const [path, heading] of Object.entries(routes)) {
       expect(read(path)).toContain(heading);
     }
+  });
+
+  test("the Playground is presented as the Writ Lab", () => {
+    const playground = read("app/playground/page.tsx");
+    const home = read("app/page.tsx");
+    const navItems = read("components/site/nav-items.ts");
+
+    expect(playground).toContain('eyebrow="Writ Lab"');
+    expect(playground).toContain(
+      "The Writ Lab shows how Writ turns a written methodology into rules that can be checked and run.",
+    );
+    expect(navItems).toContain('label: "Writ Lab"');
+    expect(home).toContain(">Try Writ</Link>");
+    expect(home).not.toContain("Try the Playground");
   });
 
   test("archive is absent from routes and navigation", () => {
@@ -42,8 +55,12 @@ describe("frontend architecture", () => {
 
   test("the globe loads only local geometry and never intercepts wheel events", () => {
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
+    const dots = JSON.parse(read("public/data/ne_110m_land_dots.json")) as unknown[];
     expect(globe).toContain('"/data/ne_110m_land.json"');
+    expect(globe).toContain('"/data/ne_110m_land_dots.json"');
     expect(globe).not.toMatch(/https?:\/\//);
+    expect(globe).not.toContain("makeLandDots");
+    expect(dots).toHaveLength(3875);
     expect(globe).not.toContain('addEventListener("wheel"');
     expect(globe).not.toContain("context.ellipse");
     expect(globe).not.toContain("--globe-accent");
@@ -63,15 +80,14 @@ describe("frontend architecture", () => {
     const receipts = read("app/receipts/page.tsx");
     expect(receipts).toContain("No public receipts are available yet.");
     expect(receipts).toContain("Open the G7 example");
-    expect(receipts).toContain("Create a receipt in the Playground");
+    expect(receipts).toContain("Create a receipt in the Writ Lab");
   });
 
-  test("methodologies uses the requested heading without a redundant description", () => {
+  test("methodologies uses the requested review-focused copy", () => {
     const methodologies = read("app/methodologies/page.tsx");
-    expect(methodologies).not.toContain(
-      "Policy researchers can inspect the source wording, the structured rule set, its version, and every diagnostic before a score is produced.",
+    expect(methodologies).toContain(
+      "Compare the original methodology with the rules Writ uses and resolve any problems before producing a result.",
     );
-    expect(methodologies).not.toContain("description=");
   });
 
   test("the footer omits retired metadata and links to the Writ repository", () => {

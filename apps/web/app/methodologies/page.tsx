@@ -19,7 +19,8 @@ export default function MethodologiesPage() {
     <main>
       <PageHeader
         eyebrow="Methodologies"
-        title="Inspect the original wording and every diagnostic before a result is produced."
+        title="Every rule, open to review."
+        description="Compare the original methodology with the rules Writ uses and resolve any problems before producing a result."
         titleClassName="max-w-[26ch]"
       />
 

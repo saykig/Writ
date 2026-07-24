@@ -109,7 +109,7 @@ export default function Home() {
                 variant="outline"
                 size="lg"
                 nativeButton={false}
-                render={<Link href="/playground">Try the Playground</Link>}
+                render={<Link href="/playground">Try Writ</Link>}
               />
             </div>
           </div>

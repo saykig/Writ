@@ -9,7 +9,7 @@ export interface NavItem {
 }
 
 export const PRIMARY_NAV: readonly NavItem[] = [
-  { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
+  { href: "/playground", label: "Writ Lab", hint: "Compile, analyze, evaluate live" },
   {
     href: "/methodologies" as Route,
     label: "Methodologies",
