@@ -69,7 +69,11 @@ def test_vocabulary_cannot_map_score_terms(tmp_path: Path) -> None:
 
 def test_proposed_and_unmapped_mappings_require_review_items(tmp_path: Path) -> None:
     vocabulary = copy.deepcopy(load_vocabulary())
-    proposed = vocabulary["mappings"][-1]
+    proposed = next(
+        mapping
+        for mapping in vocabulary["mappings"]
+        if mapping["mapping_status"] == "proposed"
+    )
     unmapped = {
         **proposed,
         "mapping_id": "g7.2025.instrument.unmapped",

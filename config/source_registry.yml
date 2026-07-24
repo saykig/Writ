@@ -20,14 +20,15 @@ sources:
     authentication:
       type: none
     robots_policy: respect
-    terms_status: review_required
+    terms_status: reviewed
     languages:
       - en
     expected_formats:
       - text/html
       - application/pdf
-    enabled: false
-    verification_status: verify_before_enable
+    enabled: true
+    verification_status: verified
+    last_verified: "2026-07-24"
     discovery:
       seed_url: https://www.g20.utoronto.ca/analysis/index.html
       section_anchor: commitments

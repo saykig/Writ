@@ -1,45 +1,50 @@
 {
   "schema_version": "2.0.0",
-  "manifest_id": "sha256:200bf5f1e0ac9fc47d7257d93357e8ca3c5950faf8073f4efae516bae177de83",
+  "manifest_id": "sha256:b807906d514d03f4bb705688dbd31e986866b35878196bcd150769042c031aa2",
   "source_id": "g20_research_group",
   "institution": "G20",
   "summit_slug": "2024-rio",
-  "live_fetch_authorized": false,
-  "raw_files_available": false,
+  "live_fetch_authorized": true,
+  "raw_files_available": true,
   "access_observations": [
-    {
-      "access_method": "browser",
-      "status": "failed",
-      "observed_at": "2026-07-24",
-      "failure_reason": "iso_8859_1_decode_error",
-      "notes": "Browser fetch could not decode the seed page."
-    },
     {
       "access_method": "direct_http",
       "status": "succeeded",
       "observed_at": "2026-07-24",
       "failure_reason": null,
-      "notes": "Bounded inspection succeeded previously; live corpus fetching is not authorized."
+      "notes": "Approved live fetch of the interim and final compliance reports; raw bytes published to the append-only Neon corpus store."
     }
   ],
   "documents": [
     {
-      "document_id": "g20_research_group.seed_index",
-      "category": "seed_index",
-      "source_url": "https://www.g20.utoronto.ca/analysis/index.html",
-      "section_anchor": "commitments",
-      "report_stage": null,
-      "fetch_status": "blocked",
-      "skip_reason": "live_access_not_approved_and_no_source_file_provided",
-      "storage_backend": null,
-      "storage_object_id": null,
-      "sha256": null,
-      "byte_size": null,
-      "media_type": null,
-      "warnings": [
-        "browser_access_failed",
-        "raw_source_unavailable"
-      ]
+      "document_id": "g20.2024-rio.final.report",
+      "category": "final_compliance_reports",
+      "source_url": "https://www.g20.utoronto.ca/compliance/2024rio-final/2024-g20-compliance-final.pdf",
+      "section_anchor": "compliance",
+      "report_stage": "final",
+      "fetch_status": "retrieved",
+      "skip_reason": null,
+      "storage_backend": "neon_postgres",
+      "storage_object_id": "corpus:813851041a664b095cf1102a9e5953d5f34b8ae2683ec710577e8b26b796ddd3",
+      "sha256": "sha256:be6d1b5a037c903e12146212ee41304fb479c1da6c06c4d6fd3a336508771654",
+      "byte_size": 17942825,
+      "media_type": "application/pdf",
+      "warnings": []
+    },
+    {
+      "document_id": "g20.2024-rio.interim.report",
+      "category": "interim_compliance_reports",
+      "source_url": "https://www.g20.utoronto.ca/compliance/2024rio-interim/2024-g20-compliance-interim.pdf",
+      "section_anchor": "compliance",
+      "report_stage": "interim",
+      "fetch_status": "retrieved",
+      "skip_reason": null,
+      "storage_backend": "neon_postgres",
+      "storage_object_id": "corpus:1e9f66da6c011d976933ff133ecd67ce19a7cfef4e2770c8fbfad1e55069a2dd",
+      "sha256": "sha256:a36b8f9bf057b62796f7d148ae82a2792afe5dab2446447adf543a21ca5f4de7",
+      "byte_size": 9356340,
+      "media_type": "application/pdf",
+      "warnings": []
     }
   ]
 }

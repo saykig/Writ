@@ -2,12 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
 from writ_ingest.corpus.adapters.g7_2025_ai_sme import G7AiSmeFixtureAdapter
-from writ_ingest.corpus.adapters.g20 import (
-    G20Adapter,
-    G20AdapterUnavailableError,
-)
+from writ_ingest.corpus.adapters.g20 import G20RioAdapter
 from writ_ingest.corpus.validation import validate_corpus_graph
 from writ_ingest.corpus.vocabulary import (
     load_vocabulary,
@@ -39,19 +35,18 @@ def test_g7_fixture_adapter_emits_normalized_records_in_memory() -> None:
     validate_vocabulary_review_items(load_vocabulary(), list(output.review_items))
 
 
-def test_g20_adapter_remains_unimplemented_and_fetch_disabled() -> None:
-    with pytest.raises(G20AdapterUnavailableError, match="fetch-disabled"):
-        G20Adapter().emit()
+def test_g20_rio_adapter_is_implemented() -> None:
+    output = G20RioAdapter().emit()
+    assert len(output.commitments) == 13
+    assert len(output.reports) == 2
+    assert all(item["institution"] == "G20" for item in output.commitments)
 
 
-def test_schema_migration_creates_no_rio_corpus_records() -> None:
+def test_rio_records_stay_out_of_the_data_tree() -> None:
+    # Normalized records and raw bytes live in the Neon store and the benchmark tree,
+    # never in data/raw/g20 or data/normalized/g20, which stay documentation-only.
     root = Path(__file__).resolve().parents[2]
     assert [path.name for path in (root / "data/raw/g20").iterdir()] == ["README.md"]
     assert [path.name for path in (root / "data/normalized/g20").iterdir()] == [
         "README.md"
     ]
-    manifest = (root / "data/manifests/g20/2024-rio/source-manifest.json").read_text(
-        encoding="utf-8"
-    )
-    assert '"fetch_status": "blocked"' in manifest
-    assert '"live_fetch_authorized": false' in manifest

@@ -10,5 +10,7 @@ wording is retained, while proposed or unmapped terminology enters review rather
 Historical labels remain expert-assigned historical scores and cannot transfer automatically to new
 commitments.
 
-The G20 adapter remains unimplemented and fetch-disabled. Parsing stays blocked until a later,
-separately approved Rio pilot with reviewed source files or approved access.
+The G20 2024 Rio adapter is implemented. It parses the interim and final G20 Research Group
+compliance reports into version `2.0.0` records without inferring any score. The canonical
+normalized set is published to the append-only Neon store; a frozen review copy lives under
+`benchmark/2024-rio-g20/normalized/`. This directory stays documentation-only and holds no records.

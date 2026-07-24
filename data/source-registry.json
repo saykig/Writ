@@ -22,7 +22,7 @@
         "type": "none"
       },
       "robots_policy": "respect",
-      "terms_status": "review_required",
+      "terms_status": "reviewed",
       "languages": [
         "en"
       ],
@@ -30,8 +30,9 @@
         "text/html",
         "application/pdf"
       ],
-      "enabled": false,
-      "verification_status": "verify_before_enable"
+      "enabled": true,
+      "verification_status": "verified",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "g7.compliance.index",

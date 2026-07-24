@@ -6,9 +6,35 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 from writ_ingest.corpus.adapters.g7_2025_ai_sme import G7AiSmeFixtureAdapter
+from writ_ingest.corpus.adapters.g20 import G20RioAdapter
 from writ_ingest.corpus.validation import validate_corpus_graph, validate_record
+
+
+def _adapter_counts(output: Any) -> dict[str, int]:
+    return {
+        "identified_commitments": len(output.commitments),
+        "assessment_selections": len(output.selections),
+        "compliance_reports": len(output.reports),
+        "member_compliance_assessments": len(output.member_assessments),
+        "reconciliation_manifests": len(output.reconciliations),
+        "review_items": len(output.review_items),
+    }
+
+
+def _validate_output(output: Any) -> None:
+    validate_corpus_graph(
+        commitments=list(output.commitments),
+        selections=list(output.selections),
+        reports=list(output.reports),
+        member_assessments=list(output.member_assessments),
+        reconciliations=list(output.reconciliations),
+        review_items=list(output.review_items),
+        passage_ids=set(output.passage_ids),
+        source_document_ids=set(output.source_document_ids),
+    )
 
 
 def main() -> int:
@@ -18,6 +44,11 @@ def main() -> int:
         "--g7-fixture",
         action="store_true",
         help="Validate the frozen G7 adapter output in memory without writing records.",
+    )
+    parser.add_argument(
+        "--g20-rio",
+        action="store_true",
+        help="Validate the G20 2024 Rio adapter output in memory without writing records.",
     )
     parser.add_argument(
         "--record",
@@ -43,24 +74,14 @@ def main() -> int:
     adapter_counts: dict[str, int] | None = None
     if args.g7_fixture:
         output = G7AiSmeFixtureAdapter().emit()
-        validate_corpus_graph(
-            commitments=list(output.commitments),
-            selections=list(output.selections),
-            reports=list(output.reports),
-            member_assessments=list(output.member_assessments),
-            reconciliations=list(output.reconciliations),
-            review_items=list(output.review_items),
-            passage_ids=set(output.passage_ids),
-            source_document_ids=set(output.source_document_ids),
-        )
-        adapter_counts = {
-            "identified_commitments": len(output.commitments),
-            "assessment_selections": len(output.selections),
-            "compliance_reports": len(output.reports),
-            "member_compliance_assessments": len(output.member_assessments),
-            "review_items": len(output.review_items),
-        }
+        _validate_output(output)
+        adapter_counts = _adapter_counts(output)
         validated.append("benchmark/2025-ai-sme (in-memory adapter)")
+    if args.g20_rio:
+        output = G20RioAdapter().emit()
+        _validate_output(output)
+        adapter_counts = _adapter_counts(output)
+        validated.append("benchmark/2024-rio-g20 (in-memory adapter)")
     print(
         json.dumps(
             {

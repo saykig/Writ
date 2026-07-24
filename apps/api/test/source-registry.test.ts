@@ -134,13 +134,15 @@ suite("DATA-004 registry import", () => {
     const summary = await repos.sourceRegistry.importRegistry(doc);
     expect(summary.total).toBe(104);
     expect(summary.imported).toBe(104);
-    expect(summary.enabled).toBe(5);
-    expect(summary.eligible).toBe(6);
-    expect(summary.verificationPending).toBe(92);
-    expect(summary.disabled).toBe(99);
+    // g20_research_group is enabled (verified) in this branch, so one more source
+    // is enabled/eligible and one fewer is verification-pending/disabled.
+    expect(summary.enabled).toBe(6);
+    expect(summary.eligible).toBe(7);
+    expect(summary.verificationPending).toBe(91);
+    expect(summary.disabled).toBe(98);
 
     const enabled = await repos.sourceRegistry.listEnabled();
-    expect(enabled.length).toBe(5);
+    expect(enabled.length).toBe(6);
     for (const row of enabled) {
       expect(row.verification_status).toBe("verified");
       expect(row.eligible).toBe(true);
@@ -150,14 +152,14 @@ suite("DATA-004 registry import", () => {
       { total: string; enabled: string; eligible: string }[]
     >`SELECT total::text, enabled::text, eligible::text
         FROM source_coverage_by_status WHERE verification_status = 'verified'`;
-    expect(Number(verified?.total)).toBe(11);
-    expect(Number(verified?.enabled)).toBe(5);
-    expect(Number(verified?.eligible)).toBe(6);
+    expect(Number(verified?.total)).toBe(12);
+    expect(Number(verified?.enabled)).toBe(6);
+    expect(Number(verified?.eligible)).toBe(7);
 
     const g20 = await repos.sourceRegistry.getEntry("g20_research_group");
-    expect(g20?.verification_status).toBe("verify_before_enable");
-    expect(g20?.enabled).toBe(false);
-    expect(g20?.disabled_reason).toContain("not_verified");
+    expect(g20?.verification_status).toBe("verified");
+    expect(g20?.enabled).toBe(true);
+    expect(g20?.disabled_reason).toBeFalsy();
   });
 
   test("an incomplete production connector is imported DISABLED with a reason", async () => {

@@ -84,3 +84,264 @@ mappings:
     mapping_status: proposed
     source_id: g7.evaluations.2025.final
     reviewer_id:
+
+# --- G20 Research Group 2024 Rio de Janeiro summit ---
+  - mapping_id: g20.2024-rio.institution.g20
+    namespace: institution
+    source_term: "G20"
+    canonical_term: G20
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.argentina
+    namespace: member_name
+    source_term: "Argentina"
+    canonical_term: argentina
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.australia
+    namespace: member_name
+    source_term: "Australia"
+    canonical_term: australia
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.brazil
+    namespace: member_name
+    source_term: "Brazil"
+    canonical_term: brazil
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.canada
+    namespace: member_name
+    source_term: "Canada"
+    canonical_term: canada
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.china
+    namespace: member_name
+    source_term: "China"
+    canonical_term: china
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.france
+    namespace: member_name
+    source_term: "France"
+    canonical_term: france
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.germany
+    namespace: member_name
+    source_term: "Germany"
+    canonical_term: germany
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.india
+    namespace: member_name
+    source_term: "India"
+    canonical_term: india
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.indonesia
+    namespace: member_name
+    source_term: "Indonesia"
+    canonical_term: indonesia
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.italy
+    namespace: member_name
+    source_term: "Italy"
+    canonical_term: italy
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.japan
+    namespace: member_name
+    source_term: "Japan"
+    canonical_term: japan
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.south_korea
+    namespace: member_name
+    source_term: "Korea"
+    canonical_term: south_korea
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.mexico
+    namespace: member_name
+    source_term: "Mexico"
+    canonical_term: mexico
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.russia
+    namespace: member_name
+    source_term: "Russia"
+    canonical_term: russia
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.saudi_arabia
+    namespace: member_name
+    source_term: "Saudi Arabia"
+    canonical_term: saudi_arabia
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.south_africa
+    namespace: member_name
+    source_term: "South Africa"
+    canonical_term: south_africa
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.turkiye
+    namespace: member_name
+    source_term: "Türkiye"
+    canonical_term: turkiye
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.united_kingdom
+    namespace: member_name
+    source_term: "United Kingdom"
+    canonical_term: united_kingdom
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.united_states
+    namespace: member_name
+    source_term: "United States"
+    canonical_term: united_states
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.african_union
+    namespace: member_name
+    source_term: "African Union"
+    canonical_term: african_union
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.member.european_union
+    namespace: member_name
+    source_term: "European Union"
+    canonical_term: european_union
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.report.interim_compliance
+    namespace: report_terminology
+    source_term: "interim compliance"
+    canonical_term: interim
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.report.final_compliance
+    namespace: report_terminology
+    source_term: "final compliance"
+    canonical_term: final
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.energy_transition_supply_chains
+    namespace: issue_area
+    source_term: "Energy: Energy Transition Supply Chains"
+    canonical_term: energy_transition_supply_chains
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.development_financial_support_lmics
+    namespace: issue_area
+    source_term: "Development: Financial Support for Low- and Middle-Income Countries"
+    canonical_term: development_financial_support_lmics
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.development_african_union_integration
+    namespace: issue_area
+    source_term: "Development: Integration of the African Union"
+    canonical_term: development_african_union_integration
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.institutional_reform_global_governance
+    namespace: issue_area
+    source_term: "Institutional Reform: Reforming Global Governance Institutions"
+    canonical_term: institutional_reform_global_governance
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.climate_change_ghg_reduction
+    namespace: issue_area
+    source_term: "Climate Change: Greenhouse Gas Reduction"
+    canonical_term: climate_change_ghg_reduction
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.climate_change_disaster_risk_reduction
+    namespace: issue_area
+    source_term: "Climate Change: Disaster Risk Reduction"
+    canonical_term: climate_change_disaster_risk_reduction
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.environment_biodiversity
+    namespace: issue_area
+    source_term: "Environment: Biodiversity"
+    canonical_term: environment_biodiversity
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.health_inclusive_health_systems
+    namespace: issue_area
+    source_term: "Health: Inclusive Health Systems"
+    canonical_term: health_inclusive_health_systems
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.macroeconomics_fiscal_policy
+    namespace: issue_area
+    source_term: "Macroeconomics: Fiscal Policy"
+    canonical_term: macroeconomics_fiscal_policy
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.regional_security_gaza_lebanon_humanitarian
+    namespace: issue_area
+    source_term: "Regional Security: Humanitarian Efforts in Gaza and Lebanon"
+    canonical_term: regional_security_gaza_lebanon_humanitarian
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.food_agriculture_fertilizer_shortages
+    namespace: issue_area
+    source_term: "Food and Agriculture: Fertilizer Shortages"
+    canonical_term: food_agriculture_fertilizer_shortages
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.gender_equality_labour_markets
+    namespace: issue_area
+    source_term: "Gender Equality: Labour Markets"
+    canonical_term: gender_equality_labour_markets
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer
+  - mapping_id: g20.2024-rio.issue.digitalization_digital_platform_transparency
+    namespace: issue_area
+    source_term: "Digitalization: Digital Platform Transparency"
+    canonical_term: digitalization_digital_platform_transparency
+    mapping_status: reviewed
+    source_id: g20_research_group
+    reviewer_id: g20_rio_corpus_maintainer

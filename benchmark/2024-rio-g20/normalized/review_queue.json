@@ -1,0 +1,257 @@
+[
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.43f3ab9c648d59f8705b7baf",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-122",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-122"
+    ],
+    "original_source_text": "2024-122",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.c1bbd536144f1da0ae3a6b2e",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-150",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-150"
+    ],
+    "original_source_text": "2024-150",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.6ccca8a4fbd2b081a7e69c77",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-168",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-168"
+    ],
+    "original_source_text": "2024-168",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.42a54248e86b667100692d13",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-137",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-137"
+    ],
+    "original_source_text": "2024-137",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.42b3f07276b692ade11743da",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-102",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-102"
+    ],
+    "original_source_text": "2024-102",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.e0df49bee4f2db7295bdc303",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-78",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-78"
+    ],
+    "original_source_text": "2024-78",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.cb03af054f965c2c820a28ce",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-124",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-124"
+    ],
+    "original_source_text": "2024-124",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.ecbcb4dba81063ad24bce5dc",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-43",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-43"
+    ],
+    "original_source_text": "2024-43",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.49ef47c4a83fb427e2484949",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-10",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-10"
+    ],
+    "original_source_text": "2024-10",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.ff77b43ed05bf9529a5ce434",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-16",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-16"
+    ],
+    "original_source_text": "2024-16",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.9595052db6810d3deb5c1a2e",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-25",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-25"
+    ],
+    "original_source_text": "2024-25",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.a27152f2eec9d9a81f258c4d",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-32",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-32"
+    ],
+    "original_source_text": "2024-32",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.8646e71cc4368bc931b3cd5b",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": "g20.2024-rio.commitment.2024-59",
+      "page_or_section": "table1"
+    },
+    "issue_type": "missing_required_date",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "G20:G20.rio.2024:2024-59"
+    ],
+    "original_source_text": "2024-59",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.b9b607f0b0ea9b0b9b8f2d27",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": null,
+      "page_or_section": "table1"
+    },
+    "issue_type": "incomplete_reconciliation",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "g20.2024-rio.reconciliation"
+    ],
+    "original_source_text": "174 total commitments; 13 selected for monitoring",
+    "review_status": "pending"
+  },
+  {
+    "schema_version": "2.0.0",
+    "record_type": "corpus_review_item",
+    "review_item_id": "review.0c72f55193be3cf934db9454",
+    "source_id": "g20_research_group",
+    "source_location": {
+      "passage_id": null,
+      "page_or_section": "cover"
+    },
+    "issue_type": "conflicting_source_records",
+    "parser_version": "g20-2024-rio-adapter@2.0.0",
+    "affected_record_ids": [
+      "g20.2024.rio.final.compliance"
+    ],
+    "original_source_text": "cover_window_end_differs:2025-11-05",
+    "review_status": "pending"
+  }
+]
