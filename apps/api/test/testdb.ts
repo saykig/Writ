@@ -1,24 +1,20 @@
-// Hermetic database test harness.
+// Database test harness.
 //
-// DB-touching tests are gated on WRIT_TEST_DATABASE_URL. They deliberately
-// ignore the application's DATABASE_URL so Bun's automatic .env loading cannot
-// send tests to a production or owner-level database by accident. Each suite
-// runs inside a disposable schema on a reserved connection whose search_path
-// points at that schema and is dropped on teardown.
+// DB-touching tests are gated on WRIT_TEST_DATABASE_URL and still ignore the
+// application's DATABASE_URL, so DB suites run only when that variable is set
+// explicitly (an opt-in), never as a side effect of Bun's .env loading. This is
+// a single-developer setup: WRIT_TEST_DATABASE_URL may point at the same Neon
+// database as the app. Isolation does not come from the role — it comes from the
+// per-suite disposable schema (see createTempDb), which is created and dropped
+// on teardown and never writes to the public schema.
 import { randomUUID } from "node:crypto";
 import { createSql, type ReservedSql, type Sql } from "../src/db/client.js";
 import { applyPendingOnConnection, loadMigrationFiles } from "../src/db/migrate.js";
 
-const LOCAL_TEST_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
-const PRIVILEGED_REMOTE_ROLE = /(?:^|[_-])(owner|admin|root|postgres)(?:$|[_-])/i;
-
 export function validateTestDatabaseUrl(rawUrl: string): string {
   const parsed = new URL(rawUrl);
-  const username = decodeURIComponent(parsed.username);
-  if (!LOCAL_TEST_HOSTS.has(parsed.hostname) && PRIVILEGED_REMOTE_ROLE.test(username)) {
-    throw new Error(
-      "WRIT_TEST_DATABASE_URL must not use a remote owner, admin, root, or postgres role",
-    );
+  if (parsed.protocol !== "postgres:" && parsed.protocol !== "postgresql:") {
+    throw new Error("WRIT_TEST_DATABASE_URL must be a postgres connection string");
   }
   return rawUrl;
 }

@@ -18,5 +18,6 @@ PYTHONPATH=apps/ingest/src python scripts/validate_corpus.py --g7-fixture
 ```
 
 Database tests ignore the application's `DATABASE_URL` and run only when
-`WRIT_TEST_DATABASE_URL` names a local, ephemeral, or restricted test role. Remote owner,
-administrator, root, and `postgres` roles are rejected.
+`WRIT_TEST_DATABASE_URL` is set explicitly (an opt-in). It may point at the same database as
+`DATABASE_URL` — including the single Neon database — because each suite runs inside a disposable
+schema that is created and dropped on teardown and never writes to the public schema.

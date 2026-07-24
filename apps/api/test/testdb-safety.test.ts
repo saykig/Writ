@@ -7,20 +7,23 @@ describe("database test credential boundary", () => {
     expect(validateTestDatabaseUrl(url)).toBe(url);
   });
 
-  test.each(["neondb_owner", "service-admin", "root", "postgres"])(
-    "rejects remote privileged role %s",
+  // Single-developer setup: the one Neon database (owner role) is a valid target.
+  // Data is protected by the per-suite disposable schema, not by the role.
+  test.each(["neondb_owner", "service-admin", "postgres"])(
+    "accepts the configured database with role %s",
     (role) => {
-      expect(() =>
-        validateTestDatabaseUrl(
-          `postgresql://${role}:redacted@example.neon.tech/writ_test?sslmode=require`,
-        ),
-      ).toThrow("must not use a remote owner, admin, root, or postgres role");
+      const url = `postgresql://${role}:redacted@example.neon.tech/neondb?sslmode=require`;
+      expect(validateTestDatabaseUrl(url)).toBe(url);
     },
   );
 
-  test("accepts a remote role explicitly named as restricted", () => {
-    const url =
-      "postgresql://writ_test_restricted:redacted@example.neon.tech/writ_test?sslmode=require";
-    expect(validateTestDatabaseUrl(url)).toBe(url);
+  test("rejects a non-postgres connection string", () => {
+    expect(() => validateTestDatabaseUrl("https://example.com/db")).toThrow(
+      "must be a postgres connection string",
+    );
+  });
+
+  test("rejects a malformed connection string", () => {
+    expect(() => validateTestDatabaseUrl("not a url")).toThrow();
   });
 });
