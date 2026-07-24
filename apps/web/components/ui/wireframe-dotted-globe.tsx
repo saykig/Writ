@@ -16,6 +16,16 @@ export function clampLatitude(value: number): number {
   return Math.max(-72, Math.min(72, value));
 }
 
+export function markerLeaderStyle(offset: readonly [number, number]): {
+  width: string;
+  transform: string;
+} {
+  return {
+    width: `${Math.hypot(offset[0], offset[1]).toFixed(4)}px`,
+    transform: `rotate(${Math.atan2(-offset[1], -offset[0]).toFixed(5)}rad)`,
+  };
+}
+
 export interface GlobeMarker {
   readonly id: string;
   readonly label: string;
@@ -340,13 +350,7 @@ export function WireframeDottedGlobe({
                   <span
                     aria-hidden
                     className="pointer-events-none absolute top-1/2 left-1/2 h-px origin-left bg-primary/45"
-                    style={{
-                      width: Math.hypot(marker.displayOffset[0], marker.displayOffset[1]),
-                      transform: `rotate(${Math.atan2(
-                        -marker.displayOffset[1],
-                        -marker.displayOffset[0],
-                      )}rad)`,
-                    }}
+                    style={markerLeaderStyle(marker.displayOffset)}
                   />
                 ) : null}
                 <span
