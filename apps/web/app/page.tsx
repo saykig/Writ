@@ -86,7 +86,7 @@ export default function Home() {
   return (
     <main>
       <Reveal as="section" className="min-h-[calc(100svh-4.5rem)]">
-        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8 min-[1400px]:max-w-[92rem] min-[1400px]:grid-cols-[minmax(24rem,1fr)_58rem]">
+        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[76rem] items-center gap-4 px-5 py-12 sm:px-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(30rem,1.12fr)] lg:py-8">
           <div className="relative z-10 py-4 lg:py-10">
             <h1 className="whitespace-nowrap text-[length:var(--t-hero)] leading-[0.98] font-semibold tracking-[-0.04em]">
               Write in Writ.
@@ -116,7 +116,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-[42rem] lg:justify-self-end min-[1400px]:max-w-[58rem]">
+          <div className="mx-auto w-full min-w-0 max-w-[42rem] lg:justify-self-end">
             <G7GlobeSelector members={g7Members} />
           </div>
         </div>

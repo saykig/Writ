@@ -94,8 +94,11 @@ describe("frontend architecture", () => {
     expect(globe).toContain("markerPausedRef.current");
     expect(globe).toContain("size-11");
     expect(selector).toContain("MARKER_DISPLAY_OFFSETS");
-    expect(selector).toContain("h-11");
+    expect(selector).toContain("h-9");
+    expect(selector).toContain("min-w-0 max-w-full");
+    expect(selector).toContain("whitespace-normal");
     expect(selector).not.toContain("lg:absolute");
+    expect(selector).not.toContain("min-[1400px]");
   });
 
   test("member-specific Lab routes preload the resolved fixture, evidence, and receipt", () => {

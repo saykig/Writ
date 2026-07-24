@@ -43,12 +43,7 @@ export function G7GlobeSelector({
   const selectedMember = members.find((member) => member.id === selectedMemberId);
 
   return (
-    <div
-      className={cn(
-        "relative min-[1400px]:grid min-[1400px]:grid-cols-[minmax(0,42rem)_15rem] min-[1400px]:items-end min-[1400px]:gap-3",
-        className,
-      )}
-    >
+    <div className={cn("relative min-w-0 max-w-full", className)}>
       <WireframeDottedGlobe
         className="mx-auto"
         markers={markers}
@@ -56,13 +51,13 @@ export function G7GlobeSelector({
         onMarkerSelect={(markerId) => setSelectedMemberId(markerId as G7MemberId)}
       />
 
-      <div className="relative z-20 mx-auto mt-3 grid max-w-[40rem] items-end gap-3 sm:grid-cols-[12rem_minmax(0,1fr)] min-[1400px]:mx-0 min-[1400px]:mt-0 min-[1400px]:grid-cols-1">
-        <label className="block">
+      <div className="relative z-20 mt-3 grid w-full min-w-0 max-w-full items-start gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+        <label className="block min-w-0 max-w-full justify-self-start">
           <span className="sr-only">Choose a G7 member assessment</span>
           <select
             value={selectedMemberId ?? ""}
             onChange={(event) => setSelectedMemberId(event.target.value as G7MemberId)}
-            className="h-11 w-full rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+            className="h-9 w-auto max-w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             <option value="" disabled>
               Choose a member
@@ -75,7 +70,7 @@ export function G7GlobeSelector({
           </select>
         </label>
 
-        <div aria-live="polite">
+        <div className="min-w-0 max-w-full" aria-live="polite">
           {selectedMember ? (
             <aside className="rounded-xl border border-border bg-card/95 p-4 shadow-sm">
               <div className="flex items-start justify-between gap-4">
@@ -114,7 +109,7 @@ export function G7GlobeSelector({
               </p>
             </aside>
           ) : (
-            <p className="rounded-lg bg-background/85 px-3 py-2 text-xs leading-5 text-muted-foreground">
+            <p className="max-w-full min-w-0 rounded-lg bg-background/85 px-2.5 py-1.5 text-xs leading-5 whitespace-normal text-muted-foreground">
               Select an illuminated marker or choose a member to preview its assessment.
             </p>
           )}
