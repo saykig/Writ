@@ -17,6 +17,7 @@ import {
 
 import { benchmark, evaluateMember, memberSnapshot } from "@/lib/toolchain";
 import { g7AssessmentPreviews } from "@/lib/g7-assessments";
+import { rioCorpus } from "@/lib/rio-corpus";
 import { G7GlobeSelector } from "@/components/g7/g7-globe-selector";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,7 @@ export default function Home() {
   const receipt = evaluateMember("canada", "published");
   const snapshot = memberSnapshot("canada");
   const g7Members = g7AssessmentPreviews();
+  const rio = rioCorpus();
 
   return (
     <main>
@@ -259,6 +261,48 @@ export default function Home() {
               <ArrowRight className="size-4" />
             </Link>
           </div>
+        </div>
+
+        {/* A second, quieter corpus: imported rather than evaluated. */}
+        <div className="mt-6 rounded-xl border border-border bg-card/40 p-6 sm:p-7">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+            <div className="max-w-[62ch]">
+              <p className="text-sm text-muted-foreground">Also on the benchmark page</p>
+              <h3 className="mt-2 text-base font-semibold">
+                G20 Rio 2024 — a normalized published compliance corpus
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                The G20 Research Group&rsquo;s interim and final Rio compliance reports, imported
+                into normalized records with their published scores and provenance intact. This is
+                not a Writ-generated evaluation: no score here was computed or reproduced by Writ.
+              </p>
+            </div>
+            <Link
+              href="/benchmark#g20-rio-2024"
+              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              View the corpus
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
+          <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-2 border-t border-border pt-4 text-sm">
+            <div className="flex gap-2">
+              <dt className="text-muted-foreground">Selected commitments</dt>
+              <dd className="tabular-nums">{rio.counts.selectedCommitments}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-muted-foreground">Imported assessments</dt>
+              <dd className="tabular-nums">{rio.counts.memberAssessments}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-muted-foreground">Reports</dt>
+              <dd>interim and final, kept separate</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-muted-foreground">Pending review items</dt>
+              <dd className="tabular-nums">{rio.counts.reviewItems}</dd>
+            </div>
+          </dl>
         </div>
       </Reveal>
 

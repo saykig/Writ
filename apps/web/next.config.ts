@@ -42,7 +42,12 @@ const nextConfig: NextConfig = {
       "../../benchmark/2025-ai-sme/**",
       "../../packages/domain/schemas/**",
     ],
-    "/benchmark": ["../../benchmark/2025-ai-sme/**", "../../packages/domain/schemas/**"],
+    "/benchmark": [
+      "../../benchmark/2025-ai-sme/**",
+      "../../benchmark/2024-rio-g20/normalized/**",
+      "../../data/manifests/g20/2024-rio/**",
+      "../../packages/domain/schemas/**",
+    ],
     "/how-it-works": [
       "../../examples/**",
       "../../benchmark/2025-ai-sme/**",

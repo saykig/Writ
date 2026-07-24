@@ -32,6 +32,7 @@ const SECTIONS: readonly EssaySection[] = [
   { id: "truth", title: "Four-valued truth" },
   { id: "language", title: "The language" },
   { id: "evidence", title: "Governed evidence" },
+  { id: "adapters", title: "Imported corpora" },
   { id: "conformance", title: "Conformance" },
   { id: "faq", title: "Questions" },
 ];
@@ -696,7 +697,60 @@ export default function HowItWorksPage() {
               </Disclosure>
             </section>
 
-            {/* ── 5 · Conformance ─────────────────────────────────────────── */}
+            {/* ── 5 · Imported corpora ────────────────────────────────────── */}
+            <section
+              id="adapters"
+              className="mt-20 scroll-mt-24 border-t border-rule-soft pt-16 sm:mt-24 sm:pt-20"
+            >
+              <SectionLabel>Imported corpora</SectionLabel>
+              <SectionHeading className="mt-3 max-w-[26ch]">
+                Reading someone else&rsquo;s compliance record, without rescoring it.
+              </SectionHeading>
+              <Prose className="mt-5">
+                Not every corpus is something Writ evaluates. Institutions publish their own
+                compliance assessments, and those are worth holding in a form that can be queried,
+                compared, and audited. A source adapter imports one external compliance report into
+                the same normalized records the rest of the system uses: an identified commitment
+                with its exact text, the selection that put it in scope, the report it belongs to,
+                and one assessment per member.
+              </Prose>
+              <Prose className="mt-4">
+                The adapter&rsquo;s job is fidelity, not judgment. The G20 2024 Rio adapter reads the
+                G20 Research Group&rsquo;s interim and final compliance reports and carries their
+                published scores through exactly as printed, together with the assessment window, the
+                source document, and the parser version that produced each record. It performs no
+                compliance scoring of its own, reproduces nothing, and infers no missing value.
+                Interim and final stay separate records, because they are separate published
+                judgments made over different windows.
+              </Prose>
+              <Prose className="mt-4">
+                Where the source is unclear, the adapter writes a review item instead of a value. A
+                cell that cannot be read becomes a missing score with a pending review, not a zero. A
+                commitment inventory the reports do not enumerate stays incomplete and says so, rather
+                than being filled in. Imported scores are labelled expert-assigned historical
+                results, and the label explicitly forbids transferring them onto new commitments as
+                though Writ had derived them.
+              </Prose>
+
+              <div className="mt-8 rounded-[9px] border border-rule bg-paper-raise px-5 py-4">
+                <p className="max-w-prose text-[0.9rem] leading-relaxed text-ink-soft">
+                  The imported G20 Rio corpus is on the benchmark page, beside the G7 example. The
+                  two are deliberately not the same kind of thing: one is a published record Writ
+                  reproduced, the other is a published record Writ only carried across.
+                </p>
+                <div className="mt-4">
+                  <Link
+                    href="/benchmark"
+                    className="inline-flex items-center gap-1.5 text-[0.86rem] font-medium text-foreground underline decoration-gold/45 underline-offset-4 hover:text-gold hover:decoration-gold"
+                  >
+                    See both datasets
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </section>
+
+            {/* ── 6 · Conformance ─────────────────────────────────────────── */}
             <section
               id="conformance"
               className="mt-20 scroll-mt-24 border-t border-rule-soft pt-16 sm:mt-24 sm:pt-20"
