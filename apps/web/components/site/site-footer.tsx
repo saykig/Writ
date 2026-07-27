@@ -1,16 +1,24 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { GITHUB_URL, PRIMARY_NAV, RESEARCH_NAV } from "@/components/site/nav-items";
 
 /**
- * Quiet closing band shared by every route.
+ * Quiet closing band shared by every non-homepage route.
  */
 export function SiteFooter() {
+  const pathname = usePathname();
   const productLinks = PRIMARY_NAV.filter((item) => item.href !== "/how-it-works");
   const resourceLinks = [
     PRIMARY_NAV.find((item) => item.href === "/how-it-works"),
     ...RESEARCH_NAV,
   ].filter((item) => item !== undefined);
+
+  if (pathname === "/") {
+    return null;
+  }
 
   return (
     <footer className="mt-24 border-t border-border bg-card/25">
