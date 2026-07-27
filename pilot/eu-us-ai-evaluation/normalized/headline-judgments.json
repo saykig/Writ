@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "record_type": "pilot_headline_judgments",
+  "parser_version": "eu-us-ai-evaluation-pilot@1.0.0",
+  "headline_rule": {
+    "legal_force": "binding",
+    "applicability_status": "applicable",
+    "actor_type": "market_provider",
+    "conduct_type": "model_evaluation"
+  },
+  "EU": {
+    "market_provider": "binding_applicable_for_defined_class",
+    "defined_class": "provider of a general-purpose AI model with systemic risk",
+    "decisive_evidence": [
+      "EU-06"
+    ],
+    "supporting_evidence": [
+      "EU-01",
+      "EU-02",
+      "EU-07",
+      "EU-10B",
+      "EU-11A"
+    ],
+    "qualifying_evidence": [
+      "EU-11B"
+    ]
+  },
+  "US": {
+    "market_provider_cross_sector": {
+      "judgment": "no_current_binding_model_evaluation_requirement",
+      "evidence": []
+    },
+    "federal_agency_government_use": {
+      "judgment": "binding_testing_and_impact_assessment_requirements",
+      "evidence": [
+        "US-08A",
+        "US-08B"
+      ]
+    },
+    "government_procurement": {
+      "judgment": "binding_agency_controls_and_contract_mediated_vendor_duties",
+      "evidence": [
+        "US-09A",
+        "US-09B",
+        "US-09C",
+        "US-10A",
+        "US-10B"
+      ]
+    },
+    "contract_mediated_government_vendor": {
+      "judgment": "contractual_duties_contingent_on_a_government_contract",
+      "evidence": [
+        "US-09C",
+        "US-10A",
+        "US-10B"
+      ]
+    },
+    "voluntary_cross_sector": {
+      "judgment": "active_evaluation_guidance_and_infrastructure",
+      "evidence": [
+        "US-01",
+        "US-02",
+        "US-03",
+        "US-04",
+        "US-05A"
+      ]
+    },
+    "proposed_future": {
+      "judgment": "reporting_and_disclosure_standard_only",
+      "evidence": [
+        "US-11"
+      ]
+    }
+  }
+}

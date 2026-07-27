@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/pilot/eu-us-ai-evaluation/headline_judgments.schema.json",
+  "title": "EuUsAiEvaluationHeadlineJudgments",
+  "description": "Headline judgments derived from the normalized claims. Every finding records the claim ids that produced it, so a reader can retrace it. Nothing here is asserted independently of the claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_type", "parser_version", "headline_rule", "EU", "US"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "record_type": { "const": "pilot_headline_judgments" },
+    "parser_version": { "type": "string", "minLength": 1 },
+
+    "headline_rule": {
+      "description": "The conjunctive predicate a claim must satisfy to establish a binding, currently applicable model-evaluation duty on market providers.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legal_force", "applicability_status", "actor_type", "conduct_type"],
+      "properties": {
+        "legal_force": { "const": "binding" },
+        "applicability_status": { "const": "applicable" },
+        "actor_type": { "const": "market_provider" },
+        "conduct_type": { "const": "model_evaluation" }
+      }
+    },
+
+    "EU": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "market_provider",
+        "defined_class",
+        "decisive_evidence",
+        "supporting_evidence",
+        "qualifying_evidence"
+      ],
+      "properties": {
+        "market_provider": {
+          "enum": [
+            "binding_applicable_for_defined_class",
+            "no_current_binding_model_evaluation_requirement"
+          ]
+        },
+        "defined_class": {
+          "description": "Null unless a decisive claim exists. The positive finding never generalizes beyond the class the decisive claim names.",
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "decisive_evidence": { "$ref": "#/$defs/claimIds" },
+        "supporting_evidence": { "$ref": "#/$defs/claimIds" },
+        "qualifying_evidence": { "$ref": "#/$defs/claimIds" }
+      }
+    },
+
+    "US": {
+      "description": "Five separately preserved findings. Collapsing any of them would convert government-use, procurement, or contract duties into general market-provider obligations.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "market_provider_cross_sector",
+        "federal_agency_government_use",
+        "government_procurement",
+        "contract_mediated_government_vendor",
+        "voluntary_cross_sector",
+        "proposed_future"
+      ],
+      "properties": {
+        "market_provider_cross_sector": { "$ref": "#/$defs/finding" },
+        "federal_agency_government_use": { "$ref": "#/$defs/finding" },
+        "government_procurement": { "$ref": "#/$defs/finding" },
+        "contract_mediated_government_vendor": { "$ref": "#/$defs/finding" },
+        "voluntary_cross_sector": { "$ref": "#/$defs/finding" },
+        "proposed_future": { "$ref": "#/$defs/finding" }
+      }
+    }
+  },
+  "$defs": {
+    "claimIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^(EU|US)-(0[1-9]|1[0-2])[A-Z]?$" }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["judgment", "evidence"],
+      "properties": {
+        "judgment": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/$defs/claimIds" }
+      }
+    }
+  }
+}

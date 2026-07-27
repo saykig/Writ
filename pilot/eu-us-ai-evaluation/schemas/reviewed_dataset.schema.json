@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/pilot/eu-us-ai-evaluation/reviewed_dataset.schema.json",
+  "title": "EuUsAiEvaluationReviewedDataset",
+  "description": "The human-reviewed EU-US AI evaluation pilot annotation table. Row identity is authoritative and is never derived from source order.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "review_status",
+    "pilot_question",
+    "methodology",
+    "reconciliation",
+    "records",
+    "headline_judgments",
+    "validation_expectations"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "dataset_id": { "type": "string", "minLength": 1 },
+    "review_status": { "const": "human_reviewed" },
+    "pilot_question": { "type": "string", "minLength": 1 },
+    "methodology": { "$ref": "#/$defs/methodology" },
+    "reconciliation": { "$ref": "#/$defs/reconciliation" },
+    "records": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": { "$ref": "#/$defs/reviewedRecord" }
+    },
+    "headline_judgments": { "$ref": "#/$defs/headlineJudgments" },
+    "validation_expectations": { "$ref": "#/$defs/validationExpectations" }
+  },
+  "$defs": {
+    "rowId": { "type": "string", "pattern": "^(EU|US)-(0[1-9]|1[0-2])$" },
+    "claimId": { "type": "string", "pattern": "^(EU|US)-(0[1-9]|1[0-2])[A-Z]$" },
+    "prose": { "type": "string", "minLength": 1 },
+    "termList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+
+    "jurisdiction": { "enum": ["EU", "US"] },
+
+    "recordType": {
+      "enum": [
+        "compliance_path",
+        "contract_mediated_obligation",
+        "exception_rule",
+        "executive_direction",
+        "guidance",
+        "implementation_guidance",
+        "institutional_program",
+        "interpretive_guidance",
+        "lifecycle_rule",
+        "obligation",
+        "policy_context",
+        "procurement_requirement",
+        "proposed_guidance",
+        "proposed_policy",
+        "scope_rule",
+        "source_bundle"
+      ]
+    },
+
+    "legalForce": {
+      "description": "The legal force of the norm. Kept strictly separate from compliance_function: a voluntary instrument may still serve as a recognized compliance path.",
+      "enum": ["binding", "contractual", "interpretive", "mixed", "proposed", "voluntary"]
+    },
+
+    "complianceFunction": {
+      "description": "What the norm does in the compliance system. Never a substitute for legal_force.",
+      "enum": [
+        "agency_policy_direction",
+        "contract_condition_creation",
+        "direct_obligation",
+        "evaluation_collaboration",
+        "evaluation_guidance",
+        "general_guidance",
+        "implementation_guidance",
+        "obligation_exception",
+        "policy_direction",
+        "procurement_contract_obligation",
+        "prospective_regulatory_requirement",
+        "recognized_compliance_path"
+      ]
+    },
+
+    "adoptionStatus": { "enum": ["adopted", "proposed"] },
+
+    "applicabilityStatus": {
+      "enum": [
+        "applicable",
+        "contingent_on_contract",
+        "draft_available",
+        "not_yet_applicable",
+        "transition_for_existing_models"
+      ]
+    },
+
+    "enforcementStatus": {
+      "description": "Kept as a first-class value including `unknown`. `unknown` is never collapsed to `not_applicable` or omitted.",
+      "enum": [
+        "contractual_enforcement",
+        "internal_executive_implementation",
+        "internal_government_implementation",
+        "not_applicable",
+        "not_determinable_from_passage",
+        "unknown"
+      ]
+    },
+
+    "actorType": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+
+    "bindingScope": {
+      "description": "Limits to whom a binding norm binds. Present whenever a binding norm does not bind the general market.",
+      "enum": ["executive_branch_only", "federal_agencies_only", "government_contract_only"]
+    },
+
+    "scopeTerm": {
+      "enum": [
+        "cross_sector",
+        "cross_sector_support",
+        "government_policy",
+        "government_procurement",
+        "government_use"
+      ]
+    },
+
+    "conductType": {
+      "enum": [
+        "administrative_policy_revision",
+        "compliance_demonstration",
+        "contract_documentation",
+        "contract_terms_requirement",
+        "copyright_policy",
+        "cybersecurity_protection",
+        "downstream_documentation",
+        "evaluation_access",
+        "evaluation_documentation",
+        "evaluation_infrastructure_coordination",
+        "evaluation_participation",
+        "incident_reporting",
+        "model_evaluation",
+        "monitoring_support",
+        "pre_deployment_testing",
+        "procurement_testing",
+        "regulatory_classification",
+        "regulatory_notification",
+        "reporting_and_disclosure",
+        "risk_assessment",
+        "risk_management",
+        "training_content_summary"
+      ]
+    },
+
+    "conductFamily": {
+      "description": "A coarse grouping recorded from the source. It never promotes a record to conduct_type `model_evaluation`.",
+      "enum": ["evaluation"]
+    },
+
+    "headlineRelevance": {
+      "enum": [
+        "contextual_only",
+        "contextual_support",
+        "defines_scope",
+        "deregulatory_context_only",
+        "directly_satisfies_for_defined_class",
+        "establishes_current_applicability",
+        "excludes_general_provider_duty",
+        "government_only_binding",
+        "government_only_support",
+        "government_procurement_only",
+        "proposed_only",
+        "proposed_voluntary_evaluation_support",
+        "qualifies_baseline_obligations",
+        "qualifies_current_applicability",
+        "scope_activation_support",
+        "supporting_only",
+        "voluntary_evaluation_infrastructure",
+        "voluntary_evaluation_support",
+        "voluntary_framework_support"
+      ]
+    },
+
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "us_scope",
+        "actor_types",
+        "core_conduct_types",
+        "code_of_practice",
+        "lifecycle_dimensions",
+        "headline_rule"
+      ],
+      "properties": {
+        "us_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["included", "excluded"],
+          "properties": {
+            "included": { "$ref": "#/$defs/termList" },
+            "excluded": { "$ref": "#/$defs/termList" }
+          }
+        },
+        "actor_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/actorType" }
+        },
+        "core_conduct_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/conductType" }
+        },
+        "code_of_practice": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["legal_force", "compliance_function"],
+          "properties": {
+            "legal_force": { "$ref": "#/$defs/legalForce" },
+            "compliance_function": { "$ref": "#/$defs/complianceFunction" }
+          }
+        },
+        "lifecycle_dimensions": {
+          "description": "The three lifecycle dimensions are tracked separately and never merged into a single status.",
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["adoption_status", "applicability_status", "enforcement_status"]
+          }
+        },
+        "headline_rule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "legal_force",
+            "applicability_status",
+            "actor_type",
+            "conduct_type",
+            "target_class"
+          ],
+          "properties": {
+            "legal_force": { "$ref": "#/$defs/legalForce" },
+            "applicability_status": { "$ref": "#/$defs/applicabilityStatus" },
+            "actor_type": { "$ref": "#/$defs/actorType" },
+            "conduct_type": { "$ref": "#/$defs/conductType" },
+            "target_class": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_order_authority",
+        "removed_from_main_reviewed_corpus",
+        "corrected_numbering"
+      ],
+      "properties": {
+        "row_order_authority": { "const": "uploaded_annotation_table" },
+        "removed_from_main_reviewed_corpus": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["temporary_row_id", "source_locator", "reason"],
+            "properties": {
+              "temporary_row_id": { "$ref": "#/$defs/rowId" },
+              "source_locator": { "type": "string", "minLength": 1 },
+              "reason": { "$ref": "#/$defs/prose" }
+            }
+          }
+        },
+        "corrected_numbering": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["previous_row_id", "source_locator", "corrected_row_id"],
+            "properties": {
+              "previous_row_id": { "$ref": "#/$defs/rowId" },
+              "source_locator": { "type": "string", "minLength": 1 },
+              "corrected_row_id": { "$ref": "#/$defs/rowId" }
+            }
+          }
+        }
+      }
+    },
+
+    "reviewedRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_id",
+        "review_decision",
+        "jurisdiction",
+        "instrument",
+        "source_locator",
+        "record_type",
+        "interpretation_note"
+      ],
+      "if": { "properties": { "record_type": { "const": "source_bundle" } } },
+      "then": {
+        "required": ["derived_claims"],
+        "not": {
+          "anyOf": [
+            { "required": ["legal_force"] },
+            { "required": ["adoption_status"] },
+            { "required": ["applicability_status"] },
+            { "required": ["enforcement_status"] }
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "legal_force",
+          "adoption_status",
+          "applicability_status",
+          "enforcement_status",
+          "headline_relevance"
+        ],
+        "not": { "required": ["derived_claims"] }
+      },
+      "properties": {
+        "row_id": { "$ref": "#/$defs/rowId" },
+        "review_decision": { "const": "accepted" },
+        "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+        "instrument": { "type": "string", "minLength": 1 },
+        "source_locator": { "type": "string", "minLength": 1 },
+        "record_type": { "$ref": "#/$defs/recordType" },
+        "interpretation_note": { "$ref": "#/$defs/prose" },
+
+        "derived_claims": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/derivedClaim" }
+        },
+
+        "legal_force": { "$ref": "#/$defs/legalForce" },
+        "compliance_function": { "$ref": "#/$defs/complianceFunction" },
+        "adoption_status": { "$ref": "#/$defs/adoptionStatus" },
+        "applicability_status": { "$ref": "#/$defs/applicabilityStatus" },
+        "enforcement_status": { "$ref": "#/$defs/enforcementStatus" },
+        "headline_relevance": { "$ref": "#/$defs/headlineRelevance" },
+
+        "actor_type": { "$ref": "#/$defs/actorType" },
+        "actor_term_local": { "$ref": "#/$defs/prose" },
+        "recipient_actor_type": { "$ref": "#/$defs/actorType" },
+        "recipient_actor_term_local": { "$ref": "#/$defs/prose" },
+        "indirectly_affected_actor_type": { "$ref": "#/$defs/actorType" },
+        "additional_affected_actor_type": { "$ref": "#/$defs/actorType" },
+        "additional_actor_term_local": { "$ref": "#/$defs/prose" },
+        "current_actor_type": { "$ref": "#/$defs/actorType" },
+        "current_actor_term_local": { "$ref": "#/$defs/prose" },
+        "prospective_actor_type": { "$ref": "#/$defs/actorType" },
+        "prospective_actor_term_local": { "$ref": "#/$defs/prose" },
+        "defined_actor_class": { "type": "string", "minLength": 1 },
+        "excluded_direct_actor_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "conduct_type": { "$ref": "#/$defs/conductType" },
+        "conduct_term_local": { "$ref": "#/$defs/prose" },
+        "source_actions": { "$ref": "#/$defs/termList" },
+        "source_lifecycle_activities": { "$ref": "#/$defs/termList" },
+        "source_topics": { "$ref": "#/$defs/termList" },
+        "framework_functions": { "$ref": "#/$defs/termList" },
+        "proposal_action": { "$ref": "#/$defs/prose" },
+
+        "binding_scope": { "$ref": "#/$defs/bindingScope" },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scopeTerm" }
+        },
+        "covered_scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scopeTerm" }
+        },
+        "target_system": { "type": "string", "minLength": 1 },
+
+        "responsible_authority": { "$ref": "#/$defs/prose" },
+        "responsible_authorities": { "$ref": "#/$defs/termList" },
+        "potential_responsible_authorities": { "$ref": "#/$defs/termList" },
+        "additional_authority": { "$ref": "#/$defs/prose" },
+        "implementation_body": { "type": "string", "minLength": 1 },
+        "policy_origin": { "type": "string", "minLength": 1 },
+
+        "exception_scope_local": { "$ref": "#/$defs/prose" },
+        "exception_target": { "$ref": "#/$defs/termList" },
+        "exception_conditions_status": { "$ref": "#/$defs/prose" },
+        "source_legal_force_label": { "type": "string", "minLength": 1 },
+        "underlying_regime_force": { "$ref": "#/$defs/legalForce" },
+        "underlying_instrument": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "derivedClaim": {
+      "description": "A legally distinct claim carried by a source bundle. Children are never merged into their parent or into each other.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "record_type",
+        "legal_force",
+        "adoption_status",
+        "applicability_status",
+        "enforcement_status",
+        "headline_relevance"
+      ],
+      "properties": {
+        "claim_id": { "$ref": "#/$defs/claimId" },
+        "record_type": { "$ref": "#/$defs/recordType" },
+
+        "legal_force": { "$ref": "#/$defs/legalForce" },
+        "compliance_function": { "$ref": "#/$defs/complianceFunction" },
+        "adoption_status": { "$ref": "#/$defs/adoptionStatus" },
+        "applicability_status": { "$ref": "#/$defs/applicabilityStatus" },
+        "enforcement_status": { "$ref": "#/$defs/enforcementStatus" },
+        "headline_relevance": { "$ref": "#/$defs/headlineRelevance" },
+
+        "instrument": { "type": "string", "minLength": 1 },
+        "actor_type": { "$ref": "#/$defs/actorType" },
+        "actor_term_local": { "$ref": "#/$defs/prose" },
+        "actor_relationship": { "type": "string", "minLength": 1 },
+        "target_actor": { "$ref": "#/$defs/actorType" },
+
+        "conduct_type": { "$ref": "#/$defs/conductType" },
+        "conduct_term_local": { "$ref": "#/$defs/prose" },
+        "conduct_family": { "$ref": "#/$defs/conductFamily" },
+        "evaluation_method": { "$ref": "#/$defs/termList" },
+        "required_vendor_conduct": { "$ref": "#/$defs/termList" },
+        "noncompliance_consequence": { "type": "string", "minLength": 1 },
+
+        "binding_scope": { "$ref": "#/$defs/bindingScope" },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/scopeTerm" }
+        },
+        "target_system": { "$ref": "#/$defs/prose" },
+
+        "responsible_authority": { "$ref": "#/$defs/prose" },
+        "implementation_body": { "type": "string", "minLength": 1 },
+        "policy_authority": { "type": "string", "minLength": 1 },
+
+        "classification_indicators": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "indicative_gpai_compute_threshold": { "type": "string", "minLength": 1 },
+            "systemic_risk_presumption_threshold": { "type": "string", "minLength": 1 }
+          }
+        },
+        "source_instrument_force": { "$ref": "#/$defs/legalForce" },
+        "described_obligation_force": { "$ref": "#/$defs/legalForce" },
+        "effective_from": { "type": "string", "format": "date" },
+        "compliance_deadline": { "type": "string", "format": "date" }
+      }
+    },
+
+    "headlineJudgments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["EU", "US"],
+      "properties": {
+        "EU": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "market_provider",
+            "defined_class",
+            "decisive_evidence",
+            "supporting_evidence",
+            "qualification"
+          ],
+          "properties": {
+            "market_provider": { "type": "string", "minLength": 1 },
+            "defined_class": { "$ref": "#/$defs/prose" },
+            "decisive_evidence": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "supporting_evidence": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "qualification": { "$ref": "#/$defs/prose" }
+          }
+        },
+        "US": {
+          "description": "Five separately preserved findings. Collapsing them would convert government-use or procurement duties into market-provider duties.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "market_provider_cross_sector",
+            "federal_agency_government_use",
+            "government_procurement",
+            "voluntary_cross_sector",
+            "proposed_future"
+          ],
+          "properties": {
+            "market_provider_cross_sector": { "$ref": "#/$defs/prose" },
+            "federal_agency_government_use": { "$ref": "#/$defs/prose" },
+            "government_procurement": { "$ref": "#/$defs/prose" },
+            "voluntary_cross_sector": { "$ref": "#/$defs/prose" },
+            "proposed_future": { "$ref": "#/$defs/prose" }
+          }
+        }
+      }
+    },
+
+    "validationExpectations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_row_count",
+        "eu_parent_row_count",
+        "us_parent_row_count",
+        "normalized_claim_count",
+        "pending_review_count",
+        "rejected_review_count"
+      ],
+      "properties": {
+        "parent_row_count": { "const": 24 },
+        "eu_parent_row_count": { "const": 12 },
+        "us_parent_row_count": { "const": 12 },
+        "normalized_claim_count": { "const": 32 },
+        "pending_review_count": { "const": 0 },
+        "rejected_review_count": { "const": 0 }
+      }
+    }
+  }
+}

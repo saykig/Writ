@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/pilot/eu-us-ai-evaluation/normalized_claim.schema.json",
+  "title": "EuUsAiEvaluationNormalizedClaim",
+  "description": "One legally distinct claim, generated from a reviewed parent row. A leaf parent yields exactly one claim; a source bundle yields one claim per child. Nothing is inferred, defaulted, or merged.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "claim_id",
+    "parent_row_id",
+    "claim_origin",
+    "jurisdiction",
+    "instrument",
+    "source_locator",
+    "claim_record_type",
+    "legal_force",
+    "adoption_status",
+    "applicability_status",
+    "enforcement_status",
+    "headline_relevance",
+    "parser_version"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "record_type": { "const": "pilot_normalized_claim" },
+    "parser_version": { "type": "string", "minLength": 1 },
+
+    "claim_id": { "type": "string", "pattern": "^(EU|US)-(0[1-9]|1[0-2])[A-Z]?$" },
+    "parent_row_id": { "type": "string", "pattern": "^(EU|US)-(0[1-9]|1[0-2])$" },
+    "claim_origin": {
+      "description": "`parent_record` for a leaf row, `derived_claim` for a source-bundle child. Preserves the parent-child relationship after normalization.",
+      "enum": ["parent_record", "derived_claim"]
+    },
+
+    "jurisdiction": { "enum": ["EU", "US"] },
+    "instrument": { "type": "string", "minLength": 1 },
+    "source_locator": { "type": "string", "minLength": 1 },
+    "claim_record_type": {
+      "enum": [
+        "compliance_path",
+        "contract_mediated_obligation",
+        "exception_rule",
+        "executive_direction",
+        "guidance",
+        "implementation_guidance",
+        "institutional_program",
+        "interpretive_guidance",
+        "lifecycle_rule",
+        "obligation",
+        "policy_context",
+        "procurement_requirement",
+        "proposed_guidance",
+        "proposed_policy",
+        "scope_rule"
+      ]
+    },
+
+    "legal_force": {
+      "description": "Required, and independent of compliance_function. A voluntary instrument that serves as a recognized compliance path stays `voluntary`.",
+      "enum": ["binding", "contractual", "interpretive", "mixed", "proposed", "voluntary"]
+    },
+    "compliance_function": {
+      "enum": [
+        "agency_policy_direction",
+        "contract_condition_creation",
+        "direct_obligation",
+        "evaluation_collaboration",
+        "evaluation_guidance",
+        "general_guidance",
+        "implementation_guidance",
+        "obligation_exception",
+        "policy_direction",
+        "procurement_contract_obligation",
+        "prospective_regulatory_requirement",
+        "recognized_compliance_path"
+      ]
+    },
+
+    "adoption_status": { "enum": ["adopted", "proposed"] },
+    "applicability_status": {
+      "enum": [
+        "applicable",
+        "contingent_on_contract",
+        "draft_available",
+        "not_yet_applicable",
+        "transition_for_existing_models"
+      ]
+    },
+    "enforcement_status": {
+      "description": "Required and non-nullable, with `unknown` as a first-class member. A claim can neither drop this field nor collapse `unknown` into `not_applicable`.",
+      "type": "string",
+      "enum": [
+        "contractual_enforcement",
+        "internal_executive_implementation",
+        "internal_government_implementation",
+        "not_applicable",
+        "not_determinable_from_passage",
+        "unknown"
+      ]
+    },
+
+    "headline_relevance": {
+      "enum": [
+        "contextual_only",
+        "contextual_support",
+        "defines_scope",
+        "deregulatory_context_only",
+        "directly_satisfies_for_defined_class",
+        "establishes_current_applicability",
+        "excludes_general_provider_duty",
+        "government_only_binding",
+        "government_only_support",
+        "government_procurement_only",
+        "proposed_only",
+        "proposed_voluntary_evaluation_support",
+        "qualifies_baseline_obligations",
+        "qualifies_current_applicability",
+        "scope_activation_support",
+        "supporting_only",
+        "voluntary_evaluation_infrastructure",
+        "voluntary_evaluation_support",
+        "voluntary_framework_support"
+      ]
+    },
+
+    "actor_type": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "actor_term_local": { "type": "string", "minLength": 1 },
+    "actor_relationship": { "type": "string", "minLength": 1 },
+    "target_actor": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "recipient_actor_type": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "recipient_actor_term_local": { "type": "string", "minLength": 1 },
+    "indirectly_affected_actor_type": {
+      "description": "An actor affected in fact but not placed under the duty. Never substituted for actor_type.",
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "additional_affected_actor_type": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "additional_actor_term_local": { "type": "string", "minLength": 1 },
+    "current_actor_type": {
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "current_actor_term_local": { "type": "string", "minLength": 1 },
+    "prospective_actor_type": {
+      "description": "An actor a proposal would reach if adopted. Never substituted for actor_type.",
+      "enum": [
+        "ai_lifecycle_organization",
+        "downstream_provider",
+        "ecosystem_stakeholder",
+        "federal_agency",
+        "government_vendor",
+        "market_provider"
+      ]
+    },
+    "prospective_actor_term_local": { "type": "string", "minLength": 1 },
+    "defined_actor_class": { "type": "string", "minLength": 1 },
+    "excluded_direct_actor_types": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+
+    "conduct_type": {
+      "enum": [
+        "administrative_policy_revision",
+        "compliance_demonstration",
+        "contract_documentation",
+        "contract_terms_requirement",
+        "copyright_policy",
+        "cybersecurity_protection",
+        "downstream_documentation",
+        "evaluation_access",
+        "evaluation_documentation",
+        "evaluation_infrastructure_coordination",
+        "evaluation_participation",
+        "incident_reporting",
+        "model_evaluation",
+        "monitoring_support",
+        "pre_deployment_testing",
+        "procurement_testing",
+        "regulatory_classification",
+        "regulatory_notification",
+        "reporting_and_disclosure",
+        "risk_assessment",
+        "risk_management",
+        "training_content_summary"
+      ]
+    },
+    "conduct_term_local": { "type": "string", "minLength": 1 },
+    "conduct_family": {
+      "description": "A coarse source grouping. It never promotes a claim to conduct_type `model_evaluation`.",
+      "enum": ["evaluation"]
+    },
+    "evaluation_method": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "required_vendor_conduct": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "noncompliance_consequence": { "type": "string", "minLength": 1 },
+    "source_actions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source_lifecycle_activities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source_topics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "framework_functions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "proposal_action": { "type": "string", "minLength": 1 },
+
+    "binding_scope": {
+      "description": "Limits to whom a binding norm binds. Where present, the claim is not a general market-provider duty.",
+      "enum": ["executive_branch_only", "federal_agencies_only", "government_contract_only"]
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "cross_sector",
+          "cross_sector_support",
+          "government_policy",
+          "government_procurement",
+          "government_use"
+        ]
+      }
+    },
+    "covered_scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "cross_sector",
+          "cross_sector_support",
+          "government_policy",
+          "government_procurement",
+          "government_use"
+        ]
+      }
+    },
+    "target_system": { "type": "string", "minLength": 1 },
+
+    "responsible_authority": { "type": "string", "minLength": 1 },
+    "responsible_authorities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "potential_responsible_authorities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "additional_authority": { "type": "string", "minLength": 1 },
+    "implementation_body": { "type": "string", "minLength": 1 },
+    "policy_authority": { "type": "string", "minLength": 1 },
+    "policy_origin": { "type": "string", "minLength": 1 },
+
+    "exception_scope_local": { "type": "string", "minLength": 1 },
+    "exception_target": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "exception_conditions_status": { "type": "string", "minLength": 1 },
+    "source_legal_force_label": { "type": "string", "minLength": 1 },
+    "underlying_regime_force": {
+      "enum": ["binding", "contractual", "interpretive", "mixed", "proposed", "voluntary"]
+    },
+    "underlying_instrument": { "type": "string", "minLength": 1 },
+    "source_instrument_force": {
+      "enum": ["binding", "contractual", "interpretive", "mixed", "proposed", "voluntary"]
+    },
+    "described_obligation_force": {
+      "enum": ["binding", "contractual", "interpretive", "mixed", "proposed", "voluntary"]
+    },
+    "classification_indicators": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "indicative_gpai_compute_threshold": { "type": "string", "minLength": 1 },
+        "systemic_risk_presumption_threshold": { "type": "string", "minLength": 1 }
+      }
+    },
+    "effective_from": { "type": "string", "format": "date" },
+    "compliance_deadline": { "type": "string", "format": "date" },
+
+    "interpretation_note": { "type": "string", "minLength": 1 }
+  }
+}
