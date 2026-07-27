@@ -13,7 +13,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { EXAMPLE_ITEMS, PRIMARY_NAV, RESEARCH_NAV } from "@/components/site/nav-items";
+import {
+  EXAMPLE_ITEMS,
+  PRIMARY_NAV,
+  RESEARCH_NAV,
+  SECONDARY_NAV,
+} from "@/components/site/nav-items";
 
 /** Custom event other components dispatch to open the palette (see SiteNav). */
 export const OPEN_COMMAND_EVENT = "writ:open-command";
@@ -74,7 +79,7 @@ export function CommandMenu() {
               <span className="ml-auto text-xs text-ink-faint">{item.hint}</span>
             </CommandItem>
           ))}
-          {RESEARCH_NAV.map((item) => (
+          {[...SECONDARY_NAV, ...RESEARCH_NAV].map((item) => (
             <CommandItem
               key={item.href}
               value={`${item.label} ${item.href} ${item.hint}`}

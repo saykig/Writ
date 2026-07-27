@@ -31,6 +31,13 @@ START_HERE.md
 VALIDATION.md
 VERSION_POLICY.md
 
+# Generated canonical corpora, emitted by the Python adapters via
+# canonical_json_bytes. Their emitters are asserted to be byte-for-byte
+# reproducible, so reformatting them here would break those tests.
+benchmark/*/normalized/
+pilot/*/normalized/
+
 # Generated embed outputs (regenerated on build)
 **/schemas.embedded.ts
 **/frozen-data.ts
+**/policy-test-data.ts

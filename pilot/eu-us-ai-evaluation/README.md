@@ -12,15 +12,15 @@ stated judgment disagree.
 
 ## Layout
 
-| Path | Role |
-| --- | --- |
-| `annotations/human-reviewed.yaml` | The authoritative hand-reviewed annotation table. Never rewritten by any script. |
-| `schemas/reviewed_dataset.schema.json` | Contract for the reviewed table |
-| `schemas/normalized_claim.schema.json` | Contract for one generated claim |
-| `schemas/headline_judgments.schema.json` | Contract for the derived judgments |
-| `normalized/records.json` | The 24 parent rows, canonical JSON |
-| `normalized/claims.json` | The 32 normalized claims |
-| `normalized/headline-judgments.json` | The derived judgments and their evidence |
+| Path                                     | Role                                                                             |
+| ---------------------------------------- | -------------------------------------------------------------------------------- |
+| `annotations/human-reviewed.yaml`        | The authoritative hand-reviewed annotation table. Never rewritten by any script. |
+| `schemas/reviewed_dataset.schema.json`   | Contract for the reviewed table                                                  |
+| `schemas/normalized_claim.schema.json`   | Contract for one generated claim                                                 |
+| `schemas/headline_judgments.schema.json` | Contract for the derived judgments                                               |
+| `normalized/records.json`                | The 24 parent rows, canonical JSON                                               |
+| `normalized/claims.json`                 | The 32 normalized claims                                                         |
+| `normalized/headline-judgments.json`     | The derived judgments and their evidence                                         |
 
 Code lives at `apps/ingest/src/writ_ingest/pilot/eu_us_ai_evaluation.py`; the emitter is
 `scripts/emit_eu_us_ai_evaluation.py`; the tests are `tests/pilot/test_eu_us_ai_evaluation.py`.
@@ -38,10 +38,10 @@ schema's `minItems`/`maxItems` and row-id pattern make a 25th row or an `EU-13` 
 An earlier draft assigned two scope and notification passages the `EU-06` and `EU-07`
 identifiers, displacing the Article 55(1) obligations. The review removed them:
 
-| Temporary row | Source | Status |
-| --- | --- | --- |
-| EU-06 | Article 51(1)–(2) | Removed from the reviewed corpus |
-| EU-07 | Article 52(1) | Removed from the reviewed corpus |
+| Temporary row | Source            | Status                           |
+| ------------- | ----------------- | -------------------------------- |
+| EU-06         | Article 51(1)–(2) | Removed from the reviewed corpus |
+| EU-07         | Article 52(1)     | Removed from the reviewed corpus |
 
 Neither passage exists anywhere in this repository as a reviewed record, and validation
 proves it: no row in `EU-01`…`EU-12` may carry either locator. Article 51 and 52 are not
@@ -50,8 +50,8 @@ date, or authority for them and inventing one is out of scope.
 
 The corrected Article 55(1) numbering:
 
-| Source | Row |
-| --- | --- |
+| Source           | Row   |
+| ---------------- | ----- |
 | Article 55(1)(a) | EU-06 |
 | Article 55(1)(b) | EU-07 |
 | Article 55(1)(c) | EU-08 |
@@ -62,14 +62,14 @@ The corrected Article 55(1) numbering:
 A leaf parent yields exactly one claim, keeping its row id. A `source_bundle` parent yields
 one claim per child, because its children are legally distinct and must not be merged:
 
-| Bundle | Children |
-| --- | --- |
-| EU-10 Commission GPAI guidelines | EU-10A, EU-10B, EU-10C |
-| EU-11 Article 113 timetable | EU-11A, EU-11B |
-| US-05 CAISI guidelines page | US-05A, US-05B |
-| US-08 OMB M-25-21 high-impact AI | US-08A, US-08B |
-| US-09 OMB M-25-22 procurement testing | US-09A, US-09B, US-09C |
-| US-10 OMB M-25-22 contracted AI oversight | US-10A, US-10B |
+| Bundle                                    | Children               |
+| ----------------------------------------- | ---------------------- |
+| EU-10 Commission GPAI guidelines          | EU-10A, EU-10B, EU-10C |
+| EU-11 Article 113 timetable               | EU-11A, EU-11B         |
+| US-05 CAISI guidelines page               | US-05A, US-05B         |
+| US-08 OMB M-25-21 high-impact AI          | US-08A, US-08B         |
+| US-09 OMB M-25-22 procurement testing     | US-09A, US-09B, US-09C |
+| US-10 OMB M-25-22 contracted AI oversight | US-10A, US-10B         |
 
 18 leaves + 14 children = **32 claims**. Every reviewed field is copied verbatim. Nothing is
 defaulted, inferred, or filled in.
@@ -112,21 +112,21 @@ conduct_type == model_evaluation
 binding, currently applicable duty. A parametrized test substitutes every enforcement value into
 every claim and asserts the positive set is unchanged.
 
-| Derived finding | Predicate | Evidence |
-| --- | --- | --- |
-| EU decisive | the rule above | `EU-06` |
-| EU supporting | `headline_relevance ∈ {supporting_only, scope_activation_support, establishes_current_applicability}` | `EU-01, EU-02, EU-07, EU-10B, EU-11A` |
-| EU qualifying | `headline_relevance == qualifies_current_applicability` | `EU-11B` |
-| US cross-sector | the rule above, US only | — (empty) |
-| US voluntary cross-sector | `voluntary ∧ adopted ∧ cross_sector ∈ scope` | `US-01…US-04, US-05A` |
-| US federal government use | `binding ∧ federal_agencies_only ∧ government_use ∈ scope` | `US-08A, US-08B` |
-| US federal procurement | `binding ∧ federal_agencies_only ∧ government_procurement ∈ scope` | `US-09A, US-09B` |
-| US contract-mediated vendor | `contractual ∧ government_vendor` | `US-09C, US-10A, US-10B` |
-| US proposed future | `proposed(legal_force) ∧ proposed(adoption_status)` | `US-11` |
+| Derived finding             | Predicate                                                                                             | Evidence                              |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| EU decisive                 | the rule above                                                                                        | `EU-06`                               |
+| EU supporting               | `headline_relevance ∈ {supporting_only, scope_activation_support, establishes_current_applicability}` | `EU-01, EU-02, EU-07, EU-10B, EU-11A` |
+| EU qualifying               | `headline_relevance == qualifies_current_applicability`                                               | `EU-11B`                              |
+| US cross-sector             | the rule above, US only                                                                               | — (empty)                             |
+| US voluntary cross-sector   | `voluntary ∧ adopted ∧ cross_sector ∈ scope`                                                          | `US-01…US-04, US-05A`                 |
+| US federal government use   | `binding ∧ federal_agencies_only ∧ government_use ∈ scope`                                            | `US-08A, US-08B`                      |
+| US federal procurement      | `binding ∧ federal_agencies_only ∧ government_procurement ∈ scope`                                    | `US-09A, US-09B`                      |
+| US contract-mediated vendor | `contractual ∧ government_vendor`                                                                     | `US-09C, US-10A, US-10B`              |
+| US proposed future          | `proposed(legal_force) ∧ proposed(adoption_status)`                                                   | `US-11`                               |
 
 The last predicate needs both conjuncts: US-05B is `adoption_status: proposed` but
-`legal_force: voluntary`, so a proposed *draft benchmark practice* stays out of the
-proposed-*regulation* finding.
+`legal_force: voluntary`, so a proposed _draft benchmark practice_ stays out of the
+proposed-_regulation_ finding.
 
 The labels attached to each finding are selected by the derived predicate — a finding with no
 qualifying claims takes its negative label. The evidence lists are never hardcoded.

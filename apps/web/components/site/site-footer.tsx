@@ -3,14 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { GITHUB_URL, PRIMARY_NAV, RESEARCH_NAV } from "@/components/site/nav-items";
+import { GITHUB_URL, PRIMARY_NAV, RESEARCH_NAV, SECONDARY_NAV } from "@/components/site/nav-items";
 
 /**
  * Quiet closing band shared by every non-homepage route.
  */
 export function SiteFooter() {
   const pathname = usePathname();
-  const productLinks = PRIMARY_NAV.filter((item) => item.href !== "/how-it-works");
+  // The tools kept out of the header stay reachable here.
+  const productLinks = [
+    ...PRIMARY_NAV.filter((item) => item.href !== "/how-it-works"),
+    ...SECONDARY_NAV,
+  ];
   const resourceLinks = [
     PRIMARY_NAV.find((item) => item.href === "/how-it-works"),
     ...RESEARCH_NAV,

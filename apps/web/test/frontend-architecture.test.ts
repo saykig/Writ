@@ -14,6 +14,7 @@ describe("frontend architecture", () => {
       "app/methodologies/page.tsx": "Every rule, open to review.",
       "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
+      "app/policy-test/eu-us-ai-evaluation/page.tsx": "Is model evaluation legally required?",
     };
 
     for (const [path, heading] of Object.entries(routes)) {
@@ -35,17 +36,43 @@ describe("frontend architecture", () => {
     expect(home).not.toContain("Try the Playground");
   });
 
+  test("the header offers three destinations and nothing is orphaned", () => {
+    const navItems = read("components/site/nav-items.ts");
+    const nav = read("components/site/site-nav.tsx");
+    const footer = read("components/site/site-footer.tsx");
+    const commandMenu = read("components/site/command-menu.tsx");
+
+    // The header renders PRIMARY_NAV only: Policy Test, Benchmark, How it works.
+    const primary = navItems.slice(
+      navItems.indexOf("export const PRIMARY_NAV"),
+      navItems.indexOf("export const SECONDARY_NAV"),
+    );
+    expect(primary).toContain('label: "Policy Test"');
+    expect(primary).toContain('label: "Benchmark"');
+    expect(primary).toContain('label: "How it works"');
+    for (const removed of ["Writ Lab", "Methodologies", "Receipts"]) {
+      expect(primary).not.toContain(`label: "${removed}"`);
+    }
+
+    // The desktop header is the only place restricted to PRIMARY_NAV.
+    expect(nav).toContain("{PRIMARY_NAV.map((item) => {");
+    // Every removed destination stays reachable elsewhere.
+    expect(nav).toContain("[...PRIMARY_NAV, ...SECONDARY_NAV, ...RESEARCH_NAV]");
+    expect(footer).toContain("...SECONDARY_NAV");
+    expect(commandMenu).toContain("[...SECONDARY_NAV, ...RESEARCH_NAV]");
+  });
+
   test("archive is absent from routes and navigation", () => {
     expect(existsSync(resolve(WEB_ROOT, "app/archive"))).toBe(false);
     expect(read("components/site/nav-items.ts").toLowerCase()).not.toContain("archive");
   });
 
-  test("about is explained on the homepage rather than exposed as a route", () => {
+  test("about is not exposed as a route", () => {
+    // The homepage was reduced to the hero in "Simplify homepage to hero", which
+    // removed the explanatory copy this test used to assert. What still holds is
+    // the original intent: there is no About route and no About nav entry.
     const home = read("app/page.tsx");
     expect(existsSync(resolve(WEB_ROOT, "app/about/page.tsx"))).toBe(false);
-    expect(home).toContain("From ambiguous prose to reviewable decisions.");
-    expect(home).toContain("Compliance methods are usually written for people to interpret.");
-    expect(home).toContain("When the evidence is not enough, Writ does not guess.");
     expect(home).not.toContain(
       "Institutional compliance methodologies are written for human analysts.",
     );
@@ -187,8 +214,13 @@ describe("frontend architecture", () => {
 
   test("every landing-page section uses the reduced-motion-safe scroll reveal", () => {
     const home = read("app/page.tsx");
+    const policyTest = read("components/policy-test/policy-test-section.tsx");
     const reveal = read("components/site/reveal.tsx");
-    expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(6);
+    // The homepage is now the hero plus the Policy Test section, and each
+    // section owns its own Reveal. Counting them in page.tsx alone stopped
+    // being meaningful once sections moved into their own components.
+    expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
+    expect(policyTest.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
     expect(reveal).toContain("IntersectionObserver");
     expect(reveal).toContain("prefers-reduced-motion: reduce");
     expect(reveal).toContain('status === "in"');
