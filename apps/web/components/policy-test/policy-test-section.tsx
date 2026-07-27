@@ -33,7 +33,7 @@ export function PolicyTestSection() {
             href={POLICY_TEST_HREF}
             badge="Human-reviewed pilot"
             jurisdiction="EU · US federal"
-            question="Is model evaluation legally required?"
+            title="Where model evaluation is legally binding"
             description="Tests whether a jurisdiction currently imposes a binding model-evaluation requirement on providers of advanced or general-purpose AI models."
             meta={[
               { label: "Reviewed source rows", value: String(summary.parentRowCount) },

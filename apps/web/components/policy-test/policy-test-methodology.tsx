@@ -79,8 +79,8 @@ export function PolicyTestMethodology({
           ))}
         </ul>
         <p className="mt-4 max-w-[68ch] text-[0.88rem] leading-6 text-muted-foreground">
-          These conduct types remain separate. Documentation or risk assessment does not
-          automatically count as a direct model-evaluation duty.
+          These stay separate. Documentation and risk assessment do not count as a model-evaluation
+          duty.
         </p>
       </div>
 

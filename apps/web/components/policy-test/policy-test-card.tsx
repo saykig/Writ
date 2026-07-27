@@ -22,7 +22,7 @@ export function PolicyTestCard({
   href,
   badge,
   jurisdiction,
-  question,
+  title,
   description,
   meta,
   action,
@@ -31,7 +31,7 @@ export function PolicyTestCard({
   href: ComponentProps<typeof Link>["href"];
   badge: string;
   jurisdiction: string;
-  question: string;
+  title: string;
   description: string;
   meta: readonly PolicyTestCardMeta[];
   action: string;
@@ -57,7 +57,7 @@ export function PolicyTestCard({
       </div>
 
       <h3 className="mt-6 max-w-[22ch] text-[length:var(--t-h3)] leading-[1.15] font-semibold tracking-[-0.015em]">
-        {question}
+        {title}
       </h3>
 
       <p className="mt-4 max-w-[62ch] text-[0.94rem] leading-7 text-muted-foreground text-pretty">

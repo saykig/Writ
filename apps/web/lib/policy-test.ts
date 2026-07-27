@@ -200,6 +200,48 @@ export interface EvidenceField {
   tone: "default" | "unknown" | "mono";
 }
 
+/** Whether one claim meets one condition of the headline rule. */
+export interface RuleCheck {
+  key: "actor" | "conduct" | "force" | "applicability";
+  label: string;
+  met: boolean;
+  /** What the claim actually records for this condition. */
+  actual: string | null;
+}
+
+/**
+ * The rule's four conditions, in the order that reads as an argument: who bears
+ * the duty, what it requires, whether it binds, and whether it is in force yet.
+ */
+const RULE_CHECKS: {
+  key: RuleCheck["key"];
+  label: string;
+  field: keyof ClaimFields;
+  required: string;
+}[] = [
+  { key: "actor", label: "Actor", field: "actor_type", required: "market_provider" },
+  { key: "conduct", label: "Conduct", field: "conduct_type", required: "model_evaluation" },
+  { key: "force", label: "Force", field: "legal_force", required: "binding" },
+  {
+    key: "applicability",
+    label: "In force",
+    field: "applicability_status",
+    required: "applicable",
+  },
+];
+
+function checksFor(claim: ClaimFields): RuleCheck[] {
+  return RULE_CHECKS.map(({ key, label, field, required }) => {
+    const actual = claim[field];
+    return {
+      key,
+      label,
+      met: actual === required,
+      actual: typeof actual === "string" ? humanize(actual) : null,
+    };
+  });
+}
+
 export interface EvidenceEntry {
   id: string;
   kind: "parent_record" | "derived_claim";
@@ -214,6 +256,8 @@ export interface EvidenceEntry {
   legalForce: string | null;
   actorType: string | null;
   conductType: string | null;
+  /** How this claim fares against each rule condition. `null` for a bundle. */
+  checks: RuleCheck[] | null;
   fields: EvidenceField[];
 }
 
@@ -297,6 +341,9 @@ export function policyTestEvidenceGroups(): EvidenceGroup[] {
       legalForce: record.legal_force ?? null,
       actorType: record.actor_type ?? null,
       conductType: record.conduct_type ?? null,
+      // A bundle is a container; its children carry the legal force, so the
+      // bundle itself is never tested against the rule.
+      checks: isBundle ? null : checksFor(record),
       fields: detailFields(record, context, record.interpretation_note),
     };
 
@@ -316,6 +363,7 @@ export function policyTestEvidenceGroups(): EvidenceGroup[] {
         legalForce: claim.legal_force ?? null,
         actorType: claim.actor_type ?? null,
         conductType: claim.conduct_type ?? null,
+        checks: checksFor(claim),
         fields: detailFields(
           claim,
           { ...context, rowId: claim.claim_id, instrument: childInstrument },
@@ -454,21 +502,43 @@ export interface RuleCondition {
   value: string;
   /** The field in `methodology.headline_rule` this condition was read from. */
   source: keyof HeadlineRule;
+  /**
+   * The per-claim check this condition drives, or `null` for `target_class`,
+   * which names the class of model the rule is about rather than a field any
+   * one claim carries. It is shown as part of the rule, but it is not a filter.
+   */
+  key: RuleCheck["key"] | null;
 }
 
 /** The five conditions, read from `methodology.headline_rule` and never restated. */
 export function policyTestRuleConditions(): RuleCondition[] {
   const rule = policyTestDataset().methodology.headline_rule;
   return [
-    { label: "Actor", value: humanize(rule.actor_type), source: "actor_type" },
-    { label: "Conduct", value: humanize(rule.conduct_type), source: "conduct_type" },
-    { label: "Legal force", value: humanize(rule.legal_force), source: "legal_force" },
+    { label: "Actor", value: humanize(rule.actor_type), source: "actor_type", key: "actor" },
+    {
+      label: "Conduct",
+      value: humanize(rule.conduct_type),
+      source: "conduct_type",
+      key: "conduct",
+    },
+    {
+      label: "Legal force",
+      value: humanize(rule.legal_force),
+      source: "legal_force",
+      key: "force",
+    },
     {
       label: "Applicability",
       value: humanize(rule.applicability_status),
       source: "applicability_status",
+      key: "applicability",
     },
-    { label: "Target class", value: humanize(rule.target_class), source: "target_class" },
+    {
+      label: "Target class",
+      value: humanize(rule.target_class),
+      source: "target_class",
+      key: null,
+    },
   ];
 }
 

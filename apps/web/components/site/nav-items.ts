@@ -9,12 +9,10 @@ export interface NavItem {
 }
 
 /**
- * The header. Three destinations, one per question a visitor actually arrives
- * with: can I try it, has it been used on something real, and how does it work.
- *
- * The Writ Lab, Methodologies, and Receipts are tools you reach *from* that
- * work rather than things you choose between on arrival, so they live in
- * `SECONDARY_NAV` — still one keystroke away in ⌘K, and still in the footer.
+ * The header. Two destinations: see it run, and understand how it works.
+ * Everything else is a tool you reach from that work rather than something you
+ * choose between on arrival, so it lives in `SECONDARY_NAV` — still one
+ * keystroke away in ⌘K, still in the footer, still in the mobile sheet.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
   {
@@ -22,12 +20,12 @@ export const PRIMARY_NAV: readonly NavItem[] = [
     label: "Policy Test",
     hint: "Run a reviewed policy question end to end",
   },
-  { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 
 /** Reachable from the command menu and the footer, but not the header. */
 export const SECONDARY_NAV: readonly NavItem[] = [
+  { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
   { href: "/playground", label: "Writ Lab", hint: "Compile, analyze, evaluate live" },
   {
     href: "/methodologies" as Route,

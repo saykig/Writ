@@ -4,54 +4,30 @@ import * as React from "react";
 import { ChevronDown, ScanSearch } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HashPill } from "@/components/site/hash-pill";
 import { formatReviewedDate, humanize, statusLabel } from "@/lib/policy-test-format";
-import type { EvidenceEntry, PolicyTestView } from "@/components/policy-test/types";
+import type { PolicyTestView } from "@/components/policy-test/types";
 
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/** Evidence IDs, each one a button back to the record it names. */
-function EvidenceIds({
-  ids,
-  entriesById,
-  onOpenEntry,
-  label,
-}: {
-  ids: string[];
-  entriesById: Map<string, EvidenceEntry>;
-  onOpenEntry: (entry: EvidenceEntry, trigger: HTMLElement) => void;
-  label: string;
-}) {
+/** The evidence a finding rests on, named so it can be looked up in stage 3. */
+function EvidenceIds({ ids, label }: { ids: string[]; label: string }) {
   if (ids.length === 0) return null;
   return (
     <div>
       <h5 className="label">{label}</h5>
       <ul aria-label={label} className="mt-2 flex flex-wrap gap-1.5">
-        {ids.map((id) => {
-          const entry = entriesById.get(id);
-          return (
-            <li key={id}>
-              <button
-                type="button"
-                aria-haspopup="dialog"
-                aria-label={`Open reviewed record ${id}`}
-                disabled={!entry}
-                onClick={(event) => entry && onOpenEntry(entry, event.currentTarget)}
-                className={cn(
-                  "rounded-md border border-border px-2 py-1 font-mono text-[0.76rem] font-medium transition-colors duration-150 outline-none",
-                  "hover:border-foreground/30 hover:bg-muted/50",
-                  "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
-                  "disabled:pointer-events-none disabled:opacity-50",
-                )}
-              >
-                {id}
-              </button>
-            </li>
-          );
-        })}
+        {ids.map((id) => (
+          <li key={id}>
+            <Badge variant="outline" className="font-mono">
+              {id}
+            </Badge>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -68,13 +44,9 @@ function ReceiptRow({ label, children }: { label: string; children: React.ReactN
 
 export function PolicyTestReceipt({
   view,
-  entriesById,
-  onOpenEntry,
   onInspectEvidence,
 }: {
   view: PolicyTestView;
-  entriesById: Map<string, EvidenceEntry>;
-  onOpenEntry: (entry: EvidenceEntry, trigger: HTMLElement) => void;
   onInspectEvidence: () => void;
 }) {
   const [showFull, setShowFull] = React.useState(false);
@@ -107,18 +79,8 @@ export function PolicyTestReceipt({
             applicable model-evaluation obligation for a defined class of market providers.
           </p>
 
-          <EvidenceIds
-            label="Decisive evidence"
-            ids={receipt.eu.decisiveEvidence}
-            entriesById={entriesById}
-            onOpenEntry={onOpenEntry}
-          />
-          <EvidenceIds
-            label="Supporting evidence"
-            ids={receipt.eu.supportingEvidence}
-            entriesById={entriesById}
-            onOpenEntry={onOpenEntry}
-          />
+          <EvidenceIds label="Decisive evidence" ids={receipt.eu.decisiveEvidence} />
+          <EvidenceIds label="Supporting evidence" ids={receipt.eu.supportingEvidence} />
 
           <div className="mt-auto rounded-lg border border-border px-3.5 py-3">
             <h5 className="label">Qualification</h5>
@@ -164,12 +126,7 @@ export function PolicyTestReceipt({
                   {result.finding}
                 </p>
                 <div className="mt-2.5">
-                  <EvidenceIds
-                    label="Relevant evidence"
-                    ids={result.evidence}
-                    entriesById={entriesById}
-                    onOpenEntry={onOpenEntry}
-                  />
+                  <EvidenceIds label="Relevant evidence" ids={result.evidence} />
                 </div>
               </li>
             ))}
@@ -267,8 +224,7 @@ export function PolicyTestReceipt({
           </ReceiptRow>
         </dl>
         <p className="mt-4 text-[0.8rem] leading-6 text-muted-foreground">
-          The hash is SHA-256 over the RFC 8785 canonical JSON of every field above, the same
-          convention used by Writ evaluation receipts.
+          SHA-256 over the RFC 8785 canonical JSON of every field above.
         </p>
       </section>
     </div>

@@ -10,10 +10,20 @@ import type {
   HighlightedEvidence,
   PolicyTestReceipt,
   PolicyTestSummary,
+  RuleCheck,
   RuleCondition,
 } from "@/lib/policy-test";
 
-export type { EvidenceEntry, EvidenceField, EvidenceGroup } from "@/lib/policy-test";
+export type {
+  EvidenceEntry,
+  EvidenceField,
+  EvidenceGroup,
+  RuleCheck,
+  RuleCondition,
+} from "@/lib/policy-test";
+
+/** The four conditions a claim can be tested against. */
+export type RuleKey = RuleCheck["key"];
 
 export const STAGES = [
   {

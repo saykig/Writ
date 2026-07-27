@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import {
@@ -75,7 +75,7 @@ describe("homepage Policy Test section", () => {
     const section = read("components/policy-test/policy-test-section.tsx");
     expect(section).toContain('badge="Human-reviewed pilot"');
     expect(section).toContain('jurisdiction="EU · US federal"');
-    expect(section).toContain('question="Is model evaluation legally required?"');
+    expect(section).toContain('title="Where model evaluation is legally binding"');
     expect(section).toContain("Tests whether a jurisdiction currently imposes a binding");
     expect(section).toContain('label: "Reviewed source rows"');
     expect(section).toContain('label: "Normalized claims"');
@@ -102,8 +102,9 @@ describe("homepage Policy Test section", () => {
       "href={POLICY_TEST_HREF}",
     );
     // The route file exists at that path.
-    expect(read("app/policy-test/eu-us-ai-evaluation/page.tsx")).toContain(
-      "Is model evaluation legally required?",
+    expect(read("app/policy-test/eu-us-ai-evaluation/page.tsx")).toContain("<PolicyTestHero");
+    expect(read("components/policy-test/policy-test-hero.tsx")).toContain(
+      "Where model evaluation is legally binding.",
     );
   });
 
@@ -177,23 +178,43 @@ describe("stage navigation", () => {
     expect(page).toContain('isStageId(stage) ? stage : "methodology"');
   });
 
-  test("the stepper is a keyboard-operable tablist", () => {
-    const stepper = read("components/policy-test/policy-test-stepper.tsx");
-    expect(stepper).toContain('role="tablist"');
-    expect(stepper).toContain('role="tab"');
-    expect(stepper).toContain("aria-selected={selected}");
-    expect(stepper).toContain("aria-controls={panelId}");
-    // Roving tabindex: the group is a single tab stop.
-    expect(stepper).toContain("tabIndex={selected ? 0 : -1}");
-    for (const key of ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"]) {
-      expect(stepper).toContain(`"${key}"`);
-    }
-    // Semantic buttons, not clickable divs.
-    expect(stepper).toContain('type="button"');
-
+  test("the stages use the shared Tabs component rather than a bespoke control", () => {
     const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    expect(workspace).toContain('role="tabpanel"');
-    expect(workspace).toContain('aria-live="polite"');
+    // Stock shadcn Tabs supplies tablist/tab/tabpanel roles, roving tabindex,
+    // and arrow-key navigation, so none of it is reimplemented here.
+    expect(workspace).toContain('from "@/components/ui/tabs"');
+    expect(workspace).toContain("<TabsList");
+    expect(workspace).toContain("<TabsTrigger");
+    expect(workspace).toContain("<TabsContent");
+    expect(workspace).not.toContain('role="tablist"');
+    expect(workspace).not.toContain("tabIndex");
+    // The bespoke stepper is gone.
+    expect(existsSync(resolve(WEB_ROOT, "components/policy-test/policy-test-stepper.tsx"))).toBe(
+      false,
+    );
+  });
+
+  test("nothing in the policy test opens in a dialog", () => {
+    const files = [
+      "policy-test-workspace.tsx",
+      "policy-test-evidence.tsx",
+      "policy-test-receipt.tsx",
+      "policy-test-rule.tsx",
+      "policy-test-methodology.tsx",
+    ];
+    for (const file of files) {
+      const source = read(`components/policy-test/${file}`);
+      expect(source).not.toContain("ui/sheet");
+      expect(source).not.toContain("ui/dialog");
+      expect(source).not.toContain('aria-haspopup="dialog"');
+    }
+    // The Sheet-based detail panel was replaced by inline disclosure.
+    expect(existsSync(resolve(WEB_ROOT, "components/policy-test/policy-evidence-detail.tsx"))).toBe(
+      false,
+    );
+    expect(read("components/policy-test/policy-test-evidence.tsx")).toContain(
+      'from "@/components/ui/accordion"',
+    );
   });
 });
 
@@ -386,24 +407,36 @@ describe("reviewed corpus shape", () => {
 
   test("the evidence list renders the bundle relationship", () => {
     const evidence = read("components/policy-test/policy-test-evidence.tsx");
+    // Children render nested inside their parent's list item, not as siblings.
     expect(evidence).toContain("group.children.map");
-    expect(evidence).toContain("Derived claims");
-    expect(evidence).toContain("View all reviewed evidence");
+    expect(evidence).toContain("<RecordItem key={child.id} entry={child} isChild");
+    // The whole corpus is listed in place; there is no separate reveal step.
+    expect(evidence).toContain("All reviewed evidence");
     // Generated from the data, not duplicated by hand.
     expect(evidence).toContain("view.groups.filter");
+    // The bundle parent names its child count rather than pretending to be a claim.
+    expect(read("lib/policy-test.ts")).toContain("Source bundle · ");
   });
 
   test("the rule conditions come from methodology.headline_rule", () => {
     const rule = dataset.methodology.headline_rule;
     expect(policyTestRuleConditions()).toEqual([
-      { label: "Actor", value: "Market provider", source: "actor_type" },
-      { label: "Conduct", value: "Model evaluation", source: "conduct_type" },
-      { label: "Legal force", value: "Binding", source: "legal_force" },
-      { label: "Applicability", value: "Applicable", source: "applicability_status" },
+      { label: "Actor", value: "Market provider", source: "actor_type", key: "actor" },
+      { label: "Conduct", value: "Model evaluation", source: "conduct_type", key: "conduct" },
+      { label: "Legal force", value: "Binding", source: "legal_force", key: "force" },
+      {
+        label: "Applicability",
+        value: "Applicable",
+        source: "applicability_status",
+        key: "applicability",
+      },
+      // `target_class` names the class of model, not a per-claim field, so it
+      // is shown as part of the rule but is never used as a filter.
       {
         label: "Target class",
         value: "Advanced or general-purpose AI model",
         source: "target_class",
+        key: null,
       },
     ]);
     expect(rule.actor_type).toBe("market_provider");
@@ -418,7 +451,7 @@ describe("responsive layout", () => {
       "components/policy-test/policy-test-card.tsx",
       "components/policy-test/policy-test-section.tsx",
       "components/policy-test/policy-test-workspace.tsx",
-      "components/policy-test/policy-test-stepper.tsx",
+      "components/policy-test/policy-test-hero.tsx",
       "components/policy-test/policy-test-evidence.tsx",
       "components/policy-test/policy-test-receipt.tsx",
       "components/policy-test/policy-test-methodology.tsx",
@@ -435,17 +468,15 @@ describe("responsive layout", () => {
     }
   });
 
-  test("the stepper stacks above the content before the desktop breakpoint", () => {
+  test("the stage tabs wrap instead of scrolling sideways", () => {
     const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    // Single column by default, two columns only from 900px up.
-    expect(workspace).toContain("grid-cols-1");
-    expect(workspace).toContain("min-[900px]:grid-cols-[13rem_minmax(0,1fr)]");
-    expect(workspace).toContain("min-w-0");
+    expect(workspace).toContain("flex-wrap");
+    expect(workspace).not.toContain("overflow-x-auto");
   });
 
   test("long reviewed values wrap instead of forcing a scrollbar", () => {
-    expect(read("components/policy-test/policy-evidence-detail.tsx")).toContain("break-words");
     expect(read("components/policy-test/policy-test-evidence.tsx")).toContain("break-words");
+    expect(read("components/policy-test/policy-test-receipt.tsx")).toContain("break-words");
   });
 });
 
@@ -481,10 +512,10 @@ describe("unknown is preserved", () => {
   });
 
   test("unknown is rendered in the reserved unknown colour, never blanked", () => {
-    const detail = read("components/policy-test/policy-evidence-detail.tsx");
-    expect(detail).toContain("text-unknown");
+    const evidence = read("components/policy-test/policy-test-evidence.tsx");
+    expect(evidence).toContain("text-unknown");
     // An absent value is distinct from a recorded unknown.
-    expect(detail).toContain('field.value ?? "Not recorded"');
+    expect(evidence).toContain('field.value ?? "Not recorded"');
     expect(read("lib/policy-test.ts")).toContain('value === "unknown" ? "unknown"');
   });
 

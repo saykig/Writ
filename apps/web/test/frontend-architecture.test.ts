@@ -14,7 +14,7 @@ describe("frontend architecture", () => {
       "app/methodologies/page.tsx": "Every rule, open to review.",
       "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
-      "app/policy-test/eu-us-ai-evaluation/page.tsx": "Is model evaluation legally required?",
+      "app/policy-test/eu-us-ai-evaluation/page.tsx": "<PolicyTestHero",
     };
 
     for (const [path, heading] of Object.entries(routes)) {
@@ -36,21 +36,20 @@ describe("frontend architecture", () => {
     expect(home).not.toContain("Try the Playground");
   });
 
-  test("the header offers three destinations and nothing is orphaned", () => {
+  test("the header offers two destinations and nothing is orphaned", () => {
     const navItems = read("components/site/nav-items.ts");
     const nav = read("components/site/site-nav.tsx");
     const footer = read("components/site/site-footer.tsx");
     const commandMenu = read("components/site/command-menu.tsx");
 
-    // The header renders PRIMARY_NAV only: Policy Test, Benchmark, How it works.
+    // The header renders PRIMARY_NAV only: Policy Test and How it works.
     const primary = navItems.slice(
       navItems.indexOf("export const PRIMARY_NAV"),
       navItems.indexOf("export const SECONDARY_NAV"),
     );
     expect(primary).toContain('label: "Policy Test"');
-    expect(primary).toContain('label: "Benchmark"');
     expect(primary).toContain('label: "How it works"');
-    for (const removed of ["Writ Lab", "Methodologies", "Receipts"]) {
+    for (const removed of ["Benchmark", "Writ Lab", "Methodologies", "Receipts"]) {
       expect(primary).not.toContain(`label: "${removed}"`);
     }
 
