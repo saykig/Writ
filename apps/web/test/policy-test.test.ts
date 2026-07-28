@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { existsSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import {
@@ -14,7 +14,7 @@ import {
   policyTestUsSubResults,
 } from "../lib/policy-test";
 import { humanize } from "../lib/policy-test-format";
-import { STAGES } from "../components/policy-test/types";
+import { PRESETS } from "../components/policy-test/policy-test";
 
 const WEB_ROOT = resolve(import.meta.dir, "..");
 const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
@@ -102,8 +102,8 @@ describe("homepage Policy Test section", () => {
       "href={POLICY_TEST_HREF}",
     );
     // The route file exists at that path.
-    expect(read("app/policy-test/eu-us-ai-evaluation/page.tsx")).toContain("<PolicyTestHero");
-    expect(read("components/policy-test/policy-test-hero.tsx")).toContain(
+    expect(read("app/policy-test/eu-us-ai-evaluation/page.tsx")).toContain("<PolicyTest ");
+    expect(read("components/policy-test/policy-test.tsx")).toContain(
       "Where model evaluation is legally binding.",
     );
   });
@@ -117,102 +117,87 @@ describe("homepage Policy Test section", () => {
   });
 });
 
-// 3–5. Stages, advance buttons, and the URL query string.
-describe("stage navigation", () => {
-  test("all four stages are declared in order with their headings", () => {
-    expect(STAGES.map((stage) => stage.id)).toEqual(["methodology", "rule", "evidence", "receipt"]);
-    expect(STAGES.map((stage) => stage.label)).toEqual([
-      "Methodology",
-      "Explicit rule",
-      "Reviewed evidence",
-      "Assessment receipt",
-    ]);
-    expect(STAGES[0].heading).toBe("Define the question before running it.");
-    expect(STAGES[1].heading).toBe("Writ converts the question into a testable condition.");
-    expect(STAGES[2].heading).toBe("The rule runs only against accepted, human-reviewed records.");
-    expect(STAGES[3].heading).toBe(
-      "The result preserves the legal differences between the two systems.",
+// 3-5. The rule, as preset scenarios over the reviewed claims.
+describe("rule presets", () => {
+  const claims = policyTestEvidenceGroups().flatMap((group) =>
+    group.isBundle ? group.children : [group.parent],
+  );
+  const run = (keys: readonly string[]) =>
+    claims.filter((claim) =>
+      keys.every((key) => claim.checks?.find((check) => check.key === key)?.met),
     );
+
+  test("the reviewed rule is the first preset and requires all four conditions", () => {
+    expect(PRESETS[0].id).toBe("reviewed");
+    expect(PRESETS[0].label).toBe("The reviewed rule");
+    expect([...PRESETS[0].keys].sort()).toEqual(["actor", "applicability", "conduct", "force"]);
   });
 
-  test("every stage renders its own panel", () => {
-    const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    for (const component of [
-      "<PolicyTestMethodology",
-      "<PolicyTestRule",
-      "<PolicyTestEvidence",
-      "<PolicyTestReceipt",
-    ]) {
-      expect(workspace).toContain(component);
+  test("every preset draws only on the rule's own conditions", () => {
+    const allowed = new Set(["actor", "conduct", "force", "applicability"]);
+    for (const preset of PRESETS) {
+      expect(preset.keys.length).toBeGreaterThan(0);
+      for (const key of preset.keys) expect(allowed.has(key)).toBe(true);
     }
   });
 
-  test("each stage's primary button advances to the next stage", () => {
-    const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    expect(workspace).toContain('onAdvance={() => selectStage("rule")}');
-    expect(workspace).toContain('onAdvance={() => selectStage("evidence")}');
-    expect(workspace).toContain('onAdvance={() => selectStage("receipt")}');
-    // "Inspect reviewed evidence" on the receipt returns to stage 3.
-    expect(workspace).toContain('onInspectEvidence={() => selectStage("evidence")}');
+  test("each preset returns the reviewed corpus's real answer", () => {
+    const byId = Object.fromEntries(PRESETS.map((preset) => [preset.id, run(preset.keys)]));
 
-    expect(read("components/policy-test/policy-test-methodology.tsx")).toContain(
-      "Translate into a rule",
-    );
-    expect(read("components/policy-test/policy-test-rule.tsx")).toContain(
-      "Run against reviewed evidence",
-    );
-    expect(read("components/policy-test/policy-test-evidence.tsx")).toContain(
-      "Produce assessment receipt",
-    );
+    // The rule as written: EU-06 alone.
+    expect(byId.reviewed.map((claim) => claim.id)).toEqual(["EU-06"]);
+
+    // Drop everything but the conduct: the US does address model evaluation.
+    expect(byId.evaluation.map((claim) => claim.id).sort()).toEqual([
+      "EU-06",
+      "US-03",
+      "US-05A",
+      "US-05B",
+    ]);
+    expect(byId.evaluation.filter((claim) => claim.jurisdiction === "US")).toHaveLength(3);
+
+    // Binding duties on providers: ten in the EU, none in the US.
+    expect(byId.provider).toHaveLength(10);
+    expect(byId.provider.filter((claim) => claim.jurisdiction === "US")).toHaveLength(0);
+
+    // Any binding duty at all: the US has six, and they bind agencies and vendors.
+    expect(byId.binding).toHaveLength(17);
+    expect(byId.binding.filter((claim) => claim.jurisdiction === "US")).toHaveLength(6);
+    for (const claim of byId.binding.filter((c) => c.jurisdiction === "US")) {
+      expect(claim.actorType).not.toBe("market_provider");
+    }
   });
 
-  test("the selected stage is written to and read from the query string", () => {
-    const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    // Written without a reload, matching the Writ Lab's URL handling.
-    expect(workspace).toContain('url.searchParams.set("stage", next)');
-    expect(workspace).toContain("window.history.replaceState");
+  test("loosening a condition never changes the reviewed result on the page", () => {
+    // The receipt reports the reviewed rule regardless of what is explored.
+    expect(policyTestReceipt().eu.decisiveEvidence).toEqual(["EU-06"]);
+    expect(policyTestReceipt().us.status).toBe("no_current_binding_model_evaluation_requirement");
+  });
 
-    // Read and validated on the server, so a shared or refreshed URL restores.
+  test("the whole feature is one component the page hands data to", () => {
     const page = read("app/policy-test/eu-us-ai-evaluation/page.tsx");
-    expect(page).toContain("await searchParams");
-    expect(page).toContain('isStageId(stage) ? stage : "methodology"');
-  });
+    expect(page).toContain("<PolicyTest ");
+    expect(page).not.toContain("searchParams");
+    expect(page).not.toContain("stage");
 
-  test("the stages use the shared Tabs component rather than a bespoke control", () => {
-    const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    // Stock shadcn Tabs supplies tablist/tab/tabpanel roles, roving tabindex,
-    // and arrow-key navigation, so none of it is reimplemented here.
-    expect(workspace).toContain('from "@/components/ui/tabs"');
-    expect(workspace).toContain("<TabsList");
-    expect(workspace).toContain("<TabsTrigger");
-    expect(workspace).toContain("<TabsContent");
-    expect(workspace).not.toContain('role="tablist"');
-    expect(workspace).not.toContain("tabIndex");
-    // The bespoke stepper is gone.
-    expect(existsSync(resolve(WEB_ROOT, "components/policy-test/policy-test-stepper.tsx"))).toBe(
-      false,
-    );
+    // One traceable component, not a scatter of coupled pieces.
+    const components = readdirSync(resolve(WEB_ROOT, "components/policy-test")).sort();
+    expect(components).toEqual([
+      "policy-test-card.tsx",
+      "policy-test-section.tsx",
+      "policy-test.tsx",
+    ]);
   });
 
   test("nothing in the policy test opens in a dialog", () => {
-    const files = [
-      "policy-test-workspace.tsx",
-      "policy-test-evidence.tsx",
-      "policy-test-receipt.tsx",
-      "policy-test-rule.tsx",
-      "policy-test-methodology.tsx",
-    ];
-    for (const file of files) {
+    for (const file of ["policy-test.tsx", "policy-test-card.tsx", "policy-test-section.tsx"]) {
       const source = read(`components/policy-test/${file}`);
       expect(source).not.toContain("ui/sheet");
       expect(source).not.toContain("ui/dialog");
       expect(source).not.toContain('aria-haspopup="dialog"');
     }
-    // The Sheet-based detail panel was replaced by inline disclosure.
-    expect(existsSync(resolve(WEB_ROOT, "components/policy-test/policy-evidence-detail.tsx"))).toBe(
-      false,
-    );
-    expect(read("components/policy-test/policy-test-evidence.tsx")).toContain(
+    // Records open in place, using the shared Accordion.
+    expect(read("components/policy-test/policy-test.tsx")).toContain(
       'from "@/components/ui/accordion"',
     );
   });
@@ -406,14 +391,13 @@ describe("reviewed corpus shape", () => {
   });
 
   test("the evidence list renders the bundle relationship", () => {
-    const evidence = read("components/policy-test/policy-test-evidence.tsx");
-    // Children render nested inside their parent's list item, not as siblings.
-    expect(evidence).toContain("group.children.map");
-    expect(evidence).toContain("<RecordItem key={child.id} entry={child} isChild");
-    // The whole corpus is listed in place; there is no separate reveal step.
-    expect(evidence).toContain("All reviewed evidence");
+    const source = read("components/policy-test/policy-test.tsx");
+    // Children render nested inside their parent's item, not as siblings.
+    expect(source).toContain("group.children.map");
+    expect(source).toContain("<Record key={child.id} entry={child} isChild />");
+    expect(source).toContain("All reviewed evidence");
     // Generated from the data, not duplicated by hand.
-    expect(evidence).toContain("view.groups.filter");
+    expect(source).toContain("view.groups.filter");
     // The bundle parent names its child count rather than pretending to be a claim.
     expect(read("lib/policy-test.ts")).toContain("Source bundle · ");
   });
@@ -446,18 +430,14 @@ describe("reviewed corpus shape", () => {
 
 // 14. Mobile layout cannot overflow horizontally.
 describe("responsive layout", () => {
-  test("no policy-test element uses a fixed width that would break mobile", () => {
-    const files = [
-      "components/policy-test/policy-test-card.tsx",
-      "components/policy-test/policy-test-section.tsx",
-      "components/policy-test/policy-test-workspace.tsx",
-      "components/policy-test/policy-test-hero.tsx",
-      "components/policy-test/policy-test-evidence.tsx",
-      "components/policy-test/policy-test-receipt.tsx",
-      "components/policy-test/policy-test-methodology.tsx",
-      "components/policy-test/policy-test-rule.tsx",
-      "app/policy-test/eu-us-ai-evaluation/page.tsx",
-    ];
+  const files = [
+    "components/policy-test/policy-test.tsx",
+    "components/policy-test/policy-test-card.tsx",
+    "components/policy-test/policy-test-section.tsx",
+    "app/policy-test/eu-us-ai-evaluation/page.tsx",
+  ];
+
+  test("no policy-test element uses a fixed width or a sideways scroller", () => {
     for (const file of files) {
       const source = read(file);
       // A fixed `w-[…px]` or a horizontal scroller would overflow a 375px viewport.
@@ -468,15 +448,14 @@ describe("responsive layout", () => {
     }
   });
 
-  test("the stage tabs wrap instead of scrolling sideways", () => {
-    const workspace = read("components/policy-test/policy-test-workspace.tsx");
-    expect(workspace).toContain("flex-wrap");
-    expect(workspace).not.toContain("overflow-x-auto");
+  test("the preset row and the rule chips wrap", () => {
+    const source = read("components/policy-test/policy-test.tsx");
+    expect(source).toContain("flex-wrap");
+    expect(source).toContain("min-w-0");
   });
 
   test("long reviewed values wrap instead of forcing a scrollbar", () => {
-    expect(read("components/policy-test/policy-test-evidence.tsx")).toContain("break-words");
-    expect(read("components/policy-test/policy-test-receipt.tsx")).toContain("break-words");
+    expect(read("components/policy-test/policy-test.tsx")).toContain("break-words");
   });
 });
 
@@ -512,7 +491,7 @@ describe("unknown is preserved", () => {
   });
 
   test("unknown is rendered in the reserved unknown colour, never blanked", () => {
-    const evidence = read("components/policy-test/policy-test-evidence.tsx");
+    const evidence = read("components/policy-test/policy-test.tsx");
     expect(evidence).toContain("text-unknown");
     // An absent value is distinct from a recorded unknown.
     expect(evidence).toContain('field.value ?? "Not recorded"');

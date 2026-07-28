@@ -14,7 +14,7 @@ describe("frontend architecture", () => {
       "app/methodologies/page.tsx": "Every rule, open to review.",
       "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
-      "app/policy-test/eu-us-ai-evaluation/page.tsx": "<PolicyTestHero",
+      "app/policy-test/eu-us-ai-evaluation/page.tsx": "<PolicyTest ",
     };
 
     for (const [path, heading] of Object.entries(routes)) {
