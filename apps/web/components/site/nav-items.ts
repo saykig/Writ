@@ -9,24 +9,30 @@ export interface NavItem {
 }
 
 /**
- * The whole site: the Lab, where a methodology is written and run, and the
- * reading that explains what running it means. The homepage carries the rest.
+ * The whole site: the answer, the workbench that produced it, and the reading
+ * that explains what producing it means. The homepage carries the rest.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
-  { href: "/playground", label: "Writ Lab", hint: "Compile, analyze, evaluate live" },
+  { href: "/demo", label: "Demo", hint: "One question, answered from the law" },
+  { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 
 export interface ExampleItem {
-  readonly id: "literal" | "resolved" | "inclusive";
+  readonly id: "reviewed" | "any-actor" | "broad-conduct" | "incomplete";
   readonly label: string;
   readonly reading: string;
 }
 
 export const EXAMPLE_ITEMS: readonly ExampleItem[] = [
-  { id: "literal", label: "Literal reading", reading: "up to four → 1–4 strong" },
-  { id: "resolved", label: "Resolved reading", reading: "exhaustive, counter-precedence" },
-  { id: "inclusive", label: "Inclusive reading", reading: "up to four → 0–4 strong" },
+  { id: "reviewed", label: "The reviewed rule", reading: "all four conditions" },
+  {
+    id: "any-actor",
+    label: "Any organization, any force",
+    reading: "drops binding, drops provider",
+  },
+  { id: "broad-conduct", label: "Any duty near evaluation", reading: "drops model evaluation" },
+  { id: "incomplete", label: "A band left out", reading: "no rule for the empty case" },
 ];
 
 export const GITHUB_URL = "https://github.com/saykig/Writ";

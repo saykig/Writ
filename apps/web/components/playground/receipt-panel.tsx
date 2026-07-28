@@ -20,7 +20,7 @@ import { Disclosure } from "./disclosure";
 import { ProofTree } from "./proof-tree";
 import {
   badgeResult,
-  MEMBER_LABELS,
+  memberLabel,
   MEMBERS,
   PROFILE_LABELS,
   type EvaluateResponse,
@@ -94,12 +94,12 @@ export interface ReceiptPanelProps {
 export function ReceiptPanel({
   source,
   canEvaluate,
-  initialMember = "japan",
+  initialMember = "eu",
   initialReceipt,
   lockMember = false,
 }: ReceiptPanelProps) {
   const [member, setMember] = useState<Member>(initialMember);
-  const [profile, setProfile] = useState<Profile>("published");
+  const [profile, setProfile] = useState<Profile>("reviewed");
   const [receipt, setReceipt] = useState<EvaluationReceipt | null>(initialReceipt ?? null);
   const [evaluatedSource, setEvaluatedSource] = useState<string | null>(
     initialReceipt ? source : null,
@@ -107,7 +107,7 @@ export function ReceiptPanel({
   const [evaluatedMember, setEvaluatedMember] = useState<Member | null>(
     initialReceipt ? initialMember : null,
   );
-  const [evaluatedProfile, setEvaluatedProfile] = useState<string>("published");
+  const [evaluatedProfile, setEvaluatedProfile] = useState<string>("reviewed");
   const [evalError, setEvalError] = useState<string | null>(null);
   const [evaluating, setEvaluating] = useState(false);
 
@@ -208,17 +208,17 @@ export function ReceiptPanel({
           <FieldLabel>Member</FieldLabel>
           {lockMember ? (
             <span className="flex h-8 min-w-44 items-center rounded-md border border-rule bg-paper-deep/30 px-3 text-sm text-foreground">
-              {MEMBER_LABELS[member]}
+              {memberLabel(member)}
             </span>
           ) : (
             <Select value={member} onValueChange={(value) => setMember(value as Member)}>
               <SelectTrigger className="w-44" aria-label="Member">
-                <SelectValue />
+                <SelectValue>{memberLabel(member)}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {MEMBERS.map((id) => (
                   <SelectItem key={id} value={id}>
-                    {MEMBER_LABELS[id]}
+                    {memberLabel(id)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -226,20 +226,13 @@ export function ReceiptPanel({
           )}
         </label>
 
+        {/* The pilot profile governs no parameters, so there is nothing to
+            choose between. It is shown because the receipt names it. */}
         <label className="flex flex-col gap-1.5">
           <FieldLabel>Profile</FieldLabel>
-          <Select value={profile} onValueChange={(value) => setProfile(value as Profile)}>
-            <SelectTrigger className="w-36" aria-label="Interpretation profile">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(PROFILE_LABELS) as Profile[]).map((id) => (
-                <SelectItem key={id} value={id}>
-                  {PROFILE_LABELS[id]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <span className="flex h-8 min-w-36 items-center rounded-md border border-rule bg-paper-deep/30 px-3 text-sm text-foreground">
+            {PROFILE_LABELS[profile]}
+          </span>
         </label>
 
         <Button onClick={handleEvaluate} disabled={!canEvaluate || evaluating}>
@@ -270,7 +263,7 @@ export function ReceiptPanel({
             <div className="min-w-0 space-y-1.5 text-[0.9rem]">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <strong className="font-medium text-foreground">
-                  {evaluatedMember ? MEMBER_LABELS[evaluatedMember] : MEMBER_LABELS[member]}
+                  {memberLabel(evaluatedMember ?? member)}
                 </strong>
                 <span
                   className={cn(
@@ -470,7 +463,7 @@ export function ReceiptPanel({
         </p>
       ) : !evalError && canEvaluate ? (
         <p className="text-[0.9rem] text-ink-soft">
-          Choose a member and profile, then evaluate to produce a receipt with its proof tree.
+          Choose a jurisdiction, then evaluate to produce a receipt with its proof tree.
         </p>
       ) : null}
     </div>

@@ -1,0 +1,44 @@
+[
+  {
+    "row_id": "EU-10",
+    "instrument": "COMMISSION_GPAI_GUIDELINES",
+    "source_locator": "Commission GPAI guidelines",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "EU-12",
+    "instrument": "GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE",
+    "source_locator": "AI Office signatory notice",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "US-02",
+    "instrument": "NIST_AI_RMF_PLAYBOOK",
+    "source_locator": "overview",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "US-05",
+    "instrument": "CAISI_GUIDELINES_PAGE",
+    "source_locator": "voluntary guidelines and draft benchmark-evaluation practices",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "US-06",
+    "instrument": "WHITE_HOUSE_AI_EXECUTIVE_POLICY",
+    "source_locator": "January 2025 White House fact sheet",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "US-11",
+    "instrument": "WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET",
+    "source_locator": "December 2025 fact sheet",
+    "reason": "no source document is registered for this instrument"
+  },
+  {
+    "row_id": "US-12",
+    "instrument": "WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS",
+    "source_locator": "AI Action Plan and later White House policy-action materials",
+    "reason": "no source document is registered for this instrument"
+  }
+]

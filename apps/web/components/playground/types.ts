@@ -72,13 +72,18 @@ export interface VerifyResponse {
   actual: string;
 }
 
-export type ExampleOutcome = "gap" | "overlap" | "clean";
+/**
+ * What a reading does to the answer, relative to the reviewed rule. All three
+ * readings compile and analyze clean, so the interesting axis is not whether the
+ * logic is well-formed but what loosening a condition does to the verdict.
+ */
+export type ExampleEffect = "reviewed" | "flips" | "widens" | "gap";
 
 export interface PlaygroundExample {
   id: string;
   title: string;
   reading: string;
-  outcome: ExampleOutcome;
+  effect: ExampleEffect;
   note: string;
   source: string;
 }
@@ -87,36 +92,36 @@ export interface ExamplesResponse {
   examples: PlaygroundExample[];
 }
 
-/** The eight G7 members the evaluator accepts, in benchmark display order. */
-export const MEMBERS = [
-  "canada",
-  "france",
-  "germany",
-  "italy",
-  "japan",
-  "united_kingdom",
-  "united_states",
-  "european_union",
-] as const;
+/** The two members of the pilot methodology's declared subject set. */
+export const MEMBERS = ["eu", "us"] as const;
 
 export type Member = (typeof MEMBERS)[number];
 
 export const MEMBER_LABELS: Record<Member, string> = {
-  canada: "Canada",
-  france: "France",
-  germany: "Germany",
-  italy: "Italy",
-  japan: "Japan",
-  united_kingdom: "United Kingdom",
-  united_states: "United States",
-  european_union: "European Union",
+  eu: "European Union",
+  us: "United States",
 };
 
-export type Profile = "published" | "generous";
+/** Label a member id, falling back to a humanized form for anything unlisted. */
+export function memberLabel(id: string): string {
+  return (
+    MEMBER_LABELS[id as Member] ??
+    id
+      .split("_")
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+  );
+}
+
+/**
+ * The pilot's methodology governs no parameters, so there is one profile and
+ * nothing to choose between. It is still named on the receipt, because "no
+ * interpretive choices were made" is itself a claim worth being able to check.
+ */
+export type Profile = "reviewed";
 
 export const PROFILE_LABELS: Record<Profile, string> = {
-  published: "Published",
-  generous: "Generous",
+  reviewed: "Reviewed",
 };
 
 /** Score/truth values the receipt can carry, narrowed for the shared TruthBadge. */
@@ -134,4 +139,24 @@ export function badgeResult(result: string): BadgeableResult {
     default:
       return "unknown";
   }
+}
+
+/** One provision in the snapshot the Lab is evaluating against. */
+export interface EvidenceAction {
+  readonly id: string;
+  readonly label: string;
+  /** The classification shown beside the label. */
+  readonly badge: string | null;
+  /** Secondary detail: the legal force, the lifecycle stage, whatever fits. */
+  readonly detail: string;
+  readonly passage: { readonly page: number | null; readonly quote: string } | null;
+  readonly review: { readonly reviewerId: string; readonly decision: string } | null;
+}
+
+export interface EvidenceView {
+  readonly snapshotId: string;
+  readonly frozenAt: string;
+  readonly cutoff: string;
+  readonly contentHash: string;
+  readonly actions: readonly EvidenceAction[];
 }

@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import type { EvaluationReceipt } from "@writ/domain";
 
-import type { G7EvidenceView } from "@/components/g7/types";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
@@ -17,7 +16,8 @@ import { VerdictInline } from "./verdict";
 import type {
   AnalyzeResponse,
   CompileResponse,
-  ExampleOutcome,
+  ExampleEffect,
+  EvidenceView,
   ExamplesResponse,
   Member,
   PlaygroundExample,
@@ -34,23 +34,26 @@ const WritEditor = dynamic(() => import("./writ-editor"), {
   ),
 });
 
-const OUTCOME_DOT: Record<ExampleOutcome, string> = {
+const OUTCOME_DOT: Record<ExampleEffect, string> = {
+  reviewed: "bg-true",
+  flips: "bg-false",
+  widens: "bg-gold",
   gap: "bg-gold",
-  overlap: "bg-false",
-  clean: "bg-true",
 };
 
-/** Plain one-word outcome shown on each reading, so the lesson reads before a click. */
-const OUTCOME_LABEL: Record<ExampleOutcome, string> = {
+/** What each reading does to the answer, so the lesson reads before a click. */
+const OUTCOME_LABEL: Record<ExampleEffect, string> = {
+  reviewed: "as reviewed",
+  flips: "US turns to yes",
+  widens: "EU evidence widens",
   gap: "leaves a gap",
-  overlap: "overlaps",
-  clean: "clean",
 };
 
-const OUTCOME_TAG_TONE: Record<ExampleOutcome, string> = {
+const OUTCOME_TAG_TONE: Record<ExampleEffect, string> = {
+  reviewed: "text-true",
+  flips: "text-false",
+  widens: "text-gold",
   gap: "text-gold",
-  overlap: "text-false",
-  clean: "text-true",
 };
 
 async function postJson<T>(path: string, body: unknown): Promise<T> {
@@ -70,7 +73,7 @@ export interface PlaygroundProps {
   /** Optional member and receipt to open without a second selection step. */
   initialMember?: Member;
   initialReceipt?: EvaluationReceipt;
-  initialEvidence?: G7EvidenceView;
+  initialEvidence?: EvidenceView;
   lockInitialMember?: boolean;
   initialResultTab?: "analysis" | "ir" | "receipt";
   initialCompile?: CompileResponse;
@@ -310,57 +313,76 @@ export function Playground({
   return (
     <div className="flex-1">
       <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[112rem] flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
-        {/* Slim toolbar: the reading switch on the left, the live verdict on the right. */}
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <div className="flex min-w-0 items-center gap-3">
-            <span className="label hidden shrink-0 md:inline">Writ Lab</span>
-            <div
-              role="radiogroup"
-              aria-label="Reading of the 2025 AI-for-SMEs rubric"
-              className="inline-flex gap-0.5 rounded-lg border border-border bg-muted/40 p-0.5"
-            >
-              {examples.map((example, index) => {
-                const active = example.id === exampleId;
-                return (
-                  <button
-                    key={example.id}
-                    ref={(el) => {
-                      readingRefs.current[index] = el;
-                    }}
-                    role="radio"
-                    aria-checked={active}
-                    tabIndex={active ? 0 : -1}
-                    onClick={() => selectExample(example)}
-                    onKeyDown={(event) => onReadingKeyDown(event, index)}
+        {/* The readings, as cards. Each says what it changes and what that does
+            to the answer, so the choice is legible before it is made. */}
+        <div
+          role="radiogroup"
+          aria-label="Reading of the model-evaluation test"
+          className="grid grid-cols-2 gap-2 lg:grid-cols-4"
+        >
+          {examples.map((example, index) => {
+            const active = example.id === exampleId;
+            return (
+              <button
+                key={example.id}
+                ref={(el) => {
+                  readingRefs.current[index] = el;
+                }}
+                role="radio"
+                aria-checked={active}
+                tabIndex={active ? 0 : -1}
+                onClick={() => selectExample(example)}
+                onKeyDown={(event) => onReadingKeyDown(event, index)}
+                title={example.note}
+                className={cn(
+                  "flex min-w-0 flex-col gap-1 rounded-lg border px-3 py-2.5 text-left transition-colors",
+                  "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                  active
+                    ? "border-foreground/25 bg-card shadow-sm"
+                    : "border-border bg-muted/25 hover:border-border hover:bg-muted/50",
+                )}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span
+                    aria-hidden
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[0.85rem] transition-colors focus-visible:outline-none",
-                      active
-                        ? "bg-card text-foreground shadow-sm ring-1 ring-border"
-                        : "text-muted-foreground hover:text-foreground",
+                      "size-2 shrink-0 rounded-full",
+                      OUTCOME_DOT[example.effect],
+                      active ? "opacity-100" : "opacity-50",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "min-w-0 truncate text-[0.85rem]",
+                      active ? "font-medium text-foreground" : "text-muted-foreground",
                     )}
                   >
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "size-2 shrink-0 rounded-full",
-                        OUTCOME_DOT[example.outcome],
-                        active ? "opacity-100" : "opacity-60",
-                      )}
-                    />
-                    <span>{example.title.replace(/\s+reading$/i, "")}</span>
-                    <span
-                      className={cn(
-                        "hidden text-[0.7rem] sm:inline",
-                        OUTCOME_TAG_TONE[example.outcome],
-                        active ? "opacity-100" : "opacity-55",
-                      )}
-                    >
-                      {OUTCOME_LABEL[example.outcome]}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                    {example.title}
+                  </span>
+                </span>
+                <span
+                  className={cn(
+                    "truncate text-[0.7rem]",
+                    OUTCOME_TAG_TONE[example.effect],
+                    active ? "opacity-100" : "opacity-60",
+                  )}
+                >
+                  {OUTCOME_LABEL[example.effect]}
+                </span>
+                <span className="truncate font-mono text-[0.66rem] text-muted-foreground/80">
+                  {example.reading}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* What the selected reading does, and whether it still holds together. */}
+        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+          <div className="flex min-w-0 items-baseline gap-3">
+            <p className="min-w-0 max-w-[68ch] text-[0.8rem] leading-6 text-muted-foreground">
+              {activeExample?.note}
+            </p>
             {edited ? (
               <button
                 type="button"

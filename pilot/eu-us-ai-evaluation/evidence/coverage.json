@@ -1,0 +1,24 @@
+{
+  "EU": {
+    "actions": 11,
+    "omitted": [
+      "EU-10A",
+      "EU-10B",
+      "EU-10C",
+      "EU-12"
+    ],
+    "documents": 1
+  },
+  "US": {
+    "actions": 11,
+    "omitted": [
+      "US-02",
+      "US-05A",
+      "US-05B",
+      "US-06",
+      "US-11",
+      "US-12"
+    ],
+    "documents": 5
+  }
+}

@@ -1,7 +1,7 @@
-import { loadExamples } from "@/lib/toolchain";
+import { loadPilotExamples } from "@/lib/toolchain";
 
 export const runtime = "nodejs";
 
 export function GET() {
-  return Response.json({ examples: loadExamples() });
+  return Response.json({ examples: loadPilotExamples() });
 }

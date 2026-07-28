@@ -1,7 +1,7 @@
 /**
  * Frozen-data readers for the server side of the site.
  *
- * The example sources and the 2025 AI-for-SMEs benchmark corpus are inlined at
+ * The pilot methodologies, snapshots, and provenance are inlined at
  * build time into `frozen-data.ts` (see `scripts/embed-frozen.ts`) and served
  * from there. This is deliberate: the @writ/* packages locate their data via
  * `import.meta.url`, which bundlers rewrite to a build-time path, and Vercel does
@@ -20,7 +20,7 @@ export function repoRoot(): string {
   if (cached) return cached;
   let dir = process.cwd();
   for (let i = 0; i < 10; i += 1) {
-    if (existsSync(join(dir, "examples")) && existsSync(join(dir, "benchmark", "2025-ai-sme"))) {
+    if (existsSync(join(dir, "specs")) && existsSync(join(dir, "pilot", "eu-us-ai-evaluation"))) {
       cached = dir;
       return dir;
     }
@@ -31,8 +31,6 @@ export function repoRoot(): string {
   cached = resolve(process.cwd(), "..", "..");
   return cached;
 }
-
-export const BENCH_DIR = "benchmark/2025-ai-sme";
 
 export function readRepoText(rel: string): string {
   const inlined = FROZEN_FILES[rel];

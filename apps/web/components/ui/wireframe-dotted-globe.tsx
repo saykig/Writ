@@ -423,7 +423,7 @@ export function WireframeDottedGlobe({
         <div
           role="listbox"
           tabIndex={0}
-          aria-label="G7 assessments"
+          aria-label="Jurisdictions assessed"
           aria-activedescendant={
             activeMarkerId ? `globe-marker-${activeMarkerId}` : undefined
           }

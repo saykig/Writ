@@ -1,8 +1,8 @@
 /**
- * Generate `lib/frozen-data.ts` — the frozen repo data (example sources, the
- * 2025 AI-for-SMEs benchmark corpus, and the normalized G20 2024 Rio compliance
- * corpus) inlined as text, keyed by repo-relative path, so the server layer can
- * serve it without a runtime filesystem read.
+ * Generate `lib/frozen-data.ts` — the frozen repo data the server layer reads
+ * (the pilot methodologies, its evidence snapshots, its interpretation profile,
+ * and its provenance) inlined as text, keyed by repo-relative path, so it can be
+ * served without a runtime filesystem read.
  *
  * Why: on Vercel the serverless lambda root is `/var/task`, and none of the
  * repo data dirs are shipped there (outputFileTracingIncludes for parent-of-app
@@ -12,7 +12,7 @@
  *
  * Run: `bun scripts/embed-frozen.ts` (wired as the web app `prebuild`).
  */
-import { readFileSync, writeFileSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -20,37 +20,25 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..");
 const outFile = join(here, "..", "lib", "frozen-data.ts");
 
-const BENCH = "benchmark/2025-ai-sme";
-const RIO = "benchmark/2024-rio-g20/normalized";
-const RIO_MANIFEST = "data/manifests/g20/2024-rio";
+const PILOT = "pilot/eu-us-ai-evaluation";
 
-// Exactly the files the server layer (lib/toolchain.ts, lib/rio-corpus.ts) reads
-// at runtime.
+// Exactly the files the server layer reads at runtime.
 const rels: string[] = [
-  "examples/2025-ai-sme-literal.writ",
-  "examples/2025-ai-sme-resolved.writ",
-  "examples/2025-ai-sme-inclusive-up-to.writ",
-  "examples/ai-governance-gap-matrix.writ",
-  "benchmark/ai-governance-gap-matrix/assessments.json",
-  `${BENCH}/discrepancy-ledger.json`,
-  ...readdirSync(join(repoRoot, BENCH, "evidence"))
-    .filter((f) => f.endsWith(".snapshot.json"))
-    .sort()
-    .map((f) => `${BENCH}/evidence/${f}`),
-  ...readdirSync(join(repoRoot, BENCH, "profiles"))
-    .filter((f) => f.endsWith(".json"))
-    .sort()
-    .map((f) => `${BENCH}/profiles/${f}`),
-  // Normalized G20 2024 Rio corpus: records imported from the published G20
-  // Research Group compliance reports, plus their manifest and ingestion report.
-  `${RIO}/commitments.json`,
-  `${RIO}/selections.json`,
-  `${RIO}/reports.json`,
-  `${RIO}/member_assessments.json`,
-  `${RIO}/reconciliations.json`,
-  `${RIO}/review_queue.json`,
-  `${RIO_MANIFEST}/ingestion-report.md`,
-  `${RIO_MANIFEST}/source-manifest.json`,
+  // Provenance for the reviewed EU-US pilot: which document each row came
+  // from, when it was retrieved, its byte hash, and the verbatim passage.
+  `${PILOT}/provenance/document-versions.json`,
+  `${PILOT}/provenance/passages.json`,
+  `${PILOT}/provenance/unresolved.json`,
+  // The Lab runs these: four readings of the same question, the evidence
+  // snapshots they run against, and the profile they run under.
+  `${PILOT}/methodology/model-evaluation-duty.writ`,
+  `${PILOT}/methodology/any-actor-any-force.writ`,
+  `${PILOT}/methodology/broad-conduct.writ`,
+  `${PILOT}/methodology/incomplete-score.writ`,
+  `${PILOT}/evidence/eu.snapshot.json`,
+  `${PILOT}/evidence/us.snapshot.json`,
+  `${PILOT}/evidence/coverage.json`,
+  `${PILOT}/profiles/reviewed.profile.json`,
 ];
 
 const entries = rels

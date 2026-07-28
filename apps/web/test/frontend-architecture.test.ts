@@ -6,36 +6,35 @@ const WEB_ROOT = resolve(import.meta.dir, "..");
 const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
 
 describe("frontend architecture", () => {
-  test("all public routes have their approved headings", () => {
-    const routes: Record<string, string> = {
-      "app/playground/page.tsx": "Write and test a policy methodology.",
-      "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
-    };
-
-    for (const [path, heading] of Object.entries(routes)) {
-      expect(read(path)).toContain(heading);
+  test("the working surfaces lead with the work, not with a hero", () => {
+    // The Playground opens on the readings chooser and How it works on its own
+    // index; neither carries a page header above the thing it is for.
+    for (const path of ["app/playground/page.tsx", "app/how-it-works/page.tsx"]) {
+      expect(read(path)).not.toContain("PageHeader");
     }
+    // The demo keeps its framing: it opens with the question being answered.
+    expect(read("components/demo/demo.tsx")).toContain("{view.question}");
   });
 
-  test("the Playground is presented as the Writ Lab", () => {
+  test("the Playground is the tool, with no page header above it", () => {
     const playground = read("app/playground/page.tsx");
     const home = read("app/page.tsx");
     const navItems = read("components/site/nav-items.ts");
 
-    expect(playground).toContain('eyebrow="Writ Lab"');
-    expect(playground).toContain(
-      "The Writ Lab shows how Writ turns a written methodology into rules that can be checked and run.",
-    );
-    expect(navItems).toContain('label: "Writ Lab"');
+    // The readings chooser is the only framing; no hero competes with it.
+    expect(playground).not.toContain("PageHeader");
+    expect(playground).not.toContain("eyebrow=");
+    expect(navItems).toContain('label: "Playground"');
     expect(home).toContain(">Try Writ</Link>");
     expect(home).not.toContain("Try the Playground");
   });
 
-  test("the site is three surfaces and the nav names exactly two", () => {
+  test("the site is four surfaces and the nav names exactly three", () => {
     const navItems = read("components/site/nav-items.ts");
 
-    // Writ Lab and How it works; the homepage is reached from the wordmark.
-    expect(navItems).toContain('label: "Writ Lab"');
+    // Demo, Playground, How it works; the homepage is reached from the wordmark.
+    expect(navItems).toContain('label: "Demo"');
+    expect(navItems).toContain('label: "Playground"');
     expect(navItems).toContain('label: "How it works"');
     for (const removed of ["Benchmark", "Methodologies", "Receipts", "Gap Matrix", "Policy Test"]) {
       expect(navItems).not.toContain(`label: "${removed}"`);
@@ -44,7 +43,12 @@ describe("frontend architecture", () => {
     expect(navItems).not.toContain("SECONDARY_NAV");
     expect(navItems).not.toContain("RESEARCH_NAV");
 
-    for (const page of ["app/page.tsx", "app/how-it-works/page.tsx", "app/playground/page.tsx"]) {
+    for (const page of [
+      "app/page.tsx",
+      "app/demo/page.tsx",
+      "app/how-it-works/page.tsx",
+      "app/playground/page.tsx",
+    ]) {
       expect(existsSync(resolve(WEB_ROOT, page))).toBe(true);
     }
     for (const gone of [
@@ -53,6 +57,7 @@ describe("frontend architecture", () => {
       "app/methodologies",
       "app/receipts",
       "app/policy-test",
+      "app/lab",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
     }
@@ -103,18 +108,18 @@ describe("frontend architecture", () => {
     expect(globe).not.toContain("overflow-hidden rounded-full");
   });
 
-  test("the homepage globe exposes all G7 assessments without immediate navigation", () => {
+  test("the homepage globe answers for each jurisdiction without immediate navigation", () => {
     const home = read("app/page.tsx");
-    const selector = read("components/g7/g7-globe-selector.tsx");
+    const selector = read("components/pilot/pilot-globe-selector.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
-    expect(home).toContain("<G7GlobeSelector");
-    expect(selector).toContain("Published result");
-    expect(selector).toContain("Writ result");
-    expect(selector).toContain("Result status");
-    expect(selector).toContain("Reviewed actions");
-    expect(selector).toContain("View the rules, evidence, and result in Writ Lab.");
-    expect(selector).toContain("/lab/g7-2025/");
+    expect(home).toContain("<PilotGlobeSelector");
+    expect(selector).toContain("Receipt score");
+    expect(selector).toContain("Provisions considered");
+    // The gap in the record travels with the answer.
+    expect(selector).toContain("Not yet traced");
+    expect(selector).toContain("See how this was answered");
+    expect(selector).toContain('href="/demo"');
     expect(globe).toContain("onPointerEnter");
     expect(globe).toContain("onFocus");
     expect(globe).toContain("markerPausedRef.current");
@@ -127,7 +132,7 @@ describe("frontend architecture", () => {
   });
 
   test("the globe is the only member selector and is keyboard operable", () => {
-    const selector = read("components/g7/g7-globe-selector.tsx");
+    const selector = read("components/pilot/pilot-globe-selector.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
     // The globe replaced the dropdown, so no control may duplicate it.
@@ -154,28 +159,36 @@ describe("frontend architecture", () => {
     expect(globe).toContain("keyboardActive");
   });
 
-  test("member-specific Lab routes preload the resolved fixture, evidence, and receipt", () => {
-    const lab = read("app/lab/g7-2025/[member]/page.tsx");
-    const playground = read("components/playground/playground.tsx");
-    expect(lab).toContain("generateStaticParams");
-    expect(lab).toContain('initialExample="resolved"');
-    expect(lab).toContain("initialMember={assessment.id}");
-    expect(lab).toContain("initialReceipt={receipt}");
-    expect(lab).toContain("initialEvidence={evidence}");
-    expect(lab).toContain("lockInitialMember");
-    expect(lab).toContain('initialResultTab="receipt"');
-    expect(lab).toContain("initialCompile={initialCompile}");
-    expect(lab).toContain("initialAnalysis={initialAnalysis}");
-    expect(lab).toContain("See how the G7 methodology was translated into Writ");
-    expect(playground).toContain("<EvidencePanel evidence={initialEvidence}");
-    expect(playground).not.toContain('<main className="flex-1">');
+  test("the Lab runs the pilot readings against the traced snapshots", () => {
+    const toolchain = read("lib/toolchain.ts");
+    const evaluate = read("app/api/evaluate/route.ts");
+    const examples = read("app/api/examples/route.ts");
+
+    // Every reading the Lab offers is a real file under the pilot.
+    for (const file of [
+      "model-evaluation-duty.writ",
+      "any-actor-any-force.writ",
+      "broad-conduct.writ",
+      "incomplete-score.writ",
+    ]) {
+      expect(toolchain).toContain(file);
+      expect(
+        existsSync(resolve(WEB_ROOT, "../../pilot/eu-us-ai-evaluation/methodology", file)),
+      ).toBe(true);
+    }
+    expect(evaluate).toContain("evaluatePilot");
+    expect(examples).toContain("loadPilotExamples");
+    // The G7 member Lab and its corpus adapter are gone rather than dangling.
+    expect(existsSync(resolve(WEB_ROOT, "app/lab"))).toBe(false);
+    expect(existsSync(resolve(WEB_ROOT, "components/g7"))).toBe(false);
+    expect(existsSync(resolve(WEB_ROOT, "lib/g7-assessments.ts"))).toBe(false);
   });
 
   test("changing a receipt input cannot relabel a stale receipt", () => {
     const receipt = read("components/playground/receipt-panel.tsx");
     expect(receipt).toContain("evaluatedMember !== member");
     expect(receipt).toContain("evaluatedProfile !== profile");
-    expect(receipt).toContain("MEMBER_LABELS[evaluatedMember]");
+    expect(receipt).toContain("memberLabel(evaluatedMember ?? member)");
   });
 
   test("dark is the explicit default and system switching is disabled", () => {

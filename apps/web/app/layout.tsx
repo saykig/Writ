@@ -21,7 +21,7 @@ const mono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Writ · an auditable policy-evaluation compiler",
   description:
-    "Writ turns a G7 compliance methodology into a program, its evidence into a frozen reviewed ledger, and each score into a reproducible receipt. It catches scoring ambiguity before any evidence exists, and names exactly where a score depends on judgment.",
+    "Writ turns a policy methodology into a program, its evidence into a frozen reviewed ledger, and each result into a reproducible receipt. It catches scoring ambiguity before any evidence exists, and names exactly where a result depends on judgment.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

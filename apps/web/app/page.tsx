@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { g7AssessmentPreviews } from "@/lib/g7-assessments";
-import { G7GlobeSelector } from "@/components/g7/g7-globe-selector";
+import { pilotPreviews } from "@/lib/pilot-assessments";
+import { PilotGlobeSelector } from "@/components/pilot/pilot-globe-selector";
+import { policyTestDataset } from "@/lib/policy-test";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const g7Members = g7AssessmentPreviews();
+  const jurisdictions = pilotPreviews();
+  const question = policyTestDataset().pilot_question;
 
   return (
     <main>
@@ -27,8 +29,8 @@ export default function Home() {
                 className="text-[0.78rem] sm:text-[0.82rem]"
                 nativeButton={false}
                 render={
-                  <Link href="/how-it-works">
-                    See how it works
+                  <Link href="/demo">
+                    See a worked answer
                     <ArrowRight />
                   </Link>
                 }
@@ -43,7 +45,7 @@ export default function Home() {
           </div>
 
           <div className="mx-auto w-full min-w-0 max-w-[42rem] lg:justify-self-end">
-            <G7GlobeSelector members={g7Members} />
+            <PilotGlobeSelector jurisdictions={jurisdictions} question={question} />
           </div>
         </div>
       </Reveal>

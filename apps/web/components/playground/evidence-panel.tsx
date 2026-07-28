@@ -1,13 +1,13 @@
 import { CheckCircle2 } from "lucide-react";
 
-import type { G7EvidenceView } from "@/components/g7/types";
+import type { EvidenceView } from "@/components/playground/types";
 import { HashPill } from "@/components/site/hash-pill";
 
 function day(iso: string): string {
   return iso.slice(0, 10);
 }
 
-export function EvidencePanel({ evidence }: { evidence: G7EvidenceView }) {
+export function EvidencePanel({ evidence }: { evidence: EvidenceView }) {
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-rule bg-paper-deep/30 p-4">
@@ -21,7 +21,7 @@ export function EvidencePanel({ evidence }: { evidence: G7EvidenceView }) {
 
       <div>
         <div className="flex items-baseline justify-between gap-4">
-          <p className="text-sm font-medium text-foreground">Reviewed actions</p>
+          <p className="text-sm font-medium text-foreground">Reviewed provisions</p>
           <span className="font-mono text-[0.7rem] text-ink-faint">{evidence.actions.length}</span>
         </div>
         <ul className="mt-3 space-y-3">
@@ -33,11 +33,11 @@ export function EvidencePanel({ evidence }: { evidence: G7EvidenceView }) {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <p className="text-sm font-medium text-foreground">{action.label}</p>
                     <span className="rounded border border-rule px-1.5 py-0.5 font-mono text-[0.68rem] text-ink-soft">
-                      {action.classification ?? "classification unknown"}
+                      {action.badge ?? "unclassified"}
                     </span>
                   </div>
                   <p className="mt-1 font-mono text-[0.68rem] text-ink-faint">
-                    {action.implementationStage.replaceAll("_", " ")} · {action.id}
+                    {action.detail} · {action.id}
                   </p>
                   {action.passage ? (
                     <blockquote className="mt-3 border-l border-rule pl-3 text-[0.82rem] leading-6 text-ink-soft">

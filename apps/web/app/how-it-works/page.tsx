@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CodeArtifact } from "@/components/site/code-artifact";
 import { HashPill } from "@/components/site/hash-pill";
-import { PageHeader } from "@/components/site/page-header";
 import { Pipeline } from "@/components/site/pipeline";
 import { Prose, SectionHeading, SectionLabel } from "@/components/site/section";
 import { TruthBadge, type TruthBadgeValue } from "@/components/site/truth-badge";
@@ -15,16 +14,16 @@ import { ArchitectureDiagram } from "@/components/how-it-works/architecture-diag
 import { EssayIndex, type EssaySection } from "@/components/how-it-works/essay-index";
 import { Faq } from "@/components/how-it-works/faq";
 import { loadCoverage } from "@/lib/conformance";
-import { rioCorpus } from "@/lib/rio-corpus";
 import {
   analyze,
-  benchmark,
   compile,
-  evaluateMember,
-  exampleSource,
-  memberSnapshot,
+  evaluatePilot,
+  pilotExampleSource,
+  pilotEvidenceView,
   verify,
 } from "@/lib/toolchain";
+import { sourcingSummary, unsourcedRows } from "@/lib/pilot-sources";
+import { policyTestSummary } from "@/lib/policy-test";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -38,7 +37,6 @@ const SECTIONS: readonly EssaySection[] = [
   { id: "truth", title: "Four-valued truth" },
   { id: "language", title: "The language" },
   { id: "evidence", title: "Governed evidence" },
-  { id: "corpora", title: "Imported corpora" },
   { id: "reproducible", title: "Reproducibility" },
   { id: "faq", title: "Questions" },
 ];
@@ -129,38 +127,31 @@ function Facts({ items }: { items: { label: string; value: string | number; mono
 
 export default function HowItWorksPage() {
   // Everything below is compiled, evaluated, and counted on this request.
-  const literalSource = exampleSource("literal") ?? "";
-  const ir = compile(literalSource).ir;
+  const reviewedSource = pilotExampleSource("reviewed") ?? "";
+  const ir = compile(reviewedSource).ir;
   const commitment = ir?.commitments[0];
-  const literalFindings = analyze(literalSource).findings;
-  const resolvedFindings = analyze(exampleSource("resolved") ?? "").findings;
+  // The reviewed rule is clean; the fourth reading leaves a scoring band out.
+  const cleanFindings = analyze(reviewedSource).findings;
+  const gapFindings = analyze(pilotExampleSource("incomplete") ?? "").findings;
 
   let sampleHash: string | undefined;
   let verified = false;
-  try {
-    const receipt = evaluateMember("japan", "published");
-    sampleHash = receipt?.canonical_hash;
-    if (receipt) verified = verify(receipt).valid;
-  } catch {
-    sampleHash = undefined;
+  const usEvaluation = evaluatePilot(reviewedSource, "us");
+  if (usEvaluation.receipt) {
+    sampleHash = usEvaluation.receipt.canonical_hash;
+    verified = verify(usEvaluation.receipt).valid;
   }
 
-  const snapshot = memberSnapshot("japan");
-  const reviewedClaims = snapshot?.claims.filter((c) => c.status === "accepted").length ?? 0;
-  const bench = benchmark();
-  const rio = rioCorpus();
+  const evidence = pilotEvidenceView("eu");
+  const quoted = evidence?.actions.filter((action) => action.passage !== null).length ?? 0;
+  const sourcing = sourcingSummary(policyTestSummary().parentRowCount);
+  const untraced = unsourcedRows();
   const { areas, totalCases, totalFiles } = loadCoverage();
   const maxCases = Math.max(...areas.map((area) => area.cases));
 
   return (
     <main className="flex-1">
-      <PageHeader
-        eyebrow="How it works"
-        title="From methodology to reproducible assessment."
-        description="A policy methodology becomes a typed program. Writ checks it before any evidence, runs it against a frozen reviewed record, and returns a result anyone can recompute."
-      />
-
-      <article className="mx-auto w-[min(100%-2.5rem,72rem)] pt-14 pb-24 sm:pt-20">
+      <article className="mx-auto w-[min(100%-2.5rem,72rem)] pt-10 pb-24 sm:pt-14">
         <div className="grid grid-cols-1 gap-y-4 min-[900px]:grid-cols-[220px_minmax(0,1fr)] min-[900px]:gap-x-16">
           <EssayIndex
             sections={SECTIONS}
@@ -266,16 +257,17 @@ export default function HowItWorksPage() {
             {/* 3 · Language */}
             <Section id="language" label="The language" heading="A rubric, written as a program.">
               <Prose className="mt-5">
-                The 2025 G7 AI-for-SMEs rubric, in Writ. Scoring bands, the evidence they draw on,
-                and how actions are counted are all declared, so the analyzer can read the rubric as
-                a program and find its defects before any evidence is gathered.
+                The EU–US pilot’s headline test, in Writ. The question is whether a jurisdiction
+                imposes a binding model-evaluation duty on providers of advanced AI models, and the
+                answer turns on four conditions holding at once. Written this way, each condition is
+                a line someone can argue with.
               </Prose>
 
               <div className="mt-8">
                 <CodeArtifact
-                  code={literalSource}
+                  code={reviewedSource}
                   label="Methodology"
-                  filename="2025-ai-sme-literal.writ"
+                  filename="model-evaluation-duty.writ"
                 />
               </div>
 
@@ -294,12 +286,14 @@ export default function HowItWorksPage() {
                 What the analyzer finds, before any evidence
               </h3>
               <p className="mt-3 max-w-[64ch] text-[0.9rem] leading-7 text-muted-foreground">
-                The literal reading of the published rubric does not cover its own input space. Each
-                finding carries the exact case that breaks it.
+                Take the same rule and leave one scoring band out, and the analyzer says so before
+                any evidence is loaded. The finding carries the exact case that breaks it — which
+                matters here, because both jurisdictions in this pilot happen to avoid that case, so
+                running it would not have revealed the hole.
               </p>
 
               <ul className="mt-6 space-y-2">
-                {literalFindings.map((finding, index) => (
+                {gapFindings.map((finding, index) => (
                   <li key={`${finding.code}-${index}`} className="tool p-4">
                     <div className="flex flex-wrap items-center gap-2">
                       <AlertTriangle aria-hidden className="size-3.5 shrink-0 text-false" />
@@ -317,11 +311,9 @@ export default function HowItWorksPage() {
 
               <p className="mt-5 flex flex-wrap items-center gap-2 text-[0.88rem] text-muted-foreground">
                 <Check aria-hidden className="size-4 text-true" />
-                The resolved reading of the same rubric analyzes clean:{" "}
-                <span className="font-medium text-foreground">
-                  {resolvedFindings.length} findings
-                </span>
-                . The ambiguity was in the prose, not the evidence.
+                The reviewed rule analyzes clean:{" "}
+                <span className="font-medium text-foreground">{cleanFindings.length} findings</span>
+                . The defect was in the rule, not the evidence.
               </p>
 
               <div className="mt-8">
@@ -330,7 +322,7 @@ export default function HowItWorksPage() {
                   nativeButton={false}
                   render={
                     <Link href="/playground">
-                      Open it in the Writ Lab
+                      Open it in the Playground
                       <ArrowRight />
                     </Link>
                   }
@@ -345,26 +337,36 @@ export default function HowItWorksPage() {
               heading="A score is only as trustworthy as the record beneath it."
             >
               <Prose className="mt-5">
-                Evidence is not a bag of links. Each passage is anchored in a document version, each
-                claim points at the passage supporting it, and each claim and action carries a
-                review decision by a named reviewer. A model may propose; it never accepts.
+                Evidence is not a bag of links. Each passage is anchored in a retrieved document
+                version and hashed, each claim points at the passage supporting it, and each claim
+                carries a review decision. A model may propose; it never accepts.
               </Prose>
 
-              {snapshot ? (
+              {evidence ? (
                 <>
                   <Facts
                     items={[
-                      { label: "Anchored passages", value: snapshot.passages.length },
-                      { label: "Claims", value: snapshot.claims.length },
-                      { label: "Actions", value: snapshot.actions.length },
-                      { label: "Review decisions", value: snapshot.reviews.length },
+                      { label: "Provisions", value: evidence.actions.length },
+                      { label: "With quoted text", value: quoted },
+                      { label: "Source documents", value: sourcing.documents },
+                      {
+                        label: "Reviewed rows traced",
+                        value: `${sourcing.sourced} / ${sourcing.total}`,
+                      },
                     ]}
                   />
                   <p className="mt-5 max-w-[64ch] text-[0.88rem] leading-7 text-muted-foreground">
-                    That is one member of the 2025 G7 snapshot — {reviewedClaims} of{" "}
-                    {snapshot.claims.length} claims accepted, with {snapshot.reviews.length}{" "}
-                    recorded decisions across the claims and the actions they support. Nothing
-                    enters a score without one.
+                    That is the European Union snapshot: {quoted} provisions, each carrying the
+                    words of the article it classifies, lifted from the Official Journal text and
+                    hashed on retrieval. Nothing enters a score without one.
+                  </p>
+                  <p className="mt-4 max-w-[64ch] text-[0.88rem] leading-7 text-muted-foreground">
+                    <span className="font-medium text-foreground">
+                      {untraced.length} of the {sourcing.total} reviewed rows
+                    </span>{" "}
+                    have not been traced to a source document yet, so they are absent from both
+                    snapshots rather than carried in on the reviewers’ summary alone. A result
+                    computed over part of the record says so.
                   </p>
                 </>
               ) : null}
@@ -379,70 +381,7 @@ export default function HowItWorksPage() {
               </Disclosure>
             </Section>
 
-            {/* 5 · Imported corpora */}
-            <Section
-              id="corpora"
-              label="Imported corpora"
-              heading="Reading someone else's compliance record, without rescoring it."
-            >
-              <Prose className="mt-5">
-                Writ also carries corpora it did not score. Published results are imported verbatim
-                with their provenance, and Writ computes nothing over them. Two are checked in.
-              </Prose>
-
-              <div className="mt-8 grid grid-cols-1 gap-3 lg:grid-cols-2">
-                <div className="tool p-5">
-                  <h3 className="text-[0.95rem] font-semibold">2025 G7 AI-for-SMEs</h3>
-                  <p className="mt-2 text-[0.86rem] leading-6 text-muted-foreground">
-                    Writ recomputes every published cell from the frozen evidence and compares. A
-                    mismatch would become a discrepancy record, not a hidden exception.
-                  </p>
-                  <p className="mt-4 flex items-baseline gap-2">
-                    <span className="text-[1.4rem] font-semibold tabular-nums text-true">
-                      {bench.summary.matches} / {bench.cells.length}
-                    </span>
-                    <span className="text-[0.82rem] text-muted-foreground">cells reproduced</span>
-                  </p>
-                </div>
-
-                <div className="tool p-5">
-                  <h3 className="text-[0.95rem] font-semibold">2024 G20 Rio</h3>
-                  <p className="mt-2 text-[0.86rem] leading-6 text-muted-foreground">
-                    Imported from the published G20 Research Group reports. The reports cover only
-                    the commitments selected for monitoring, so the corpus stays deliberately
-                    partial rather than inventing the rest.
-                  </p>
-                  <dl className="mt-4 flex flex-wrap gap-x-7 gap-y-3">
-                    <div>
-                      <dt className="label">Commitments</dt>
-                      <dd className="mt-1 text-[0.95rem] font-medium tabular-nums">
-                        {rio.counts.selectedCommitments} of {rio.counts.expectedInventory}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="label">Assessments</dt>
-                      <dd className="mt-1 text-[0.95rem] font-medium tabular-nums">
-                        {rio.counts.memberAssessments}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="label">In review</dt>
-                      <dd className="mt-1 text-[0.95rem] font-medium tabular-nums">
-                        {rio.counts.reviewItems}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </div>
-
-              <p className="mt-5 max-w-[66ch] text-[0.88rem] leading-7 text-muted-foreground">
-                The Rio reconciliation is recorded as incomplete on purpose.{" "}
-                {rio.counts.reviewItems} items sit in the review queue rather than being resolved by
-                guesswork, and every imported score keeps the label authority it came with.
-              </p>
-            </Section>
-
-            {/* 6 · Reproducibility */}
+            {/* 5 · Reproducibility */}
             <Section
               id="reproducible"
               label="Reproducibility"
@@ -498,7 +437,7 @@ export default function HowItWorksPage() {
                   nativeButton={false}
                   render={
                     <Link href="/playground">
-                      Run it yourself in the Writ Lab
+                      Run it yourself in the Playground
                       <ArrowRight />
                     </Link>
                   }

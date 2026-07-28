@@ -1,0 +1,48 @@
+// The reviewed rule with one scoring band left out.
+//
+// The conditions are unchanged. What is missing is the case where a jurisdiction
+// has no binding duty on providers and no binding duty on its agencies either:
+// nothing in the score program covers it, so the rule cannot say what that
+// means.
+//
+// This is the failure the analyzer is for. It is found before any evidence is
+// loaded, by checking the score program against its own declared input space,
+// so it cannot be hidden by a corpus that happens not to contain the uncovered
+// case. Both jurisdictions in this pilot do have binding agency duties, which is
+// exactly why running it would not reveal the hole.
+
+language writ "0.1"
+package pilot.eu_us_ai_evaluation.incomplete version "1.0.0";
+
+commitment MODEL_EVALUATION_DUTY {
+  title "Binding model-evaluation duty, with an uncovered case";
+  subjects {EuropeanUnion, UnitedStates};
+  evaluation_window [2024-07-12, 2026-07-27];
+  evidence_policy open_world;
+  unknown_policy propagate;
+
+  action_identity strict_separate by id;
+
+  let binding_duty: Int = count_distinct(claims where
+    qualifiers.legal_force == binding
+    and qualifiers.applicability_status == applicable
+    and qualifiers.actor_type == market_provider
+    and qualifiers.conduct_type == model_evaluation
+    distinct_by subject_ref);
+
+  let government_duty: Int = count_distinct(claims where
+    qualifiers.legal_force == binding
+    and qualifiers.actor_type == federal_agency
+    distinct_by subject_ref);
+
+  score {
+    result "+1" priority 20 when binding_duty >= 1 id duty_on_providers;
+    result "0" priority 20 when binding_duty == 0 and government_duty >= 1
+      id government_duty_only;
+    // The `no_duty_found` band belongs here.
+    otherwise unresolved "The retrieved corpus does not determine the answer.";
+  }
+
+  assert exhaustive over binding_duty in 0..20, government_duty in 0..20;
+  assert non_overlapping over binding_duty in 0..20, government_duty in 0..20;
+}

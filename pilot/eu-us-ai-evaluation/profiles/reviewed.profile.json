@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "id": "profile-eu-us-ai-evaluation-reviewed",
+  "name": "reviewed",
+  "version": "1.0.0",
+  "methodology_bundle_hash": "sha256:7c0278381bf803b602efe6c4fed289cfdd07f9b00addc7eb757d57650afed128",
+  "parameters": {},
+  "decisions": [],
+  "waivers": [],
+  "status": "approved",
+  "canonical_hash": "sha256:aabffb6b723feea5f8be0215a5e132019f0937aa520a23c062390b4df26be6c4"
+}

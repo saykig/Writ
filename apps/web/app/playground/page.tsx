@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 
 import { Playground } from "@/components/playground/playground";
-import { PageHeader } from "@/components/site/page-header";
 
 export const metadata: Metadata = {
-  title: "Writ Lab · Writ",
+  title: "Playground · Writ",
   description:
-    "Write a methodology in the Writ DSL and watch it compile, get analyzed for scoring gaps and overlaps, and evaluate against a frozen member snapshot into a receipt.",
+    "One question, asked four ways. Each reading is a real rule that runs against the European Union and United States provisions traced to their source text.",
 };
 
-const VALID_EXAMPLES = new Set(["literal", "resolved", "inclusive"]);
+const VALID_EXAMPLES = new Set(["reviewed", "any-actor", "broad-conduct", "incomplete"]);
 
 export default async function PlaygroundPage({
   searchParams,
@@ -20,13 +19,10 @@ export default async function PlaygroundPage({
   const raw = params.example;
   const initialExample = typeof raw === "string" && VALID_EXAMPLES.has(raw) ? raw : null;
 
+  // No page header: the tool is the page. The readings and their effects are
+  // named in the chooser, which is where the reading is actually made.
   return (
     <main>
-      <PageHeader
-        eyebrow="Writ Lab"
-        title="Write and test a policy methodology."
-        description="The Writ Lab shows how Writ turns a written methodology into rules that can be checked and run. You can revise the example, review any problems in the logic, and see how the final result is produced."
-      />
       <Playground initialExample={initialExample} />
     </main>
   );

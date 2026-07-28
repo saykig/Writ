@@ -1,0 +1,51 @@
+// A looser reading: any organization, any legal force.
+//
+// This drops two conditions from the reviewed rule. It no longer asks whether
+// the duty binds, and it no longer asks whom it binds. Everything else is
+// unchanged.
+//
+// Run it and the United States turns from "no" to "yes". The provision it finds
+// is US-03, the NIST Generative AI Profile, which is voluntary guidance
+// addressed to AI lifecycle organizations. Nobody is required to follow it. Read
+// this way a recommendation reads as a legal duty, and the answer to the
+// question changes without a single word of law changing.
+//
+// That is why the reviewed rule keeps the conditions separate and visible. This
+// is what it is holding back, and you can watch it happen.
+
+language writ "0.1"
+package pilot.eu_us_ai_evaluation.any_actor version "1.0.0";
+
+commitment MODEL_EVALUATION_DUTY {
+  title "Any evaluation expectation on any organization";
+  subjects {EuropeanUnion, UnitedStates};
+  evaluation_window [2024-07-12, 2026-07-27];
+  evidence_policy open_world;
+  unknown_policy propagate;
+
+  action_identity strict_separate by id;
+
+  // The dropped conditions were `qualifiers.legal_force == binding` and
+  // `qualifiers.actor_type == market_provider`.
+  let binding_duty: Int = count_distinct(claims where
+    qualifiers.applicability_status == applicable
+    and qualifiers.conduct_type == model_evaluation
+    distinct_by subject_ref);
+
+  let government_duty: Int = count_distinct(claims where
+    qualifiers.legal_force == binding
+    and qualifiers.actor_type == federal_agency
+    distinct_by subject_ref);
+
+  score {
+    result "+1" priority 20 when binding_duty >= 1 id duty_on_providers;
+    result "0" priority 20 when binding_duty == 0 and government_duty >= 1
+      id government_duty_only;
+    result "-1" priority 20 when binding_duty == 0 and government_duty == 0
+      id no_duty_found;
+    otherwise unresolved "The retrieved corpus does not determine the answer.";
+  }
+
+  assert exhaustive over binding_duty in 0..20, government_duty in 0..20;
+  assert non_overlapping over binding_duty in 0..20, government_duty in 0..20;
+}

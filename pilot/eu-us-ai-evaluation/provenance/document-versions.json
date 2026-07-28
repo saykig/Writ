@@ -1,0 +1,74 @@
+[
+  {
+    "id": "dv-eu-ai-act-2024-1689",
+    "document_id": "eu-ai-act-2024-1689",
+    "title": "Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial Intelligence Act)",
+    "uri": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689",
+    "media_type": "text/html",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2024-07-12T00:00:00Z",
+    "sha256": "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c",
+    "publisher": "Publications Office of the European Union",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-omb-m-25-21",
+    "document_id": "omb-m-25-21",
+    "title": "M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust",
+    "uri": "https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-04-03T00:00:00Z",
+    "sha256": "sha256:0aab0aa4eaeac969ed93894d3940c5dc9d0b7377048171b164a439e8b9e49813",
+    "publisher": "Office of Management and Budget",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-omb-m-25-22",
+    "document_id": "omb-m-25-22",
+    "title": "M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government",
+    "uri": "https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-22-Driving-Efficient-Acquisition-of-Artificial-Intelligence-in-Government.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-04-03T00:00:00Z",
+    "sha256": "sha256:e157538371eb9665fabdacff748788fc6afc0575bb3661d15b146f3138084cd8",
+    "publisher": "Office of Management and Budget",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-nist-ai-100-1",
+    "document_id": "nist-ai-100-1",
+    "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+    "uri": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2023-01-26T00:00:00Z",
+    "sha256": "sha256:7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+    "publisher": "National Institute of Standards and Technology",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-nist-ai-600-1",
+    "document_id": "nist-ai-600-1",
+    "title": "NIST AI 600-1: Artificial Intelligence Risk Management Framework — Generative Artificial Intelligence Profile",
+    "uri": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2024-07-26T00:00:00Z",
+    "sha256": "sha256:6e73620ab6b64e90ef2c04bf0e0d6246185a2f4b1b13cab0df494496cff89b6a",
+    "publisher": "National Institute of Standards and Technology",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-caisi-overview",
+    "document_id": "caisi-overview",
+    "title": "Center for AI Standards and Innovation (CAISI)",
+    "uri": "https://www.nist.gov/caisi",
+    "media_type": "text/html",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-06-03T00:00:00Z",
+    "sha256": "sha256:b326283a21d1c9e8f4ad128345a1ddc1eae8f4b27e3ec7ce929015262a15f584",
+    "publisher": "National Institute of Standards and Technology",
+    "source_tier": 1
+  }
+]

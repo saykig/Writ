@@ -30,7 +30,7 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Can it handle more than pass/fail scoring?",
-    a: "Yes. Beyond the G7 three-point scale, it expresses weighted-ordinal indices — the AI-governance Gap Matrix is scored that way, with an axis left honestly pending rather than collapsed to zero.",
+    a: "Yes. Beyond a three-point scale, it expresses weighted-ordinal indices — the AI-governance Gap Matrix is scored that way, with an axis left honestly pending rather than collapsed to zero.",
   },
 ];
 

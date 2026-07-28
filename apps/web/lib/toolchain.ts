@@ -3,13 +3,12 @@
  *
  * Every function runs the checked-in semantic packages server-side — the
  * language front end, the deterministic evaluator, the bounded score analyzer,
- * and the frozen 2025 AI-for-SMEs benchmark data. Nothing is reimplemented; the
+ * and the frozen reviewed pilot evidence. Nothing is reimplemented; the
  * site only orchestrates and shapes results. Repo data is read via `repo.ts`.
  */
 
 import { compileSource, type LanguageDiagnostic } from "@writ/language";
 import { evaluateCommitment, verifyReceipt } from "@writ/evaluator";
-import { enrichSnapshotForProfile, type DiscrepancyLedger } from "@writ/benchmark";
 import type {
   CanonicalIr,
   Diagnostic,
@@ -18,67 +17,193 @@ import type {
   InterpretationProfile,
 } from "@writ/domain";
 import { analyzeCommitment } from "./analysis.js";
-import { BENCH_DIR, readRepoJson, readRepoText, repoFileExists } from "./repo.js";
+import { readRepoJson, readRepoText } from "./repo.js";
 
-const COMMITMENT_ID = "AI_SME_ADOPTION";
-const PROFILE_NAMES = new Set(["published", "generous"]);
+// --- The EU-US pilot: what the Lab runs -------------------------------------
+//
+// One question — does the jurisdiction impose a binding model-evaluation duty on
+// providers of advanced AI models? — asked three ways. Each reading is a real
+// `.writ` file, each runs against evidence snapshots whose every claim is linked
+// to the retrieved text of the provision it classifies, and each produces a real
+// receipt naming the provisions that qualified.
+//
+// The three differ only in which conditions they require, which is the whole
+// lesson: the answer depends on the definition, and the definition is editable.
 
-// --- Examples ---------------------------------------------------------------
+const PILOT_DIR = "pilot/eu-us-ai-evaluation";
+const PILOT_COMMITMENT_ID = "MODEL_EVALUATION_DUTY";
+const PILOT_PROFILE = "reviewed";
 
-export interface StudioExample {
+/** The two jurisdictions the pilot covers, and the snapshot each maps to. */
+export const PILOT_SUBJECTS: Readonly<Record<string, string>> = {
+  eu: "EuropeanUnion",
+  us: "UnitedStates",
+};
+
+const PILOT_SEEDS = [
+  {
+    id: "reviewed",
+    file: "model-evaluation-duty.writ",
+    title: "The reviewed rule",
+    effect: "reviewed" as const,
+    reading: "binding · applicable · provider · model evaluation",
+    note: "All four conditions, as the human reviewers stated them. The European Union qualifies on one provision, Article 55(1)(a). The United States qualifies on none, though its agencies carry binding testing duties of their own.",
+  },
+  {
+    id: "any-actor",
+    file: "any-actor-any-force.writ",
+    title: "Any organization, any legal force",
+    effect: "flips" as const,
+    reading: "drops binding · drops provider",
+    note: "Stops asking whether the duty binds, and whom. The United States turns to yes on the NIST Generative AI Profile, which is voluntary guidance nobody is required to follow.",
+  },
+  {
+    id: "broad-conduct",
+    file: "broad-conduct.writ",
+    title: "Any duty near evaluation",
+    effect: "widens" as const,
+    reading: "drops model evaluation",
+    note: "Stops asking what the duty is about. Both verdicts hold, which is what makes it the harder error to catch: the European Union's evidence goes from one provision to nine, now counting documentation and incident reporting as model evaluation.",
+  },
+  {
+    id: "incomplete",
+    file: "incomplete-score.writ",
+    title: "A band left out",
+    effect: "gap" as const,
+    reading: "no rule for the empty case",
+    note: "The same conditions, but the score program says nothing about a jurisdiction with no binding duty at all. The analyzer finds it before any evidence loads, which matters because both jurisdictions here would have masked it.",
+  },
+] as const;
+
+export interface PilotExample {
   readonly id: string;
   readonly title: string;
+  /** What this reading does to the answer, relative to the reviewed rule. */
+  readonly effect: "reviewed" | "flips" | "widens" | "gap";
   readonly reading: string;
-  readonly outcome: "gap" | "overlap" | "clean";
   readonly note: string;
   readonly source: string;
 }
 
-const EXAMPLE_SEEDS = [
-  {
-    id: "literal",
-    file: "2025-ai-sme-literal.writ",
-    title: "Literal reading",
-    reading: "up to four → 1–4 strong",
-    outcome: "gap" as const,
-    note: "Reads “up to four strong actions” as the range 1–4. Zero strong with several weak matches no rule: an uncovered region the score program cannot resolve.",
-  },
-  {
-    id: "resolved",
-    file: "2025-ai-sme-resolved.writ",
-    title: "Resolved reading",
-    reading: "exhaustive, counter-precedence",
-    outcome: "clean" as const,
-    note: "The interpretation made explicit: a total, non-overlapping score program with counteraction precedence stated as a governed parameter. No gaps, no overlaps.",
-  },
-  {
-    id: "inclusive",
-    file: "2025-ai-sme-inclusive-up-to.writ",
-    title: "Inclusive reading",
-    reading: "up to four → 0–4 strong",
-    outcome: "overlap" as const,
-    note: "Reads the same phrase inclusively (0–4 strong). Now the zero-strong, low-weak state is scored by two rules at once with different results: an unmarked overlap.",
-  },
-];
+let pilotExamplesCache: readonly PilotExample[] | undefined;
 
-let examplesCache: readonly StudioExample[] | undefined;
-
-export function loadExamples(): readonly StudioExample[] {
-  if (examplesCache === undefined) {
-    examplesCache = EXAMPLE_SEEDS.map((seed) => ({
+export function loadPilotExamples(): readonly PilotExample[] {
+  if (pilotExamplesCache === undefined) {
+    pilotExamplesCache = PILOT_SEEDS.map((seed) => ({
       id: seed.id,
       title: seed.title,
+      effect: seed.effect,
       reading: seed.reading,
-      outcome: seed.outcome,
       note: seed.note,
-      source: readRepoText(`examples/${seed.file}`),
+      source: readRepoText(`${PILOT_DIR}/methodology/${seed.file}`),
     }));
   }
-  return examplesCache;
+  return pilotExamplesCache;
 }
 
-export function exampleSource(id: string): string | undefined {
-  return loadExamples().find((example) => example.id === id)?.source;
+export function pilotExampleSource(id: string): string | undefined {
+  return loadPilotExamples().find((example) => example.id === id)?.source;
+}
+
+/**
+ * The snapshot the Lab is evaluating against, shaped for display: one entry per
+ * provision, carrying the classification the rule tests and the retrieved text
+ * the classification rests on.
+ */
+export function pilotEvidenceView(jurisdiction: string): PilotEvidenceView | undefined {
+  if (!(jurisdiction in PILOT_SUBJECTS)) return undefined;
+  const snapshot = readRepoJson<Evidence>(`${PILOT_DIR}/evidence/${jurisdiction}.snapshot.json`);
+  const passages = new Map(snapshot.passages.map((passage) => [passage.id, passage]));
+  const reviews = new Map(
+    (snapshot.reviews ?? []).map((review) => [String(review.object_id), review]),
+  );
+
+  return {
+    snapshotId: snapshot.snapshot.id,
+    frozenAt: snapshot.snapshot.frozen_at,
+    cutoff: snapshot.snapshot.cutoff,
+    contentHash: snapshot.snapshot.content_hash,
+    actions: snapshot.claims.map((claim) => {
+      const qualifiers = (claim.qualifiers ?? {}) as Record<string, string>;
+      const passage = passages.get(claim.evidence_links[0]?.passage_id ?? "");
+      const review = reviews.get(claim.id);
+      return {
+        id: qualifiers.row_id ?? claim.id,
+        label: `${qualifiers.instrument ?? ""} ${qualifiers.source_locator ?? ""}`.trim(),
+        // What the duty is about, which is the condition most often collapsed.
+        badge: qualifiers.conduct_type?.replaceAll("_", " ") ?? null,
+        detail: [qualifiers.legal_force, qualifiers.actor_type]
+          .filter((part) => part !== undefined)
+          .map((part) => part.replaceAll("_", " "))
+          .join(" · "),
+        passage: passage ? { page: passage.page_number ?? null, quote: passage.quote } : null,
+        review: review
+          ? { reviewerId: String(review.reviewer_id), decision: String(review.decision) }
+          : null,
+      };
+    }),
+  };
+}
+
+export interface PilotEvidenceView {
+  readonly snapshotId: string;
+  readonly frozenAt: string;
+  readonly cutoff: string;
+  readonly contentHash: string;
+  readonly actions: readonly {
+    readonly id: string;
+    readonly label: string;
+    readonly badge: string | null;
+    readonly detail: string;
+    readonly passage: { readonly page: number | null; readonly quote: string } | null;
+    readonly review: { readonly reviewerId: string; readonly decision: string } | null;
+  }[];
+}
+
+/** How much of the reviewed corpus reached the snapshots, and what did not. */
+export function pilotCoverage(): Record<string, { actions: number; omitted: string[] }> {
+  return readRepoJson(`${PILOT_DIR}/evidence/coverage.json`);
+}
+
+/**
+ * Compile `source` and evaluate it against one jurisdiction's pilot snapshot.
+ *
+ * The snapshot holds only provisions traced to their source text, so a receipt
+ * from here is computed over quoted law and nothing else. What was left out is
+ * in `pilotCoverage()`, and the Lab shows it beside the result.
+ */
+export function evaluatePilot(source: string, jurisdiction: string): EvaluateResponse {
+  const subject = PILOT_SUBJECTS[jurisdiction];
+  if (subject === undefined) {
+    return { ok: false, error: `Unknown jurisdiction "${jurisdiction}".` };
+  }
+  const compiled = compileSource(source, { fileName: "playground.writ" });
+  if (compiled.ir === undefined) {
+    return {
+      ok: false,
+      error: "Source did not compile to IR; fix the diagnostics before evaluating.",
+      diagnostics: compiled.diagnostics,
+    };
+  }
+  const snapshot = readRepoJson<Evidence>(`${PILOT_DIR}/evidence/${jurisdiction}.snapshot.json`);
+  const profile = readRepoJson<InterpretationProfile>(
+    `${PILOT_DIR}/profiles/${PILOT_PROFILE}.profile.json`,
+  );
+  const hasCommitment = compiled.ir.commitments.some((c) => c.id === PILOT_COMMITMENT_ID);
+  try {
+    const receipt = evaluateCommitment({
+      ir: compiled.ir,
+      ...(hasCommitment ? { commitmentId: PILOT_COMMITMENT_ID } : {}),
+      // The pilot's profile governs no parameters, so the snapshot is evaluated
+      // as retrieved. Nothing is reclassified on the way in.
+      snapshot,
+      subject,
+      profile,
+    });
+    return { ok: true, member: jurisdiction, profile: PILOT_PROFILE, receipt };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Evaluation failed." };
+  }
 }
 
 // --- Compile ----------------------------------------------------------------
@@ -134,56 +259,6 @@ export interface EvaluateResponse {
   readonly receipt?: EvaluationReceipt;
 }
 
-function snapshotRel(member: string): string {
-  return `${BENCH_DIR}/evidence/${member}.snapshot.json`;
-}
-function profileRel(name: string): string {
-  return `${BENCH_DIR}/profiles/${name}.profile.json`;
-}
-
-function loadSnapshotAndProfile(
-  member: string,
-  profileKey: string,
-): { snapshot: Evidence; profile: InterpretationProfile } | undefined {
-  if (!repoFileExists(snapshotRel(member))) return undefined;
-  const snapshot = readRepoJson<Evidence>(snapshotRel(member));
-  const profile = readRepoJson<InterpretationProfile>(profileRel(profileKey));
-  return { snapshot, profile };
-}
-
-/** Compile `source` and evaluate its AI-SME commitment against a member snapshot. */
-export function evaluate(
-  source: string,
-  member: string,
-  profileName: string = "published",
-): EvaluateResponse {
-  const compiled = compileSource(source, { fileName: "playground.writ" });
-  if (compiled.ir === undefined) {
-    return {
-      ok: false,
-      error: "Source did not compile to IR; fix the diagnostics before evaluating.",
-      diagnostics: compiled.diagnostics,
-    };
-  }
-  const profileKey = PROFILE_NAMES.has(profileName) ? profileName : "published";
-  const loaded = loadSnapshotAndProfile(member, profileKey);
-  if (!loaded) return { ok: false, error: `No evidence snapshot for member "${member}".` };
-
-  const hasCommitment = compiled.ir.commitments.some((c) => c.id === COMMITMENT_ID);
-  try {
-    const receipt = evaluateCommitment({
-      ir: compiled.ir,
-      ...(hasCommitment ? { commitmentId: COMMITMENT_ID } : {}),
-      snapshot: enrichSnapshotForProfile(loaded.snapshot, loaded.profile),
-      subject: member,
-      profile: loaded.profile,
-    });
-    return { ok: true, member, profile: profileKey, receipt };
-  } catch (error) {
-    return { ok: false, error: error instanceof Error ? error.message : "Evaluation failed." };
-  }
-}
-
 /** Verify a receipt's content hash (tamper detection). */
 export function verify(receipt: EvaluationReceipt): {
   valid: boolean;
@@ -191,102 +266,4 @@ export function verify(receipt: EvaluationReceipt): {
   actual: string;
 } {
   return verifyReceipt(receipt);
-}
-
-// --- Benchmark --------------------------------------------------------------
-
-export interface BenchmarkCell {
-  readonly member: string;
-  readonly published: string;
-  readonly computed: string;
-  readonly generous: string;
-  readonly match: boolean;
-  readonly flips: boolean;
-  readonly sensitive: boolean;
-  readonly qualifying: number;
-  readonly note: string;
-}
-
-export interface BenchmarkResponse {
-  readonly commitmentId: string;
-  readonly methodologyVersionId: string;
-  readonly summary: DiscrepancyLedger["summary"];
-  readonly cells: readonly BenchmarkCell[];
-}
-
-let resolvedIrCache: CanonicalIr | undefined;
-function resolvedIr(): CanonicalIr {
-  if (resolvedIrCache === undefined) {
-    const source = readRepoText("examples/2025-ai-sme-resolved.writ");
-    const compiled = compileSource(source, { fileName: "2025-ai-sme-resolved.writ" });
-    if (!compiled.ir) throw new Error("Resolved methodology failed to compile.");
-    resolvedIrCache = compiled.ir;
-  }
-  return resolvedIrCache;
-}
-
-/** Evaluate the resolved methodology against a member under a profile (real receipt). */
-export function evaluateMember(
-  member: string,
-  profileKey = "published",
-): EvaluationReceipt | undefined {
-  const loaded = loadSnapshotAndProfile(
-    member,
-    PROFILE_NAMES.has(profileKey) ? profileKey : "published",
-  );
-  if (!loaded) return undefined;
-  return evaluateCommitment({
-    ir: resolvedIr(),
-    commitmentId: COMMITMENT_ID,
-    snapshot: enrichSnapshotForProfile(loaded.snapshot, loaded.profile),
-    subject: member,
-    profile: loaded.profile,
-  });
-}
-
-export function benchmarkLedger(): DiscrepancyLedger {
-  return readRepoJson<DiscrepancyLedger>(`${BENCH_DIR}/discrepancy-ledger.json`);
-}
-
-let benchmarkCache: BenchmarkResponse | undefined;
-
-export function benchmark(): BenchmarkResponse {
-  if (benchmarkCache !== undefined) return benchmarkCache;
-  const ledger = benchmarkLedger();
-  const sensitivityByMember = new Map(
-    ledger.interpretation_sensitivity.map((entry) => [entry.member, entry]),
-  );
-  const cells: BenchmarkCell[] = ledger.cells.map((cell) => {
-    const sensitivity = sensitivityByMember.get(cell.member);
-    let qualifying = 0;
-    try {
-      qualifying = evaluateMember(cell.member, "published")?.qualifying_action_ids?.length ?? 0;
-    } catch {
-      qualifying = 0;
-    }
-    return {
-      member: cell.member,
-      published: cell.published,
-      computed: cell.computed,
-      generous: sensitivity?.generous_profile_result ?? cell.computed,
-      match: cell.match,
-      flips: sensitivity?.flips ?? false,
-      sensitive: cell.category === "implicit_analyst_interpretation",
-      qualifying,
-      note: cell.note,
-    };
-  });
-  benchmarkCache = {
-    commitmentId: ledger.commitment_id,
-    methodologyVersionId: ledger.methodology_version_id,
-    summary: ledger.summary,
-    cells,
-  };
-  return benchmarkCache;
-}
-
-/** A member's frozen evidence snapshot (for the benchmark drill-down). */
-export function memberSnapshot(member: string): Evidence | undefined {
-  if (!repoFileExists(snapshotRel(member))) return undefined;
-  return readRepoJson<Evidence>(snapshotRel(member));
 }

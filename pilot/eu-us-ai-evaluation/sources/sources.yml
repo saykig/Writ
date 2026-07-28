@@ -1,0 +1,117 @@
+# Source documents behind the reviewed EU-US AI evaluation pilot.
+#
+# The reviewed annotation table records a `source_locator` for every row but no
+# document, no retrieval date, and no quoted text. This file names the document
+# each instrument refers to so `scripts/fetch_pilot_sources.py` can retrieve it,
+# hash the bytes it actually received, and lift the verbatim passage at each
+# locator.
+#
+# Only instruments whose document has been located and verified appear here. An
+# instrument that is absent has not been sourced yet, and its rows will have no
+# passage rather than an invented one.
+
+schema_version: "1.0"
+
+sources:
+  - instrument: EU_AI_ACT
+    document_id: eu-ai-act-2024-1689
+    title: >
+      Regulation (EU) 2024/1689 laying down harmonised rules on artificial
+      intelligence (Artificial Intelligence Act)
+    publisher: Publications Office of the European Union
+    uri: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689
+    media_type: text/html
+    # Official Journal publication of the consolidated text.
+    issued_at: "2024-07-12"
+    # Tier 1: the legally official text from the issuing authority.
+    source_tier: 1
+    # How a `source_locator` in the reviewed table maps onto this document.
+    locator_style: eu_article
+
+  - instrument: OMB_M_25_21
+    document_id: omb-m-25-21
+    title: >
+      M-25-21: Accelerating Federal Use of AI through Innovation, Governance,
+      and Public Trust
+    publisher: Office of Management and Budget
+    uri: https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf
+    media_type: application/pdf
+    issued_at: "2025-04-03"
+    source_tier: 1
+    # The reviewed table locates these rows by topic rather than by section
+    # number, so each row records the phrase used to find its passage. The
+    # phrase is stored with the passage, so the extraction can be rechecked.
+    locator_style: phrase_anchor
+    # Each anchor was placed by reading the memorandum and checking that the
+    # paragraph it selects is the provision the reviewed row cites.
+    anchors:
+      # § b. Covered AI — the memorandum's own statement of what it applies to.
+      US-07: "Covered AI. This memorandum provides requirements"
+      # The pre-deployment testing duty US-08A records, p. 15.
+      US-08: "Conduct Pre-Deployment Testing"
+
+  - instrument: OMB_M_25_22
+    document_id: omb-m-25-22
+    title: >
+      M-25-22: Driving Efficient Acquisition of Artificial Intelligence in
+      Government
+    publisher: Office of Management and Budget
+    uri: https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-22-Driving-Efficient-Acquisition-of-Artificial-Intelligence-in-Government.pdf
+    media_type: application/pdf
+    issued_at: "2025-04-03"
+    source_tier: 1
+    locator_style: phrase_anchor
+    anchors:
+      # § d. Selection and Award — agencies must test proposed solutions during
+      # the procurement itself, which is what US-09A records.
+      US-09: "Testing and Evaluation. When evaluating proposals"
+      # § E. Ongoing Testing and Monitoring — the contractual terms behind the
+      # vendor duties US-10A and US-10B record.
+      US-10: "Ongoing Testing and Monitoring"
+
+  - instrument: NIST_AI_RMF
+    document_id: nist-ai-100-1
+    title: >
+      NIST AI 100-1: Artificial Intelligence Risk Management Framework
+      (AI RMF 1.0)
+    publisher: National Institute of Standards and Technology
+    uri: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+    media_type: application/pdf
+    issued_at: "2023-01-26"
+    source_tier: 1
+    locator_style: phrase_anchor
+    anchors:
+      # The Framework's statement of its own purpose and voluntary status,
+      # which is what the reviewed row cites as its "abstract".
+      US-01: "the goal of the AI RMF is to offer a resource"
+
+  - instrument: NIST_GENERATIVE_AI_PROFILE
+    document_id: nist-ai-600-1
+    title: >
+      NIST AI 600-1: Artificial Intelligence Risk Management Framework —
+      Generative Artificial Intelligence Profile
+    publisher: National Institute of Standards and Technology
+    uri: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf
+    media_type: application/pdf
+    issued_at: "2024-07-26"
+    source_tier: 1
+    locator_style: phrase_anchor
+    anchors:
+      # The Profile's description of what it is and how it is applied.
+      US-03: "is an implementation of the AI RMF functions"
+
+  - instrument: CAISI_OVERVIEW
+    document_id: caisi-overview
+    title: >
+      Center for AI Standards and Innovation (CAISI)
+    publisher: National Institute of Standards and Technology
+    uri: https://www.nist.gov/caisi
+    media_type: text/html
+    # The date the Center was established under its current name.
+    issued_at: "2025-06-03"
+    source_tier: 1
+    locator_style: phrase_anchor
+    anchors:
+      # The Center's own statement of the mandate the reviewed row cites:
+      # voluntary agreements with developers, and unclassified evaluations.
+      US-04: "Establish voluntary agreements with private sector AI developers"
