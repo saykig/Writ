@@ -4,11 +4,16 @@
 // the duty binds, and it no longer asks whom it binds. Everything else is
 // unchanged.
 //
-// Run it and the United States turns from "no" to "yes". The provision it finds
-// is US-03, the NIST Generative AI Profile, which is voluntary guidance
-// addressed to AI lifecycle organizations. Nobody is required to follow it. Read
-// this way a recommendation reads as a legal duty, and the answer to the
-// question changes without a single word of law changing.
+// Run it and the United States turns from "no" to "yes". What it finds is US-03,
+// the NIST Generative AI Profile, and US-05A, CAISI's published guidelines: both
+// voluntary, both addressed to AI lifecycle organizations, neither of which
+// anyone is required to follow. Read this way a recommendation reads as a legal
+// duty, and the answer to the question changes without a single word of law
+// changing.
+//
+// US-05B, CAISI's draft benchmark practices, still does not qualify. It is
+// voluntary and it is about model evaluation, but it is a draft rather than
+// something in force, and this reading kept the condition that asks.
 //
 // That is why the reviewed rule keeps the conditions separate and visible. This
 // is what it is holding back, and you can watch it happen.

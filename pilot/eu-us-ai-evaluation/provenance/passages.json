@@ -132,6 +132,36 @@
     "language": "en"
   },
   {
+    "id": "passage-us-05a",
+    "row_id": "US-05A",
+    "document_version_id": "dv-caisi-guidelines",
+    "anchor_type": "html_dom",
+    "anchor_phrase": "develops and publishes voluntary guidelines",
+    "quote": "The Center for AI Standards and Innovation develops and publishes voluntary guidelines to support the responsible design, development, deployment, use, and governance of advanced AI models, systems, and agents.",
+    "anchor_hash": "sha256:73577c3d9ffb66f15dc0a0f871667e072ebdc8d83f27b9a603fa0567a3f1565a",
+    "language": "en"
+  },
+  {
+    "id": "passage-us-05b",
+    "row_id": "US-05B",
+    "document_version_id": "dv-caisi-guidelines",
+    "anchor_type": "html_dom",
+    "anchor_phrase": "These draft guidelines identify preliminary best practices",
+    "quote": "Practices for Automated Benchmark Evaluations of Language Models (Initial Public Draft) – These draft guidelines identify preliminary best practices for evaluating language models and AI agent systems. We are soliciting public comment on this document until March 31, 2026, at 11:59 PM Eastern Time. To provide feedback, please email NISTAI800-1 [at] nist.gov ( NISTAI800-2[at]nist[dot]gov ) .",
+    "anchor_hash": "sha256:e6535ddcaa9b2f661f28ab334d5a177308f2be56d2b2b50686a7c55ac0ae147c",
+    "language": "en"
+  },
+  {
+    "id": "passage-us-06",
+    "row_id": "US-06",
+    "document_version_id": "dv-wh-fact-sheet-2025-01-ai-leadership",
+    "anchor_type": "html_dom",
+    "anchor_phrase": "revise or rescind all policies, directives, regulations",
+    "quote": "Calls for departments and agencies to revise or rescind all policies, directives, regulations, orders, and other actions taken under the Biden AI order that are inconsistent with enhancing America’s leadership in AI.",
+    "anchor_hash": "sha256:18ab1889b5a5a00ef21eb4e912053ad699857e75b0181b6e44dd00d6625ad350",
+    "language": "en"
+  },
+  {
     "id": "passage-us-07",
     "row_id": "US-07",
     "document_version_id": "dv-omb-m-25-21",
@@ -174,5 +204,26 @@
     "anchor_hash": "sha256:42e794873e540128c5fa3440f2d6ff4bf456e0bec2ebb5a482cd4262126662f3",
     "language": "en",
     "page_number": 10
+  },
+  {
+    "id": "passage-us-11",
+    "row_id": "US-11",
+    "document_version_id": "dv-wh-fact-sheet-2025-12-national-framework",
+    "anchor_type": "html_dom",
+    "anchor_phrase": "considering whether to adopt a Federal reporting and disclosure",
+    "quote": "The Order instructs the Federal Trade Commission and Federal Communications Commission to take actions that will limit States’ ability to force AI companies to deceive consumers, including determining whether laws that force companies to embed DEI into their models cause those companies to violate the Federal Trade Commission Act, and considering whether to adopt a Federal reporting and disclosure standard for AI models.",
+    "anchor_hash": "sha256:bddf15e3f242b9cad1c7efa44e3a4bb49617b70c78cbc87adec45dd349cfe080",
+    "language": "en"
+  },
+  {
+    "id": "passage-us-12",
+    "row_id": "US-12",
+    "document_version_id": "dv-wh-americas-ai-action-plan",
+    "anchor_type": "pdf_text",
+    "anchor_phrase": "Publish guidelines and resources through NIST at DOC",
+    "quote": "Recommended Policy Actions • Publish guidelines and resources through NIST at DOC, including CAISI, for Federal agencies to conduct their own evaluations of AI systems for their distinct missions and operations and for compliance with existing law. • Support the development of the science of measuring and evaluating AI models, led by",
+    "anchor_hash": "sha256:8e11665921d345528d27da71cef5d7974fde9e79a59b78de8379ebeb864addc2",
+    "language": "en",
+    "page_number": 13
   }
 ]

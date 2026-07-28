@@ -93,8 +93,11 @@ export interface SourcingSummary {
 }
 
 export function sourcingSummary(totalRows: number): SourcingSummary {
+  // Counted by subtracting what did not resolve, not by counting passages: a
+  // bundle whose children carry their own anchors produces more passages than
+  // rows, and counting those would overstate how much of the table is traced.
   return {
-    sourced: sourcePassages().length,
+    sourced: totalRows - unsourcedRows().length,
     total: totalRows,
     documents: sourceDocuments().length,
   };

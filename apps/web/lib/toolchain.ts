@@ -55,7 +55,7 @@ const PILOT_SEEDS = [
     title: "Any organization, any legal force",
     effect: "flips" as const,
     reading: "drops binding · drops provider",
-    note: "Stops asking whether the duty binds, and whom. The United States turns to yes on the NIST Generative AI Profile, which is voluntary guidance nobody is required to follow.",
+    note: "Stops asking whether the duty binds, and whom. The United States turns to yes on the NIST Generative AI Profile and CAISI\u2019s published guidelines, both of which are voluntary and neither of which anyone is required to follow.",
   },
   {
     id: "broad-conduct",

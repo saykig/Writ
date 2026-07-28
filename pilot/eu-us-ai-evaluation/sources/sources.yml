@@ -115,3 +115,75 @@ sources:
       # The Center's own statement of the mandate the reviewed row cites:
       # voluntary agreements with developers, and unclassified evaluations.
       US-04: "Establish voluntary agreements with private sector AI developers"
+
+  - instrument: CAISI_GUIDELINES_PAGE
+    document_id: caisi-guidelines
+    title: >
+      CAISI Guidelines
+    publisher: National Institute of Standards and Technology
+    uri: https://www.nist.gov/aisi/guidelines
+    media_type: text/html
+    # The page's own "Updated" date at retrieval.
+    issued_at: "2026-02-10"
+    source_tier: 1
+    locator_style: phrase_anchor
+    # US-05 is a source bundle whose two children cite different items on this
+    # one page, so each child carries its own anchor rather than inheriting.
+    anchors:
+      # The Center's statement of what it publishes and for whom, which is the
+      # published-guidelines claim US-05A records.
+      US-05A: "develops and publishes voluntary guidelines"
+      # The draft still open for comment, which is what US-05B records as
+      # proposed rather than adopted.
+      US-05B: "These draft guidelines identify preliminary best practices"
+
+  - instrument: WHITE_HOUSE_AI_EXECUTIVE_POLICY
+    document_id: wh-fact-sheet-2025-01-ai-leadership
+    title: >
+      Fact Sheet: President Donald J. Trump Takes Action to Enhance America's
+      AI Leadership
+    publisher: The White House
+    uri: https://www.whitehouse.gov/fact-sheets/2025/01/fact-sheet-president-donald-j-trump-takes-action-to-enhance-americas-ai-leadership/
+    media_type: text/html
+    issued_at: "2025-01-23"
+    # Tier 2: this is the document the reviewed row cites, but it summarises
+    # Executive Order 14179 rather than being the instrument itself. The row
+    # classifies the direction as binding; a fact sheet binds nobody. Recorded
+    # here so the gap between the citation and the operative text is visible.
+    source_tier: 2
+    locator_style: phrase_anchor
+    anchors:
+      US-06: "revise or rescind all policies, directives, regulations"
+
+  - instrument: WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET
+    document_id: wh-fact-sheet-2025-12-national-framework
+    title: >
+      Fact Sheet: President Donald J. Trump Ensures a National Policy Framework
+      for Artificial Intelligence
+    publisher: The White House
+    uri: https://www.whitehouse.gov/fact-sheets/2025/12/fact-sheet-president-donald-j-trump-ensures-a-national-policy-framework-for-artificial-intelligence/
+    media_type: text/html
+    issued_at: "2025-12-11"
+    source_tier: 2
+    locator_style: phrase_anchor
+    anchors:
+      # "considering whether to adopt" is the reason US-11 is recorded as
+      # proposed and not yet applicable.
+      US-11: "considering whether to adopt a Federal reporting and disclosure"
+
+  - instrument: WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS
+    document_id: wh-americas-ai-action-plan
+    title: >
+      Winning the Race: America's AI Action Plan
+    publisher: The White House
+    uri: https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf
+    media_type: application/pdf
+    issued_at: "2025-07-23"
+    source_tier: 1
+    locator_style: phrase_anchor
+    anchors:
+      # The recommended policy actions under "Build an AI Evaluations
+      # Ecosystem". Anchored on the first action rather than the section's
+      # "Recommended Policy Actions" heading, which recurs throughout the plan
+      # and would have matched an earlier pillar.
+      US-12: "Publish guidelines and resources through NIST at DOC"

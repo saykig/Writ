@@ -10,15 +10,10 @@
     "documents": 1
   },
   "US": {
-    "actions": 11,
+    "actions": 16,
     "omitted": [
-      "US-02",
-      "US-05A",
-      "US-05B",
-      "US-06",
-      "US-11",
-      "US-12"
+      "US-02"
     ],
-    "documents": 5
+    "documents": 9
   }
 }

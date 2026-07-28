@@ -4,7 +4,7 @@
     "id": "snapshot-eu-us-ai-evaluation-us",
     "frozen_at": "2026-07-28T00:00:00Z",
     "cutoff": "2026-07-28T00:00:00Z",
-    "content_hash": "sha256:dd8f252d23c38b107b4479ccf080fda650bbf6c0fbda6fc4629de33d8ab005f3",
+    "content_hash": "sha256:6d9d4248ff3d73f627f86bbeece44c9b7f4569cf159553c3ae33e0df839bf559",
     "description": "Human-reviewed US provisions on model evaluation, each traced to the retrieved text of its source document."
   },
   "document_versions": [
@@ -42,6 +42,28 @@
       "source_tier": 1
     },
     {
+      "id": "dv-caisi-guidelines",
+      "document_id": "caisi-guidelines",
+      "uri": "https://www.nist.gov/aisi/guidelines",
+      "media_type": "text/html",
+      "retrieved_at": "2026-07-28T00:00:00Z",
+      "issued_at": "2026-02-10T00:00:00Z",
+      "sha256": "sha256:b5237981f1af13e49fc6df55a3504400b30ad1391c1f86b0612c169c44fa797c",
+      "publisher": "National Institute of Standards and Technology",
+      "source_tier": 1
+    },
+    {
+      "id": "dv-wh-fact-sheet-2025-01-ai-leadership",
+      "document_id": "wh-fact-sheet-2025-01-ai-leadership",
+      "uri": "https://www.whitehouse.gov/fact-sheets/2025/01/fact-sheet-president-donald-j-trump-takes-action-to-enhance-americas-ai-leadership/",
+      "media_type": "text/html",
+      "retrieved_at": "2026-07-28T00:00:00Z",
+      "issued_at": "2025-01-23T00:00:00Z",
+      "sha256": "sha256:2104044564b2c31ccc48f7327c3e348ecf06ec7e1b21190738ce0cd432007013",
+      "publisher": "The White House",
+      "source_tier": 2
+    },
+    {
       "id": "dv-omb-m-25-21",
       "document_id": "omb-m-25-21",
       "uri": "https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf",
@@ -61,6 +83,28 @@
       "issued_at": "2025-04-03T00:00:00Z",
       "sha256": "sha256:e157538371eb9665fabdacff748788fc6afc0575bb3661d15b146f3138084cd8",
       "publisher": "Office of Management and Budget",
+      "source_tier": 1
+    },
+    {
+      "id": "dv-wh-fact-sheet-2025-12-national-framework",
+      "document_id": "wh-fact-sheet-2025-12-national-framework",
+      "uri": "https://www.whitehouse.gov/fact-sheets/2025/12/fact-sheet-president-donald-j-trump-ensures-a-national-policy-framework-for-artificial-intelligence/",
+      "media_type": "text/html",
+      "retrieved_at": "2026-07-28T00:00:00Z",
+      "issued_at": "2025-12-11T00:00:00Z",
+      "sha256": "sha256:fca8b14c9e8e719e9433a017345d3f5a3495a95add7bcbb1fd5a3c2e7348b0d1",
+      "publisher": "The White House",
+      "source_tier": 2
+    },
+    {
+      "id": "dv-wh-americas-ai-action-plan",
+      "document_id": "wh-americas-ai-action-plan",
+      "uri": "https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf",
+      "media_type": "application/pdf",
+      "retrieved_at": "2026-07-28T00:00:00Z",
+      "issued_at": "2025-07-23T00:00:00Z",
+      "sha256": "sha256:91d56ab3ddefe43f395bde31e1c3923fb37f47091275aaf2a0d7da500ff547f4",
+      "publisher": "The White House",
       "source_tier": 1
     }
   ],
@@ -89,6 +133,30 @@
       "anchor_type": "html_dom",
       "quote": "Establish voluntary agreements with private sector AI developers and evaluators, and lead unclassified evaluations of AI capabilities that may pose risks to national security. In conducting these evaluations, CAISI will focus on demonstrable risks, such as cybersecurity, biosecurity, and chemical weapons.",
       "anchor_hash": "sha256:219e4fd9b26170f216190e78b7fad9861b37e40d7b656decefcad8344169dc2c",
+      "language": "en"
+    },
+    {
+      "id": "passage-us-05a",
+      "document_version_id": "dv-caisi-guidelines",
+      "anchor_type": "html_dom",
+      "quote": "The Center for AI Standards and Innovation develops and publishes voluntary guidelines to support the responsible design, development, deployment, use, and governance of advanced AI models, systems, and agents.",
+      "anchor_hash": "sha256:73577c3d9ffb66f15dc0a0f871667e072ebdc8d83f27b9a603fa0567a3f1565a",
+      "language": "en"
+    },
+    {
+      "id": "passage-us-05b",
+      "document_version_id": "dv-caisi-guidelines",
+      "anchor_type": "html_dom",
+      "quote": "Practices for Automated Benchmark Evaluations of Language Models (Initial Public Draft) – These draft guidelines identify preliminary best practices for evaluating language models and AI agent systems. We are soliciting public comment on this document until March 31, 2026, at 11:59 PM Eastern Time. To provide feedback, please email NISTAI800-1 [at] nist.gov ( NISTAI800-2[at]nist[dot]gov ) .",
+      "anchor_hash": "sha256:e6535ddcaa9b2f661f28ab334d5a177308f2be56d2b2b50686a7c55ac0ae147c",
+      "language": "en"
+    },
+    {
+      "id": "passage-us-06",
+      "document_version_id": "dv-wh-fact-sheet-2025-01-ai-leadership",
+      "anchor_type": "html_dom",
+      "quote": "Calls for departments and agencies to revise or rescind all policies, directives, regulations, orders, and other actions taken under the Biden AI order that are inconsistent with enhancing America’s leadership in AI.",
+      "anchor_hash": "sha256:18ab1889b5a5a00ef21eb4e912053ad699857e75b0181b6e44dd00d6625ad350",
       "language": "en"
     },
     {
@@ -125,6 +193,23 @@
       "page_number": 10,
       "quote": "E. Ongoing Testing and Monitoring. Contractual terms must provide the contracting agency the ability to regularly monitor and evaluate ( e.g., on a quarterly or biannual basis, based on the needs of the program) performance, risks, and effectiveness of an AI system or service. To achieve that outcome:",
       "anchor_hash": "sha256:42e794873e540128c5fa3440f2d6ff4bf456e0bec2ebb5a482cd4262126662f3",
+      "language": "en"
+    },
+    {
+      "id": "passage-us-11",
+      "document_version_id": "dv-wh-fact-sheet-2025-12-national-framework",
+      "anchor_type": "html_dom",
+      "quote": "The Order instructs the Federal Trade Commission and Federal Communications Commission to take actions that will limit States’ ability to force AI companies to deceive consumers, including determining whether laws that force companies to embed DEI into their models cause those companies to violate the Federal Trade Commission Act, and considering whether to adopt a Federal reporting and disclosure standard for AI models.",
+      "anchor_hash": "sha256:bddf15e3f242b9cad1c7efa44e3a4bb49617b70c78cbc87adec45dd349cfe080",
+      "language": "en"
+    },
+    {
+      "id": "passage-us-12",
+      "document_version_id": "dv-wh-americas-ai-action-plan",
+      "anchor_type": "pdf_text",
+      "page_number": 13,
+      "quote": "Recommended Policy Actions • Publish guidelines and resources through NIST at DOC, including CAISI, for Federal agencies to conduct their own evaluations of AI systems for their distinct missions and operations and for compliance with existing law. • Support the development of the science of measuring and evaluating AI models, led by",
+      "anchor_hash": "sha256:8e11665921d345528d27da71cef5d7974fde9e79a59b78de8379ebeb864addc2",
       "language": "en"
     }
   ],
@@ -235,6 +320,117 @@
       "evidence_links": [
         {
           "passage_id": "passage-us-04",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-us-05a",
+      "claim_type": "fact",
+      "subject_ref": "action-us-05a",
+      "predicate": "reviewed_legal_classification",
+      "object": "voluntary_evaluation_support",
+      "qualifiers": {
+        "legal_force": "voluntary",
+        "adoption_status": "adopted",
+        "applicability_status": "applicable",
+        "enforcement_status": "not_applicable",
+        "row_id": "US-05A",
+        "instrument": "CAISI_EVALUATION_GUIDELINES",
+        "source_locator": "voluntary guidelines and draft benchmark-evaluation practices\n",
+        "actor_type": "ai_lifecycle_organization",
+        "conduct_type": "model_evaluation",
+        "compliance_function": "evaluation_guidance",
+        "target_system": "advanced_ai_model_system_or_agent",
+        "scope": [
+          "cross_sector"
+        ]
+      },
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-02-10T00:00:00Z"
+      },
+      "recorded_at": "2026-07-28T00:00:00Z",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-us-05a",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-us-05b",
+      "claim_type": "fact",
+      "subject_ref": "action-us-05b",
+      "predicate": "reviewed_legal_classification",
+      "object": "proposed_voluntary_evaluation_support",
+      "qualifiers": {
+        "legal_force": "voluntary",
+        "adoption_status": "proposed",
+        "applicability_status": "draft_available",
+        "enforcement_status": "not_applicable",
+        "row_id": "US-05B",
+        "instrument": "CAISI_DRAFT_BENCHMARK_PRACTICES",
+        "source_locator": "voluntary guidelines and draft benchmark-evaluation practices\n",
+        "actor_type": "ai_lifecycle_organization",
+        "conduct_type": "model_evaluation",
+        "compliance_function": "evaluation_guidance",
+        "target_system": "advanced_ai_model_system_or_agent",
+        "scope": [
+          "cross_sector"
+        ]
+      },
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2026-02-10T00:00:00Z"
+      },
+      "recorded_at": "2026-07-28T00:00:00Z",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-us-05b",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-us-06",
+      "claim_type": "fact",
+      "subject_ref": "action-us-06",
+      "predicate": "reviewed_legal_classification",
+      "object": "deregulatory_context_only",
+      "qualifiers": {
+        "legal_force": "binding",
+        "adoption_status": "adopted",
+        "applicability_status": "applicable",
+        "enforcement_status": "internal_executive_implementation",
+        "row_id": "US-06",
+        "instrument": "WHITE_HOUSE_AI_EXECUTIVE_POLICY",
+        "source_locator": "January 2025 White House fact sheet",
+        "actor_type": "federal_agency",
+        "conduct_type": "administrative_policy_revision",
+        "binding_scope": "executive_branch_only",
+        "compliance_function": "agency_policy_direction",
+        "scope": [
+          "government_policy"
+        ]
+      },
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-01-23T00:00:00Z"
+      },
+      "recorded_at": "2026-07-28T00:00:00Z",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-us-06",
           "stance": "supports",
           "support_type": "direct"
         }
@@ -537,6 +733,79 @@
           "support_type": "direct"
         }
       ]
+    },
+    {
+      "id": "claim-us-11",
+      "claim_type": "fact",
+      "subject_ref": "action-us-11",
+      "predicate": "reviewed_legal_classification",
+      "object": "proposed_only",
+      "qualifiers": {
+        "legal_force": "proposed",
+        "adoption_status": "proposed",
+        "applicability_status": "not_yet_applicable",
+        "enforcement_status": "not_applicable",
+        "row_id": "US-11",
+        "instrument": "WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET",
+        "source_locator": "December 2025 fact sheet",
+        "conduct_type": "reporting_and_disclosure",
+        "compliance_function": "prospective_regulatory_requirement",
+        "target_system": "artificial_intelligence_model",
+        "scope": [
+          "cross_sector"
+        ]
+      },
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-12-11T00:00:00Z"
+      },
+      "recorded_at": "2026-07-28T00:00:00Z",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-us-11",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
+    },
+    {
+      "id": "claim-us-12",
+      "claim_type": "fact",
+      "subject_ref": "action-us-12",
+      "predicate": "reviewed_legal_classification",
+      "object": "contextual_only",
+      "qualifiers": {
+        "legal_force": "mixed",
+        "adoption_status": "adopted",
+        "applicability_status": "applicable",
+        "enforcement_status": "not_determinable_from_passage",
+        "row_id": "US-12",
+        "instrument": "WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS",
+        "source_locator": "AI Action Plan and later White House policy-action materials\n",
+        "actor_type": "federal_agency",
+        "conduct_type": "evaluation_infrastructure_coordination",
+        "compliance_function": "policy_direction",
+        "scope": [
+          "government_policy",
+          "cross_sector_support"
+        ]
+      },
+      "truth_value": "true",
+      "status": "accepted",
+      "valid_time": {
+        "start": "2025-07-23T00:00:00Z"
+      },
+      "recorded_at": "2026-07-28T00:00:00Z",
+      "origin": "human",
+      "evidence_links": [
+        {
+          "passage_id": "passage-us-12",
+          "stance": "supports",
+          "support_type": "direct"
+        }
+      ]
     }
   ],
   "actions": [
@@ -586,6 +855,54 @@
       "status": "accepted",
       "claim_ids": [
         "claim-us-04"
+      ]
+    },
+    {
+      "id": "action-us-05a",
+      "label": "CAISI_EVALUATION_GUIDELINES voluntary guidelines and draft benchmark-evaluation practices\n",
+      "actors": [
+        "US"
+      ],
+      "jurisdiction": "US",
+      "kind": "guidance",
+      "implementation_stage": "operational",
+      "beneficiary_targeting": "absent",
+      "attribution": "unilateral",
+      "status": "accepted",
+      "claim_ids": [
+        "claim-us-05a"
+      ]
+    },
+    {
+      "id": "action-us-05b",
+      "label": "CAISI_DRAFT_BENCHMARK_PRACTICES voluntary guidelines and draft benchmark-evaluation practices\n",
+      "actors": [
+        "US"
+      ],
+      "jurisdiction": "US",
+      "kind": "proposed_guidance",
+      "implementation_stage": "proposed",
+      "beneficiary_targeting": "absent",
+      "attribution": "unilateral",
+      "status": "accepted",
+      "claim_ids": [
+        "claim-us-05b"
+      ]
+    },
+    {
+      "id": "action-us-06",
+      "label": "WHITE_HOUSE_AI_EXECUTIVE_POLICY January 2025 White House fact sheet",
+      "actors": [
+        "US"
+      ],
+      "jurisdiction": "US",
+      "kind": "executive_direction",
+      "implementation_stage": "operational",
+      "beneficiary_targeting": "absent",
+      "attribution": "unilateral",
+      "status": "accepted",
+      "claim_ids": [
+        "claim-us-06"
       ]
     },
     {
@@ -715,6 +1032,38 @@
       "claim_ids": [
         "claim-us-10b"
       ]
+    },
+    {
+      "id": "action-us-11",
+      "label": "WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET December 2025 fact sheet",
+      "actors": [
+        "US"
+      ],
+      "jurisdiction": "US",
+      "kind": "proposed_policy",
+      "implementation_stage": "proposed",
+      "beneficiary_targeting": "absent",
+      "attribution": "unilateral",
+      "status": "accepted",
+      "claim_ids": [
+        "claim-us-11"
+      ]
+    },
+    {
+      "id": "action-us-12",
+      "label": "WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS AI Action Plan and later White House policy-action materials\n",
+      "actors": [
+        "US"
+      ],
+      "jurisdiction": "US",
+      "kind": "policy_context",
+      "implementation_stage": "operational",
+      "beneficiary_targeting": "absent",
+      "attribution": "unilateral",
+      "status": "accepted",
+      "claim_ids": [
+        "claim-us-12"
+      ]
     }
   ],
   "reviews": [
@@ -743,6 +1092,33 @@
       "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
       "decision": "accept",
       "rationale": "Row US-04 (CAISI_OVERVIEW overview concerning voluntary agreements and unclassified evaluations\n) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
+      "created_at": "2026-07-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-us-05a",
+      "object_type": "claim",
+      "object_id": "claim-us-05a",
+      "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
+      "decision": "accept",
+      "rationale": "Row US-05A (CAISI_EVALUATION_GUIDELINES voluntary guidelines and draft benchmark-evaluation practices\n) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
+      "created_at": "2026-07-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-us-05b",
+      "object_type": "claim",
+      "object_id": "claim-us-05b",
+      "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
+      "decision": "accept",
+      "rationale": "Row US-05B (CAISI_DRAFT_BENCHMARK_PRACTICES voluntary guidelines and draft benchmark-evaluation practices\n) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
+      "created_at": "2026-07-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-us-06",
+      "object_type": "claim",
+      "object_id": "claim-us-06",
+      "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
+      "decision": "accept",
+      "rationale": "Row US-06 (WHITE_HOUSE_AI_EXECUTIVE_POLICY January 2025 White House fact sheet) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
       "created_at": "2026-07-28T00:00:00Z"
     },
     {
@@ -815,6 +1191,24 @@
       "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
       "decision": "accept",
       "rationale": "Row US-10B (OMB_M_25_22 disclosure and performance monitoring for contracted AI use\n) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
+      "created_at": "2026-07-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-us-11",
+      "object_type": "claim",
+      "object_id": "claim-us-11",
+      "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
+      "decision": "accept",
+      "rationale": "Row US-11 (WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET December 2025 fact sheet) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
+      "created_at": "2026-07-28T00:00:00Z"
+    },
+    {
+      "id": "review-claim-us-12",
+      "object_type": "claim",
+      "object_id": "claim-us-12",
+      "reviewer_id": "eu_us_ai_evaluation_pilot_human_reviewed",
+      "decision": "accept",
+      "rationale": "Row US-12 (WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS AI Action Plan and later White House policy-action materials\n) carries review_decision \"accepted\" in the human-reviewed pilot dataset.",
       "created_at": "2026-07-28T00:00:00Z"
     }
   ]

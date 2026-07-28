@@ -117,7 +117,10 @@ function build(jurisdiction: "EU" | "US"): Built {
   const usedDocuments = new Map<string, ProvDocument>();
 
   for (const claim of mine) {
-    const passage = passageByRow.get(claim.parent_row_id);
+    // A bundle child with its own anchor quotes that; otherwise it inherits the
+    // bundle's passage, which is right where the children share a provision.
+    const passage =
+      passageByRow.get(claim.claim_id) ?? passageByRow.get(claim.parent_row_id);
     if (!passage) {
       omitted.push(claim.claim_id);
       continue;

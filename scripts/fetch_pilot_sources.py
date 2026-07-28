@@ -87,14 +87,34 @@ def phrase_locator(
     return None
 
 
+# Tags that end a paragraph. Inline markup inside one does not, so a sentence
+# split across <strong>/<a>/<em> stays whole.
+BLOCK_TAGS = (
+    "p|div|li|tr|section|article|header|footer|main|aside|nav|"
+    "h[1-6]|ul|ol|dl|dt|dd|table|thead|tbody|blockquote|br|hr|figure|figcaption"
+)
+
+
 def html_paragraphs(raw: bytes) -> list[tuple[int | None, str]]:
     """Flatten an HTML document to paragraphs, with no page number.
 
     Web pages carry no pagination, so an anchor into one is located by its
-    phrase alone. The phrase is stored with the passage either way, so the
-    extraction can be rechecked against the retrieved bytes.
+    phrase alone. Splitting on block-level tags only keeps a sentence together
+    when the page wraps part of it in inline markup, which is common: a draft's
+    title in <strong> followed by its description would otherwise arrive as two
+    fragments and quote as one. The phrase is stored with the passage either
+    way, so the extraction can be rechecked against the retrieved bytes.
     """
-    return [(None, line) for line in to_text(raw)]
+    text = raw.decode("utf-8", errors="replace")
+    text = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(rf"</?(?:{BLOCK_TAGS})\b[^>]*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = html.unescape(text)
+    return [
+        (None, paragraph)
+        for paragraph in (" ".join(line.split()) for line in text.split("\n"))
+        if paragraph
+    ]
 
 
 def to_text(raw: bytes) -> list[str]:
@@ -237,8 +257,67 @@ def main() -> int:
             source["_lines"] = to_text(raw)
         print(f"fetched {source['instrument']}: {len(raw)} bytes, {digest[:23]}…")
 
+    def phrase_passage(
+        source: dict[str, Any], row_id: str, phrase: str
+    ) -> dict[str, Any] | None:
+        """A passage for `row_id` at `phrase`, or None if the phrase is absent."""
+        found = phrase_locator(source["_paragraphs"], phrase)
+        if found is None:
+            return None
+        quote, page = found
+        passage: dict[str, Any] = {
+            "id": f"passage-{row_id.lower()}",
+            "row_id": row_id,
+            "document_version_id": f"dv-{source['document_id']}",
+            "anchor_type": "pdf_text" if page is not None else "html_dom",
+            # The phrase used to locate the passage, recorded so the extraction
+            # can be checked rather than taken on trust.
+            "anchor_phrase": phrase,
+            "quote": quote,
+            "anchor_hash": "sha256:" + hashlib.sha256(quote.encode("utf-8")).hexdigest(),
+            "language": "en",
+        }
+        if page is not None:
+            passage["page_number"] = page
+        return passage
+
+    def resolve_children(record: dict[str, Any]) -> None:
+        """Give a bundle's children their own passages where one is registered.
+
+        A source bundle groups claims that cite different things: US-05A points
+        at CAISI's published guidelines and US-05B at its draft benchmark
+        practices, both on one page. Without a per-child anchor both would
+        inherit the parent's passage, and the snapshot would quote the wrong
+        text at one of them. A child with no anchor of its own still inherits,
+        which is correct where the children share a provision.
+        """
+        for child in record.get("derived_claims") or []:
+            child_id = child["claim_id"]
+            # A child may name its own instrument; fall back to the bundle's.
+            source = by_instrument.get(child.get("instrument", "")) or by_instrument.get(
+                record["instrument"]
+            )
+            if source is None or source["locator_style"] != "phrase_anchor":
+                continue
+            phrase = (source.get("anchors") or {}).get(child_id)
+            if not phrase:
+                continue
+            passage = phrase_passage(source, child_id, phrase)
+            if passage is None:
+                unresolved.append(
+                    {
+                        "row_id": child_id,
+                        "instrument": child.get("instrument", record["instrument"]),
+                        "source_locator": " ".join(record["source_locator"].split()),
+                        "reason": "anchor phrase not found in the retrieved document",
+                    }
+                )
+                continue
+            passages.append(passage)
+
     # Resolve every reviewed row against its instrument's document.
     for record in dataset["records"]:
+        resolve_children(record)
         instrument = record["instrument"]
         locator = " ".join(record["source_locator"].split())
         source = by_instrument.get(instrument)
@@ -255,8 +334,16 @@ def main() -> int:
 
         if source["locator_style"] == "phrase_anchor":
             phrase = (source.get("anchors") or {}).get(record["row_id"])
-            found = phrase_locator(source["_paragraphs"], phrase) if phrase else None
-            if found is None:
+            passage = phrase_passage(source, record["row_id"], phrase) if phrase else None
+            if passage is None:
+                # A bundle whose children all resolved on their own needs no
+                # passage of its own; it carries no legal force to quote.
+                resolved_children = {item["row_id"] for item in passages}
+                children = [
+                    child["claim_id"] for child in (record.get("derived_claims") or [])
+                ]
+                if children and all(child in resolved_children for child in children):
+                    continue
                 unresolved.append(
                     {
                         "row_id": record["row_id"],
@@ -270,21 +357,6 @@ def main() -> int:
                     }
                 )
                 continue
-            quote, page = found
-            passage = {
-                "id": f"passage-{record['row_id'].lower()}",
-                "row_id": record["row_id"],
-                "document_version_id": f"dv-{source['document_id']}",
-                "anchor_type": "pdf_text" if page is not None else "html_dom",
-                # The phrase used to locate the passage, recorded so the
-                # extraction can be checked rather than taken on trust.
-                "anchor_phrase": phrase,
-                "quote": quote,
-                "anchor_hash": "sha256:" + hashlib.sha256(quote.encode("utf-8")).hexdigest(),
-                "language": "en",
-            }
-            if page is not None:
-                passage["page_number"] = page
             passages.append(passage)
             continue
 

@@ -36,12 +36,20 @@ test("the reviewed rule finds none on US providers, only on its agencies", () =>
 });
 
 test("dropping `binding` and `market_provider` turns the US answer to yes", () => {
-  // The loosened reading qualifies US-03, the voluntary NIST Generative AI
-  // Profile. This is the collapse the reviewed rule exists to prevent, so it is
-  // pinned here rather than left as prose.
+  // The loosened reading qualifies the NIST Generative AI Profile and CAISI's
+  // published guidelines, both voluntary. This is the collapse the reviewed
+  // rule exists to prevent, so it is pinned here rather than left as prose.
   const result = evaluatePilot(sourceFor("any-actor"), "us");
   expect(result.receipt?.result).toBe("+1");
-  expect(result.receipt?.qualifying_action_ids).toEqual(["claim-us-03"]);
+  expect(result.receipt?.qualifying_action_ids).toEqual(["claim-us-03", "claim-us-05a"]);
+});
+
+test("a draft still out for comment does not qualify even under the loose reading", () => {
+  // US-05B is CAISI's draft benchmark practices: model evaluation, voluntary,
+  // but `draft_available` rather than `applicable`. Even the reading that drops
+  // both `binding` and `market_provider` still asks whether it is in force.
+  const result = evaluatePilot(sourceFor("any-actor"), "us");
+  expect(result.receipt?.qualifying_action_ids).not.toContain("claim-us-05b");
 });
 
 test("dropping the conduct condition holds the verdict but widens the evidence", () => {

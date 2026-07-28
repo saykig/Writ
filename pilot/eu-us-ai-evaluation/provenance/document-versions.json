@@ -70,5 +70,53 @@
     "sha256": "sha256:b326283a21d1c9e8f4ad128345a1ddc1eae8f4b27e3ec7ce929015262a15f584",
     "publisher": "National Institute of Standards and Technology",
     "source_tier": 1
+  },
+  {
+    "id": "dv-caisi-guidelines",
+    "document_id": "caisi-guidelines",
+    "title": "CAISI Guidelines",
+    "uri": "https://www.nist.gov/aisi/guidelines",
+    "media_type": "text/html",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2026-02-10T00:00:00Z",
+    "sha256": "sha256:b5237981f1af13e49fc6df55a3504400b30ad1391c1f86b0612c169c44fa797c",
+    "publisher": "National Institute of Standards and Technology",
+    "source_tier": 1
+  },
+  {
+    "id": "dv-wh-fact-sheet-2025-01-ai-leadership",
+    "document_id": "wh-fact-sheet-2025-01-ai-leadership",
+    "title": "Fact Sheet: President Donald J. Trump Takes Action to Enhance America's AI Leadership",
+    "uri": "https://www.whitehouse.gov/fact-sheets/2025/01/fact-sheet-president-donald-j-trump-takes-action-to-enhance-americas-ai-leadership/",
+    "media_type": "text/html",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-01-23T00:00:00Z",
+    "sha256": "sha256:2104044564b2c31ccc48f7327c3e348ecf06ec7e1b21190738ce0cd432007013",
+    "publisher": "The White House",
+    "source_tier": 2
+  },
+  {
+    "id": "dv-wh-fact-sheet-2025-12-national-framework",
+    "document_id": "wh-fact-sheet-2025-12-national-framework",
+    "title": "Fact Sheet: President Donald J. Trump Ensures a National Policy Framework for Artificial Intelligence",
+    "uri": "https://www.whitehouse.gov/fact-sheets/2025/12/fact-sheet-president-donald-j-trump-ensures-a-national-policy-framework-for-artificial-intelligence/",
+    "media_type": "text/html",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-12-11T00:00:00Z",
+    "sha256": "sha256:fca8b14c9e8e719e9433a017345d3f5a3495a95add7bcbb1fd5a3c2e7348b0d1",
+    "publisher": "The White House",
+    "source_tier": 2
+  },
+  {
+    "id": "dv-wh-americas-ai-action-plan",
+    "document_id": "wh-americas-ai-action-plan",
+    "title": "Winning the Race: America's AI Action Plan",
+    "uri": "https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-07-28T00:00:00Z",
+    "issued_at": "2025-07-23T00:00:00Z",
+    "sha256": "sha256:91d56ab3ddefe43f395bde31e1c3923fb37f47091275aaf2a0d7da500ff547f4",
+    "publisher": "The White House",
+    "source_tier": 1
   }
 ]
