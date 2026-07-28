@@ -12,12 +12,15 @@ describe("frontend architecture", () => {
     for (const path of ["app/playground/page.tsx", "app/how-it-works/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
-    // The demo opens on the three supported questions, with no free-text box:
-    // a memo is assembled from reviewed records, not searched for.
-    const picker = read("components/demo/question-picker.tsx");
-    expect(picker).toContain("Choose a policy question to test");
-    expect(picker).not.toContain("<input");
-    expect(picker).not.toContain("<textarea");
+    // The demo is three columns with the questions always in view, and no
+    // free-text box: a memo is assembled from reviewed records, not searched for.
+    const workspace = read("components/demo/demo-workspace.tsx");
+    expect(workspace).toContain("Policy questions");
+    expect(workspace).toContain("lg:grid-cols-[14rem_minmax(0,1fr)_21rem]");
+    expect(workspace).not.toContain("<input");
+    expect(workspace).not.toContain("<textarea");
+    // The record column is opened on demand and closable, not a permanent third.
+    expect(workspace).toContain("openRecord ?");
   });
 
   test("the Playground is the tool, with no page header above it", () => {

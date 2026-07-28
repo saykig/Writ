@@ -57,10 +57,11 @@ export interface StructuredField {
   value: string | null;
 }
 
-export interface MemoFootnote {
-  n: number;
+export interface MemoRecord {
+  /** Set only where the memo cites this record inline. */
+  n?: number;
   claimId: string;
-  /** The reviewed fields this record was cited for, named for the reader. */
+  /** The reviewed fields this record was cited for, if it was cited at all. */
   supportingFields: string[];
   jurisdiction: "EU" | "US";
   instrument: string;
@@ -103,7 +104,12 @@ export interface Memo {
   executive: MemoSentence[];
   sections: MemoSection[];
   conclusion: MemoSentence[];
-  footnotes: MemoFootnote[];
+  /**
+   * Every record the memo drew on, in reviewed order. Inline citations are kept
+   * for the sentences that genuinely rest on a named provision; this list is
+   * what makes the aggregate statements checkable without littering the prose.
+   */
+  records: MemoRecord[];
   /** How much of the reviewed corpus this memo drew on, and what it left out. */
   coverage: {
     selected: number;
@@ -143,34 +149,28 @@ function structuredFields(fields: ClaimFields): StructuredField[] {
 }
 
 /**
- * Assigns footnote numbers as the memo is written: one per reviewed record, in
- * the order a reader first meets it. A record cited in several sections keeps
- * the same number and accumulates the fields it was cited for, so the note can
- * say which parts of the record the memo leaned on without the reader wading
- * through a separate note per field.
+ * Holds every selected record, and numbers the few that are cited inline.
+ *
+ * Citations are spent sparingly: on a sentence that quotes a provision's own
+ * wording, on the records a finding actually turns on, and on the distinctions
+ * the pilot exists to protect. A sentence that merely counts how the corpus
+ * divides carries no marker, because the record list below the memo already
+ * answers "which ones" without interrupting the reading.
  */
-class Footnotes {
-  private readonly index = new Map<string, number>();
-  readonly list: MemoFootnote[] = [];
+class Ledger {
+  private readonly index = new Map<string, MemoRecord>();
+  readonly list: MemoRecord[] = [];
+  private numbered = 0;
 
-  cite(claim: ClaimRecord, supportingField: string): number {
+  /** Register a record so it appears in the list, cited or not. */
+  register(claim: ClaimRecord): MemoRecord {
     const existing = this.index.get(claim.claimId);
-    if (existing !== undefined) {
-      const note = this.list[existing - 1];
-      if (!note.supportingFields.includes(supportingField)) {
-        note.supportingFields.push(supportingField);
-      }
-      return existing;
-    }
-
-    const n = this.list.length + 1;
-    this.index.set(claim.claimId, n);
+    if (existing) return existing;
 
     const sourced = sourceFor(claim.claimId) ?? sourceFor(claim.parentRowId);
-    this.list.push({
-      n,
+    const record: MemoRecord = {
       claimId: claim.claimId,
-      supportingFields: [supportingField],
+      supportingFields: [],
       jurisdiction: claim.jurisdiction,
       instrument: instrumentLabel(claim.instrument),
       sourceLocator: claim.sourceLocator,
@@ -191,11 +191,26 @@ class Footnotes {
       adoptionStatus: claim.fields.adoption_status ?? "not recorded",
       enforcementStatus: claim.fields.enforcement_status ?? "not recorded",
       structured: structuredFields(claim.fields),
-    });
-    return n;
+    };
+    this.index.set(claim.claimId, record);
+    this.list.push(record);
+    return record;
   }
 
-  /** Ascending and deduplicated, so a citation run reads as "1, 3–5". */
+  /** Cite a record inline, assigning its number the first time. */
+  cite(claim: ClaimRecord, supportingField: string): number {
+    const record = this.register(claim);
+    if (!record.supportingFields.includes(supportingField)) {
+      record.supportingFields.push(supportingField);
+    }
+    if (record.n === undefined) {
+      this.numbered += 1;
+      record.n = this.numbered;
+    }
+    return record.n;
+  }
+
+  /** Ascending and deduplicated, so a citation run reads in order. */
   citeAll(claims: readonly ClaimRecord[], supportingField: string): number[] {
     const numbers = claims.map((claim) => this.cite(claim, supportingField));
     return [...new Set(numbers)].sort((a, b) => a - b);
@@ -235,7 +250,7 @@ const has = (claims: readonly ClaimRecord[], field: keyof ClaimFields, value: st
 interface BuildContext {
   selected: ClaimRecord[];
   corpus: ClaimRecord[];
-  notes: Footnotes;
+  notes: Ledger;
 }
 
 export interface QuestionConfig {
@@ -371,7 +386,7 @@ const QUESTIONS: QuestionConfig[] = [
       const sentences: MemoSentence[] = [
         {
           text: `The selected records include ${count(voluntary.length, "voluntary measure")} alongside the binding obligations they sit next to.`,
-          notes: notes.citeAll(voluntary, "legal_force"),
+          notes: [],
         },
       ];
       if (paths.length > 0) {
@@ -418,7 +433,7 @@ const QUESTIONS: QuestionConfig[] = [
     description:
       "Whether evaluation governance runs through rules on providers, duties on agencies, procurement, or public institutions.",
     select: (claims) => claims.filter((claim) => typeof claim.fields.actor_type === "string"),
-    executive: ({ selected, notes }) => {
+    executive: ({ selected }) => {
       const provider = has(selected, "actor_type", "market_provider");
       const agency = has(selected, "actor_type", "federal_agency");
       const vendor = has(selected, "actor_type", "government_vendor");
@@ -433,35 +448,31 @@ const QUESTIONS: QuestionConfig[] = [
           text: sentence(
             `${count(provider.length, "provision")} ${agree(provider.length, "is", "are")} addressed to a provider placing a model on the market.`,
           ),
-          notes: notes.citeAll(provider, "actor_type"),
+          notes: [],
         },
         {
           text: sentence(
             `${count(agency.length, "provision")} ${agree(agency.length, "is", "are")} addressed to a federal agency, and ${count(vendor.length, "provision")} to a vendor supplying AI to the government under contract.`,
           ),
-          notes: [...notes.citeAll(agency, "actor_type"), ...notes.citeAll(vendor, "actor_type")],
+          notes: [],
         },
       ];
     },
-    conclusion: ({ selected, notes }) => {
+    conclusion: ({ selected }) => {
       const agency = has(selected, "actor_type", "federal_agency");
       const vendor = has(selected, "actor_type", "government_vendor");
       const provider = has(selected, "actor_type", "market_provider");
-      const bindingProvider = provider.filter((claim) => claim.fields.legal_force === "binding");
       return [
         {
-          text: `Where the reviewed corpus governs evaluation through public institutions, it does so by binding the agency that uses or buys the system and, through procurement, the vendor that supplies it${vendor.length ? "" : ""}.`,
-          notes: [
-            ...notes.citeAll(agency, "binding_scope"),
-            ...notes.citeAll(vendor, "actor_type"),
-          ],
+          text: `Where the reviewed corpus governs evaluation through public institutions, it does so by binding the agency that uses or buys the system, and by carrying duties to the vendor through the procurement contract rather than through market regulation.`,
+          notes: [],
         },
         {
-          text: `Where it regulates the provider directly, it does so as a duty on the party that places the model on the market${bindingProvider.length ? "" : ""}.`,
-          notes: notes.citeAll(bindingProvider.slice(0, 6), "actor_type"),
+          text: `${count(agency.length + vendor.length, "provision reaches", "provisions reach")} its addressee that way, against ${count(provider.length, "addressed")} to a provider placing a model on the market.`,
+          notes: [],
         },
         {
-          text: "These are different instruments reaching different parties, and a duty on a public buyer does not extend to the market at large.",
+          text: "These are different instruments reaching different parties. A duty on a public buyer, or on the vendor that sells to it, does not extend to the market at large.",
           notes: [],
         },
       ];
@@ -480,27 +491,17 @@ export function demoQuestion(id: string): QuestionConfig | undefined {
 /* ------------------------------------------------------------ the sections */
 
 function actorsSection(context: BuildContext): MemoSection {
-  const { selected, notes } = context;
-  const groups = groupBy(selected, "actor_type");
+  const { selected } = context;
+  // A distribution, not an assertion about any one provision: no quoted wording
+  // and no citations. The reviewers' own term for each addressee is on the
+  // record itself, one click away from the list below the memo.
   const paragraphs: MemoSentence[][] = [
-    groups.map((group) => {
-      // Where the reviewers wrote the addressee out in their own words, use
-      // theirs rather than restating the coded class.
-      const local = [
-        ...new Set(
-          group.claims
-            .map((claim) => claim.fields.actor_term_local?.trim())
-            .filter((term): term is string => Boolean(term)),
-        ),
-      ];
-      const gloss = local.length === 1 ? `, described in the source as “${local[0]}”` : "";
-      return {
-        text: sentence(
-          `${count(group.claims.length, "provision")} ${agree(group.claims.length, "is", "are")} addressed to ${actorPhrase(group.value)}${gloss}.`,
-        ),
-        notes: notes.citeAll(group.claims, "actor_type"),
-      };
-    }),
+    groupBy(selected, "actor_type").map((group) => ({
+      text: sentence(
+        `${count(group.claims.length, "provision")} ${agree(group.claims.length, "is", "are")} addressed to ${actorPhrase(group.value)}.`,
+      ),
+      notes: [],
+    })),
   ];
 
   const scoped = selected.filter((claim) => typeof claim.fields.binding_scope === "string");
@@ -510,7 +511,7 @@ function actorsSection(context: BuildContext): MemoSection {
         text: sentence(
           `${count(group.claims.length, "provision")} ${agree(group.claims.length, "binds", "bind")} only within ${scopeBoundary(group.value)}, and ${agree(group.claims.length, "reaches", "reach")} no one outside it.`,
         ),
-        notes: notes.citeAll(group.claims, "binding_scope"),
+        notes: [],
       })),
     );
   }
@@ -525,26 +526,38 @@ function actorsSection(context: BuildContext): MemoSection {
 function conductSection(context: BuildContext): MemoSection {
   const { selected, notes } = context;
   const groups = groupBy(selected, "conduct_type");
+
+  // The distribution first, as a plain enumeration. Quoting each provision's
+  // own wording here would turn the section into a list of citations; the
+  // record list below the memo already names every one of them.
   const paragraphs: MemoSentence[][] = [
-    groups.map((group) => {
-      const local = [
-        ...new Set(
-          group.claims
-            .map((claim) => claim.fields.conduct_term_local?.trim())
-            .filter((term): term is string => Boolean(term)),
-        ),
-      ];
-      const gloss = local.length === 1 ? `, stated in the source as “${local[0]}”` : "";
-      return {
-        text: sentence(
-          `${count(group.claims.length, "provision")} ${agree(group.claims.length, "requires", "require")} the actor to ${conductPhrase(group.value)}${gloss}.`,
-        ),
-        notes: notes.citeAll(group.claims, "conduct_type"),
-      };
-    }),
+    groups.map((group) => ({
+      text: sentence(
+        `${count(group.claims.length, "provision")} ${agree(group.claims.length, "requires", "require")} the actor to ${conductPhrase(group.value)}.`,
+      ),
+      notes: [],
+    })),
   ];
 
+  // Model evaluation is quoted and cited, because it is the conduct the pilot
+  // turns on and the one most easily confused with its neighbours.
   const evaluation = has(selected, "conduct_type", "model_evaluation");
+  if (evaluation.length > 0) {
+    const terms = [
+      ...new Set(
+        evaluation
+          .map((claim) => claim.fields.conduct_term_local?.trim())
+          .filter((term): term is string => Boolean(term)),
+      ),
+    ];
+    paragraphs.push([
+      {
+        text: `Where a provision requires model evaluation, the reviewed records state the duty in the source's own words${terms.length ? `: ${joinList(terms.map((term) => `“${term}”`))}` : ""}.`,
+        notes: notes.citeAll(evaluation, "conduct_type"),
+      },
+    ]);
+  }
+
   const adjacent = selected.filter((claim) =>
     ADJACENT_TO_EVALUATION.includes(claim.fields.conduct_type as never),
   );
@@ -552,7 +565,7 @@ function conductSection(context: BuildContext): MemoSection {
     paragraphs.push([
       {
         text: `The reviewed records keep model evaluation apart from the duties that surround it. ${sentence(count(adjacent.length, "selected provision"))} ${agree(adjacent.length, "concerns", "concern")} documenting an evaluation, assessing risk, monitoring, reporting incidents, granting access for evaluation or testing during procurement, and none of them requires the actor to evaluate the model.`,
-        notes: notes.citeAll(adjacent, "conduct_type"),
+        notes: [],
       },
     ]);
   }
@@ -571,7 +584,7 @@ function forceSection(context: BuildContext): MemoSection {
       text: sentence(
         `${count(group.claims.length, "provision")} ${agree(group.claims.length, "is", "are")} ${forcePhrase(group.value)}.`,
       ),
-      notes: notes.citeAll(group.claims, "legal_force"),
+      notes: [],
     })),
   ];
 
@@ -586,7 +599,12 @@ function forceSection(context: BuildContext): MemoSection {
         text: sentence(
           `${count(group.claims.length, "provision")} ${functionPhrase(group.value, group.claims.length) ?? humanize(group.value)}.`,
         ),
-        notes: notes.citeAll(group.claims, "compliance_function"),
+        // Only the recognised compliance path is cited: it is the line that
+        // keeps a voluntary measure from reading as a binding one.
+        notes:
+          group.value === "recognized_compliance_path"
+            ? notes.citeAll(group.claims, "compliance_function")
+            : [],
       })),
     ]);
   }
@@ -599,19 +617,19 @@ function forceSection(context: BuildContext): MemoSection {
 }
 
 function applicabilitySection(context: BuildContext): MemoSection {
-  const { selected, notes } = context;
+  const { selected } = context;
   const paragraphs: MemoSentence[][] = [
     groupBy(selected, "adoption_status").map((group) => ({
       text: sentence(
         `${count(group.claims.length, "provision")} ${adoptionPhrase(group.value, group.claims.length)}.`,
       ),
-      notes: notes.citeAll(group.claims, "adoption_status"),
+      notes: [],
     })),
     groupBy(selected, "applicability_status").map((group) => ({
       text: sentence(
         `${count(group.claims.length, "provision")} ${applicabilityPhrase(group.value, group.claims.length)}.`,
       ),
-      notes: notes.citeAll(group.claims, "applicability_status"),
+      notes: [],
     })),
   ];
 
@@ -620,7 +638,7 @@ function applicabilitySection(context: BuildContext): MemoSection {
   paragraphs.push(
     enforcement.map((group) => ({
       text: `For ${count(group.claims.length, "provision")}, ${enforcementPhrase(group.value)}.`,
-      notes: notes.citeAll(group.claims, "enforcement_status"),
+      notes: [],
     })),
   );
   if (unknown.length > 0) {
@@ -648,7 +666,10 @@ export function buildMemo(questionId: string): Memo | undefined {
   const corpus = policyTestClaimRecords();
   // Stable order: the reviewers' row order, which the pilot treats as authority.
   const selected = config.select(corpus);
-  const notes = new Footnotes();
+  const notes = new Ledger();
+  // Registered up front and in reviewed order, so the record list reads as the
+  // corpus the memo drew on rather than as the order citations happened to fall.
+  for (const claim of selected) notes.register(claim);
   const context: BuildContext = { selected, corpus, notes };
 
   // Executive finding first, so its citations take the low numbers a reader
@@ -676,13 +697,15 @@ export function buildMemo(questionId: string): Memo | undefined {
     executive,
     sections,
     conclusion,
-    footnotes: notes.list,
+    records: notes.list,
     coverage: {
       selected: selected.length,
       corpus: corpus.length,
       untraced,
       documents: new Set(
-        notes.list.map((note) => note.document?.title).filter((title): title is string => !!title),
+        notes.list
+          .map((record) => record.document?.title)
+          .filter((title): title is string => !!title),
       ).size,
     },
   };

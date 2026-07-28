@@ -30,6 +30,7 @@
   --font-display: var(--font-sans);
   --font-heading: var(--font-sans);
   --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
 
   /* accent + truth palette */
   --color-gold: var(--accent-strong);

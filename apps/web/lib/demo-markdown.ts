@@ -128,7 +128,8 @@ export function memoToMarkdown({ memo, provenance, generatedAt }: ExportOptions)
   // --- sources -------------------------------------------------------------
   lines.push("## Sources");
   lines.push("");
-  for (const note of memo.footnotes) {
+  for (const note of memo.records) {
+    if (note.n === undefined) continue;
     const where = note.document ? ` ${note.document.anchor}`.trimEnd() : "";
     const head = `[^${note.n}]: **${note.claimId}** · ${note.jurisdiction} · ${note.instrument}, ${note.sourceLocator}${where}.`;
     const parts = [head];
@@ -151,6 +152,23 @@ export function memoToMarkdown({ memo, provenance, generatedAt }: ExportOptions)
     lines.push(parts.join("\n"));
     lines.push("");
   }
+
+  // Everything the memo drew on, cited inline or not, so an aggregate sentence
+  // in the prose can still be checked against the records behind it.
+  lines.push("## Records considered");
+  lines.push("");
+  for (const record of memo.records) {
+    const marker = record.n !== undefined ? `[${record.n}] ` : "";
+    lines.push(
+      `- ${marker}**${record.claimId}** · ${record.jurisdiction} · ${record.instrument}, ${record.sourceLocator}` +
+        (record.excerpt
+          ? `\n  > “${record.excerpt}”`
+          : "\n  Not yet traced to a source document.") +
+        `\n  ${record.interpretation}` +
+        `\n  Legal force: ${humanize(record.legalForce)}. Applicability: ${humanize(record.applicabilityStatus)}. Enforcement: ${record.enforcementStatus}.`,
+    );
+  }
+  lines.push("");
 
   lines.push(
     `Drawn from ${memo.coverage.selected} of ${memo.coverage.corpus} reviewed claims across ${memo.coverage.documents} source documents.` +

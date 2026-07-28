@@ -58,30 +58,53 @@ test("no coded field name or YAML syntax reaches the memo prose", () => {
   }
 });
 
-test("every citation resolves to a footnote, and every footnote is cited", () => {
+test("every citation resolves to a numbered record, and every number is cited", () => {
   for (const memo of memos()) {
-    const numbers = new Set(memo.footnotes.map((note) => note.n));
+    const numbered = memo.records.filter((record) => record.n !== undefined);
+    const numbers = new Set(numbered.map((record) => record.n!));
     const cited = new Set(allSentences(memo).flatMap((sentence) => sentence.notes));
     for (const n of cited) expect(numbers.has(n)).toBe(true);
     for (const n of numbers) expect(cited.has(n)).toBe(true);
   }
 });
 
-test("footnotes are numbered from one without gaps", () => {
+test("citation numbers run from one without gaps", () => {
   for (const memo of memos()) {
-    expect(memo.footnotes.map((note) => note.n)).toEqual(
-      memo.footnotes.map((_, index) => index + 1),
-    );
+    const numbers = memo.records
+      .map((record) => record.n)
+      .filter((n): n is number => n !== undefined)
+      .sort((a, b) => a - b);
+    expect(numbers).toEqual(numbers.map((_, index) => index + 1));
   }
 });
 
-test("each footnote carries the record it rests on", () => {
+test("citations are spent sparingly, and never on a bare count", () => {
+  // The record list carries the aggregate; a marker means the sentence rests on
+  // named provisions a reader would want to open.
+  for (const memo of memos()) {
+    const numbered = memo.records.filter((record) => record.n !== undefined);
+    expect(numbered.length).toBeGreaterThan(0);
+    expect(numbered.length).toBeLessThanOrEqual(8);
+    for (const sentence of allSentences(memo)) {
+      expect(sentence.notes.length).toBeLessThanOrEqual(6);
+    }
+  }
+});
+
+test("every selected record is listed, cited or not", () => {
+  for (const memo of memos()) {
+    expect(memo.records.length).toBe(memo.coverage.selected);
+    for (const record of memo.records) expect(record.claimId.length).toBeGreaterThan(0);
+  }
+});
+
+test("each record carries what a reader needs to check it", () => {
   const known = new Set(policyTestClaimRecords().map((claim) => claim.claimId));
   for (const memo of memos()) {
-    for (const note of memo.footnotes) {
+    for (const note of memo.records) {
       expect(known.has(note.claimId)).toBe(true);
       expect(note.interpretation.length).toBeGreaterThan(0);
-      expect(note.supportingFields.length).toBeGreaterThan(0);
+      if (note.n !== undefined) expect(note.supportingFields.length).toBeGreaterThan(0);
       // An excerpt is present only where the row was traced to a document; a
       // footnote never invents one.
       if (note.excerpt !== undefined) expect(note.document).toBeDefined();
@@ -92,7 +115,7 @@ test("each footnote carries the record it rests on", () => {
 test("an untraced record is reported as untraced rather than given an excerpt", () => {
   for (const memo of memos()) {
     for (const claimId of memo.coverage.untraced) {
-      const note = memo.footnotes.find((item) => item.claimId === claimId);
+      const note = memo.records.find((item) => item.claimId === claimId);
       if (note) {
         expect(note.excerpt).toBeUndefined();
         expect(note.document).toBeUndefined();
@@ -108,7 +131,7 @@ test("unknown enforcement survives into the footnote as `unknown`", () => {
   );
   expect(claims.length).toBeGreaterThan(0);
   const seen = memos()
-    .flatMap((memo) => memo.footnotes)
+    .flatMap((memo) => memo.records)
     .filter((note) => claims.some((claim) => claim.claimId === note.claimId));
   expect(seen.length).toBeGreaterThan(0);
   for (const note of seen) expect(note.enforcementStatus).toBe("unknown");
@@ -124,7 +147,7 @@ test("no memo introduces a score, percentage or ranking", () => {
 
 test("the memo never calls a voluntary measure binding", () => {
   for (const memo of memos()) {
-    for (const note of memo.footnotes) {
+    for (const note of memo.records) {
       if (note.legalForce !== "voluntary") continue;
       // A voluntary record may be cited, but only ever described as voluntary.
       expect(note.legalForce).toBe("voluntary");
@@ -206,7 +229,9 @@ test("the export quotes only excerpts that exist", () => {
     provenance: REPO_PROVENANCE,
     generatedAt: "2026-07-27T00:00:00.000Z",
   });
-  for (const note of memo.footnotes) {
+  for (const note of memo.records) {
+    // Every record reaches the export, cited inline or listed below the memo.
+    expect(markdown).toContain(note.claimId);
     if (note.excerpt) expect(markdown).toContain(note.excerpt);
   }
   if (memo.coverage.untraced.length > 0) {
