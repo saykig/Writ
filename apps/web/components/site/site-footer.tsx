@@ -15,7 +15,7 @@ export function SiteFooter() {
   }
 
   return (
-    <footer className="mt-24 border-t border-border bg-card/25">
+    <footer data-site-chrome className="mt-24 border-t border-border bg-card/25">
       <div className="mx-auto grid max-w-[76rem] gap-12 px-5 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.5fr_0.7fr_0.9fr] lg:gap-16">
         <div className="flex max-w-sm flex-col gap-4">
           <span className="text-3xl font-semibold tracking-[-0.035em] text-foreground">Writ</span>

@@ -60,7 +60,7 @@ export interface Methodology {
 }
 
 /** Fields shared by a reviewed parent row and a derived claim. */
-interface ClaimFields {
+export interface ClaimFields {
   record_type: string;
   legal_force?: string;
   compliance_function?: string;
@@ -373,6 +373,54 @@ export function policyTestEvidenceGroups(): EvidenceGroup[] {
     });
 
     return { parent, children, isBundle };
+  });
+}
+
+/**
+ * Every claim the reviewers accepted, flattened with its context, for callers
+ * that need the coded fields rather than a display string. A leaf parent yields
+ * one claim; a source bundle yields its children and no claim of its own,
+ * because a bundle carries no legal force to classify.
+ *
+ * The Demo builds its memos from this, so the memo and the Lab read the same
+ * normalization rather than two copies of it.
+ */
+export interface ClaimRecord {
+  claimId: string;
+  parentRowId: string;
+  jurisdiction: Jurisdiction;
+  instrument: string;
+  sourceLocator: string;
+  /** The reviewers' own note on the row, inherited by a bundle's children. */
+  interpretationNote: string;
+  fields: ClaimFields;
+}
+
+export function policyTestClaimRecords(): ClaimRecord[] {
+  return policyTestDataset().records.flatMap((record) => {
+    const base = {
+      parentRowId: record.row_id,
+      jurisdiction: record.jurisdiction,
+      sourceLocator: record.source_locator,
+      interpretationNote: record.interpretation_note,
+    };
+    if (record.record_type === "source_bundle") {
+      return (record.derived_claims ?? []).map((claim) => ({
+        ...base,
+        claimId: claim.claim_id,
+        // A child may override the bundle's instrument; nothing else is.
+        instrument: claim.instrument ?? record.instrument,
+        fields: claim as ClaimFields,
+      }));
+    }
+    return [
+      {
+        ...base,
+        claimId: record.row_id,
+        instrument: record.instrument,
+        fields: record as ClaimFields,
+      },
+    ];
   });
 }
 

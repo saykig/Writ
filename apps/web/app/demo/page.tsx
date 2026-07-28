@@ -1,68 +1,55 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { Demo, type DemoView, type RuleRow } from "@/components/demo/demo";
-import { pilotPreviews } from "@/lib/pilot-assessments";
-import { sourceFor, sourcingSummary } from "@/lib/pilot-sources";
-import { instrumentLabel } from "@/lib/policy-test-format";
-import { policyTestDataset, policyTestEvidenceEntries, policyTestSummary } from "@/lib/policy-test";
+import { MemoView } from "@/components/demo/memo-view";
+import { QuestionPicker } from "@/components/demo/question-picker";
+import { buildMemo, demoQuestion, demoQuestions } from "@/lib/demo-memo";
+import { policyTestDataset } from "@/lib/policy-test";
+import { readRepoText } from "@/lib/repo";
+import { REPO_PROVENANCE } from "@/lib/repo-provenance";
 
 export const metadata: Metadata = {
-  title: "Is model evaluation legally required? · Writ",
+  title: "Policy memos from reviewed records · Writ",
   description:
-    "A human-reviewed pilot applying one explicit test to the European Union and United States federal policy corpus, quoting the official text behind each answer.",
+    "Choose a policy question and read a memo assembled from human-reviewed European Union and United States records, with every sentence traceable to its source.",
 };
 
-export default function DemoPage() {
-  const dataset = policyTestDataset();
-  const entries = policyTestEvidenceEntries();
-  const summary = policyTestSummary();
-  const previews = pilotPreviews();
+/** The profile a memo is produced under, offered verbatim as a download. */
+const PROFILE_PATH = "pilot/eu-us-ai-evaluation/methodology/model-evaluation-duty.writ";
 
-  // Every provision the answer was actually computed over: the ones traced to
-  // the text of their source document. A row with nothing to quote never
-  // entered the evaluation, so showing it here would overstate the record.
-  const rows: RuleRow[] = entries
-    .map((entry) => {
-      // A source bundle groups its children and carries no legal force of its
-      // own, so it is not a provision the rule can be applied to. Its children
-      // appear on their own rows.
-      if (entry.recordType === "source_bundle") return undefined;
-      const sourced = sourceFor(entry.id) ?? sourceFor(entry.parentRowId);
-      if (!sourced) return undefined;
-      return {
-        id: entry.id,
-        place: entry.jurisdiction,
-        label: `${instrumentLabel(entry.instrument)} · ${entry.sourceLocator}`,
-        conditions: (entry.checks ?? []).map((check) => ({
-          label: check.label,
-          met: check.met,
-          actual: check.actual,
-        })),
-        quote: sourced.passage.quote,
-        citation: `${instrumentLabel(entry.instrument)}, ${entry.sourceLocator}`,
-        uri: sourced.document.uri,
-      };
-    })
-    .filter((row) => row !== undefined);
+export default async function DemoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+  const requested = typeof params.q === "string" ? params.q : undefined;
 
-  const view: DemoView = {
-    question: dataset.pilot_question,
-    conditionLabels: (entries.find((entry) => entry.id === "EU-06")?.checks ?? []).map(
-      (check) => check.label,
-    ),
-    rows,
-    // The verdicts are produced by running the reviewed rule against each
-    // jurisdiction's snapshot, not written here.
-    verdicts: previews.map((preview) => ({
-      place: preview.name,
-      answer: preview.answer,
-      note: preview.note,
-      citations: [...preview.qualifying],
-      considered: preview.consideredProvisions,
-      untraced: preview.untraced,
-    })),
-    sourcing: sourcingSummary(summary.parentRowCount),
-  };
+  // No question chosen: the three supported questions and nothing else.
+  if (requested === undefined) {
+    return (
+      <QuestionPicker
+        questions={demoQuestions().map((question) => ({
+          id: question.id,
+          question: question.question,
+          kind: question.kind,
+          description: question.description,
+        }))}
+        pilotQuestion={policyTestDataset().pilot_question}
+      />
+    );
+  }
 
-  return <Demo view={view} />;
+  if (!demoQuestion(requested)) notFound();
+  const memo = buildMemo(requested);
+  if (!memo) notFound();
+
+  return (
+    <MemoView
+      memo={memo}
+      provenance={REPO_PROVENANCE}
+      profileSource={readRepoText(PROFILE_PATH)}
+      profileFilename="model-evaluation-duty.writ"
+    />
+  );
 }

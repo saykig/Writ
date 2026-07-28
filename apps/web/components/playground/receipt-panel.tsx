@@ -99,7 +99,8 @@ export function ReceiptPanel({
   lockMember = false,
 }: ReceiptPanelProps) {
   const [member, setMember] = useState<Member>(initialMember);
-  const [profile, setProfile] = useState<Profile>("reviewed");
+  // One profile, so this is fixed rather than chosen; the receipt still names it.
+  const profile: Profile = "reviewed";
   const [receipt, setReceipt] = useState<EvaluationReceipt | null>(initialReceipt ?? null);
   const [evaluatedSource, setEvaluatedSource] = useState<string | null>(
     initialReceipt ? source : null,

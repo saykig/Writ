@@ -218,3 +218,65 @@
     }
   }
 }
+
+/* Printing a policy memo.
+ *
+ * "Save as PDF" is one of the memo's two exports, so the printed page has to be
+ * a document rather than a screenshot of a dark interface: light ground, black
+ * text, no site chrome, and the citation markers kept legible so the numbered
+ * sources at the end can still be followed. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Site chrome and controls are not part of the document. */
+  [data-site-chrome],
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  article {
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  article h1,
+  article h2,
+  article h3 {
+    color: #111 !important;
+    break-after: avoid;
+  }
+
+  /* A citation is a button on screen; in print it is just its number. */
+  article sup button {
+    color: #111 !important;
+    text-decoration: none !important;
+  }
+
+  article blockquote {
+    border-left: 1px solid #999;
+  }
+
+  /* Keep a source and its excerpt on one page. */
+  article ol li {
+    break-inside: avoid;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    word-break: break-all;
+  }
+}

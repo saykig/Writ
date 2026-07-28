@@ -12,8 +12,12 @@ describe("frontend architecture", () => {
     for (const path of ["app/playground/page.tsx", "app/how-it-works/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
-    // The demo keeps its framing: it opens with the question being answered.
-    expect(read("components/demo/demo.tsx")).toContain("{view.question}");
+    // The demo opens on the three supported questions, with no free-text box:
+    // a memo is assembled from reviewed records, not searched for.
+    const picker = read("components/demo/question-picker.tsx");
+    expect(picker).toContain("Choose a policy question to test");
+    expect(picker).not.toContain("<input");
+    expect(picker).not.toContain("<textarea");
   });
 
   test("the Playground is the tool, with no page header above it", () => {
