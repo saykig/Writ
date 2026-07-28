@@ -85,7 +85,7 @@ mappings:
     source_id: g7.evaluations.2025.final
     reviewer_id:
 
-# --- G20 Research Group 2024 Rio de Janeiro summit ---
+  # --- G20 Research Group 2024 Rio de Janeiro summit ---
   - mapping_id: g20.2024-rio.institution.g20
     namespace: institution
     source_term: "G20"

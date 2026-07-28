@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { CommandMenu } from "@/components/site/command-menu";
 import { ThemeToggle } from "@/components/site/theme-toggle";
-import { GITHUB_URL, PRIMARY_NAV, RESEARCH_NAV, SECONDARY_NAV } from "@/components/site/nav-items";
+import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
 
 function GitHubMark({ className }: { className?: string }) {
   return (
@@ -93,10 +93,8 @@ export function SiteNav() {
               <SheetHeader className="border-b border-border">
                 <SheetTitle className="text-xl font-semibold tracking-[-0.03em]">Writ</SheetTitle>
               </SheetHeader>
-              {/* There is no ⌘K on a phone, so the sheet carries every
-                  destination, with the header's three listed first. */}
               <nav className="flex flex-col p-2" aria-label="Primary">
-                {[...PRIMARY_NAV, ...SECONDARY_NAV, ...RESEARCH_NAV].map((item) => {
+                {PRIMARY_NAV.map((item) => {
                   const active = isActive(pathname, item.href);
                   return (
                     <SheetClose

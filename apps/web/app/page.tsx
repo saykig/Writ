@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 
 import { g7AssessmentPreviews } from "@/lib/g7-assessments";
 import { G7GlobeSelector } from "@/components/g7/g7-globe-selector";
-import { PolicyTestSection } from "@/components/policy-test/policy-test-section";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 
@@ -28,8 +27,8 @@ export default function Home() {
                 className="text-[0.78rem] sm:text-[0.82rem]"
                 nativeButton={false}
                 render={
-                  <Link href="/benchmark">
-                    See how it works with 2025 G7 Commitments
+                  <Link href="/how-it-works">
+                    See how it works
                     <ArrowRight />
                   </Link>
                 }
@@ -48,8 +47,6 @@ export default function Home() {
           </div>
         </div>
       </Reveal>
-
-      <PolicyTestSection />
     </main>
   );
 }

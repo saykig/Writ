@@ -9,12 +9,7 @@ describe("frontend architecture", () => {
   test("all public routes have their approved headings", () => {
     const routes: Record<string, string> = {
       "app/playground/page.tsx": "Write and test a policy methodology.",
-      "app/benchmark/page.tsx": "See Writ used for policy compliance",
-      "app/gap-matrix/page.tsx": "A second methodology, with a different scoring shape.",
-      "app/methodologies/page.tsx": "Every rule, open to review.",
-      "app/receipts/page.tsx": "See how each result was reached.",
       "app/how-it-works/page.tsx": "From methodology to reproducible assessment.",
-      "app/policy-test/eu-us-ai-evaluation/page.tsx": "<PolicyTest ",
     };
 
     for (const [path, heading] of Object.entries(routes)) {
@@ -36,29 +31,31 @@ describe("frontend architecture", () => {
     expect(home).not.toContain("Try the Playground");
   });
 
-  test("the header offers two destinations and nothing is orphaned", () => {
+  test("the site is three surfaces and the nav names exactly two", () => {
     const navItems = read("components/site/nav-items.ts");
-    const nav = read("components/site/site-nav.tsx");
-    const footer = read("components/site/site-footer.tsx");
-    const commandMenu = read("components/site/command-menu.tsx");
 
-    // The header renders PRIMARY_NAV only: Policy Test and How it works.
-    const primary = navItems.slice(
-      navItems.indexOf("export const PRIMARY_NAV"),
-      navItems.indexOf("export const SECONDARY_NAV"),
-    );
-    expect(primary).toContain('label: "Policy Test"');
-    expect(primary).toContain('label: "How it works"');
-    for (const removed of ["Benchmark", "Writ Lab", "Methodologies", "Receipts"]) {
-      expect(primary).not.toContain(`label: "${removed}"`);
+    // Writ Lab and How it works; the homepage is reached from the wordmark.
+    expect(navItems).toContain('label: "Writ Lab"');
+    expect(navItems).toContain('label: "How it works"');
+    for (const removed of ["Benchmark", "Methodologies", "Receipts", "Gap Matrix", "Policy Test"]) {
+      expect(navItems).not.toContain(`label: "${removed}"`);
     }
+    // The retired groups are gone rather than left dangling.
+    expect(navItems).not.toContain("SECONDARY_NAV");
+    expect(navItems).not.toContain("RESEARCH_NAV");
 
-    // The desktop header is the only place restricted to PRIMARY_NAV.
-    expect(nav).toContain("{PRIMARY_NAV.map((item) => {");
-    // Every removed destination stays reachable elsewhere.
-    expect(nav).toContain("[...PRIMARY_NAV, ...SECONDARY_NAV, ...RESEARCH_NAV]");
-    expect(footer).toContain("...SECONDARY_NAV");
-    expect(commandMenu).toContain("[...SECONDARY_NAV, ...RESEARCH_NAV]");
+    for (const page of ["app/page.tsx", "app/how-it-works/page.tsx", "app/playground/page.tsx"]) {
+      expect(existsSync(resolve(WEB_ROOT, page))).toBe(true);
+    }
+    for (const gone of [
+      "app/benchmark",
+      "app/gap-matrix",
+      "app/methodologies",
+      "app/receipts",
+      "app/policy-test",
+    ]) {
+      expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
+    }
   });
 
   test("archive is absent from routes and navigation", () => {
@@ -187,20 +184,6 @@ describe("frontend architecture", () => {
     expect(layout).toContain("enableSystem={false}");
   });
 
-  test("receipts page presents an honest empty state and working next actions", () => {
-    const receipts = read("app/receipts/page.tsx");
-    expect(receipts).toContain("No public receipts are available yet.");
-    expect(receipts).toContain("Open the G7 example");
-    expect(receipts).toContain("Create a receipt in the Writ Lab");
-  });
-
-  test("methodologies uses the requested review-focused copy", () => {
-    const methodologies = read("app/methodologies/page.tsx");
-    expect(methodologies).toContain(
-      "Compare the original methodology with the rules Writ uses and resolve any problems before producing a result.",
-    );
-  });
-
   test("the footer omits retired metadata and links to the Writ repository", () => {
     const footer = read("components/site/site-footer.tsx");
     const navItems = read("components/site/nav-items.ts");
@@ -213,13 +196,9 @@ describe("frontend architecture", () => {
 
   test("every landing-page section uses the reduced-motion-safe scroll reveal", () => {
     const home = read("app/page.tsx");
-    const policyTest = read("components/policy-test/policy-test-section.tsx");
     const reveal = read("components/site/reveal.tsx");
-    // The homepage is now the hero plus the Policy Test section, and each
-    // section owns its own Reveal. Counting them in page.tsx alone stopped
-    // being meaningful once sections moved into their own components.
+    // The homepage is the hero alone.
     expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
-    expect(policyTest.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
     expect(reveal).toContain("IntersectionObserver");
     expect(reveal).toContain("prefers-reduced-motion: reduce");
     expect(reveal).toContain('status === "in"');

@@ -9,34 +9,12 @@ export interface NavItem {
 }
 
 /**
- * The header. Two destinations: see it run, and understand how it works.
- * Everything else is a tool you reach from that work rather than something you
- * choose between on arrival, so it lives in `SECONDARY_NAV` — still one
- * keystroke away in ⌘K, still in the footer, still in the mobile sheet.
+ * The whole site: the Lab, where a methodology is written and run, and the
+ * reading that explains what running it means. The homepage carries the rest.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
-  {
-    href: "/policy-test/eu-us-ai-evaluation" as Route,
-    label: "Policy Test",
-    hint: "Run a reviewed policy question end to end",
-  },
-  { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
-];
-
-/** Reachable from the command menu and the footer, but not the header. */
-export const SECONDARY_NAV: readonly NavItem[] = [
-  { href: "/benchmark", label: "Benchmark", hint: "The 2025 G7 discrepancy ledger" },
   { href: "/playground", label: "Writ Lab", hint: "Compile, analyze, evaluate live" },
-  {
-    href: "/methodologies" as Route,
-    label: "Methodologies",
-    hint: "Source, structure, and diagnostics",
-  },
-  { href: "/receipts" as Route, label: "Receipts", hint: "How each assessment was reached" },
-];
-
-export const RESEARCH_NAV: readonly NavItem[] = [
-  { href: "/gap-matrix", label: "Gap Matrix", hint: "A second methodology: AI governance" },
+  { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 
 export interface ExampleItem {

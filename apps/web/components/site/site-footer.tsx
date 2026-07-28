@@ -3,30 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { GITHUB_URL, PRIMARY_NAV, RESEARCH_NAV, SECONDARY_NAV } from "@/components/site/nav-items";
+import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
 
 /**
  * Quiet closing band shared by every non-homepage route.
  */
 export function SiteFooter() {
   const pathname = usePathname();
-  // The tools kept out of the header stay reachable here.
-  const productLinks = [
-    ...PRIMARY_NAV.filter((item) => item.href !== "/how-it-works"),
-    ...SECONDARY_NAV,
-  ];
-  const resourceLinks = [
-    PRIMARY_NAV.find((item) => item.href === "/how-it-works"),
-    ...RESEARCH_NAV,
-  ].filter((item) => item !== undefined);
-
   if (pathname === "/") {
     return null;
   }
 
   return (
     <footer className="mt-24 border-t border-border bg-card/25">
-      <div className="mx-auto grid max-w-[76rem] gap-12 px-5 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.35fr_0.7fr_0.8fr_0.9fr] lg:gap-16">
+      <div className="mx-auto grid max-w-[76rem] gap-12 px-5 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.5fr_0.7fr_0.9fr] lg:gap-16">
         <div className="flex max-w-sm flex-col gap-4">
           <span className="text-3xl font-semibold tracking-[-0.035em] text-foreground">Writ</span>
           <p className="text-sm leading-7 text-muted-foreground">
@@ -35,22 +25,9 @@ export function SiteFooter() {
           </p>
         </div>
 
-        <nav className="flex flex-col gap-3" aria-label="Product">
-          <p className="text-sm font-semibold text-foreground">Product</p>
-          {productLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <nav className="flex flex-col gap-3" aria-label="Resources">
-          <p className="text-sm font-semibold text-foreground">Resources</p>
-          {resourceLinks.map((item) => (
+        <nav className="flex flex-col gap-3" aria-label="Site">
+          <p className="text-sm font-semibold text-foreground">Site</p>
+          {PRIMARY_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
