@@ -4,11 +4,6 @@ Writ is an auditable policy-evaluation compiler for institutional commitment com
 a normative methodology, a reviewed evidence ledger, and explicit interpretation rules into a
 deterministic, reproducible evaluation receipt with a proof tree and content hashes.
 
-Its normalized historical corpus contracts support distinct G7 and G20 source adapters while
-keeping identified commitments, assessment selections, compliance reports, and member assessments
-separate. Historical analyst scores are expert-assigned reference labels, never universal scoring
-rules or substitutes for current evidence.
-
 The textual DSL compiles into a typed canonical intermediate representation (IR). The IR,
 the deterministic evaluator, the frozen evidence snapshot, and the receipt are the source of
 truth — a rendered report is a view, never the record.
@@ -64,23 +59,3 @@ Database and object storage for the evidence ledger run via Docker Compose:
 bun run db:up          # postgres:17 + minio
 bun run db:down
 ```
-
-## Web interface
-
-The Next.js interface in `apps/web` defaults to a near-black research theme, with an explicit
-light/dark toggle. Its shared navigation and page-header system cover the Writ Lab, checked-in
-methodologies, G7 benchmark, Gap Matrix, receipts, and explanatory material. The homepage explains
-why Writ is needed before introducing the process. Archive is intentionally not exposed until
-normalized corpus records are available.
-
-The homepage globe is a first-party D3 canvas component at
-`apps/web/components/ui/wireframe-dotted-globe.tsx`. It reads the checked-in Natural Earth 1:110m
-land geometry from `/data/ne_110m_land.json`; there is no remote runtime geometry request. The
-component supports pointer capture, mouse and touch rotation, page-safe vertical touch scrolling,
-reduced motion, and responsive resizing. Eight interactive markers and the adjacent selector are
-derived from the frozen G7 benchmark members; their approved capital or institutional-seat anchors
-are recorded in `packages/benchmark/src/members.ts`. Each preview links to a shareable
-`/lab/g7-2025/<member>` route that opens the member's existing methodology, reviewed evidence,
-diagnostics, result, and receipt in Writ Lab. The local GeoJSON was retrieved from the
-`martynafford/natural-earth-geojson` distribution and is derived from Natural Earth public-domain
-map data.
