@@ -1,12 +1,6 @@
 # Writ
 
-Writ is a textual DSL that compiles into a typed canonical intermediate representation (IR). The IR,
-the deterministic evaluator, the frozen evidence snapshot, and the receipt are the source of
-truth — a rendered report is a view, never the record.
-
-> Build the evaluator and evidence receipts to be trustworthy before making the language
-> pleasant to write. See `AGENTS.md` for the non-negotiable invariants and `START_HERE.md`
-> for the normative precedence order.
+Writ is a source-grounded knowledge system and domain-specific language (DSL) for political science and global affairs. It represents claims, institutions, policies, theories, evidence and relationships while preserving their provenance, scope, uncertainty and contestation. Questions are asked across corpora; they do not define corpora.
 
 ## Layout
 
