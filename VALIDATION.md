@@ -31,7 +31,7 @@ Authoritative schemas live only under `schemas/`. Runtime vendor copies under
 For documentation-only changes:
 
 ```bash
-bun x prettier --check AGENTS.md README.md START_HERE.md PRODUCT.md DESIGN.md \
+bun x prettier --check AGENTS.md README.md PRODUCT.md DESIGN.md \
   VALIDATION.md VERSION_POLICY.md TASKS.yaml adr docs archive/plans internal
 git diff --check
 ```

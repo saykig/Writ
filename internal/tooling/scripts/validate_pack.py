@@ -56,7 +56,6 @@ SCHEMA_EXAMPLES = [
 
 REQUIRED_FILES = [
     "README.md",
-    "START_HERE.md",
     "AGENTS.md",
     "TASKS.yaml",
     "schemas/README.md",
