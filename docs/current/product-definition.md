@@ -48,8 +48,8 @@ or analyze them, but a source-reported judgment and a Writ-derived result are di
 
 ## Current material
 
-- The EU–US AI comparison is a pilot analysis over reviewed material. Its comparison question,
-  headline rule, and conclusion do not define an EU or US corpus.
+- The EU and US AI-governance corpora are independent jurisdictional corpora. The former EU–US
+  comparison question, headline rule, and conclusion are preserved only in the archived pilot.
 - G20 Rio records exist as multilateral political material. The current frozen review copy contains
   13 ingested statements and 546 source-reported member judgments; it explicitly records that 161
   reported commitments have not been ingested.

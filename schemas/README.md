@@ -5,7 +5,7 @@ Schema 2020-12. Files under `packages/domain/schemas/` are generated, drift-guar
 for runtime packaging; they are not a second authority.
 
 The frozen EU-US pilot keeps three local schemas under
-`pilot/eu-us-ai-evaluation/schemas/` until its corpus migration. Those contracts are
+`archive/pilots/eu-us-ai-evaluation-v1/original/schemas/`. Those contracts are
 `archived pilot-local`: they govern only that preserved pilot and are not active global Writ
 schemas.
 
@@ -74,11 +74,11 @@ relocation.
 
 ## Pilot-local schemas
 
-| Schema                                                             | Classification       |
-| ------------------------------------------------------------------ | -------------------- |
-| `pilot/eu-us-ai-evaluation/schemas/reviewed_dataset.schema.json`   | archived pilot-local |
-| `pilot/eu-us-ai-evaluation/schemas/normalized_claim.schema.json`   | archived pilot-local |
-| `pilot/eu-us-ai-evaluation/schemas/headline_judgments.schema.json` | archived pilot-local |
+| Schema                                                                                  | Classification       |
+| --------------------------------------------------------------------------------------- | -------------------- |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/reviewed_dataset.schema.json`   | archived pilot-local |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/normalized_claim.schema.json`   | archived pilot-local |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/headline_judgments.schema.json` | archived pilot-local |
 
 ## Layer ownership
 

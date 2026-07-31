@@ -8,6 +8,17 @@ The G20 adapter is deliberately unavailable during the schema migration. Discove
 commands remain gated, no Rio source is requested, and ambiguous rows emit review items rather than
 fabricated assessments.
 
+The EU and US AI-governance corpora are independent, active jurisdictional corpora generated from
+the byte-preserved reviewed pilot input. Regenerate or drift-check them with:
+
+```bash
+PYTHONPATH=apps/ingest/src python scripts/migrate_eu_us_corpora.py
+PYTHONPATH=apps/ingest/src python scripts/migrate_eu_us_corpora.py --check
+```
+
+The generator preserves the reviewed values exactly, uses deterministic UUIDv5 identities, and
+does not evaluate the archived EU-versus-US question.
+
 Run corpus validation from the repository root with the ingest development environment:
 
 ```bash

@@ -63,8 +63,13 @@ Generated caches, virtual environments, package installations, and `.git` intern
 │   ├── evaluator/
 │   ├── language/
 │   └── provenance/
-├── pilot/
-│   └── eu-us-ai-evaluation/
+├── archive/
+│   └── pilots/
+│       └── eu-us-ai-evaluation-v1/
+├── corpora/
+│   └── jurisdictions/
+│       ├── eu/ai-governance/
+│       └── us/ai-governance/
 ├── reference-core/
 │   ├── src/
 │   └── test/
@@ -75,7 +80,7 @@ Generated caches, virtual environments, package installations, and `.git` intern
     ├── benchmarks/
     ├── fixtures/
     ├── ingestion/
-    ├── pilot/
+    ├── corpora/
     └── schema/
 ```
 
@@ -89,7 +94,7 @@ artifact can still be frozen and reviewable; it is not the place where later cor
 
 | Knowledge material | Authoritative or source-grounded input | Generated or derived copies | Current consumers and checks |
 | --- | --- | --- | --- |
-| EU–US AI-governance review | `pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml` is explicitly the authoritative hand-reviewed table. `sources/sources.yml` governs acquisition. | `normalized/{records,claims,headline-judgments}.json` from `scripts/emit_eu_us_ai_evaluation.py`; `provenance/*.json` from `scripts/fetch_pilot_sources.py`; `evidence/{eu,us}.snapshot.json` and `coverage.json` from `scripts/build-pilot-snapshot.ts`; web projections `apps/web/lib/policy-test-data.ts` and `apps/web/lib/frozen-data.ts`. | Python pilot builder/tests; web demo, memo, globe, Playground toolchain, and web tests. |
+| EU and US AI-governance corpora | The hash-pinned reviewed input is preserved at `archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml`; independent active records live at `corpora/jurisdictions/{eu,us}/ai-governance/`. | The archive retains the original normalized comparison outputs, methodology, provenance, and snapshots. Active corpora are deterministic projections from `scripts/migrate_eu_us_corpora.py`; web comparison views read the archived saved query. | Corpus migration tests and generator drift checks; web demo, memo, globe, Playground toolchain, and web tests. |
 | G20 Rio 2024 | Frozen report excerpts in `benchmark/2024-rio-g20/sources/*.pdf`, their `sources.json`, canonical source policy in `config/source_registry.yml`, and reviewed vocabulary in `config/corpus_vocabulary.yml`. | Six files in `benchmark/2024-rio-g20/normalized/`, emitted by `scripts/emit_g20_rio.py`; `data/manifests/g20/2024-rio/*` records acquisition/reconciliation metadata. | `G20RioAdapter`, corpus validators, schema tests, ingestion tests, publishing scripts, and stale web tracing configuration. |
 | G7 2025 AI-for-SMEs | Frozen report PDF, reviewed action catalog in `packages/benchmark/src/members.ts`, methodology/rubric inputs, reviewed tally, and published labels. The action catalog says every action is grounded in the frozen chapter. | `sources.json`, `methodology-inventory.json`, eight evidence snapshots, and two profiles from `packages/benchmark/src/generate.ts`; `discrepancy-ledger.json` from the benchmark runner. | `packages/benchmark`, G7 adapter, conformance tests, examples, and stale web tracing configuration. |
 | Source registry | `config/source_registry.yml` plus `schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json`. | `data/source-registry.json`, checked by `scripts/generate_source_registry.py --check`; `data/source-registry-summary.md` is descriptive output. | Ingest registry policy, API seeding/publishing, G7/G20 adapters, tests. |
@@ -110,7 +115,7 @@ artifact can still be frozen and reviewable; it is not the place where later cor
 The normalized set contains 18 leaf-parent claims and 14 legally distinct bundle-child claims.
 No child claims were merged.
 
-`pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml` SHA-256:
+`archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml` SHA-256:
 
 ```text
 8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb
@@ -167,9 +172,9 @@ summit-compliance schemas remain unchanged in meaning and version under
 
 | File | Governs | Consumer |
 | --- | --- | --- |
-| `reviewed_dataset.schema.json` | Authoritative reviewed YAML shape, including parent rows and distinct child claims. | Python pilot builder and tests. |
-| `normalized_claim.schema.json` | Each generated atomic claim. | Python generator/tests. |
-| `headline_judgments.schema.json` | Generated pilot comparison result. | Python generator/tests. |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/reviewed_dataset.schema.json` | Preserved reviewed YAML shape, including parent rows and distinct child claims. | Archived reference code and active corpus migration tests. |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/normalized_claim.schema.json` | Each historical generated atomic claim. | Archived reference code/tests. |
+| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/headline_judgments.schema.json` | Historical generated comparison result. | Archived reference code/tests and saved frontend query. |
 
 The pilot contracts are self-contained and use only local `$defs`. They are not extensions of the
 summit-compliance schemas.
@@ -180,7 +185,7 @@ Inspect and update these callers before any later relocation:
 
 | Planned material | Path-dependent code and configuration |
 | --- | --- |
-| EU–US pilot to archive plus independent EU/US corpora | `apps/ingest/src/writ_ingest/pilot/eu_us_ai_evaluation.py`; `scripts/{emit_eu_us_ai_evaluation.py,fetch_pilot_sources.py,build-pilot-snapshot.ts}`; `apps/web/scripts/{embed-frozen.ts,embed-policy-test.ts,embed-provenance.ts}`; `apps/web/lib/{toolchain,pilot-assessments,pilot-sources,policy-test,policy-test-data}.ts`; demo/globe components; web and Python pilot tests; `.prettierignore`; pilot README. |
+| EU–US pilot archive and independent EU/US corpora (completed) | Historical builders/tests are under `archive/pilots/eu-us-ai-evaluation-v1/`; active generation is `scripts/migrate_eu_us_corpora.py`; web saved-query consumers point to the archive. |
 | G20 into `corpora/multilateral/g20/2024-rio` | `G20RioAdapter.SOURCES_FIXTURE`; `scripts/emit_g20_rio.py`; `scripts/validate_corpus.py`; `scripts/publish_corpus.ts`; ingestion/schema tests; `apps/web/next.config.ts`; data manifest references; source registry/vocabulary IDs. |
 | G7 into `corpora/multilateral/g7/2025-ai-sme` and score reproduction under `benchmarks/evaluator/` | `packages/benchmark/src/{paths,methodology,generate,run,members,evidence}.ts`; benchmark tests; G7 adapter; `scripts/{replicate.ts,demo.sh,validate_corpus.py}`; `apps/web/next.config.ts`; examples and discrepancy ledger references. |
 | `examples/` and `fixtures/` cleanup | language/CLI/analyzer/domain/benchmark tests; `scripts/demo.sh`; `scripts/validate_pack.py`; web tracing comments/config; conformance parity tests. |
@@ -192,13 +197,14 @@ Inspect and update these callers before any later relocation:
 | Path | Classification | Reset decision/evidence |
 | --- | --- | --- |
 | `apps/api` | current | Active Fastify application. |
-| `apps/ingest` | current | Active acquisition/normalization code, including G7/G20 and pilot adapters. |
+| `apps/ingest` | current | Active acquisition/normalization code, including G7/G20 adapters and the EU/US corpus migration. |
 | `apps/web` | current, with generated and stale compatibility areas | Active Next app. `lib/frozen-data.ts`, `policy-test-data.ts`, and `repo-provenance.ts` are generated. `policy-test-*`, Playground naming, deleted-route traces, and compliance-first copy need later semantic cleanup. |
 | `packages/{domain,evaluator,analyzer,language,provenance,cli,conformance}` | current | Production semantic/compiler stack. |
 | `packages/benchmark` | current analysis capability with path-bound corpus code | Preserve evaluator reproduction capability; separate source corpus from benchmark outputs. |
 | `schemas` | current authority | Sole JSON Schema authority, split into core, extensions, analysis, and versioned compatibility layers. |
 | `protocols` | current authority | Language EBNF and API OpenAPI protocol contracts. |
-| `pilot/eu-us-ai-evaluation` | archive candidate plus migration source | Preserve the combined pilot exactly in the archive; derive independent active EU and US corpora without its comparison question or conclusion. |
+| `archive/pilots/eu-us-ai-evaluation-v1` | historical archive | Byte-preserved combined pilot, original methodology, provenance, generated outputs, reference code/tests, and checksum manifest. |
+| `corpora/jurisdictions/{eu,us}/ai-governance` | current source-of-truth corpora | Independent active corpora with deterministic identities and complete legacy-reference maps. |
 | `benchmark/2024-rio-g20` | current source corpus in the wrong category/path | Reclassify as multilateral political corpus. |
 | `benchmark/2025-ai-sme` | mixed source corpus and generated benchmark | Split authoritative G7 knowledge from score-reproduction benchmark. |
 | `benchmark/fatf-mutual-evaluation` | example/fixture candidate | No authoritative country result corpus; reproduction test is `todo`. |
@@ -326,20 +332,20 @@ The shell did not expose `bun` or Node on `PATH`; the pinned installed Bun binar
 | `pytest -q` with no package path | fail | Nine collection errors because `writ_ingest` is not installed/on `PYTHONPATH`. |
 | `PYTHONPATH=apps/ingest/src pytest -q` | fail | Two collection errors because the local venv lacks `fitz`. |
 | Python tests not requiring PDF parser | pass | Pilot: 77; schema: 29; benchmark/API smoke: 8. |
-| `emit_eu_us_ai_evaluation.py --check` | pass | Confirms 24 parents, 32 atomic claims, no pending/rejected review. |
+| `scripts/migrate_eu_us_corpora.py --check` | pass | Confirms 24 imported parent reviews, 32 atomic claims, and deterministic active projections. |
 | `emit_g20_rio.py --check` | environment-blocked | Cannot import `fitz`; checked-in counts were independently inspected without rewriting data. |
 | `generate_source_registry.py --check` | pass | Generated JSON agrees with canonical YAML. |
 
-The build regenerated `apps/web/lib/repo-provenance.ts` with the current commit as designed. That
-single build-produced line was restored to `HEAD` immediately. No generated file is changed in this
-branch.
+The build regenerates `apps/web/lib/repo-provenance.ts` with the current commit as designed; that
+build-only stamp is restored after validation. Prompt 5 intentionally regenerates the frontend
+embeds and source-registry projection from their relocated authoritative inputs.
 
 ## Reset risks and sequencing constraints
 
-1. Archive the combined EU–US pilot before deriving active jurisdiction corpora, but do not let its
-   question, headline rule, or comparison conclusion define either new corpus.
-2. Introduce permanent deterministic IDs and a complete legacy-reference migration map before
-   changing relationship targets.
+1. The combined EU–US pilot is archived; its question, headline rule, and comparison conclusion do
+   not define either active corpus.
+2. Permanent deterministic IDs and complete legacy-reference migration maps now govern active
+   relationship targets.
 3. Split authoritative G7/G20 knowledge from evaluator benchmark outputs; never treat published
    scores as Writ-derived facts.
 4. Move schemas mechanically before changing semantics. Preserve schema versions and update `$id`,
@@ -347,12 +353,14 @@ branch.
 5. Remove source-specific external product material entirely while preserving generic
    weighted-ordinal test coverage with synthetic Writ-owned fixtures.
 6. Retire `reference-core` only after its parity role is absorbed into conformance.
-7. Regenerate or replace `MANIFEST.sha256`; it already contains deleted paths and should not drive
-   moves without verification.
+7. Keep `MANIFEST.sha256` and the pilot archive checksum manifest synchronized with tracked
+   relocations; stale paths must not drive moves without verification.
 8. Clear or regenerate ignored Next type output before interpreting root typecheck failures as
    source errors.
 
-## Acceptance-gate confirmation
+## Original Prompt 1 acceptance-gate confirmation
+
+The following records the audit-only gate as it stood before the later reset steps changed paths:
 
 - No corpus, schema, or runtime file was moved.
 - No corpus, schema, runtime, or generated file is changed.

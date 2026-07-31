@@ -31,5 +31,5 @@ This is the complete old-path to new-path map for the schema/protocol authority 
 The following paths intentionally do not move:
 
 - `packages/domain/schemas/*.schema.json` are generated/runtime vendor copies, not authorities.
-- `pilot/eu-us-ai-evaluation/schemas/*.schema.json` remain archived pilot-local until the corpus
-  migration branch.
+- `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/*.schema.json` are preserved
+  pilot-local contracts and are not active schema authority.

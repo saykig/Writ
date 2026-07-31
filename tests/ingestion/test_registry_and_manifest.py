@@ -39,7 +39,7 @@ def g20_source() -> dict[str, object]:
 def test_registry_is_canonical_and_generated_json_is_synchronized() -> None:
     registry = load_registry()
     assert registry["sources"][0]["id"] == "g20_research_group"
-    assert len(registry["sources"]) == 104
+    assert len(registry["sources"]) == 106
     expected = canonical_json_bytes(project_legacy_registry(registry))
     assert (ROOT / "data/source-registry.json").read_bytes() == expected
 

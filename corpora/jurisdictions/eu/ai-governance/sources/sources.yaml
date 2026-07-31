@@ -1,0 +1,47 @@
+schema_version: 1.0.0
+jurisdiction: EU
+sources:
+- machine_id: 80bce319-838e-5518-bab4-6da5ba6c0c2d
+  ref: eu/ai-governance/eu-ai-act-2024-1689/official-document#source-version
+  display_ref: Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
+    Intelligence Act)
+  aliases: []
+  legacy_refs:
+  - dv-eu-ai-act-2024-1689
+  record_type: source_document_version
+  jurisdiction: EU
+  verification_status: verified
+  document_id: eu-ai-act-2024-1689
+  title: Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
+    Intelligence Act)
+  uri: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689
+  media_type: text/html
+  retrieved_at: '2026-07-28T00:00:00Z'
+  issued_at: '2024-07-12T00:00:00Z'
+  sha256: sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c
+  publisher: Publications Office of the European Union
+  source_tier: 1
+- machine_id: 5243cf6c-cc84-5a5e-b928-db1211a07a26
+  ref: eu/ai-governance/commission-gpai-guidelines/classification#unresolved-source
+  display_ref: Unresolved source — Commission GPAI guidelines
+  aliases: []
+  legacy_refs: []
+  record_type: unresolved_source
+  jurisdiction: EU
+  verification_status: unresolved
+  imported_parent_legacy_ref: EU-10
+  instrument: COMMISSION_GPAI_GUIDELINES
+  source_locator: Commission GPAI guidelines
+  reason: no source document is registered for this instrument
+- machine_id: cc6f9844-f11c-506b-837e-39a604c9e1ef
+  ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#unresolved-source
+  display_ref: Unresolved source — AI Office signatory notice
+  aliases: []
+  legacy_refs: []
+  record_type: unresolved_source
+  jurisdiction: EU
+  verification_status: unresolved
+  imported_parent_legacy_ref: EU-12
+  instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
+  source_locator: AI Office signatory notice
+  reason: no source document is registered for this instrument

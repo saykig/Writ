@@ -2,7 +2,8 @@
  * Typed reader for the human-reviewed EU–US AI evaluation pilot.
  *
  * The authoritative record is the reviewed YAML annotation table at
- * `pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml`. It is parsed once
+ * `archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml`.
+ * It is parsed once
  * at build time by `scripts/embed-policy-test.ts`; this module only reads,
  * indexes, and shapes that data for the interface. Nothing here invents a claim,
  * a count, a jurisdiction, or a piece of supporting evidence.

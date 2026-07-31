@@ -298,7 +298,9 @@ describe("unknown is preserved", () => {
 describe("data provenance", () => {
   test("the generated projection is built from the authoritative YAML", () => {
     const script = read("scripts/embed-policy-test.ts");
-    expect(script).toContain("pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml");
+    expect(script).toContain(
+      "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml",
+    );
     expect(script).toContain("Bun.YAML.parse");
     expect(script).toContain("requireFields");
 
@@ -309,7 +311,10 @@ describe("data provenance", () => {
 
   test("the projection agrees with the reviewed YAML on disk", () => {
     const yaml = readFileSync(
-      resolve(WEB_ROOT, "../../pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml"),
+      resolve(
+        WEB_ROOT,
+        "../../archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml",
+      ),
       "utf8",
     );
     const source = Bun.YAML.parse(yaml) as { records: unknown[]; dataset_id: string };

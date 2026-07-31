@@ -1,0 +1,541 @@
+schema_version: 1.0.0
+jurisdiction: EU
+claims:
+- machine_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+  ref: eu/ai-governance/ai-act/art-53-1-a#technical-documentation
+  display_ref: Article 53(1)(a) — technical documentation
+  aliases: []
+  legacy_refs:
+  - EU-01
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 1f52448f-ec85-579f-8b92-a707487b8f95
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 53(1)(a)
+  actor_type: market_provider
+  actor_term_local: provider of a general-purpose AI model
+  conduct_type: evaluation_documentation
+  conduct_term_local: 'draw up and maintain technical documentation, including training, testing and evaluation
+    results
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  additional_authority: competent national authorities
+  scope:
+  - cross_sector
+  target_system: general_purpose_ai_model
+  interpretation_note: 'The provision requires documentation that includes evaluation results but does
+    not independently create a direct duty to perform model evaluation.
+
+    '
+- machine_id: d6c03e83-d88c-572e-9b77-35a818346675
+  ref: eu/ai-governance/ai-act/art-53-1-b#downstream-documentation
+  display_ref: Article 53(1)(b) — downstream documentation
+  aliases: []
+  legacy_refs:
+  - EU-02
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: da6a678b-6903-5380-acd3-2c0d7e1c3b12
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 53(1)(b)
+  actor_type: market_provider
+  actor_term_local: provider of a general-purpose AI model
+  recipient_actor_type: downstream_provider
+  recipient_actor_term_local: 'provider intending to integrate the general-purpose AI model into an artificial-intelligence
+    system
+
+    '
+  conduct_type: downstream_documentation
+  conduct_term_local: 'provide information and documentation to downstream artificial-intelligence system
+    providers
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  additional_authority: competent national authorities
+  scope:
+  - cross_sector
+  target_system: general_purpose_ai_model
+  interpretation_note: 'This is a binding information and documentation obligation for downstream integration.
+    It may support evaluation and oversight but does not itself require the GPAI provider to perform model
+    evaluation.
+
+    '
+- machine_id: 5fe186b5-b05a-5e49-b065-3296c2617f4e
+  ref: eu/ai-governance/ai-act/art-53-1-c#copyright-policy
+  display_ref: Article 53(1)(c) — copyright policy
+  aliases: []
+  legacy_refs:
+  - EU-03
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 30246e59-7f3b-5f39-9767-12e59bd87fcd
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 53(1)(c)
+  actor_type: market_provider
+  actor_term_local: provider of a general-purpose AI model
+  conduct_type: copyright_policy
+  conduct_term_local: 'put in place a policy to comply with Union copyright law
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  additional_authority: competent national authorities
+  scope:
+  - cross_sector
+  target_system: general_purpose_ai_model
+  interpretation_note: 'This is a binding copyright-compliance policy obligation. It does not require
+    model evaluation, testing or risk assessment.
+
+    '
+- machine_id: 456bd51b-75bf-5313-8863-bd6ba767e625
+  ref: eu/ai-governance/ai-act/art-53-1-d#training-content-summary
+  display_ref: Article 53(1)(d) — training content summary
+  aliases: []
+  legacy_refs:
+  - EU-04
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 33efe1eb-2724-51d6-850f-af35826cdaeb
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 53(1)(d)
+  actor_type: market_provider
+  actor_term_local: provider of a general-purpose AI model
+  conduct_type: training_content_summary
+  conduct_term_local: 'draw up and make publicly available a sufficiently detailed summary of the content
+    used to train the model
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  scope:
+  - cross_sector
+  target_system: general_purpose_ai_model
+  interpretation_note: 'This is a binding public-transparency obligation concerning training content.
+    It does not require model evaluation, testing or risk assessment.
+
+    '
+- machine_id: 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
+  ref: eu/ai-governance/ai-act/art-53-2#open-source-exception
+  display_ref: Article 53(2) — open source exception
+  aliases: []
+  legacy_refs:
+  - EU-05
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 705984a5-7b33-513a-8c4c-f883720c0387
+  claim_record_type: exception_rule
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 53(2)
+  actor_type: market_provider
+  actor_term_local: open-source general-purpose AI model provider
+  defined_actor_class: open_source_gpai_provider
+  exception_scope_local: 'possible exemption from some Article 53 documentation obligations
+
+    '
+  exception_target:
+  - specified_Article_53_documentation_obligations
+  exception_conditions_status: 'statutory conditions apply but are not fully encoded from the uploaded
+    annotation table
+
+    '
+  legal_force: binding
+  source_legal_force_label: binding_exception
+  compliance_function: obligation_exception
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  scope:
+  - cross_sector
+  target_system: open_source_general_purpose_ai_model
+  interpretation_note: 'Article 53(2) provides a conditional exception from specified Article 53 documentation
+    obligations for qualifying open-source GPAI providers. It does not create a general exemption from
+    the AI Act or erase every obligation that may apply.
+
+    '
+- machine_id: d4dfd16f-33bb-5956-b313-fde572c8d808
+  ref: eu/ai-governance/ai-act/art-55-1-a#model-evaluation
+  display_ref: Article 55(1)(a) — model evaluation
+  aliases: []
+  legacy_refs:
+  - EU-06
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 30df19d5-9cab-53f8-ab14-9750fdbbee3b
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 55(1)(a)
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model with systemic risk
+
+    '
+  conduct_type: model_evaluation
+  conduct_term_local: 'perform model evaluation using standardized protocols and state-of-the-art tools,
+    including adversarial testing
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  target_system: general_purpose_ai_model_with_systemic_risk
+  interpretation_note: 'This is the clearest EU positive example of a binding and currently applicable
+    model-evaluation duty for a defined class of market providers.
+
+    '
+- machine_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+  ref: eu/ai-governance/ai-act/art-55-1-b#systemic-risk-assessment
+  display_ref: Article 55(1)(b) — systemic risk assessment
+  aliases: []
+  legacy_refs:
+  - EU-07
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: fb181ee6-b9e7-5ef6-8502-a06ef583f122
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 55(1)(b)
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model with systemic risk
+
+    '
+  conduct_type: risk_assessment
+  conduct_term_local: 'assess possible systemic risks at Union level
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  target_system: general_purpose_ai_model_with_systemic_risk
+  interpretation_note: 'The systemic-risk assessment obligation supports evaluation governance but remains
+    distinct from the direct model-evaluation duty.
+
+    '
+- machine_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+  ref: eu/ai-governance/ai-act/art-55-1-c#incident-reporting
+  display_ref: Article 55(1)(c) — incident reporting
+  aliases: []
+  legacy_refs:
+  - EU-08
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: d0c820ef-b220-5ca6-89aa-a2efd4e171da
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 55(1)(c)
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model with systemic risk
+
+    '
+  conduct_type: incident_reporting
+  conduct_term_local: 'report relevant information about serious incidents and possible corrective measures
+
+    '
+  source_actions:
+  - incident_tracking
+  - incident_documentation
+  - incident_reporting
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  additional_authority: 'national competent authorities, where appropriate
+
+    '
+  target_system: general_purpose_ai_model_with_systemic_risk
+  interpretation_note: 'Incident reporting is binding within the systemic-risk regime, but it is distinct
+    from model evaluation.
+
+    '
+- machine_id: 493e990c-81ae-55d5-8279-cf56812b1959
+  ref: eu/ai-governance/ai-act/art-55-1-d#cybersecurity-protection
+  display_ref: Article 55(1)(d) — cybersecurity protection
+  aliases: []
+  legacy_refs:
+  - EU-09
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 575b40a6-e524-57fd-9b5c-b571ce5cb33f
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 55(1)(d)
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model with systemic risk
+
+    '
+  conduct_type: cybersecurity_protection
+  conduct_term_local: 'ensure an appropriate level of cybersecurity protection for the model and its infrastructure
+
+    '
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  target_system: general_purpose_ai_model_with_systemic_risk
+  interpretation_note: 'Cybersecurity protection is a distinct binding duty but does not independently
+    establish a model-evaluation obligation.
+
+    '
+- machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+  ref: eu/ai-governance/commission-gpai-guidelines/classification#regulatory-classification
+  display_ref: Commission GPAI guidelines — regulatory classification
+  aliases: []
+  legacy_refs:
+  - EU-10A
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+  claim_record_type: interpretive_guidance
+  jurisdiction: EU
+  instrument: COMMISSION_GPAI_GUIDELINES
+  source_locator: Commission GPAI guidelines
+  interpretation_note: 'The guidelines are interpretive and do not independently create statutory duties.
+    The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+    is voluntary and functions as a recognized compliance path.
+
+    '
+  actor_type: market_provider
+  actor_relationship: possible_provider
+  actor_term_local: 'provider or undertaking determining whether it is the provider of a general-purpose
+    AI model
+
+    '
+  conduct_type: regulatory_classification
+  conduct_term_local: 'determine whether the model qualifies as a general-purpose AI model
+
+    '
+  classification_indicators:
+    indicative_gpai_compute_threshold: 10^23_FLOP
+    systemic_risk_presumption_threshold: 10^25_FLOP
+  legal_force: interpretive
+  compliance_function: implementation_guidance
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: not_applicable
+  responsible_authority: European Commission
+  implementation_body: AI Office
+- machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+  ref: eu/ai-governance/commission-gpai-guidelines/notification#regulatory-notification
+  display_ref: Commission GPAI guidelines — regulatory notification
+  aliases: []
+  legacy_refs:
+  - EU-10B
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+  claim_record_type: obligation
+  jurisdiction: EU
+  instrument: COMMISSION_GPAI_GUIDELINES
+  source_locator: Commission GPAI guidelines
+  interpretation_note: 'The guidelines are interpretive and do not independently create statutory duties.
+    The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+    is voluntary and functions as a recognized compliance path.
+
+    '
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model meeting or expected to meet the systemic-risk
+    compute threshold
+
+    '
+  conduct_type: regulatory_notification
+  conduct_term_local: 'notify the Commission when the systemic-risk threshold is met or expected to be
+    met
+
+    '
+  source_instrument_force: interpretive
+  described_obligation_force: binding
+  legal_force: binding
+  compliance_function: direct_obligation
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: unknown
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  target_system: 'general_purpose_ai_model_meeting_systemic_risk_threshold
+
+    '
+- machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+  ref: eu/ai-governance/commission-gpai-guidelines/compliance#compliance-demonstration
+  display_ref: Commission GPAI guidelines — compliance demonstration
+  aliases: []
+  legacy_refs:
+  - EU-10C
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+  claim_record_type: compliance_path
+  jurisdiction: EU
+  instrument: COMMISSION_GPAI_GUIDELINES
+  source_locator: Commission GPAI guidelines
+  interpretation_note: 'The guidelines are interpretive and do not independently create statutory duties.
+    The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+    is voluntary and functions as a recognized compliance path.
+
+    '
+  actor_type: market_provider
+  actor_term_local: provider of a general-purpose AI model
+  conduct_type: compliance_demonstration
+  conduct_term_local: 'rely on adherence to the Code of Practice as a means of demonstrating compliance
+    with relevant AI Act obligations
+
+    '
+  legal_force: voluntary
+  compliance_function: recognized_compliance_path
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: not_applicable
+  responsible_authority: European Commission
+  implementation_body: AI Office
+- machine_id: e54e3962-be7f-5610-83b2-d297cc904664
+  ref: eu/ai-governance/ai-act/art-113#application-from-2025-08-02
+  display_ref: Article 113 application timetable — application from 2025 08 02
+  aliases: []
+  legacy_refs:
+  - EU-11A
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 4e7a709a-675c-5c86-a414-b3952ae3d17e
+  claim_record_type: lifecycle_rule
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 113 application timetable
+  interpretation_note: 'Article 113 is a binding lifecycle rule rather than a separate model-evaluation
+    obligation.
+
+    '
+  target_actor: market_provider
+  target_system: general_purpose_ai_model
+  legal_force: binding
+  adoption_status: adopted
+  applicability_status: applicable
+  effective_from: '2025-08-02'
+  enforcement_status: unknown
+  responsible_authority: European Commission
+- machine_id: 1bf6ede3-45ca-588d-9123-2f69e501cb08
+  ref: eu/ai-governance/ai-act/art-113#existing-model-transition
+  display_ref: Article 113 application timetable — existing model transition
+  aliases: []
+  legacy_refs:
+  - EU-11B
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: 4e7a709a-675c-5c86-a414-b3952ae3d17e
+  claim_record_type: lifecycle_rule
+  jurisdiction: EU
+  instrument: EU_AI_ACT
+  source_locator: Article 113 application timetable
+  interpretation_note: 'Article 113 is a binding lifecycle rule rather than a separate model-evaluation
+    obligation.
+
+    '
+  target_actor: market_provider
+  target_system: 'general-purpose AI model placed on the market before 2025-08-02
+
+    '
+  legal_force: binding
+  adoption_status: adopted
+  applicability_status: transition_for_existing_models
+  compliance_deadline: '2027-08-02'
+  enforcement_status: unknown
+  responsible_authority: European Commission
+- machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+  ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#recognized-compliance-path
+  display_ref: AI Office signatory notice — recognized compliance path
+  aliases: []
+  legacy_refs:
+  - EU-12
+  record_type: political_claim
+  record_family: policy
+  review_status: accepted
+  imported_review_machine_id: f0d4ca5f-4432-5980-8b82-4609e9126ef4
+  claim_record_type: compliance_path
+  jurisdiction: EU
+  instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
+  source_locator: AI Office signatory notice
+  actor_type: market_provider
+  actor_term_local: 'provider of a general-purpose AI model choosing to become a signatory to the Code
+    of Practice
+
+    '
+  conduct_type: compliance_demonstration
+  conduct_term_local: 'adhere to the General-Purpose AI Code of Practice as a means of demonstrating compliance
+    with relevant AI Act obligations
+
+    '
+  legal_force: voluntary
+  compliance_function: recognized_compliance_path
+  adoption_status: adopted
+  applicability_status: applicable
+  enforcement_status: not_applicable
+  responsible_authority: European Commission
+  implementation_body: AI Office
+  underlying_regime_force: binding
+  underlying_instrument: EU_AI_ACT
+  interpretation_note: 'The Code is voluntary but operates as a recognized route for demonstrating compliance
+    with binding statutory duties.
+
+    '

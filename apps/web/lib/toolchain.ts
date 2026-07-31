@@ -3,7 +3,7 @@
  *
  * Every function runs the checked-in semantic packages server-side — the
  * language front end, the deterministic evaluator, the bounded score analyzer,
- * and the frozen reviewed pilot evidence. Nothing is reimplemented; the
+ * and the frozen archived pilot evidence. Nothing is reimplemented; the
  * site only orchestrates and shapes results. Repo data is read via `repo.ts`.
  */
 
@@ -19,7 +19,7 @@ import type {
 import { analyzeCommitment } from "./analysis.js";
 import { readRepoJson, readRepoText } from "./repo.js";
 
-// --- The EU-US pilot: what the Lab runs -------------------------------------
+// --- The archived EU-US saved query: what the Lab runs ----------------------
 //
 // One question — does the jurisdiction impose a binding model-evaluation duty on
 // providers of advanced AI models? — asked three ways. Each reading is a real
@@ -30,7 +30,7 @@ import { readRepoJson, readRepoText } from "./repo.js";
 // The three differ only in which conditions they require, which is the whole
 // lesson: the answer depends on the definition, and the definition is editable.
 
-const PILOT_DIR = "pilot/eu-us-ai-evaluation";
+const PILOT_DIR = "archive/pilots/eu-us-ai-evaluation-v1/original";
 const PILOT_COMMITMENT_ID = "MODEL_EVALUATION_DUTY";
 const PILOT_PROFILE = "reviewed";
 

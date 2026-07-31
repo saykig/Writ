@@ -1,6 +1,6 @@
 /**
  * Generate `lib/policy-test-data.ts` — the human-reviewed EU–US AI evaluation
- * pilot, parsed from its authoritative YAML at build time.
+ * pilot, parsed from its byte-preserved archived YAML at build time.
  *
  * Why build time: the reviewed dataset is YAML, but the Next build and the
  * serverless runtime are Node, where no YAML parser is installed. Bun ships one
@@ -25,7 +25,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..");
 const outFile = join(here, "..", "lib", "policy-test-data.ts");
 
-const SOURCE_REL = "pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml";
+const SOURCE_REL =
+  "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml";
 
 /** Collapse folded-scalar whitespace. Whitespace-only, and idempotent. */
 function collapse(value: string): string {

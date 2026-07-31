@@ -1,6 +1,6 @@
 /**
  * Generate `lib/frozen-data.ts` — the frozen repo data the server layer reads
- * (the pilot methodologies, its evidence snapshots, its interpretation profile,
+ * (the archived pilot methodologies, its evidence snapshots, its interpretation profile,
  * and its provenance) inlined as text, keyed by repo-relative path, so it can be
  * served without a runtime filesystem read.
  *
@@ -20,11 +20,11 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..");
 const outFile = join(here, "..", "lib", "frozen-data.ts");
 
-const PILOT = "pilot/eu-us-ai-evaluation";
+const PILOT = "archive/pilots/eu-us-ai-evaluation-v1/original";
 
 // Exactly the files the server layer reads at runtime.
 const rels: string[] = [
-  // Provenance for the reviewed EU-US pilot: which document each row came
+  // Provenance for the preserved historical EU-US pilot: which document each row came
   // from, when it was retrieved, its byte hash, and the verbatim passage.
   `${PILOT}/provenance/document-versions.json`,
   `${PILOT}/provenance/passages.json`,

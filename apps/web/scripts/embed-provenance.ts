@@ -52,7 +52,8 @@ function canonicalRemote(): string | undefined {
 /** Candidate licence files, in the order a reader would look for them. */
 const LICENCE_FILES = ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", "COPYING.md"];
 const DATA_LICENCE_FILES = [
-  "pilot/eu-us-ai-evaluation/LICENSE",
+  "archive/pilots/eu-us-ai-evaluation-v1/original/LICENSE",
+  "corpora/LICENSE",
   "pilot/LICENSE",
   "data/LICENSE",
   "DATA-LICENSE",

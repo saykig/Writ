@@ -40,8 +40,8 @@ network and no database.
 
 ## Current research material
 
-- The EU–US AI comparison is a pilot analysis over reviewed records. Its question and conclusion do
-  not define either jurisdiction's corpus.
+- The EU and US AI-governance corpora are independent jurisdictional corpora under `corpora/`.
+  The former EU–US comparison survives only as an archived pilot analysis and saved query.
 - The G20 Rio material contains 13 ingested political statements, two reports, and 546
   source-reported member judgments. The 161 un-ingested commitments remain explicitly absent.
 - The G7 AI-for-SMEs score reproduction is a historical benchmark. Published ratings remain

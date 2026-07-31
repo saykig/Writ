@@ -1434,6 +1434,52 @@ sources:
     expected_formats:
       - text/html
       - application/pdf
+    notes: Active US AI-governance corpus includes frozen White House fact sheets and the AI Action Plan with source-version hashes.
+  - id: us.omb.memoranda
+    name: Office of Management and Budget Memoranda
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - executive
+      - procurement
+    base_uri: https://www.whitehouse.gov/omb/information-for-agencies/memoranda/
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: catalogued
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Active US AI-governance corpus includes frozen M-25-21 and M-25-22 source versions.
+  - id: us.nist.ai
+    name: National Institute of Standards and Technology AI publications
+    jurisdictions:
+      - UnitedStates
+    source_tier: 1
+    source_types:
+      - research
+    base_uri: https://www.nist.gov/artificial-intelligence
+    discovery_method: crawl
+    fetch_method: http
+    enabled: false
+    verification_status: catalogued
+    authentication:
+      type: none
+    robots_policy: respect
+    terms_status: review_required
+    languages:
+      - en
+    expected_formats:
+      - text/html
+      - application/pdf
+    notes: Active US AI-governance corpus includes frozen AI RMF, Generative AI Profile, and CAISI source versions.
   - id: us.omb.budget
     name: Office of Management and Budget
     jurisdictions:
@@ -1739,6 +1785,7 @@ sources:
     expected_formats:
       - text/html
       - application/pdf
+    notes: Active EU AI-governance corpus includes a frozen Regulation (EU) 2024/1689 source version with passage anchors and hash.
   - id: eu.publications
     name: Publications Office and CELLAR
     jurisdictions:

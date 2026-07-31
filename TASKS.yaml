@@ -86,5 +86,29 @@ tasks:
       - docs/current/schema-protocol-path-map.md
       - docs/current/reference-core-retirement.md
 
+  - id: RESET-005
+    title: Separate EU and US AI-governance corpora
+    status: review
+    dependencies:
+      - RESET-004
+    scope:
+      - Preserve the complete reviewed EU-US pilot as an immutable historical archive.
+      - Create independent EU and US jurisdictional corpora from the reviewed records.
+      - Replace spreadsheet-order active references with deterministic identities and scalable references.
+      - Preserve every legacy identifier through complete migration maps.
+      - Keep the comparison question and headline derivation only as an archived saved query.
+    acceptance:
+      - The archive is byte-for-byte recoverable and carries a verified checksum manifest.
+      - EU and US parent-review and atomic-claim counts match the authoritative reviewed input.
+      - Source locators, passages, legal distinctions, unknowns, and review decisions are preserved.
+      - Every legacy identifier resolves exactly once and no active relationship depends on a readable ref.
+      - Tests, typecheck, build, and corpus validation pass.
+    outputs:
+      - archive/pilots/eu-us-ai-evaluation-v1
+      - corpora/jurisdictions/eu/ai-governance
+      - corpora/jurisdictions/us/ai-governance
+      - adr/0014-stable-corpus-identities.md
+      - docs/current/eu-us-corpus-migration.md
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

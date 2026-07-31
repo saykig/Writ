@@ -179,7 +179,13 @@ describe("frontend architecture", () => {
     ]) {
       expect(toolchain).toContain(file);
       expect(
-        existsSync(resolve(WEB_ROOT, "../../pilot/eu-us-ai-evaluation/methodology", file)),
+        existsSync(
+          resolve(
+            WEB_ROOT,
+            "../../archive/pilots/eu-us-ai-evaluation-v1/original/methodology",
+            file,
+          ),
+        ),
       ).toBe(true);
     }
     expect(evaluate).toContain("evaluatePilot");

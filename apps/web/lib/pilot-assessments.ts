@@ -1,5 +1,5 @@
 /**
- * The homepage and demo view of the EU-US pilot.
+ * The homepage and demo view of the archived EU-US pilot analysis.
  *
  * Each jurisdiction's preview is produced by actually running the reviewed rule
  * against that jurisdiction's evidence snapshot. The verdict, the provisions
@@ -13,7 +13,7 @@ import { instrumentLabel } from "./policy-test-format.js";
 import { readRepoJson } from "./repo.js";
 import { evaluatePilot, pilotCoverage, pilotExampleSource } from "./toolchain.js";
 
-const PILOT_DIR = "pilot/eu-us-ai-evaluation";
+const PILOT_DIR = "archive/pilots/eu-us-ai-evaluation-v1/original";
 
 export type JurisdictionId = "eu" | "us";
 

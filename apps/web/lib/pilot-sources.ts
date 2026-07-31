@@ -2,7 +2,7 @@
  * Where each reviewed row came from.
  *
  * The reviewed annotation table records a `source_locator` but not the text at
- * it. `scripts/fetch_pilot_sources.py` retrieves the official document, hashes
+ * it. The archived `reference-code/fetch_pilot_sources.py` retrieved the official document, hashes
  * the bytes it received, and lifts the verbatim passage; this module reads that
  * output and joins it back onto the rows.
  *
@@ -13,7 +13,7 @@
 
 import { readRepoJson } from "./repo.js";
 
-const DIR = "pilot/eu-us-ai-evaluation/provenance";
+const DIR = "archive/pilots/eu-us-ai-evaluation-v1/original/provenance";
 
 export interface SourceDocument {
   id: string;
