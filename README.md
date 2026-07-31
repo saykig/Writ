@@ -1,10 +1,6 @@
 # Writ
 
-Writ is an auditable policy-evaluation compiler for institutional commitment compliance. It turns
-a normative methodology, a reviewed evidence ledger, and explicit interpretation rules into a
-deterministic, reproducible evaluation receipt with a proof tree and content hashes.
-
-The textual DSL compiles into a typed canonical intermediate representation (IR). The IR,
+Writ is a textual DSL that compiles into a typed canonical intermediate representation (IR). The IR,
 the deterministic evaluator, the frozen evidence snapshot, and the receipt are the source of
 truth — a rendered report is a view, never the record.
 
