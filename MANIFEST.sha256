@@ -197,8 +197,9 @@ fda5bdfb3ffaac24f8738a11fbf5f4ec78687b5f19c6b6c8dc259a2d73a752b6  apps/web/test/
 84fc3f416dea84e8b9a0763c141f46bb0e19695b2f04de242768c1f2a610634c  apps/web/test/wireframe-dotted-globe.test.ts
 7a775070c6f7d105bd6c3a68251f21bb0427a8da1d64db36787962a5978eeaed  apps/web/tsconfig.json
 e5dc34ce80daa015211c0d0d54800606221ca44e70ac7f29e8cbf7138026601e  apps/web/vercel.json
-a18653300426cd69f624eba146bd78bb2e9038568f75b5cd2bd329099eab4267  archive/pilots/eu-us-ai-evaluation-v1/MANIFEST.sha256
-cb7c12afe43d55805e12b2440a2c960ba452980092b0b42a1541e31ca732a150  archive/pilots/eu-us-ai-evaluation-v1/README.md
+e8b4f90c27a58f197ca4db5f4c1b65bc4b2c833ada4ae61426c24c396ef9acb3  archive/pilots/eu-us-ai-evaluation-v1/MANIFEST.sha256
+212ed6c944d50b3663503e189f6279befc08ff2162f43f2d3b2224d3e8fdec1a  archive/pilots/eu-us-ai-evaluation-v1/README.md
+90c799a4c0cecf7d83a29a11d628579e588fbe7cdb937fe203559bd69f498fa6  archive/pilots/eu-us-ai-evaluation-v1/deep-research-report.md
 cd64fd0f935dc6eb9ca6a171ae4f5ff482392cb95571f8da7d143b1d13aab20d  archive/pilots/eu-us-ai-evaluation-v1/original/README.md
 8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb  archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml
 83405ba652f6efc213fd8a1227584eb0c41ad17f3359cf59ad5bc931fd676070  archive/pilots/eu-us-ai-evaluation-v1/original/evidence/coverage.json
