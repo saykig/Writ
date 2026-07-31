@@ -5,8 +5,7 @@ science and global affairs. It represents claims, institutions, laws, policies, 
 findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
 and revision history. Questions are asked across corpora; they do not define corpora.
 
-Writ separates durable knowledge from the questions asked of it. A jurisdiction, institution, or
-research corpus exists on its own; comparisons, evaluations, visualizations, and memos are
+A jurisdiction, institution, or research corpus exists on its own; comparisons, evaluations, visualizations, and memos are
 reproducible views over one or more corpora.
 
 The initial knowledge families are institutional, legal, policy, theoretical, and empirical. They
