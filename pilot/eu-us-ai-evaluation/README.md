@@ -1,6 +1,10 @@
 # EU–US AI evaluation pilot — human-reviewed
 
-One comparative question, asked of two jurisdictions:
+This directory preserves one pilot analysis over reviewed EU and US material. The comparison
+question, headline rule, and conclusion are query-layer objects; they do not define either
+jurisdiction's corpus. Independent active EU and US corpora will be created by the repository reset.
+
+The pilot asks one comparative question of two jurisdictions:
 
 > Does the jurisdiction currently impose a binding model-evaluation requirement on
 > providers of advanced or general-purpose AI models?

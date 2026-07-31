@@ -1,49 +1,40 @@
-# Start Here: Codex Handoff
+# Start Here
 
-This pack is a build specification for **Writ**, a domain-specific language and evidence system for auditable G7 commitment compliance evaluation.
+Writ is a structured, source-grounded knowledge system and domain-specific language for political
+science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
+findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
+and revision history. Questions are asked across corpora; they do not define corpora.
 
-## The first command to give Codex
+Read these before changing the repository:
 
-Open `13_CODEX_MASTER_PROMPT.md` and use it as the initial task prompt in a fresh repository. Keep `AGENTS.md`, `TASKS.yaml`, `.agents/skills/writ-domain/SKILL.md`, `specs/`, `examples/`, and `fixtures/` at the repository root.
+1. `AGENTS.md` for implementation invariants and working rules.
+2. `docs/current/product-definition.md` for current product scope.
+3. `TASKS.yaml` for the active change and acceptance gate.
+4. Relevant current schemas and accepted ADRs.
+5. `docs/current/repository-reset-audit.md` before relocating existing material.
 
 ## What is normative
 
 Use this precedence order when documents disagree:
 
 1. `AGENTS.md` invariants, unless an accepted replacement ADR explicitly supersedes one.
-2. `04_FORMAL_SEMANTICS.md` and accepted ADRs.
-3. JSON Schemas in `specs/`.
-4. `02_DOMAIN_MODEL.md` and `03_LANGUAGE_SPEC.md`.
-5. Product, architecture, roadmap, and task documents.
-6. Examples and the bootstrap Langium grammar.
+2. `docs/current/product-definition.md`.
+3. Accepted ADRs and current JSON Schemas.
+4. Current protocol and language specifications.
+5. Current product and task documents.
+6. Examples and compatibility material.
 
-The bootstrap grammar is not complete. Do not contort the domain model to preserve it.
+Material under `archive/` is historical and non-normative.
 
-## First delivery slice
+## Working principles
 
-Build a vertical slice that can:
-
-1. validate the canonical IR and evidence fixtures;
-2. evaluate a precomputed fact environment using four-valued truth;
-3. emit a deterministic evaluation receipt;
-4. lint the literal AI-for-SMEs score program and find its gap and overlap;
-5. evaluate the resolved interpretation profile without either defect;
-6. expose the same behavior through a CLI and API;
-7. render the receipt and its proof tree in a minimal review UI.
-
-Do not begin with broad web crawling, a polished editor, or LLM extraction. Those become valuable only after the semantic core is trustworthy.
-
-## Definition of a serious first milestone
-
-The first milestone is complete only when:
-
-- all JSON examples validate against their schemas;
-- the conformance suite is deterministic on two clean runs;
-- score gaps and overlaps include minimized witnesses;
-- unknown evidence never silently becomes false;
-- action identity uncertainty can block or widen counts;
-- every result names the methodology, evidence, interpretation, and evaluator hashes that produced it;
-- the repository contains a migration path and rollback notes for every schema change.
+- Keep jurisdictional corpora independent of comparisons and saved questions.
+- Keep institutional, legal, policy, theoretical, and empirical records family-specific.
+- Preserve unknown and contested values rather than coercing them.
+- Treat external ratings as source-reported judgments.
+- Make every Writ-derived result reproducible from named, versioned inputs and a trace.
+- Treat visualizations and memos as views, never as source records.
+- Supersede accepted records instead of silently rewriting them.
 
 ## Evidence warning
 

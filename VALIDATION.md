@@ -1,19 +1,34 @@
 # Validation
 
-Run from the pack root:
+The active repository uses Bun for TypeScript packages and Python 3.12 for ingestion.
+
+Run the documentation and repository checks from the root:
 
 ```bash
-python -m pip install -r scripts/requirements.txt
-./scripts/validate_pack.sh
+bun run format
+bun run lint
+bun run typecheck
+bun run test
+bun run conformance
+bun run build
 ```
 
-The command checks:
+Python checks use the install and commands defined in `.github/workflows/ci.yml`.
 
-- required handoff files;
-- JSON syntax;
-- JSON Schema validity and all paired examples;
-- YAML task IDs and dependencies;
-- text-policy constraints;
-- TypeScript compilation and semantic tests in `reference-core/`.
+For documentation-only changes:
 
-The bootstrap Langium grammar is intentionally not compiled by this pack. Completing and validating it is task `LANG-001` after the canonical IR and evaluator contracts stabilize.
+```bash
+bun x prettier --check AGENTS.md README.md START_HERE.md PRODUCT.md DESIGN.md \
+  VALIDATION.md VERSION_POLICY.md TASKS.yaml docs/current archive/plans
+git diff --check
+```
+
+Also verify that:
+
+- current governing documents use `docs/current/product-definition.md`;
+- archived plans are not referenced as current instructions;
+- external ratings are described as source-reported judgments;
+- generated files, schemas, runtime code, and corpus records are unchanged.
+
+Historical pack validation instructions are preserved at
+`archive/plans/compliance-product-v1/VALIDATION.md`.

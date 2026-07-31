@@ -1,14 +1,16 @@
 # Writ pilot: results and next steps
 
-A short, honest read on what the first pilot established, what it did not, and
-where it should go. For the reproducible run behind the numbers, see
+This is a historical benchmark note, not Writ's current product definition and not a corpus
+identity. It records what the first scoring pilot established, what it did not, and where that
+experiment pointed. For the reproducible run behind the numbers, see
 [`docs/PROOF.md`](./PROOF.md) and `scripts/demo.sh`.
 
 ## Summary
 
-Writ compiles a compliance methodology into a program, evaluates it against
-frozen reviewed evidence, and returns a score as a receipt anyone can recompute.
-The pilot ran the 2025 G7 AI-for-SMEs chapter across all eight members. It shows
+In this benchmark, Writ compiles a compliance methodology into a program, evaluates it against
+frozen reviewed evidence, and returns a derived reproduction with a trace anyone can recompute.
+The published ratings remain source-reported judgments. The pilot ran the 2025 G7 AI-for-SMEs
+chapter across all eight members. It shows
 the mechanism works on real published data and produces one substantive finding:
 two of the eight published scores hold only under a particular reading of the
 rubric, and the tool names exactly which two and exactly which phrase. That is a
