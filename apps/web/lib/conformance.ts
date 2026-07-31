@@ -1,17 +1,18 @@
 /**
  * Server-side loader for the checked-in conformance corpus at repo-root
- * `conformance/cases/**`. Nothing here reimplements the semantics: it reads the
+ * `internal/verification/conformance/cases/**`. Nothing here reimplements the semantics: it reads the
  * frozen case files, counts cases per area (a file holds either one case object
  * or an array of them), and surfaces a few representative shapes verbatim.
  *
- * The ten areas and their one-line coverage come from `conformance/README.md`;
+ * The ten areas and their one-line coverage come from
+ * `internal/verification/conformance/README.md`;
  * per-area counts are computed from the files, so the total is whatever the
  * corpus actually holds (130 across 22 files at time of writing).
  */
 
 import { listRepoDir, readRepoJson } from "@/lib/repo";
 
-const CASES_DIR = "conformance/cases";
+const CASES_DIR = "internal/verification/conformance/cases";
 
 /** One conformance case (the closed shape from `case.schema.json`). */
 export interface ConformanceCase {
@@ -40,7 +41,7 @@ export interface ConformanceCoverage {
 
 /**
  * The ten areas in corpus order, each with the one-line coverage note from
- * `conformance/README.md`. Counts are filled in from the files below.
+ * `internal/verification/conformance/README.md`. Counts are filled in from the files below.
  */
 const AREA_META: readonly { id: string; title: string; covers: string }[] = [
   {

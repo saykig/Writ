@@ -12,7 +12,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from .registry import find_repo_root, load_registry
 from .validation import CorpusValidationError, load_schema
 
-VOCABULARY_RELATIVE_PATH = Path("config/corpus_vocabulary.yml")
+VOCABULARY_RELATIVE_PATH = Path("internal/infrastructure/config/corpus_vocabulary.yml")
 SCORE_TERMS = frozenset({"-1", "0", "+1", "not_applicable", "unresolved"})
 
 

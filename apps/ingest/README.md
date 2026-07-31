@@ -12,8 +12,8 @@ The EU and US AI-governance corpora are independent, active jurisdictional corpo
 the byte-preserved reviewed pilot input. Regenerate or drift-check them with:
 
 ```bash
-PYTHONPATH=apps/ingest/src python scripts/migrate_eu_us_corpora.py
-PYTHONPATH=apps/ingest/src python scripts/migrate_eu_us_corpora.py --check
+PYTHONPATH=apps/ingest/src python internal/tooling/scripts/migrate_eu_us_corpora.py
+PYTHONPATH=apps/ingest/src python internal/tooling/scripts/migrate_eu_us_corpora.py --check
 ```
 
 The generator preserves the reviewed values exactly, uses deterministic UUIDv5 identities, and
@@ -25,7 +25,7 @@ Run corpus validation from the repository root with the ingest development envir
 pytest tests
 ruff check apps/ingest/src tests scripts
 mypy apps/ingest/src
-PYTHONPATH=apps/ingest/src python scripts/validate_corpus.py --g7-fixture
+PYTHONPATH=apps/ingest/src python internal/tooling/scripts/validate_corpus.py --g7-fixture
 ```
 
 Database tests ignore the application's `DATABASE_URL` and run only when

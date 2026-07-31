@@ -1,6 +1,7 @@
 // Idempotent SQL migration runner for @writ/api.
 //
-// Applies the plain-SQL files in `db/migrations/*.sql` in filename order and
+// Applies the plain-SQL files in
+// `internal/infrastructure/database/migrations/*.sql` in filename order and
 // records each in a `schema_migrations` table so re-runs are no-ops. The same
 // primitives drive hermetic tests, which apply the migrations into a disposable
 // temporary schema instead of `public`.
@@ -16,9 +17,11 @@ export interface MigrationFile {
   checksum: string;
 }
 
-/** Absolute path to the repository's `db/migrations` directory. */
+/** Absolute path to the repository's internal database migrations directory. */
 export function defaultMigrationsDir(): string {
-  return fileURLToPath(new URL("../../../../db/migrations/", import.meta.url));
+  return fileURLToPath(
+    new URL("../../../../internal/infrastructure/database/migrations/", import.meta.url),
+  );
 }
 
 /** Load and hash every `*.sql` migration file, sorted by filename. */
@@ -103,8 +106,7 @@ export async function applyMigrations(sql: Sql, options: ApplyOptions = {}): Pro
   const conn = await sql.reserve();
   try {
     await conn`SELECT pg_advisory_lock(hashtext('writ.migrations.' || ${schema}))`;
-    const searchPath =
-      schema === "public" ? "public" : `${quoteIdent(schema)}, public`;
+    const searchPath = schema === "public" ? "public" : `${quoteIdent(schema)}, public`;
     await conn.unsafe(`SET search_path TO ${searchPath}`);
     try {
       return await applyPendingOnConnection(conn, files);

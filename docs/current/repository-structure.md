@@ -20,15 +20,19 @@ implementation wiring, a later ADR records the change rather than rewriting hist
 
 ## Supporting and historical areas
 
-- `benchmarks/` owns evaluator fixtures, methodologies, expected derived results, and historical
-  reproduction notes. A benchmark may read a corpus but is not a corpus authority.
-- `conformance/` owns portable semantic inputs and expected outputs. It contains no implementation.
-- `examples/` and `fixtures/` remain because active compiler and analyzer tests consume them.
-- `config/` owns reviewed registry inputs; `data/` contains generated compatibility projections or
-  runtime output only.
-- `db/`, `scripts/`, and `tests/` contain infrastructure, automation, and cross-package checks.
+- `internal/verification/` owns evaluator benchmarks, conformance cases, fixtures, and root-level
+  integration/schema suites. A benchmark may read a corpus but is not a corpus authority.
+- `internal/tooling/` contains repository-maintenance, migration, validation, publication, and
+  reproduction commands.
+- `internal/infrastructure/` contains operational registry inputs, deterministic generated
+  compatibility projections, and database migrations.
 - `archive/` preserves non-normative pilots and plans that remain useful for inspection.
 - `docs/migrations/` preserves completed reset path maps and verification handoffs.
+
+Application- and package-owned tests and generators remain colocated under `apps/*` and
+`packages/*`. `.github/` and `.agents/` remain at the root because their external consumers require
+those conventional discovery paths. `adr/` remains because corpus identity metadata resolves to
+stable accepted-decision paths.
 
 ## Final-hygiene decisions
 
@@ -36,21 +40,24 @@ implementation wiring, a later ADR records the change rather than rewriting hist
 - Historical G7 pilot, proof, replication, and architecture notes moved beside their evaluator
   benchmark.
 - The source-gated FATF methodology moved from the singular `benchmark/` and root `examples/` paths
-  into `benchmarks/evaluator/fatf-mutual-evaluation-scaffold/`.
+  and now lives under `internal/verification/benchmarks/evaluator/fatf-mutual-evaluation-scaffold/`.
 - The general data-model diagram moved into current technical documentation.
 - Superseded methodology planning moved to `archive/plans/methodology-candidates-v1/`.
 - The duplicate `reference-core/` implementation was retired only after its remaining behavior was
   proven covered by implementation-independent conformance cases and canonical package tests.
 - An editor-specific launch file and a redundant generated source-registry summary were removed;
-  neither had a consumer, and the authoritative registry documentation remains in `data/README.md`.
+  neither had a consumer.
+- Developer-only root machinery was consolidated under `internal/`; the complete path map is in
+  `docs/migrations/internal-repository-support.md`.
 
 All deleted material remains recoverable from Git history. The cleanup does not rewrite the
 Covenant-to-Writ development history.
 
 ## Preservation gate
 
-The cleanup does not edit any file under `corpora/` or the frozen EU–US pilot archive. Validation
-continues to enforce:
+Structural cleanup does not change corpus meaning or any frozen EU–US pilot byte. The G7 corpus's
+benchmark locator follows the benchmark to its internal path; all substantive records, identifiers,
+sources, passages, reviews, judgments, and provenance remain unchanged. Validation enforces:
 
 - 12 EU and 12 US reviewed parent annotations;
 - 15 EU and 17 US atomic claims and every legacy identifier mapping;

@@ -10,7 +10,7 @@ record_counts:
   published_reports: 1
   published_judgments: 8
   reviewer_annotations: 87
-benchmark_ref: benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
+benchmark_ref: internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
 notes:
   - Actions are queryable without evaluating a score.
   - Strong, weak and counter assignments are benchmark-local methodology judgments.

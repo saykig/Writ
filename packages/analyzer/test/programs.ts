@@ -26,7 +26,9 @@ function readJson<T>(relativePath: string): T {
   return JSON.parse(readFileSync(new URL(relativePath, import.meta.url), "utf8")) as T;
 }
 
-export const literalIr = readJson<CanonicalIr>("../../../examples/2025-ai-sme-literal.ir.json");
+export const literalIr = readJson<CanonicalIr>(
+  "../../../internal/verification/fixtures/compatibility/g7-ai-sme/schemas/2025-ai-sme-literal.ir.json",
+);
 
 export const literalProgram: ScoreProgram = literalIr.commitments[0]!.score_program;
 

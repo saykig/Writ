@@ -42,10 +42,10 @@ Material under `archive/` is historical and non-normative.
 
 ## Evidence warning
 
-`config/source_registry.yml` contains connector candidates and research leads.
-`data/source-registry.json` is its generated compatibility projection. A source's
-`verification_status` is authoritative for operational readiness. Codex must not treat an entry
-as production-ready merely because it appears in the registry.
+`internal/infrastructure/config/source_registry.yml` contains connector candidates and research
+leads. `internal/infrastructure/generated/source-registry.json` is its generated compatibility
+projection. A source's `verification_status` is authoritative for operational readiness. Codex
+must not treat an entry as production-ready merely because it appears in the registry.
 
 ## Repository map
 
@@ -61,17 +61,13 @@ The active source-of-truth areas are deliberately separated from analyses and hi
 - `docs/current/` — current product and technical guidance.
 - `archive/` — non-normative historical pilots and plans worth preserving.
 
-Supporting areas have narrower roles:
+Developer-only support is bounded under `internal/`: verification cases and benchmarks, maintenance
+tooling, operational configuration, generated projections, and database migrations. Nothing under
+`internal/` is a public corpus, normative schema, governing protocol, or primary demonstration.
 
-- `benchmarks/` — evaluator methodologies, expected derived results, and historical reproductions;
-  never an authoritative political corpus.
-- `conformance/` — implementation-independent semantic cases and expected outcomes.
-- `adr/` — accepted architecture decisions.
-- `config/` — reviewed source-registry and vocabulary inputs.
-- `data/` — generated compatibility projections and runtime outputs, not a corpus authority.
-- `db/` — PostgreSQL migrations.
-- `examples/` and `fixtures/` — compiled examples and diagnostic test inputs.
-- `scripts/` and `tests/` — repository automation and cross-package verification.
+`adr/` remains at the root because accepted decisions are active authority and stable corpus
+identity metadata resolves to those paths. `.agents/` and `.github/` remain conventional discovery
+locations for agent and GitHub automation.
 
 See [`docs/current/repository-structure.md`](docs/current/repository-structure.md) for ownership,
 retention rules, and the completed cleanup decisions.

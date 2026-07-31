@@ -11,7 +11,12 @@ import {
 import { actionEligible, claimEligible, evaluateCommitment, verifyReceipt } from "../src/index.js";
 
 function loadExample<T>(name: string): T {
-  const path = fileURLToPath(new URL(`../../../examples/${name}`, import.meta.url));
+  const path = fileURLToPath(
+    new URL(
+      `../../../internal/verification/fixtures/compatibility/g7-ai-sme/schemas/${name}`,
+      import.meta.url,
+    ),
+  );
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 

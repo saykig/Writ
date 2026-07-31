@@ -6,7 +6,12 @@ import { join } from "node:path";
 import { runCli, type CliIO } from "../src/index.js";
 
 function example(name: string): string {
-  return fileURLToPath(new URL(`../../../examples/${name}`, import.meta.url));
+  return fileURLToPath(
+    new URL(
+      `../../../internal/verification/fixtures/compatibility/g7-ai-sme/schemas/${name}`,
+      import.meta.url,
+    ),
+  );
 }
 
 const IR = example("2025-ai-sme-literal.ir.json");

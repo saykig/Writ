@@ -8,7 +8,7 @@ page and footnote anchors, 87 action reviews, and eight source-reported ratings.
 Actions have no intrinsic `strong`, `weak`, or `counter` property. Those 87
 methodology assignments, their reviews, profiles, rubric, expected derived
 results, and discrepancy ledger live in
-`benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/`.
+`internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/`.
 
 Every external rating declares `origin: source_reported` and
 `writ_derived: false`. A benchmark result separately declares its methodology,

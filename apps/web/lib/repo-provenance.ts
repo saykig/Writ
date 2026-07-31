@@ -21,5 +21,5 @@ export interface RepoProvenance {
 
 export const REPO_PROVENANCE: RepoProvenance = {
   "repository": "https://github.com/saykig/Writ",
-  "commit": "d50bb75b3ea49127d1204d4ed644ce59d6db3685"
+  "commit": "ab02f42c4d0a9a063a4403809d77cea1b82d2ede"
 };

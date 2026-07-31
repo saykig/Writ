@@ -1,7 +1,8 @@
 # Candidate third methodologies
 
 **Archived planning snapshot.** This document is historical and non-normative. Its selected FATF
-scaffold now lives under `benchmarks/evaluator/`; the other candidates are not active work.
+scaffold now lives under `internal/verification/benchmarks/evaluator/`; the other candidates are not
+active work.
 
 The pilot has one historical source-backed score reproduction (G7 AI-for-SMEs,
 three-point), while weighted-ordinal behavior is covered by a Writ-owned
@@ -39,8 +40,8 @@ Each notes the phrase it would stress and which Writ capability it exercises
 - **Status (2026-07-23):** encoded and analyzed clean, with the follow-up rule's
   regular/enhanced branches statically verified to partition the rating space and
   computed over synthetic evidence. See
-  [`methodology.writ`](../../../benchmarks/evaluator/fatf-mutual-evaluation-scaffold/methodology.writ),
-  the benchmark [README](../../../benchmarks/evaluator/fatf-mutual-evaluation-scaffold/README.md), and
+  [`methodology.writ`](../../../internal/verification/benchmarks/evaluator/fatf-mutual-evaluation-scaffold/methodology.writ),
+  the benchmark [README](../../../internal/verification/benchmarks/evaluator/fatf-mutual-evaluation-scaffold/README.md), and
   `packages/benchmark/test/fatf-reproduction.test.ts`. **Still source-gated**
   (held pending, no real ratings committed): (1) the enhanced-follow-up trigger
   constants must be verified verbatim against the FATF _Procedures_; (2) the

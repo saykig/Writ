@@ -1,10 +1,6 @@
 // Evaluation runs, immutable receipts, and benchmark discrepancies.
 import type { DbClient } from "../client.js";
-import type {
-  DiscrepancyInput,
-  EvaluationRunInput,
-  ReceiptInput,
-} from "../types.js";
+import type { DiscrepancyInput, EvaluationRunInput, ReceiptInput } from "../types.js";
 import { json, maybe, one } from "./shared.js";
 
 export interface EvaluationRunRow {
@@ -84,9 +80,7 @@ export function evaluationsRepository(sql: DbClient) {
     },
 
     async getReceipt(id: string): Promise<ReceiptRow | null> {
-      return maybe(
-        await sql<ReceiptRow[]>`SELECT * FROM evaluation_receipts WHERE id = ${id}`,
-      );
+      return maybe(await sql<ReceiptRow[]>`SELECT * FROM evaluation_receipts WHERE id = ${id}`);
     },
 
     async getReceiptByRun(runId: string): Promise<ReceiptRow | null> {

@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const g7 = join(root, "corpora/multilateral/g7/2025-ai-sme");
-const g7Benchmark = join(root, "benchmarks/evaluator/g7-2025-ai-sme-score-reproduction");
+const g7Benchmark = join(
+  root,
+  "internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction",
+);
 const g20 = join(root, "corpora/multilateral/g20/2024-rio");
 
 const json = <T>(...parts: string[]): T => JSON.parse(readFileSync(join(...parts), "utf8")) as T;

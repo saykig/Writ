@@ -14,7 +14,7 @@
  * hash does NOT prove is covered in the benchmark replication note (e.g. a passage's
  * anchor_hash also folds in a footnote that is not stored in the snapshot).
  *
- * Run: `bun scripts/replicate.ts` (exits non-zero on any divergence).
+ * Run: `bun run replicate` (exits non-zero on any divergence).
  */
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";

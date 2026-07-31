@@ -1,6 +1,6 @@
 // The frozen methodology: the resolved AI-for-SMEs writ compiled to IR.
 //
-// The runner and tests use this AS-IS (`examples/2025-ai-sme-resolved.writ`).
+// The runner and tests use this compatibility fixture AS-IS.
 // It is the gap/overlap-free methodology whose score program the benchmark
 // reproduces; nothing here edits it.
 
@@ -11,11 +11,11 @@ import { methodologyBundleHash } from "@writ/provenance";
 import type { CanonicalIr, Commitment } from "@writ/domain";
 
 /**
- * Absolute path to the resolved writ source (repo `examples/`). The relative
+ * Absolute path to the resolved historical G7 compatibility fixture. The relative
  * specifier is computed so bundlers do not asset-analyze it; Bun/Node behavior
  * is unchanged.
  */
-const RESOLVED_WRIT_REL = `${"../".repeat(3)}examples/2025-ai-sme-resolved.writ`;
+const RESOLVED_WRIT_REL = `${"../".repeat(3)}internal/verification/fixtures/compatibility/g7-ai-sme/language/2025-ai-sme-resolved.writ`;
 export const RESOLVED_WRIT_PATH = fileURLToPath(new URL(RESOLVED_WRIT_REL, import.meta.url));
 
 let cached: CompileSourceResult | undefined;

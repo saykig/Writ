@@ -121,7 +121,7 @@ tasks:
       - G7's 87 actions and G20's incomplete 13-of-174 coverage remain explicit.
     outputs:
       - corpora/multilateral/g7/2025-ai-sme
-      - benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
+      - internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
       - corpora/multilateral/g20/2024-rio
 
   - id: RESET-007
@@ -161,6 +161,20 @@ tasks:
     acceptance:
       - No test, script, workspace, or documentation consumer remains.
       - Conformance, unit tests, typecheck, and production build pass without reference-core.
+
+  - id: INTERNALIZE-REPOSITORY-SUPPORT
+    title: Consolidate active developer support under internal
+    status: done
+    dependencies:
+      - RESET-008
+    scope:
+      - Move root verification, tooling, infrastructure, generated, and integration-test paths under internal.
+      - Reclassify former public examples as active language, schema, or compatibility fixtures.
+      - Preserve corpus semantics, reviewed records, protocol/query behavior, and archive bytes.
+    acceptance:
+      - No developer-support directory named in the migration remains at the root.
+      - Every active consumer resolves the new path and the complete verification suite passes.
+      - The old G7 AI-for-SMEs material is bounded as internal compatibility verification.
 
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

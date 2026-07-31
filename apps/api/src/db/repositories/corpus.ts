@@ -87,7 +87,9 @@ export function corpusRepository(sql: DbClient) {
           SELECT * FROM corpus_current_objects
           WHERE logical_id = ${artifact.logicalId}`;
         if (currentRows.length > 1) {
-          throw new Error(`logical corpus object has multiple current versions: ${artifact.logicalId}`);
+          throw new Error(
+            `logical corpus object has multiple current versions: ${artifact.logicalId}`,
+          );
         }
         const current = currentRows[0] ?? null;
         if (current?.artifact_sha256 === artifact.artifactSha256) {

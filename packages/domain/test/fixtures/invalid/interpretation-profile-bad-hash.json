@@ -13,30 +13,20 @@
       "id": "decision-counter-precedence",
       "question": "Does a qualifying counteraction override positive action counts?",
       "choice": "yes",
-      "alternatives_considered": [
-        "no",
-        "netting"
-      ],
+      "alternatives_considered": ["no", "netting"],
       "rationale": "This profile makes precedence explicit so the score program is deterministic.",
       "status": "accepted",
-      "approved_by": [
-        "methodologist-example"
-      ],
+      "approved_by": ["methodologist-example"],
       "approved_at": "2026-07-22T15:00:00Z"
     },
     {
       "id": "decision-many-weak",
       "question": "How is “up to four strong actions” operationalized, and how are zero-strong cases with five or more weak actions scored?",
       "choice": "0",
-      "alternatives_considered": [
-        "-1",
-        "unresolved"
-      ],
+      "alternatives_considered": ["-1", "unresolved"],
       "rationale": "This profile interprets the phrase as requiring at least one strong action for that branch, then separately assigns three or more weak actions to partial compliance. The choice is explicit because an inclusive zero-to-four reading creates a different overlap.",
       "status": "accepted",
-      "approved_by": [
-        "methodologist-example"
-      ],
+      "approved_by": ["methodologist-example"],
       "approved_at": "2026-07-22T15:00:00Z"
     }
   ],

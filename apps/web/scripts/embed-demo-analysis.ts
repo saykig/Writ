@@ -26,8 +26,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..");
 const outFile = join(here, "..", "lib", "demo-analysis-data.ts");
 
-const SOURCE_REL =
-  "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml";
+const SOURCE_REL = "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml";
 const ACTIVE_CORPORA = {
   EU: "corpora/jurisdictions/eu/ai-governance",
   US: "corpora/jurisdictions/us/ai-governance",
@@ -95,13 +94,11 @@ requireFields(methodology, "methodology", [
   "lifecycle_dimensions",
   "headline_rule",
 ]);
-requireFields(requireObject(methodology.headline_rule, "methodology.headline_rule"), "methodology.headline_rule", [
-  "legal_force",
-  "applicability_status",
-  "actor_type",
-  "conduct_type",
-  "target_class",
-]);
+requireFields(
+  requireObject(methodology.headline_rule, "methodology.headline_rule"),
+  "methodology.headline_rule",
+  ["legal_force", "applicability_status", "actor_type", "conduct_type", "target_class"],
+);
 requireFields(requireObject(methodology.us_scope, "methodology.us_scope"), "methodology.us_scope", [
   "included",
   "excluded",
@@ -131,15 +128,19 @@ for (const [index, record] of records.entries()) {
       fail(`${at} (${String(record.row_id)}) is a source_bundle with no derived_claims`);
     }
     for (const [childIndex, child] of record.derived_claims.entries()) {
-      requireFields(requireObject(child, `${at}.derived_claims[${childIndex}]`), `${at}.derived_claims[${childIndex}]`, [
-        "claim_id",
-        "record_type",
-        "legal_force",
-        "adoption_status",
-        "applicability_status",
-        "enforcement_status",
-        "headline_relevance",
-      ]);
+      requireFields(
+        requireObject(child, `${at}.derived_claims[${childIndex}]`),
+        `${at}.derived_claims[${childIndex}]`,
+        [
+          "claim_id",
+          "record_type",
+          "legal_force",
+          "adoption_status",
+          "applicability_status",
+          "enforcement_status",
+          "headline_relevance",
+        ],
+      );
     }
     derivedClaimCount += record.derived_claims.length;
   } else {
@@ -240,10 +241,13 @@ for (const [jurisdiction, base] of Object.entries(ACTIVE_CORPORA)) {
 }
 
 if (archivedClaimRefs.length !== activeClaimIds.size) {
-  fail(`archived ${archivedClaimRefs.length} claims do not match ${activeClaimIds.size} active claims`);
+  fail(
+    `archived ${archivedClaimRefs.length} claims do not match ${activeClaimIds.size} active claims`,
+  );
 }
 for (const legacyRef of archivedClaimRefs) {
-  if (!activeLegacyRefs.has(legacyRef)) fail(`archived claim ${legacyRef} has no active resolution`);
+  if (!activeLegacyRefs.has(legacyRef))
+    fail(`archived claim ${legacyRef} has no active resolution`);
 }
 for (const legacyRef of archivedParentRefs) {
   if (!activeParentRefs.has(legacyRef)) fail(`archived parent ${legacyRef} has no active review`);

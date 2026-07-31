@@ -57,9 +57,7 @@
         "truth_value": "true",
         "value": 7,
         "rule_id": "full",
-        "action_ids": [
-          "action-ca-compute-fund"
-        ],
+        "action_ids": ["action-ca-compute-fund"],
         "child_ids": []
       },
       {
@@ -68,16 +66,11 @@
         "label": "Selected unique highest-priority true score branch",
         "truth_value": "true",
         "rule_id": "full",
-        "child_ids": [
-          "proof-counter",
-          "proof-full"
-        ]
+        "child_ids": ["proof-counter", "proof-full"]
       }
     ]
   },
-  "qualifying_action_ids": [
-    "action-ca-compute-fund"
-  ],
+  "qualifying_action_ids": ["action-ca-compute-fund"],
   "excluded_actions": [],
   "unresolved_claim_ids": [],
   "contested_claim_ids": [],
@@ -87,15 +80,9 @@
     "evidence_snapshot_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
     "interpretation_profile_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
     "evaluator_build_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
-    "source_snapshot_ids": [
-      "snapshot-canada-ai-sme-2025-10-31"
-    ],
-    "claim_ids": [
-      "claim-ca-compute-fund-targets-smes"
-    ],
-    "action_ids": [
-      "action-ca-compute-fund"
-    ]
+    "source_snapshot_ids": ["snapshot-canada-ai-sme-2025-10-31"],
+    "claim_ids": ["claim-ca-compute-fund-targets-smes"],
+    "action_ids": ["action-ca-compute-fund"]
   },
   "canonical_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
 }

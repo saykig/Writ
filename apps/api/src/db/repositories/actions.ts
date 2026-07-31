@@ -1,11 +1,6 @@
 // Actions (bitemporal) and typed relationships between them.
 import type { DbClient } from "../client.js";
-import type {
-  ActionInput,
-  ActionRelationshipInput,
-  ActionRow,
-  ActionStatus,
-} from "../types.js";
+import type { ActionInput, ActionRelationshipInput, ActionRow, ActionStatus } from "../types.js";
 import { json, maybe, one, withTransaction } from "./shared.js";
 
 export interface ActionSupersedeResult {

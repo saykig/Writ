@@ -13,8 +13,14 @@ import {
 import { inclusiveUpToProgram, literalIr, literalProgram } from "./programs.js";
 
 function readFixture<T>(name: string): T {
+  const directory = name.startsWith("ai-sme")
+    ? "compatibility/g7-ai-sme/analyzer"
+    : "language/diagnostics";
   return JSON.parse(
-    readFileSync(new URL(`../../../fixtures/${name}`, import.meta.url), "utf8"),
+    readFileSync(
+      new URL(`../../../internal/verification/fixtures/${directory}/${name}`, import.meta.url),
+      "utf8",
+    ),
   ) as T;
 }
 

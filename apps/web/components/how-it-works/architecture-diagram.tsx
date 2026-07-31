@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
  * legible at every width), theme-aware via the color tokens, no diagram library.
  *
  * Mirrors the historical benchmark diagram in
- * benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/architecture.mmd.
+ * internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/architecture.mmd.
  */
 
 type Accent = "plain" | "gold" | "machine" | "emphasis";

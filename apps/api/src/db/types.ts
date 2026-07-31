@@ -112,12 +112,7 @@ export interface PassageInput {
 // ---------------------------------------------------------------------------
 export type TruthValue = "true" | "false" | "unknown" | "contested";
 export type ClaimStatus =
-  | "candidate"
-  | "accepted"
-  | "rejected"
-  | "contested"
-  | "superseded"
-  | "withdrawn";
+  "candidate" | "accepted" | "rejected" | "contested" | "superseded" | "withdrawn";
 
 export interface ClaimRow {
   id: string;

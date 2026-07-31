@@ -4,7 +4,7 @@ grammar Writ
 // Writ 0.1 grammar.
 //
 // This grammar covers the full concrete surface exercised by the checked-in
-// example methodologies (`examples/*.writ`) and the design-target grammar in
+// internal language and compatibility fixtures plus the design-target grammar in
 // `protocols/language/writ.ebnf`. Where the protocol's §16
 // `rule … => …` sugar diverges from the example files, the example files are the
 // compile target, so the concrete syntax here follows them (`result "+1" priority

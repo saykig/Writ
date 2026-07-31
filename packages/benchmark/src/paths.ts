@@ -10,7 +10,7 @@ const REPOSITORY_ROOT = fileURLToPath(new URL(ROOT_REL, import.meta.url));
 export const G7_CORPUS_DIR = join(REPOSITORY_ROOT, "corpora/multilateral/g7/2025-ai-sme");
 export const BENCHMARK_DIR = join(
   REPOSITORY_ROOT,
-  "benchmarks/evaluator/g7-2025-ai-sme-score-reproduction",
+  "internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction",
 );
 
 export const G7_SOURCE_MANIFEST_PATH = join(G7_CORPUS_DIR, "sources/source-manifest.json");

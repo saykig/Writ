@@ -10,7 +10,7 @@ check:
 	bun run lint
 	bun run typecheck
 	bun run test
-	. .venv/bin/activate && ruff check apps/ingest && pytest apps/ingest
+	. .venv/bin/activate && ruff check apps/ingest internal/tooling/scripts internal/verification && pytest apps/ingest internal/verification
 
 test: check
 
