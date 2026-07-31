@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils";
  * emits a proof-carrying receipt. Pure HTML/SVG: real DOM text (selectable,
  * legible at every width), theme-aware via the color tokens, no diagram library.
  *
- * Mirrors docs/architecture.mmd.
+ * Mirrors the historical benchmark diagram in
+ * benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/architecture.mmd.
  */
 
 type Accent = "plain" | "gold" | "machine" | "emphasis";

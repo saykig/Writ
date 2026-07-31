@@ -31,9 +31,9 @@ package fatf.mutual_evaluation version "1.0.0";
 // Evaluations" — before any reproduction result is claimed. The per-country
 // ratings and the actual assigned follow-up streams are likewise sourced from
 // the FATF Consolidated Assessment Ratings table when it is reachable. Until
-// then, no cell of `benchmark/fatf-mutual-evaluation/` contains a real rating,
+// then, no file in this benchmark scaffold contains a real rating,
 // and the reproduction test is held pending (see fatf-reproduction.test.ts).
-// See docs/NEXT-METHODOLOGIES.md and the corpus README for exactly what remains.
+// See this directory's README for exactly what remains.
 // ─────────────────────────────────────────────────────────────────────────────
 
 commitment FATF_MUTUAL_EVALUATION {

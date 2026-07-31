@@ -15,7 +15,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-import fitz  # type: ignore[import-untyped]
+import fitz  # type: ignore[import-not-found,import-untyped]
 
 _MONTHS = {
     "january": 1,

@@ -3,7 +3,7 @@
  *
  * The literal program is loaded from the checked-in flagship IR example (read
  * only); the inclusive-up-to, resolved, dead-rule and non-monotonic programs are
- * built here as IR `ScoreProgram` values, mirroring the reference-core fixtures.
+ * built here as IR `ScoreProgram` values for implementation-independent tests.
  */
 
 import { readFileSync } from "node:fs";

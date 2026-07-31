@@ -13,7 +13,6 @@ export default tseslint.config(
       "**/*.langium",
       "**/generated/**",
       "**/schemas.embedded.ts",
-      "reference-core/**",
       "**/.next/**",
       "apps/web/**",
     ],

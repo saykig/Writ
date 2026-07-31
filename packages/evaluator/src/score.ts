@@ -1,7 +1,7 @@
 // CORE-008 (part 1) — deterministic score-branch selection with proof.
 //
-// Ported from `reference-core/src/evaluator.ts::evaluateScore`, with the runtime
-// diagnostic codes renamed to the ADR-0011 `WRT-EVAL-*` catalog and a proof
+// Implements the frozen conformance selection semantics, with ADR-0011
+// `WRT-EVAL-*` diagnostic codes and a proof
 // subtree emitted for every rule plus a `selection` root. The value/status split
 // of 04_FORMAL_SEMANTICS.md §12–13 is preserved:
 //

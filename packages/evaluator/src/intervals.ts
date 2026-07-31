@@ -6,10 +6,9 @@
 // heart of "unknown never silently becomes false": an uncertain count or amount
 // compared against a decisive threshold yields `unknown`, not a guess.
 //
-// `compareCountIntervals` is ported verbatim (semantics) from
-// `reference-core/src/evaluator.ts`. `compareUnitedIntervals` lifts the same
-// logic to exact decimals with an unbounded (`+infinity`) upper endpoint and a
-// unit dimension.
+// `compareCountIntervals` implements the frozen conformance behavior.
+// `compareUnitedIntervals` lifts the same logic to exact decimals with an
+// unbounded (`+infinity`) upper endpoint and a unit dimension.
 
 import type { CountInterval } from "@writ/domain";
 import { truth, not, all, type Truth } from "./truth.js";
@@ -18,7 +17,7 @@ import type { UnitedInterval } from "./values.js";
 
 export type OrderOp = "eq" | "neq" | "gt" | "gte" | "lt" | "lte";
 
-/** Four-valued comparison of two numeric count intervals (reference parity). */
+/** Four-valued comparison of two numeric count intervals. */
 export function compareCountIntervals(
   op: OrderOp,
   left: CountInterval,

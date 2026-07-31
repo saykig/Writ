@@ -100,5 +100,6 @@ relocation.
 - Language grammar protocol: `protocols/language/writ.ebnf`
 - API protocol: `protocols/api/openapi.yaml`
 - Architecture decision: `adr/0013-schema-and-protocol-authority.md`
-- Complete path map: `docs/current/schema-protocol-path-map.md`
-- `reference-core` migration proposal: `docs/current/reference-core-retirement.md`
+- Completed path map: `docs/migrations/repository-reset/04-schema-protocol-path-map.md`
+- Completed reference implementation retirement:
+  `docs/migrations/repository-reset/08-reference-core-retirement.md`

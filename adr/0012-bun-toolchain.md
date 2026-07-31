@@ -20,4 +20,9 @@ This changes only the toolchain. It does not touch any semantic invariant in `AG
 
 ## Consequences
 
-`reference-core` is wired into the Bun workspace and its conformance test runs as `bun ./test/run-tests.ts`. The Python `apps/ingest` workspace, PostgreSQL migration job, and Docker Compose stack are unaffected. Any contributor guidance that says "pnpm" is superseded by "bun".
+The Python `apps/ingest` workspace, PostgreSQL migration job, and Docker Compose stack are
+unaffected. Any contributor guidance that says "pnpm" is superseded by "bun".
+
+ADR 0015 later retired the duplicate `reference-core` workspace after its behavior was frozen in
+implementation-independent conformance cases. That retirement does not change this toolchain
+decision.

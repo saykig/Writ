@@ -1,5 +1,9 @@
 # Verified input for Prompt 8 repository hygiene
 
+**Historical input snapshot.** The decisions requested here are recorded in the current
+[`repository-structure.md`](../../current/repository-structure.md) and the completed
+[`reference-core` retirement](./08-reference-core-retirement.md).
+
 This inventory classifies the repository after Prompt 7. It does not perform the full hygiene pass.
 Deletion requires a proven absence of consumers and an explicit retention decision.
 

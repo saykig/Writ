@@ -11,7 +11,7 @@ A G7 compliance score is a number on a `+1 / 0 / -1` scale, and behind each numb
 is a methodology, a pile of public evidence, and — usually invisibly — a set of
 judgment calls. In this benchmark, Writ makes the methodology a program, the evidence a frozen
 reviewed ledger, and the derived reproduction a trace you can recompute and audit. The published
-ratings remain source-reported judgments. The analyzer catches ambiguity in the *methodology*
+ratings remain source-reported judgments. The analyzer catches ambiguity in the _methodology_
 before any evidence exists, and the discrepancy ledger names exactly where a reproduced result
 depends on interpretation rather than treating that interpretation as a fact.
 
@@ -66,7 +66,7 @@ actions by id.
 
 Six cells reproduce with wide margin and no judgment call. **Japan and US do not.**
 Their published `0` holds only if general, non-SME-targeted AI legislation and
-strategy documents are read as *weak*; a generous reading that counts them as
+strategy documents are read as _weak_; a generous reading that counts them as
 strong flips both to `+1`. The discrepancy ledger tags exactly those two cells
 `implicit_analyst_interpretation`. That ledger — a precise map of where the score
 stops being a fact and starts being a judgment — is worth more than the score

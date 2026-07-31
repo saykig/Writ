@@ -1,8 +1,8 @@
 /**
  * A slim four-valued evaluator over a concrete fact environment.
  *
- * This mirrors the reference-core evaluator's `evaluateTruth` for the expression
- * subset the analyzer reasons about, including interval-valued counts so that a
+ * This implements the frozen conformance semantics for the expression subset
+ * the analyzer reasons about, including interval-valued counts so that a
  * threshold crossing (e.g. a count known only to be in `[4, 6]` compared against
  * `>= 5`) yields `unknown` rather than a forced boolean. It powers the
  * bounded-enumeration oracle and stands in for the evaluator (which the analyzer

@@ -14,7 +14,7 @@ execution_policy:
   required_reading:
     - AGENTS.md
     - docs/current/product-definition.md
-    - docs/current/repository-reset-audit.md
+    - docs/migrations/repository-reset/01-audit.md
 
 statuses:
   - ready
@@ -28,7 +28,7 @@ tasks:
     title: Audit and freeze the pre-reset repository
     status: done
     outputs:
-      - docs/current/repository-reset-audit.md
+      - docs/migrations/repository-reset/01-audit.md
 
   - id: RESET-002
     title: Replace the governing product definition
@@ -75,7 +75,7 @@ tasks:
       - Separate core, extension, analysis, and versioned compatibility contracts.
       - Move language and API protocols out of the former mixed contract root.
       - Update schema IDs, consumers, generators, tests, documentation, and manifests.
-      - Document the remaining reference-core retirement path without deleting an active consumer.
+      - Document the then-pending reference-core retirement path without deleting an active consumer.
     acceptance:
       - No active schema ambiguity remains.
       - No universal core record requires commitment, obligation, or score fields.
@@ -83,8 +83,8 @@ tasks:
     outputs:
       - schemas/README.md
       - adr/0013-schema-and-protocol-authority.md
-      - docs/current/schema-protocol-path-map.md
-      - docs/current/reference-core-retirement.md
+      - docs/migrations/repository-reset/04-schema-protocol-path-map.md
+      - docs/migrations/repository-reset/08-reference-core-retirement.md
 
   - id: RESET-005
     title: Separate EU and US AI-governance corpora
@@ -108,7 +108,7 @@ tasks:
       - corpora/jurisdictions/eu/ai-governance
       - corpora/jurisdictions/us/ai-governance
       - adr/0014-stable-corpus-identities.md
-      - docs/current/eu-us-corpus-migration.md
+      - docs/migrations/repository-reset/05-eu-us-corpus-migration.md
 
   - id: RESET-006
     title: Reclassify G7 and G20 as multilateral corpora
@@ -136,22 +136,22 @@ tasks:
     outputs:
       - queries/README.md
       - queries/eu-us-ai-governance-pilot/query.yaml
-      - docs/current/repository-reset-handoff.md
-      - docs/current/final-hygiene-input.md
+      - docs/migrations/repository-reset/07-handoff.md
+      - docs/migrations/repository-reset/07-final-hygiene-input.md
 
   - id: RESET-008
     title: Perform the verified repository-hygiene pass
-    status: ready
+    status: done
     dependencies:
       - RESET-007
     scope:
-      - Use docs/current/final-hygiene-input.md as the verified input.
+      - Use docs/migrations/repository-reset/07-final-hygiene-input.md as the verified input.
       - Resolve only items whose consumers and retention requirements are proven.
       - Preserve historical and compatibility material until its retirement gate is met.
 
   - id: RETIRE-REFERENCE-CORE
     title: Replace the reference-core parity oracle with implementation-independent fixtures
-    status: ready
+    status: done
     dependencies:
       - RESET-007
     scope:

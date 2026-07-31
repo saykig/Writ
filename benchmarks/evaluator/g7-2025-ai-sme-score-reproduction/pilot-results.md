@@ -3,7 +3,7 @@
 This is a historical benchmark note, not Writ's current product definition and not a corpus
 identity. It records what the first scoring pilot established, what it did not, and where that
 experiment pointed. For the reproducible run behind the numbers, see
-[`docs/PROOF.md`](./PROOF.md) and `scripts/demo.sh`.
+[`proof.md`](./proof.md) and `scripts/demo.sh`.
 
 ## Summary
 
@@ -91,14 +91,15 @@ validation.
   verifies the machinery, not an external methodology or dataset.
 - **Analyzer scope.** Findings are decided by bounded enumeration over declared
   finite domains; a clean result guarantees clean only within them, and query-
-  driven rubric anchors are not coverage-checked. `docs/ANALYZER-SCOPE.md` states
+  driven rubric anchors are not coverage-checked. The current
+  [`analyzer-scope.md`](../../../docs/current/analyzer-scope.md) states
   the bounds in full.
 
 ## How to check it
 
 The evidence is frozen in-repo and needs no network. `bash scripts/demo.sh`
 reproduces the AI-for-SMEs figures; `bun scripts/replicate.ts` re-derives every
-hash and score from the frozen bytes (`docs/REPLICATION.md`); and
+hash and score from the frozen bytes ([`replication.md`](./replication.md)); and
 `bun test packages/benchmark/test/weighted-ordinal.test.ts` verifies the generic
 graded-measure path. The live site runs the same compiler and analyzer toolchain.
 
@@ -113,13 +114,14 @@ Status: the historical reproduction and analyzer-scope work are complete.
 2. ✅ **Frozen re-derivation of the evidence.** Done — `bun scripts/replicate.ts`
    re-derives every source hash, snapshot content hash, profile hash, and score
    from the in-repo bytes, and a test proves a one-character quote edit breaks the
-   hash (`docs/REPLICATION.md`). What a matching hash does and does not prove is
-   stated there; independent re-*gathering* by a second analyst remains open.
+   hash ([`replication.md`](./replication.md)). What a matching hash does and does not prove is
+   stated there; independent re-_gathering_ by a second analyst remains open.
 
 3. ⏳ **One real domain reviewer.** Open. A reviewer should assess whether the
    source-backed methodology encoding and analyzer findings are correct and useful.
 
-4. ✅ **Analyzer scope + negative results.** Done — `docs/ANALYZER-SCOPE.md` states
+4. ✅ **Analyzer scope + negative results.** Done — the current
+   [`analyzer-scope.md`](../../../docs/current/analyzer-scope.md) states
    what the score and measure analyzers decide and where they are silent, and
    "clean" is a first-class reported result. The resolved AI-for-SMEs methodology
    and synthetic weighted-ordinal fixture are clean within their declared bounds.

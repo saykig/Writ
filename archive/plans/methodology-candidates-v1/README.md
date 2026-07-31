@@ -1,5 +1,8 @@
 # Candidate third methodologies
 
+**Archived planning snapshot.** This document is historical and non-normative. Its selected FATF
+scaffold now lives under `benchmarks/evaluator/`; the other candidates are not active work.
+
 The pilot has one historical source-backed score reproduction (G7 AI-for-SMEs,
 three-point), while weighted-ordinal behavior is covered by a Writ-owned
 synthetic fixture. A future independent methodology should test whether the
@@ -20,7 +23,8 @@ encoding generalizes beyond those development fixtures.
 Each notes the phrase it would stress and which Writ capability it exercises
 (the three-point gap/overlap path, or the graded-measure path).
 
-### 1. FATF Mutual Evaluations (AML/CFT) — *chosen; scaffold landed, source-gated*
+### 1. FATF Mutual Evaluations (AML/CFT) — _chosen; scaffold landed, source-gated_
+
 - **What:** the Financial Action Task Force rates each country **Compliant /
   Largely Compliant / Partially Compliant / Non-Compliant** on 40 Recommendations
   (technical compliance) and **High / Substantial / Moderate / Low** on 11
@@ -35,17 +39,18 @@ Each notes the phrase it would stress and which Writ capability it exercises
 - **Status (2026-07-23):** encoded and analyzed clean, with the follow-up rule's
   regular/enhanced branches statically verified to partition the rating space and
   computed over synthetic evidence. See
-  [`examples/fatf-mutual-evaluation.writ`](../examples/fatf-mutual-evaluation.writ),
-  the corpus [README](../benchmark/fatf-mutual-evaluation/README.md), and
+  [`methodology.writ`](../../../benchmarks/evaluator/fatf-mutual-evaluation-scaffold/methodology.writ),
+  the benchmark [README](../../../benchmarks/evaluator/fatf-mutual-evaluation-scaffold/README.md), and
   `packages/benchmark/test/fatf-reproduction.test.ts`. **Still source-gated**
   (held pending, no real ratings committed): (1) the enhanced-follow-up trigger
-  constants must be verified verbatim against the FATF *Procedures*; (2) the
+  constants must be verified verbatim against the FATF _Procedures_; (2) the
   per-country ratings sourced from the Consolidated Assessment Ratings table; and
   (3) the actual assigned follow-up streams to reproduce against. The FATF site
   blocks automated fetch, so this last mile awaits a reachable source or a clean
   export.
 
 ### 2. World Bank CPIA
+
 - **What:** the Country Policy and Institutional Assessment scores IDA countries
   **1–6** on 16 criteria in four clusters, each with anchor descriptions.
 - **Soft quantifier:** **"adequate"** — the mid-band anchor most assessments hinge
@@ -57,9 +62,10 @@ Each notes the phrase it would stress and which Writ capability it exercises
   countries but coverage/detail varies — check data availability before committing.
 
 ### 3. Climate Action Tracker
+
 - **What:** rates countries' targets and policies on an ordinal band —
-  *Critically insufficient → Highly insufficient → Insufficient → Almost
-  sufficient → 1.5°C compatible*. Published per country.
+  _Critically insufficient → Highly insufficient → Insufficient → Almost
+  sufficient → 1.5°C compatible_. Published per country.
 - **Soft quantifier:** **"sufficient"** (sufficient for what warming outcome) — the
   load-bearing word is the scale itself.
 - **Stresses:** ordinal band assignment + roll-up across several metrics; a
@@ -70,13 +76,14 @@ Each notes the phrase it would stress and which Writ capability it exercises
   work than FATF.
 
 ### 4. G7 Hiroshima AI Process — International Code of Conduct
+
 - **What:** organizations report against voluntary AI commitments; the OECD hosts
   a reporting framework.
 - **Soft quantifier:** **"appropriate measures" / "as appropriate" / "reasonable"**
   — dense soft language.
 - **Stresses:** the **static gap/overlap** path on soft-commitment text — the
   purest re-run of the "up to four" finding, in the same domain as the pilot.
-- **Independence:** medium. **Caveat:** it is *reporting*, not scoring — there is
+- **Independence:** medium. **Caveat:** it is _reporting_, not scoring — there is
   no published per-party ordinal record to reproduce, so it tests ambiguity
   detection but not score reproduction. Best as a complement, not the primary
   third case.
@@ -85,7 +92,7 @@ Each notes the phrase it would stress and which Writ capability it exercises
 
 **Lead with FATF** (public ratings, bounded rubric, a real "largely vs partially"
 boundary, and unimpeachable independence) to strengthen the discrete/gap-overlap
-claim on data we did not touch. **Follow with CPIA** to get a *second*
+claim on data we did not touch. **Follow with CPIA** to get a _second_
 weighted-ordinal case — that pairing (a third discrete methodology + a second
 graded one) is what turns the generality claim from "two shapes each once" into
 "each shape, twice, on independent data." Hold Hiroshima as an ambiguity-detection

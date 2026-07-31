@@ -59,6 +59,9 @@ Therefore it is not deleted in this change. Its retirement requires replacing th
 with implementation-independent conformance fixtures, removing workspace/script dependencies, and
 passing the same truth, score, witness, conformance, typecheck, and build gates.
 
+**Subsequent decision:** ADR 0015 completed that bounded retirement after the declarative
+conformance coverage was proven. This section records the state at the time of ADR 0013.
+
 ## Consequences
 
 - Schema consumers have one authoritative root.

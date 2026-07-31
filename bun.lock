@@ -141,10 +141,6 @@
       "name": "@writ/provenance",
       "version": "0.1.0",
     },
-    "reference-core": {
-      "name": "@writ/reference-core",
-      "version": "0.1.0",
-    },
   },
   "trustedDependencies": [
     "sharp",
@@ -626,8 +622,6 @@
     "@writ/language": ["@writ/language@workspace:packages/language"],
 
     "@writ/provenance": ["@writ/provenance@workspace:packages/provenance"],
-
-    "@writ/reference-core": ["@writ/reference-core@workspace:reference-core"],
 
     "@writ/web": ["@writ/web@workspace:apps/web"],
 

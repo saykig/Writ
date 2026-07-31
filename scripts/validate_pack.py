@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Writ schemas, protocols, examples, tasks, and the compatibility oracle."""
+"""Validate Writ schemas, protocols, examples, tasks, and conformance cases."""
 
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ REQUIRED_FILES = [
     "protocols/language/writ.ebnf",
     "protocols/api/openapi.yaml",
     ".agents/skills/writ-domain/SKILL.md",
-    "reference-core/package.json",
+    "conformance/case.schema.json",
     "data/source-registry.json",
 ]
 
@@ -122,7 +122,7 @@ def validate_yaml() -> None:
             fail(f"task {task.get('id')} has unknown dependencies: {missing}")
 
 
-def run_reference_core() -> None:
+def run_conformance() -> None:
     bun = os.environ.get("BUN_BIN") or shutil.which("bun")
     if bun is None:
         fallback = Path.home() / ".bun" / "bin" / "bun"
@@ -130,13 +130,13 @@ def run_reference_core() -> None:
     if bun is None:
         fail("Bun executable not found; set BUN_BIN or install Bun")
     completed = subprocess.run(
-        [bun, "run", "test"],
-        cwd=ROOT / "reference-core",
+        [bun, "run", "conformance"],
+        cwd=ROOT,
         check=False,
         text=True,
     )
     if completed.returncode != 0:
-        fail("reference-core tests failed")
+        fail("conformance tests failed")
 
 
 def main() -> None:
@@ -144,7 +144,7 @@ def main() -> None:
     validate_all_json_syntax()
     validate_schemas_and_examples()
     validate_yaml()
-    run_reference_core()
+    run_conformance()
     print("OK: Writ build pack validated")
 
 

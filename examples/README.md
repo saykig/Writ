@@ -12,4 +12,5 @@ The examples serve different purposes:
 - `2025-ai-sme.sample-evidence.json` is illustrative evidence data, not a claim about the live state of Canadian policy.
 - `2025-ai-sme.sample-receipt.json` is an illustrative output contract.
 
-The `.writ` syntax is a design target until the Langium parser is implemented and its examples are promoted into the conformance suite.
+The `.writ` files are compiled by the Langium-based language package in tests. Declarative semantic
+cases that do not depend on source syntax live under `conformance/`.

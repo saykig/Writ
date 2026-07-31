@@ -32,7 +32,7 @@ For documentation-only changes:
 
 ```bash
 bun x prettier --check AGENTS.md README.md START_HERE.md PRODUCT.md DESIGN.md \
-  VALIDATION.md VERSION_POLICY.md TASKS.yaml docs/current archive/plans
+  VALIDATION.md VERSION_POLICY.md TASKS.yaml adr benchmarks docs archive/plans scripts/README.md
 git diff --check
 ```
 

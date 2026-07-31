@@ -1,8 +1,7 @@
 /**
  * Four-valued truth as a bilattice of (supportsTrue, supportsFalse).
  *
- * This is a peer re-implementation of the reference-core truth kernel. The
- * analyzer and evaluator are peers, so this is intentionally NOT imported from
+ * The analyzer and evaluator are peers, so this is intentionally NOT imported from
  * `@writ/evaluator`; the four-valued semantics are encoded here directly so
  * both the bounded-enumeration oracle and the Z3 lowering share one meaning of
  * true / false / unknown / contested.

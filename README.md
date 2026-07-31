@@ -11,29 +11,34 @@ reproducible views over one or more corpora.
 The initial knowledge families are institutional, legal, policy, theoretical, empirical and
 share provenance and revision conventions.
 
-## Layout
+## Repository map
 
-- `packages/domain` — canonical types, schemas, identifiers, canonicalization, the diagnostic catalog.
-- `packages/evaluator` — deterministic derivation, four-valued truth where applicable, and proof construction.
-- `packages/analyzer` — static checks, bounded witnesses, and stable diagnostics.
-- `packages/language` — Langium grammar, linker, formatter, AST→IR compiler, LSP.
-- `packages/provenance` — RFC 8785 canonical JSON, SHA-256 hashing, snapshots, signatures.
-- `packages/cli` — author and operator commands.
-- `apps/api` — governed knowledge and derivation service (Fastify + OpenAPI).
-- `apps/web` — active research, review, and demonstration interface.
-- `apps/ingest` — source-specific acquisition, parsing, anchoring, normalization, and corpus
-  validation.
-- `db/migrations` — PostgreSQL schema and controlled migrations.
-- `reference-core` — compatibility test oracle pending the documented consumer migration.
-- `schemas/` — sole active JSON Schema authority, divided into core, extensions, analysis, and
-  versioned compatibility contracts.
+The active source-of-truth areas are deliberately separated from analyses and history:
+
+- `apps/` — product interfaces and source-specific ingestion.
+- `corpora/` — active jurisdictional and multilateral political-science corpora.
+- `schemas/` — sole active JSON Schema authority: core, extensions, analysis, and compatibility.
 - `protocols/` — language EBNF and API OpenAPI protocol authority.
-- `examples/`, `fixtures/`, `data/` — golden `.writ`/IR/receipt examples, seeded defect fixtures,
-  source manifests, and generated registry artifacts.
-- `config/` — canonical source and controlled-vocabulary registries.
-- `docs/current/` — current product definition and repository audit.
-- `archive/plans/compliance-product-v1/` — superseded compliance-product planning history.
-- `adr/` — architecture decision records.
+- `queries/` — reproducible inquiries over versioned corpora.
+- `packages/` — shared domain, evaluator, analyzer, language, provenance, CLI, conformance, and
+  benchmark runtime code.
+- `docs/current/` — current product and technical guidance.
+- `archive/` — non-normative historical pilots and plans worth preserving.
+
+Supporting areas have narrower roles:
+
+- `benchmarks/` — evaluator methodologies, expected derived results, and historical reproductions;
+  never an authoritative political corpus.
+- `conformance/` — implementation-independent semantic cases and expected outcomes.
+- `adr/` — accepted architecture decisions.
+- `config/` — reviewed source-registry and vocabulary inputs.
+- `data/` — generated compatibility projections and runtime outputs, not a corpus authority.
+- `db/` — PostgreSQL migrations.
+- `examples/` and `fixtures/` — compiled examples and diagnostic test inputs.
+- `scripts/` and `tests/` — repository automation and cross-package verification.
+
+See [`docs/current/repository-structure.md`](docs/current/repository-structure.md) for ownership,
+retention rules, and the completed cleanup decisions.
 
 The semantic packages (`domain`, `evaluator`, `analyzer`, `provenance`) must stay usable with no
 network and no database.
@@ -70,3 +75,10 @@ Database and object storage for the evidence ledger run via Docker Compose:
 bun run db:up          # postgres:17 + minio
 bun run db:down
 ```
+
+## Rights and secrets
+
+The repository does not currently declare a software or data license. Do not infer permission to
+reuse code, reports, or source excerpts; third-party material remains subject to its publisher's
+terms. Keep credentials in ignored local environment files based on `.env.example`, never in corpus
+records, fixtures, logs, or commits.

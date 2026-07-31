@@ -1,6 +1,6 @@
 # Frozen-evidence re-derivation
 
-The pilot named its weakest link honestly: reproduction is a *consistency check*,
+The pilot named its weakest link honestly: reproduction is a _consistency check_,
 and the part it does not test is whether the frozen, reviewed evidence is itself
 reproducible. This protocol tests re-derivation of that evidence from the bytes
 already in the repository — no network, no regeneration from the seed.
@@ -26,7 +26,7 @@ It exits non-zero on any divergence and prints one line per check. The logic is
    action, or review changes this hash.
 3. **Interpretation-profile hash.** Each `profiles/<name>.profile.json`
    `canonical_hash` must equal `sha256Canonical(profile, drop /canonical_hash,
-   /signature)` — the same recipe that produced it.
+/signature)` — the same recipe that produced it.
 4. **Scores.** The deterministic evaluator, re-run over the frozen evidence,
    reproduces the published record (8/8) and every receipt's `canonical_hash`
    verifies (`verifyReceipt`).
@@ -43,7 +43,7 @@ It does **not** prove:
 
 - **Anchor hashes are independently re-derivable from the snapshot alone.** A
   passage's `anchor_hash = sha256Canonical({ page, quote, footnote })` folds in
-  the source *footnote number*. The active corpus stores that locator explicitly,
+  the source _footnote number_. The active corpus stores that locator explicitly,
   while the compatibility snapshot omits it. So the harness re-derives the snapshot content
   hash, not each passage's anchor hash. Re-deriving anchor hashes requires the
   source registry, not just the frozen snapshot.

@@ -1,6 +1,7 @@
 # Diagnostic fixtures
 
-These are compact, implementation-independent cases for the analyzer and review workflow. A production conformance corpus should add:
+These are compact diagnostic inputs still consumed by analyzer and review tests. The broader,
+implementation-independent semantic suite lives under `conformance/` and covers:
 
 - exact source spans and diagnostic ordering;
 - type and unit errors;

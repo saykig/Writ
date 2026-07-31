@@ -1,7 +1,7 @@
 # FATF Mutual Evaluations — the third methodology (scaffold, source-gated)
 
-This corpus ports the **Financial Action Task Force (FATF) Mutual Evaluation**
-ratings into Writ, as the project's third methodology. Its purpose is to move
+This benchmark scaffold encodes a **Financial Action Task Force (FATF) Mutual Evaluation**
+methodology in Writ. Its purpose is to test
 the generality claim from "two methodologies" toward a pattern, on a record
 Writ's authors had **no hand in writing**: a standing intergovernmental body
 publishes the ratings in full, per country, in the
@@ -31,7 +31,7 @@ of its Mutual Evaluation Report. In the receipt's three-point vocabulary,
 ## Encoding
 
 - The methodology of record is
-  [`examples/fatf-mutual-evaluation.writ`](../../examples/fatf-mutual-evaluation.writ).
+  [`methodology.writ`](./methodology.writ).
   Each rating is one reviewed, accepted evidence claim:
   `claim_type` `"technical_compliance"` with `subject_ref` `"R.<n>"` and `object`
   in `{C, LC, PC, NC, NA}`, or `claim_type` `"effectiveness"` with `subject_ref`

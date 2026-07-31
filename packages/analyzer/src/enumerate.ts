@@ -1,8 +1,8 @@
 /**
  * Bounded-enumeration score analysis — the cross-check oracle for the Z3 pass.
  *
- * This is a port of `reference-core/analyzer.ts`, walking the full domain product
- * and applying the four-valued semantics in `semantics.ts`. It emits diagnostics
+ * This walks the full domain product and applies the four-valued semantics in
+ * `semantics.ts`. It emits diagnostics
  * through the same builders the Z3 analysis uses, so on the seeded fixtures the
  * two passes must produce identical output. Its purpose is to guard the Z3
  * lowering, not to be fast.

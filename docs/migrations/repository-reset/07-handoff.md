@@ -1,5 +1,9 @@
 # Repository reset handoff
 
+**Historical Prompt 7 snapshot.** Prompt 8 resolved the remaining hygiene items. See
+[`08-reference-core-retirement.md`](./08-reference-core-retirement.md) and the current
+[`repository-structure.md`](../../current/repository-structure.md).
+
 This is the Prompt 7 handoff for the reset completed through the query/interface layer. Historical
 artifacts remain inspectable; active corpora, schemas, protocols, queries, and runtime code have
 separate authorities.
@@ -28,9 +32,10 @@ Writ/
 
 ## 2. Old-to-new path mappings
 
-The complete schema/protocol map is in [schema-protocol-path-map.md](schema-protocol-path-map.md),
+The complete schema/protocol map is in
+[`04-schema-protocol-path-map.md`](./04-schema-protocol-path-map.md),
 and the complete EU/US identifier maps are the two active `migration-map.yaml` files documented in
-[eu-us-corpus-migration.md](eu-us-corpus-migration.md). The reset's directory-level map is:
+[`05-eu-us-corpus-migration.md`](./05-eu-us-corpus-migration.md). The reset's directory-level map is:
 
 | Old path | Current path or disposition |
 | --- | --- |

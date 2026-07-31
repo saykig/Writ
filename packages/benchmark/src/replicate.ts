@@ -11,7 +11,7 @@
  *   4. the benchmark result (the deterministic evaluator over the frozen evidence).
  *
  * A mismatch localizes the divergence to a specific artifact. What a matching
- * hash does NOT prove is covered in docs/REPLICATION.md (e.g. a passage's
+ * hash does NOT prove is covered in the benchmark replication note (e.g. a passage's
  * anchor_hash also folds in a footnote that is not stored in the snapshot).
  *
  * Run: `bun scripts/replicate.ts` (exits non-zero on any divergence).

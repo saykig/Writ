@@ -11,7 +11,7 @@ Read these before changing the repository:
 2. `docs/current/product-definition.md` for current product scope.
 3. `TASKS.yaml` for the active change and acceptance gate.
 4. Relevant current schemas and accepted ADRs.
-5. `docs/current/repository-reset-audit.md` before relocating existing material.
+5. `docs/current/repository-structure.md` before relocating existing material.
 
 ## What is normative
 

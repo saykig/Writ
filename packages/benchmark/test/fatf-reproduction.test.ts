@@ -1,15 +1,15 @@
 /**
  * FATF Mutual Evaluation follow-up stream — the third methodology (scaffold).
  *
- * This proves the ENCODING: Writ compiles `examples/fatf-mutual-evaluation
- * .writ`, the follow-up score program analyzes clean (the regular/enhanced
+ * This proves the ENCODING: Writ compiles the benchmark's `methodology.writ`,
+ * the follow-up score program analyzes clean (the regular/enhanced
  * branches partition the rating space), and the rule computes the documented
  * outcome over evidence. The evidence used here is SYNTHETIC and clearly labelled
  * — it is illustrative rating data, NOT a real country's FATF ratings. The real
  * per-country reproduction (against the published Consolidated Assessment Ratings
  * and the actual assigned follow-up streams) is held pending until that source is
  * reachable and the trigger constants are verified against the FATF Procedures;
- * see the `test.todo` at the end and benchmark/fatf-mutual-evaluation/README.md.
+ * see the `test.todo` at the end and the benchmark README.
  */
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
@@ -22,9 +22,16 @@ import type { CanonicalIr, Evidence } from "@writ/domain";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CUTOFF = "2026-03-23T00:00:00Z";
+const FATF_METHOD = join(
+  REPO_ROOT,
+  "benchmarks",
+  "evaluator",
+  "fatf-mutual-evaluation-scaffold",
+  "methodology.writ",
+);
 
 function compileFatf(): CanonicalIr {
-  const source = readFileSync(join(REPO_ROOT, "examples", "fatf-mutual-evaluation.writ"), "utf8");
+  const source = readFileSync(FATF_METHOD, "utf8");
   const result = compileSource(source, { fileName: "fatf-mutual-evaluation.writ" });
   if (!result.ir) throw new Error("FATF methodology failed to compile.");
   return result.ir;
@@ -118,7 +125,7 @@ const DOMAINS: FiniteDomains = {
 
 describe("FATF follow-up rule — static shape", () => {
   test("compiles with no error diagnostics", () => {
-    const source = readFileSync(join(REPO_ROOT, "examples", "fatf-mutual-evaluation.writ"), "utf8");
+    const source = readFileSync(FATF_METHOD, "utf8");
     const result = compileSource(source, { fileName: "fatf-mutual-evaluation.writ" });
     expect(result.diagnostics.filter((d) => d.severity === "error")).toHaveLength(0);
     expect(result.ir).toBeDefined();
@@ -189,5 +196,5 @@ describe("FATF follow-up rule — computed over illustrative evidence", () => {
 // FATF ratings, asserting the computed follow-up stream equals the stream FATF
 // actually assigned. Held pending until the Consolidated Assessment Ratings table
 // is reachable AND the enhanced-follow-up trigger constants are verified against
-// the FATF Procedures. See benchmark/fatf-mutual-evaluation/README.md.
+// the FATF Procedures. See the benchmark scaffold README.
 test.todo("reproduces FATF's assigned follow-up stream for each assessed country", () => {});
