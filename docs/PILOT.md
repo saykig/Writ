@@ -67,47 +67,28 @@ This is exhaustiveness and overlap checking, the property a compiler checks on a
 pattern match, applied to policy scoring. It is a real capability, independent of
 any country's data.
 
-## Update: a second methodology, a different scoring shape
+## Generic weighted-ordinal capability
 
-The first named next step — a second methodology — is done, and deliberately in a
-different domain *and* a different scoring paradigm: **Sara Kim's Gap Matrix** (an
-AI-governance index across the EU, US, UK, and China). Where AI-for-SMEs is a
-three-point `+1/0/-1` verdict, the Gap Matrix is a **weighted-ordinal measure**:
-each axis is five equally-weighted components, each scored on a five-anchor
-rubric (0..4), aggregated as `round(100 · Σ wᵢ·sᵢ/4)`. That shape did not exist in
-Writ; expressing it required a graded-measure extension to the IR, the
-evaluator, and the analyzer (see the plan and `docs/ANALYZER-SCOPE.md`).
+Writ also supports weighted-ordinal measures: components use an ordinal scale,
+weights form a well-defined aggregate, and an unassessed component keeps the
+result pending rather than silently contributing zero. This generic behavior is
+covered by a small Writ-owned synthetic methodology in
+`packages/benchmark/test/fixtures/weighted-ordinal-methodology.writ`.
 
-What it shows:
-
-- **Faithful reproduction of a genuinely different shape.** Writ recomputes
-  Sara's `deriveAssessment` exactly: `public_authority` (five components at level
-  2) → **50**; `knowledge_concentration` (two of five components unassessed) →
-  **pending**, not a silent 0 — reproducing her "if some score is null, return
-  null". Cross-checked against her formula, byte-identical hash across runs
-  (`packages/benchmark/test/gap-matrix-reproduction.test.ts`).
-- **Pending as a first-class, located outcome.** The analyzer reports each axis
-  *pending-decisive*: the index turns on every component, so a single unresolved
-  judgment carries the whole result. This is the graded analog of the
-  interpretation-sensitivity finding — the "who bears the risk" localization —
-  and it falls out of the same four-valued core.
-
-One case was an anecdote; two methodologies that behave the same way — faithful
-recomputation, honest pending/uncertainty, and a located point of judgment —
-across two different scoring paradigms is the start of a generality claim.
+The synthetic benchmark exercises compilation, evaluation, structural analyzer
+checks, pending propagation, and deterministic receipt hashing. It demonstrates
+the capability without presenting synthetic data as an independent empirical
+validation.
 
 ## What this does not establish
 
-- **Generality, still bounded.** Two methodologies in two domains and two scoring
-  shapes, not a broad sweep. The direction is now evidenced, not merely asserted,
-  but a handful of cases is not a population.
+- **Generality, still bounded.** One historical source-backed methodology and
+  synthetic coverage of a second scoring shape are not a broad sweep.
 - **The judgment is still human.** Gathering evidence, translating the rubric, and
-  authoring the interpretation profiles (or, for the Gap Matrix, transcribing the
-  analyst assessments) were all hand work. Writ makes the judgment explicit
-  and its consequences reproducible. It does not produce the judgment.
-- **No user validation yet.** The analyzer's output on Sara's own Gap Matrix is
-  the natural fixture for her review, but her sign-off is not recorded here and is
-  not assumed. That review is the next honest step, not a claimed result.
+  authoring interpretation profiles are human work. Writ makes judgment explicit
+  and its consequences reproducible; it does not produce the judgment.
+- **No independent weighted-ordinal validation yet.** The synthetic fixture
+  verifies the machinery, not an external methodology or dataset.
 - **Analyzer scope.** Findings are decided by bounded enumeration over declared
   finite domains; a clean result guarantees clean only within them, and query-
   driven rubric anchors are not coverage-checked. `docs/ANALYZER-SCOPE.md` states
@@ -118,19 +99,16 @@ across two different scoring paradigms is the start of a generality claim.
 The evidence is frozen in-repo and needs no network. `bash scripts/demo.sh`
 reproduces the AI-for-SMEs figures; `bun scripts/replicate.ts` re-derives every
 hash and score from the frozen bytes (`docs/REPLICATION.md`); and
-`bun test packages/benchmark/test/gap-matrix-reproduction.test.ts` reproduces the
-Gap Matrix. The live site runs the same toolchain: the playground compiles and
-analyzes arbitrary source, and the benchmark recomputes all eight cells from the
-frozen corpus.
+`bun test packages/benchmark/test/weighted-ordinal.test.ts` verifies the generic
+graded-measure path. The live site runs the same compiler and analyzer toolchain.
 
 ## Next steps
 
-Status: three of the four named steps are done; the reviewer step remains.
+Status: the historical reproduction and analyzer-scope work are complete.
 
-1. ✅ **A second methodology, a different scoring shape.** Done — Sara Kim's Gap
-   Matrix, ported as a weighted-ordinal measure, reproduced faithfully (see the
-   Update above). It required extending the IR/evaluator/analyzer for graded
-   scoring rather than reusing the three-point path.
+1. ⏳ **An independent methodology with a different scoring shape.** Open. The
+   Writ-owned fixture proves that weighted-ordinal machinery works, but it is not
+   evidence that an external methodology was encoded faithfully.
 
 2. ✅ **Frozen re-derivation of the evidence.** Done — `bun scripts/replicate.ts`
    re-derives every source hash, snapshot content hash, profile hash, and score
@@ -138,12 +116,10 @@ Status: three of the four named steps are done; the reviewer step remains.
    hash (`docs/REPLICATION.md`). What a matching hash does and does not prove is
    stated there; independent re-*gathering* by a second analyst remains open.
 
-3. ⏳ **One real domain reviewer.** Open. The analyzer's output on Sara's own Gap
-   Matrix — the pending-decisive components, the reproduced indices — is the
-   natural fixture for her review. Her plain yes/no on whether it is correct and
-   useful is the honest remaining validation; it is not assumed here.
+3. ⏳ **One real domain reviewer.** Open. A reviewer should assess whether the
+   source-backed methodology encoding and analyzer findings are correct and useful.
 
 4. ✅ **Analyzer scope + negative results.** Done — `docs/ANALYZER-SCOPE.md` states
    what the score and measure analyzers decide and where they are silent, and
-   "clean" is a first-class reported result (the resolved AI-for-SMEs methodology
-   and the Gap Matrix both report clean/well-formed within their declared bounds).
+   "clean" is a first-class reported result. The resolved AI-for-SMEs methodology
+   and synthetic weighted-ordinal fixture are clean within their declared bounds.

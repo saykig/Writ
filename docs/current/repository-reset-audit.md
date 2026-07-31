@@ -37,7 +37,6 @@ Generated caches, virtual environments, package installations, and `.git` intern
 ├── benchmark/
 │   ├── 2024-rio-g20/
 │   ├── 2025-ai-sme/
-│   ├── ai-governance-gap-matrix/
 │   └── fatf-mutual-evaluation/
 ├── codex-tasks/
 ├── config/
@@ -95,7 +94,6 @@ artifact can still be frozen and reviewable; it is not the place where later cor
 | G7 2025 AI-for-SMEs | Frozen report PDF, reviewed action catalog in `packages/benchmark/src/members.ts`, methodology/rubric inputs, reviewed tally, and published labels. The action catalog says every action is grounded in the frozen chapter. | `sources.json`, `methodology-inventory.json`, eight evidence snapshots, and two profiles from `packages/benchmark/src/generate.ts`; `discrepancy-ledger.json` from the benchmark runner. | `packages/benchmark`, G7 adapter, conformance tests, examples, and stale web tracing configuration. |
 | Source registry | `config/source_registry.yml` plus `schemas/source_registry_config.schema.json`. | `data/source-registry.json`, checked by `scripts/generate_source_registry.py --check`; `data/source-registry-summary.md` is descriptive output. | Ingest registry policy, API seeding/publishing, G7/G20 adapters, tests. |
 | Core contract examples | `specs/*.schema.json`, `specs/writ.ebnf`, `specs/openapi.yaml`. | Byte-identical schema vendor copies in `packages/domain/schemas/`; generated TS in `packages/domain/src/generated/`; generated embed `packages/domain/src/schemas.embedded.ts`; example JSON under `examples/`. | Domain validation/generation, compiler/evaluator packages, conformance, API, CLI, tests. |
-| Gap Matrix | External Cepheus-derived files under `benchmark/ai-governance-gap-matrix/`, `examples/ai-governance-gap-matrix.writ`, and `scripts/gen-gap-matrix.py`. | The Writ encoding and reproduction test are derived from that external source. | Analyzer/language fixtures, benchmark reproduction test, docs, and web explanatory text. All must be deleted or replaced with synthetic Writ-owned fixtures under the reset decision. |
 | FATF example | `benchmark/fatf-mutual-evaluation/README.md` and illustrative template. | Writ teaching encoding in `examples/fatf-mutual-evaluation.writ`. No authoritative country result corpus exists. | Benchmark test; the authoritative reproduction test remains `todo`. Classify as example/fixture, not corpus. |
 
 ### EU–US preservation checks
@@ -238,11 +236,10 @@ Matrix files and therefore is not a reliable current-tree manifest.
 | `pilot/eu-us-ai-evaluation` | archive candidate plus migration source | Preserve the combined pilot exactly in the archive; derive independent active EU and US corpora without its comparison question or conclusion. |
 | `benchmark/2024-rio-g20` | current source corpus in the wrong category/path | Reclassify as multilateral political corpus. |
 | `benchmark/2025-ai-sme` | mixed source corpus and generated benchmark | Split authoritative G7 knowledge from score-reproduction benchmark. |
-| `benchmark/ai-governance-gap-matrix` | deletion candidate | External Cepheus/Gap Matrix material; do not archive inside Writ. |
 | `benchmark/fatf-mutual-evaluation` | example/fixture candidate | No authoritative country result corpus; reproduction test is `todo`. |
 | `data` | mixed generated/compatibility/current metadata | Source registry JSON is generated; G20 manifest is operational metadata; empty/README-only raw/normalized areas should not be recreated until they hold real material. |
-| `examples` | mixed teaching examples and deletion candidate | Keep small Writ-owned examples. Delete Gap Matrix example; move corpus-like material out. |
-| `fixtures` and `tests/fixtures` | current synthetic/broken test inputs | Keep; replace Gap Matrix-dependent cases with synthetic Writ-owned weighted-ordinal fixtures. |
+| `examples` | mixed teaching examples | Keep small Writ-owned examples; move corpus-like material out. |
+| `fixtures` and `tests/fixtures` | current synthetic/broken test inputs | Keep Writ-owned fixtures for generic behavioral coverage. |
 | `conformance` | current | Implementation-independent cases. |
 | `reference-core` | compatibility, retirement candidate after parity gate | Duplicated by production packages but still directly imported by conformance. |
 | `docs/plan` | archive candidate | Compliance-product-v1 planning history conflicts with governing reset definition. |
@@ -280,45 +277,13 @@ Retirement gate: preserve parity cases in implementation-independent conformance
 the direct import and root workspace dependency, update validation/docs/ADR references, then delete
 `reference-core` in its own reviewable change.
 
-## Cepheus and Gap Matrix inventory
+## External product removal decision
 
-The following tracked references must be removed. Generic weighted-ordinal analyzer capability may
-remain after renaming examples and replacing fixtures with synthetic Writ-owned material.
-
-### Runtime, tests, and generators
-
-- `scripts/gen-gap-matrix.py:2-15,56-64` reads `~/personal/cepheus/public/data/gap-matrix`.
-- `packages/benchmark/test/gap-matrix-reproduction.test.ts:2-101` reproduces the external method.
-- `examples/ai-governance-gap-matrix.writ:2-10` identifies the package and Cepheus source.
-- `benchmark/ai-governance-gap-matrix/README.md:1-54` and `assessments.json:7`.
-- `packages/analyzer/src/measure-analysis.ts:19,99`.
-- `packages/analyzer/test/measure-analysis.test.ts:85`.
-- `packages/language/test/measure-compile.test.ts:5,40`.
-
-The last four analyzer/language references can become synthetic weighted-ordinal terminology rather
-than deleting the generic feature.
-
-### Web
-
-- `apps/web/components/how-it-works/faq.tsx:33`.
-- `apps/web/components/site/section.tsx:29`.
-- `apps/web/components/how-it-works/essay-index.tsx:10`.
-- `apps/web/test/frontend-architecture.test.ts:46,63` names the retired route/content.
-
-The upstream main branch already deleted the former Gap Matrix route and runtime data module, but
-`MANIFEST.sha256:81,148` still lists those deleted paths.
-
-### Documentation and manifests
-
-- `docs/NEXT-METHODOLOGIES.md:3,54`.
-- `docs/PILOT.md:71-147`.
-- `docs/REVIEWER-BRIEF.md:1-17`.
-- `docs/ANALYZER-SCOPE.md:52,73`.
-- `PRODUCT.md:29,41`.
-- `benchmark/fatf-mutual-evaluation/README.md:11`.
-- `MANIFEST.sha256:175-176,266,313,450`.
-
-No Cepheus or Gap Matrix material should be placed in `archive/`.
+The reset identified a source-specific weighted-ordinal product and its derived
+corpus, generator, example, benchmark, documentation, and web copy for complete
+removal rather than in-repository archival. Generic weighted-ordinal evaluation
+and structural analyzer behavior remain useful and should be covered only with
+small Writ-owned synthetic fixtures.
 
 ## Stale product language and surface names
 
@@ -387,7 +352,7 @@ The shell did not expose `bun` or Node on `PATH`; the pinned installed Bun binar
 | `bun run format` | pass | All matched files use Prettier style. |
 | `bun run lint` | pass | All TypeScript workspaces pass. |
 | `ruff check apps/ingest` | pass | No Python lint findings. |
-| `bun run typecheck` | fail | `apps/web/.next/dev/types/validator.ts` retains ignored declarations for six routes deleted upstream (`benchmark`, `gap-matrix`, G7 lab member, `methodologies`, `receipts`, and benchmark API). Production build typechecking passes. |
+| `bun run typecheck` | fail | `apps/web/.next/dev/types/validator.ts` retains ignored declarations for deleted upstream routes. Production build typechecking passes. |
 | `mypy apps/ingest/src` | fail | The local environment lacks the `fitz` implementation/stub; one `import-not-found` error in `g20_rio.py`. |
 | `bun run test` | pass | All workspace test commands exit 0; the FATF authoritative-country reproduction remains one declared `todo`. |
 | `bun run conformance` | pass | 143 passed, 0 failed. |
@@ -414,7 +379,7 @@ branch.
    scores as Writ-derived facts.
 4. Move schemas mechanically before changing semantics. Preserve schema versions and update `$id`,
    vendored copies, generators, tests, and manifests together.
-5. Remove external Cepheus/Gap Matrix material entirely; first replace only the generic
+5. Remove source-specific external product material entirely while preserving generic
    weighted-ordinal test coverage with synthetic Writ-owned fixtures.
 6. Retire `reference-core` only after its parity role is absorbed into conformance.
 7. Regenerate or replace `MANIFEST.sha256`; it already contains deleted paths and should not drive

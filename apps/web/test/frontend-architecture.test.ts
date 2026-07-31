@@ -43,7 +43,7 @@ describe("frontend architecture", () => {
     expect(navItems).toContain('label: "Demo"');
     expect(navItems).toContain('label: "Playground"');
     expect(navItems).toContain('label: "How it works"');
-    for (const removed of ["Benchmark", "Methodologies", "Receipts", "Gap Matrix", "Policy Test"]) {
+    for (const removed of ["Benchmark", "Methodologies", "Receipts", "Policy Test"]) {
       expect(navItems).not.toContain(`label: "${removed}"`);
     }
     // The retired groups are gone rather than left dangling.
@@ -60,7 +60,6 @@ describe("frontend architecture", () => {
     }
     for (const gone of [
       "app/benchmark",
-      "app/gap-matrix",
       "app/methodologies",
       "app/receipts",
       "app/policy-test",

@@ -1,9 +1,9 @@
 # Candidate third methodologies
 
-The pilot has two methodologies (G7 AI-for-SMEs, three-point; the Gap Matrix,
-weighted-ordinal). A third moves "two cases" toward "a pattern" — most of all if
-it is one **Writ's authors did not help write**, so the encoding is not
-graded against itself.
+The pilot has one historical source-backed score reproduction (G7 AI-for-SMEs,
+three-point), while weighted-ordinal behavior is covered by a Writ-owned
+synthetic fixture. A future independent methodology should test whether the
+encoding generalizes beyond those development fixtures.
 
 ## What makes a good candidate
 
@@ -51,8 +51,8 @@ Each notes the phrase it would stress and which Writ capability it exercises
 - **Soft quantifier:** **"adequate"** — the mid-band anchor most assessments hinge
   on.
 - **Stresses:** the **graded-measure path** again, on independent data — a second
-  weighted-ordinal case is the strongest possible test that the Gap Matrix result
-  was not a one-off. Directly re-exercises the new IR.
+  weighted-ordinal case would test the graded-measure path against independent
+  data rather than only a synthetic fixture. Directly re-exercises the new IR.
 - **Independence:** high. **Caveat:** per-criterion scores are public for IDA
   countries but coverage/detail varies — check data availability before committing.
 

@@ -26,7 +26,7 @@ export function SectionLabel({
 
 /**
  * SectionHeading — display-face (IM Fell English) section heading, `<h2>` by
- * default. Sized on the fluid cepheus scale.
+ * default. Sized on the shared fluid type scale.
  */
 export function SectionHeading({
   children,

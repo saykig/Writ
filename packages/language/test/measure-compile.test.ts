@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { compileSource } from "../src/index.js";
 
 const SOURCE = `language writ "0.1"
-package test.gap_matrix version "1.0.0";
+package test.weighted_ordinal version "1.0.0";
 
 commitment GOVERNANCE_FIELD {
   title "Frontier AI governance field";
@@ -37,7 +37,7 @@ commitment GOVERNANCE_FIELD {
 }`;
 
 describe("measure surface syntax compiles to canonical IR", () => {
-  const result = compileSource(SOURCE, { fileName: "gap-matrix.writ" });
+  const result = compileSource(SOURCE, { fileName: "weighted-ordinal.writ" });
 
   test("compiles without link/parse diagnostics and validates against the schema", () => {
     expect(result.diagnostics.map((d) => d.code)).toEqual([]);

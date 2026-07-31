@@ -82,7 +82,7 @@ describe("graded-measure analysis", () => {
     expect(codes(complete)).toEqual(["WRT-MEASURE-PENDING-DECISIVE"]);
   });
 
-  test("a missing ordinal level is caught even without a declared domain (the Gap Matrix case)", () => {
+  test("a missing ordinal level is caught even without a declared domain", () => {
     const missing = measure([0, 1, 2, 3].map((v) => ({ value: v, when: eq("undeclared", v) })));
     const found = analyzeMeasureByEnumeration(missing, {} as FiniteDomains, { objectId: "FIELD" });
     const gap = found.find((d) => d.code === "WRT-MEASURE-ANCHOR-GAP");
