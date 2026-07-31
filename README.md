@@ -3,114 +3,137 @@
 Writ is a structured, source-grounded knowledge system and domain-specific language for political
 science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
 findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
-and revision history. A jurisdiction, institution, or research corpus exists on its own; comparisons, evaluations, visualizations, and memos are
-reproducible views over one or more corpora.
+and revision history. A jurisdiction, institution, or research corpus exists on its own; comparisons, 
+evaluations, visualizations, and memos are reproducible views over one or more corpora.
 
-The initial knowledge families are institutional, legal, policy, theoretical, empirical and
-share provenance and revision conventions.
+# Writ
 
-## Read these before changing the repository:
+Writ is a system for turning political, technical, and legal research into structured,
+traceable knowledge (i.e., domain-specific language (DSL). 
 
-1. `AGENTS.md` for implementation invariants and working rules.
-2. `docs/current/product-definition.md` for current product scope.
-3. `TASKS.yaml` for the active change and acceptance gate.
-4. Relevant current schemas and accepted ADRs.
-5. `docs/current/repository-structure.md` before relocating existing material.
+Research in the global affairs and policy space usually ends up spread across reports, 
+laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
+institutions consistently or update an analysis when the evidence changes.
 
-## What is normative
+Writ keeps the source, the reviewed claim and the resulting analysis connected.
+It preserves uncertainty and disagreement instead of forcing every question
+into a score or a simple yes-or-no answer.
 
-Use this precedence order when documents disagree:
+## How Writ works
 
-1. `AGENTS.md` invariants, unless an accepted replacement ADR explicitly supersedes one.
+1. Sources provide the original laws, policies, reports and research.
+2. Human-reviewed records capture specific claims and their evidence.
+3. Corpora organize those records by jurisdiction or subject.
+4. Saved queries ask reproducible questions across one or more corpora.
+5. Results retain a trace back to the records and sources that produced them.
+
+A corpus stores reviewed knowledge. A query asks a question about that
+knowledge. A memo, comparison or visualization is an output, not a new source
+of truth.
+
+## What is available now
+
+The Writ pilot currently includes:
+
+- independent EU and US AI-governance corpora;
+- G7 and G20 multilateral policy records;
+- a saved EU–US AI-governance query;
+- reproducible evaluator benchmarks;
+- Writ Lab, where structured records and analyses can be inspected.
+
+Some datasets remain incomplete. Writ records those gaps explicitly rather
+than inventing missing evidence.
+
+## Start here
+
+If you work in policy or research:
+
+- Browse `corpora/` to see the reviewed knowledge.
+- Browse `queries/` to see the questions asked across that knowledge.
+- Read `docs/current/product-definition.md` for the full product model.
+- Open Writ Lab to inspect records and their evidence traces.
+
+If you are contributing code:
+
+- Read `AGENTS.md` before making changes.
+- Read `docs/current/repository-structure.md`.
+- Check `TASKS.yaml` for the active task.
+- Use `internal/` for developer-only verification and infrastructure.
+
+## Repository guide
+
+| Path | What it contains |
+| --- | --- |
+| `apps/` | Writ’s interfaces and ingestion applications |
+| `corpora/` | Reviewed political and legal knowledge |
+| `queries/` | Reproducible questions over corpora |
+| `schemas/` | Rules defining valid Writ records |
+| `protocols/` | Writ language and API specifications |
+| `packages/` | Shared application and language code |
+| `docs/current/` | Current explanations and technical guidance |
+| `internal/` | Developer-only testing and infrastructure |
+| `archive/` | Historical, non-authoritative material |
+
+The semantic packages for the domain model, evaluator, analyzer and provenance must remain usable without a network connection or database.
+
+## Which files are authoritative
+
+Use this order when documents disagree:
+
+1. `AGENTS.md`, unless an accepted replacement decision explicitly supersedes one of its rules.
 2. `docs/current/product-definition.md`.
-3. Accepted ADRs and current JSON Schemas.
+3. Accepted architectural decisions and current JSON Schemas.
 4. Current protocol and language specifications.
 5. Current product and task documents.
 6. Examples and compatibility material.
 
-Material under `archive/` is historical and non-normative.
+Material under `archive/` is historical and non-authoritative. Material under `internal/` may verify behaviour, but it is not a public corpus, governing protocol or primary product example.
 
-## Working principles
+## Working rules
 
-- Keep jurisdictional corpora independent of comparisons and saved questions.
-- Keep institutional, legal, policy, theoretical, and empirical records family-specific.
-- Preserve unknown and contested values rather than coercing them.
+- Keep jurisdictional corpora independent from comparisons and saved queries.
+- Keep institutional, legal, policy, theoretical and empirical records distinct.
+- Preserve unknown and contested values instead of forcing a conclusion.
 - Treat external ratings as source-reported judgments.
-- Make every Writ-derived result reproducible from named, versioned inputs and a trace.
-- Treat visualizations and memos as views, never as source records.
+- Make every Writ-derived result reproducible from named and versioned inputs.
+- Preserve a trace from each result back to its records and evidence.
+- Treat visualizations and memos as views, not source records.
 - Supersede accepted records instead of silently rewriting them.
+- Do not fabricate missing evidence or infer certainty from absent information.
 
-## Evidence warning
+## Technical setup
 
-`internal/infrastructure/config/source_registry.yml` contains connector candidates and research
-leads. `internal/infrastructure/generated/source-registry.json` is its generated compatibility
-projection. A source's `verification_status` is authoritative for operational readiness. Codex
-must not treat an entry as production-ready merely because it appears in the registry.
-
-## Repository map
-
-The active source-of-truth areas are deliberately separated from analyses and history:
-
-- `apps/` — product interfaces and source-specific ingestion.
-- `corpora/` — active jurisdictional and multilateral political-science corpora.
-- `schemas/` — sole active JSON Schema authority: core, extensions, analysis, and compatibility.
-- `protocols/` — language EBNF and API OpenAPI protocol authority.
-- `queries/` — reproducible inquiries over versioned corpora.
-- `packages/` — shared domain, evaluator, analyzer, language, provenance, CLI, conformance, and
-  benchmark runtime code.
-- `docs/current/` — current product and technical guidance.
-- `archive/` — non-normative historical pilots and plans worth preserving.
-
-Developer-only support is bounded under `internal/`: verification cases and benchmarks, maintenance
-tooling, operational configuration, generated projections, and database migrations. Nothing under
-`internal/` is a public corpus, normative schema, governing protocol, or primary demonstration.
-
-`adr/` remains at the root because accepted decisions are active authority and stable corpus
-identity metadata resolves to those paths. `.agents/` and `.github/` remain conventional discovery
-locations for agent and GitHub automation.
-
-See [`docs/current/repository-structure.md`](docs/current/repository-structure.md) for ownership,
-retention rules, and the completed cleanup decisions.
-
-The semantic packages (`domain`, `evaluator`, `analyzer`, `provenance`) must stay usable with no
-network and no database.
-
-## Current research material
-
-- The EU and US AI-governance corpora are independent jurisdictional corpora under `corpora/`.
-  The former EU–US comparison survives only as an archived pilot analysis and saved query.
-- The G20 Rio material contains 13 ingested political statements, two reports, and 546
-  source-reported member judgments. The 161 un-ingested commitments remain explicitly absent.
-- The G7 AI-for-SMEs score reproduction is a historical benchmark. Published ratings remain
-  source-reported judgments; Writ-derived reproductions declare their methodology, inputs, version,
-  and trace.
-
-## Toolchain
-
-This is a [Bun](https://bun.sh) workspace (package manager, runtime, and test runner). Bun runs
-TypeScript source directly, so internal packages resolve to `src/` and `build`/`typecheck` are
-`tsc --noEmit`.
+Writ uses [Bun](https://bun.sh) as its package manager, runtime and test runner. Bun runs the TypeScript source directly, while TypeScript compilation is used as a validation gate.
 
 ```bash
-bun install            # install workspace dependencies
-bun run typecheck      # tsc --noEmit across all packages
-bun run lint           # eslint
-bun run format         # prettier --check
-bun run test           # bun test across all packages
-bun run conformance    # implementation-independent semantic conformance suite
-bun run build          # tsc --noEmit (type gate; Bun executes source)
+bun install
+bun run typecheck
+bun run lint
+bun run format
+bun run test
+bun run conformance
+bun run build
 ```
 
-Database and object storage for the evidence ledger run via Docker Compose:
+The evidence ledger uses PostgreSQL and MinIO through Docker Compose:
 
 ```bash
-bun run db:up          # postgres:17 + minio
+bun run db:up
 bun run db:down
 ```
 
+Detailed ownership, retention and path rules are documented in the [repository structure guide](docs/current/repository-structure.md).
+
+## Evidence warning
+
+`internal/infrastructure/config/source_registry.yml` contains possible connectors and research leads. Its presence in the registry does not mean that a source is verified or ready for operational use.
+
+The `verification_status` field determines whether a source is ready. Contributors must not treat a registry entry as production-ready without checking that status.
+
+`internal/infrastructure/generated/source-registry.json` is a generated compatibility projection of the registry. It is not an independent source of authority.
+
 ## Rights and secrets
 
-The repository does not currently declare a software or data license. Do not infer permission to
-reuse code, reports, or source excerpts; third-party material remains subject to its publisher's
-terms. Keep credentials in ignored local environment files based on `.env.example`, never in corpus
-records, fixtures, logs, or commits.
+This repository does not currently declare a software or data licence. Do not assume that its code, reports or source excerpts may be reused without permission.
+Third-party material remains subject to the terms of its original publisher.
+Keep credentials in ignored local environment files based on `.env.example`. Never place credentials in corpus records, fixtures, logs or commits.
