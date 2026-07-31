@@ -8,9 +8,8 @@ and revision history. Questions are asked across corpora; they do not define cor
 A jurisdiction, institution, or research corpus exists on its own; comparisons, evaluations, visualizations, and memos are
 reproducible views over one or more corpora.
 
-The initial knowledge families are institutional, legal, policy, theoretical, and empirical. They
-share provenance and revision conventions without requiring every record to carry a commitment,
-obligation, or score.
+The initial knowledge families are institutional, legal, policy, theoretical, empirical and
+share provenance and revision conventions.
 
 ## Layout
 
