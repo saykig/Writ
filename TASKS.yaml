@@ -47,5 +47,23 @@ tasks:
       - docs/current/product-definition.md
       - archive/plans/compliance-product-v1/README.md
 
+  - id: RESET-003
+    title: Remove external weighted-ordinal product artifacts
+    status: review
+    dependencies:
+      - RESET-002
+    scope:
+      - Remove the external product corpus, generator, examples, copy, and historical references.
+      - Preserve generic weighted-ordinal evaluation and structural analyzer behavior.
+      - Replace source-specific test coverage with a small Writ-owned synthetic fixture.
+      - Regenerate the tracked-tree checksum manifest.
+    acceptance:
+      - No tracked reference to the removed external product remains.
+      - Generic weighted-ordinal capabilities retain analyzer, language, benchmark, and frontend coverage.
+      - Typecheck, build, and affected tests pass.
+    outputs:
+      - packages/benchmark/test/fixtures/weighted-ordinal-methodology.writ
+      - packages/benchmark/test/weighted-ordinal.test.ts
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

@@ -15,8 +15,8 @@
 //
 // Anchor coverage has two modes. When a component's anchors reference a declared
 // finite domain, the analyzer enumerates it and checks the anchor *conditions*
-// (do they partition every state?). When they do not (evidence-query anchors,
-// e.g. the Gap Matrix), it falls back to a *structural* check of the ordinal
+// (do they partition every state?). When they do not (for example,
+// evidence-query anchors), it falls back to a *structural* check of the ordinal
 // levels: 0..scale must each be declared exactly once. It never claims the
 // conditions are well-formed for query-driven anchors — only the levels.
 
@@ -96,7 +96,7 @@ function componentLocation(
 
 /**
  * Structural anchor coverage, used when a component's anchors reference no
- * declared-domain variable (e.g. the Gap Matrix's evidence-query anchors). It
+ * declared-domain variable, such as evidence-query anchors. It
  * cannot reason about the anchor *conditions*, but it can verify the ordinal
  * *levels*: every level `0..scale` must be declared exactly once. A missing level
  * is a gap (the component is pending there); a duplicated level is an overlap.

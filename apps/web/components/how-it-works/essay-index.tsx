@@ -6,9 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * EssayIndex — the sticky reading rail for the How-it-works monograph, adapted
- * from ~/personal/cepheus/app/components/essay-index.tsx into the Writ paper
- * palette. A single-level list of section links with:
+ * EssayIndex — the sticky reading rail for the How-it-works monograph in the
+ * Writ paper palette. A single-level list of section links with:
  *   • a scroll-progress spine (a hairline whose filled portion tracks how far
  *     the reader has come), and
  *   • an active-section highlight recomputed from live geometry and nudged by an

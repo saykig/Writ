@@ -49,7 +49,7 @@ wired into the CLI, and there is no Z3 path for measures yet.
   input space is not enumerated. For a **measure** whose anchors reference a
   declared-domain variable, the analyzer enumerates and checks the anchor
   *conditions* (do they partition every state?). For a measure whose anchors are
-  evidence queries with no such variable (the ported Gap Matrix), it cannot reason
+  evidence queries with no such variable, it cannot reason
   about the conditions, but it still runs a **structural level check**: every
   ordinal level `0..scale` must be declared exactly once, so a missing or
   duplicated anchor level is caught (`WRT-MEASURE-ANCHOR-GAP`/`OVERLAP`). What it
@@ -70,7 +70,8 @@ wired into the CLI, and there is no Z3 path for measures yet.
 
 An empty finding set over declared domains is a positive statement: *this rubric
 has no gap, no overlap, and well-formed weights, within the declared domain.* The
-2025 AI-for-SMEs resolved methodology analyzes clean; the ported Gap Matrix
-reports well-formed weights and localizes pending-decisiveness on both axes. A
+2025 AI-for-SMEs resolved methodology analyzes clean; the Writ-owned synthetic
+weighted-ordinal fixture reports well-formed weights and localizes
+pending-decisiveness. A
 tool that only ever "finds problems" is not trustworthy; reporting "clean, and
 here is exactly what that covers" is.

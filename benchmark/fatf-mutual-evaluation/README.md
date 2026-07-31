@@ -8,8 +8,8 @@ publishes the ratings in full, per country, in the
 [Consolidated Assessment Ratings table](https://www.fatf-gafi.org/en/publications/mutualevaluations/documents/assessment-ratings.html).
 
 It exercises the **discrete three-point score path** (the same shape as the 2025
-AI-for-SMEs benchmark), not the graded-measure path — see the Gap Matrix corpus
-for that one.
+AI-for-SMEs benchmark), not the graded-measure path. Generic graded-measure
+coverage uses a small Writ-owned synthetic fixture.
 
 ## What it measures
 
