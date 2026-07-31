@@ -31,8 +31,14 @@ explicit selected subset; otherwise its selection status is `unknown`.
 may become approved canonical terms. Proposed and unmapped terms retain their source wording and
 enter the review queue. Score values are excluded from vocabulary mapping.
 
-The frozen G7 AI-for-SMEs adapter emits normalized records in memory for compatibility testing. The
-G20 adapter is intentionally unimplemented and fetch-disabled, and no Rio records exist.
+The frozen G7 AI-for-SMEs adapter emits normalized records in memory for compatibility testing. Its
+published scores are source-reported historical judgments; Writ's score reproduction is a
+benchmark, not a universal label.
+
+The G20 Rio adapter is implemented and remains fetch-disabled by default. A frozen review copy
+exists under `benchmark/2024-rio-g20/normalized/`: 13 ingested political statements, 13 selections,
+two reports, 546 source-reported member judgments, one reconciliation record, and 15 review items.
+The source reports 174 commitments; the 161 not ingested remain explicitly absent.
 
 Corpus payloads are published to the append-only Neon artifact store created by
 `db/migrations/0004_corpus_artifact_store.sql`. Local `data/raw/g20/` and

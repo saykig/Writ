@@ -8,42 +8,61 @@ web
 
 ## Users
 
-Policy researchers, methodology authors, evidence reviewers, and engineers who need to inspect,
-test, and reproduce institutional compliance assessments.
+Political scientists, global-affairs researchers, legal and policy researchers, evidence reviewers,
+methodology authors, and engineers who need source-grounded knowledge that remains inspectable
+across revision and disagreement.
 
 ## Product Purpose
 
-Writ turns policy-evaluation methodologies, reviewed evidence, and explicit interpretations into
-deterministic assessment receipts. Success means a researcher can see both what result was reached
-and exactly how it was reached.
+Writ is a structured, source-grounded knowledge system and domain-specific language for political
+science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
+findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
+and revision history. Questions are asked across corpora; they do not define corpora.
+
+Success means a researcher can assemble durable, reviewable corpora and ask reproducible questions
+across them without turning a question, comparison, memo, or rating into the identity of the
+underlying knowledge.
 
 ## Positioning
 
-Writ treats a policy methodology as a typed, analyzable program. It identifies gaps and overlaps
-before evaluation and preserves unknown or contested evidence instead of silently reducing it to a
-binary answer.
+Writ combines governed knowledge records with a typed language for explicit derivation. It keeps
+source statements, reviewed claims, interpretations, source-reported judgments, and Writ-derived
+results distinct. Deterministic analyzers and evaluators remain useful capabilities, not the
+definition of the product.
 
 ## Capabilities and Constraints
 
-- The canonical compiler IR and evaluator are deterministic and independent of the web interface.
-- Existing Playground, benchmark, Gap Matrix, and API behavior must remain available.
-- Historical scores are expert-assigned reference labels, not universal scoring rules.
-- The interface must not invent corpus records, methodology results, or archive statistics.
+- Questions are query-layer objects, not corpus identities.
+- Jurisdictional corpora exist independently of comparisons.
+- The core schema does not require commitments, obligations, or scores.
+- External ratings are source-reported judgments.
+- Writ-derived results declare their methodology, version, inputs, and trace.
+- Unknown and contested values remain explicit.
+- Visualizations and memos are views, not sources of truth.
+- The initial knowledge families are institutional, legal, policy, theoretical, and empirical.
+- Deterministic derivation is independent of the web interface.
+- Models may propose candidates; human review and deterministic code govern accepted knowledge and
+  derived results.
 
 ## Brand Commitments
 
-The product name is Writ. Its voice is plain, rigorous, and policy-facing. The supplied dark
-homepage mockup is the visual reference for the current web interface.
+The product name is Writ. Its voice is plain, rigorous, source-aware, and appropriate for political
+science and global-affairs research.
 
 ## Evidence on Hand
 
-The repository contains a frozen 2025 G7 AI-for-SMEs benchmark, methodology examples, reviewed
-evidence snapshots, evaluation receipts, analyzer diagnostics, and the Gap Matrix example. No
-normalized G20 Rio corpus records are available for presentation.
+- The EU–US comparison is a pilot analysis. It is not the identity of an EU or US corpus.
+- G20 Rio normalized records exist, including 13 ingested political statements, two reports, and
+  546 source-reported member judgments.
+- The G7 AI-for-SMEs reproduction is a historical benchmark over 87 reviewed government-action
+  records across eight members.
 
 ## Product Principles
 
 - Make analytical judgment visible.
 - Preserve unknown and contested states.
 - Prefer real, reviewable evidence over promotional claims.
-- Keep every published result reproducible and provenance-bearing.
+- Keep source-reported judgments distinct from Writ-derived results.
+- Keep every derived result reproducible and provenance-bearing.
+- Supersede accepted records instead of silently rewriting them.
+- Preserve stable diagnostics and complete evidence traces.

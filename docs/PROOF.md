@@ -1,18 +1,19 @@
-# Writ works: a demonstration
+# Historical G7 score-reproduction benchmark
 
-This document shows the system doing the thing it exists to do, on real data,
-reproducibly. Run `bash scripts/demo.sh` from a clean checkout to reproduce every
-line below (the benchmark needs no network; the evidence is frozen in-repo).
+This document records one historical benchmark of Writ's deterministic derivation capabilities.
+It is not the product definition and does not make compliance scoring a universal Writ schema. Run
+`bash scripts/demo.sh` from a clean checkout to reproduce every line below (the benchmark needs no
+network; the evidence is frozen in-repo).
 
-## What Writ is for
+## What this benchmark tests
 
 A G7 compliance score is a number on a `+1 / 0 / -1` scale, and behind each number
 is a methodology, a pile of public evidence, and — usually invisibly — a set of
-judgment calls. Writ makes the methodology a program, the evidence a frozen
-reviewed ledger, and the score a receipt you can recompute and audit. Two things
-fall out of that: the analyzer catches ambiguity in the *methodology* before any
-evidence exists, and the discrepancy ledger names exactly where a *score* depends
-on judgment rather than public fact.
+judgment calls. In this benchmark, Writ makes the methodology a program, the evidence a frozen
+reviewed ledger, and the derived reproduction a trace you can recompute and audit. The published
+ratings remain source-reported judgments. The analyzer catches ambiguity in the *methodology*
+before any evidence exists, and the discrepancy ledger names exactly where a reproduced result
+depends on interpretation rather than treating that interpretation as a fact.
 
 ## 1. The language compiles to a canonical IR
 

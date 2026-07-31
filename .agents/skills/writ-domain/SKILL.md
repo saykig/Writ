@@ -1,6 +1,6 @@
 ---
 name: writ-domain
-summary: Domain rules for implementing the Writ G7 compliance DSL, evaluator, evidence ledger, and static analyzer.
+summary: Domain rules for implementing Writ's source-grounded political-science knowledge system, language, provenance, and deterministic derivations.
 ---
 
 # Writ Domain Skill
@@ -9,13 +9,15 @@ Use this skill when implementing or reviewing Writ domain behavior.
 
 ## Mental model
 
-Writ has three governed layers:
+Writ has governed layers that must remain distinct:
 
-1. normative methodology;
-2. reviewed evidence;
-3. deterministic evaluation receipt.
+1. immutable source versions and anchored passages;
+2. reviewed institutional, legal, policy, theoretical, and empirical records;
+3. query-layer questions and explicit methodologies;
+4. deterministic derived results with traces;
+5. visualizations and memos as views.
 
-A report is generated from these layers.
+Questions never define corpora. Jurisdictional corpora exist independently of comparisons.
 
 ## Epistemic separation
 
@@ -29,9 +31,9 @@ Never merge:
 
 Workflow status and truth value are also separate.
 
-## Truth logic
+## Truth and uncertainty
 
-Use four values:
+Use four values where a proposition is evaluated:
 
 ```text
 true       supported true only
@@ -40,31 +42,37 @@ unknown    neither supported
 contested  both supported
 ```
 
-Implement conjunction, disjunction, and negation according to `04_FORMAL_SEMANTICS.md`.
+Never silently coerce `unknown` to `false` or `contested` to a single answer.
 
-## Scoring
+## Derivation
 
-Evaluate all score branches. Select a unique highest-priority true branch. Equal-priority different results are unresolved. Unknown or contested branches that could change the result make the result unresolved unless the methodology explicitly resolves them.
+Derivation is deterministic over frozen inputs. Every Writ-derived result declares its methodology,
+version, inputs, and trace. External ratings remain source-reported judgments and are never promoted
+to universal labels or Writ facts.
 
 ## Counting
 
-Count methodology identities, not rows. If membership or identity is uncertain, compute lower and upper bounds or require review. Do not guess.
+When a methodology counts entities or actions, count its declared identities, not rows. If
+membership or identity is uncertain, compute lower and upper bounds or require review. Do not guess.
 
 ## Evidence
 
-Only frozen, eligible, accepted claims support a published run. Every score-decisive claim needs immutable source anchors and review history.
+Only frozen, eligible, accepted records support a published derivation. Every decisive dependency
+needs immutable source anchors and review history. Accepted records are superseded, never silently
+rewritten.
 
 ## Automation boundary
 
-Models may propose candidates. Deterministic code and human decisions control accepted evidence and scores.
+Models may propose candidates. Deterministic code and human decisions control accepted knowledge
+and derived results.
 
-## Required benchmark defects
+## Schema boundary
 
-The analyzer must detect:
+The shared core does not require commitments, obligations, legal force, or scores. Keep the
+provenance envelope small and place family-specific fields in institutional, legal, policy,
+theoretical, or empirical contracts.
 
-- the AI-for-SMEs one-to-four normalization gap and zero-to-four normalization overlap;
-- counteraction overlap when precedence is not specified;
-- exclusive classification overlap;
-- missing count identity;
-- decisive unknown evidence;
-- prose and formal-rule mismatch fixtures.
+## Diagnostics
+
+Return stable diagnostic codes for semantic gaps, ambiguity, missing provenance, invalid identity,
+and incomplete traces. Do not renumber or repurpose released diagnostics silently.
