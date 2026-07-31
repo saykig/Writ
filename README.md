@@ -1,13 +1,5 @@
 # Writ
 
-Writ is a structured, source-grounded knowledge system and domain-specific language for political
-science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
-findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
-and revision history. A jurisdiction, institution, or research corpus exists on its own; comparisons, 
-evaluations, visualizations, and memos are reproducible views over one or more corpora.
-
-# Writ
-
 Writ is a system for turning political, technical, and legal research into structured,
 traceable knowledge (i.e., domain-specific language (DSL). 
 
