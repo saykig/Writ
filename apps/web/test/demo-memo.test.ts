@@ -207,15 +207,13 @@ test("the export states what the repository declares, and invents nothing", () =
     generatedAt: "2026-07-27T00:00:00.000Z",
   });
 
-  if (REPO_PROVENANCE.softwareLicense === undefined) {
-    // There is no licence file, so the memo must not imply one was granted.
-    expect(markdown).toContain("no licence file");
-    expect(markdown).not.toMatch(/license: (MIT|Apache-2\.0|GPL|BSD)/);
-  }
-  if (REPO_PROVENANCE.copyright === undefined) {
-    expect(markdown).toContain("states no copyright notice");
-    expect(markdown).not.toMatch(/©\s*\d{4}/);
-  }
+  expect(REPO_PROVENANCE.softwareLicense).toEqual({
+    file: "LICENSE",
+    identifier: "Apache-2.0",
+  });
+  expect(REPO_PROVENANCE.copyright).toBe("Copyright 2026 Sara Kim");
+  expect(markdown).toContain("Apache-2.0");
+  expect(markdown).toContain("Copyright 2026 Sara Kim");
   // A software licence must never be described as covering the reviewed data.
   expect(markdown).toContain("does not govern them");
   // Provenance is not a claim of ownership.

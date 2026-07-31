@@ -1,9 +1,11 @@
 # Writ
 
-Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (i.e., domain-specific language (DSL). 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-Research in the global affairs and policy space usually ends up spread across reports, 
+Writ is a system for turning political, technical, and legal research into structured,
+traceable knowledge (i.e., domain-specific language (DSL).
+
+Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
 institutions consistently or update an analysis when the evidence changes.
 
@@ -54,17 +56,17 @@ If you are contributing code:
 
 ## Repository guide
 
-| Path | What it contains |
-| --- | --- |
-| `apps/` | Writ’s interfaces and ingestion applications |
-| `corpora/` | Reviewed political and legal knowledge |
-| `queries/` | Reproducible questions over corpora |
-| `schemas/` | Rules defining valid Writ records |
-| `protocols/` | Writ language and API specifications |
-| `packages/` | Shared application and language code |
-| `docs/current/` | Current explanations and technical guidance |
-| `internal/` | Developer-only testing and infrastructure |
-| `archive/` | Historical, non-authoritative material |
+| Path            | What it contains                             |
+| --------------- | -------------------------------------------- |
+| `apps/`         | Writ’s interfaces and ingestion applications |
+| `corpora/`      | Reviewed political and legal knowledge       |
+| `queries/`      | Reproducible questions over corpora          |
+| `schemas/`      | Rules defining valid Writ records            |
+| `protocols/`    | Writ language and API specifications         |
+| `packages/`     | Shared application and language code         |
+| `docs/current/` | Current explanations and technical guidance  |
+| `internal/`     | Developer-only testing and infrastructure    |
+| `archive/`      | Historical, non-authoritative material       |
 
 The semantic packages for the domain model, evaluator, analyzer and provenance must remain usable without a network connection or database.
 
@@ -124,8 +126,17 @@ The `verification_status` field determines whether a source is ready. Contributo
 
 `internal/infrastructure/generated/source-registry.json` is a generated compatibility projection of the registry. It is not an independent source of authority.
 
+## License
+
+Writ is licensed under the Apache License 2.0. See LICENSE for details.
+
+Copyright 2026 Sara Kim
+
+The Apache License applies to original Writ code and documentation. It does not relicense external
+source documents, source passages, published judgments, datasets, dependencies, or third-party
+assets. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution and rights notes.
+
 ## Rights and secrets
 
-This repository does not currently declare a software or data licence. Do not assume that its code, reports or source excerpts may be reused without permission.
 Third-party material remains subject to the terms of its original publisher.
 Keep credentials in ignored local environment files based on `.env.example`. Never place credentials in corpus records, fixtures, logs or commits.

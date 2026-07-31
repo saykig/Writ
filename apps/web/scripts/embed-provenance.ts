@@ -89,9 +89,7 @@ function copyrightNotice(text: string | undefined): string | undefined {
   const line = text
     .split("\n")
     .map((item) => item.trim())
-    .find(
-      (item) => /^(copyright|\(c\)|©)/i.test(item) && !/^copyright\s*\(c\)\s*<?year>?/i.test(item),
-    );
+    .find((item) => /^(?:copyright(?:\s+\(c\))?|©)\s+\d{4}(?:[-–]\d{4})?\b/i.test(item));
   return line || undefined;
 }
 
