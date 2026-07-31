@@ -13,8 +13,10 @@ SHA-256:
 
 The original tree contains the reviewed YAML, local schemas, normalized outputs, methodology
 files, interpretation profile, source registry, source passages, document hashes, unresolved
-coverage, evidence snapshots, and saved headline judgments. No separate deep-research report was
-present in the repository at migration time.
+coverage, evidence snapshots, and saved headline judgments.
+
+`deep-research-report.md` is preserved as historical research context for the combined EU-US
+pilot. It is not normative and is not part of either active jurisdictional corpus.
 
 `reference-code/` preserves the original normalizer, headline derivation, source fetcher, emitter,
 and snapshot builder. `reference-tests/` preserves the exact original acceptance and mutation test.
