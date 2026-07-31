@@ -10,7 +10,7 @@ research corpus exists on its own; comparisons, evaluations, visualizations, and
 reproducible views over one or more corpora.
 
 The initial knowledge families are institutional, legal, policy, theoretical, and empirical. They
-share provenance and revision conventions without forcing every record to be a commitment,
+share provenance and revision conventions.
 obligation, or score.
 
 ## Layout
