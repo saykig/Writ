@@ -9,7 +9,7 @@ reproducible views over one or more corpora.
 The initial knowledge families are institutional, legal, policy, theoretical, empirical and
 share provenance and revision conventions.
 
-Read these before changing the repository:
+## Read these before changing the repository:
 
 1. `AGENTS.md` for implementation invariants and working rules.
 2. `docs/current/product-definition.md` for current product scope.
