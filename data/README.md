@@ -20,6 +20,13 @@ authentication expectations, licensing notes, operational status, and verificati
 The G20 Research Group entry additionally defines bounded category discovery and historical-label
 policy. It is disabled until access, rights, and parser verification are complete.
 
+## Generated output only
+
+`data/` is not a corpus authority. It contains deterministic compatibility
+projections and may contain generated cache/output under `data/generated/`.
+Source-grounded records belong under `corpora/`; evaluator fixtures belong
+under `benchmarks/`.
+
 ## Normalized corpus contracts
 
 Corpus schema version `2.0.0` separates identified commitments, assessment selections, compliance
@@ -35,14 +42,13 @@ The frozen G7 AI-for-SMEs adapter emits normalized records in memory for compati
 published scores are source-reported historical judgments; Writ's score reproduction is a
 benchmark, not a universal label.
 
-The G20 Rio adapter is implemented and remains fetch-disabled by default. A frozen review copy
-exists under `benchmark/2024-rio-g20/normalized/`: 13 ingested political statements, 13 selections,
-two reports, 546 source-reported member judgments, one reconciliation record, and 15 review items.
+The G20 Rio adapter is implemented and remains fetch-disabled by default. The authoritative corpus
+exists under `corpora/multilateral/g20/2024-rio/`: 13 ingested political statements, 13 selections,
+two reports, 546 source-reported member judgments, one incomplete reconciliation record, and 15 review items.
 The source reports 174 commitments; the 161 not ingested remain explicitly absent.
 
 Corpus payloads are published to the append-only Neon artifact store created by
-`db/migrations/0004_corpus_artifact_store.sql`. Local `data/raw/g20/` and
-`data/normalized/g20/` directories contain policy files only. Connection strings are runtime
+`db/migrations/0004_corpus_artifact_store.sql`. Connection strings are runtime
 secrets and must never be committed. The previously shared owner credential must be rotated before
 any further publication; tests may use only a local, ephemeral, or restricted database role.
 

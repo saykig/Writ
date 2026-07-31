@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "g20_research_group",
+  "institution": "G20",
+  "summit_slug": "2024-rio",
+  "note": "Fixture excerpts contain only the cover, scoring-window, Table 1 (selected commitments) and Table 2 (compliance scores) pages of the public G20 Research Group reports. full_source_sha256 is the complete PDF fetched in Stage 2.",
+  "document_versions": [
+    {
+      "document_id": "g20.2024-rio.final.report",
+      "stage": "final",
+      "uri": "https://www.g20.utoronto.ca/compliance/2024rio-final/2024-g20-compliance-final.pdf",
+      "fixture_path": "corpora/multilateral/g20/2024-rio/sources/2024-g20-compliance-final-excerpt.pdf",
+      "media_type": "application/pdf",
+      "publisher": "G20 Research Group",
+      "retrieved_at": "2026-07-24",
+      "excerpt_sha256": "sha256:4e12e02fd944314128389f8ffef5a09621a0d589ded4a1e728bb3867016ca2ba",
+      "full_source_sha256": "sha256:be6d1b5a037c903e12146212ee41304fb479c1da6c06c4d6fd3a336508771654"
+    },
+    {
+      "document_id": "g20.2024-rio.interim.report",
+      "stage": "interim",
+      "uri": "https://www.g20.utoronto.ca/compliance/2024rio-interim/2024-g20-compliance-interim.pdf",
+      "fixture_path": "corpora/multilateral/g20/2024-rio/sources/2024-g20-compliance-interim-excerpt.pdf",
+      "media_type": "application/pdf",
+      "publisher": "G20 Research Group",
+      "retrieved_at": "2026-07-24",
+      "excerpt_sha256": "sha256:93902fbe76d98a5b938399ef4c9e33212b8cb2825b4abdab132e615181145d3c",
+      "full_source_sha256": "sha256:a36b8f9bf057b62796f7d148ae82a2792afe5dab2446447adf543a21ca5f4de7"
+    }
+  ]
+}

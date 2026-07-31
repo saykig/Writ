@@ -42,8 +42,9 @@ The resolved methodology, which makes the interpretation explicit, analyzes clea
 
 Every member's published AI-for-SMEs score is recomputed by the deterministic
 evaluator over 87 real government actions, each drawn from the published G7
-chapter (`benchmark/2025-ai-sme/sources/`, `sha256:9e88bb36…`), page-anchored, and
-carrying a reviewed strong/weak/countervailing classification.
+chapter (`corpora/multilateral/g7/2025-ai-sme/sources/`, `sha256:9e88bb36…`),
+page-anchored, and joined to a reviewed benchmark-local
+strong/weak/countervailing assignment.
 
 ```
 summary: {"cells":8,"matches":8,"mismatches":0,"interpretation_sensitive_cells":2}

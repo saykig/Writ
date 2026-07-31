@@ -1,0 +1,614 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-ai-compute-access-fund",
+      "active_action_id": "action-canada-ai-compute-access-fund",
+      "source_passage_id": "passage-canada-ai-compute-access-fund",
+      "benchmark_assignment_id": "claim-canada-ai-compute-access-fund"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-japan-canada-tech-accelerator",
+      "active_action_id": "action-canada-japan-canada-tech-accelerator",
+      "source_passage_id": "passage-canada-japan-canada-tech-accelerator",
+      "benchmark_assignment_id": "claim-canada-japan-canada-tech-accelerator"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-toronto-region-ai-business-catalyst",
+      "active_action_id": "action-canada-toronto-region-ai-business-catalyst",
+      "source_passage_id": "passage-canada-toronto-region-ai-business-catalyst",
+      "benchmark_assignment_id": "claim-canada-toronto-region-ai-business-catalyst"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-fcac-gri-workshop",
+      "active_action_id": "action-canada-fcac-gri-workshop",
+      "source_passage_id": "passage-canada-fcac-gri-workshop",
+      "benchmark_assignment_id": "claim-canada-fcac-gri-workshop"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-canada-germany-digital-alliance",
+      "active_action_id": "action-canada-canada-germany-digital-alliance",
+      "source_passage_id": "passage-canada-canada-germany-digital-alliance",
+      "benchmark_assignment_id": "claim-canada-canada-germany-digital-alliance"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-national-ai-compute-925m",
+      "active_action_id": "action-canada-national-ai-compute-925m",
+      "source_passage_id": "passage-canada-national-ai-compute-925m",
+      "benchmark_assignment_id": "claim-canada-national-ai-compute-925m"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-g7-ai-adoption-roadmap-declaration",
+      "active_action_id": "action-canada-g7-ai-adoption-roadmap-declaration",
+      "source_passage_id": "passage-canada-g7-ai-adoption-roadmap-declaration",
+      "benchmark_assignment_id": "claim-canada-g7-ai-adoption-roadmap-declaration"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-sme-ai-adoption-blueprint",
+      "active_action_id": "action-canada-sme-ai-adoption-blueprint",
+      "source_passage_id": "passage-canada-sme-ai-adoption-blueprint",
+      "benchmark_assignment_id": "claim-canada-sme-ai-adoption-blueprint"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-g7-sme-ai-toolkit",
+      "active_action_id": "action-canada-g7-sme-ai-toolkit",
+      "source_passage_id": "passage-canada-g7-sme-ai-toolkit",
+      "benchmark_assignment_id": "claim-canada-g7-sme-ai-toolkit"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-quebec-vector-amii-case-studies",
+      "active_action_id": "action-canada-quebec-vector-amii-case-studies",
+      "source_passage_id": "passage-canada-quebec-vector-amii-case-studies",
+      "benchmark_assignment_id": "claim-canada-quebec-vector-amii-case-studies"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-italy-canada-jag-declaration",
+      "active_action_id": "action-canada-italy-canada-jag-declaration",
+      "source_passage_id": "passage-canada-italy-canada-jag-declaration",
+      "benchmark_assignment_id": "claim-canada-italy-canada-jag-declaration"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-feddev-coralus-toronto-resiliency",
+      "active_action_id": "action-canada-feddev-coralus-toronto-resiliency",
+      "source_passage_id": "passage-canada-feddev-coralus-toronto-resiliency",
+      "benchmark_assignment_id": "claim-canada-feddev-coralus-toronto-resiliency"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-feddev-ai-growth-19m",
+      "active_action_id": "action-canada-feddev-ai-growth-19m",
+      "source_passage_id": "passage-canada-feddev-ai-growth-19m",
+      "benchmark_assignment_id": "claim-canada-feddev-ai-growth-19m"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-cannor-ai-entrepreneurship-centre",
+      "active_action_id": "action-canada-cannor-ai-entrepreneurship-centre",
+      "source_passage_id": "passage-canada-cannor-ai-entrepreneurship-centre",
+      "benchmark_assignment_id": "claim-canada-cannor-ai-entrepreneurship-centre"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-canada-germany-jdi-sovereign-alliance",
+      "active_action_id": "action-canada-canada-germany-jdi-sovereign-alliance",
+      "source_passage_id": "passage-canada-canada-germany-jdi-sovereign-alliance",
+      "benchmark_assignment_id": "claim-canada-canada-germany-jdi-sovereign-alliance"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-acoa-regional-ai-initiative",
+      "active_action_id": "action-canada-acoa-regional-ai-initiative",
+      "source_passage_id": "passage-canada-acoa-regional-ai-initiative",
+      "benchmark_assignment_id": "claim-canada-acoa-regional-ai-initiative"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-nrc-emerging-tech-900m",
+      "active_action_id": "action-canada-nrc-emerging-tech-900m",
+      "source_passage_id": "passage-canada-nrc-emerging-tech-900m",
+      "benchmark_assignment_id": "claim-canada-nrc-emerging-tech-900m"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-canada-finland-joint-statement",
+      "active_action_id": "action-canada-canada-finland-joint-statement",
+      "source_passage_id": "passage-canada-canada-finland-joint-statement",
+      "benchmark_assignment_id": "claim-canada-canada-finland-joint-statement"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-ai-sovereign-compute-infrastructure-program",
+      "active_action_id": "action-canada-ai-sovereign-compute-infrastructure-program",
+      "source_passage_id": "passage-canada-ai-sovereign-compute-infrastructure-program",
+      "benchmark_assignment_id": "claim-canada-ai-sovereign-compute-infrastructure-program"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-canada-ai-sme-2025",
+      "legacy_action_id": "action-canada-siemens-ai-manufacturing-centre",
+      "active_action_id": "action-canada-siemens-ai-manufacturing-centre",
+      "source_passage_id": "passage-canada-siemens-ai-manufacturing-centre",
+      "benchmark_assignment_id": "claim-canada-siemens-ai-manufacturing-centre"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-ai-pioneers",
+      "active_action_id": "action-france-ai-pioneers",
+      "source_passage_id": "passage-france-ai-pioneers",
+      "benchmark_assignment_id": "claim-france-ai-pioneers"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-osez-lia",
+      "active_action_id": "action-france-osez-lia",
+      "source_passage_id": "passage-france-osez-lia",
+      "benchmark_assignment_id": "claim-france-osez-lia"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-ai-academy-small-business",
+      "active_action_id": "action-france-ai-academy-small-business",
+      "source_passage_id": "passage-france-ai-academy-small-business",
+      "benchmark_assignment_id": "claim-france-ai-academy-small-business"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-piiec-ai-innovation",
+      "active_action_id": "action-france-piiec-ai-innovation",
+      "source_passage_id": "passage-france-piiec-ai-innovation",
+      "benchmark_assignment_id": "claim-france-piiec-ai-innovation"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-data-center-sme-deployment",
+      "active_action_id": "action-france-data-center-sme-deployment",
+      "source_passage_id": "passage-france-data-center-sme-deployment",
+      "benchmark_assignment_id": "claim-france-data-center-sme-deployment"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-bull-acquisition",
+      "active_action_id": "action-france-bull-acquisition",
+      "source_passage_id": "passage-france-bull-acquisition",
+      "benchmark_assignment_id": "claim-france-bull-acquisition"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-france-ai-sme-2025",
+      "legacy_action_id": "action-france-amd-compute-loi",
+      "active_action_id": "action-france-amd-compute-loi",
+      "source_passage_id": "passage-france-amd-compute-loi",
+      "benchmark_assignment_id": "claim-france-amd-compute-loi"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-bmz-data-strategy",
+      "active_action_id": "action-germany-bmz-data-strategy",
+      "source_passage_id": "passage-germany-bmz-data-strategy",
+      "benchmark_assignment_id": "claim-germany-bmz-data-strategy"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-mittelstand-digital-congress",
+      "active_action_id": "action-germany-mittelstand-digital-congress",
+      "source_passage_id": "passage-germany-mittelstand-digital-congress",
+      "benchmark_assignment_id": "claim-germany-mittelstand-digital-congress"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-european-digital-sovereignty-summit",
+      "active_action_id": "action-germany-european-digital-sovereignty-summit",
+      "source_passage_id": "passage-germany-european-digital-sovereignty-summit",
+      "benchmark_assignment_id": "claim-germany-european-digital-sovereignty-summit"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-canada-germany-digital-alliance",
+      "active_action_id": "action-germany-canada-germany-digital-alliance",
+      "source_passage_id": "passage-germany-canada-germany-digital-alliance",
+      "benchmark_assignment_id": "claim-germany-canada-germany-digital-alliance"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-sme-ai-adoption-blueprint",
+      "active_action_id": "action-germany-sme-ai-adoption-blueprint",
+      "source_passage_id": "passage-germany-sme-ai-adoption-blueprint",
+      "benchmark_assignment_id": "claim-germany-sme-ai-adoption-blueprint"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-g7-sme-ai-toolkit",
+      "active_action_id": "action-germany-g7-sme-ai-toolkit",
+      "source_passage_id": "passage-germany-g7-sme-ai-toolkit",
+      "benchmark_assignment_id": "claim-germany-g7-sme-ai-toolkit"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-eif-german-equity",
+      "active_action_id": "action-germany-eif-german-equity",
+      "source_passage_id": "passage-germany-eif-german-equity",
+      "benchmark_assignment_id": "claim-germany-eif-german-equity"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-canada-germany-jdi-sovereign-alliance",
+      "active_action_id": "action-germany-canada-germany-jdi-sovereign-alliance",
+      "source_passage_id": "passage-germany-canada-germany-jdi-sovereign-alliance",
+      "benchmark_assignment_id": "claim-germany-canada-germany-jdi-sovereign-alliance"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-india-germany-ai-pact",
+      "active_action_id": "action-germany-india-germany-ai-pact",
+      "source_passage_id": "passage-germany-india-germany-ai-pact",
+      "benchmark_assignment_id": "claim-germany-india-germany-ai-pact"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-ai-funding-guideline-consultation",
+      "active_action_id": "action-germany-ai-funding-guideline-consultation",
+      "source_passage_id": "passage-germany-ai-funding-guideline-consultation",
+      "benchmark_assignment_id": "claim-germany-ai-funding-guideline-consultation"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-germany-ai-sme-2025",
+      "legacy_action_id": "action-germany-zukunftstag-mittelstand",
+      "active_action_id": "action-germany-zukunftstag-mittelstand",
+      "source_passage_id": "passage-germany-zukunftstag-mittelstand",
+      "benchmark_assignment_id": "claim-germany-zukunftstag-mittelstand"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-congo-mou-startups",
+      "active_action_id": "action-italy-congo-mou-startups",
+      "source_passage_id": "passage-italy-congo-mou-startups",
+      "benchmark_assignment_id": "claim-italy-congo-mou-startups"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-ai-hub-sustainable-development",
+      "active_action_id": "action-italy-ai-hub-sustainable-development",
+      "source_passage_id": "passage-italy-ai-hub-sustainable-development",
+      "benchmark_assignment_id": "claim-italy-ai-hub-sustainable-development"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-ai4industry-virkkunen-meeting",
+      "active_action_id": "action-italy-ai4industry-virkkunen-meeting",
+      "source_passage_id": "passage-italy-ai4industry-virkkunen-meeting",
+      "benchmark_assignment_id": "claim-italy-ai4industry-virkkunen-meeting"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-smau-2025-innovation-award",
+      "active_action_id": "action-italy-smau-2025-innovation-award",
+      "source_passage_id": "passage-italy-smau-2025-innovation-award",
+      "benchmark_assignment_id": "claim-italy-smau-2025-innovation-award"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-ai-match-pilot",
+      "active_action_id": "action-italy-ai-match-pilot",
+      "source_passage_id": "passage-italy-ai-match-pilot",
+      "benchmark_assignment_id": "claim-italy-ai-match-pilot"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-lobito-corridor-dialogue",
+      "active_action_id": "action-italy-lobito-corridor-dialogue",
+      "source_passage_id": "passage-italy-lobito-corridor-dialogue",
+      "benchmark_assignment_id": "claim-italy-lobito-corridor-dialogue"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-it4lia-ai-factory",
+      "active_action_id": "action-italy-it4lia-ai-factory",
+      "source_passage_id": "passage-italy-it4lia-ai-factory",
+      "benchmark_assignment_id": "claim-italy-it4lia-ai-factory"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-italy-canada-jag-declaration",
+      "active_action_id": "action-italy-italy-canada-jag-declaration",
+      "source_passage_id": "passage-italy-italy-canada-jag-declaration",
+      "benchmark_assignment_id": "claim-italy-italy-canada-jag-declaration"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-nairobi-harmonic-africa",
+      "active_action_id": "action-italy-nairobi-harmonic-africa",
+      "source_passage_id": "passage-italy-nairobi-harmonic-africa",
+      "benchmark_assignment_id": "claim-italy-nairobi-harmonic-africa"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-innoconnect-greece-italy",
+      "active_action_id": "action-italy-innoconnect-greece-italy",
+      "source_passage_id": "passage-italy-innoconnect-greece-italy",
+      "benchmark_assignment_id": "claim-italy-innoconnect-greece-italy"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-italy-ai-sme-2025",
+      "legacy_action_id": "action-italy-ai4i-accenture-partnership",
+      "active_action_id": "action-italy-ai4i-accenture-partnership",
+      "source_passage_id": "passage-italy-ai4i-accenture-partnership",
+      "benchmark_assignment_id": "claim-italy-ai4i-accenture-partnership"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-ai-act",
+      "active_action_id": "action-japan-ai-act",
+      "source_passage_id": "passage-japan-ai-act",
+      "benchmark_assignment_id": "claim-japan-ai-act"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-ai-strategy-headquarters",
+      "active_action_id": "action-japan-ai-strategy-headquarters",
+      "source_passage_id": "passage-japan-ai-strategy-headquarters",
+      "benchmark_assignment_id": "claim-japan-ai-strategy-headquarters"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-oecd-labour-market-report",
+      "active_action_id": "action-japan-oecd-labour-market-report",
+      "source_passage_id": "passage-japan-oecd-labour-market-report",
+      "benchmark_assignment_id": "claim-japan-oecd-labour-market-report"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-sme-ai-adoption-blueprint",
+      "active_action_id": "action-japan-sme-ai-adoption-blueprint",
+      "source_passage_id": "passage-japan-sme-ai-adoption-blueprint",
+      "benchmark_assignment_id": "claim-japan-sme-ai-adoption-blueprint"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-g7-sme-ai-toolkit",
+      "active_action_id": "action-japan-g7-sme-ai-toolkit",
+      "source_passage_id": "passage-japan-g7-sme-ai-toolkit",
+      "benchmark_assignment_id": "claim-japan-g7-sme-ai-toolkit"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-first-basic-ai-plan",
+      "active_action_id": "action-japan-first-basic-ai-plan",
+      "source_passage_id": "passage-japan-first-basic-ai-plan",
+      "benchmark_assignment_id": "claim-japan-first-basic-ai-plan"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-japan-ai-sme-2025",
+      "legacy_action_id": "action-japan-gennai-government-pilot",
+      "active_action_id": "action-japan-gennai-government-pilot",
+      "source_passage_id": "passage-japan-gennai-government-pilot",
+      "benchmark_assignment_id": "claim-japan-gennai-government-pilot"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-made-in-uk-awards",
+      "active_action_id": "action-united_kingdom-made-in-uk-awards",
+      "source_passage_id": "passage-united_kingdom-made-in-uk-awards",
+      "benchmark_assignment_id": "claim-united_kingdom-made-in-uk-awards"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-regulatory-innovation-office",
+      "active_action_id": "action-united_kingdom-regulatory-innovation-office",
+      "source_passage_id": "passage-united_kingdom-regulatory-innovation-office",
+      "benchmark_assignment_id": "claim-united_kingdom-regulatory-innovation-office"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-compute-roadmap",
+      "active_action_id": "action-united_kingdom-compute-roadmap",
+      "source_passage_id": "passage-united_kingdom-compute-roadmap",
+      "benchmark_assignment_id": "claim-united_kingdom-compute-roadmap"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-uk-us-tech-prosperity-deal",
+      "active_action_id": "action-united_kingdom-uk-us-tech-prosperity-deal",
+      "source_passage_id": "passage-united_kingdom-uk-us-tech-prosperity-deal",
+      "benchmark_assignment_id": "claim-united_kingdom-uk-us-tech-prosperity-deal"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-regional-tech-booster",
+      "active_action_id": "action-united_kingdom-regional-tech-booster",
+      "source_passage_id": "passage-united_kingdom-regional-tech-booster",
+      "benchmark_assignment_id": "claim-united_kingdom-regional-tech-booster"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-local-innovation-partnerships-fund",
+      "active_action_id": "action-united_kingdom-local-innovation-partnerships-fund",
+      "source_passage_id": "passage-united_kingdom-local-innovation-partnerships-fund",
+      "benchmark_assignment_id": "claim-united_kingdom-local-innovation-partnerships-fund"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-ai-growth-lab",
+      "active_action_id": "action-united_kingdom-ai-growth-lab",
+      "source_passage_id": "passage-united_kingdom-ai-growth-lab",
+      "benchmark_assignment_id": "claim-united_kingdom-ai-growth-lab"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-ai-skills-framework",
+      "active_action_id": "action-united_kingdom-ai-skills-framework",
+      "source_passage_id": "passage-united_kingdom-ai-skills-framework",
+      "benchmark_assignment_id": "claim-united_kingdom-ai-skills-framework"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-dawn-supercomputer",
+      "active_action_id": "action-united_kingdom-dawn-supercomputer",
+      "source_passage_id": "passage-united_kingdom-dawn-supercomputer",
+      "benchmark_assignment_id": "claim-united_kingdom-dawn-supercomputer"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-free-ai-foundations-training",
+      "active_action_id": "action-united_kingdom-free-ai-foundations-training",
+      "source_passage_id": "passage-united_kingdom-free-ai-foundations-training",
+      "benchmark_assignment_id": "claim-united_kingdom-free-ai-foundations-training"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-youth-employment-ai-apprenticeship",
+      "active_action_id": "action-united_kingdom-youth-employment-ai-apprenticeship",
+      "source_passage_id": "passage-united_kingdom-youth-employment-ai-apprenticeship",
+      "benchmark_assignment_id": "claim-united_kingdom-youth-employment-ai-apprenticeship"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-ai-upskilling-challenge-fund",
+      "active_action_id": "action-united_kingdom-ai-upskilling-challenge-fund",
+      "source_passage_id": "passage-united_kingdom-ai-upskilling-challenge-fund",
+      "benchmark_assignment_id": "claim-united_kingdom-ai-upskilling-challenge-fund"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-frontier-ai-discovery",
+      "active_action_id": "action-united_kingdom-frontier-ai-discovery",
+      "source_passage_id": "passage-united_kingdom-frontier-ai-discovery",
+      "benchmark_assignment_id": "claim-united_kingdom-frontier-ai-discovery"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_kingdom-ai-sme-2025",
+      "legacy_action_id": "action-united_kingdom-sovereign-ai-initiative",
+      "active_action_id": "action-united_kingdom-sovereign-ai-initiative",
+      "source_passage_id": "passage-united_kingdom-sovereign-ai-initiative",
+      "benchmark_assignment_id": "claim-united_kingdom-sovereign-ai-initiative"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-ai-technology-stack-export-eo",
+      "active_action_id": "action-united_states-ai-technology-stack-export-eo",
+      "source_passage_id": "passage-united_states-ai-technology-stack-export-eo",
+      "benchmark_assignment_id": "claim-united_states-ai-technology-stack-export-eo"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-americas-ai-action-plan",
+      "active_action_id": "action-united_states-americas-ai-action-plan",
+      "source_passage_id": "passage-united_states-americas-ai-action-plan",
+      "benchmark_assignment_id": "claim-united_states-americas-ai-action-plan"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-genesis-mission",
+      "active_action_id": "action-united_states-genesis-mission",
+      "source_passage_id": "passage-united_states-genesis-mission",
+      "benchmark_assignment_id": "claim-united_states-genesis-mission"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-dol-ai-literacy-framework",
+      "active_action_id": "action-united_states-dol-ai-literacy-framework",
+      "source_passage_id": "passage-united_states-dol-ai-literacy-framework",
+      "benchmark_assignment_id": "claim-united_states-dol-ai-literacy-framework"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-india-summit-world-bank-fund",
+      "active_action_id": "action-united_states-india-summit-world-bank-fund",
+      "source_passage_id": "passage-united_states-india-summit-world-bank-fund",
+      "benchmark_assignment_id": "claim-united_states-india-summit-world-bank-fund"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-united_states-ai-sme-2025",
+      "legacy_action_id": "action-united_states-national-policy-framework-ai",
+      "active_action_id": "action-united_states-national-policy-framework-ai",
+      "source_passage_id": "passage-united_states-national-policy-framework-ai",
+      "benchmark_assignment_id": "claim-united_states-national-policy-framework-ai"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-ai-act-advisory-forum",
+      "active_action_id": "action-european_union-ai-act-advisory-forum",
+      "source_passage_id": "passage-european_union-ai-act-advisory-forum",
+      "benchmark_assignment_id": "claim-european_union-ai-act-advisory-forum"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-apply-ai-strategy",
+      "active_action_id": "action-european_union-apply-ai-strategy",
+      "source_passage_id": "passage-european_union-apply-ai-strategy",
+      "benchmark_assignment_id": "claim-european_union-apply-ai-strategy"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-ai-in-science-raise",
+      "active_action_id": "action-european_union-ai-in-science-raise",
+      "source_passage_id": "passage-european_union-ai-in-science-raise",
+      "benchmark_assignment_id": "claim-european_union-ai-in-science-raise"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-ai-act-service-desk",
+      "active_action_id": "action-european_union-ai-act-service-desk",
+      "source_passage_id": "passage-european_union-ai-act-service-desk",
+      "benchmark_assignment_id": "claim-european_union-ai-act-service-desk"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-ai-factories-six-new",
+      "active_action_id": "action-european_union-ai-factories-six-new",
+      "source_passage_id": "passage-european_union-ai-factories-six-new",
+      "benchmark_assignment_id": "claim-european_union-ai-factories-six-new"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-seventh-ai-pact-webinar",
+      "active_action_id": "action-european_union-seventh-ai-pact-webinar",
+      "source_passage_id": "passage-european_union-seventh-ai-pact-webinar",
+      "benchmark_assignment_id": "claim-european_union-seventh-ai-pact-webinar"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-european-data-union-strategy",
+      "active_action_id": "action-european_union-european-data-union-strategy",
+      "source_passage_id": "passage-european_union-european-data-union-strategy",
+      "benchmark_assignment_id": "claim-european_union-european-data-union-strategy"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-apply-ai-manufacturing-tef",
+      "active_action_id": "action-european_union-apply-ai-manufacturing-tef",
+      "source_passage_id": "passage-european_union-apply-ai-manufacturing-tef",
+      "benchmark_assignment_id": "claim-european_union-apply-ai-manufacturing-tef"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-eesc-commercialization-call",
+      "active_action_id": "action-european_union-eesc-commercialization-call",
+      "source_passage_id": "passage-european_union-eesc-commercialization-call",
+      "benchmark_assignment_id": "claim-european_union-eesc-commercialization-call"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-apply-ai-framework-innovation-hubs",
+      "active_action_id": "action-european_union-apply-ai-framework-innovation-hubs",
+      "source_passage_id": "passage-european_union-apply-ai-framework-innovation-hubs",
+      "benchmark_assignment_id": "claim-european_union-apply-ai-framework-innovation-hubs"
+    },
+    {
+      "legacy_snapshot_id": "snapshot-european_union-ai-sme-2025",
+      "legacy_action_id": "action-european_union-ai-continent-action-plan",
+      "active_action_id": "action-european_union-ai-continent-action-plan",
+      "source_passage_id": "passage-european_union-ai-continent-action-plan",
+      "benchmark_assignment_id": "claim-european_union-ai-continent-action-plan"
+    }
+  ]
+}

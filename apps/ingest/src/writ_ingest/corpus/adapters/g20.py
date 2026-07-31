@@ -26,7 +26,7 @@ INSTITUTION = "G20"
 SUMMIT_ID = "G20.rio.2024"
 SUMMIT_SLUG = "2024-rio"
 PARSER_VERSION = "g20-2024-rio-adapter@2.0.0"
-SOURCES_FIXTURE = "benchmark/2024-rio-g20/sources.json"
+SOURCES_FIXTURE = "corpora/multilateral/g20/2024-rio/sources/source-manifest.json"
 
 REPORT_IDS = {
     "final": "g20.2024.rio.final.compliance",

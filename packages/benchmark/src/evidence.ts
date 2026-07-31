@@ -370,7 +370,7 @@ export const METHODOLOGY_PASSAGES: readonly Passage[] = [
   },
 ];
 
-/** The immutable source manifest written to `benchmark/2025-ai-sme/sources.json`. */
+/** Schema-compatible projection of source records held by the G7 corpus. */
 export function buildSourceManifest(): {
   schema_version: "1.0.0";
   document_version: Evidence["document_versions"][number];

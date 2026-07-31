@@ -37,7 +37,7 @@ CLI analyze "$ROOT/examples/2025-ai-sme-resolved.writ" 2>&1 | tail -1 | sed 's/^
 rule "3. BENCHMARK — reproduce all 8 published G7 AI-for-SMEs scores from frozen evidence"
 bench '
 import { readFileSync } from "node:fs";
-const l = JSON.parse(readFileSync(process.env.ROOT + "/benchmark/2025-ai-sme/discrepancy-ledger.json","utf8"));
+const l = JSON.parse(readFileSync(process.env.ROOT + "/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json","utf8"));
 console.log("  summary:", JSON.stringify(l.summary));
 for (const c of l.cells) console.log(`    ${c.member.padEnd(16)} published ${c.published}  computed ${c.computed}  ${c.match?"MATCH":"MISMATCH"}  ${c.category==="implicit_analyst_interpretation"?"[interpretation-sensitive]":""}`);
 '

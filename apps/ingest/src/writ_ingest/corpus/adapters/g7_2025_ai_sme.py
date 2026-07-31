@@ -30,8 +30,24 @@ class G7AiSmeFixtureAdapter:
         return value
 
     def emit(self) -> AdapterOutput:
-        inventory = self._json("benchmark/2025-ai-sme/methodology-inventory.json")
-        sources = self._json("benchmark/2025-ai-sme/sources.json")
+        inventory = self._json(
+            "benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/"
+            "methodology-inventory.json"
+        )
+        sources = self._json(
+            "corpora/multilateral/g7/2025-ai-sme/sources/source-manifest.json"
+        )
+        judgments = json.loads(
+            (
+                self.root
+                / "corpora/multilateral/g7/2025-ai-sme/records/"
+                "published-judgments.json"
+            ).read_text(encoding="utf-8")
+        )
+        source_judgment_by_member = {
+            str(item["subject_ref"]).removeprefix("actor-"): item
+            for item in judgments
+        }
         vocabulary = load_vocabulary()
         source_document = sources["document_version"]
         retrieval_date = str(source_document["retrieved_at"])[:10]
@@ -152,7 +168,8 @@ class G7AiSmeFixtureAdapter:
             if member.canonical_term is None:
                 raise ValueError(f"G7 fixture member mapping is not reviewed: {source_member}")
             assessment_id = f"{REPORT_ID}.{commitment_id}.{member.canonical_term}"
-            result = inventory["observed_results"][source_member]
+            source_judgment = source_judgment_by_member[str(source_member)]
+            result = source_judgment["reported_value"]
             assessments.append(
                 {
                     "schema_version": "2.0.0",
@@ -163,7 +180,7 @@ class G7AiSmeFixtureAdapter:
                     "member_id": member.canonical_term,
                     "published_result": result,
                     "score_status": "published",
-                    "source_passage_ids": [],
+                    "source_passage_ids": [source_judgment["source_passage_ref"]],
                     "analyst_reasoning": None,
                     "dispute_reason": None,
                     "current_view_status": "included",
@@ -176,7 +193,7 @@ class G7AiSmeFixtureAdapter:
                     },
                     "parser_version": PARSER_VERSION,
                     "retrieval_date": retrieval_date,
-                    "extraction_warnings": ["published_score_passage_not_isolated"],
+                    "extraction_warnings": [],
                 }
             )
             reviews.append(

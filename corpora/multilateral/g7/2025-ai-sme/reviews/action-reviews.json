@@ -1,0 +1,872 @@
+[
+  {
+    "id": "review-action-canada-ai-compute-access-fund",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-ai-compute-access-fund",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.173.",
+    "created_at": "2025-06-25T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-japan-canada-tech-accelerator",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-japan-canada-tech-accelerator",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.173.",
+    "created_at": "2025-08-19T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-toronto-region-ai-business-catalyst",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-toronto-region-ai-business-catalyst",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.173.",
+    "created_at": "2025-10-22T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-fcac-gri-workshop",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-fcac-gri-workshop",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.173.",
+    "created_at": "2025-11-13T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-canada-germany-digital-alliance",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-canada-germany-digital-alliance",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.174.",
+    "created_at": "2025-12-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-national-ai-compute-925m",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-national-ai-compute-925m",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.174.",
+    "created_at": "2025-12-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-g7-ai-adoption-roadmap-declaration",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-g7-ai-adoption-roadmap-declaration",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.174.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-sme-ai-adoption-blueprint",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-sme-ai-adoption-blueprint",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.174.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-g7-sme-ai-toolkit",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-g7-sme-ai-toolkit",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.174.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-quebec-vector-amii-case-studies",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-quebec-vector-amii-case-studies",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-italy-canada-jag-declaration",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-italy-canada-jag-declaration",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2025-12-10T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-feddev-coralus-toronto-resiliency",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-feddev-coralus-toronto-resiliency",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2025-12-15T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-feddev-ai-growth-19m",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-feddev-ai-growth-19m",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2025-12-17T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-cannor-ai-entrepreneurship-centre",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-cannor-ai-entrepreneurship-centre",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2026-02-06T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-canada-germany-jdi-sovereign-alliance",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-canada-germany-jdi-sovereign-alliance",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.175.",
+    "created_at": "2026-02-14T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-acoa-regional-ai-initiative",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-acoa-regional-ai-initiative",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.176.",
+    "created_at": "2026-03-18T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-nrc-emerging-tech-900m",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-nrc-emerging-tech-900m",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.176.",
+    "created_at": "2026-03-19T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-canada-finland-joint-statement",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-canada-finland-joint-statement",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.176.",
+    "created_at": "2026-04-14T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-ai-sovereign-compute-infrastructure-program",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-ai-sovereign-compute-infrastructure-program",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.176.",
+    "created_at": "2026-04-15T00:00:00Z"
+  },
+  {
+    "id": "review-action-canada-siemens-ai-manufacturing-centre",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-canada-siemens-ai-manufacturing-centre",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.176.",
+    "created_at": "2026-04-21T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-ai-pioneers",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-ai-pioneers",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.177.",
+    "created_at": "2025-09-18T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-osez-lia",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-osez-lia",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.177.",
+    "created_at": "2025-09-18T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-ai-academy-small-business",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-ai-academy-small-business",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.177.",
+    "created_at": "2025-11-07T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-piiec-ai-innovation",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-piiec-ai-innovation",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.177.",
+    "created_at": "2025-11-26T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-data-center-sme-deployment",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-data-center-sme-deployment",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.178.",
+    "created_at": "2026-01-30T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-bull-acquisition",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-bull-acquisition",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.178.",
+    "created_at": "2026-03-31T00:00:00Z"
+  },
+  {
+    "id": "review-action-france-amd-compute-loi",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-france-amd-compute-loi",
+    "reviewer_id": "mai-linh-pham-dac",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.178.",
+    "created_at": "2026-04-16T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-bmz-data-strategy",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-bmz-data-strategy",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.179.",
+    "created_at": "2025-09-30T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-mittelstand-digital-congress",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-mittelstand-digital-congress",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.179.",
+    "created_at": "2025-11-13T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-european-digital-sovereignty-summit",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-european-digital-sovereignty-summit",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.179.",
+    "created_at": "2025-11-18T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-canada-germany-digital-alliance",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-canada-germany-digital-alliance",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.179.",
+    "created_at": "2025-12-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-sme-ai-adoption-blueprint",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-sme-ai-adoption-blueprint",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.179.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-g7-sme-ai-toolkit",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-g7-sme-ai-toolkit",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.180.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-eif-german-equity",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-eif-german-equity",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.180.",
+    "created_at": "2026-01-13T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-canada-germany-jdi-sovereign-alliance",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-canada-germany-jdi-sovereign-alliance",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.180.",
+    "created_at": "2026-02-14T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-india-germany-ai-pact",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-india-germany-ai-pact",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.180.",
+    "created_at": "2026-02-18T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-ai-funding-guideline-consultation",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-ai-funding-guideline-consultation",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.181.",
+    "created_at": "2026-03-02T00:00:00Z"
+  },
+  {
+    "id": "review-action-germany-zukunftstag-mittelstand",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-germany-zukunftstag-mittelstand",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.181.",
+    "created_at": "2026-04-15T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-congo-mou-startups",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-congo-mou-startups",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.181.",
+    "created_at": "2025-06-19T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-ai-hub-sustainable-development",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-ai-hub-sustainable-development",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.181.",
+    "created_at": "2025-06-20T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-ai4industry-virkkunen-meeting",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-ai4industry-virkkunen-meeting",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.182.",
+    "created_at": "2025-07-17T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-smau-2025-innovation-award",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-smau-2025-innovation-award",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.182.",
+    "created_at": "2025-11-07T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-ai-match-pilot",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-ai-match-pilot",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.182.",
+    "created_at": "2025-11-10T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-lobito-corridor-dialogue",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-lobito-corridor-dialogue",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.182.",
+    "created_at": "2025-11-24T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-it4lia-ai-factory",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-it4lia-ai-factory",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.182.",
+    "created_at": "2025-09-05T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-italy-canada-jag-declaration",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-italy-canada-jag-declaration",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.183.",
+    "created_at": "2025-12-10T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-nairobi-harmonic-africa",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-nairobi-harmonic-africa",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.183.",
+    "created_at": "2026-02-10T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-innoconnect-greece-italy",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-innoconnect-greece-italy",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.183.",
+    "created_at": "2026-03-16T00:00:00Z"
+  },
+  {
+    "id": "review-action-italy-ai4i-accenture-partnership",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-italy-ai4i-accenture-partnership",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.183.",
+    "created_at": "2026-03-24T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-ai-act",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-ai-act",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.184.",
+    "created_at": "2025-09-01T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-ai-strategy-headquarters",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-ai-strategy-headquarters",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.184.",
+    "created_at": "2025-09-11T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-oecd-labour-market-report",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-oecd-labour-market-report",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.184.",
+    "created_at": "2025-11-28T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-sme-ai-adoption-blueprint",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-sme-ai-adoption-blueprint",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.184.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-g7-sme-ai-toolkit",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-g7-sme-ai-toolkit",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.185.",
+    "created_at": "2025-12-09T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-first-basic-ai-plan",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-first-basic-ai-plan",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.185.",
+    "created_at": "2025-12-22T00:00:00Z"
+  },
+  {
+    "id": "review-action-japan-gennai-government-pilot",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-japan-gennai-government-pilot",
+    "reviewer_id": "ece-onal",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.185.",
+    "created_at": "2026-03-06T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-made-in-uk-awards",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-made-in-uk-awards",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-06-24T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-regulatory-innovation-office",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-regulatory-innovation-office",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-07-01T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-compute-roadmap",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-compute-roadmap",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-07-17T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-uk-us-tech-prosperity-deal",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-uk-us-tech-prosperity-deal",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-09-16T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-regional-tech-booster",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-regional-tech-booster",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-10-01T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-local-innovation-partnerships-fund",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-local-innovation-partnerships-fund",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.186.",
+    "created_at": "2025-10-19T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-ai-growth-lab",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-ai-growth-lab",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2025-10-21T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-ai-skills-framework",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-ai-skills-framework",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2025-10-29T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-dawn-supercomputer",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-dawn-supercomputer",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2026-01-26T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-free-ai-foundations-training",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-free-ai-foundations-training",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2026-01-28T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-youth-employment-ai-apprenticeship",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-youth-employment-ai-apprenticeship",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2026-03-16T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-ai-upskilling-challenge-fund",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-ai-upskilling-challenge-fund",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.187.",
+    "created_at": "2026-03-25T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-frontier-ai-discovery",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-frontier-ai-discovery",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.188.",
+    "created_at": "2026-04-14T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_kingdom-sovereign-ai-initiative",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_kingdom-sovereign-ai-initiative",
+    "reviewer_id": "anson-hu",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.188.",
+    "created_at": "2026-04-16T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-ai-technology-stack-export-eo",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-ai-technology-stack-export-eo",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.188.",
+    "created_at": "2025-07-23T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-americas-ai-action-plan",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-americas-ai-action-plan",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.188.",
+    "created_at": "2025-07-23T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-genesis-mission",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-genesis-mission",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.189.",
+    "created_at": "2025-11-24T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-dol-ai-literacy-framework",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-dol-ai-literacy-framework",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.189.",
+    "created_at": "2026-02-13T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-india-summit-world-bank-fund",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-india-summit-world-bank-fund",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.189.",
+    "created_at": "2026-02-20T00:00:00Z"
+  },
+  {
+    "id": "review-action-united_states-national-policy-framework-ai",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-united_states-national-policy-framework-ai",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.189.",
+    "created_at": "2026-03-20T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-ai-act-advisory-forum",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-ai-act-advisory-forum",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.190.",
+    "created_at": "2025-07-17T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-apply-ai-strategy",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-apply-ai-strategy",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.190.",
+    "created_at": "2025-10-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-ai-in-science-raise",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-ai-in-science-raise",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.190.",
+    "created_at": "2025-10-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-ai-act-service-desk",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-ai-act-service-desk",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.190.",
+    "created_at": "2025-10-08T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-ai-factories-six-new",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-ai-factories-six-new",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.190.",
+    "created_at": "2025-10-10T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-seventh-ai-pact-webinar",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-seventh-ai-pact-webinar",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.191.",
+    "created_at": "2025-10-21T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-european-data-union-strategy",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-european-data-union-strategy",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.191.",
+    "created_at": "2025-11-19T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-apply-ai-manufacturing-tef",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-apply-ai-manufacturing-tef",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.191.",
+    "created_at": "2025-11-28T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-eesc-commercialization-call",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-eesc-commercialization-call",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.191.",
+    "created_at": "2026-01-21T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-apply-ai-framework-innovation-hubs",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-apply-ai-framework-innovation-hubs",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.191.",
+    "created_at": "2026-03-27T00:00:00Z"
+  },
+  {
+    "id": "review-action-european_union-ai-continent-action-plan",
+    "record_type": "reviewer_annotation",
+    "object_type": "action",
+    "object_id": "action-european_union-ai-continent-action-plan",
+    "reviewer_id": "jeanne-brownewell",
+    "decision": "accept",
+    "rationale": "Action verified against the frozen source chapter, report p.192.",
+    "created_at": "2026-04-09T00:00:00Z"
+  }
+]

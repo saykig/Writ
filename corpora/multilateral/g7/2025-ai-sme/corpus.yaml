@@ -1,0 +1,17 @@
+schema_version: 1.0.0
+corpus_id: multilateral/g7/2025-ai-sme
+title: G7 2025 AI adoption for SMEs
+authority: corpora/multilateral/g7/2025-ai-sme
+record_counts:
+  political_actors: 8
+  political_statements: 1
+  government_or_institutional_actions: 87
+  statement_action_relationships: 87
+  published_reports: 1
+  published_judgments: 8
+  reviewer_annotations: 87
+benchmark_ref: benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
+notes:
+  - Actions are queryable without evaluating a score.
+  - Strong, weak and counter assignments are benchmark-local methodology judgments.
+  - Published ratings are source-reported judgments and are never Writ-derived.

@@ -5,7 +5,7 @@
 // profile, and calls `evaluateCommitment` to obtain a receipt. The published
 // profile reproduces the published cell; the generous profile records
 // interpretation-sensitivity. The per-cell comparison is written to
-// `benchmark/2025-ai-sme/discrepancy-ledger.json`.
+// `benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json`.
 //
 // Scores are produced by `evaluateCommitment` over the anchored evidence — never
 // hardcoded here. This module only compares and records.
@@ -20,7 +20,13 @@ import type {
 } from "@writ/domain";
 import { resolvedIr, methodologyVersionId } from "./methodology.js";
 import { projectSnapshotForProfile, type ClassificationProjectionDiagnostic } from "./evidence.js";
-import { INVENTORY_PATH, LEDGER_PATH, profilePath, snapshotPath } from "./paths.js";
+import {
+  G7_JUDGMENTS_PATH,
+  INVENTORY_PATH,
+  LEDGER_PATH,
+  profilePath,
+  snapshotPath,
+} from "./paths.js";
 
 const COMMITMENT_ID = "AI_SME_ADOPTION";
 const BENCHMARK_REFERENCE = "2025-ai-sme";
@@ -76,6 +82,13 @@ export interface BenchmarkRun {
   >;
 }
 
+interface SourceReportedJudgment {
+  readonly subject_ref: string;
+  readonly reported_value: "-1" | "0" | "+1";
+  readonly origin: "source_reported";
+  readonly writ_derived: false;
+}
+
 function loadJson<T>(path: string): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
@@ -86,6 +99,12 @@ export function runBenchmark(): BenchmarkRun {
   const inventory = loadJson<MethodologyInventory>(INVENTORY_PATH);
   const published = loadJson<InterpretationProfile>(profilePath("published"));
   const generous = loadJson<InterpretationProfile>(profilePath("generous"));
+  const sourceJudgments = new Map(
+    loadJson<SourceReportedJudgment[]>(G7_JUDGMENTS_PATH).map((judgment) => [
+      judgment.subject_ref.replace(/^actor-/, ""),
+      judgment,
+    ]),
+  );
 
   const receipts = new Map<string, EvaluationReceipt>();
   const generousReceipts = new Map<string, EvaluationReceipt>();
@@ -98,10 +117,11 @@ export function runBenchmark(): BenchmarkRun {
 
   for (const subject of inventory.subjects) {
     const snapshot = loadJson<Evidence>(snapshotPath(subject));
-    const publishedCell = inventory.observed_results[subject];
-    if (publishedCell === undefined || publishedCell === "not_applicable") {
-      throw new Error(`Methodology inventory has no ±1/0 published result for "${subject}".`);
+    const sourceJudgment = sourceJudgments.get(subject);
+    if (sourceJudgment === undefined) {
+      throw new Error(`G7 corpus has no source-reported judgment for "${subject}".`);
     }
+    const publishedCell = sourceJudgment.reported_value;
 
     const publishedProjection = projectSnapshotForProfile(snapshot, published);
     const generousProjection = projectSnapshotForProfile(snapshot, generous);

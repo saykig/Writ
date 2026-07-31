@@ -1,0 +1,2241 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "legacy_commitment_id": "2024-122",
+      "statement_id": "2024-122"
+    },
+    {
+      "legacy_commitment_id": "2024-150",
+      "statement_id": "2024-150"
+    },
+    {
+      "legacy_commitment_id": "2024-168",
+      "statement_id": "2024-168"
+    },
+    {
+      "legacy_commitment_id": "2024-137",
+      "statement_id": "2024-137"
+    },
+    {
+      "legacy_commitment_id": "2024-102",
+      "statement_id": "2024-102"
+    },
+    {
+      "legacy_commitment_id": "2024-78",
+      "statement_id": "2024-78"
+    },
+    {
+      "legacy_commitment_id": "2024-124",
+      "statement_id": "2024-124"
+    },
+    {
+      "legacy_commitment_id": "2024-43",
+      "statement_id": "2024-43"
+    },
+    {
+      "legacy_commitment_id": "2024-10",
+      "statement_id": "2024-10"
+    },
+    {
+      "legacy_commitment_id": "2024-16",
+      "statement_id": "2024-16"
+    },
+    {
+      "legacy_commitment_id": "2024-25",
+      "statement_id": "2024-25"
+    },
+    {
+      "legacy_commitment_id": "2024-32",
+      "statement_id": "2024-32"
+    },
+    {
+      "legacy_commitment_id": "2024-59",
+      "statement_id": "2024-59"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-122.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-122.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-150.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-150.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-168.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-168.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-137.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-137.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-102.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-102.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-78.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-78.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-124.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-124.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-43.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-43.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-10.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-10.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-16.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-16.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-25.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-25.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-32.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-32.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.argentina",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.australia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.brazil",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.canada",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.china",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.france",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.germany",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.india",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.indonesia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.italy",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.japan",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.south_korea",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.mexico",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.russia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.south_africa",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.turkiye",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.united_states",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.african_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.final.compliance.2024-59.european_union",
+      "published_judgment_id": "g20.2024.rio.final.compliance.2024-59.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-122.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-122.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-150.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-150.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-168.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-168.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-137.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-137.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-102.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-102.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-78.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-78.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-124.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-124.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-43.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-43.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-10.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-10.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-16.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-16.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-25.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-25.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-32.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-32.european_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.argentina",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.argentina"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.australia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.australia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.brazil",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.brazil"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.canada",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.canada"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.china",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.china"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.france",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.france"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.germany",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.germany"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.india",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.india"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.indonesia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.indonesia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.italy",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.italy"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.japan",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.japan"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.south_korea",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.south_korea"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.mexico",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.mexico"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.russia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.russia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.saudi_arabia",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.saudi_arabia"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.south_africa",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.south_africa"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.turkiye",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.turkiye"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.united_kingdom",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.united_kingdom"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.united_states",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.united_states"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.african_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.african_union"
+    },
+    {
+      "legacy_assessment_id": "g20.2024.rio.interim.compliance.2024-59.european_union",
+      "published_judgment_id": "g20.2024.rio.interim.compliance.2024-59.european_union"
+    }
+  ]
+}

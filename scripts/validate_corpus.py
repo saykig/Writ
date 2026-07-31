@@ -76,12 +76,12 @@ def main() -> int:
         output = G7AiSmeFixtureAdapter().emit()
         _validate_output(output)
         adapter_counts = _adapter_counts(output)
-        validated.append("benchmark/2025-ai-sme (in-memory adapter)")
+        validated.append("corpora/multilateral/g7/2025-ai-sme (in-memory adapter)")
     if args.g20_rio:
         output = G20RioAdapter().emit()
         _validate_output(output)
         adapter_counts = _adapter_counts(output)
-        validated.append("benchmark/2024-rio-g20 (in-memory adapter)")
+        validated.append("corpora/multilateral/g20/2024-rio (in-memory adapter)")
     print(
         json.dumps(
             {

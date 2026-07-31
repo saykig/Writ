@@ -1,0 +1,2317 @@
+[
+  {
+    "id": "action-canada-ai-compute-access-fund",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Compute Access Fund (up to CAD300M to SMEs)",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "compute_funding_program",
+    "instrument_type": "compute_funding_program",
+    "announcement_time": "2025-06-25T00:00:00Z",
+    "valid_time": {
+      "start": "2025-06-25T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-ai-compute-access-fund",
+    "source_passage_ids": ["passage-canada-ai-compute-access-fund"],
+    "source_anchor": {
+      "page": 173,
+      "footnote": 915
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "300000000",
+        "currency": "CAD",
+        "bound": "up_to"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-japan-canada-tech-accelerator",
+    "record_type": "government_or_institutional_action",
+    "label": "Japan-Canada Technology Accelerator + NRC IRAP AI Solutions program",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "talent_exchange",
+    "instrument_type": "talent_exchange",
+    "announcement_time": "2025-08-19T00:00:00Z",
+    "valid_time": {
+      "start": "2025-08-19T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-japan-canada-tech-accelerator",
+    "source_passage_ids": ["passage-canada-japan-canada-tech-accelerator"],
+    "source_anchor": {
+      "page": 173,
+      "footnote": 916
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-toronto-region-ai-business-catalyst",
+    "record_type": "government_or_institutional_action",
+    "label": "Toronto Region Board of Trade AI Business Catalyst (CAD2.4M)",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-10-22T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-22T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-toronto-region-ai-business-catalyst",
+    "source_passage_ids": ["passage-canada-toronto-region-ai-business-catalyst"],
+    "source_anchor": {
+      "page": 173,
+      "footnote": 917
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "2400000",
+        "currency": "CAD",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-fcac-gri-workshop",
+    "record_type": "government_or_institutional_action",
+    "label": "FCAC + Global Risk Institute AI workshop",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "workshop",
+    "instrument_type": "workshop",
+    "announcement_time": "2025-11-13T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-13T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-fcac-gri-workshop",
+    "source_passage_ids": ["passage-canada-fcac-gri-workshop"],
+    "source_anchor": {
+      "page": 173,
+      "footnote": 918
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-canada-germany-digital-alliance",
+    "record_type": "government_or_institutional_action",
+    "label": "Canada-Germany Digital Alliance joint statement",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2025-12-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-08T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-canada-germany-digital-alliance",
+    "source_passage_ids": ["passage-canada-canada-germany-digital-alliance"],
+    "source_anchor": {
+      "page": 174,
+      "footnote": 919
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-national-ai-compute-925m",
+    "record_type": "government_or_institutional_action",
+    "label": "CAD925.6M national AI compute capacity expansion",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-12-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-08T00:00:00Z"
+    },
+    "implementation_stage": "budgeted",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-national-ai-compute-925m",
+    "source_passage_ids": ["passage-canada-national-ai-compute-925m"],
+    "source_anchor": {
+      "page": 174,
+      "footnote": 919
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "925600000",
+        "currency": "CAD",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-g7-ai-adoption-roadmap-declaration",
+    "record_type": "government_or_institutional_action",
+    "label": "G7 Ministerial declaration on the AI Adoption Roadmap",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-g7-ai-adoption-roadmap-declaration",
+    "source_passage_ids": ["passage-canada-g7-ai-adoption-roadmap-declaration"],
+    "source_anchor": {
+      "page": 174,
+      "footnote": 920
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-sme-ai-adoption-blueprint",
+    "record_type": "government_or_institutional_action",
+    "label": "SME AI Adoption Blueprint (G7 statement)",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "policy_framework",
+    "instrument_type": "policy_framework",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-sme-ai-adoption-blueprint",
+    "source_passage_ids": ["passage-canada-sme-ai-adoption-blueprint"],
+    "source_anchor": {
+      "page": 174,
+      "footnote": 921
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-g7-sme-ai-toolkit",
+    "record_type": "government_or_institutional_action",
+    "label": "Toolkit for SMEs Deploying AI",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "toolkit",
+    "instrument_type": "toolkit",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-g7-sme-ai-toolkit",
+    "source_passage_ids": ["passage-canada-g7-sme-ai-toolkit"],
+    "source_anchor": {
+      "page": 174,
+      "footnote": 922
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-quebec-vector-amii-case-studies",
+    "record_type": "government_or_institutional_action",
+    "label": "Quebec AI / Vector / Amii comparative case-study report",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "case_studies",
+    "instrument_type": "case_studies",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-quebec-vector-amii-case-studies",
+    "source_passage_ids": ["passage-canada-quebec-vector-amii-case-studies"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 923
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-italy-canada-jag-declaration",
+    "record_type": "government_or_institutional_action",
+    "label": "Italy-Canada Joint Advisory Group declaration",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "declaration",
+    "instrument_type": "declaration",
+    "announcement_time": "2025-12-10T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-10T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-italy-canada-jag-declaration",
+    "source_passage_ids": ["passage-canada-italy-canada-jag-declaration"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 924
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-feddev-coralus-toronto-resiliency",
+    "record_type": "government_or_institutional_action",
+    "label": "CAD6.7M FedDev Ontario support for Toronto small business + Coralus",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-12-15T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-15T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-feddev-coralus-toronto-resiliency",
+    "source_passage_ids": ["passage-canada-feddev-coralus-toronto-resiliency"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 925
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "6700000",
+        "currency": "CAD",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-feddev-ai-growth-19m",
+    "record_type": "government_or_institutional_action",
+    "label": "CAD19M FedDev Ontario AI growth package",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-12-17T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-17T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-feddev-ai-growth-19m",
+    "source_passage_ids": ["passage-canada-feddev-ai-growth-19m"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 925
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "19000000",
+        "currency": "CAD",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-cannor-ai-entrepreneurship-centre",
+    "record_type": "government_or_institutional_action",
+    "label": "CAD2.8M CanNor AI-Driven Entrepreneurship and Business Support Centre",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "sme_support_centre",
+    "instrument_type": "sme_support_centre",
+    "announcement_time": "2026-02-06T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-06T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-cannor-ai-entrepreneurship-centre",
+    "source_passage_ids": ["passage-canada-cannor-ai-entrepreneurship-centre"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 926
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "2800000",
+        "currency": "CAD",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-canada-germany-jdi-sovereign-alliance",
+    "record_type": "government_or_institutional_action",
+    "label": "Canada-Germany Joint Declaration of Intent on AI + Sovereign Technology Alliance",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2026-02-14T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-14T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-canada-germany-jdi-sovereign-alliance",
+    "source_passage_ids": ["passage-canada-canada-germany-jdi-sovereign-alliance"],
+    "source_anchor": {
+      "page": 175,
+      "footnote": 927
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-acoa-regional-ai-initiative",
+    "record_type": "government_or_institutional_action",
+    "label": "ACOA Regional Artificial Intelligence Initiative (CAD200M to SMEs)",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2026-03-18T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-18T00:00:00Z"
+    },
+    "implementation_stage": "disbursing",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-acoa-regional-ai-initiative",
+    "source_passage_ids": ["passage-canada-acoa-regional-ai-initiative"],
+    "source_anchor": {
+      "page": 176,
+      "footnote": 928
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "200000000",
+        "currency": "CAD",
+        "bound": "up_to"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-nrc-emerging-tech-900m",
+    "record_type": "government_or_institutional_action",
+    "label": "NRC CAD900M emerging-technologies investment",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "research_investment",
+    "instrument_type": "research_investment",
+    "announcement_time": "2026-03-19T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-19T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-nrc-emerging-tech-900m",
+    "source_passage_ids": ["passage-canada-nrc-emerging-tech-900m"],
+    "source_anchor": {
+      "page": 176,
+      "footnote": 930
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "900000000",
+        "currency": "CAD",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-canada-canada-finland-joint-statement",
+    "record_type": "government_or_institutional_action",
+    "label": "Canada-Finland joint statement on sovereign technology and AI",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "joint_statement",
+    "instrument_type": "joint_statement",
+    "announcement_time": "2026-04-14T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-14T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-canada-finland-joint-statement",
+    "source_passage_ids": ["passage-canada-canada-finland-joint-statement"],
+    "source_anchor": {
+      "page": 176,
+      "footnote": 931
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-ai-sovereign-compute-infrastructure-program",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Sovereign Compute Infrastructure Program",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-04-15T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-15T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-ai-sovereign-compute-infrastructure-program",
+    "source_passage_ids": ["passage-canada-ai-sovereign-compute-infrastructure-program"],
+    "source_anchor": {
+      "page": 176,
+      "footnote": 932
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-canada-siemens-ai-manufacturing-centre",
+    "record_type": "government_or_institutional_action",
+    "label": "CAD23M Siemens Canada Global AI Manufacturing R&D Centre",
+    "actor_ids": ["actor-canada"],
+    "jurisdiction": "Canada",
+    "kind": "rd_investment",
+    "instrument_type": "rd_investment",
+    "announcement_time": "2026-04-21T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-21T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "ca-ai-sme",
+    "underlying_instrument_id": "ca-siemens-ai-manufacturing-centre",
+    "source_passage_ids": ["passage-canada-siemens-ai-manufacturing-centre"],
+    "source_anchor": {
+      "page": 176,
+      "footnote": 933
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "23000000",
+        "currency": "CAD",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-france-ai-pioneers",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Pioneers program (EUR3-8M per enterprise)",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-09-18T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-18T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-ai-pioneers",
+    "source_passage_ids": ["passage-france-ai-pioneers"],
+    "source_anchor": {
+      "page": 177,
+      "footnote": 934
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "8000000",
+        "currency": "EUR",
+        "bound": "up_to"
+      }
+    ]
+  },
+  {
+    "id": "action-france-osez-lia",
+    "record_type": "government_or_institutional_action",
+    "label": "Osez l'IA plan for SME AI adoption",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2025-09-18T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-18T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-osez-lia",
+    "source_passage_ids": ["passage-france-osez-lia"],
+    "source_anchor": {
+      "page": 177,
+      "footnote": 935
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-france-ai-academy-small-business",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Academy small-business revitalization plan",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2025-11-07T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-07T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-ai-academy-small-business",
+    "source_passage_ids": ["passage-france-ai-academy-small-business"],
+    "source_anchor": {
+      "page": 177,
+      "footnote": 936
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-france-piiec-ai-innovation",
+    "record_type": "government_or_institutional_action",
+    "label": "Important Projects of Common European Interest (PIIEC) AI framework",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-11-26T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-26T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-piiec-ai-innovation",
+    "source_passage_ids": ["passage-france-piiec-ai-innovation"],
+    "source_anchor": {
+      "page": 177,
+      "footnote": 937
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-france-data-center-sme-deployment",
+    "record_type": "government_or_institutional_action",
+    "label": "Data-center support for 52 SMEs deploying AI",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-01-30T00:00:00Z",
+    "valid_time": {
+      "start": "2026-01-30T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-data-center-sme-deployment",
+    "source_passage_ids": ["passage-france-data-center-sme-deployment"],
+    "source_anchor": {
+      "page": 178,
+      "footnote": 938
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-france-bull-acquisition",
+    "record_type": "government_or_institutional_action",
+    "label": "EUR404M state acquisition of AI computing brand Bull",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-03-31T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-31T00:00:00Z"
+    },
+    "implementation_stage": "contracted",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-bull-acquisition",
+    "source_passage_ids": ["passage-france-bull-acquisition"],
+    "source_anchor": {
+      "page": 178,
+      "footnote": 939
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "404000000",
+        "currency": "EUR",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-france-amd-compute-loi",
+    "record_type": "government_or_institutional_action",
+    "label": "France-AMD letter of intent on AI compute + Alice Recoque supercomputer",
+    "actor_ids": ["actor-france"],
+    "jurisdiction": "France",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-04-16T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-16T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "fr-ai-sme",
+    "underlying_instrument_id": "fr-amd-compute-loi",
+    "source_passage_ids": ["passage-france-amd-compute-loi"],
+    "source_anchor": {
+      "page": 178,
+      "footnote": 940
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-bmz-data-strategy",
+    "record_type": "government_or_institutional_action",
+    "label": "BMZ Data Strategy (based on Sept 2024 data)",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2025-09-30T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-30T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-bmz-data-strategy",
+    "source_passage_ids": ["passage-germany-bmz-data-strategy"],
+    "source_anchor": {
+      "page": 179,
+      "footnote": 941
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-mittelstand-digital-congress",
+    "record_type": "government_or_institutional_action",
+    "label": "Mittelstand Digital Congress 2025",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2025-11-13T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-13T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-mittelstand-digital-congress",
+    "source_passage_ids": ["passage-germany-mittelstand-digital-congress"],
+    "source_anchor": {
+      "page": 179,
+      "footnote": 942
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-european-digital-sovereignty-summit",
+    "record_type": "government_or_institutional_action",
+    "label": "European Summit on Digital Sovereignty (Berlin)",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "conference",
+    "instrument_type": "conference",
+    "announcement_time": "2025-11-18T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-18T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "joint",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-european-digital-sovereignty-summit",
+    "source_passage_ids": ["passage-germany-european-digital-sovereignty-summit"],
+    "source_anchor": {
+      "page": 179,
+      "footnote": 943
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-canada-germany-digital-alliance",
+    "record_type": "government_or_institutional_action",
+    "label": "Canada-Germany Digital Alliance joint statement",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2025-12-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-08T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-canada-germany-digital-alliance",
+    "source_passage_ids": ["passage-germany-canada-germany-digital-alliance"],
+    "source_anchor": {
+      "page": 179,
+      "footnote": 944
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-sme-ai-adoption-blueprint",
+    "record_type": "government_or_institutional_action",
+    "label": "SME AI Adoption Blueprint (G7 statement)",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "policy_framework",
+    "instrument_type": "policy_framework",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-sme-ai-adoption-blueprint",
+    "source_passage_ids": ["passage-germany-sme-ai-adoption-blueprint"],
+    "source_anchor": {
+      "page": 179,
+      "footnote": 945
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-g7-sme-ai-toolkit",
+    "record_type": "government_or_institutional_action",
+    "label": "Toolkit for SMEs Deploying AI",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "toolkit",
+    "instrument_type": "toolkit",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-g7-sme-ai-toolkit",
+    "source_passage_ids": ["passage-germany-g7-sme-ai-toolkit"],
+    "source_anchor": {
+      "page": 180,
+      "footnote": 946
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-eif-german-equity",
+    "record_type": "government_or_institutional_action",
+    "label": "EIF German Equity program (EUR1.6B for startups + SMEs)",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "financing_program",
+    "instrument_type": "financing_program",
+    "announcement_time": "2026-01-13T00:00:00Z",
+    "valid_time": {
+      "start": "2026-01-13T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-eif-german-equity",
+    "source_passage_ids": ["passage-germany-eif-german-equity"],
+    "source_anchor": {
+      "page": 180,
+      "footnote": 947
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "1600000000",
+        "currency": "EUR",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-germany-canada-germany-jdi-sovereign-alliance",
+    "record_type": "government_or_institutional_action",
+    "label": "Canada-Germany Joint Declaration of Intent on AI + Sovereign Technology Alliance",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2026-02-14T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-14T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "joint",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-canada-germany-jdi-sovereign-alliance",
+    "source_passage_ids": ["passage-germany-canada-germany-jdi-sovereign-alliance"],
+    "source_anchor": {
+      "page": 180,
+      "footnote": 948
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-india-germany-ai-pact",
+    "record_type": "government_or_institutional_action",
+    "label": "India-Germany AI Pact",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2026-02-18T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-18T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "joint",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-india-germany-ai-pact",
+    "source_passage_ids": ["passage-germany-india-germany-ai-pact"],
+    "source_anchor": {
+      "page": 180,
+      "footnote": 949
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-ai-funding-guideline-consultation",
+    "record_type": "government_or_institutional_action",
+    "label": "Public consultation on an AI funding guideline",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "consultation",
+    "instrument_type": "consultation",
+    "announcement_time": "2026-03-02T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-02T00:00:00Z"
+    },
+    "implementation_stage": "proposed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-ai-funding-guideline-consultation",
+    "source_passage_ids": ["passage-germany-ai-funding-guideline-consultation"],
+    "source_anchor": {
+      "page": 181,
+      "footnote": 950
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-germany-zukunftstag-mittelstand",
+    "record_type": "government_or_institutional_action",
+    "label": "Zukunftstag Mittelstand 2026",
+    "actor_ids": ["actor-germany"],
+    "jurisdiction": "Germany",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2026-04-15T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-15T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "de-ai-sme",
+    "underlying_instrument_id": "de-zukunftstag-mittelstand",
+    "source_passage_ids": ["passage-germany-zukunftstag-mittelstand"],
+    "source_anchor": {
+      "page": 181,
+      "footnote": 951
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-congo-mou-startups",
+    "record_type": "government_or_institutional_action",
+    "label": "MoU with the Republic of Congo on AI for startups",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2025-06-19T00:00:00Z",
+    "valid_time": {
+      "start": "2025-06-19T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-congo-mou-startups",
+    "source_passage_ids": ["passage-italy-congo-mou-startups"],
+    "source_anchor": {
+      "page": 181,
+      "footnote": 952
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-ai-hub-sustainable-development",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Hub for Sustainable Development (Mattei Plan)",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-06-20T00:00:00Z",
+    "valid_time": {
+      "start": "2025-06-20T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "implementing_partner",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-ai-hub-sustainable-development",
+    "source_passage_ids": ["passage-italy-ai-hub-sustainable-development"],
+    "source_anchor": {
+      "page": 181,
+      "footnote": 953
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-ai4industry-virkkunen-meeting",
+    "record_type": "government_or_institutional_action",
+    "label": "Urso-Virkkunen meeting on AI4Industry",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "meeting",
+    "instrument_type": "meeting",
+    "announcement_time": "2025-07-17T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-17T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-ai4industry-virkkunen-meeting",
+    "source_passage_ids": ["passage-italy-ai4industry-virkkunen-meeting"],
+    "source_anchor": {
+      "page": 182,
+      "footnote": 954
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-smau-2025-innovation-award",
+    "record_type": "government_or_institutional_action",
+    "label": "SMAU 2025 Innovation Award",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "award",
+    "instrument_type": "award",
+    "announcement_time": "2025-11-07T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-07T00:00:00Z"
+    },
+    "implementation_stage": "completed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-smau-2025-innovation-award",
+    "source_passage_ids": ["passage-italy-smau-2025-innovation-award"],
+    "source_anchor": {
+      "page": 182,
+      "footnote": 955
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-ai-match-pilot",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Match national pilot programme",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2025-11-10T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-10T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "implementing_partner",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-ai-match-pilot",
+    "source_passage_ids": ["passage-italy-ai-match-pilot"],
+    "source_anchor": {
+      "page": 182,
+      "footnote": 956
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-lobito-corridor-dialogue",
+    "record_type": "government_or_institutional_action",
+    "label": "Lobito corridor AI infrastructure dialogue",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "dialogue",
+    "instrument_type": "dialogue",
+    "announcement_time": "2025-11-24T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-24T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-lobito-corridor-dialogue",
+    "source_passage_ids": ["passage-italy-lobito-corridor-dialogue"],
+    "source_anchor": {
+      "page": 182,
+      "footnote": 957
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-it4lia-ai-factory",
+    "record_type": "government_or_institutional_action",
+    "label": "IT4LIA AI Factory operational opening",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-09-05T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-05T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "implementing_partner",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-it4lia-ai-factory",
+    "source_passage_ids": ["passage-italy-it4lia-ai-factory"],
+    "source_anchor": {
+      "page": 182,
+      "footnote": 958
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-italy-canada-jag-declaration",
+    "record_type": "government_or_institutional_action",
+    "label": "Italy-Canada Joint Advisory Group declaration",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2025-12-10T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-10T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-italy-canada-jag-declaration",
+    "source_passage_ids": ["passage-italy-italy-canada-jag-declaration"],
+    "source_anchor": {
+      "page": 183,
+      "footnote": 959
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-nairobi-harmonic-africa",
+    "record_type": "government_or_institutional_action",
+    "label": "Harmonic Africa Startup Acceleration Program (EUR50M)",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "financing_program",
+    "instrument_type": "financing_program",
+    "announcement_time": "2026-02-10T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-10T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "implementing_partner",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-nairobi-harmonic-africa",
+    "source_passage_ids": ["passage-italy-nairobi-harmonic-africa"],
+    "source_anchor": {
+      "page": 183,
+      "footnote": 960
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "50000000",
+        "currency": "EUR",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-italy-innoconnect-greece-italy",
+    "record_type": "government_or_institutional_action",
+    "label": "InnoConnect SME-centred Interreg project",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2026-03-16T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-16T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-innoconnect-greece-italy",
+    "source_passage_ids": ["passage-italy-innoconnect-greece-italy"],
+    "source_anchor": {
+      "page": 183,
+      "footnote": 961
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-italy-ai4i-accenture-partnership",
+    "record_type": "government_or_institutional_action",
+    "label": "AI4I-Accenture strategic partnership",
+    "actor_ids": ["actor-italy"],
+    "jurisdiction": "Italy",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2026-03-24T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-24T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "it-ai-sme",
+    "underlying_instrument_id": "it-ai4i-accenture-partnership",
+    "source_passage_ids": ["passage-italy-ai4i-accenture-partnership"],
+    "source_anchor": {
+      "page": 183,
+      "footnote": 962
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-ai-act",
+    "record_type": "government_or_institutional_action",
+    "label": "Act on Promotion of R&D and Utilization of AI-related Technology",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "legislation",
+    "instrument_type": "legislation",
+    "announcement_time": "2025-09-01T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-01T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-ai-act",
+    "source_passage_ids": ["passage-japan-ai-act"],
+    "source_anchor": {
+      "page": 184,
+      "footnote": 963
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-ai-strategy-headquarters",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Strategy Headquarters",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "institution",
+    "instrument_type": "institution",
+    "announcement_time": "2025-09-11T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-11T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-ai-strategy-headquarters",
+    "source_passage_ids": ["passage-japan-ai-strategy-headquarters"],
+    "source_anchor": {
+      "page": 184,
+      "footnote": 964
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-oecd-labour-market-report",
+    "record_type": "government_or_institutional_action",
+    "label": "OECD report on AI in Japan's labour market",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "report",
+    "instrument_type": "report",
+    "announcement_time": "2025-11-28T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-28T00:00:00Z"
+    },
+    "implementation_stage": "completed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "external",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-oecd-labour-market-report",
+    "source_passage_ids": ["passage-japan-oecd-labour-market-report"],
+    "source_anchor": {
+      "page": 184,
+      "footnote": 965
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-sme-ai-adoption-blueprint",
+    "record_type": "government_or_institutional_action",
+    "label": "SME AI Adoption Blueprint (G7 statement)",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "policy_framework",
+    "instrument_type": "policy_framework",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-sme-ai-adoption-blueprint",
+    "source_passage_ids": ["passage-japan-sme-ai-adoption-blueprint"],
+    "source_anchor": {
+      "page": 184,
+      "footnote": 966
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-g7-sme-ai-toolkit",
+    "record_type": "government_or_institutional_action",
+    "label": "Toolkit for SMEs Deploying AI",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "toolkit",
+    "instrument_type": "toolkit",
+    "announcement_time": "2025-12-09T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-09T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "collective",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-g7-sme-ai-toolkit",
+    "source_passage_ids": ["passage-japan-g7-sme-ai-toolkit"],
+    "source_anchor": {
+      "page": 185,
+      "footnote": 967
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-first-basic-ai-plan",
+    "record_type": "government_or_institutional_action",
+    "label": "First basic plan on AI",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2025-12-22T00:00:00Z",
+    "valid_time": {
+      "start": "2025-12-22T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-first-basic-ai-plan",
+    "source_passage_ids": ["passage-japan-first-basic-ai-plan"],
+    "source_anchor": {
+      "page": 185,
+      "footnote": 968
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-japan-gennai-government-pilot",
+    "record_type": "government_or_institutional_action",
+    "label": "GENNAI government AI system pilot",
+    "actor_ids": ["actor-japan"],
+    "jurisdiction": "Japan",
+    "kind": "pilot",
+    "instrument_type": "pilot",
+    "announcement_time": "2026-03-06T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-06T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "jp-ai-sme",
+    "underlying_instrument_id": "jp-gennai-government-pilot",
+    "source_passage_ids": ["passage-japan-gennai-government-pilot"],
+    "source_anchor": {
+      "page": 185,
+      "footnote": 969
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-made-in-uk-awards",
+    "record_type": "government_or_institutional_action",
+    "label": "Made in the UK, Sold to the World Awards",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "award",
+    "instrument_type": "award",
+    "announcement_time": "2025-06-24T00:00:00Z",
+    "valid_time": {
+      "start": "2025-06-24T00:00:00Z"
+    },
+    "implementation_stage": "completed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-made-in-uk-awards",
+    "source_passage_ids": ["passage-united_kingdom-made-in-uk-awards"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 970
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-regulatory-innovation-office",
+    "record_type": "government_or_institutional_action",
+    "label": "Regulatory Innovation Office AI regulation work",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "regulation",
+    "instrument_type": "regulation",
+    "announcement_time": "2025-07-01T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-01T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-regulatory-innovation-office",
+    "source_passage_ids": ["passage-united_kingdom-regulatory-innovation-office"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 971
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-compute-roadmap",
+    "record_type": "government_or_institutional_action",
+    "label": "Compute Roadmap (AI Research Resource 20x)",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-07-17T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-17T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-compute-roadmap",
+    "source_passage_ids": ["passage-united_kingdom-compute-roadmap"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 972
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-uk-us-tech-prosperity-deal",
+    "record_type": "government_or_institutional_action",
+    "label": "UK-US Tech Prosperity Deal + North East AI Growth Zone",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "partnership",
+    "instrument_type": "partnership",
+    "announcement_time": "2025-09-16T00:00:00Z",
+    "valid_time": {
+      "start": "2025-09-16T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-uk-us-tech-prosperity-deal",
+    "source_passage_ids": ["passage-united_kingdom-uk-us-tech-prosperity-deal"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 973
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-regional-tech-booster",
+    "record_type": "government_or_institutional_action",
+    "label": "Regional Tech Booster programme",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-10-01T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-01T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-regional-tech-booster",
+    "source_passage_ids": ["passage-united_kingdom-regional-tech-booster"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 974
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-local-innovation-partnerships-fund",
+    "record_type": "government_or_institutional_action",
+    "label": "Local Innovation Partnerships Fund (GBP20M each for AI SMEs)",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2025-10-19T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-19T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-local-innovation-partnerships-fund",
+    "source_passage_ids": ["passage-united_kingdom-local-innovation-partnerships-fund"],
+    "source_anchor": {
+      "page": 186,
+      "footnote": 975
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "20000000",
+        "currency": "GBP",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-united_kingdom-ai-growth-lab",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Growth Lab regulatory pilot",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "pilot",
+    "instrument_type": "pilot",
+    "announcement_time": "2025-10-21T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-21T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-ai-growth-lab",
+    "source_passage_ids": ["passage-united_kingdom-ai-growth-lab"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 976
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-ai-skills-framework",
+    "record_type": "government_or_institutional_action",
+    "label": "Skills England AI Skills Framework, Adoption Pathway and Employer Checklist",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "toolkit",
+    "instrument_type": "toolkit",
+    "announcement_time": "2025-10-29T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-29T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-ai-skills-framework",
+    "source_passage_ids": ["passage-united_kingdom-ai-skills-framework"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 977
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-dawn-supercomputer",
+    "record_type": "government_or_institutional_action",
+    "label": "GBP36M Cambridge DAWN supercomputer injection",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-01-26T00:00:00Z",
+    "valid_time": {
+      "start": "2026-01-26T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-dawn-supercomputer",
+    "source_passage_ids": ["passage-united_kingdom-dawn-supercomputer"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 978
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "36000000",
+        "currency": "GBP",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-united_kingdom-free-ai-foundations-training",
+    "record_type": "government_or_institutional_action",
+    "label": "Free AI foundations training (2M+ SME employees)",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2026-01-28T00:00:00Z",
+    "valid_time": {
+      "start": "2026-01-28T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-free-ai-foundations-training",
+    "source_passage_ids": ["passage-united_kingdom-free-ai-foundations-training"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 979
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_kingdom-youth-employment-ai-apprenticeship",
+    "record_type": "government_or_institutional_action",
+    "label": "GBP1B youth employment AI apprenticeship",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "employment_program",
+    "instrument_type": "employment_program",
+    "announcement_time": "2026-03-16T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-16T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-youth-employment-ai-apprenticeship",
+    "source_passage_ids": ["passage-united_kingdom-youth-employment-ai-apprenticeship"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 980
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "1000000000",
+        "currency": "GBP",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-united_kingdom-ai-upskilling-challenge-fund",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Upskilling Challenge Fund (GBP800k) + Healthcare Living Lab",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2026-03-25T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-25T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-ai-upskilling-challenge-fund",
+    "source_passage_ids": ["passage-united_kingdom-ai-upskilling-challenge-fund"],
+    "source_anchor": {
+      "page": 187,
+      "footnote": 981
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "800000",
+        "currency": "GBP",
+        "bound": "exact"
+      }
+    ]
+  },
+  {
+    "id": "action-united_kingdom-frontier-ai-discovery",
+    "record_type": "government_or_institutional_action",
+    "label": "Frontier AI Discovery funding competition (GBP2.5M)",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2026-04-14T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-14T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-frontier-ai-discovery",
+    "source_passage_ids": ["passage-united_kingdom-frontier-ai-discovery"],
+    "source_anchor": {
+      "page": 188,
+      "footnote": 982
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "2500000",
+        "currency": "GBP",
+        "bound": "up_to"
+      }
+    ]
+  },
+  {
+    "id": "action-united_kingdom-sovereign-ai-initiative",
+    "record_type": "government_or_institutional_action",
+    "label": "GBP500M Sovereign AI initiative",
+    "actor_ids": ["actor-united_kingdom"],
+    "jurisdiction": "United Kingdom",
+    "kind": "funding_program",
+    "instrument_type": "funding_program",
+    "announcement_time": "2026-04-16T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-16T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "uk-ai-sme",
+    "underlying_instrument_id": "uk-sovereign-ai-initiative",
+    "source_passage_ids": ["passage-united_kingdom-sovereign-ai-initiative"],
+    "source_anchor": {
+      "page": 188,
+      "footnote": 983
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "500000000",
+        "currency": "GBP",
+        "bound": "up_to"
+      }
+    ]
+  },
+  {
+    "id": "action-united_states-ai-technology-stack-export-eo",
+    "record_type": "government_or_institutional_action",
+    "label": "Executive Order: Promoting the Export of the American Technology Stack",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "executive_order",
+    "instrument_type": "executive_order",
+    "announcement_time": "2025-07-23T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-23T00:00:00Z"
+    },
+    "implementation_stage": "authorized",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-ai-technology-stack-export-eo",
+    "source_passage_ids": ["passage-united_states-ai-technology-stack-export-eo"],
+    "source_anchor": {
+      "page": 188,
+      "footnote": 984
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_states-americas-ai-action-plan",
+    "record_type": "government_or_institutional_action",
+    "label": "America's AI Action Plan",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2025-07-23T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-23T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-americas-ai-action-plan",
+    "source_passage_ids": ["passage-united_states-americas-ai-action-plan"],
+    "source_anchor": {
+      "page": 188,
+      "footnote": 985
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_states-genesis-mission",
+    "record_type": "government_or_institutional_action",
+    "label": "Genesis Mission AI platform",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2025-11-24T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-24T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-genesis-mission",
+    "source_passage_ids": ["passage-united_states-genesis-mission"],
+    "source_anchor": {
+      "page": 189,
+      "footnote": 986
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_states-dol-ai-literacy-framework",
+    "record_type": "government_or_institutional_action",
+    "label": "Department of Labor AI Literacy Framework",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "training_program",
+    "instrument_type": "training_program",
+    "announcement_time": "2026-02-13T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-13T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-dol-ai-literacy-framework",
+    "source_passage_ids": ["passage-united_states-dol-ai-literacy-framework"],
+    "source_anchor": {
+      "page": 189,
+      "footnote": 987
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_states-india-summit-world-bank-fund",
+    "record_type": "government_or_institutional_action",
+    "label": "India AI Impact Summit initiatives + World Bank SME fund",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "financing_program",
+    "instrument_type": "financing_program",
+    "announcement_time": "2026-02-20T00:00:00Z",
+    "valid_time": {
+      "start": "2026-02-20T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "joint",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-india-summit-world-bank-fund",
+    "source_passage_ids": ["passage-united_states-india-summit-world-bank-fund"],
+    "source_anchor": {
+      "page": 189,
+      "footnote": 988
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-united_states-national-policy-framework-ai",
+    "record_type": "government_or_institutional_action",
+    "label": "National Policy Framework for Artificial Intelligence",
+    "actor_ids": ["actor-united_states"],
+    "jurisdiction": "United States",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2026-03-20T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-20T00:00:00Z"
+    },
+    "implementation_stage": "proposed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "general",
+    "attribution": "unilateral",
+    "program_family_id": "us-ai-sme",
+    "underlying_instrument_id": "us-national-policy-framework-ai",
+    "source_passage_ids": ["passage-united_states-national-policy-framework-ai"],
+    "source_anchor": {
+      "page": 189,
+      "footnote": 989
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-ai-act-advisory-forum",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Act Advisory Forum call",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "advisory_forum",
+    "instrument_type": "advisory_forum",
+    "announcement_time": "2025-07-17T00:00:00Z",
+    "valid_time": {
+      "start": "2025-07-17T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-ai-act-advisory-forum",
+    "source_passage_ids": ["passage-european_union-ai-act-advisory-forum"],
+    "source_anchor": {
+      "page": 190,
+      "footnote": 990
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-apply-ai-strategy",
+    "record_type": "government_or_institutional_action",
+    "label": "Apply AI Strategy",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "strategy_document",
+    "instrument_type": "strategy_document",
+    "announcement_time": "2025-10-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-08T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-apply-ai-strategy",
+    "source_passage_ids": ["passage-european_union-apply-ai-strategy"],
+    "source_anchor": {
+      "page": 190,
+      "footnote": 991
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-ai-in-science-raise",
+    "record_type": "government_or_institutional_action",
+    "label": "AI in Science strategy + RAISE (EUR600M Horizon compute)",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "compute_funding_program",
+    "instrument_type": "compute_funding_program",
+    "announcement_time": "2025-10-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-08T00:00:00Z"
+    },
+    "implementation_stage": "funded",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-ai-in-science-raise",
+    "source_passage_ids": ["passage-european_union-ai-in-science-raise"],
+    "source_anchor": {
+      "page": 190,
+      "footnote": 992
+    },
+    "status": "accepted",
+    "amounts": [
+      {
+        "value": "600000000",
+        "currency": "EUR",
+        "bound": "at_least"
+      }
+    ]
+  },
+  {
+    "id": "action-european_union-ai-act-service-desk",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Act Service Desk and Single Information Platform",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "toolkit",
+    "instrument_type": "toolkit",
+    "announcement_time": "2025-10-08T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-08T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-ai-act-service-desk",
+    "source_passage_ids": ["passage-european_union-ai-act-service-desk"],
+    "source_anchor": {
+      "page": 190,
+      "footnote": 993
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-ai-factories-six-new",
+    "record_type": "government_or_institutional_action",
+    "label": "Six new AI Factories",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-10-10T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-10T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-ai-factories-six-new",
+    "source_passage_ids": ["passage-european_union-ai-factories-six-new"],
+    "source_anchor": {
+      "page": 190,
+      "footnote": 994
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-seventh-ai-pact-webinar",
+    "record_type": "government_or_institutional_action",
+    "label": "Seventh AI Pact webinar for SMEs",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "webinar",
+    "instrument_type": "webinar",
+    "announcement_time": "2025-10-21T00:00:00Z",
+    "valid_time": {
+      "start": "2025-10-21T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-seventh-ai-pact-webinar",
+    "source_passage_ids": ["passage-european_union-seventh-ai-pact-webinar"],
+    "source_anchor": {
+      "page": 191,
+      "footnote": 995
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-european-data-union-strategy",
+    "record_type": "government_or_institutional_action",
+    "label": "European Data Union Strategy",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "data_infrastructure",
+    "instrument_type": "data_infrastructure",
+    "announcement_time": "2025-11-19T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-19T00:00:00Z"
+    },
+    "implementation_stage": "launched",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-european-data-union-strategy",
+    "source_passage_ids": ["passage-european_union-european-data-union-strategy"],
+    "source_anchor": {
+      "page": 191,
+      "footnote": 996
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-apply-ai-manufacturing-tef",
+    "record_type": "government_or_institutional_action",
+    "label": "Apply AI manufacturing actions + Testing and Experimentation Facilities",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2025-11-28T00:00:00Z",
+    "valid_time": {
+      "start": "2025-11-28T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-apply-ai-manufacturing-tef",
+    "source_passage_ids": ["passage-european_union-apply-ai-manufacturing-tef"],
+    "source_anchor": {
+      "page": 191,
+      "footnote": 997
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-eesc-commercialization-call",
+    "record_type": "government_or_institutional_action",
+    "label": "EESC call for AI commercialization measures",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "advisory_opinion",
+    "instrument_type": "advisory_opinion",
+    "announcement_time": "2026-01-21T00:00:00Z",
+    "valid_time": {
+      "start": "2026-01-21T00:00:00Z"
+    },
+    "implementation_stage": "proposed",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "indirect",
+    "attribution": "external",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-eesc-commercialization-call",
+    "source_passage_ids": ["passage-european_union-eesc-commercialization-call"],
+    "source_anchor": {
+      "page": 191,
+      "footnote": 998
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-apply-ai-framework-innovation-hubs",
+    "record_type": "government_or_institutional_action",
+    "label": "Apply AI Strategy framework + European Digital Innovation Hubs",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "policy_framework",
+    "instrument_type": "policy_framework",
+    "announcement_time": "2026-03-27T00:00:00Z",
+    "valid_time": {
+      "start": "2026-03-27T00:00:00Z"
+    },
+    "implementation_stage": "operational",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "explicit",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-apply-ai-framework-innovation-hubs",
+    "source_passage_ids": ["passage-european_union-apply-ai-framework-innovation-hubs"],
+    "source_anchor": {
+      "page": 191,
+      "footnote": 999
+    },
+    "status": "accepted"
+  },
+  {
+    "id": "action-european_union-ai-continent-action-plan",
+    "record_type": "government_or_institutional_action",
+    "label": "AI Continent Action Plan",
+    "actor_ids": ["actor-european_union"],
+    "jurisdiction": "European Union",
+    "kind": "compute_infrastructure",
+    "instrument_type": "compute_infrastructure",
+    "announcement_time": "2026-04-09T00:00:00Z",
+    "valid_time": {
+      "start": "2026-04-09T00:00:00Z"
+    },
+    "implementation_stage": "announced",
+    "beneficiaries": ["SME"],
+    "beneficiary_targeting": "materially_inclusive",
+    "attribution": "unilateral",
+    "program_family_id": "eu-ai-sme",
+    "underlying_instrument_id": "eu-ai-continent-action-plan",
+    "source_passage_ids": ["passage-european_union-ai-continent-action-plan"],
+    "source_anchor": {
+      "page": 192,
+      "footnote": 1000
+    },
+    "status": "accepted"
+  }
+]

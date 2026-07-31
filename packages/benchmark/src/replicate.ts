@@ -21,7 +21,7 @@ import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { sha256Canonical } from "@writ/provenance";
 import { verifyReceipt } from "@writ/evaluator";
-import { BENCHMARK_DIR, EVIDENCE_DIR, PROFILES_DIR } from "./paths.js";
+import { EVIDENCE_DIR, G7_CORPUS_DIR, PROFILES_DIR } from "./paths.js";
 import { runBenchmark } from "./run.js";
 
 export interface Check {
@@ -78,7 +78,7 @@ export function replicate(): Check[] {
       const docVersions = snapshot.document_versions as { uri?: string; sha256: string }[];
       const doc = docVersions[0];
       if (doc) {
-        const pdfPath = join(BENCHMARK_DIR, "sources", "g7-2025-ai-sme-chapter.pdf");
+        const pdfPath = join(G7_CORPUS_DIR, "sources", "g7-2025-ai-sme-chapter.pdf");
         try {
           const bytes = readFileSync(pdfPath);
           const raw = `sha256:${createHash("sha256").update(bytes).digest("hex")}`;

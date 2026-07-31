@@ -43,10 +43,8 @@ def test_g20_rio_adapter_is_implemented() -> None:
 
 
 def test_rio_records_stay_out_of_the_data_tree() -> None:
-    # Normalized records and raw bytes live in the Neon store and the benchmark tree,
-    # never in data/raw/g20 or data/normalized/g20, which stay documentation-only.
+    # Authoritative records and source bytes live in the multilateral corpus.
+    # data/ is reserved for generated compatibility cache/output.
     root = Path(__file__).resolve().parents[2]
-    assert [path.name for path in (root / "data/raw/g20").iterdir()] == ["README.md"]
-    assert [path.name for path in (root / "data/normalized/g20").iterdir()] == [
-        "README.md"
-    ]
+    assert not (root / "data/raw/g20").exists()
+    assert not (root / "data/normalized/g20").exists()

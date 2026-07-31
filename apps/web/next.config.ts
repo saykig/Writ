@@ -22,35 +22,37 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   // Trace the frozen repo data into the serverless bundle so the API routes work
   // on Vercel as well as locally. Two kinds of runtime file reads must ship:
-  //   1. lib/repo.ts reads examples/ and benchmark/2025-ai-sme/ (relative to the
-  //      repo root it discovers from process.cwd()).
+  //   1. lib/repo.ts reads examples/ plus the separated G7 corpus and benchmark.
   //   2. The @writ/* packages read data relative to their own module via
   //      import.meta.url — @writ/domain loads packages/domain/schemas/*.json
   //      for AJV validation (triggered by every compile/parse/evaluate), and
-  //      @writ/benchmark reads examples/2025-ai-sme-resolved.writ plus
-  //      benchmark/2025-ai-sme/. Miss any of these and the route 500s with ENOENT.
+  //      @writ/benchmark reads examples/2025-ai-sme-resolved.writ plus those
+  //      separated data paths. Miss any of these and the route 500s with ENOENT.
   outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
     "/api/**": [
       "../../examples/**",
-      "../../benchmark/2025-ai-sme/**",
+      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
       "../../conformance/**",
     ],
     "/playground": [
       "../../examples/**",
-      "../../benchmark/2025-ai-sme/**",
+      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
     ],
     "/benchmark": [
-      "../../benchmark/2025-ai-sme/**",
-      "../../benchmark/2024-rio-g20/normalized/**",
-      "../../data/manifests/g20/2024-rio/**",
+      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../corpora/multilateral/g20/2024-rio/**",
+      "../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
     ],
     "/how-it-works": [
       "../../examples/**",
-      "../../benchmark/2025-ai-sme/**",
+      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
       "../../conformance/**",
     ],

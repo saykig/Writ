@@ -1,0 +1,82 @@
+[
+  {
+    "id": "actor-canada",
+    "record_type": "political_actor",
+    "name": "Canada",
+    "short_code": "ca",
+    "marker_coordinates": [-75.6972, 45.4215],
+    "marker_anchor": "Ottawa",
+    "analyst": "Mai Linh Pham Dac",
+    "source_section_page": 173
+  },
+  {
+    "id": "actor-france",
+    "record_type": "political_actor",
+    "name": "France",
+    "short_code": "fr",
+    "marker_coordinates": [2.3522, 48.8566],
+    "marker_anchor": "Paris",
+    "analyst": "Mai Linh Pham Dac",
+    "source_section_page": 177
+  },
+  {
+    "id": "actor-germany",
+    "record_type": "political_actor",
+    "name": "Germany",
+    "short_code": "de",
+    "marker_coordinates": [13.405, 52.52],
+    "marker_anchor": "Berlin",
+    "analyst": "Ece Onal",
+    "source_section_page": 179
+  },
+  {
+    "id": "actor-italy",
+    "record_type": "political_actor",
+    "name": "Italy",
+    "short_code": "it",
+    "marker_coordinates": [12.4964, 41.9028],
+    "marker_anchor": "Rome",
+    "analyst": "Anson Hu",
+    "source_section_page": 181
+  },
+  {
+    "id": "actor-japan",
+    "record_type": "political_actor",
+    "name": "Japan",
+    "short_code": "jp",
+    "marker_coordinates": [139.6917, 35.6895],
+    "marker_anchor": "Tokyo",
+    "analyst": "Ece Onal",
+    "source_section_page": 184
+  },
+  {
+    "id": "actor-united_kingdom",
+    "record_type": "political_actor",
+    "name": "United Kingdom",
+    "short_code": "uk",
+    "marker_coordinates": [-0.1276, 51.5072],
+    "marker_anchor": "London",
+    "analyst": "Anson Hu",
+    "source_section_page": 185
+  },
+  {
+    "id": "actor-united_states",
+    "record_type": "political_actor",
+    "name": "United States",
+    "short_code": "us",
+    "marker_coordinates": [-77.0369, 38.9072],
+    "marker_anchor": "Washington, D.C.",
+    "analyst": "Jeanne Brownewell",
+    "source_section_page": 188
+  },
+  {
+    "id": "actor-european_union",
+    "record_type": "political_actor",
+    "name": "European Union",
+    "short_code": "eu",
+    "marker_coordinates": [4.3517, 50.8503],
+    "marker_anchor": "Brussels",
+    "analyst": "Jeanne Brownewell",
+    "source_section_page": 190
+  }
+]

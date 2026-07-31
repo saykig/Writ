@@ -18,7 +18,7 @@ import {
   snapshotPath,
 } from "../src/index.js";
 
-// Expected reviewed strong/weak tallies (benchmark/2025-ai-sme/reviewed-tally.md).
+// Expected reviewed strong/weak tallies from the evaluator benchmark fixture.
 const TALLY: Record<string, { strong: number; weak: number; published: "-1" | "0" | "+1" }> = {
   canada: { strong: 16, weak: 4, published: "+1" },
   france: { strong: 7, weak: 0, published: "+1" },
@@ -261,7 +261,10 @@ describe("discrepancy ledger is well-formed", () => {
   test("the persisted ledger on disk matches a fresh run", () => {
     const onDisk = loadJson<typeof ledger>(
       fileURLToPath(
-        new URL("../../../benchmark/2025-ai-sme/discrepancy-ledger.json", import.meta.url),
+        new URL(
+          "../../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json",
+          import.meta.url,
+        ),
       ),
     );
     expect(onDisk.cells).toEqual(ledger.cells as never);

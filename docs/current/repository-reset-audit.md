@@ -35,18 +35,18 @@ Generated caches, virtual environments, package installations, and `.git` intern
 │   ├── ingest/
 │   └── web/
 ├── benchmark/
-│   ├── 2024-rio-g20/
-│   ├── 2025-ai-sme/
 │   └── fatf-mutual-evaluation/
+├── benchmarks/
+│   └── evaluator/
 ├── codex-tasks/
 ├── config/
 ├── conformance/
 │   └── cases/
+├── corpora/
+│   ├── jurisdictions/
+│   └── multilateral/
 ├── data/
-│   ├── benchmarks/
-│   ├── manifests/
-│   ├── normalized/
-│   └── raw/
+│   └── benchmarks/
 ├── db/
 │   └── migrations/
 ├── docs/
@@ -95,7 +95,7 @@ artifact can still be frozen and reviewable; it is not the place where later cor
 | Knowledge material | Authoritative or source-grounded input | Generated or derived copies | Current consumers and checks |
 | --- | --- | --- | --- |
 | EU and US AI-governance corpora | The hash-pinned reviewed input is preserved at `archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml`; independent active records live at `corpora/jurisdictions/{eu,us}/ai-governance/`. | The archive retains the original normalized comparison outputs, methodology, provenance, and snapshots. Active corpora are deterministic projections from `scripts/migrate_eu_us_corpora.py`; web comparison views read the archived saved query. | Corpus migration tests and generator drift checks; web demo, memo, globe, Playground toolchain, and web tests. |
-| G20 Rio 2024 | Frozen report excerpts in `benchmark/2024-rio-g20/sources/*.pdf`, their `sources.json`, canonical source policy in `config/source_registry.yml`, and reviewed vocabulary in `config/corpus_vocabulary.yml`. | Six files in `benchmark/2024-rio-g20/normalized/`, emitted by `scripts/emit_g20_rio.py`; `data/manifests/g20/2024-rio/*` records acquisition/reconciliation metadata. | `G20RioAdapter`, corpus validators, schema tests, ingestion tests, publishing scripts, and stale web tracing configuration. |
+| G20 Rio 2024 | Frozen report excerpts and authoritative records in `corpora/multilateral/g20/2024-rio/`, canonical source policy in `config/source_registry.yml`, and reviewed vocabulary in `config/corpus_vocabulary.yml`. | Generated compatibility projections may be emitted under `data/generated/`; provenance remains with the corpus. | `G20RioAdapter`, corpus validators, schema tests, ingestion tests, publishing scripts, and web tracing configuration. |
 | G7 2025 AI-for-SMEs | Frozen report PDF, reviewed action catalog in `packages/benchmark/src/members.ts`, methodology/rubric inputs, reviewed tally, and published labels. The action catalog says every action is grounded in the frozen chapter. | `sources.json`, `methodology-inventory.json`, eight evidence snapshots, and two profiles from `packages/benchmark/src/generate.ts`; `discrepancy-ledger.json` from the benchmark runner. | `packages/benchmark`, G7 adapter, conformance tests, examples, and stale web tracing configuration. |
 | Source registry | `config/source_registry.yml` plus `schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json`. | `data/source-registry.json`, checked by `scripts/generate_source_registry.py --check`; `data/source-registry-summary.md` is descriptive output. | Ingest registry policy, API seeding/publishing, G7/G20 adapters, tests. |
 | Schema and protocol contracts | `schemas/{core,extensions,analysis,compatibility}/`, `protocols/language/writ.ebnf`, and `protocols/api/openapi.yaml`. | Drift-guarded schema vendor copies in `packages/domain/schemas/`; generated TS in `packages/domain/src/generated/`; generated embed `packages/domain/src/schemas.embedded.ts`; example JSON under `examples/`. | Domain validation/generation, compiler/evaluator packages, conformance, API, CLI, tests. |
@@ -205,8 +205,8 @@ Inspect and update these callers before any later relocation:
 | `protocols` | current authority | Language EBNF and API OpenAPI protocol contracts. |
 | `archive/pilots/eu-us-ai-evaluation-v1` | historical archive | Byte-preserved combined pilot, original methodology, provenance, generated outputs, reference code/tests, and checksum manifest. |
 | `corpora/jurisdictions/{eu,us}/ai-governance` | current source-of-truth corpora | Independent active corpora with deterministic identities and complete legacy-reference maps. |
-| `benchmark/2024-rio-g20` | current source corpus in the wrong category/path | Reclassify as multilateral political corpus. |
-| `benchmark/2025-ai-sme` | mixed source corpus and generated benchmark | Split authoritative G7 knowledge from score-reproduction benchmark. |
+| `corpora/multilateral/g20/2024-rio` | authoritative multilateral political corpus | Reclassified in Prompt 6. |
+| `corpora/multilateral/g7/2025-ai-sme` and `benchmarks/evaluator/g7-2025-ai-sme-score-reproduction` | political corpus separated from evaluator behavior | Split in Prompt 6. |
 | `benchmark/fatf-mutual-evaluation` | example/fixture candidate | No authoritative country result corpus; reproduction test is `todo`. |
 | `data` | mixed generated/compatibility/current metadata | Source registry JSON is generated; G20 manifest is operational metadata; empty/README-only raw/normalized areas should not be recreated until they hold real material. |
 | `examples` | mixed teaching examples | Keep small Writ-owned examples; move corpus-like material out. |

@@ -17,7 +17,7 @@ It exits non-zero on any divergence and prints one line per check. The logic is
 
 ## What is re-derived
 
-1. **Source bytes.** The raw SHA-256 of `benchmark/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`
+1. **Source bytes.** The raw SHA-256 of `corpora/multilateral/g7/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`
    must equal the `document_versions[].sha256` recorded in the snapshots.
 2. **Snapshot content hash.** For each `evidence/<member>.snapshot.json`, the
    stored `snapshot.content_hash` must equal
@@ -43,8 +43,8 @@ It does **not** prove:
 
 - **Anchor hashes are independently re-derivable from the snapshot alone.** A
   passage's `anchor_hash = sha256Canonical({ page, quote, footnote })` folds in
-  the source *footnote number*, which is not stored on the passage record (it
-  lives in the acquisition seed). So the harness re-derives the snapshot content
+  the source *footnote number*. The active corpus stores that locator explicitly,
+  while the compatibility snapshot omits it. So the harness re-derives the snapshot content
   hash, not each passage's anchor hash. Re-deriving anchor hashes requires the
   source registry, not just the frozen snapshot.
 - **The classifications are correct.** Re-derivation checks reproducibility, not

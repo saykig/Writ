@@ -1,0 +1,698 @@
+[
+  {
+    "id": "relationship-ai-sme-statement-action-canada-ai-compute-access-fund",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-ai-compute-access-fund",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-ai-compute-access-fund"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-japan-canada-tech-accelerator",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-japan-canada-tech-accelerator",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-japan-canada-tech-accelerator"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-toronto-region-ai-business-catalyst",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-toronto-region-ai-business-catalyst",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-toronto-region-ai-business-catalyst"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-fcac-gri-workshop",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-fcac-gri-workshop",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-fcac-gri-workshop"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-canada-germany-digital-alliance",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-canada-germany-digital-alliance",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-canada-germany-digital-alliance"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-national-ai-compute-925m",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-national-ai-compute-925m",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-national-ai-compute-925m"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-g7-ai-adoption-roadmap-declaration",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-g7-ai-adoption-roadmap-declaration",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-g7-ai-adoption-roadmap-declaration"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-sme-ai-adoption-blueprint",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-sme-ai-adoption-blueprint",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-sme-ai-adoption-blueprint"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-g7-sme-ai-toolkit",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-g7-sme-ai-toolkit",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-g7-sme-ai-toolkit"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-quebec-vector-amii-case-studies",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-quebec-vector-amii-case-studies",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-quebec-vector-amii-case-studies"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-italy-canada-jag-declaration",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-italy-canada-jag-declaration",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-italy-canada-jag-declaration"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-feddev-coralus-toronto-resiliency",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-feddev-coralus-toronto-resiliency",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-feddev-coralus-toronto-resiliency"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-feddev-ai-growth-19m",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-feddev-ai-growth-19m",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-feddev-ai-growth-19m"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-cannor-ai-entrepreneurship-centre",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-cannor-ai-entrepreneurship-centre",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-cannor-ai-entrepreneurship-centre"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-canada-germany-jdi-sovereign-alliance",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-canada-germany-jdi-sovereign-alliance",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-canada-germany-jdi-sovereign-alliance"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-acoa-regional-ai-initiative",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-acoa-regional-ai-initiative",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-acoa-regional-ai-initiative"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-nrc-emerging-tech-900m",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-nrc-emerging-tech-900m",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-nrc-emerging-tech-900m"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-canada-finland-joint-statement",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-canada-finland-joint-statement",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-canada-finland-joint-statement"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-ai-sovereign-compute-infrastructure-program",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-ai-sovereign-compute-infrastructure-program",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-ai-sovereign-compute-infrastructure-program"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-canada-siemens-ai-manufacturing-centre",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-canada-siemens-ai-manufacturing-centre",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-canada-siemens-ai-manufacturing-centre"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-ai-pioneers",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-ai-pioneers",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-ai-pioneers"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-osez-lia",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-osez-lia",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-osez-lia"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-ai-academy-small-business",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-ai-academy-small-business",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-ai-academy-small-business"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-piiec-ai-innovation",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-piiec-ai-innovation",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-piiec-ai-innovation"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-data-center-sme-deployment",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-data-center-sme-deployment",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-data-center-sme-deployment"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-bull-acquisition",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-bull-acquisition",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-bull-acquisition"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-france-amd-compute-loi",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-france-amd-compute-loi",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-france-amd-compute-loi"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-bmz-data-strategy",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-bmz-data-strategy",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-bmz-data-strategy"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-mittelstand-digital-congress",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-mittelstand-digital-congress",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-mittelstand-digital-congress"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-european-digital-sovereignty-summit",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-european-digital-sovereignty-summit",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-european-digital-sovereignty-summit"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-canada-germany-digital-alliance",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-canada-germany-digital-alliance",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-canada-germany-digital-alliance"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-sme-ai-adoption-blueprint",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-sme-ai-adoption-blueprint",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-sme-ai-adoption-blueprint"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-g7-sme-ai-toolkit",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-g7-sme-ai-toolkit",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-g7-sme-ai-toolkit"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-eif-german-equity",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-eif-german-equity",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-eif-german-equity"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-canada-germany-jdi-sovereign-alliance",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-canada-germany-jdi-sovereign-alliance",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-canada-germany-jdi-sovereign-alliance"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-india-germany-ai-pact",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-india-germany-ai-pact",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-india-germany-ai-pact"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-ai-funding-guideline-consultation",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-ai-funding-guideline-consultation",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-ai-funding-guideline-consultation"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-germany-zukunftstag-mittelstand",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-germany-zukunftstag-mittelstand",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-germany-zukunftstag-mittelstand"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-congo-mou-startups",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-congo-mou-startups",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-congo-mou-startups"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-ai-hub-sustainable-development",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-ai-hub-sustainable-development",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-ai-hub-sustainable-development"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-ai4industry-virkkunen-meeting",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-ai4industry-virkkunen-meeting",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-ai4industry-virkkunen-meeting"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-smau-2025-innovation-award",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-smau-2025-innovation-award",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-smau-2025-innovation-award"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-ai-match-pilot",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-ai-match-pilot",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-ai-match-pilot"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-lobito-corridor-dialogue",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-lobito-corridor-dialogue",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-lobito-corridor-dialogue"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-it4lia-ai-factory",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-it4lia-ai-factory",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-it4lia-ai-factory"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-italy-canada-jag-declaration",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-italy-canada-jag-declaration",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-italy-canada-jag-declaration"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-nairobi-harmonic-africa",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-nairobi-harmonic-africa",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-nairobi-harmonic-africa"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-innoconnect-greece-italy",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-innoconnect-greece-italy",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-innoconnect-greece-italy"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-italy-ai4i-accenture-partnership",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-italy-ai4i-accenture-partnership",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-italy-ai4i-accenture-partnership"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-ai-act",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-ai-act",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-ai-act"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-ai-strategy-headquarters",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-ai-strategy-headquarters",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-ai-strategy-headquarters"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-oecd-labour-market-report",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-oecd-labour-market-report",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-oecd-labour-market-report"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-sme-ai-adoption-blueprint",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-sme-ai-adoption-blueprint",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-sme-ai-adoption-blueprint"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-g7-sme-ai-toolkit",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-g7-sme-ai-toolkit",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-g7-sme-ai-toolkit"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-first-basic-ai-plan",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-first-basic-ai-plan",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-first-basic-ai-plan"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-japan-gennai-government-pilot",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-japan-gennai-government-pilot",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-japan-gennai-government-pilot"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-made-in-uk-awards",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-made-in-uk-awards",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-made-in-uk-awards"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-regulatory-innovation-office",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-regulatory-innovation-office",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-regulatory-innovation-office"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-compute-roadmap",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-compute-roadmap",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-compute-roadmap"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-uk-us-tech-prosperity-deal",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-uk-us-tech-prosperity-deal",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-uk-us-tech-prosperity-deal"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-regional-tech-booster",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-regional-tech-booster",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-regional-tech-booster"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-local-innovation-partnerships-fund",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-local-innovation-partnerships-fund",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-local-innovation-partnerships-fund"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-ai-growth-lab",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-ai-growth-lab",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-ai-growth-lab"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-ai-skills-framework",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-ai-skills-framework",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-ai-skills-framework"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-dawn-supercomputer",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-dawn-supercomputer",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-dawn-supercomputer"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-free-ai-foundations-training",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-free-ai-foundations-training",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-free-ai-foundations-training"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-youth-employment-ai-apprenticeship",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-youth-employment-ai-apprenticeship",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-youth-employment-ai-apprenticeship"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-ai-upskilling-challenge-fund",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-ai-upskilling-challenge-fund",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-ai-upskilling-challenge-fund"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-frontier-ai-discovery",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-frontier-ai-discovery",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-frontier-ai-discovery"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_kingdom-sovereign-ai-initiative",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_kingdom-sovereign-ai-initiative",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_kingdom-sovereign-ai-initiative"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-ai-technology-stack-export-eo",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-ai-technology-stack-export-eo",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-ai-technology-stack-export-eo"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-americas-ai-action-plan",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-americas-ai-action-plan",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-americas-ai-action-plan"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-genesis-mission",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-genesis-mission",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-genesis-mission"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-dol-ai-literacy-framework",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-dol-ai-literacy-framework",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-dol-ai-literacy-framework"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-india-summit-world-bank-fund",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-india-summit-world-bank-fund",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-india-summit-world-bank-fund"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-united_states-national-policy-framework-ai",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-united_states-national-policy-framework-ai",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-united_states-national-policy-framework-ai"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-ai-act-advisory-forum",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-ai-act-advisory-forum",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-ai-act-advisory-forum"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-apply-ai-strategy",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-apply-ai-strategy",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-apply-ai-strategy"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-ai-in-science-raise",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-ai-in-science-raise",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-ai-in-science-raise"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-ai-act-service-desk",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-ai-act-service-desk",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-ai-act-service-desk"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-ai-factories-six-new",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-ai-factories-six-new",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-ai-factories-six-new"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-seventh-ai-pact-webinar",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-seventh-ai-pact-webinar",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-seventh-ai-pact-webinar"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-european-data-union-strategy",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-european-data-union-strategy",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-european-data-union-strategy"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-apply-ai-manufacturing-tef",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-apply-ai-manufacturing-tef",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-apply-ai-manufacturing-tef"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-eesc-commercialization-call",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-eesc-commercialization-call",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-eesc-commercialization-call"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-apply-ai-framework-innovation-hubs",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-apply-ai-framework-innovation-hubs",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-apply-ai-framework-innovation-hubs"]
+  },
+  {
+    "id": "relationship-ai-sme-statement-action-european_union-ai-continent-action-plan",
+    "record_type": "statement_action_relationship",
+    "statement_id": "statement-g7-2025-ai-sme-adoption",
+    "action_id": "action-european_union-ai-continent-action-plan",
+    "relationship": "relevant_action",
+    "source_passage_ids": ["passage-european_union-ai-continent-action-plan"]
+  }
+]

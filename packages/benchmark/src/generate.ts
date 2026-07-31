@@ -1,10 +1,9 @@
 // Deliverable generator.
 //
 // Writes the frozen benchmark data artifacts from the reviewed catalog:
-//   - benchmark/2025-ai-sme/sources.json                 (source manifest)
-//   - benchmark/2025-ai-sme/methodology-inventory.json   (governed methodology)
-//   - benchmark/2025-ai-sme/evidence/<member>.snapshot.json  (8 snapshots)
-//   - benchmark/2025-ai-sme/profiles/<name>.profile.json     (2 profiles)
+//   - benchmark-local methodology inventory, evidence projections, and profiles
+//
+// The independent G7 corpus is an input and is never overwritten here.
 //
 // Every artifact is validated against its `@writ/domain` schema before it is
 // written, so a generation that succeeds cannot emit an invalid deliverable.
@@ -15,14 +14,7 @@ import { MEMBERS } from "./members.js";
 import { buildMemberSnapshot, buildSourceManifest, sourceDocumentVersion } from "./evidence.js";
 import { buildMethodologyInventory } from "./inventory.js";
 import { buildProfile } from "./profiles.js";
-import {
-  EVIDENCE_DIR,
-  INVENTORY_PATH,
-  PROFILES_DIR,
-  SOURCES_PATH,
-  profilePath,
-  snapshotPath,
-} from "./paths.js";
+import { EVIDENCE_DIR, INVENTORY_PATH, PROFILES_DIR, profilePath, snapshotPath } from "./paths.js";
 
 const writeJson = (path: string, value: unknown): void => {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
@@ -56,9 +48,6 @@ export function generateArtifacts(): string[] {
       `sources.json document/passages are not schema-valid: ${JSON.stringify(probeResult.errors)}`,
     );
   }
-  writeJson(SOURCES_PATH, manifest);
-  written.push(SOURCES_PATH);
-
   // Methodology inventory.
   const inventory = buildMethodologyInventory();
   assertValid("methodology-inventory", inventory);

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Emit, validate, and materialize the G20 2024 Rio normalized corpus records.
+"""Emit and validate a generated compatibility projection of the G20 Rio corpus.
 
-Writes the deterministic frozen record set under ``benchmark/2024-rio-g20/normalized``
-for offline review. It performs no scoring and imports published scores exactly; the
-canonical online copy is published separately to the append-only Neon store.
+The authoritative political records live under
+``corpora/multilateral/g20/2024-rio``. Optional output goes only to
+``data/generated`` and cannot compete with that corpus as a source of truth.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from writ_ingest.corpus.vocabulary import (
     validate_vocabulary_review_items,
 )
 
-OUTPUT_DIR = Path("benchmark/2024-rio-g20/normalized")
+OUTPUT_DIR = Path("data/generated/g20/2024-rio")
 FILES = {
     "commitments": "commitments.json",
     "selections": "selections.json",
