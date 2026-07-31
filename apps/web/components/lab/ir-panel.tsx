@@ -25,7 +25,7 @@ export interface IrPanelProps {
 
 /**
  * IrPanel — the compiled canonical IR. A hairline summary (package, schema
- * validity, rule counts), the score program as a flat table, and the full
+ * validity, rule counts), the methodology's result rules as a flat table, and the full
  * pretty-printed IR tucked behind a disclosure so the panel reads calm.
  */
 export function IrPanel({ ir, schemaValid, hasErrors }: IrPanelProps) {
@@ -60,7 +60,7 @@ export function IrPanel({ ir, schemaValid, hasErrors }: IrPanelProps) {
           }
         />
         <Kv k="commitments" v={<span className="tabular-nums">{ir.commitments.length}</span>} />
-        <Kv k="score rules" v={<span className="tabular-nums">{rules.length} + otherwise</span>} />
+        <Kv k="result rules" v={<span className="tabular-nums">{rules.length} + otherwise</span>} />
       </dl>
 
       {commitment ? (
@@ -114,7 +114,7 @@ export function IrPanel({ ir, schemaValid, hasErrors }: IrPanelProps) {
           <div className="max-h-[420px] overflow-auto rounded-lg">
             <CodeArtifact
               label="Canonical IR"
-              filename="playground.ir.json"
+              filename="writ-lab.ir.json"
               code={JSON.stringify(ir, null, 2)}
               showLineNumbers
             />

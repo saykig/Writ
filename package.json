@@ -22,7 +22,6 @@
     "conformance:reference": "bun run --filter '@writ/reference-core' test",
     "replicate": "bun scripts/replicate.ts",
     "dev": "bun run --filter '@writ/api' --filter '@writ/web' dev",
-    "studio": "bun run --filter '@writ/web' dev",
     "web": "bun run --filter '@writ/web' dev",
     "db:up": "docker compose up -d postgres minio",
     "db:down": "docker compose down"

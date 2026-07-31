@@ -27,12 +27,11 @@ projections and may contain generated cache/output under `data/generated/`.
 Source-grounded records belong under `corpora/`; evaluator fixtures belong
 under `benchmarks/`.
 
-## Normalized corpus contracts
+## Compatibility adapters
 
-Corpus schema version `2.0.0` separates identified commitments, assessment selections, compliance
-reports, and member compliance assessments. Selection and scores never live on commitment inventory
-records. A commitment is `not_selected` only after a complete inventory is reconciled with an
-explicit selected subset; otherwise its selection status is `unknown`.
+Versioned compatibility schemas separate source records, assessment selections, reports, and
+source-reported member judgments. Those compatibility projections are not the universal Writ core
+and do not compete with active corpus records under `corpora/`.
 
 `config/corpus_vocabulary.yml` is the canonical source-terminology registry. Only reviewed mappings
 may become approved canonical terms. Proposed and unmapped terms retain their source wording and

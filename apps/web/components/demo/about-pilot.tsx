@@ -56,8 +56,7 @@ export function AboutPilot({ question }: { question: string }) {
             its source and underlying Writ profile.
           </p>
           <p className="text-foreground">
-            The Demo shows the policy analysis. The Playground shows how that analysis was
-            structured.
+            The Demo shows one saved analysis. Writ Lab shows how that analysis was structured.
           </p>
         </div>
       </DialogContent>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { DemoWorkspace } from "@/components/demo/demo-workspace";
 import { buildMemo, demoQuestions } from "@/lib/demo-memo";
-import { policyTestDataset } from "@/lib/policy-test";
+import { demoAnalysisDataset } from "@/lib/demo-analysis";
 
 export const metadata: Metadata = {
   title: "Policy memos from reviewed records · Writ",
@@ -36,7 +36,7 @@ export default async function DemoPage({
         question: question.question,
         kind: question.kind,
       }))}
-      pilotQuestion={policyTestDataset().pilot_question}
+      pilotQuestion={demoAnalysisDataset().pilot_question}
       initialQuestionId={initialQuestionId}
     />
   );

@@ -24,13 +24,13 @@
  */
 
 import {
-  policyTestClaimRecords,
-  policyTestDataset,
+  demoAnalysisClaimRecords,
+  demoAnalysisDataset,
   type ClaimFields,
   type ClaimRecord,
-} from "./policy-test.js";
+} from "./demo-analysis.js";
 import { sourceFor } from "./pilot-sources.js";
-import { humanize, instrumentLabel } from "./policy-test-format.js";
+import { humanize, instrumentLabel } from "./demo-analysis-format.js";
 import {
   ADJACENT_TO_EVALUATION,
   actorPhrase,
@@ -663,7 +663,7 @@ export function buildMemo(questionId: string): Memo | undefined {
   const config = demoQuestion(questionId);
   if (!config) return undefined;
 
-  const corpus = policyTestClaimRecords();
+  const corpus = demoAnalysisClaimRecords();
   // Stable order: the reviewers' row order, which the pilot treats as authority.
   const selected = config.select(corpus);
   const notes = new Ledger();
@@ -692,7 +692,7 @@ export function buildMemo(questionId: string): Memo | undefined {
     question: config.question,
     title: config.title,
     kind: config.kind,
-    datasetId: policyTestDataset().dataset_id,
+    datasetId: demoAnalysisDataset().dataset_id,
     profileId: PROFILE_ID,
     executive,
     sections,

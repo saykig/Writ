@@ -14,7 +14,7 @@
 
 import type { Memo, MemoSentence } from "./demo-memo.js";
 import type { RepoProvenance } from "./repo-provenance.js";
-import { humanize } from "./policy-test-format.js";
+import { humanize } from "./demo-analysis-format.js";
 
 /** Superscript-style citation run: `[1][2][3]` collapses to `[1–3]`. */
 export function citationRun(notes: readonly number[]): string {

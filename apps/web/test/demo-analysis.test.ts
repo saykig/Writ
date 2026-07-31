@@ -11,22 +11,22 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import {
-  policyTestDataset,
-  policyTestEvidenceEntries,
-  policyTestEvidenceGroups,
-  policyTestHighlights,
-  policyTestReceipt,
-  policyTestRuleConditions,
-  policyTestSummary,
-  policyTestUsSubResults,
-} from "../lib/policy-test";
-import { humanize } from "../lib/policy-test-format";
+  demoAnalysisDataset,
+  demoAnalysisEvidenceEntries,
+  demoAnalysisEvidenceGroups,
+  demoAnalysisHighlights,
+  demoAnalysisReceipt,
+  demoAnalysisRuleConditions,
+  demoAnalysisSummary,
+  demoAnalysisUsSubResults,
+} from "../lib/demo-analysis";
+import { humanize } from "../lib/demo-analysis-format";
 
 const WEB_ROOT = resolve(import.meta.dir, "..");
 const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
 
-const dataset = policyTestDataset();
-const entries = policyTestEvidenceEntries();
+const dataset = demoAnalysisDataset();
+const entries = demoAnalysisEvidenceEntries();
 
 /** The fields these tests assert on, as recorded in the reviewed YAML. */
 interface ReviewedClaimFields {
@@ -55,7 +55,7 @@ const claim = (id: string): ReviewedClaimFields => {
 
 describe("reviewed corpus shape", () => {
   test("24 parent rows and 32 normalized claims, counted from the data", () => {
-    const summary = policyTestSummary();
+    const summary = demoAnalysisSummary();
     expect(summary.parentRowCount).toBe(24);
     expect(summary.euParentRowCount).toBe(12);
     expect(summary.usParentRowCount).toBe(12);
@@ -73,7 +73,7 @@ describe("reviewed corpus shape", () => {
   });
 
   test("source bundles keep their child claims underneath them", () => {
-    const bundles = policyTestEvidenceGroups().filter((group) => group.isBundle);
+    const bundles = demoAnalysisEvidenceGroups().filter((group) => group.isBundle);
     expect(
       Object.fromEntries(bundles.map((group) => [group.parent.id, group.children.length])),
     ).toEqual({ "EU-10": 3, "EU-11": 2, "US-05": 2, "US-08": 2, "US-09": 3, "US-10": 2 });
@@ -85,13 +85,13 @@ describe("reviewed corpus shape", () => {
         expect(child.id.startsWith(group.parent.id)).toBe(true);
       }
     }
-    expect(policyTestEvidenceGroups()).toHaveLength(24);
+    expect(demoAnalysisEvidenceGroups()).toHaveLength(24);
     expect(entries).toHaveLength(38); // 24 parents + 14 derived claims
   });
 
   test("the rule conditions come from methodology.headline_rule", () => {
     const rule = dataset.methodology.headline_rule;
-    expect(policyTestRuleConditions()).toEqual([
+    expect(demoAnalysisRuleConditions()).toEqual([
       { label: "Actor", value: "Market provider", source: "actor_type", key: "actor" },
       { label: "Conduct", value: "Model evaluation", source: "conduct_type", key: "conduct" },
       { label: "Legal force", value: "Binding", source: "legal_force", key: "force" },
@@ -117,7 +117,7 @@ describe("reviewed corpus shape", () => {
 
 describe("the reviewed distinctions survive", () => {
   test("EU-06 is the decisive evidence and the only claim satisfying the rule", () => {
-    const receipt = policyTestReceipt();
+    const receipt = demoAnalysisReceipt();
     expect(receipt.eu.decisiveEvidence).toEqual(["EU-06"]);
 
     const eu06 = claim("EU-06");
@@ -138,10 +138,10 @@ describe("the reviewed distinctions survive", () => {
     expect(eu01.conduct_type).toBe("evaluation_documentation");
     expect(eu01.conduct_type).not.toBe("model_evaluation");
     expect(eu01.headline_relevance).toBe("supporting_only");
-    expect(policyTestReceipt().eu.supportingEvidence).toContain("EU-01");
-    expect(policyTestReceipt().eu.decisiveEvidence).not.toContain("EU-01");
+    expect(demoAnalysisReceipt().eu.supportingEvidence).toContain("EU-01");
+    expect(demoAnalysisReceipt().eu.decisiveEvidence).not.toContain("EU-01");
 
-    const highlight = policyTestHighlights().find((item) => item.id === "EU-01");
+    const highlight = demoAnalysisHighlights().find((item) => item.id === "EU-01");
     expect(highlight?.summary).toBe(
       "Market provider · Evaluation documentation · Binding · Applicable",
     );
@@ -153,7 +153,7 @@ describe("the reviewed distinctions survive", () => {
     expect(us03.legal_force).toBe("voluntary");
     expect(us03.actor_type).toBe("ai_lifecycle_organization");
     expect(us03.actor_type).not.toBe("market_provider");
-    expect(policyTestReceipt().eu.decisiveEvidence).not.toContain("US-03");
+    expect(demoAnalysisReceipt().eu.decisiveEvidence).not.toContain("US-03");
   });
 
   test("US-08A stays government-only binding and never a market duty", () => {
@@ -189,7 +189,7 @@ describe("the reviewed distinctions survive", () => {
 
 describe("headline judgments", () => {
   test("both judgments match the reviewed YAML exactly", () => {
-    const receipt = policyTestReceipt();
+    const receipt = demoAnalysisReceipt();
     const stated = dataset.headline_judgments;
 
     expect(receipt.eu.status).toBe(stated.EU.market_provider);
@@ -203,7 +203,7 @@ describe("headline judgments", () => {
   });
 
   test("the transition qualification is read from the EU-11 lifecycle claims", () => {
-    const receipt = policyTestReceipt();
+    const receipt = demoAnalysisReceipt();
     expect(receipt.eu.transitionFrom).toBe(claim("EU-11A").effective_from ?? null);
     expect(receipt.eu.transitionDeadline).toBe(claim("EU-11B").compliance_deadline ?? null);
     expect(receipt.eu.transitionFrom).toBe("2025-08-02");
@@ -211,7 +211,7 @@ describe("headline judgments", () => {
   });
 
   test("the four US sub-results stay separate, each with its own evidence", () => {
-    const subResults = policyTestUsSubResults();
+    const subResults = demoAnalysisUsSubResults();
     expect(subResults.map((result) => result.key)).toEqual([
       "government_use",
       "government_procurement",
@@ -252,7 +252,7 @@ describe("headline judgments", () => {
   });
 
   test("the receipt is content-hashed with the repository's convention", () => {
-    expect(policyTestReceipt().contentHash).toMatch(/^sha256:[0-9a-f]{64}$/);
+    expect(demoAnalysisReceipt().contentHash).toMatch(/^sha256:[0-9a-f]{64}$/);
   });
 });
 
@@ -297,7 +297,7 @@ describe("unknown is preserved", () => {
 
 describe("data provenance", () => {
   test("the generated projection is built from the authoritative YAML", () => {
-    const script = read("scripts/embed-policy-test.ts");
+    const script = read("scripts/embed-demo-analysis.ts");
     expect(script).toContain(
       "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml",
     );
@@ -305,8 +305,8 @@ describe("data provenance", () => {
     expect(script).toContain("requireFields");
 
     const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
-    expect(pkg.scripts.build).toContain("embed-policy-test.ts");
-    expect(pkg.scripts.embed).toContain("embed-policy-test.ts");
+    expect(pkg.scripts.build).toContain("embed-demo-analysis.ts");
+    expect(pkg.scripts.embed).toContain("embed-demo-analysis.ts");
   });
 
   test("the projection agrees with the reviewed YAML on disk", () => {
@@ -323,7 +323,7 @@ describe("data provenance", () => {
   });
 
   test("no runtime network request fetches the dataset", () => {
-    for (const file of ["lib/policy-test.ts", "lib/policy-test-format.ts"]) {
+    for (const file of ["lib/demo-analysis.ts", "lib/demo-analysis-format.ts"]) {
       expect(read(file)).not.toContain("fetch(");
     }
   });

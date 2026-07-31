@@ -238,7 +238,7 @@ export function ReceiptPanel({
 
         <Button onClick={handleEvaluate} disabled={!canEvaluate || evaluating}>
           <ScrollText />
-          {evaluating ? "Evaluating…" : "Evaluate"}
+          {evaluating ? "Tracing…" : "Trace this judgment"}
         </Button>
       </div>
 
@@ -460,11 +460,11 @@ export function ReceiptPanel({
         </div>
       ) : stale ? (
         <p className="rounded-lg border border-rule bg-paper-deep/30 px-3.5 py-2.5 text-[0.9rem] text-ink-soft">
-          The source changed since the last receipt. Evaluate again to produce a fresh one.
+          The query changed since the last trace. Trace this judgment again to produce a fresh one.
         </p>
       ) : !evalError && canEvaluate ? (
         <p className="text-[0.9rem] text-ink-soft">
-          Choose a jurisdiction, then evaluate to produce a receipt with its proof tree.
+          Choose a jurisdiction, then trace this judgment to its records and proof tree.
         </p>
       ) : null}
     </div>

@@ -2,7 +2,7 @@ import type { Monaco } from "@monaco-editor/react";
 
 /**
  * The `writ` editor language, ported verbatim from the original studio
- * (`apps/studio/public/app.js` → `registerWrit`). One Monarch grammar for
+ * (the retired legacy editor's `registerWrit`). One Monarch grammar for
  * the DSL and two themes keyed to the Seam palette — `writ-paper` (light)
  * and `writ-sumi` (dark). Registration is idempotent: calling it twice is a
  * no-op, so it is safe to run in Monaco's `beforeMount` on every editor mount.

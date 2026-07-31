@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack -p 4317",
-    "embed": "bun scripts/embed-frozen.ts && bun scripts/embed-policy-test.ts && bun scripts/embed-provenance.ts",
-    "build": "bun scripts/embed-frozen.ts && bun scripts/embed-policy-test.ts && bun scripts/embed-provenance.ts && next build --webpack",
+    "embed": "bun scripts/embed-frozen.ts && bun scripts/embed-demo-analysis.ts && bun scripts/embed-provenance.ts",
+    "build": "bun scripts/embed-frozen.ts && bun scripts/embed-demo-analysis.ts && bun scripts/embed-provenance.ts && next build --webpack",
     "start": "next start -p 4317",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

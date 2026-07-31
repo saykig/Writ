@@ -32,7 +32,7 @@ tasks:
 
   - id: RESET-002
     title: Replace the governing product definition
-    status: review
+    status: done
     dependencies:
       - RESET-001
     scope:
@@ -49,7 +49,7 @@ tasks:
 
   - id: RESET-003
     title: Remove external weighted-ordinal product artifacts
-    status: review
+    status: done
     dependencies:
       - RESET-002
     scope:
@@ -67,7 +67,7 @@ tasks:
 
   - id: RESET-004
     title: Establish schema and protocol authority
-    status: review
+    status: done
     dependencies:
       - RESET-003
     scope:
@@ -88,7 +88,7 @@ tasks:
 
   - id: RESET-005
     title: Separate EU and US AI-governance corpora
-    status: review
+    status: done
     dependencies:
       - RESET-004
     scope:
@@ -109,6 +109,58 @@ tasks:
       - corpora/jurisdictions/us/ai-governance
       - adr/0014-stable-corpus-identities.md
       - docs/current/eu-us-corpus-migration.md
+
+  - id: RESET-006
+    title: Reclassify G7 and G20 as multilateral corpora
+    status: done
+    dependencies:
+      - RESET-005
+    acceptance:
+      - G7 and G20 authoritative political records live under corpora/multilateral.
+      - Source-reported judgments and Writ-derived results remain distinguishable.
+      - G7's 87 actions and G20's incomplete 13-of-174 coverage remain explicit.
+    outputs:
+      - corpora/multilateral/g7/2025-ai-sme
+      - benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
+      - corpora/multilateral/g20/2024-rio
+
+  - id: RESET-007
+    title: Establish saved queries and align interface language
+    status: done
+    dependencies:
+      - RESET-006
+    acceptance:
+      - Questions reference versioned corpora without changing corpus identities.
+      - The active interface uses Writ Lab and provenance-aware judgment language.
+      - Dead paths are removed or explicitly classified and all validation passes.
+    outputs:
+      - queries/README.md
+      - queries/eu-us-ai-governance-pilot/query.yaml
+      - docs/current/repository-reset-handoff.md
+      - docs/current/final-hygiene-input.md
+
+  - id: RESET-008
+    title: Perform the verified repository-hygiene pass
+    status: ready
+    dependencies:
+      - RESET-007
+    scope:
+      - Use docs/current/final-hygiene-input.md as the verified input.
+      - Resolve only items whose consumers and retention requirements are proven.
+      - Preserve historical and compatibility material until its retirement gate is met.
+
+  - id: RETIRE-REFERENCE-CORE
+    title: Replace the reference-core parity oracle with implementation-independent fixtures
+    status: ready
+    dependencies:
+      - RESET-007
+    scope:
+      - Convert parity inputs and outputs into implementation-independent conformance fixtures.
+      - Prove canonical packages retain truth, unknown, score, witness, and replay coverage.
+      - Remove reference-core consumers, workspace wiring, and the package in one bounded change.
+    acceptance:
+      - No test, script, workspace, or documentation consumer remains.
+      - Conformance, unit tests, typecheck, and production build pass without reference-core.
 
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

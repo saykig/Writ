@@ -20,8 +20,8 @@ export function SiteFooter() {
         <div className="flex max-w-sm flex-col gap-4">
           <span className="text-3xl font-semibold tracking-[-0.035em] text-foreground">Writ</span>
           <p className="text-sm leading-7 text-muted-foreground">
-            A Domain-Specific Language (DSL) for expressing rule-based policy evaluation
-            methodologies over reviewed evidence and producing reproducible assessment receipts.
+            A source-grounded knowledge system and domain-specific language for political science
+            and global affairs, with explicit uncertainty and traceable derived results.
           </p>
         </div>
 

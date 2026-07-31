@@ -2,7 +2,7 @@ import { test, expect } from "bun:test";
 
 import { buildMemo, demoQuestions, type Memo, type MemoSentence } from "../lib/demo-memo";
 import { citationRun, memoToMarkdown } from "../lib/demo-markdown";
-import { policyTestClaimRecords } from "../lib/policy-test";
+import { demoAnalysisClaimRecords } from "../lib/demo-analysis";
 import { REPO_PROVENANCE } from "../lib/repo-provenance";
 
 const memos = () => demoQuestions().map((question) => buildMemo(question.id)!);
@@ -99,7 +99,7 @@ test("every selected record is listed, cited or not", () => {
 });
 
 test("each record carries what a reader needs to check it", () => {
-  const known = new Set(policyTestClaimRecords().map((claim) => claim.claimId));
+  const known = new Set(demoAnalysisClaimRecords().map((claim) => claim.claimId));
   for (const memo of memos()) {
     for (const note of memo.records) {
       expect(known.has(note.claimId)).toBe(true);
@@ -126,7 +126,7 @@ test("an untraced record is reported as untraced rather than given an excerpt", 
 
 test("unknown enforcement survives into the footnote as `unknown`", () => {
   // AGENTS invariant: unknown is never silently rendered as false or absent.
-  const claims = policyTestClaimRecords().filter(
+  const claims = demoAnalysisClaimRecords().filter(
     (claim) => claim.fields.enforcement_status === "unknown",
   );
   expect(claims.length).toBeGreaterThan(0);
@@ -158,7 +158,7 @@ test("the memo never calls a voluntary measure binding", () => {
 test("model evaluation is counted apart from the duties around it", () => {
   // Documentation, risk assessment, monitoring, reporting, access and testing
   // must never be folded into the model-evaluation count.
-  const evaluation = policyTestClaimRecords().filter(
+  const evaluation = demoAnalysisClaimRecords().filter(
     (claim) => claim.fields.conduct_type === "model_evaluation",
   );
   expect(evaluation.map((claim) => claim.claimId).sort()).toEqual([

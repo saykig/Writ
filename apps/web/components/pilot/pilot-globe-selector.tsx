@@ -5,7 +5,7 @@
  *
  * Selecting one gives its answer to the pilot's question, the provisions behind
  * it, and how much of the reviewed corpus the answer was computed over. Every
- * figure comes from the receipt the evaluator produced.
+ * figure comes from the trace object the evaluator produced.
  */
 
 import { useMemo, useState } from "react";
@@ -99,7 +99,7 @@ export function PilotGlobeSelector({
             ) : null}
 
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[0.7rem]">
-              <dt className="text-muted-foreground">Receipt score</dt>
+              <dt className="text-muted-foreground">Derived result</dt>
               <dd className="text-right tabular-nums">{selected.result}</dd>
               <dt className="text-muted-foreground">Provisions considered</dt>
               <dd className="text-right tabular-nums">{selected.consideredProvisions}</dd>

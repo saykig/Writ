@@ -1,4 +1,7 @@
-# `reference-core` retirement proposal
+# `reference-core` compatibility status and bounded retirement
+
+**Status:** retained compatibility test oracle; not production authority. Retirement is tracked as
+`RETIRE-REFERENCE-CORE` in `TASKS.yaml`.
 
 ## Finding
 

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 
-import { Playground } from "@/components/playground/playground";
+import { WritLab } from "@/components/lab/writ-lab";
+import { pilotEvidenceView } from "@/lib/toolchain";
 
 export const metadata: Metadata = {
-  title: "Playground · Writ",
+  title: "Writ Lab · Writ",
   description:
-    "One question, asked four ways. Each reading is a real rule that runs against the European Union and United States provisions traced to their source text.",
+    "Inspect a saved query across independent corpora, change its interpretation, and trace derived judgments to reviewed records.",
 };
 
 const VALID_EXAMPLES = new Set(["reviewed", "any-actor", "broad-conduct", "incomplete"]);
 
-export default async function PlaygroundPage({
+export default async function LabPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -18,12 +19,13 @@ export default async function PlaygroundPage({
   const params = await searchParams;
   const raw = params.example;
   const initialExample = typeof raw === "string" && VALID_EXAMPLES.has(raw) ? raw : null;
+  const initialEvidence = pilotEvidenceView("eu");
 
   // No page header: the tool is the page. The readings and their effects are
   // named in the chooser, which is where the reading is actually made.
   return (
     <main>
-      <Playground initialExample={initialExample} />
+      <WritLab initialExample={initialExample} initialEvidence={initialEvidence} />
     </main>
   );
 }

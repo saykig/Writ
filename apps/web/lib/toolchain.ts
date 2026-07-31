@@ -177,7 +177,7 @@ export function evaluatePilot(source: string, jurisdiction: string): EvaluateRes
   if (subject === undefined) {
     return { ok: false, error: `Unknown jurisdiction "${jurisdiction}".` };
   }
-  const compiled = compileSource(source, { fileName: "playground.writ" });
+  const compiled = compileSource(source, { fileName: "query-methodology.writ" });
   if (compiled.ir === undefined) {
     return {
       ok: false,
@@ -216,7 +216,7 @@ export interface CompileResponse {
 }
 
 export function compile(source: string): CompileResponse {
-  const result = compileSource(source, { fileName: "playground.writ" });
+  const result = compileSource(source, { fileName: "query-methodology.writ" });
   return {
     diagnostics: result.diagnostics,
     schemaValid: result.schemaValid,
@@ -234,7 +234,7 @@ export interface AnalyzeResponse {
 }
 
 export function analyze(source: string): AnalyzeResponse {
-  const result = compileSource(source, { fileName: "playground.writ" });
+  const result = compileSource(source, { fileName: "query-methodology.writ" });
   const findings: Diagnostic[] = [];
   if (result.ir) {
     for (const commitment of result.ir.commitments) {

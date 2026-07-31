@@ -14,7 +14,7 @@ export interface NavItem {
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
   { href: "/demo", label: "Demo", hint: "One question, answered from the law" },
-  { href: "/playground", label: "Playground", hint: "Compile, analyze, evaluate live" },
+  { href: "/lab", label: "Writ Lab", hint: "Inspect queries, records, choices, and traces" },
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 

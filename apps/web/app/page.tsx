@@ -3,13 +3,13 @@ import { ArrowRight } from "lucide-react";
 
 import { pilotPreviews } from "@/lib/pilot-assessments";
 import { PilotGlobeSelector } from "@/components/pilot/pilot-globe-selector";
-import { policyTestDataset } from "@/lib/policy-test";
+import { demoAnalysisDataset } from "@/lib/demo-analysis";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const jurisdictions = pilotPreviews();
-  const question = policyTestDataset().pilot_question;
+  const question = demoAnalysisDataset().pilot_question;
 
   return (
     <main>
@@ -20,8 +20,9 @@ export default function Home() {
               Write in Writ.
             </h1>
             <p className="mt-7 max-w-[36rem] text-[length:var(--t-lead)] leading-8 text-muted-foreground text-pretty">
-              Writ is a Domain-Specific Language (DSL) for expressing rule-based policy evaluation
-              methodologies over reviewed evidence and producing reproducible assessment receipts.
+              Writ is a structured, source-grounded knowledge system and domain-specific language
+              for political science and global affairs. Ask questions across reviewed corpora and
+              trace every derived judgment to its evidence.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Button
@@ -39,7 +40,7 @@ export default function Home() {
                 variant="outline"
                 size="lg"
                 nativeButton={false}
-                render={<Link href="/playground">Try Writ</Link>}
+                render={<Link href="/lab">Try Writ</Link>}
               />
             </div>
           </div>

@@ -20,7 +20,7 @@ import type {
   EvidenceView,
   ExamplesResponse,
   Member,
-  PlaygroundExample,
+  LabExample,
 } from "./types";
 
 const WritEditor = dynamic(() => import("./writ-editor"), {
@@ -65,11 +65,11 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
   return (await res.json()) as T;
 }
 
-export interface PlaygroundProps {
+export interface WritLabProps {
   /** Example to open first, from `?example=` — validated server-side. */
   initialExample: string | null;
   /** Optional frozen examples for a contextual Lab route. */
-  initialExamples?: readonly PlaygroundExample[];
+  initialExamples?: readonly LabExample[];
   /** Optional member and receipt to open without a second selection step. */
   initialMember?: Member;
   initialReceipt?: EvaluationReceipt;
@@ -80,7 +80,7 @@ export interface PlaygroundProps {
   initialAnalysis?: AnalyzeResponse;
 }
 
-export function Playground({
+export function WritLab({
   initialExample,
   initialExamples,
   initialMember,
@@ -90,13 +90,13 @@ export function Playground({
   initialResultTab = "analysis",
   initialCompile,
   initialAnalysis,
-}: PlaygroundProps) {
+}: WritLabProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
   const seededExample =
     initialExamples?.find((example) => example.id === initialExample) ?? initialExamples?.[0];
-  const [examples, setExamples] = useState<PlaygroundExample[]>(
+  const [examples, setExamples] = useState<LabExample[]>(
     initialExamples ? [...initialExamples] : [],
   );
   const [exampleId, setExampleId] = useState<string | null>(seededExample?.id ?? null);
@@ -164,7 +164,7 @@ export function Playground({
     return () => window.clearTimeout(timer);
   }, [source]);
 
-  const selectExample = useCallback((example: PlaygroundExample) => {
+  const selectExample = useCallback((example: LabExample) => {
     setExampleId(example.id);
     setSource(example.source);
     if (typeof window !== "undefined") {
@@ -231,7 +231,7 @@ export function Playground({
   const editorPane = (
     <div className="flex h-full min-h-0 flex-col bg-paper-deep/40">
       <div className="flex items-center justify-between gap-3 border-b border-rule px-4 py-2.5">
-        <span className="font-mono text-[0.72rem] text-ink-faint">methodology.writ</span>
+        <span className="font-mono text-[0.72rem] text-ink-faint">query-methodology.writ</span>
         <span className="flex items-center gap-2 text-[0.72rem]">
           <span aria-hidden className={cn("size-1.5 rounded-full", statusPip)} />
           <span className={statusTone}>{statusText}</span>
@@ -265,14 +265,14 @@ export function Playground({
             ) : null}
           </TabsTrigger>
           <TabsTrigger value="ir" className="flex-none px-0 py-3">
-            IR
+            Query IR
           </TabsTrigger>
           <TabsTrigger value="receipt" className="flex-none px-0 py-3">
-            Receipt
+            Trace
           </TabsTrigger>
           {initialEvidence ? (
             <TabsTrigger value="evidence" className="flex-none px-0 py-3">
-              Evidence
+              Records
               <span className="ml-1.5 text-[0.7rem] text-ink-faint tabular-nums">
                 {initialEvidence.actions.length}
               </span>
@@ -313,6 +313,10 @@ export function Playground({
   return (
     <div className="flex-1">
       <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[112rem] flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-[0.72rem] text-muted-foreground">
+          <span>Saved query · EU AI governance v1.0.0 + US AI governance v1.0.0</span>
+          <span className="font-mono">queries/eu-us-ai-governance-pilot</span>
+        </div>
         {/* The readings, as cards. Each says what it changes and what that does
             to the answer, so the choice is legible before it is made. */}
         <div

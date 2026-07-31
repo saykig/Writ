@@ -9,7 +9,7 @@
 
 import type { Evidence } from "@writ/domain";
 
-import { instrumentLabel } from "./policy-test-format.js";
+import { instrumentLabel } from "./demo-analysis-format.js";
 import { readRepoJson } from "./repo.js";
 import { evaluatePilot, pilotCoverage, pilotExampleSource } from "./toolchain.js";
 

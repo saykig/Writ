@@ -1,0 +1,105 @@
+contract_version: 1.0.0
+query_id: writ.query.eu-us-ai-governance.model-evaluation-duty
+query_version: 1.0.0
+status: saved_historical_analysis
+question: >-
+  Does the jurisdiction currently impose a binding model-evaluation requirement on providers of
+  advanced or general-purpose AI models?
+corpora:
+  - corpus_id: writ.corpus.eu.ai-governance
+    corpus_version: 1.0.0
+    manifest: corpora/jurisdictions/eu/ai-governance/corpus.yaml
+  - corpus_id: writ.corpus.us.ai-governance
+    corpus_version: 1.0.0
+    manifest: corpora/jurisdictions/us/ai-governance/corpus.yaml
+scope:
+  jurisdictions: [EU, US]
+  field: ai-governance
+  target_class: advanced_or_general_purpose_ai_model
+filters:
+  legal_force: binding
+  applicability_status: applicable
+  actor_type: market_provider
+  conduct_type: model_evaluation
+evidence:
+  included: &included_evidence
+    - 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+    - d6c03e83-d88c-572e-9b77-35a818346675
+    - 5fe186b5-b05a-5e49-b065-3296c2617f4e
+    - 456bd51b-75bf-5313-8863-bd6ba767e625
+    - 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
+    - d4dfd16f-33bb-5956-b313-fde572c8d808
+    - 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+    - 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+    - 493e990c-81ae-55d5-8279-cf56812b1959
+    - 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    - 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    - 3291437a-2606-5737-b0b8-b798efb11c7d
+    - e54e3962-be7f-5610-83b2-d297cc904664
+    - 1bf6ede3-45ca-588d-9123-2f69e501cb08
+    - 66a51aec-420c-5b38-accc-2b60d2805a0b
+    - 2e169e44-5094-5ebc-ac67-330cabf22462
+    - ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    - 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    - 5f39309f-df22-5c9a-88bd-ebd9a288cb4d
+    - bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+    - 774b58d2-8517-5113-a7d0-64f8c17ed277
+    - af0898a6-7575-5af0-b270-cb615f6cd43f
+    - 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    - 3675454a-3cb3-5799-9fd3-3dc90f3add50
+    - d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    - 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    - 94800da1-6467-5ffb-9892-bfe0565a8194
+    - 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
+    - e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
+    - a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
+    - 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    - 07e3604d-321e-5621-9fde-357ab058412c
+  excluded:
+    - reason: outside_reviewed_corpus
+      archive_path: archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml
+      source_locators: [Article 51(1)-(2), Article 52(1)]
+      note: Temporary Article 51 and Article 52 rows were excluded during reviewed reconciliation.
+requested:
+  concepts: [legal_force, applicability_status, actor_type, conduct_type, target_system]
+  relationships: [claim_supported_by_passage, claim_describes_actor]
+resulting_claims:
+  - subject: EU
+    origin: writ_derived
+    reported_value: true
+    methodology_id: writ.methodology.model-evaluation-duty
+    methodology_version: 1.0.0
+    input_record_ids: [d4dfd16f-33bb-5956-b313-fde572c8d808]
+    trace_id: writ.trace.eu-us-model-evaluation.eu.v1
+    writ_derived: true
+  - subject: US
+    origin: writ_derived
+    reported_value: false
+    methodology_id: writ.methodology.model-evaluation-duty
+    methodology_version: 1.0.0
+    input_record_ids:
+      - 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+      - 3675454a-3cb3-5799-9fd3-3dc90f3add50
+      - 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    trace_id: writ.trace.eu-us-model-evaluation.us.v1
+    writ_derived: true
+unresolved_or_contested:
+  - record_id: 92393fff-5ee8-56f8-aa97-7847e2b689ac
+    status: unresolved
+  - record_id: aa006750-2c54-589a-91de-3456e55210c6
+    status: unresolved
+  - record_id: d22da9ba-8264-5bf0-b286-51235002e7ed
+    status: unresolved
+answer_trace:
+  origin: writ_derived
+  methodology_id: writ.methodology.model-evaluation-duty
+  methodology_version: 1.0.0
+  methodology_path: archive/pilots/eu-us-ai-evaluation-v1/original/methodology/model-evaluation-duty.writ
+  input_record_ids: *included_evidence
+  trace_id: writ.trace.eu-us-model-evaluation.v1
+  writ_derived: true
+  interpretation_choices:
+    - binding means legal_force is binding
+    - currently means applicability_status is applicable
+    - providers means actor_type is market_provider
+    - evaluation means conduct_type is model_evaluation

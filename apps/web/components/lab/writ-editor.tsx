@@ -29,7 +29,7 @@ export interface WritEditorProps {
  * WritEditor — a Monaco editor bound to the `writ` language and the two
  * Seam themes. It renders compile diagnostics as markers and, when the analyzer
  * reports an uncovered region, paints a gold gutter seam on the `otherwise`
- * clause via `deltaDecorations`. Loaded client-only (see `Playground`).
+ * clause via `deltaDecorations`. Loaded client-only (see `WritLab`).
  */
 export default function WritEditor({ value, onChange, isDark, diagnostics, gap }: WritEditorProps) {
   const editorRef = useRef<CodeEditor | null>(null);

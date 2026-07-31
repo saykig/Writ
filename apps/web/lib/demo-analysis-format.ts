@@ -1,8 +1,8 @@
 /**
- * Presentation helpers for the policy-test data.
+ * Presentation helpers for the demo-analysis data.
  *
  * Deliberately free of Node imports so client components can use them: the
- * server-only module (`lib/policy-test.ts`) reaches for `node:crypto` through
+ * server-only module (`lib/demo-analysis.ts`) reaches for `node:crypto` through
  * `@writ/provenance`, which must never reach the browser bundle.
  *
  * Nothing here changes what a value says. These functions fix word separators,

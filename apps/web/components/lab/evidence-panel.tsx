@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 
-import type { EvidenceView } from "@/components/playground/types";
+import type { EvidenceView } from "@/components/lab/types";
 import { HashPill } from "@/components/site/hash-pill";
 
 function day(iso: string): string {

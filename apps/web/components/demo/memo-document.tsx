@@ -6,7 +6,7 @@
  * Serif text on a paper surface, a masthead, numbered sections and a measured
  * line length. The point is that a reader should be able to treat this as a
  * memorandum they could file, not as a screen they have to operate — the same
- * reviewed records the Playground compiles, rendered for reading.
+ * reviewed records the Writ Lab compiles, rendered for reading.
  *
  * Citations are sparse by design. Where one appears, it opens the record it
  * rests on; the record list at the end covers everything the memo drew on.
@@ -189,10 +189,10 @@ export function MemoDocument({
       <footer className="mt-9 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
         <p className="text-[0.72rem] text-muted-foreground italic">written in Writ.</p>
         <Link
-          href={{ pathname: "/playground", query: { example: "reviewed", from: memo.questionId } }}
+          href={{ pathname: "/lab", query: { example: "reviewed", from: memo.questionId } }}
           className="inline-flex items-center gap-1 text-[0.76rem] text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground print:hidden"
         >
-          View how this was structured in the Playground
+          Trace this judgment in Writ Lab
           <ArrowUpRight aria-hidden className="size-3" />
         </Link>
       </footer>

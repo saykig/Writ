@@ -10,7 +10,7 @@ import {
 const ITEMS: { q: string; a: string }[] = [
   {
     q: "What is Writ, in one sentence?",
-    a: "A compiler for policy scoring: you write a scoring rubric as a program, and Writ catches ambiguity before any evidence, scores it against a frozen, reviewed record, and returns every number as a receipt anyone can recompute.",
+    a: "A source-grounded knowledge system and domain-specific language for political science and global affairs: questions run across versioned corpora, and every derived judgment remains traceable to reviewed evidence.",
   },
   {
     q: "Does it automate the judgment?",
@@ -18,19 +18,19 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Why four truth values instead of true and false?",
-    a: "Because evidence is often incomplete or conflicting. Writ keeps “unknown” and “contested” distinct from “false”, so a missing fact never silently becomes a failing score — the result stays honestly unresolved rather than guessed.",
+    a: "Because evidence is often incomplete or conflicting. Writ keeps “unknown” and “contested” distinct from “false”, so a missing fact never silently becomes a negative result — the result stays honestly unresolved rather than guessed.",
   },
   {
     q: "What does “reproducible” actually mean here?",
-    a: "Every score is content-hashed. Anyone with the same frozen evidence recomputes the same number and the same hash; change a single quote and the hash changes. The score carries its own proof.",
+    a: "Every Writ-derived result declares its methodology, version, inputs, and trace. Anyone with the same frozen evidence recomputes the same result and hash; change a single quote and the hash changes.",
   },
   {
     q: "What is the IR?",
     a: "The intermediate representation — the normalized, typed program a rubric compiles to. The evaluator and the analyzer reason over the IR, not the surface text, so the same methodology behaves identically everywhere.",
   },
   {
-    q: "Can it handle more than pass/fail scoring?",
-    a: "Yes. Beyond a three-point scale, it expresses weighted-ordinal indices while keeping an incompletely assessed measure pending rather than collapsing it to zero.",
+    q: "Can a methodology use more than a yes/no result?",
+    a: "Yes. A declared analysis can use a three-point scale or weighted-ordinal measure while keeping an incompletely assessed value pending rather than collapsing it to zero.",
   },
 ];
 

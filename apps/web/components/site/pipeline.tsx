@@ -5,9 +5,9 @@ import { TruthBadge } from "@/components/site/truth-badge";
 import { HashPill } from "@/components/site/hash-pill";
 
 /**
- * Pipeline — a plain, one-glance picture of what Writ does with a policy
- * rubric: read it as a program, check it before any evidence, score it against a
- * frozen record, and return an auditable receipt. Each stage shows a real
+ * Pipeline — a plain, one-glance picture of what Writ does when a saved query
+ * applies a computable methodology: check it, evaluate it against a frozen
+ * record, and return an auditable trace. Each stage shows a real
  * artifact, not an abstract icon, so the story reads left to right.
  */
 
@@ -36,7 +36,7 @@ function Connector() {
 export function Pipeline() {
   return (
     <div className="flex flex-col items-stretch gap-1 lg:flex-row lg:items-stretch">
-      <Stage step="1" title="Write the rubric as a program">
+      <Stage step="1" title="Write the methodology as a program">
         <p className="text-[0.82rem] leading-relaxed text-muted-foreground">
           A scoring methodology, made precise. No spreadsheet, no prose left to interpret at
           run&nbsp;time.
@@ -50,10 +50,10 @@ otherwise  unresolved`}</code>
 
       <Connector />
 
-      <Stage step="2" title="Writ checks it, then scores it">
+      <Stage step="2" title="Writ checks it, then derives a result">
         <p className="text-[0.82rem] leading-relaxed text-muted-foreground">
           The analyzer flags ambiguity <em className="text-foreground not-italic">before</em> any
-          evidence. Then it scores against a frozen, reviewed record — where{" "}
+          evidence. Then it evaluates a frozen, reviewed record — where{" "}
           <span className="text-foreground">unknown</span> never silently becomes false.
         </p>
         <div className="mt-auto flex flex-col gap-1.5">
@@ -70,14 +70,14 @@ otherwise  unresolved`}</code>
 
       <Connector />
 
-      <Stage step="3" title="Get an auditable receipt">
+      <Stage step="3" title="Get an auditable trace">
         <p className="text-[0.82rem] leading-relaxed text-muted-foreground">
-          Every score is reproducible, and it names exactly where the result turns on a judgment
-          rather than a fact.
+          Every derived result is reproducible, and it names exactly where the result turns on a
+          judgment rather than a fact.
         </p>
         <div className="mt-auto flex flex-col gap-2">
           <span className="flex items-center gap-2 text-[0.82rem] text-muted-foreground">
-            score
+            derived result
             <TruthBadge value="0" />
             <span aria-hidden>·</span>
             <span className="text-gold">interpretation-sensitive</span>

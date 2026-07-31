@@ -3,7 +3,7 @@ import type { CanonicalIr, EvaluationReceipt } from "@writ/domain";
 /**
  * Client-side mirrors of the site's JSON API response shapes. These are the
  * wire contracts of `app/api/*` — declared here (not imported from the server
- * `lib/toolchain`, which pulls in node-only code) so the playground bundle stays
+ * `lib/toolchain`, which pulls in node-only code) so the Writ Lab bundle stays
  * client-safe. Types are erased at build; runtime access still goes through
  * `fetch`.
  */
@@ -79,7 +79,7 @@ export interface VerifyResponse {
  */
 export type ExampleEffect = "reviewed" | "flips" | "widens" | "gap";
 
-export interface PlaygroundExample {
+export interface LabExample {
   id: string;
   title: string;
   reading: string;
@@ -89,7 +89,7 @@ export interface PlaygroundExample {
 }
 
 export interface ExamplesResponse {
-  examples: PlaygroundExample[];
+  examples: LabExample[];
 }
 
 /** The two members of the pilot methodology's declared subject set. */

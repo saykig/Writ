@@ -27,9 +27,9 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Writ · an auditable policy-evaluation compiler",
+  title: "Writ · source-grounded political knowledge",
   description:
-    "Writ turns a policy methodology into a program, its evidence into a frozen reviewed ledger, and each result into a reproducible receipt. It catches scoring ambiguity before any evidence exists, and names exactly where a result depends on judgment.",
+    "Writ is a structured knowledge system and domain-specific language for political science and global affairs. It keeps claims, evidence, uncertainty, provenance, and derived results traceable across corpora.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

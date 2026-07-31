@@ -17,7 +17,7 @@ import Link from "next/link";
 import { ExternalLink, X } from "lucide-react";
 
 import type { MemoRecord } from "@/lib/demo-memo";
-import { humanize } from "@/lib/policy-test-format";
+import { humanize } from "@/lib/demo-analysis-format";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -198,10 +198,10 @@ export function RecordPanel({
           </section>
 
           <Link
-            href={{ pathname: "/playground", query: { example: "reviewed", from: questionId } }}
+            href={{ pathname: "/lab", query: { example: "reviewed", from: questionId } }}
             className="inline-flex items-center gap-1.5 text-[0.76rem] underline decoration-border underline-offset-4 hover:text-foreground"
           >
-            View this record in the Playground
+            Trace this record in Writ Lab
             <ExternalLink aria-hidden className="size-3" />
           </Link>
         </div>

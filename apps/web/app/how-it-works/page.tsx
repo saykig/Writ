@@ -23,7 +23,7 @@ import {
   verify,
 } from "@/lib/toolchain";
 import { sourcingSummary, unsourcedRows } from "@/lib/pilot-sources";
-import { policyTestSummary } from "@/lib/policy-test";
+import { demoAnalysisSummary } from "@/lib/demo-analysis";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -144,7 +144,7 @@ export default function HowItWorksPage() {
 
   const evidence = pilotEvidenceView("eu");
   const quoted = evidence?.actions.filter((action) => action.passage !== null).length ?? 0;
-  const sourcing = sourcingSummary(policyTestSummary().parentRowCount);
+  const sourcing = sourcingSummary(demoAnalysisSummary().parentRowCount);
   const untraced = unsourcedRows();
   const { areas, totalCases, totalFiles } = loadCoverage();
   const maxCases = Math.max(...areas.map((area) => area.cases));
@@ -165,12 +165,13 @@ export default function HowItWorksPage() {
               first
               id="pipeline"
               label="The pipeline"
-              heading="Source, to canonical IR, to evaluator, to receipt."
+              heading="Question, to reviewed records, to a traceable result."
             >
               <Prose className="mt-5">
-                Four stages, each producing a real artifact rather than a status. The rubric is read
-                as a program, checked before any evidence is involved, scored against a frozen
-                record, and returned with a proof of how it was reached.
+                A saved query names versioned corpora and interpretation choices. When it applies a
+                computable methodology, that program is checked before evidence is involved,
+                evaluated over frozen reviewed records, and returned with a proof of how the result
+                was reached.
               </Prose>
 
               <div className="mt-8">
@@ -190,8 +191,8 @@ export default function HowItWorksPage() {
             >
               <Prose className="mt-5">
                 A missing fact and a disproved one are different findings, and collapsing them is
-                how a gap in the record turns into a failing score. Writ keeps four values, each a
-                pair recording support for truth and support for falsity.
+                how a gap in the record turns into an unsupported result. Writ keeps four values,
+                each a pair recording support for truth and support for falsity.
               </Prose>
 
               <dl className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -255,7 +256,11 @@ export default function HowItWorksPage() {
             </Section>
 
             {/* 3 · Language */}
-            <Section id="language" label="The language" heading="A rubric, written as a program.">
+            <Section
+              id="language"
+              label="The language"
+              heading="A methodology, written as a program."
+            >
               <Prose className="mt-5">
                 The EU–US pilot’s headline test, in Writ. The question is whether a jurisdiction
                 imposes a binding model-evaluation duty on providers of advanced AI models, and the
@@ -277,7 +282,7 @@ export default function HowItWorksPage() {
                     { label: "Package", value: ir?.package.name ?? "—", mono: true },
                     { label: "Variables", value: commitment.variables.length },
                     { label: "Parameters", value: commitment.parameters.length },
-                    { label: "Score rules", value: commitment.score_program.rules.length },
+                    { label: "Result rules", value: commitment.score_program.rules.length },
                   ]}
                 />
               ) : null}
@@ -321,8 +326,8 @@ export default function HowItWorksPage() {
                   variant="outline"
                   nativeButton={false}
                   render={
-                    <Link href="/playground">
-                      Open it in the Playground
+                    <Link href="/lab">
+                      Open it in Writ Lab
                       <ArrowRight />
                     </Link>
                   }
@@ -334,7 +339,7 @@ export default function HowItWorksPage() {
             <Section
               id="evidence"
               label="Governed evidence"
-              heading="A score is only as trustworthy as the record beneath it."
+              heading="A derived result is only as trustworthy as the record beneath it."
             >
               <Prose className="mt-5">
                 Evidence is not a bag of links. Each passage is anchored in a retrieved document
@@ -358,7 +363,7 @@ export default function HowItWorksPage() {
                   <p className="mt-5 max-w-[64ch] text-[0.88rem] leading-7 text-muted-foreground">
                     That is the European Union snapshot: {quoted} provisions, each carrying the
                     words of the article it classifies, lifted from the Official Journal text and
-                    hashed on retrieval. Nothing enters a score without one.
+                    hashed on retrieval. Nothing enters a derived result without one.
                   </p>
                   <p className="mt-4 max-w-[64ch] text-[0.88rem] leading-7 text-muted-foreground">
                     <span className="font-medium text-foreground">
@@ -373,10 +378,10 @@ export default function HowItWorksPage() {
 
               <Disclosure summary="Why a snapshot is frozen">
                 <p className="max-w-[64ch] text-[0.88rem] leading-7 text-muted-foreground">
-                  A published score names the exact evidence snapshot it was computed against, by
+                  A derived result names the exact evidence snapshot it was computed against, by
                   hash. Later evidence does not silently change an old result: it produces a new
-                  snapshot, and a new score, leaving the original reproducible. Accepted records are
-                  superseded, never edited in place.
+                  snapshot and a new derived result, leaving the original reproducible. Accepted
+                  records are superseded, never edited in place.
                 </p>
               </Disclosure>
             </Section>
@@ -395,7 +400,7 @@ export default function HowItWorksPage() {
 
               {sampleHash ? (
                 <div className="tool mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 p-4">
-                  <span className="label">Receipt, recomputed now</span>
+                  <span className="label">Trace, recomputed now</span>
                   <HashPill hash={sampleHash} chars={10} />
                   {verified ? (
                     <span className="inline-flex items-center gap-1.5 text-[0.82rem] font-medium text-true">
@@ -436,8 +441,8 @@ export default function HowItWorksPage() {
                 <Button
                   nativeButton={false}
                   render={
-                    <Link href="/playground">
-                      Run it yourself in the Playground
+                    <Link href="/lab">
+                      Run it yourself in Writ Lab
                       <ArrowRight />
                     </Link>
                   }

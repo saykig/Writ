@@ -1,12 +1,14 @@
 /**
- * Typed reader for the human-reviewed EU–US AI evaluation pilot.
+ * Typed reader for a saved historical EU–US query over the independent active
+ * jurisdictional corpora.
  *
- * The authoritative record is the reviewed YAML annotation table at
+ * The historical question and grouping are preserved in the reviewed YAML at
  * `archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml`.
  * It is parsed once
- * at build time by `scripts/embed-policy-test.ts`; this module only reads,
- * indexes, and shapes that data for the interface. Nothing here invents a claim,
- * a count, a jurisdiction, or a piece of supporting evidence.
+ * at build time by `scripts/embed-demo-analysis.ts`; this module only reads,
+ * indexes, and shapes that data for the interface. The generator verifies all
+ * 24 parent reviews and 32 claims against the active EU and US corpus records
+ * before emitting this view. Nothing here invents a claim or piece of evidence.
  *
  * Four distinctions the reviewers drew are load-bearing, and this module keeps
  * each of them in a separate field rather than merging them for display:
@@ -24,8 +26,12 @@
 
 import { sha256Canonical } from "@writ/provenance";
 
-import { POLICY_TEST_DATASET, POLICY_TEST_SOURCE_PATH } from "./policy-test-data.js";
-import { humanize } from "./policy-test-format.js";
+import {
+  DEMO_ANALYSIS_CORPUS_PATHS,
+  DEMO_ANALYSIS_DATASET,
+  DEMO_ANALYSIS_SOURCE_PATH,
+} from "./demo-analysis-data.js";
+import { humanize } from "./demo-analysis-format.js";
 
 // Presentation helpers live in a Node-free module so client components can
 // import them without pulling `node:crypto` in through @writ/provenance.
@@ -35,11 +41,9 @@ export {
   instrumentLabel,
   scopeLabel,
   statusLabel,
-} from "./policy-test-format.js";
+} from "./demo-analysis-format.js";
 
-export const POLICY_TEST_SLUG = "eu-us-ai-evaluation";
-/** Literal so it satisfies the typed-routes `Route` type at call sites. */
-export const POLICY_TEST_HREF = "/policy-test/eu-us-ai-evaluation" as const;
+export const DEMO_ANALYSIS_SLUG = "eu-us-ai-evaluation";
 
 export type Jurisdiction = "EU" | "US";
 
@@ -184,11 +188,12 @@ export interface ReviewedDataset {
   validation_expectations: ValidationExpectations;
 }
 
-export function policyTestDataset(): ReviewedDataset {
-  return POLICY_TEST_DATASET;
+export function demoAnalysisDataset(): ReviewedDataset {
+  return DEMO_ANALYSIS_DATASET;
 }
 
-export const POLICY_TEST_SOURCE = POLICY_TEST_SOURCE_PATH;
+export const DEMO_ANALYSIS_SOURCE = DEMO_ANALYSIS_SOURCE_PATH;
+export const DEMO_ANALYSIS_CORPORA = DEMO_ANALYSIS_CORPUS_PATHS;
 
 /* ------------------------------------------------------------------ display */
 
@@ -315,8 +320,8 @@ export interface EvidenceGroup {
   isBundle: boolean;
 }
 
-export function policyTestEvidenceGroups(): EvidenceGroup[] {
-  const dataset = policyTestDataset();
+export function demoAnalysisEvidenceGroups(): EvidenceGroup[] {
+  const dataset = demoAnalysisDataset();
 
   return dataset.records.map((record) => {
     const context = {
@@ -397,8 +402,8 @@ export interface ClaimRecord {
   fields: ClaimFields;
 }
 
-export function policyTestClaimRecords(): ClaimRecord[] {
-  return policyTestDataset().records.flatMap((record) => {
+export function demoAnalysisClaimRecords(): ClaimRecord[] {
+  return demoAnalysisDataset().records.flatMap((record) => {
     const base = {
       parentRowId: record.row_id,
       jurisdiction: record.jurisdiction,
@@ -426,8 +431,8 @@ export function policyTestClaimRecords(): ClaimRecord[] {
 }
 
 /** Every parent row and derived claim, flattened for lookup by ID only. */
-export function policyTestEvidenceEntries(): EvidenceEntry[] {
-  return policyTestEvidenceGroups().flatMap((group) => [group.parent, ...group.children]);
+export function demoAnalysisEvidenceEntries(): EvidenceEntry[] {
+  return demoAnalysisEvidenceGroups().flatMap((group) => [group.parent, ...group.children]);
 }
 
 /* -------------------------------------------------------------- highlights */
@@ -495,12 +500,14 @@ const HIGHLIGHT_COPY: {
   },
 ];
 
-export function policyTestHighlights(): HighlightedEvidence[] {
-  const entries = policyTestEvidenceEntries();
+export function demoAnalysisHighlights(): HighlightedEvidence[] {
+  const entries = demoAnalysisEvidenceEntries();
   return HIGHLIGHT_COPY.map((copy) => {
     const entry = entries.find((candidate) => candidate.id === copy.id);
     if (!entry) {
-      throw new Error(`policy-test: highlighted record ${copy.id} is not in the reviewed dataset`);
+      throw new Error(
+        `demo-analysis: highlighted record ${copy.id} is not in the reviewed dataset`,
+      );
     }
     return { ...copy, summary: entry.summary };
   });
@@ -508,7 +515,7 @@ export function policyTestHighlights(): HighlightedEvidence[] {
 
 /* ------------------------------------------------------------------ summary */
 
-export interface PolicyTestSummary {
+export interface DemoAnalysisSummary {
   datasetId: string;
   schemaVersion: string;
   reviewStatus: string;
@@ -522,10 +529,10 @@ export interface PolicyTestSummary {
   rejectedReviewCount: number;
 }
 
-export function policyTestSummary(): PolicyTestSummary {
-  const dataset = policyTestDataset();
+export function demoAnalysisSummary(): DemoAnalysisSummary {
+  const dataset = demoAnalysisDataset();
   const expectations = dataset.validation_expectations;
-  const groups = policyTestEvidenceGroups();
+  const groups = demoAnalysisEvidenceGroups();
 
   return {
     datasetId: dataset.dataset_id,
@@ -560,8 +567,8 @@ export interface RuleCondition {
 }
 
 /** The five conditions, read from `methodology.headline_rule` and never restated. */
-export function policyTestRuleConditions(): RuleCondition[] {
-  const rule = policyTestDataset().methodology.headline_rule;
+export function demoAnalysisRuleConditions(): RuleCondition[] {
+  const rule = demoAnalysisDataset().methodology.headline_rule;
   return [
     { label: "Actor", value: humanize(rule.actor_type), source: "actor_type", key: "actor" },
     {
@@ -600,7 +607,7 @@ export interface UsSubResult {
   evidence: string[];
 }
 
-export interface PolicyTestReceipt {
+export interface DemoAnalysisReceipt {
   datasetId: string;
   schemaVersion: string;
   reviewStatus: string;
@@ -628,7 +635,7 @@ export interface PolicyTestReceipt {
 /** Every claim-bearing record, keyed by its own ID. Bundles keep their children. */
 function claimsById(): Map<string, ClaimFields & { id: string; jurisdiction: Jurisdiction }> {
   const index = new Map<string, ClaimFields & { id: string; jurisdiction: Jurisdiction }>();
-  for (const record of policyTestDataset().records) {
+  for (const record of demoAnalysisDataset().records) {
     index.set(record.row_id, { ...record, id: record.row_id });
     for (const child of record.derived_claims ?? []) {
       index.set(child.claim_id, {
@@ -656,7 +663,7 @@ function scopedTo(claim: ClaimFields, term: string): boolean {
  * government-use and procurement duties into a market-wide provider obligation,
  * or erase them into a single "no regulation" claim.
  */
-export function policyTestUsSubResults(): UsSubResult[] {
+export function demoAnalysisUsSubResults(): UsSubResult[] {
   const usClaims = [...claimsById().values()]
     .filter((claim) => claim.jurisdiction === "US")
     // A bundle parent carries no legal force of its own; its children do.
@@ -706,16 +713,16 @@ export function policyTestUsSubResults(): UsSubResult[] {
   ];
 }
 
-export function policyTestReceipt(): PolicyTestReceipt {
-  const dataset = policyTestDataset();
+export function demoAnalysisReceipt(): DemoAnalysisReceipt {
+  const dataset = demoAnalysisDataset();
   const eu = dataset.headline_judgments.EU;
   const us = dataset.headline_judgments.US;
-  const summary = policyTestSummary();
+  const summary = demoAnalysisSummary();
 
   const transitionFrom = claimById("EU-11A")?.effective_from ?? null;
   const transitionDeadline = claimById("EU-11B")?.compliance_deadline ?? null;
 
-  const receipt: Omit<PolicyTestReceipt, "contentHash"> = {
+  const receipt: Omit<DemoAnalysisReceipt, "contentHash"> = {
     datasetId: dataset.dataset_id,
     schemaVersion: dataset.schema_version,
     reviewStatus: dataset.review_status,
@@ -732,7 +739,7 @@ export function policyTestReceipt(): PolicyTestReceipt {
     },
     us: {
       status: us.market_provider_cross_sector,
-      subResults: policyTestUsSubResults(),
+      subResults: demoAnalysisUsSubResults(),
     },
     counts: {
       ...dataset.validation_expectations,

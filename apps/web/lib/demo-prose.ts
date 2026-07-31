@@ -11,7 +11,7 @@
  * Node-free, so the memo and its footnotes can render on the client.
  */
 
-import { humanize } from "./policy-test-format.js";
+import { humanize } from "./demo-analysis-format.js";
 
 /**
  * Lowercase the first letter only. Using `toLowerCase()` on a whole humanized

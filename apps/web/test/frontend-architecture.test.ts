@@ -7,9 +7,9 @@ const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
 
 describe("frontend architecture", () => {
   test("the working surfaces lead with the work, not with a hero", () => {
-    // The Playground opens on the readings chooser and How it works on its own
+    // Writ Lab opens on the readings chooser and How it works on its own
     // index; neither carries a page header above the thing it is for.
-    for (const path of ["app/playground/page.tsx", "app/how-it-works/page.tsx"]) {
+    for (const path of ["app/lab/page.tsx", "app/how-it-works/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
     // The demo is three columns with the questions always in view, and no
@@ -23,25 +23,32 @@ describe("frontend architecture", () => {
     expect(workspace).toContain("openRecord ?");
   });
 
-  test("the Playground is the tool, with no page header above it", () => {
-    const playground = read("app/playground/page.tsx");
+  test("Writ Lab is the tool, with no page header above it", () => {
+    const lab = read("app/lab/page.tsx");
     const home = read("app/page.tsx");
     const navItems = read("components/site/nav-items.ts");
 
     // The readings chooser is the only framing; no hero competes with it.
-    expect(playground).not.toContain("PageHeader");
-    expect(playground).not.toContain("eyebrow=");
-    expect(navItems).toContain('label: "Playground"');
+    expect(lab).not.toContain("PageHeader");
+    expect(lab).not.toContain("eyebrow=");
+    expect(navItems).toContain('label: "Writ Lab"');
     expect(home).toContain(">Try Writ</Link>");
-    expect(home).not.toContain("Try the Playground");
+    expect(home).not.toContain("Try the Writ Lab");
+  });
+
+  test("the retired Playground route redirects permanently to Writ Lab", () => {
+    const config = read("next.config.ts");
+    expect(config).toContain('source: "/playground"');
+    expect(config).toContain('destination: "/lab"');
+    expect(config).toContain("permanent: true");
   });
 
   test("the site is four surfaces and the nav names exactly three", () => {
     const navItems = read("components/site/nav-items.ts");
 
-    // Demo, Playground, How it works; the homepage is reached from the wordmark.
+    // Demo, Writ Lab, How it works; the homepage is reached from the wordmark.
     expect(navItems).toContain('label: "Demo"');
-    expect(navItems).toContain('label: "Playground"');
+    expect(navItems).toContain('label: "Writ Lab"');
     expect(navItems).toContain('label: "How it works"');
     for (const removed of ["Benchmark", "Methodologies", "Receipts", "Policy Test"]) {
       expect(navItems).not.toContain(`label: "${removed}"`);
@@ -54,7 +61,7 @@ describe("frontend architecture", () => {
       "app/page.tsx",
       "app/demo/page.tsx",
       "app/how-it-works/page.tsx",
-      "app/playground/page.tsx",
+      "app/lab/page.tsx",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, page))).toBe(true);
     }
@@ -62,8 +69,8 @@ describe("frontend architecture", () => {
       "app/benchmark",
       "app/methodologies",
       "app/receipts",
-      "app/policy-test",
-      "app/lab",
+      "app/demo-analysis",
+      "app/playground",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
     }
@@ -120,7 +127,7 @@ describe("frontend architecture", () => {
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
     expect(home).toContain("<PilotGlobeSelector");
-    expect(selector).toContain("Receipt score");
+    expect(selector).toContain("Derived result");
     expect(selector).toContain("Provisions considered");
     // The gap in the record travels with the answer.
     expect(selector).toContain("Not yet traced");
@@ -190,14 +197,14 @@ describe("frontend architecture", () => {
     }
     expect(evaluate).toContain("evaluatePilot");
     expect(examples).toContain("loadPilotExamples");
-    // The G7 member Lab and its corpus adapter are gone rather than dangling.
-    expect(existsSync(resolve(WEB_ROOT, "app/lab"))).toBe(false);
+    // The G7 member-specific Lab and its corpus adapter are gone rather than dangling.
+    expect(existsSync(resolve(WEB_ROOT, "app/lab/page.tsx"))).toBe(true);
     expect(existsSync(resolve(WEB_ROOT, "components/g7"))).toBe(false);
     expect(existsSync(resolve(WEB_ROOT, "lib/g7-assessments.ts"))).toBe(false);
   });
 
   test("changing a receipt input cannot relabel a stale receipt", () => {
-    const receipt = read("components/playground/receipt-panel.tsx");
+    const receipt = read("components/lab/receipt-panel.tsx");
     expect(receipt).toContain("evaluatedMember !== member");
     expect(receipt).toContain("evaluatedProfile !== profile");
     expect(receipt).toContain("memberLabel(evaluatedMember ?? member)");

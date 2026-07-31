@@ -6,6 +6,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..");
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [{ source: "/playground", destination: "/lab", permanent: true }];
+  },
   // The @writ/* workspace packages ship raw NodeNext TypeScript source
   // (exports point at ./src/index.ts), so Next must transpile them.
   transpilePackages: [
@@ -37,7 +40,7 @@ const nextConfig: NextConfig = {
       "../../packages/domain/schemas/**",
       "../../conformance/**",
     ],
-    "/playground": [
+    "/lab": [
       "../../examples/**",
       "../../corpora/multilateral/g7/2025-ai-sme/**",
       "../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
