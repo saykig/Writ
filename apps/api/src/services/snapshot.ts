@@ -4,7 +4,7 @@
 // the cutoff, reviewed) as of a system-time instant, assembles an immutable
 // evidence document, content-addresses it with `@writ/provenance`, and
 // records the frozen membership. Export re-materializes that document and
-// validates it against `specs/evidence.schema.json` (via `@writ/domain`).
+// validates it against `schemas/core/evidence.schema.json` (via `@writ/domain`).
 //
 // The exported document's shape is EXACTLY what `evaluateCommitment` consumes:
 // `{ schema_version, snapshot, document_versions, passages, claims, actions,

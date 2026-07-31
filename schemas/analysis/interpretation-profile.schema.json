@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/interpretation-profile.schema.json",
+  "$id": "https://writ.example/schemas/analysis/interpretation-profile.schema.json",
   "title": "Writ Interpretation Profile",
   "type": "object",
   "additionalProperties": false,
@@ -44,13 +44,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "question",
-          "choice",
-          "rationale",
-          "status"
-        ],
+        "required": ["id", "question", "choice", "rationale", "status"],
         "properties": {
           "id": {
             "type": "string"
@@ -73,12 +67,7 @@
             }
           },
           "status": {
-            "enum": [
-              "proposed",
-              "accepted",
-              "contested",
-              "superseded"
-            ]
+            "enum": ["proposed", "accepted", "contested", "superseded"]
           },
           "approved_by": {
             "type": "array",
@@ -98,12 +87,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "diagnostic_code",
-          "object_id",
-          "rationale",
-          "approved_by"
-        ],
+        "required": ["diagnostic_code", "object_id", "rationale", "approved_by"],
         "properties": {
           "diagnostic_code": {
             "type": "string"
@@ -125,12 +109,7 @@
       }
     },
     "status": {
-      "enum": [
-        "draft",
-        "review",
-        "approved",
-        "withdrawn"
-      ]
+      "enum": ["draft", "review", "approved", "withdrawn"]
     },
     "created_at": {
       "type": "string",

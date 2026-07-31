@@ -70,7 +70,8 @@ function artifact(
 }
 
 function phase1aArtifacts(options: Options): CorpusArtifactInput[] {
-  const schemaFiles = readdirSync(resolve(ROOT, "schemas"))
+  const compatibilitySchemaDir = "schemas/compatibility/compliance-corpus-v2";
+  const schemaFiles = readdirSync(resolve(ROOT, compatibilitySchemaDir))
     .filter((name) => name.endsWith(".schema.json"))
     .sort();
   return [
@@ -93,7 +94,7 @@ function phase1aArtifacts(options: Options): CorpusArtifactInput[] {
     ...schemaFiles.map((name) =>
       artifact(
         options,
-        `schemas/${name}`,
+        `${compatibilitySchemaDir}/${name}`,
         `schema.${basename(name, ".schema.json")}`,
         "schema",
         "application/schema+json",

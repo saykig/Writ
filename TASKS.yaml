@@ -65,5 +65,26 @@ tasks:
       - packages/benchmark/test/fixtures/weighted-ordinal-methodology.writ
       - packages/benchmark/test/weighted-ordinal.test.ts
 
+  - id: RESET-004
+    title: Establish schema and protocol authority
+    status: review
+    dependencies:
+      - RESET-003
+    scope:
+      - Make schemas the only active JSON Schema authority.
+      - Separate core, extension, analysis, and versioned compatibility contracts.
+      - Move language and API protocols out of the former mixed contract root.
+      - Update schema IDs, consumers, generators, tests, documentation, and manifests.
+      - Document the remaining reference-core retirement path without deleting an active consumer.
+    acceptance:
+      - No active schema ambiguity remains.
+      - No universal core record requires commitment, obligation, or score fields.
+      - Schema validation, conformance, unit tests, typecheck, and build pass.
+    outputs:
+      - schemas/README.md
+      - adr/0013-schema-and-protocol-authority.md
+      - docs/current/schema-protocol-path-map.md
+      - docs/current/reference-core-retirement.md
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

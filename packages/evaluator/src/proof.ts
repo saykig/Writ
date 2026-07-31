@@ -1,7 +1,7 @@
 // Minimal proof-node model for the evaluator kernel.
 //
 // This is a Phase-1 seed aligned to the `proofNode` shape in
-// `specs/evaluation-receipt.schema.json`. It records how a derived truth value
+// `schemas/analysis/evaluation-receipt.schema.json`. It records how a derived truth value
 // was reached: leaf nodes for literals/operands and operator nodes (`not`,
 // `and`, `or`) referencing their child node ids. It will later be unified with
 // the proof types in `@writ/domain`; until then this package depends on

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/canonical-ir.schema.json",
+  "$id": "https://writ.example/schemas/analysis/canonical-ir.schema.json",
   "title": "Writ Canonical Intermediate Representation",
   "type": "object",
   "additionalProperties": false,

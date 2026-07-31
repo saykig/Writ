@@ -15,6 +15,19 @@ bun run build
 
 Python checks use the install and commands defined in `.github/workflows/ci.yml`.
 
+For schema and protocol authority changes:
+
+```bash
+bun test packages/domain
+PYTHONPATH=apps/ingest/src .venv/bin/pytest -q tests/schema
+.venv/bin/python scripts/validate_pack.py
+bun run conformance
+```
+
+Authoritative schemas live only under `schemas/`. Runtime vendor copies under
+`packages/domain/schemas/` are checked against the path map in
+`packages/domain/src/schemas.ts`.
+
 For documentation-only changes:
 
 ```bash

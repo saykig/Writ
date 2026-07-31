@@ -11,7 +11,9 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 REGISTRY_RELATIVE_PATH = Path("config/source_registry.yml")
-REGISTRY_SCHEMA_RELATIVE_PATH = Path("schemas/source_registry_config.schema.json")
+REGISTRY_SCHEMA_RELATIVE_PATH = Path(
+    "schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json"
+)
 
 LEGACY_ENTRY_KEYS = {
     "id",

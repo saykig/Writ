@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/interpretation-profile.schema.json",
+  "$id": "https://writ.example/schemas/analysis/interpretation-profile.schema.json",
   "title": "Writ Interpretation Profile",
   "type": "object",
   "additionalProperties": false,

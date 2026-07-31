@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/source_registry_config.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json",
   "title": "Writ Canonical Source Registry Configuration",
   "type": "object",
   "additionalProperties": false,

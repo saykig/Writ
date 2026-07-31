@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/methodology-inventory.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/g7-benchmark-v1/methodology-inventory.schema.json",
   "title": "G7 Chapter Methodology Inventory",
   "type": "object",
   "additionalProperties": false,

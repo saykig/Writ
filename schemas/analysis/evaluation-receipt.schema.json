@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/evaluation-receipt.schema.json",
+  "$id": "https://writ.example/schemas/analysis/evaluation-receipt.schema.json",
   "title": "Writ Evaluation Receipt",
   "type": "object",
   "additionalProperties": false,
@@ -26,22 +26,10 @@
       "$ref": "#/$defs/run"
     },
     "result": {
-      "enum": [
-        "-1",
-        "0",
-        "+1",
-        "not_applicable",
-        "unresolved"
-      ]
+      "enum": ["-1", "0", "+1", "not_applicable", "unresolved"]
     },
     "result_status": {
-      "enum": [
-        "supported",
-        "contested",
-        "incomplete",
-        "ambiguous",
-        "invalid"
-      ]
+      "enum": ["supported", "contested", "incomplete", "ambiguous", "invalid"]
     },
     "confidence": {
       "type": "object",
@@ -85,10 +73,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "action_id",
-          "reason"
-        ],
+        "required": ["action_id", "reason"],
         "properties": {
           "action_id": {
             "type": "string"
@@ -119,21 +104,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "code",
-          "severity",
-          "message"
-        ],
+        "required": ["code", "severity", "message"],
         "properties": {
           "code": {
             "type": "string"
           },
           "severity": {
-            "enum": [
-              "error",
-              "warning",
-              "info"
-            ]
+            "enum": ["error", "warning", "info"]
           },
           "message": {
             "type": "string"
@@ -180,16 +157,10 @@
             "type": "number"
           },
           "internal_score": {
-            "type": [
-              "number",
-              "null"
-            ]
+            "type": ["number", "null"]
           },
           "public_score": {
-            "type": [
-              "number",
-              "null"
-            ]
+            "type": ["number", "null"]
           },
           "pending": {
             "type": "boolean"
@@ -202,12 +173,7 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "id",
-                "weight",
-                "score",
-                "pending"
-              ],
+              "required": ["id", "weight", "score", "pending"],
               "properties": {
                 "id": {
                   "type": "string"
@@ -216,10 +182,7 @@
                   "type": "number"
                 },
                 "score": {
-                  "type": [
-                    "number",
-                    "null"
-                  ]
+                  "type": ["number", "null"]
                 },
                 "pending": {
                   "type": "boolean"
@@ -233,12 +196,7 @@
   },
   "$defs": {
     "truth": {
-      "enum": [
-        "true",
-        "false",
-        "unknown",
-        "contested"
-      ]
+      "enum": ["true", "false", "unknown", "contested"]
     },
     "run": {
       "type": "object",
@@ -281,13 +239,7 @@
     "ruleEvaluation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "rule_id",
-        "priority",
-        "result",
-        "truth_value",
-        "proof_id"
-      ],
+      "required": ["rule_id", "priority", "result", "truth_value", "proof_id"],
       "properties": {
         "rule_id": {
           "type": "string"
@@ -296,12 +248,7 @@
           "type": "integer"
         },
         "result": {
-          "enum": [
-            "-1",
-            "0",
-            "+1",
-            "not_applicable"
-          ]
+          "enum": ["-1", "0", "+1", "not_applicable"]
         },
         "truth_value": {
           "$ref": "#/$defs/truth"
@@ -314,10 +261,7 @@
     "proof": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "root_id",
-        "nodes"
-      ],
+      "required": ["root_id", "nodes"],
       "properties": {
         "root_id": {
           "type": "string"
@@ -333,13 +277,7 @@
     "proofNode": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "kind",
-        "label",
-        "truth_value",
-        "child_ids"
-      ],
+      "required": ["id", "kind", "label", "truth_value", "child_ids"],
       "properties": {
         "id": {
           "type": "string"

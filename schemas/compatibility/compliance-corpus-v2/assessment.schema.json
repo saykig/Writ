@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/corpus/assessment.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/compliance-corpus-v2/assessment.schema.json",
   "title": "Corpus Assessment Record",
   "oneOf": [
     { "$ref": "#/$defs/assessmentSelection" },

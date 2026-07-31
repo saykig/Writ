@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/corpus/reconciliation_manifest.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/compliance-corpus-v2/reconciliation_manifest.schema.json",
   "title": "ReconciliationManifest",
   "type": "object",
   "additionalProperties": false,

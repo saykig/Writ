@@ -2,7 +2,7 @@
 //
 // These mirror the SQL columns (snake_case) rather than the evaluator/domain
 // types on purpose: per AGENTS.md, database types must not leak into the
-// evaluator. Records the DB persists are shaped by the JSON Schemas in `specs/`.
+// evaluator. Records the DB persists are shaped by the authoritative JSON Schemas in `schemas/`.
 
 export type Json = unknown;
 export type JsonObject = Record<string, Json>;

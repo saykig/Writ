@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/evaluation-receipt.schema.json",
+  "$id": "https://writ.example/schemas/analysis/evaluation-receipt.schema.json",
   "title": "Writ Evaluation Receipt",
   "type": "object",
   "additionalProperties": false,

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/corpus/review_item.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/compliance-corpus-v2/review_item.schema.json",
   "title": "CorpusReviewItem",
   "type": "object",
   "additionalProperties": false,

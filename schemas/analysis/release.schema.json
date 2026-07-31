@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/release.schema.json",
+  "$id": "https://writ.example/schemas/analysis/release.schema.json",
   "title": "Writ Release Manifest",
   "type": "object",
   "additionalProperties": false,
@@ -34,12 +34,7 @@
       "type": "string"
     },
     "status": {
-      "enum": [
-        "draft",
-        "candidate",
-        "published",
-        "withdrawn"
-      ]
+      "enum": ["draft", "candidate", "published", "withdrawn"]
     },
     "created_at": {
       "type": "string",
@@ -100,11 +95,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "media_type",
-          "hash"
-        ],
+        "required": ["id", "media_type", "hash"],
         "properties": {
           "id": {
             "type": "string"
@@ -161,10 +152,7 @@
     "dependency": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "hash"
-      ],
+      "required": ["id", "hash"],
       "properties": {
         "id": {
           "type": "string"

@@ -1,7 +1,7 @@
 /**
  * Ergonomic, hand-authored TypeScript types for the Writ canonical IR.
  *
- * These mirror `specs/canonical-ir.schema.json` (the interchange authority) field
+ * These mirror `schemas/analysis/canonical-ir.schema.json` (the interchange authority) field
  * for field, using the same snake_case keys as schema-valid IR JSON so a parsed,
  * validated IR document is directly assignable to these types with no renaming.
  * The `json-schema-to-typescript` output in `./generated` is derived from the same

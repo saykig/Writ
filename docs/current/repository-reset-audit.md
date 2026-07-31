@@ -70,7 +70,7 @@ Generated caches, virtual environments, package installations, and `.git` intern
 │   └── test/
 ├── schemas/
 ├── scripts/
-├── specs/
+├── protocols/
 └── tests/
     ├── benchmarks/
     ├── fixtures/
@@ -92,8 +92,8 @@ artifact can still be frozen and reviewable; it is not the place where later cor
 | EU–US AI-governance review | `pilot/eu-us-ai-evaluation/annotations/human-reviewed.yaml` is explicitly the authoritative hand-reviewed table. `sources/sources.yml` governs acquisition. | `normalized/{records,claims,headline-judgments}.json` from `scripts/emit_eu_us_ai_evaluation.py`; `provenance/*.json` from `scripts/fetch_pilot_sources.py`; `evidence/{eu,us}.snapshot.json` and `coverage.json` from `scripts/build-pilot-snapshot.ts`; web projections `apps/web/lib/policy-test-data.ts` and `apps/web/lib/frozen-data.ts`. | Python pilot builder/tests; web demo, memo, globe, Playground toolchain, and web tests. |
 | G20 Rio 2024 | Frozen report excerpts in `benchmark/2024-rio-g20/sources/*.pdf`, their `sources.json`, canonical source policy in `config/source_registry.yml`, and reviewed vocabulary in `config/corpus_vocabulary.yml`. | Six files in `benchmark/2024-rio-g20/normalized/`, emitted by `scripts/emit_g20_rio.py`; `data/manifests/g20/2024-rio/*` records acquisition/reconciliation metadata. | `G20RioAdapter`, corpus validators, schema tests, ingestion tests, publishing scripts, and stale web tracing configuration. |
 | G7 2025 AI-for-SMEs | Frozen report PDF, reviewed action catalog in `packages/benchmark/src/members.ts`, methodology/rubric inputs, reviewed tally, and published labels. The action catalog says every action is grounded in the frozen chapter. | `sources.json`, `methodology-inventory.json`, eight evidence snapshots, and two profiles from `packages/benchmark/src/generate.ts`; `discrepancy-ledger.json` from the benchmark runner. | `packages/benchmark`, G7 adapter, conformance tests, examples, and stale web tracing configuration. |
-| Source registry | `config/source_registry.yml` plus `schemas/source_registry_config.schema.json`. | `data/source-registry.json`, checked by `scripts/generate_source_registry.py --check`; `data/source-registry-summary.md` is descriptive output. | Ingest registry policy, API seeding/publishing, G7/G20 adapters, tests. |
-| Core contract examples | `specs/*.schema.json`, `specs/writ.ebnf`, `specs/openapi.yaml`. | Byte-identical schema vendor copies in `packages/domain/schemas/`; generated TS in `packages/domain/src/generated/`; generated embed `packages/domain/src/schemas.embedded.ts`; example JSON under `examples/`. | Domain validation/generation, compiler/evaluator packages, conformance, API, CLI, tests. |
+| Source registry | `config/source_registry.yml` plus `schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json`. | `data/source-registry.json`, checked by `scripts/generate_source_registry.py --check`; `data/source-registry-summary.md` is descriptive output. | Ingest registry policy, API seeding/publishing, G7/G20 adapters, tests. |
+| Schema and protocol contracts | `schemas/{core,extensions,analysis,compatibility}/`, `protocols/language/writ.ebnf`, and `protocols/api/openapi.yaml`. | Drift-guarded schema vendor copies in `packages/domain/schemas/`; generated TS in `packages/domain/src/generated/`; generated embed `packages/domain/src/schemas.embedded.ts`; example JSON under `examples/`. | Domain validation/generation, compiler/evaluator packages, conformance, API, CLI, tests. |
 | FATF example | `benchmark/fatf-mutual-evaluation/README.md` and illustrative template. | Writ teaching encoding in `examples/fatf-mutual-evaluation.writ`. No authoritative country result corpus exists. | Benchmark test; the authoritative reproduction test remains `todo`. Classify as example/fixture, not corpus. |
 
 ### EU–US preservation checks
@@ -154,44 +154,14 @@ The eight snapshots contain 87 reviewed actions:
 
 ## Schema dependency map
 
-All JSON Schemas declare draft 2020-12. No schema currently has an external cross-file `$ref`; all
-present `$ref` values are local `#/$defs/...` references. This makes physical relocation possible,
-but `$id`, loaders, vendor copies, generators, manifests, tests, and documentation still require
-coordinated updates.
+`schemas/` is now the only active JSON Schema authority. Its core, extension, analysis, and
+versioned compatibility layers are indexed in `schemas/README.md`; the complete relocation table is
+`docs/current/schema-protocol-path-map.md`. Language and API contracts live under `protocols/`.
 
-### Core/planning contracts: `specs/`
-
-| Contract | `$id` suffix | Main dependencies |
-| --- | --- | --- |
-| `canonical-ir.schema.json` | `/schemas/canonical-ir.schema.json` | Vendored byte-identically to `packages/domain/schemas`; generated TS; compiler, analyzer, evaluator, CLI, conformance, examples. |
-| `evidence.schema.json` | `/schemas/evidence.schema.json` | Vendored domain schema; evaluator snapshots; G7 fixtures; pilot evidence snapshots; API snapshot service. |
-| `evaluation-receipt.schema.json` | `/schemas/evaluation-receipt.schema.json` | Domain generation, evaluator receipts, examples, API/web verification. |
-| `interpretation-profile.schema.json` | `/schemas/interpretation-profile.schema.json` | G7 and pilot profiles, evaluator, benchmark. |
-| `methodology-inventory.schema.json` | `/schemas/methodology-inventory.schema.json` | G7 inventory, examples, benchmark generation. |
-| `source-registry.schema.json` | `/schemas/source-registry.schema.json` | Legacy generated `data/source-registry.json`, pack validation. It is distinct from the operational YAML registry schema. |
-| `discrepancy.schema.json` | `/schemas/discrepancy.schema.json` | Benchmark examples/ledger contracts. |
-| `search-protocol.schema.json` | `/schemas/search-protocol.schema.json` | Negative-claim example and domain generation. |
-| `release.schema.json` | `/schemas/release.schema.json` | Release example and domain generation. |
-| `openapi.yaml` | n/a | Planning API contract; the target location is `protocols/api/openapi.yaml`. |
-| `writ.ebnf` | n/a | Language protocol; the target location is `protocols/language/writ.ebnf`. |
-
-Every `specs/*.schema.json` file is currently byte-identical to its same-named
-`packages/domain/schemas/` copy. `packages/domain/test/schema-drift.test.ts` enforces this.
-`packages/domain/scripts/generate-types.ts` and `embed-schemas.ts` generate the TS interfaces and
-runtime embed.
-
-### Summit-compliance contracts: `schemas/`
-
-| Schema group | Files | Direct loader/consumer |
-| --- | --- | --- |
-| Source and registry | `source_registry_config`, `source_manifest`, `source_document` | `writ_ingest.corpus.registry`, source discovery/fetch/publish scripts, schema tests. |
-| Commitment and methodology | `commitment`, `methodology`, `corpus_vocabulary` | `writ_ingest.corpus.validation`, G7/G20 adapters, vocabulary resolver, tests. |
-| Reports and judgments | `assessment`, `compliance_report` | Corpus validation, normalized G20 graph, tests. |
-| Evidence/reconciliation/review | `evidence`, `reconciliation_manifest`, `review_item` | Corpus validation, adapters, publishing, tests. |
-
-These schemas encode a G7/G20 compliance-corpus compatibility family and should not become the
-universal political-knowledge schema. Later work should move them under a clearly labelled
-compatibility or analysis location without silently changing version `2.0.0`.
+All current schemas use draft 2020-12 and only local `#/$defs/...` references. Runtime copies under
+`packages/domain/schemas/` are drift-guarded vendors, not a second authority. The G7/G20
+summit-compliance schemas remain unchanged in meaning and version under
+`schemas/compatibility/compliance-corpus-v2/`.
 
 ### EU–US pilot-local contracts
 
@@ -213,14 +183,9 @@ Inspect and update these callers before any later relocation:
 | EU–US pilot to archive plus independent EU/US corpora | `apps/ingest/src/writ_ingest/pilot/eu_us_ai_evaluation.py`; `scripts/{emit_eu_us_ai_evaluation.py,fetch_pilot_sources.py,build-pilot-snapshot.ts}`; `apps/web/scripts/{embed-frozen.ts,embed-policy-test.ts,embed-provenance.ts}`; `apps/web/lib/{toolchain,pilot-assessments,pilot-sources,policy-test,policy-test-data}.ts`; demo/globe components; web and Python pilot tests; `.prettierignore`; pilot README. |
 | G20 into `corpora/multilateral/g20/2024-rio` | `G20RioAdapter.SOURCES_FIXTURE`; `scripts/emit_g20_rio.py`; `scripts/validate_corpus.py`; `scripts/publish_corpus.ts`; ingestion/schema tests; `apps/web/next.config.ts`; data manifest references; source registry/vocabulary IDs. |
 | G7 into `corpora/multilateral/g7/2025-ai-sme` and score reproduction under `benchmarks/evaluator/` | `packages/benchmark/src/{paths,methodology,generate,run,members,evidence}.ts`; benchmark tests; G7 adapter; `scripts/{replicate.ts,demo.sh,validate_corpus.py}`; `apps/web/next.config.ts`; examples and discrepancy ledger references. |
-| `specs/` into `schemas/core` and `protocols/` | `packages/domain/schemas`; schema drift and generated-types tests; `packages/domain/scripts`; `scripts/validate_pack.py`; examples; root docs; API/language references; `$id` values; `MANIFEST.sha256`. |
-| Root `schemas/` into compatibility/analysis locations | `apps/ingest/src/writ_ingest/corpus/{validation,registry}.py`; schema tests; scripts; docs; schema `$id` values. |
 | `examples/` and `fixtures/` cleanup | language/CLI/analyzer/domain/benchmark tests; `scripts/demo.sh`; `scripts/validate_pack.py`; web tracing comments/config; conformance parity tests. |
 | `reference-core/` retirement | root workspaces/scripts; `VALIDATION.md`; `scripts/validate_pack.py`; `packages/conformance/test/canonical-parity.test.ts` direct dynamic import; analyzer/evaluator comments and parity fixtures; ADR 0012. |
 | Docs/ADRs to target locations | Root links, `AGENTS.md` required-reading paths, `TASKS.yaml`, `START_HERE.md`, `README.md`, `codex-tasks/*`, CI/document validation. |
-
-Also update or regenerate `MANIFEST.sha256`; it currently names deleted web routes and the Gap
-Matrix files and therefore is not a reliable current-tree manifest.
 
 ## Major-directory classification
 
@@ -231,8 +196,8 @@ Matrix files and therefore is not a reliable current-tree manifest.
 | `apps/web` | current, with generated and stale compatibility areas | Active Next app. `lib/frozen-data.ts`, `policy-test-data.ts`, and `repo-provenance.ts` are generated. `policy-test-*`, Playground naming, deleted-route traces, and compliance-first copy need later semantic cleanup. |
 | `packages/{domain,evaluator,analyzer,language,provenance,cli,conformance}` | current | Production semantic/compiler stack. |
 | `packages/benchmark` | current analysis capability with path-bound corpus code | Preserve evaluator reproduction capability; separate source corpus from benchmark outputs. |
-| `specs` | current contracts awaiting mechanical relocation | Core schemas plus API/grammar protocol are authoritative today. |
-| `schemas` | compatibility contracts | G7/G20 compliance-corpus version 2.0 family; not universal core. |
+| `schemas` | current authority | Sole JSON Schema authority, split into core, extensions, analysis, and versioned compatibility layers. |
+| `protocols` | current authority | Language EBNF and API OpenAPI protocol contracts. |
 | `pilot/eu-us-ai-evaluation` | archive candidate plus migration source | Preserve the combined pilot exactly in the archive; derive independent active EU and US corpora without its comparison question or conclusion. |
 | `benchmark/2024-rio-g20` | current source corpus in the wrong category/path | Reclassify as multilateral political corpus. |
 | `benchmark/2025-ai-sme` | mixed source corpus and generated benchmark | Split authoritative G7 knowledge from score-reproduction benchmark. |

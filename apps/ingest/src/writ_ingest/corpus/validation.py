@@ -18,16 +18,18 @@ from .models import (
 from .registry import find_repo_root
 
 SCHEMA_FILES = {
-    "source_document": "source_document.schema.json",
-    "commitment": "commitment.schema.json",
-    "assessment": "assessment.schema.json",
-    "compliance_report": "compliance_report.schema.json",
-    "evidence": "evidence.schema.json",
-    "methodology": "methodology.schema.json",
-    "source_manifest": "source_manifest.schema.json",
-    "reconciliation_manifest": "reconciliation_manifest.schema.json",
-    "review_item": "review_item.schema.json",
-    "corpus_vocabulary": "corpus_vocabulary.schema.json",
+    "source_document": "compatibility/compliance-corpus-v2/source_document.schema.json",
+    "commitment": "compatibility/compliance-corpus-v2/commitment.schema.json",
+    "assessment": "compatibility/compliance-corpus-v2/assessment.schema.json",
+    "compliance_report": "compatibility/compliance-corpus-v2/compliance_report.schema.json",
+    "evidence": "compatibility/compliance-corpus-v2/evidence.schema.json",
+    "methodology": "compatibility/compliance-corpus-v2/methodology.schema.json",
+    "source_manifest": "compatibility/compliance-corpus-v2/source_manifest.schema.json",
+    "reconciliation_manifest": (
+        "compatibility/compliance-corpus-v2/reconciliation_manifest.schema.json"
+    ),
+    "review_item": "compatibility/compliance-corpus-v2/review_item.schema.json",
+    "corpus_vocabulary": "core/corpus_vocabulary.schema.json",
 }
 
 

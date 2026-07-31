@@ -6,7 +6,7 @@
 --   * immutability of frozen / published rows (snapshots, receipts, published
 --     releases, audit events) enforced by triggers;
 --   * accepted claims are superseded via new rows, never edited in place;
---   * evidence-link stance / support_type aligned to specs/evidence.schema.json.
+--   * evidence-link stance / support_type aligned to schemas/core/evidence.schema.json.
 --
 -- Additive and idempotent-friendly: it never rewrites 0001. Applyable by psql
 -- and by the postgres.js runner (simple protocol, multi-statement).
@@ -193,7 +193,7 @@ CREATE TRIGGER claims_guard
 
 -- ---------------------------------------------------------------------------
 -- Spec alignment: evidence-link stance / support_type
--- (specs/evidence.schema.json is authoritative for record shapes)
+-- (schemas/core/evidence.schema.json is authoritative for record shapes)
 -- ---------------------------------------------------------------------------
 DO $$
 DECLARE c record;
@@ -214,7 +214,7 @@ ALTER TABLE claim_evidence_links
 
 -- ---------------------------------------------------------------------------
 -- Spec alignment: discrepancy resolution_status / category and release status
--- (specs/discrepancy.schema.json, specs/release.schema.json)
+-- (schemas/analysis/discrepancy.schema.json, schemas/analysis/release.schema.json)
 -- ---------------------------------------------------------------------------
 ALTER TABLE discrepancies
   DROP CONSTRAINT IF EXISTS discrepancies_resolution_status_check,

@@ -10,7 +10,7 @@ research corpus exists on its own; comparisons, evaluations, visualizations, and
 reproducible views over one or more corpora.
 
 The initial knowledge families are institutional, legal, policy, theoretical, and empirical. They
-share provenance and revision conventions.
+share provenance and revision conventions without requiring every record to carry a commitment,
 obligation, or score.
 
 ## Layout
@@ -26,13 +26,13 @@ obligation, or score.
 - `apps/ingest` — source-specific acquisition, parsing, anchoring, normalization, and corpus
   validation.
 - `db/migrations` — PostgreSQL schema and controlled migrations.
-- `reference-core` — dependency-light executable specification for the hardest semantics (kept until `packages/evaluator` supersedes it).
-- `specs/` — JSON Schemas, the EBNF, and the OpenAPI contract (interchange authority).
+- `reference-core` — compatibility test oracle pending the documented consumer migration.
+- `schemas/` — sole active JSON Schema authority, divided into core, extensions, analysis, and
+  versioned compatibility contracts.
+- `protocols/` — language EBNF and API OpenAPI protocol authority.
 - `examples/`, `fixtures/`, `data/` — golden `.writ`/IR/receipt examples, seeded defect fixtures,
   source manifests, and generated registry artifacts.
 - `config/` — canonical source and controlled-vocabulary registries.
-- `schemas/` — current and compatibility interchange contracts; the existing summit-compliance
-  family is not the universal Writ schema.
 - `docs/current/` — current product definition and repository audit.
 - `archive/plans/compliance-product-v1/` — superseded compliance-product planning history.
 - `adr/` — architecture decision records.

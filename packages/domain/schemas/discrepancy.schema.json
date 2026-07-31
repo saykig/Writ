@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/discrepancy.schema.json",
+  "$id": "https://writ.example/schemas/analysis/discrepancy.schema.json",
   "title": "Writ Benchmark Discrepancy",
   "type": "object",
   "additionalProperties": false,

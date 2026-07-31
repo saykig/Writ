@@ -2,14 +2,15 @@
  * `@writ/domain` public API.
  *
  * Canonical domain types, JSON Schema validation, a schema-version registry, and
- * the unified diagnostic catalog. `specs/*.schema.json` remains the interchange
- * authority; the schemas here are vendored, drift-guarded copies.
+ * the unified diagnostic catalog. The repository `schemas/` tree is the interchange
+ * authority; package-local schemas are vendored, drift-guarded copies.
  */
 
 // Schema kinds and vendored schema access.
 export {
   SCHEMA_KINDS,
   SCHEMA_FILES,
+  SCHEMA_AUTHORITY_FILES,
   SCHEMA_IDS,
   RAW_SCHEMAS,
   VENDORED_SCHEMAS_DIR,

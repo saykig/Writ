@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/methodology-inventory.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/g7-benchmark-v1/methodology-inventory.schema.json",
   "title": "G7 Chapter Methodology Inventory",
   "type": "object",
   "additionalProperties": false,
@@ -32,11 +32,7 @@
     "chapter": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "title",
-        "uri",
-        "report_year"
-      ],
+      "required": ["title", "uri", "report_year"],
       "properties": {
         "title": {
           "type": "string"
@@ -72,10 +68,7 @@
     "evaluation_window": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "start",
-        "end"
-      ],
+      "required": ["start", "end"],
       "properties": {
         "start": {
           "type": "string",
@@ -95,10 +88,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "term",
-          "definition"
-        ],
+        "required": ["term", "definition"],
         "properties": {
           "term": {
             "type": "string"
@@ -120,10 +110,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "label",
-          "description"
-        ],
+        "required": ["label", "description"],
         "properties": {
           "label": {
             "type": "string"
@@ -203,10 +190,7 @@
     "score_guideline": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "prose",
-        "normalized_branches"
-      ],
+      "required": ["prose", "normalized_branches"],
       "properties": {
         "prose": {
           "type": "string"
@@ -216,18 +200,10 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "result",
-              "condition_text"
-            ],
+            "required": ["result", "condition_text"],
             "properties": {
               "result": {
-                "enum": [
-                  "-1",
-                  "0",
-                  "+1",
-                  "not_applicable"
-                ]
+                "enum": ["-1", "0", "+1", "not_applicable"]
               },
               "condition_text": {
                 "type": "string"
@@ -246,12 +222,7 @@
     "observed_results": {
       "type": "object",
       "additionalProperties": {
-        "enum": [
-          "-1",
-          "0",
-          "+1",
-          "not_applicable"
-        ]
+        "enum": ["-1", "0", "+1", "not_applicable"]
       }
     },
     "open_questions": {
@@ -259,12 +230,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "question",
-          "category",
-          "blocking"
-        ],
+        "required": ["id", "question", "category", "blocking"],
         "properties": {
           "id": {
             "type": "string"
@@ -295,12 +261,7 @@
       }
     },
     "review_status": {
-      "enum": [
-        "draft",
-        "extracted",
-        "reviewed",
-        "approved"
-      ]
+      "enum": ["draft", "extracted", "reviewed", "approved"]
     },
     "reviewer_ids": {
       "type": "array",

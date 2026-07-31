@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/corpus/methodology.schema.json",
+  "$id": "https://writ.example/schemas/compatibility/compliance-corpus-v2/methodology.schema.json",
   "title": "Historical Compliance Methodology Version",
   "type": "object",
   "additionalProperties": false,

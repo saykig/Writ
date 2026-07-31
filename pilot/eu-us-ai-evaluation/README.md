@@ -29,9 +29,9 @@ stated judgment disagree.
 Code lives at `apps/ingest/src/writ_ingest/pilot/eu_us_ai_evaluation.py`; the emitter is
 `scripts/emit_eu_us_ai_evaluation.py`; the tests are `tests/pilot/test_eu_us_ai_evaluation.py`.
 
-The pilot is deliberately separate from the `schemas/` compliance-corpus family, which is
-scoped to G7/G20 summit commitments at `schema_version 2.0.0` and cannot express
-jurisdiction-keyed legal claims without a breaking change.
+The pilot schemas are archived pilot-local contracts. They remain deliberately separate from
+`schemas/compatibility/compliance-corpus-v2/`, which is scoped to G7/G20 summit commitments and
+cannot express jurisdiction-keyed legal claims without a breaking change.
 
 ## Row identity
 

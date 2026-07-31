@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/search-protocol.schema.json",
+  "$id": "https://writ.example/schemas/analysis/search-protocol.schema.json",
   "title": "Writ Negative Evidence Search Protocol",
   "type": "object",
   "additionalProperties": false,
@@ -34,10 +34,7 @@
     "evaluation_window": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "start",
-        "end"
-      ],
+      "required": ["start", "end"],
       "properties": {
         "start": {
           "type": "string",
@@ -67,12 +64,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "query",
-          "executed_at",
-          "source_registry_id",
-          "result_count"
-        ],
+        "required": ["query", "executed_at", "source_registry_id", "result_count"],
         "properties": {
           "query": {
             "type": "string"
@@ -111,18 +103,10 @@
     "coverage_assessment": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "status",
-        "known_gaps",
-        "rationale"
-      ],
+      "required": ["status", "known_gaps", "rationale"],
       "properties": {
         "status": {
-          "enum": [
-            "sufficient",
-            "insufficient",
-            "contested"
-          ]
+          "enum": ["sufficient", "insufficient", "contested"]
         },
         "known_gaps": {
           "type": "array",
@@ -136,11 +120,7 @@
       }
     },
     "result": {
-      "enum": [
-        "no_qualifying_action_found",
-        "qualifying_action_found",
-        "inconclusive"
-      ]
+      "enum": ["no_qualifying_action_found", "qualifying_action_found", "inconclusive"]
     },
     "candidate_action_ids": {
       "type": "array",
@@ -154,23 +134,13 @@
     "review": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "reviewer_id",
-        "decision",
-        "rationale",
-        "reviewed_at"
-      ],
+      "required": ["reviewer_id", "decision", "rationale", "reviewed_at"],
       "properties": {
         "reviewer_id": {
           "type": "string"
         },
         "decision": {
-          "enum": [
-            "accept",
-            "reject",
-            "contest",
-            "request_changes"
-          ]
+          "enum": ["accept", "reject", "contest", "request_changes"]
         },
         "rationale": {
           "type": "string"

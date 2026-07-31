@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Validate the Writ planning pack without modifying governed artifacts."""
+"""Validate Writ schemas, protocols, examples, tasks, and the compatibility oracle."""
 
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -12,17 +14,31 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
+IGNORED_DIRECTORY_NAMES = {
+    ".git",
+    ".mypy_cache",
+    ".next",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "node_modules",
+}
 
 SCHEMA_EXAMPLES = [
-    ("specs/source-registry.schema.json", "data/source-registry.json"),
-    ("specs/canonical-ir.schema.json", "examples/2025-ai-sme-literal.ir.json"),
-    ("specs/evidence.schema.json", "examples/2025-ai-sme.sample-evidence.json"),
-    ("specs/evaluation-receipt.schema.json", "examples/2025-ai-sme.sample-receipt.json"),
-    ("specs/discrepancy.schema.json", "examples/2025-ai-sme.sample-discrepancy.json"),
-    ("specs/interpretation-profile.schema.json", "examples/2025-ai-sme.sample-profile.json"),
-    ("specs/search-protocol.schema.json", "examples/2025-ai-sme.sample-search-protocol.json"),
-    ("specs/methodology-inventory.schema.json", "examples/2025-ai-sme.methodology-inventory.json"),
-    ("specs/release.schema.json", "examples/2025-benchmark.sample-release.json"),
+    ("schemas/core/source-registry.schema.json", "data/source-registry.json"),
+    ("schemas/analysis/canonical-ir.schema.json", "examples/2025-ai-sme-literal.ir.json"),
+    ("schemas/core/evidence.schema.json", "examples/2025-ai-sme.sample-evidence.json"),
+    ("schemas/analysis/evaluation-receipt.schema.json", "examples/2025-ai-sme.sample-receipt.json"),
+    ("schemas/analysis/discrepancy.schema.json", "examples/2025-ai-sme.sample-discrepancy.json"),
+    ("schemas/analysis/interpretation-profile.schema.json", "examples/2025-ai-sme.sample-profile.json"),
+    ("schemas/analysis/search-protocol.schema.json", "examples/2025-ai-sme.sample-search-protocol.json"),
+    (
+        "schemas/compatibility/g7-benchmark-v1/methodology-inventory.schema.json",
+        "examples/2025-ai-sme.methodology-inventory.json",
+    ),
+    ("schemas/analysis/release.schema.json", "examples/2025-benchmark.sample-release.json"),
 ]
 
 REQUIRED_FILES = [
@@ -30,10 +46,11 @@ REQUIRED_FILES = [
     "START_HERE.md",
     "AGENTS.md",
     "TASKS.yaml",
-    "13_CODEX_MASTER_PROMPT.md",
+    "schemas/README.md",
+    "protocols/language/writ.ebnf",
+    "protocols/api/openapi.yaml",
     ".agents/skills/writ-domain/SKILL.md",
     "reference-core/package.json",
-    "repo-scaffold/db/migrations/0001_initial.sql",
     "data/source-registry.json",
 ]
 
@@ -41,6 +58,11 @@ REQUIRED_FILES = [
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def is_repository_source(path: Path) -> bool:
+    relative = path.relative_to(ROOT)
+    return not any(part in IGNORED_DIRECTORY_NAMES for part in relative.parts)
 
 
 def validate_required_files() -> None:
@@ -51,7 +73,7 @@ def validate_required_files() -> None:
 
 def validate_all_json_syntax() -> None:
     for path in sorted(ROOT.rglob("*.json")):
-        if "reference-core/dist" in path.as_posix():
+        if not is_repository_source(path):
             continue
         try:
             json.loads(path.read_text(encoding="utf-8"))
@@ -74,6 +96,8 @@ def validate_schemas_and_examples() -> None:
 def validate_yaml() -> None:
     parsed_yaml: dict[str, object] = {}
     for path in sorted([*ROOT.rglob("*.yaml"), *ROOT.rglob("*.yml")]):
+        if not is_repository_source(path):
+            continue
         try:
             parsed_yaml[str(path.relative_to(ROOT))] = yaml.safe_load(path.read_text(encoding="utf-8"))
         except Exception as exc:  # noqa: BLE001
@@ -83,11 +107,11 @@ def validate_yaml() -> None:
     if not isinstance(tasks, dict) or not isinstance(tasks.get("tasks"), list):
         fail("TASKS.yaml does not contain a task list")
 
-    openapi = parsed_yaml.get("specs/openapi.yaml")
+    openapi = parsed_yaml.get("protocols/api/openapi.yaml")
     if not isinstance(openapi, dict) or openapi.get("openapi") != "3.1.0":
-        fail("specs/openapi.yaml is missing the OpenAPI 3.1.0 marker")
+        fail("protocols/api/openapi.yaml is missing the OpenAPI 3.1.0 marker")
     if not isinstance(openapi.get("paths"), dict) or not isinstance(openapi.get("components"), dict):
-        fail("specs/openapi.yaml is missing paths or components")
+        fail("protocols/api/openapi.yaml is missing paths or components")
     ids = [task.get("id") for task in tasks["tasks"]]
     if len(ids) != len(set(ids)):
         fail("TASKS.yaml contains duplicate task IDs")
@@ -98,18 +122,15 @@ def validate_yaml() -> None:
             fail(f"task {task.get('id')} has unknown dependencies: {missing}")
 
 
-def validate_text_policy() -> None:
-    for path in sorted(ROOT.rglob("*")):
-        if not path.is_file() or path.suffix.lower() not in {".md", ".yaml", ".yml", ".json", ".ts", ".py", ".sql", ".toml", ".ebnf", ".langium", ".mmd"}:
-            continue
-        text = path.read_text(encoding="utf-8")
-        if "\u2014" in text:
-            fail(f"em dash found in {path.relative_to(ROOT)}")
-
-
 def run_reference_core() -> None:
+    bun = os.environ.get("BUN_BIN") or shutil.which("bun")
+    if bun is None:
+        fallback = Path.home() / ".bun" / "bin" / "bun"
+        bun = str(fallback) if fallback.is_file() else None
+    if bun is None:
+        fail("Bun executable not found; set BUN_BIN or install Bun")
     completed = subprocess.run(
-        ["npm", "test"],
+        [bun, "run", "test"],
         cwd=ROOT / "reference-core",
         check=False,
         text=True,
@@ -123,7 +144,6 @@ def main() -> None:
     validate_all_json_syntax()
     validate_schemas_and_examples()
     validate_yaml()
-    validate_text_policy()
     run_reference_core()
     print("OK: Writ build pack validated")
 

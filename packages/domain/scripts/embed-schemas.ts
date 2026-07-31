@@ -6,7 +6,7 @@
  * path, so the `readFileSync` path resolution in `schemas.ts` breaks inside a
  * serverless bundle (the schema files are not shipped at that baked path). Inlining
  * the schema text removes the file dependency entirely. The data is frozen, and
- * `prebuild` regenerates this file so it can never drift from `schemas/`.
+ * `prebuild` regenerates this file so it cannot drift from the vendored schema directory.
  *
  * Run: `bun scripts/embed-schemas.ts` (wired as the domain package `prebuild`).
  */

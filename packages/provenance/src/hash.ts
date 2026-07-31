@@ -3,8 +3,8 @@
  *
  * Every hash is `"sha256:" + lowercaseHex(sha256(utf8(canonicalJson(value))))`,
  * matching the `^sha256:[0-9a-f]{64}$` shape used throughout the Writ
- * schemas (see `specs/evaluation-receipt.schema.json`,
- * `specs/release.schema.json`). Hashing uses Bun's `CryptoHasher`.
+ * schemas (see `schemas/analysis/evaluation-receipt.schema.json`,
+ * `schemas/analysis/release.schema.json`). Hashing uses Bun's `CryptoHasher`.
  *
  * The named helpers drop the self-referential / volatile envelope fields for
  * their record type before hashing, so that a record's own hash (and its

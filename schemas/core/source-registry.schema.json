@@ -1,13 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/source-registry.schema.json",
+  "$id": "https://writ.example/schemas/core/source-registry.schema.json",
   "title": "Writ Source Registry",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "entries"
-  ],
+  "required": ["schema_version", "entries"],
   "properties": {
     "schema_version": {
       "const": "1.0.0"
@@ -121,31 +118,15 @@
           ]
         },
         "fetch_method": {
-          "enum": [
-            "http",
-            "api",
-            "browser",
-            "bulk_download",
-            "manual",
-            "licensed_feed"
-          ]
+          "enum": ["http", "api", "browser", "bulk_download", "manual", "licensed_feed"]
         },
         "authentication": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "type"
-          ],
+          "required": ["type"],
           "properties": {
             "type": {
-              "enum": [
-                "none",
-                "api_key",
-                "oauth2",
-                "basic",
-                "session",
-                "licensed"
-              ]
+              "enum": ["none", "api_key", "oauth2", "basic", "session", "licensed"]
             },
             "secret_ref": {
               "type": "string"
@@ -177,20 +158,10 @@
           "type": "string"
         },
         "robots_policy": {
-          "enum": [
-            "respect",
-            "api_only",
-            "manual_review",
-            "not_applicable"
-          ]
+          "enum": ["respect", "api_only", "manual_review", "not_applicable"]
         },
         "terms_status": {
-          "enum": [
-            "reviewed",
-            "review_required",
-            "restricted",
-            "unknown"
-          ]
+          "enum": ["reviewed", "review_required", "restricted", "unknown"]
         },
         "languages": {
           "type": "array",
@@ -211,12 +182,7 @@
           "type": "boolean"
         },
         "verification_status": {
-          "enum": [
-            "verified",
-            "catalogued",
-            "verify_before_enable",
-            "disabled"
-          ]
+          "enum": ["verified", "catalogued", "verify_before_enable", "disabled"]
         },
         "last_verified": {
           "type": "string",

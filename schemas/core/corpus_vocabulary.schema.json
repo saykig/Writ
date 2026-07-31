@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/corpus/corpus_vocabulary.schema.json",
+  "$id": "https://writ.example/schemas/core/corpus_vocabulary.schema.json",
   "title": "Corpus Controlled Vocabulary Registry",
   "type": "object",
   "additionalProperties": false,

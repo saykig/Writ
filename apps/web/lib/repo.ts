@@ -20,7 +20,11 @@ export function repoRoot(): string {
   if (cached) return cached;
   let dir = process.cwd();
   for (let i = 0; i < 10; i += 1) {
-    if (existsSync(join(dir, "specs")) && existsSync(join(dir, "pilot", "eu-us-ai-evaluation"))) {
+    if (
+      existsSync(join(dir, "schemas")) &&
+      existsSync(join(dir, "protocols")) &&
+      existsSync(join(dir, "pilot", "eu-us-ai-evaluation"))
+    ) {
       cached = dir;
       return dir;
     }

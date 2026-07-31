@@ -5,7 +5,7 @@ grammar Writ
 //
 // This grammar covers the full concrete surface exercised by the checked-in
 // example methodologies (`examples/*.writ`) and the design-target grammar in
-// `specs/writ.ebnf` / `docs/plan/03_LANGUAGE_SPEC.md`. Where the spec's §16
+// `protocols/language/writ.ebnf`. Where the protocol's §16
 // `rule … => …` sugar diverges from the example files, the example files are the
 // compile target, so the concrete syntax here follows them (`result "+1" priority
 // 10 when … id …;`). References are kept as plain qualified-name strings; symbol

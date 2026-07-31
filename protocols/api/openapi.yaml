@@ -34,7 +34,7 @@ paths:
                 type: object
                 required: [status]
                 properties:
-                  status: {type: string, const: ok}
+                  status: { type: string, const: ok }
   /v1/source-registry:
     get:
       tags: [sources]
@@ -44,10 +44,10 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - name: jurisdiction
           in: query
-          schema: {type: string}
+          schema: { type: string }
         - name: verification_status
           in: query
-          schema: {type: string}
+          schema: { type: string }
       responses:
         "200":
           $ref: "#/components/responses/SourceRegistryPage"
@@ -69,7 +69,7 @@ paths:
             application/json:
               schema:
                 $ref: "source-registry.schema.json#/$defs/entry"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/source-registry/{sourceId}/validate:
     post:
       tags: [sources]
@@ -81,10 +81,10 @@ paths:
         required: true
         content:
           application/json:
-            schema: {$ref: "#/components/schemas/Command"}
+            schema: { $ref: "#/components/schemas/Command" }
       responses:
-        "202": {$ref: "#/components/responses/AcceptedJob"}
-        "409": {$ref: "#/components/responses/Problem"}
+        "202": { $ref: "#/components/responses/AcceptedJob" }
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/source-registry/{sourceId}/fetch:
     post:
       tags: [sources]
@@ -101,11 +101,11 @@ paths:
                 - $ref: "#/components/schemas/Command"
                 - type: object
                   properties:
-                    resource_uri: {type: string, format: uri}
-                    cutoff: {type: string, format: date-time}
+                    resource_uri: { type: string, format: uri }
+                    cutoff: { type: string, format: date-time }
       responses:
-        "202": {$ref: "#/components/responses/AcceptedJob"}
-        "409": {$ref: "#/components/responses/Problem"}
+        "202": { $ref: "#/components/responses/AcceptedJob" }
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/documents:
     get:
       tags: [sources]
@@ -115,9 +115,9 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - name: source_registry_id
           in: query
-          schema: {type: string}
+          schema: { type: string }
       responses:
-        "200": {$ref: "#/components/responses/GenericPage"}
+        "200": { $ref: "#/components/responses/GenericPage" }
   /v1/document-versions/{documentVersionId}:
     get:
       tags: [sources]
@@ -131,7 +131,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/documentVersion"
-        "404": {$ref: "#/components/responses/Problem"}
+        "404": { $ref: "#/components/responses/Problem" }
   /v1/document-versions/{documentVersionId}/passages/{passageId}:
     get:
       tags: [sources]
@@ -141,7 +141,7 @@ paths:
         - name: passageId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       responses:
         "200":
           description: Passage and relocatable anchor.
@@ -149,7 +149,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/passage"
-        "404": {$ref: "#/components/responses/Problem"}
+        "404": { $ref: "#/components/responses/Problem" }
   /v1/claims:
     get:
       tags: [evidence]
@@ -159,12 +159,12 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - name: status
           in: query
-          schema: {type: string}
+          schema: { type: string }
         - name: subject_ref
           in: query
-          schema: {type: string}
+          schema: { type: string }
       responses:
-        "200": {$ref: "#/components/responses/GenericPage"}
+        "200": { $ref: "#/components/responses/GenericPage" }
     post:
       tags: [evidence]
       operationId: createClaim
@@ -183,7 +183,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/claim"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/claims/{claimId}/{command}:
     post:
       tags: [evidence]
@@ -192,7 +192,7 @@ paths:
         - name: claimId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
         - name: command
           in: path
           required: true
@@ -204,7 +204,7 @@ paths:
         required: true
         content:
           application/json:
-            schema: {$ref: "#/components/schemas/Command"}
+            schema: { $ref: "#/components/schemas/Command" }
       responses:
         "200":
           description: Updated claim projection.
@@ -212,7 +212,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/claim"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/actions:
     get:
       tags: [evidence]
@@ -222,12 +222,12 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - name: jurisdiction
           in: query
-          schema: {type: string}
+          schema: { type: string }
         - name: status
           in: query
-          schema: {type: string}
+          schema: { type: string }
       responses:
-        "200": {$ref: "#/components/responses/GenericPage"}
+        "200": { $ref: "#/components/responses/GenericPage" }
     post:
       tags: [evidence]
       operationId: createAction
@@ -246,7 +246,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/action"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/actions/{actionId}/relationships:
     post:
       tags: [evidence]
@@ -255,7 +255,7 @@ paths:
         - name: actionId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
@@ -270,7 +270,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/relationship"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/search-protocols:
     post:
       tags: [evidence]
@@ -304,8 +304,8 @@ paths:
               type: object
               required: [cutoff, description]
               properties:
-                cutoff: {type: string, format: date-time}
-                description: {type: string}
+                cutoff: { type: string, format: date-time }
+                description: { type: string }
       responses:
         "201":
           description: Mutable draft snapshot.
@@ -321,13 +321,13 @@ paths:
         - name: snapshotId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
           application/json:
-            schema: {$ref: "#/components/schemas/Command"}
+            schema: { $ref: "#/components/schemas/Command" }
       responses:
         "200":
           description: Frozen snapshot with content hash.
@@ -335,7 +335,7 @@ paths:
             application/json:
               schema:
                 $ref: "evidence.schema.json#/$defs/snapshot"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/methodology/packages/compile:
     post:
       tags: [methodology]
@@ -350,8 +350,8 @@ paths:
               type: object
               required: [source]
               properties:
-                source: {type: string}
-                filename: {type: string}
+                source: { type: string }
+                filename: { type: string }
       responses:
         "200":
           description: Compiled canonical IR and diagnostics.
@@ -361,11 +361,11 @@ paths:
                 type: object
                 required: [ir, diagnostics]
                 properties:
-                  ir: {$ref: "canonical-ir.schema.json"}
+                  ir: { $ref: "canonical-ir.schema.json" }
                   diagnostics:
                     type: array
-                    items: {$ref: "#/components/schemas/Diagnostic"}
-        "422": {$ref: "#/components/responses/Problem"}
+                    items: { $ref: "#/components/schemas/Diagnostic" }
+        "422": { $ref: "#/components/responses/Problem" }
   /v1/methodology/packages/analyze:
     post:
       tags: [methodology]
@@ -387,7 +387,7 @@ paths:
                 properties:
                   diagnostics:
                     type: array
-                    items: {$ref: "#/components/schemas/Diagnostic"}
+                    items: { $ref: "#/components/schemas/Diagnostic" }
   /v1/interpretation-profiles:
     post:
       tags: [methodology]
@@ -420,17 +420,25 @@ paths:
             schema:
               type: object
               additionalProperties: false
-              required: [commitment_version_id, subject_id, interpretation_profile_id, evidence_snapshot_id, as_of, cutoff]
+              required:
+                [
+                  commitment_version_id,
+                  subject_id,
+                  interpretation_profile_id,
+                  evidence_snapshot_id,
+                  as_of,
+                  cutoff,
+                ]
               properties:
-                commitment_version_id: {type: string}
-                subject_id: {type: string}
-                interpretation_profile_id: {type: string}
-                evidence_snapshot_id: {type: string}
-                as_of: {type: string, format: date-time}
-                cutoff: {type: string, format: date-time}
+                commitment_version_id: { type: string }
+                subject_id: { type: string }
+                interpretation_profile_id: { type: string }
+                evidence_snapshot_id: { type: string }
+                as_of: { type: string, format: date-time }
+                cutoff: { type: string, format: date-time }
       responses:
-        "202": {$ref: "#/components/responses/AcceptedJob"}
-        "409": {$ref: "#/components/responses/Problem"}
+        "202": { $ref: "#/components/responses/AcceptedJob" }
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/evaluation-runs/{runId}:
     get:
       tags: [evaluations]
@@ -439,14 +447,14 @@ paths:
         - name: runId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       responses:
         "200":
           description: Evaluation run status and receipt reference.
           content:
             application/json:
-              schema: {$ref: "#/components/schemas/Job"}
-        "404": {$ref: "#/components/responses/Problem"}
+              schema: { $ref: "#/components/schemas/Job" }
+        "404": { $ref: "#/components/responses/Problem" }
   /v1/receipts/{receiptId}:
     get:
       tags: [evaluations]
@@ -455,7 +463,7 @@ paths:
         - name: receiptId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       responses:
         "200":
           description: Canonical evaluation receipt.
@@ -463,7 +471,7 @@ paths:
             application/json:
               schema:
                 $ref: "evaluation-receipt.schema.json"
-        "404": {$ref: "#/components/responses/Problem"}
+        "404": { $ref: "#/components/responses/Problem" }
   /v1/receipts/verify:
     post:
       tags: [evaluations]
@@ -484,10 +492,10 @@ paths:
                 type: object
                 required: [valid]
                 properties:
-                  valid: {type: boolean}
+                  valid: { type: boolean }
                   failures:
                     type: array
-                    items: {type: string}
+                    items: { type: string }
   /v1/discrepancies:
     get:
       tags: [evaluations]
@@ -497,9 +505,9 @@ paths:
         - $ref: "#/components/parameters/Limit"
         - name: resolution_status
           in: query
-          schema: {type: string}
+          schema: { type: string }
       responses:
-        "200": {$ref: "#/components/responses/GenericPage"}
+        "200": { $ref: "#/components/responses/GenericPage" }
     post:
       tags: [evaluations]
       operationId: createDiscrepancy
@@ -530,15 +538,22 @@ paths:
           application/json:
             schema:
               type: object
-              required: [name, version, methodology_bundle_ids, interpretation_profile_ids, evidence_snapshot_ids]
+              required:
+                [
+                  name,
+                  version,
+                  methodology_bundle_ids,
+                  interpretation_profile_ids,
+                  evidence_snapshot_ids,
+                ]
               properties:
-                name: {type: string}
-                version: {type: string}
-                methodology_bundle_ids: {type: array, items: {type: string}}
-                interpretation_profile_ids: {type: array, items: {type: string}}
-                evidence_snapshot_ids: {type: array, items: {type: string}}
+                name: { type: string }
+                version: { type: string }
+                methodology_bundle_ids: { type: array, items: { type: string } }
+                interpretation_profile_ids: { type: array, items: { type: string } }
+                evidence_snapshot_ids: { type: array, items: { type: string } }
       responses:
-        "202": {$ref: "#/components/responses/AcceptedJob"}
+        "202": { $ref: "#/components/responses/AcceptedJob" }
   /v1/releases/{releaseId}:
     get:
       tags: [releases]
@@ -547,7 +562,7 @@ paths:
         - name: releaseId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       responses:
         "200":
           description: Release manifest.
@@ -555,7 +570,7 @@ paths:
             application/json:
               schema:
                 $ref: "release.schema.json"
-        "404": {$ref: "#/components/responses/Problem"}
+        "404": { $ref: "#/components/responses/Problem" }
   /v1/releases/{releaseId}/{command}:
     post:
       tags: [releases]
@@ -564,7 +579,7 @@ paths:
         - name: releaseId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
         - name: command
           in: path
           required: true
@@ -576,7 +591,7 @@ paths:
         required: true
         content:
           application/json:
-            schema: {$ref: "#/components/schemas/Command"}
+            schema: { $ref: "#/components/schemas/Command" }
       responses:
         "200":
           description: Release after command.
@@ -584,7 +599,7 @@ paths:
             application/json:
               schema:
                 $ref: "release.schema.json"
-        "409": {$ref: "#/components/responses/Problem"}
+        "409": { $ref: "#/components/responses/Problem" }
   /v1/challenges:
     post:
       tags: [challenges]
@@ -600,17 +615,17 @@ paths:
               additionalProperties: false
               required: [object_type, object_id, summary, details]
               properties:
-                object_type: {type: string}
-                object_id: {type: string}
-                summary: {type: string}
-                details: {type: string}
-                evidence: {type: array, items: {type: object}}
+                object_type: { type: string }
+                object_id: { type: string }
+                summary: { type: string }
+                details: { type: string }
+                evidence: { type: array, items: { type: object } }
       responses:
         "201":
           description: Challenge created.
           content:
             application/json:
-              schema: {$ref: "#/components/schemas/Challenge"}
+              schema: { $ref: "#/components/schemas/Challenge" }
   /v1/challenges/{challengeId}/{command}:
     post:
       tags: [challenges]
@@ -619,7 +634,7 @@ paths:
         - name: challengeId
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
         - name: command
           in: path
           required: true
@@ -631,14 +646,14 @@ paths:
         required: true
         content:
           application/json:
-            schema: {$ref: "#/components/schemas/Command"}
+            schema: { $ref: "#/components/schemas/Command" }
       responses:
         "200":
           description: Challenge after command.
           content:
             application/json:
-              schema: {$ref: "#/components/schemas/Challenge"}
-        "409": {$ref: "#/components/responses/Problem"}
+              schema: { $ref: "#/components/schemas/Challenge" }
+        "409": { $ref: "#/components/responses/Problem" }
 components:
   securitySchemes:
     oidc:
@@ -648,106 +663,106 @@ components:
     Cursor:
       name: cursor
       in: query
-      schema: {type: string}
+      schema: { type: string }
     Limit:
       name: limit
       in: query
-      schema: {type: integer, minimum: 1, maximum: 200, default: 50}
+      schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
     IdempotencyKey:
       name: Idempotency-Key
       in: header
       required: true
-      schema: {type: string, minLength: 8, maxLength: 200}
+      schema: { type: string, minLength: 8, maxLength: 200 }
     SourceId:
       name: sourceId
       in: path
       required: true
-      schema: {type: string}
+      schema: { type: string }
     DocumentVersionId:
       name: documentVersionId
       in: path
       required: true
-      schema: {type: string}
+      schema: { type: string }
   schemas:
     Command:
       type: object
       additionalProperties: false
       required: [expected_version, reason]
       properties:
-        expected_version: {type: integer, minimum: 0}
-        reason: {type: string, minLength: 1}
-        metadata: {type: object}
+        expected_version: { type: integer, minimum: 0 }
+        reason: { type: string, minLength: 1 }
+        metadata: { type: object }
     Diagnostic:
       type: object
       additionalProperties: false
       required: [code, severity, message]
       properties:
-        code: {type: string}
-        severity: {type: string, enum: [error, warning, info]}
-        message: {type: string}
-        source_location: {type: object}
-        witness: {type: object}
+        code: { type: string }
+        severity: { type: string, enum: [error, warning, info] }
+        message: { type: string }
+        source_location: { type: object }
+        witness: { type: object }
     Job:
       type: object
       required: [id, status]
       properties:
-        id: {type: string}
-        status: {type: string, enum: [queued, running, succeeded, failed, cancelled]}
-        result_ref: {type: string}
-        error: {$ref: "#/components/schemas/Problem"}
+        id: { type: string }
+        status: { type: string, enum: [queued, running, succeeded, failed, cancelled] }
+        result_ref: { type: string }
+        error: { $ref: "#/components/schemas/Problem" }
     Challenge:
       type: object
       required: [id, object_type, object_id, summary, details, status, created_at]
       properties:
-        id: {type: string}
-        object_type: {type: string}
-        object_id: {type: string}
-        summary: {type: string}
-        details: {type: string}
-        evidence: {type: array, items: {type: object}}
-        status: {type: string}
-        resolution: {type: string}
-        created_at: {type: string, format: date-time}
-        resolved_at: {type: string, format: date-time}
+        id: { type: string }
+        object_type: { type: string }
+        object_id: { type: string }
+        summary: { type: string }
+        details: { type: string }
+        evidence: { type: array, items: { type: object } }
+        status: { type: string }
+        resolution: { type: string }
+        created_at: { type: string, format: date-time }
+        resolved_at: { type: string, format: date-time }
     Problem:
       type: object
       additionalProperties: false
       required: [type, title, status, code, detail, request_id]
       properties:
-        type: {type: string, format: uri}
-        title: {type: string}
-        status: {type: integer, minimum: 400, maximum: 599}
-        code: {type: string}
-        detail: {type: string}
-        instance: {type: string}
-        request_id: {type: string}
-        context: {type: object}
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        code: { type: string }
+        detail: { type: string }
+        instance: { type: string }
+        request_id: { type: string }
+        context: { type: object }
     Page:
       type: object
       required: [items]
       properties:
-        items: {type: array, items: {type: object}}
-        next_cursor: {type: string}
-        request_id: {type: string}
+        items: { type: array, items: { type: object } }
+        next_cursor: { type: string }
+        request_id: { type: string }
   responses:
     Problem:
       description: Problem details.
       content:
         application/problem+json:
-          schema: {$ref: "#/components/schemas/Problem"}
+          schema: { $ref: "#/components/schemas/Problem" }
     AcceptedJob:
       description: Asynchronous command accepted.
       headers:
         Location:
-          schema: {type: string}
+          schema: { type: string }
       content:
         application/json:
-          schema: {$ref: "#/components/schemas/Job"}
+          schema: { $ref: "#/components/schemas/Job" }
     GenericPage:
       description: Cursor-paginated resources.
       content:
         application/json:
-          schema: {$ref: "#/components/schemas/Page"}
+          schema: { $ref: "#/components/schemas/Page" }
     SourceRegistryPage:
       description: Cursor-paginated source entries.
       content:
@@ -760,5 +775,5 @@ components:
                 type: array
                 items:
                   $ref: "source-registry.schema.json#/$defs/entry"
-              next_cursor: {type: string}
-              request_id: {type: string}
+              next_cursor: { type: string }
+              request_id: { type: string }
