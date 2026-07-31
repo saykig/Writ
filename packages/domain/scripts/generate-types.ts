@@ -40,10 +40,9 @@ const BANNER =
 
 /** Compile a single schema to a formatted TypeScript source string. */
 export async function generateOne(file: string, name: string): Promise<string> {
-  const raw = JSON.parse(await readFile(join(SCHEMAS_DIR, `${file}.schema.json`), "utf8")) as Record<
-    string,
-    unknown
-  >;
+  const raw = JSON.parse(
+    await readFile(join(SCHEMAS_DIR, `${file}.schema.json`), "utf8"),
+  ) as Record<string, unknown>;
   // Override `title`/`$id` so the root interface takes our clean PascalCase name
   // instead of a title- or URL-derived identifier.
   const copy = structuredClone(raw);

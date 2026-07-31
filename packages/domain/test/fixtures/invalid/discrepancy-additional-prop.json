@@ -11,11 +11,7 @@
   "details": "An inclusive zero-to-four normalization removes this gap but overlaps the non-compliance branch for zero strong actions and two or fewer weak actions. Resolve the range and precedence through an explicit interpretation profile.",
   "blocking": true,
   "resolution_status": "open",
-  "linked_rule_ids": [
-    "full",
-    "partial",
-    "none"
-  ],
+  "linked_rule_ids": ["full", "partial", "none"],
   "linked_claim_ids": [],
   "review_ids": [],
   "unexpected_field": true

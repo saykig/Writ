@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://writ.dev/conformance/case.schema.json",
+  "title": "Writ conformance case",
+  "description": "An implementation-independent conformance case (or an array of them). Each case names an `area`, a `kind` (the operation under test), a frozen `input`, and the `expected` result. A conformant evaluator dispatches on `kind`, runs `input`, and must produce a value deep-equal to `expected`. See internal/verification/conformance/README.md for the per-kind input/expected contract.",
+  "oneOf": [
+    { "$ref": "#/$defs/case" },
+    { "type": "array", "items": { "$ref": "#/$defs/case" }, "minItems": 1 }
+  ],
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "area", "kind", "description", "input", "expected"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "description": "Globally unique, stable case identifier."
+        },
+        "area": {
+          "type": "string",
+          "enum": [
+            "truth",
+            "expressions",
+            "temporal",
+            "quantities",
+            "identity",
+            "classification",
+            "scoring",
+            "proofs",
+            "canonicalization",
+            "diagnostics"
+          ],
+          "description": "The semantic area this case belongs to (04_FORMAL_SEMANTICS.md §19)."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "truth.not",
+            "truth.and",
+            "truth.or",
+            "truth.all",
+            "truth.any",
+            "expr.evaluateTruth",
+            "expr.evaluate",
+            "compare.interval",
+            "count.interval",
+            "classify.evaluate",
+            "score.evaluate",
+            "score.analyze",
+            "canonicalize",
+            "hash",
+            "receipt.evaluate"
+          ],
+          "description": "Selects the operation. The runner maps each kind to a canonical @writ/* API; the contract for each is documented in internal/verification/conformance/README.md."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human explanation of what the case pins down."
+        },
+        "input": {
+          "type": "object",
+          "description": "The frozen input for the operation. Shape depends on `kind` (see README)."
+        },
+        "expected": {
+          "description": "The expected result, compared deep-equal (objects order-insensitive, arrays order-sensitive). Shape depends on `kind` (see README)."
+        }
+      }
+    }
+  }
+}

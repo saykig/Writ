@@ -39,9 +39,11 @@ export function documentsRepository(sql: DbClient) {
         ) VALUES (
           ${input.id}, ${input.document_id}, ${input.retrieved_at},
           ${input.issued_at ?? null}, ${input.media_type},
-          ${input.byte_size !== undefined && input.byte_size !== null
-            ? String(input.byte_size)
-            : null},
+          ${
+            input.byte_size !== undefined && input.byte_size !== null
+              ? String(input.byte_size)
+              : null
+          },
           ${input.sha256}, ${input.storage_uri}, ${input.warc_record_id ?? null},
           ${input.http_status ?? null}, ${json(sql, input.response_headers ?? {})},
           ${input.extraction_status ?? "pending"}

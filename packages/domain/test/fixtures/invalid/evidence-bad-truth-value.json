@@ -60,9 +60,7 @@
     {
       "id": "action-ca-compute-fund",
       "label": "Illustrative AI Compute Access Fund",
-      "actors": [
-        "Canada"
-      ],
+      "actors": ["Canada"],
       "jurisdiction": "Canada",
       "kind": "compute_subsidy",
       "instrument_type": "grant_program",
@@ -71,9 +69,7 @@
         "start": "2025-06-25T00:00:00Z"
       },
       "implementation_stage": "funded",
-      "beneficiaries": [
-        "SME"
-      ],
+      "beneficiaries": ["SME"],
       "beneficiary_targeting": "explicit",
       "amounts": [
         {
@@ -88,9 +84,7 @@
       "underlying_instrument_id": "ca-ai-compute-access-fund",
       "relationships": [],
       "status": "accepted",
-      "claim_ids": [
-        "claim-ca-compute-fund-targets-smes"
-      ]
+      "claim_ids": ["claim-ca-compute-fund-targets-smes"]
     }
   ],
   "reviews": [

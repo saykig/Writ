@@ -1,7 +1,8 @@
 /**
  * Canonical runner for the Writ core conformance suite (task CORE-012).
  *
- * The corpus at `conformance/cases/**` is pure, implementation-independent data.
+ * The corpus at `internal/verification/conformance/cases/**` is pure,
+ * implementation-independent data.
  * This runner is one consumer of it: it loads every case, dispatches on `kind`
  * to the real `@writ/*` semantic APIs, and compares the produced value to the
  * case's `expected` by structural deep-equality. An alternate evaluator can reuse
@@ -72,7 +73,7 @@ export const AREAS = [
 
 export type Area = (typeof AREAS)[number];
 
-/** A single declarative conformance case (see conformance/README.md). */
+/** A single declarative conformance case (see internal/verification/conformance/README.md). */
 export interface ConformanceCase {
   readonly id: string;
   readonly area: Area;
@@ -96,9 +97,11 @@ export interface RunResult {
 
 // --- Loading -----------------------------------------------------------------
 
-/** Absolute path to the corpus `cases/` directory (repo-root `conformance/`). */
+/** Absolute path to the internal conformance corpus `cases/` directory. */
 export function casesDir(): string {
-  return fileURLToPath(new URL("../../../conformance/cases", import.meta.url));
+  return fileURLToPath(
+    new URL("../../../internal/verification/conformance/cases", import.meta.url),
+  );
 }
 
 /**

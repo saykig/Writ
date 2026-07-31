@@ -19,8 +19,8 @@ For schema and protocol authority changes:
 
 ```bash
 bun test packages/domain
-PYTHONPATH=apps/ingest/src .venv/bin/pytest -q tests/schema
-.venv/bin/python scripts/validate_pack.py
+PYTHONPATH=apps/ingest/src .venv/bin/pytest -q internal/verification/schema
+.venv/bin/python internal/tooling/scripts/validate_pack.py
 bun run conformance
 ```
 
@@ -32,7 +32,7 @@ For documentation-only changes:
 
 ```bash
 bun x prettier --check AGENTS.md README.md START_HERE.md PRODUCT.md DESIGN.md \
-  VALIDATION.md VERSION_POLICY.md TASKS.yaml adr benchmarks docs archive/plans scripts/README.md
+  VALIDATION.md VERSION_POLICY.md TASKS.yaml adr docs archive/plans internal
 git diff --check
 ```
 

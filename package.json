@@ -18,7 +18,7 @@
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "conformance": "bun test packages/conformance",
-    "replicate": "bun scripts/replicate.ts",
+    "replicate": "bun internal/tooling/scripts/replicate.ts",
     "dev": "bun run --filter '@writ/api' --filter '@writ/web' dev",
     "web": "bun run --filter '@writ/web' dev",
     "db:up": "docker compose up -d postgres minio",

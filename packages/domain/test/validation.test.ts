@@ -10,7 +10,10 @@ import { assertValid, isValid, SchemaValidationError, validate } from "../src/va
 import type { SchemaKind } from "../src/schemas.js";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const EXAMPLES_DIR = join(REPO_ROOT, "examples");
+const EXAMPLES_DIR = join(
+  REPO_ROOT,
+  "internal/verification/fixtures/compatibility/g7-ai-sme/schemas",
+);
 
 /** Filename suffix -> schema kind, per the task's fixture inference rules. */
 const SUFFIX_TO_KIND: ReadonlyArray<readonly [string, SchemaKind]> = [
@@ -28,14 +31,14 @@ function inferKind(filename: string): SchemaKind | undefined {
   return SUFFIX_TO_KIND.find(([suffix]) => filename.endsWith(suffix))?.[1];
 }
 
-describe("example artifacts validate against their schemas", () => {
+describe("compatibility artifacts validate against their schemas", () => {
   const jsonFiles = readdirSync(EXAMPLES_DIR)
     .filter((f) => f.endsWith(".json"))
     .sort();
 
   const matched = jsonFiles.filter((f) => inferKind(f) !== undefined);
 
-  test("every example .json maps to a known schema kind", () => {
+  test("every schema compatibility fixture maps to a known schema kind", () => {
     expect(matched).toEqual(jsonFiles);
   });
 

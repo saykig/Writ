@@ -24,6 +24,8 @@ const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."
 const CUTOFF = "2026-03-23T00:00:00Z";
 const FATF_METHOD = join(
   REPO_ROOT,
+  "internal",
+  "verification",
   "benchmarks",
   "evaluator",
   "fatf-mutual-evaluation-scaffold",

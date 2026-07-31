@@ -262,7 +262,7 @@ describe("discrepancy ledger is well-formed", () => {
     const onDisk = loadJson<typeof ledger>(
       fileURLToPath(
         new URL(
-          "../../../benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json",
+          "../../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json",
           import.meta.url,
         ),
       ),

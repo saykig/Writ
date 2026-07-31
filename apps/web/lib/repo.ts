@@ -23,7 +23,7 @@ export function repoRoot(): string {
     if (
       existsSync(join(dir, "schemas")) &&
       existsSync(join(dir, "protocols")) &&
-      existsSync(join(dir, "pilot", "eu-us-ai-evaluation"))
+      existsSync(join(dir, "archive", "pilots", "eu-us-ai-evaluation-v1"))
     ) {
       cached = dir;
       return dir;

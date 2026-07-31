@@ -128,7 +128,10 @@ suite("DATA-004 registry import", () => {
 
   test("the 104-entry seed imports and only verified+ready connectors enable", async () => {
     const doc = JSON.parse(
-      readFileSync(new URL("../../../data/source-registry.json", import.meta.url), "utf8"),
+      readFileSync(
+        new URL("../../../internal/infrastructure/generated/source-registry.json", import.meta.url),
+        "utf8",
+      ),
     ) as RegistryDocument;
 
     const summary = await repos.sourceRegistry.importRegistry(doc);

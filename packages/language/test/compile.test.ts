@@ -11,25 +11,43 @@ import {
 } from "../src/index.js";
 import { isValid } from "@writ/domain";
 import { sha256Canonical } from "@writ/provenance";
-import golden from "../../../examples/2025-ai-sme-literal.ir.json" with { type: "json" };
+import golden from "../../../internal/verification/fixtures/compatibility/g7-ai-sme/schemas/2025-ai-sme-literal.ir.json" with { type: "json" };
 
-const EXAMPLE_DIR = fileURLToPath(new URL("../../../examples/", import.meta.url));
-const examples = readdirSync(EXAMPLE_DIR)
-  .filter((f) => f.endsWith(".writ"))
-  .sort();
+const FIXTURE_DIRS = [
+  fileURLToPath(
+    new URL(
+      "../../../internal/verification/fixtures/compatibility/g7-ai-sme/language/",
+      import.meta.url,
+    ),
+  ),
+  fileURLToPath(
+    new URL("../../../internal/verification/fixtures/language/g7-methodologies/", import.meta.url),
+  ),
+];
+const examples = FIXTURE_DIRS.flatMap((directory) =>
+  readdirSync(directory)
+    .filter((file) => file.endsWith(".writ"))
+    .map((file) => ({ file, path: `${directory}/${file}` })),
+).sort((left, right) => left.file.localeCompare(right.file));
 
-function read(file: string): string {
-  return readFileSync(`${EXAMPLE_DIR}/${file}`, "utf8");
+function fixturePath(file: string): string {
+  const fixture = examples.find((candidate) => candidate.file === file);
+  if (!fixture) throw new Error(`missing language fixture: ${file}`);
+  return fixture.path;
 }
 
-describe("LANG-003 compile examples to schema-valid IR", () => {
-  test("all checked-in .writ examples exist", () => {
+function read(file: string): string {
+  return readFileSync(fixturePath(file), "utf8");
+}
+
+describe("LANG-003 compile fixtures to schema-valid IR", () => {
+  test("all checked-in .writ fixtures exist", () => {
     expect(examples.length).toBeGreaterThanOrEqual(6);
   });
 
-  for (const file of examples) {
+  for (const { file, path } of examples) {
     test(`${file} compiles clean and validates against canonical-ir`, () => {
-      const result = compileSource(read(file), { fileName: `${EXAMPLE_DIR}/${file}` });
+      const result = compileSource(read(file), { fileName: path });
       const errors = result.diagnostics.filter((d) => d.severity === "error");
       expect({ file, errors }).toEqual({ file, errors: [] });
       expect(isClean(result)).toBe(true);
@@ -42,7 +60,7 @@ describe("LANG-003 compile examples to schema-valid IR", () => {
 describe("LANG-003 golden IR fidelity", () => {
   test("2025-ai-sme-literal compiles to the golden IR (canonical hash)", () => {
     const result = compileSource(read("2025-ai-sme-literal.writ"), {
-      fileName: `${EXAMPLE_DIR}/2025-ai-sme-literal.writ`,
+      fileName: fixturePath("2025-ai-sme-literal.writ"),
     });
     expect(result.ir).toBeDefined();
     expect(sha256Canonical(result.ir)).toBe(sha256Canonical(golden));
@@ -57,7 +75,7 @@ describe("LANG-003 golden IR fidelity", () => {
 });
 
 describe("LANG-001 formatter is idempotent", () => {
-  for (const file of examples) {
+  for (const { file } of examples) {
     test(`${file} format(format(x)) === format(x)`, () => {
       const once = formatText(read(file));
       const twice = formatText(once);

@@ -37,19 +37,13 @@
         "start_inclusive": true,
         "end_inclusive": true
       },
-      "issue_areas": [
-        "artificial_intelligence",
-        "digital_economy"
-      ],
+      "issue_areas": ["artificial_intelligence", "digital_economy"],
       "evidence_policy": "half_world",
       "unknown_policy": "propagate",
       "parameters": [],
       "action_identity": {
         "policy": "review_required",
-        "key_paths": [
-          "underlying_instrument_id",
-          "program_family_id"
-        ]
+        "key_paths": ["underlying_instrument_id", "program_family_id"]
       },
       "predicates": [],
       "classifications": [],
@@ -294,10 +288,7 @@
             },
             {
               "variable": "counter_exists",
-              "values": [
-                true,
-                false
-              ]
+              "values": [true, false]
             }
           ]
         },
@@ -321,10 +312,7 @@
             },
             {
               "variable": "counter_exists",
-              "values": [
-                true,
-                false
-              ]
+              "values": [true, false]
             }
           ]
         }

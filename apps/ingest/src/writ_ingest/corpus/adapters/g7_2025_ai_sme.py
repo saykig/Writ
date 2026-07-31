@@ -31,7 +31,7 @@ class G7AiSmeFixtureAdapter:
 
     def emit(self) -> AdapterOutput:
         inventory = self._json(
-            "benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/"
+            "internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/"
             "methodology-inventory.json"
         )
         sources = self._json(

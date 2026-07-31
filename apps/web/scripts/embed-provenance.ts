@@ -55,7 +55,7 @@ const DATA_LICENCE_FILES = [
   "archive/pilots/eu-us-ai-evaluation-v1/original/LICENSE",
   "corpora/LICENSE",
   "pilot/LICENSE",
-  "data/LICENSE",
+  "internal/infrastructure/generated/LICENSE",
   "DATA-LICENSE",
   "DATA_LICENSE.md",
 ];
@@ -89,7 +89,9 @@ function copyrightNotice(text: string | undefined): string | undefined {
   const line = text
     .split("\n")
     .map((item) => item.trim())
-    .find((item) => /^(copyright|\(c\)|©)/i.test(item) && !/^copyright\s*\(c\)\s*<?year>?/i.test(item));
+    .find(
+      (item) => /^(copyright|\(c\)|©)/i.test(item) && !/^copyright\s*\(c\)\s*<?year>?/i.test(item),
+    );
   return line || undefined;
 }
 

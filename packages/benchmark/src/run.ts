@@ -5,7 +5,7 @@
 // profile, and calls `evaluateCommitment` to obtain a receipt. The published
 // profile reproduces the published cell; the generous profile records
 // interpretation-sensitivity. The per-cell comparison is written to
-// `benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json`.
+// `internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/discrepancy-ledger.json`.
 //
 // Scores are produced by `evaluateCommitment` over the anchored evidence — never
 // hardcoded here. This module only compares and records.
