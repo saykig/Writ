@@ -7,7 +7,7 @@ traceable knowledge (i.e., domain-specific language (DSL)).
 
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
-institutions consistently or update an analysis when the evidence changes. Writ keeps the source, 
+institutions consistently or update an analysis when the evidence changes. Writ keeps the source,
 the reviewed claim and the resulting analysis connected.
 
 ## How Writ works

@@ -43,6 +43,8 @@ describe("Stage 1 pilot corpora", () => {
     expect(compiled.records).toHaveLength(6);
     for (const record of compiled.records) {
       expect(record.family).toBe("institutional");
+      expect(record.review_state).toBe("draft");
+      expect(record.provenance.created_by).toBe("OpenAI Codex automated draft");
       expect(record.evidence.length).toBeGreaterThan(0);
       expect(validate("legal-policy-record", record).valid).toBe(false);
       if (record.family === "institutional") {

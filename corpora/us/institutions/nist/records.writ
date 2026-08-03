@@ -13,8 +13,8 @@ record nist_identity : institutional {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
   uncertainty { item unknown "This identity passage does not determine NIST's legal mandate or operational capacity."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist;
     institution_type federal_agency;
@@ -38,8 +38,8 @@ record nist_organizational_placement : institutional {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
   uncertainty { item unknown "Organizational placement does not establish operational capacity."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist;
     institution_type federal_agency;
@@ -64,8 +64,8 @@ record nist_department_of_commerce_relationship : institutional {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
   uncertainty { item unknown "The cited relationship does not establish decision rights or operational capacity."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist;
     institution_type federal_agency;
@@ -90,8 +90,8 @@ record nist_measurement_science_function : institutional {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.mission locator "About NIST, Mission" quote "To promote U.S. innovation and industrial competitiveness by advancing measurement science, standards, and technology in ways that enhance economic security and improve our quality of life." passage_hash "sha256:b7c73bafbedd9701baee1cadf74dc7668b215f3d6f5d19d6b6d51a179120c219" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
   uncertainty { item ambiguous "The page labels this text as mission; this record does not treat it as statutory authority or evidence of operational capacity."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist;
     institution_type federal_agency;
@@ -115,8 +115,8 @@ record nist_ai_standards_development_function : institutional {
     support nist.ai_standards_group document_version nist.ai_standards_group.v2026_08_03 passage nist.ai_standards_group.standards locator "AI Standards and Guidelines Group, overview paragraph 2" quote "In addition to developing its own publications, the Group leads NIST's participation in the development of voluntary consensus standards, including international standards, that promote innovation and trustworthiness in systems and organizations that use AI." passage_hash "sha256:ec5b9883154946b69ee3623b9e7394501ced98354288e4167a2eedf4c31609b8" document_hash "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96" basis direct;
   }
   uncertainty { item unknown "The passage establishes a function, not operational capacity or a legal obligation imposed on external organizations."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist.ai_standards_guidelines_group;
     institution_type organizational_unit;
@@ -141,8 +141,8 @@ record nist_ai_technical_guidance_function : institutional {
     support nist.ai_standards_group document_version nist.ai_standards_group.v2026_08_03 passage nist.ai_standards_group.guidance locator "AI Standards and Guidelines Group, overview paragraph 1" quote "The Artificial Intelligence (AI) Standards and Guidelines Group develops technical resources and guidelines that help organizations to develop, deploy, and use AI with confidence, enabling U.S. industry to position itself at the forefront of technology development and AI governance." passage_hash "sha256:7a9c75b43200b400de56a5c983cc3c13c2127122e33a86ad8169548ef405f903" document_hash "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96" basis direct;
   }
   uncertainty { item unknown "Technical guidance is not encoded as a legal obligation and does not establish operational capacity."; }
-  provenance { created_by "Writ corpus maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
+  review_state draft;
   institutional {
     institution_id nist.ai_standards_guidelines_group;
     institution_type organizational_unit;
