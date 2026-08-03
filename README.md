@@ -3,7 +3,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (i.e., domain-specific language (DSL).
+traceable knowledge (i.e., domain-specific language (DSL)).
 
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
