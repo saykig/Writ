@@ -178,7 +178,7 @@ tasks:
 
   - id: STAGE-1-RECORD-GRAMMAR
     title: Add the shared record grammar and pilot constitutional and institutional corpora
-    status: in_progress
+    status: done
     dependencies:
       - INTERNALIZE-REPOSITORY-SUPPORT
     scope:
