@@ -28,6 +28,11 @@ import type {
   ScoreBlock,
   SetDeclaration,
   Source,
+  RecordDeclaration,
+  RecordMember,
+  LegalPolicyProperty,
+  InstitutionalProperty,
+  JudgmentDeclaration,
 } from "./generated/ast.js";
 import { parseDocument } from "./parse.js";
 
@@ -366,6 +371,132 @@ function printProfile(profile: Profile): string {
   return lines.join("\n");
 }
 
+function identifiers(values: readonly string[]): string {
+  return `{ ${values.join(", ")} }`;
+}
+
+function strings(values: readonly string[]): string {
+  return `{ ${values.map(quote).join(", ")} }`;
+}
+
+function printLegalProperty(property: LegalPolicyProperty, indent: string): string {
+  switch (property.$type) {
+    case "InstrumentTypeProperty": return `${indent}instrument_type ${property.value};`;
+    case "JurisdictionLevelProperty": return `${indent}jurisdiction_level ${property.value};`;
+    case "ForceProperty": return `${indent}force ${property.value};`;
+    case "AdoptionStatusProperty": return `${indent}adoption_status ${property.value};`;
+    case "ApplicabilityStatusProperty": return `${indent}applicability_status ${property.value};`;
+    case "EnforcementStatusProperty": return `${indent}enforcement_status ${property.value};`;
+    case "OfficialCitationProperty": return `${indent}official_citation ${quote(property.value)};`;
+    case "ProvisionIdentifierProperty": return `${indent}provision_identifier ${quote(property.value)};`;
+    case "JurisdictionsProperty": return `${indent}jurisdictions ${strings(property.values.values)};`;
+    case "ResponsibleAuthoritiesProperty": return `${indent}responsible_authorities ${identifiers(property.values.values)};`;
+    case "EffectiveFromProperty": return `${indent}effective_from ${property.value};`;
+    case "EffectiveUntilProperty": return `${indent}effective_until ${property.value};`;
+    case "ExceptionsProperty": return `${indent}exceptions ${strings(property.values.values)};`;
+    case "CompliancePathwayProperty": return `${indent}compliance_pathway ${quote(property.value)};`;
+    case "ParentInstrumentProperty": return `${indent}parent_instrument_id ${property.value};`;
+    case "RelatedProvisionsProperty": return `${indent}related_provision_ids ${identifiers(property.values.values)};`;
+    default: return "";
+  }
+}
+
+function printRelationships(relationships: readonly { type: string; target: string }[]): string {
+  if (relationships.length === 0) return "{}";
+  return `{\n${relationships.map((relationship) => `${INDENT.repeat(3)}relation ${relationship.type} ${relationship.target};`).join("\n")}\n${INDENT.repeat(2)}}`;
+}
+
+function printInstitutionalProperty(property: InstitutionalProperty, indent: string): string {
+  switch (property.$type) {
+    case "InstitutionIdProperty": return `${indent}institution_id ${property.value};`;
+    case "InstitutionTypeProperty": return `${indent}institution_type ${property.value};`;
+    case "MandateProperty": return `${indent}mandate ${quote(property.value)};`;
+    case "AuthoritySourcesProperty": return `${indent}authority_sources ${identifiers(property.values.values)};`;
+    case "InstitutionalJurisdictionsProperty": return `${indent}jurisdictions ${strings(property.values.values)};`;
+    case "FunctionsProperty": return `${indent}functions ${identifiers(property.values.values)};`;
+    case "OperationalCapacityProperty":
+      return `${indent}operational_capacity {\n${indent}${INDENT}status ${property.status};\n${indent}${INDENT}dimensions ${strings(property.dimensions.values)};\n${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};\n${indent}}`;
+    case "DecisionRightsProperty": return `${indent}decision_rights ${strings(property.values.values)};`;
+    case "ParentInstitutionProperty": return `${indent}parent_institution_id ${property.value};`;
+    case "SubunitIdsProperty": return `${indent}subunit_ids ${identifiers(property.values.values)};`;
+    case "OversightRelationshipsProperty": return `${indent}oversight_relationships ${printRelationships(property.relationships.relationships)};`;
+    case "InstitutionalRelationshipsProperty": return `${indent}institutional_relationships ${printRelationships(property.relationships.relationships)};`;
+    case "ApplicablePeriodProperty": {
+      const lines = [`${indent}applicable_period {`];
+      if (property.from) lines.push(`${indent}${INDENT}from ${property.from};`);
+      if (property.until) lines.push(`${indent}${INDENT}until ${property.until};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    default: return "";
+  }
+}
+
+function printRecordMember(member: RecordMember, indent: string): string {
+  switch (member.$type) {
+    case "RecordCorpus": return `${indent}corpus ${member.value};`;
+    case "RecordVersion": return `${indent}version ${quote(member.value)};`;
+    case "RecordTitle": return `${indent}title ${quote(member.value)};`;
+    case "RecordSubjects": return `${indent}subjects ${identifiers(member.values.values)};`;
+    case "RecordAssertion": return `${indent}assertion ${member.mode} ${quote(member.text)};`;
+    case "RecordTopics": return `${indent}topics { ${member.values.values.map((value) => value.includes(" ") ? quote(value) : value).join(", ")} };`;
+    case "RecordScope": {
+      const lines = [`${indent}scope {`, `${indent}${INDENT}jurisdiction ${quote(member.jurisdiction)};`];
+      for (const condition of member.conditions) lines.push(`${indent}${INDENT}condition ${quote(condition)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    case "RecordEvidence": {
+      const lines = [`${indent}evidence {`];
+      for (const reference of member.references) {
+        lines.push(`${indent}${INDENT}support ${reference.source} document_version ${reference.documentVersion} passage ${reference.passage} locator ${quote(reference.locator)} quote ${quote(reference.quote)} passage_hash ${quote(reference.passageHash)} document_hash ${quote(reference.documentHash)} basis ${reference.basis};`);
+      }
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    case "RecordUncertainty": {
+      const lines = [`${indent}uncertainty {`];
+      for (const item of member.items) lines.push(`${indent}${INDENT}item ${item.kind} ${quote(item.description)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    case "RecordProvenance": return `${indent}provenance {\n${indent}${INDENT}created_by ${quote(member.createdBy)};\n${indent}${INDENT}created_at ${member.createdAt};\n${indent}}`;
+    case "RecordReviewState": return `${indent}review_state ${member.value};`;
+    case "LegalPolicyExtension": return `${indent}legal_policy {\n${member.properties.map((property) => printLegalProperty(property, indent + INDENT)).join("\n")}\n${indent}}`;
+    case "InstitutionalExtension": return `${indent}institutional {\n${member.properties.map((property) => printInstitutionalProperty(property, indent + INDENT)).join("\n")}\n${indent}}`;
+    default: return "";
+  }
+}
+
+function printRecord(record: RecordDeclaration): string {
+  const lines = [`record ${record.name} : ${record.family} {`];
+  for (const member of record.members) lines.push(printRecordMember(member, INDENT));
+  lines.push("}");
+  return lines.join("\n");
+}
+
+function printJudgment(judgment: JudgmentDeclaration): string {
+  const lines = [`judgment ${judgment.name} {`];
+  for (const member of judgment.members) {
+    switch (member.$type) {
+      case "JudgmentTarget": lines.push(`${INDENT}target ${member.value};`); break;
+      case "JudgmentTypeProperty": lines.push(`${INDENT}type ${member.value};`); break;
+      case "JudgmentValue": lines.push(`${INDENT}value ${printExprRaw(member.value)};`); break;
+      case "JudgmentRationale": lines.push(`${INDENT}rationale ${quote(member.value)};`); break;
+      case "JudgmentEvidenceRefs": lines.push(`${INDENT}evidence_refs ${identifiers(member.values.values)};`); break;
+      case "JudgmentReviewer": lines.push(`${INDENT}reviewer ${quote(member.value)};`); break;
+      case "JudgmentStatusProperty": lines.push(`${INDENT}status ${member.value};`); break;
+      case "JudgmentCreatedAt": lines.push(`${INDENT}created_at ${member.value};`); break;
+      case "JudgmentFamilyContext": lines.push(`${INDENT}family_context ${member.value};`); break;
+      case "JudgmentSupersedes": lines.push(`${INDENT}supersedes ${member.value};`); break;
+      case "RelatedJudgments": lines.push(`${INDENT}related_judgment_ids ${identifiers(member.values.values)};`); break;
+      default: break;
+    }
+  }
+  lines.push("}");
+  return lines.join("\n");
+}
+
 function printDeclaration(decl: Declaration): string {
   switch (decl.$type) {
     case "Import":
@@ -382,6 +513,10 @@ function printDeclaration(decl: Declaration): string {
       return printRationale(decl);
     case "Commitment":
       return printCommitment(decl);
+    case "RecordDeclaration":
+      return printRecord(decl);
+    case "JudgmentDeclaration":
+      return printJudgment(decl);
     case "Scenario":
       return printScenario(decl);
     case "Profile":

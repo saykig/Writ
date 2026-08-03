@@ -37,3 +37,10 @@ export const PRELUDE_SETS: Readonly<Record<string, readonly string[]>> = {
 export const PRELUDE_ISSUE_AREAS: Readonly<Record<string, readonly string[]>> = {
   AI_SME_ADOPTION: ["artificial_intelligence", "digital_economy"],
 };
+
+/** Reviewed exact topic aliases. Keys are normalized for exact lookup only. */
+export const PRELUDE_TOPIC_ALIASES: Readonly<Record<string, string>> = {
+  ai: "artificial_intelligence",
+  "artificial intelligence": "artificial_intelligence",
+  artificial_intelligence: "artificial_intelligence",
+};

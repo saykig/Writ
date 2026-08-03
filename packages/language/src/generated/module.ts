@@ -3,33 +3,23 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-import type {
-  LangiumSharedCoreServices,
-  LangiumCoreServices,
-  LangiumGeneratedCoreServices,
-  LangiumGeneratedSharedCoreServices,
-  LanguageMetaData,
-  Module,
-} from "langium";
-import { WritAstReflection } from "./ast.js";
-import { WritGrammar } from "./grammar.js";
+import type { LangiumSharedCoreServices, LangiumCoreServices, LangiumGeneratedCoreServices, LangiumGeneratedSharedCoreServices, LanguageMetaData, Module } from 'langium';
+import { WritAstReflection } from './ast.js';
+import { WritGrammar } from './grammar.js';
 
 export const WritLanguageMetaData = {
-  languageId: "writ",
-  fileExtensions: [".writ", ".writ.md"],
-  caseInsensitive: false,
-  mode: "production",
+    languageId: 'writ',
+    fileExtensions: ['.writ', '.writ.md'],
+    caseInsensitive: false,
+    mode: 'production'
 } as const satisfies LanguageMetaData;
 
-export const WritGeneratedSharedModule: Module<
-  LangiumSharedCoreServices,
-  LangiumGeneratedSharedCoreServices
-> = {
-  AstReflection: () => new WritAstReflection(),
+export const WritGeneratedSharedModule: Module<LangiumSharedCoreServices, LangiumGeneratedSharedCoreServices> = {
+    AstReflection: () => new WritAstReflection()
 };
 
 export const WritGeneratedModule: Module<LangiumCoreServices, LangiumGeneratedCoreServices> = {
-  Grammar: () => WritGrammar(),
-  LanguageMetaData: () => WritLanguageMetaData,
-  parser: {},
+    Grammar: () => WritGrammar(),
+    LanguageMetaData: () => WritLanguageMetaData,
+    parser: {}
 };

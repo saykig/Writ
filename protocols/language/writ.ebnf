@@ -1,7 +1,7 @@
 (* Writ 0.1 reference grammar. This is the language design target, not a generated parser. *)
 
 Document        = Header, { Import | Source | TypeDecl | SetDecl | Rationale |
-                            Commitment | Profile | Scenario } ;
+                            Commitment | Record | Judgment | Profile | Scenario } ;
 Header          = "language", "writ", String, "package", QName,
                   "version", String, ";" ;
 Import          = "import", QName, "version", String,
@@ -15,6 +15,43 @@ ConceptDecl     = "concept", Identifier, [ ":", TypeRef ], "{",
 SetDecl         = "set", Identifier, ":", TypeRef, "=", SetLiteral, ";" ;
 Rationale       = "rationale", Identifier, "{", "text", String, ";",
                   { Support }, "}" ;
+
+Record          = "record", Identifier, ":", RecordFamily, "{",
+                  { RecordMember }, "}" ;
+RecordFamily    = "legal_policy" | "institutional" ;
+RecordMember    = RecordCorpus | RecordVersion | RecordTitle | RecordSubjects |
+                  RecordAssertion | RecordTopics | RecordScope | RecordEvidence |
+                  RecordUncertainty | RecordProvenance | RecordReviewState |
+                  LegalPolicyExtension | InstitutionalExtension ;
+RecordCorpus    = "corpus", QName, ";" ;
+RecordVersion   = "version", String, ";" ;
+RecordTitle     = "title", String, ";" ;
+RecordSubjects  = "subjects", IdentifierList, ";" ;
+RecordAssertion = "assertion", AssertionMode, String, ";" ;
+AssertionMode   = "requires" | "permits" | "prohibits" | "defines" |
+                  "authorizes" | "assigns" | "performs" | "states" | "observes" ;
+RecordTopics    = "topics", TopicList, ";" ;
+RecordScope     = "scope", "{", "jurisdiction", String, ";",
+                  { "condition", String, ";" }, "}" ;
+RecordEvidence  = "evidence", "{", EvidenceReference,
+                  { EvidenceReference }, "}" ;
+EvidenceReference = "support", QName, "document_version", QName, "passage", QName,
+                  "locator", String, "quote", String, "passage_hash", String,
+                  "document_hash", String, "basis", EvidenceBasis, ";" ;
+EvidenceBasis   = "direct" | "inferred" | "inherited" ;
+RecordUncertainty = "uncertainty", "{", { "item", UncertaintyType, String, ";" }, "}" ;
+UncertaintyType = "unknown" | "contested" | "ambiguous" | "incomplete_evidence" ;
+RecordProvenance = "provenance", "{", "created_by", String, ";",
+                  "created_at", Date, ";", "}" ;
+RecordReviewState = "review_state", ( "draft" | "reviewed" | "approved" |
+                  "superseded" | "withdrawn" ), ";" ;
+LegalPolicyExtension = "legal_policy", "{", { Property }, "}" ;
+InstitutionalExtension = "institutional", "{", { Property }, "}" ;
+
+Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
+JudgmentMember  = Property ;
+IdentifierList  = "{", [ QName, { ",", QName } ], [ "," ], "}" ;
+TopicList       = "{", [ ( QName | String ), { ",", ( QName | String ) } ], [ "," ], "}" ;
 
 Commitment      = "commitment", Identifier, "{", { CommitmentMember }, "}" ;
 CommitmentMember= Property | Authority | Subjects | Window | EvidencePolicy |

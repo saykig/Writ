@@ -35,6 +35,7 @@
             "report_terminology",
             "document_classification",
             "policy_instrument"
+            ,"topic"
           ]
         },
         "source_term": { "type": "string", "minLength": 1 },

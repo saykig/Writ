@@ -31,6 +31,10 @@ import type {
   Source as IrSource,
   TypeDecl,
   Variable as IrVariable,
+  WritRecord,
+  LegalPolicyRecord,
+  InstitutionalRecord,
+  RecordJudgment,
 } from "@writ/domain";
 import type {
   Assertion,
@@ -46,10 +50,14 @@ import type {
   ScoreBlock,
   Source,
   Variable,
+  RecordDeclaration,
+  JudgmentDeclaration,
+  LegalPolicyExtension,
+  InstitutionalExtension,
 } from "./generated/ast.js";
 import type { LanguageDiagnostic, SourceSpan } from "./diagnostics.js";
 import { spanOf } from "./parse.js";
-import { PRELUDE_ISSUE_AREAS, PRELUDE_SETS } from "./prelude.js";
+import { PRELUDE_ISSUE_AREAS, PRELUDE_SETS, PRELUDE_TOPIC_ALIASES } from "./prelude.js";
 
 const ZERO_HASH = `sha256:${"0".repeat(64)}`;
 
@@ -71,12 +79,177 @@ export interface ResolvedImport {
 export interface CompileResult {
   /** The canonical IR, or `undefined` when compilation could not proceed. */
   readonly ir?: CanonicalIr;
+  /** Source-grounded records compiled from native record declarations. */
+  readonly records: readonly (LegalPolicyRecord | InstitutionalRecord)[];
+  /** Analytical judgments compiled separately from record workflow state. */
+  readonly judgments: readonly RecordJudgment[];
   /** Compiler diagnostics (lowering-time faults and warnings). */
   readonly diagnostics: readonly LanguageDiagnostic[];
   /** Out-of-band node→span source map (not embedded in the hashed IR). */
   readonly sourceMap: readonly SourceMapEntry[];
   /** The resolved import lock. */
   readonly importLock: readonly ResolvedImport[];
+}
+
+/** Resolve only reviewed exact aliases; never infer topics by substring. */
+export function normalizeTopic(value: string): string {
+  const normalized = value.trim().toLowerCase();
+  return PRELUDE_TOPIC_ALIASES[normalized] ?? value;
+}
+
+function literalScalar(node: Expression): unknown {
+  return literalValue(node);
+}
+
+function lowerLegalPolicy(extension: LegalPolicyExtension | undefined): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const property of extension?.properties ?? []) {
+    switch (property.$type) {
+      case "InstrumentTypeProperty": result.instrument_type = property.value; break;
+      case "JurisdictionLevelProperty": result.jurisdiction_level = property.value; break;
+      case "ForceProperty": result.force = property.value; break;
+      case "AdoptionStatusProperty": result.adoption_status = property.value; break;
+      case "ApplicabilityStatusProperty": result.applicability_status = property.value; break;
+      case "EnforcementStatusProperty": result.enforcement_status = property.value; break;
+      case "OfficialCitationProperty": result.official_citation = property.value; break;
+      case "ProvisionIdentifierProperty": result.provision_identifier = property.value; break;
+      case "JurisdictionsProperty": result.jurisdictions = [...property.values.values]; break;
+      case "ResponsibleAuthoritiesProperty": result.responsible_authorities = [...property.values.values]; break;
+      case "EffectiveFromProperty": result.effective_from = property.value; break;
+      case "EffectiveUntilProperty": result.effective_until = property.value; break;
+      case "ExceptionsProperty": result.exceptions = [...property.values.values]; break;
+      case "CompliancePathwayProperty": result.compliance_pathway = property.value; break;
+      case "ParentInstrumentProperty": result.parent_instrument_id = property.value; break;
+      case "RelatedProvisionsProperty": result.related_provision_ids = [...property.values.values]; break;
+      default: break;
+    }
+  }
+  return result;
+}
+
+function lowerRelationships(value: { relationships: Array<{ type: string; target: string }> } | undefined): Array<{ type: string; target_id: string }> {
+  return (value?.relationships ?? []).map((relationship) => ({
+    type: relationship.type,
+    target_id: relationship.target,
+  }));
+}
+
+function lowerInstitutional(extension: InstitutionalExtension | undefined): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const property of extension?.properties ?? []) {
+    switch (property.$type) {
+      case "InstitutionIdProperty": result.institution_id = property.value; break;
+      case "InstitutionTypeProperty": result.institution_type = property.value; break;
+      case "MandateProperty": result.mandate = property.value; break;
+      case "AuthoritySourcesProperty": result.authority_sources = [...property.values.values]; break;
+      case "InstitutionalJurisdictionsProperty": result.jurisdictions = [...property.values.values]; break;
+      case "FunctionsProperty": result.functions = [...property.values.values]; break;
+      case "OperationalCapacityProperty":
+        result.operational_capacity = {
+          status: property.status,
+          dimensions: [...property.dimensions.values],
+          evidence_refs: [...property.evidenceRefs.values],
+        };
+        break;
+      case "DecisionRightsProperty": result.decision_rights = [...property.values.values]; break;
+      case "ParentInstitutionProperty": result.parent_institution_id = property.value; break;
+      case "SubunitIdsProperty": result.subunit_ids = [...property.values.values]; break;
+      case "OversightRelationshipsProperty": result.oversight_relationships = lowerRelationships(property.relationships); break;
+      case "InstitutionalRelationshipsProperty": result.institutional_relationships = lowerRelationships(property.relationships); break;
+      case "ApplicablePeriodProperty":
+        result.applicable_period = {
+          ...(property.from ? { from: property.from } : {}),
+          ...(property.until ? { until: property.until } : {}),
+        };
+        break;
+      default: break;
+    }
+  }
+  return result;
+}
+
+function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): LegalPolicyRecord | InstitutionalRecord {
+  const find = (type: string) => record.members.find((member) => member.$type === type);
+  const corpus = find("RecordCorpus");
+  const version = find("RecordVersion");
+  const title = find("RecordTitle");
+  const subjects = find("RecordSubjects");
+  const assertion = find("RecordAssertion");
+  const topics = find("RecordTopics");
+  const scope = find("RecordScope");
+  const provenance = find("RecordProvenance");
+  const reviewState = find("RecordReviewState");
+  const evidence = record.members.filter((member) => member.$type === "RecordEvidence").flatMap((member) =>
+    member.$type === "RecordEvidence" ? member.references.map((reference) => ({
+      source_id: reference.source,
+      document_version_id: reference.documentVersion,
+      passage_id: reference.passage,
+      locator: reference.locator,
+      quote: reference.quote,
+      passage_hash: reference.passageHash,
+      document_hash: reference.documentHash,
+      basis: reference.basis,
+    })) : [],
+  );
+  const uncertainties = record.members.filter((member) => member.$type === "RecordUncertainty").flatMap((member) =>
+    member.$type === "RecordUncertainty" ? member.items.map((item) => ({ type: item.kind, description: item.description })) : [],
+  );
+  const common: Record<string, unknown> = {
+    schema_version: "0.1.0",
+    record_id: record.name,
+    corpus_id: corpus?.$type === "RecordCorpus" ? corpus.value : "",
+    record_version: version?.$type === "RecordVersion" ? version.value : "",
+    family: record.family,
+    title: title?.$type === "RecordTitle" ? title.value : "",
+    subjects: subjects?.$type === "RecordSubjects" ? [...subjects.values.values] : [],
+    assertion: assertion?.$type === "RecordAssertion" ? { mode: assertion.mode, text: assertion.text } : { mode: "states", text: "" },
+    topics: topics?.$type === "RecordTopics" ? topics.values.values.map(normalizeTopic) : [],
+    scope: scope?.$type === "RecordScope" ? { jurisdiction: scope.jurisdiction, conditions: [...scope.conditions] } : { jurisdiction: "", conditions: [] },
+    evidence,
+    uncertainties,
+    provenance: provenance?.$type === "RecordProvenance" ? { created_by: provenance.createdBy, created_at: provenance.createdAt } : { created_by: "", created_at: "" },
+    review_state: reviewState?.$type === "RecordReviewState" ? reviewState.value : "draft",
+  };
+  const span = spanOf(record);
+  if (span) sourceMap.push({ key: `record:${record.name}`, span });
+  if (record.family === "legal_policy") {
+    const extension = find("LegalPolicyExtension");
+    return { ...common, ...lowerLegalPolicy(extension?.$type === "LegalPolicyExtension" ? extension : undefined) } as unknown as LegalPolicyRecord;
+  }
+  const extension = find("InstitutionalExtension");
+  return { ...common, ...lowerInstitutional(extension?.$type === "InstitutionalExtension" ? extension : undefined) } as unknown as InstitutionalRecord;
+}
+
+function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[]): RecordJudgment {
+  const find = (type: string) => judgment.members.find((member) => member.$type === type);
+  const target = find("JudgmentTarget");
+  const type = find("JudgmentTypeProperty");
+  const value = find("JudgmentValue");
+  const rationale = find("JudgmentRationale");
+  const evidence = find("JudgmentEvidenceRefs");
+  const reviewer = find("JudgmentReviewer");
+  const status = find("JudgmentStatusProperty");
+  const createdAt = find("JudgmentCreatedAt");
+  const family = find("JudgmentFamilyContext");
+  const supersedes = find("JudgmentSupersedes");
+  const related = find("RelatedJudgments");
+  const span = spanOf(judgment);
+  if (span) sourceMap.push({ key: `judgment:${judgment.name}`, span });
+  return {
+    schema_version: "0.1.0",
+    judgment_id: judgment.name,
+    target_record_id: target?.$type === "JudgmentTarget" ? target.value : "",
+    judgment_type: type?.$type === "JudgmentTypeProperty" ? type.value : "disagreement",
+    value: value?.$type === "JudgmentValue" ? literalScalar(value.value) : null,
+    rationale: rationale?.$type === "JudgmentRationale" ? rationale.value : "",
+    evidence_refs: evidence?.$type === "JudgmentEvidenceRefs" ? [...evidence.values.values] : [],
+    reviewer: reviewer?.$type === "JudgmentReviewer" ? reviewer.value : "",
+    status: status?.$type === "JudgmentStatusProperty" ? status.value : "proposed",
+    created_at: createdAt?.$type === "JudgmentCreatedAt" ? createdAt.value : "",
+    ...(family?.$type === "JudgmentFamilyContext" ? { family_context: family.value } : {}),
+    ...(supersedes?.$type === "JudgmentSupersedes" ? { supersedes: supersedes.value } : {}),
+    ...(related?.$type === "RelatedJudgments" ? { related_judgment_ids: [...related.values.values] } : {}),
+  };
 }
 
 const COMPARE_OP: Readonly<Record<string, CompareOp>> = {
@@ -706,29 +879,30 @@ export function compileModel(model: Model, options: CompileOptions = {}): Compil
     .filter((d) => d.$type === "Commitment")
     .map((d) => lowerCommitment(d as Commitment, ctx, sourceMap));
 
-  if (commitments.length === 0) {
-    diagnostics.push({
-      code: "WRT-COMPILE-NO-COMMITMENT",
-      severity: "error",
-      message: "A methodology must declare at least one commitment.",
-    });
-  }
+  const records = model.declarations
+    .filter((declaration): declaration is RecordDeclaration => declaration.$type === "RecordDeclaration")
+    .map((record) => lowerRecord(record, sourceMap));
+  const judgments = model.declarations
+    .filter((declaration): declaration is JudgmentDeclaration => declaration.$type === "JudgmentDeclaration")
+    .map((judgment) => lowerJudgment(judgment, sourceMap));
 
-  const ir: CanonicalIr = {
-    schema_version: "1.0.0",
-    language_version: options.languageVersion ?? model.languageVersion ?? "0.1",
-    package: {
-      name: model.packageName,
-      version: model.packageVersion,
-      content_hash: ZERO_HASH,
-      imports: importLock,
-    },
-    sources,
-    types,
-    commitments,
-    source_map: {},
-    diagnostic_waivers: [],
-  };
+  const ir: CanonicalIr | undefined = commitments.length > 0
+    ? {
+        schema_version: "1.0.0",
+        language_version: options.languageVersion ?? model.languageVersion ?? "0.1",
+        package: {
+          name: model.packageName,
+          version: model.packageVersion,
+          content_hash: ZERO_HASH,
+          imports: importLock,
+        },
+        sources,
+        types,
+        commitments,
+        source_map: {},
+        diagnostic_waivers: [],
+      }
+    : undefined;
 
-  return { ir, diagnostics, sourceMap, importLock };
+  return { ...(ir ? { ir } : {}), records, judgments, diagnostics, sourceMap, importLock };
 }

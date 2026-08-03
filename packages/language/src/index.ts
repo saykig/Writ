@@ -7,7 +7,7 @@
  * never imports `@writ/api` or touches a database.
  */
 
-import type { CanonicalIr } from "@writ/domain";
+import type { CanonicalIr, InstitutionalRecord, LegalPolicyRecord, RecordJudgment } from "@writ/domain";
 import { validate } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
@@ -32,6 +32,7 @@ export {
 export { checkModel, type CheckResult, type ModelScopes } from "./checker.js";
 export {
   compileModel,
+  normalizeTopic,
   type CompileResult,
   type CompileOptions,
   type SourceMapEntry,
@@ -46,7 +47,7 @@ export {
   type DiagnosticSeverity,
   type SourceSpan,
 } from "./diagnostics.js";
-export { PRELUDE_SETS, PRELUDE_ISSUE_AREAS } from "./prelude.js";
+export { PRELUDE_SETS, PRELUDE_ISSUE_AREAS, PRELUDE_TOPIC_ALIASES } from "./prelude.js";
 export * from "./generated/ast.js";
 
 /** The full outcome of the compile pipeline for one document. */
@@ -57,6 +58,8 @@ export interface CompileSourceResult {
   readonly diagnostics: readonly LanguageDiagnostic[];
   /** The canonical IR (best-effort even when non-fatal diagnostics exist). */
   readonly ir?: CanonicalIr;
+  readonly records: readonly (LegalPolicyRecord | InstitutionalRecord)[];
+  readonly judgments: readonly RecordJudgment[];
   /** Out-of-band node→span source map. */
   readonly sourceMap: readonly SourceMapEntry[];
   /** Resolved import lock. */
@@ -86,6 +89,8 @@ export function compileSource(
       diagnostics: sortDiagnostics(diagnostics),
       sourceMap: [],
       importLock: [],
+      records: [],
+      judgments: [],
       schemaValid: false,
       schemaErrors: [],
     };
@@ -98,21 +103,30 @@ export function compileSource(
   diagnostics.push(...compiled.diagnostics);
 
   const ir = compiled.ir;
-  const validation = ir ? validate("canonical-ir", ir) : { valid: false, errors: [] as const };
+  const validations = [
+    ...(ir ? [{ artifact: "canonical-ir", result: validate("canonical-ir", ir) }] : []),
+    ...compiled.records.map((record) => ({
+      artifact: record.family === "legal_policy" ? "legal-policy-record" : "institutional-record",
+      result: validate(record.family === "legal_policy" ? "legal-policy-record" : "institutional-record", record),
+    })),
+    ...compiled.judgments.map((judgment) => ({ artifact: "record-judgment", result: validate("record-judgment", judgment) })),
+  ];
+  const schemaValid = validations.length > 0 && validations.every((validation) => validation.result.valid);
+  const schemaErrors = validations.flatMap(({ artifact, result }) => result.valid ? [] : result.errors.map((issue) => ({
+    instancePath: issue.instancePath,
+    message: `${artifact}: ${issue.message}${typeof issue.params.missingProperty === "string" ? ` ${issue.params.missingProperty}` : ""}`,
+  })));
 
   return {
     model: parsed.model,
     diagnostics: sortDiagnostics(diagnostics),
     ...(ir ? { ir } : {}),
+    records: compiled.records,
+    judgments: compiled.judgments,
     sourceMap: compiled.sourceMap,
     importLock: compiled.importLock,
-    schemaValid: validation.valid,
-    schemaErrors: validation.valid
-      ? []
-      : validation.errors.map((issue) => ({
-          instancePath: issue.instancePath,
-          message: issue.message,
-        })),
+    schemaValid,
+    schemaErrors,
   };
 }
 

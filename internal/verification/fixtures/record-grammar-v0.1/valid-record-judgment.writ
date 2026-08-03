@@ -1,0 +1,14 @@
+language writ "0.1"
+package writ.fixtures.judgments version "0.1.0";
+
+judgment nist_capacity_judgment {
+  target nist_measurement_science;
+  type operational_capacity_determination;
+  value unknown;
+  rationale "The cited mission passage does not establish operational capacity.";
+  evidence_refs { nist.about.mission };
+  reviewer "Writ fixture reviewer";
+  status contested;
+  created_at 2026-08-03;
+  family_context institutional;
+}
