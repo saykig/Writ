@@ -286,7 +286,268 @@ const LIFECYCLE_RELEVANCE = [
   "excludes_general_provider_duty",
 ] as const;
 
+/** The jurisdictions, so a comparison question can be split without a filter. */
+const inJurisdiction = (claims: readonly ClaimRecord[], jurisdiction: "EU" | "US") =>
+  claims.filter((claim) => claim.jurisdiction === jurisdiction);
+
+/**
+ * Cite a group only when every member of it fits in one run.
+ *
+ * A citation on a subset of the records a sentence counts would send a reader to
+ * some of the evidence while the sentence claims all of it. Over the limit, the
+ * record list below the memo answers "which ones" instead.
+ */
+function citeGroup(notes: Ledger, claims: readonly ClaimRecord[], field: string): number[] {
+  return claims.length > 0 && claims.length <= 6 ? notes.citeAll(claims, field) : [];
+}
+
 const QUESTIONS: QuestionConfig[] = [
+  {
+    id: "binding-duties-eu-us",
+    question:
+      "How do binding model-evaluation duties differ between the European Union and the United States?",
+    title: "Binding model-evaluation duties in the European Union and the United States",
+    kind: "Comparison",
+    description:
+      "Which binding duties reach a provider placing a model on the market, and which reach only government.",
+    select: (claims) =>
+      claims.filter(
+        (claim) =>
+          claim.fields.legal_force === "binding" ||
+          EVALUATION_CONDUCT.includes(claim.fields.conduct_type as never),
+      ),
+    executive: ({ selected, notes }) => {
+      const providerDuty = selected.filter(
+        (claim) =>
+          claim.fields.legal_force === "binding" &&
+          claim.fields.actor_type === "market_provider" &&
+          claim.fields.conduct_type === "model_evaluation" &&
+          claim.fields.applicability_status === "applicable",
+      );
+      const scoped = selected.filter((claim) => typeof claim.fields.binding_scope === "string");
+      const euProvider = inJurisdiction(providerDuty, "EU");
+      const usProvider = inJurisdiction(providerDuty, "US");
+      const sentences: MemoSentence[] = [
+        {
+          text: sentence(
+            `${count(euProvider.length, "European Union provision")} ${agree(euProvider.length, "binds", "bind")} a provider placing a model on the market to perform model evaluation, and ${count(usProvider.length, "United States provision does", "United States provisions do")} so.`,
+          ),
+          notes: citeGroup(notes, providerDuty, "headline_relevance"),
+        },
+      ];
+      if (scoped.length > 0) {
+        const boundaries = [
+          ...new Set(scoped.map((claim) => scopeBoundary(claim.fields.binding_scope as string))),
+        ];
+        sentences.push({
+          text: sentence(
+            `${count(scoped.length, "United States provision records", "United States provisions record")} an explicit boundary on what ${agree(scoped.length, "it binds", "they bind")}: ${joinList(boundaries)}.`,
+          ),
+          notes: [],
+        });
+      }
+      return sentences;
+    },
+    conclusion: ({ selected }) => {
+      const euBinding = inJurisdiction(selected, "EU").filter(
+        (claim) => claim.fields.legal_force === "binding",
+      );
+      const usBinding = inJurisdiction(selected, "US").filter(
+        (claim) => claim.fields.legal_force === "binding",
+      );
+      const scoped = usBinding.filter((claim) => typeof claim.fields.binding_scope === "string");
+      return [
+        {
+          text: `Both jurisdictions carry binding duties in this corpus: ${count(euBinding.length, "in the European Union", "in the European Union")} and ${count(usBinding.length, "in the United States", "in the United States")}. The difference is not how many, but whom they reach.`,
+          notes: [],
+        },
+        {
+          text: `The European Union addresses a provider placing a model on the market. ${sentence(count(scoped.length, "of the binding United States provision", "of the binding United States provisions"))} ${agree(scoped.length, "names", "name")} the part of government ${agree(scoped.length, "it binds", "they bind")}, and the reviewers recorded that boundary as part of the rule rather than as a description of current practice.`,
+          // A count, so no marker: the evidence list below names which ones.
+          notes: [],
+        },
+        {
+          text: "A duty on a public body that uses or buys a system is not a duty on the company that supplies it. Reading the two as one is what turns an absence of market regulation into an apparent presence of it.",
+          notes: [],
+        },
+      ];
+    },
+  },
+  {
+    id: "us-voluntary-or-government",
+    question:
+      "Which United States model-evaluation requirements are voluntary or limited to government use?",
+    title: "Voluntary and government-scoped evaluation requirements in the United States",
+    kind: "Scope and force",
+    description:
+      "Where United States evaluation requirements sit: voluntary guidance, government use, procurement, or proposals.",
+    select: (claims) => claims.filter((claim) => claim.jurisdiction === "US"),
+    executive: ({ selected, notes }) => {
+      const voluntary = has(selected, "legal_force", "voluntary");
+      const scoped = selected.filter((claim) => typeof claim.fields.binding_scope === "string");
+      const contractual = has(selected, "legal_force", "contractual");
+      return [
+        {
+          text: sentence(
+            `${count(voluntary.length, "United States provision is", "United States provisions are")} voluntary, and ${count(scoped.length, "carries", "carry")} an explicit boundary on what ${agree(scoped.length, "it binds", "they bind")}.`,
+          ),
+          notes: [],
+        },
+        {
+          text: contractual.length
+            ? sentence(
+                `A further ${count(contractual.length, "provision reaches", "provisions reach")} a supplier through the terms of a procurement contract rather than through market regulation.`,
+              )
+            : "No provision in this corpus reaches a supplier through a procurement contract.",
+          notes: citeGroup(notes, contractual, "compliance_function"),
+        },
+      ];
+    },
+    conclusion: ({ selected }) => {
+      const groups = groupBy(selected, "legal_force");
+      const proposed = has(selected, "legal_force", "proposed");
+      return [
+        {
+          text: sentence(
+            `Across the reviewed United States records, evaluation requirements divide by legal force into ${count(groups.length, "kind", "kinds")}: ${joinList(groups.map((group) => `${count(group.claims.length, "that is", "that are")} ${group.value}`))}.`,
+          ),
+          notes: [],
+        },
+        {
+          text: "None of them requires a provider placing a model on the market to perform model evaluation. Voluntary guidance addresses anyone willing to follow it; a government-use duty addresses the agency; a contractual duty addresses whoever signed.",
+          notes: [],
+        },
+        proposed.length
+          ? {
+              text: sentence(
+                `${count(proposed.length, "further provision remains", "further provisions remain")} proposed, and ${agree(proposed.length, "is", "are")} recorded as not yet applicable rather than counted with the rest.`,
+              ),
+              notes: [],
+            }
+          : {
+              text: "Nothing in the reviewed United States records is recorded as proposed but not adopted.",
+              notes: [],
+            },
+      ];
+    },
+  },
+  {
+    id: "documentation-versus-evaluation",
+    question:
+      "When does documentation about evaluation differ from an obligation to conduct evaluation?",
+    title: "Documenting an evaluation and performing one",
+    kind: "Conduct distinction",
+    description:
+      "Where a rule requires evaluation results to be written down, and where it requires the evaluation itself.",
+    select: (claims) =>
+      claims.filter(
+        (claim) =>
+          claim.fields.conduct_type === "model_evaluation" ||
+          ADJACENT_TO_EVALUATION.includes(claim.fields.conduct_type as never),
+      ),
+    executive: ({ selected, notes }) => {
+      const performing = has(selected, "conduct_type", "model_evaluation");
+      const documenting = has(selected, "conduct_type", "evaluation_documentation");
+      return [
+        {
+          text: sentence(
+            `${count(performing.length, "selected provision requires", "selected provisions require")} the actor to perform model evaluation itself.`,
+          ),
+          notes: citeGroup(notes, performing, "conduct_type"),
+        },
+        {
+          text: sentence(
+            `${count(documenting.length, "requires", "require")} documentation that contains evaluation results, which the reviewers recorded as different conduct rather than as a weaker form of the same duty.`,
+          ),
+          notes: citeGroup(notes, documenting, "conduct_type"),
+        },
+      ];
+    },
+    conclusion: ({ selected }) => {
+      const adjacent = selected.filter((claim) =>
+        ADJACENT_TO_EVALUATION.includes(claim.fields.conduct_type as never),
+      );
+      return [
+        {
+          text: "A duty to document evaluation results assumes an evaluation happened; it does not create the duty to carry one out. Where the two coincide it is because a separate provision imposes the evaluation, not because the documentation rule reaches that far.",
+          notes: [],
+        },
+        {
+          text: sentence(
+            `${count(adjacent.length, "selected provision sits", "selected provisions sit")} next to model evaluation without being it: documenting, assessing risk, monitoring, reporting an incident, granting access for evaluation, or testing during procurement.`,
+          ),
+          notes: [],
+        },
+        {
+          text: "Collapsing them would widen the European Union answer from one provision to nine, and would do it without any record having changed.",
+          notes: [],
+        },
+      ];
+    },
+  },
+  {
+    id: "code-of-practice",
+    question: "What role does the European Union Code of Practice play in compliance?",
+    title: "The General-Purpose AI Code of Practice as a compliance route",
+    kind: "Soft law and binding law",
+    description:
+      "Whether the Code creates duties of its own, or is a recognised way of showing that duties elsewhere have been met.",
+    select: (claims) =>
+      claims.filter(
+        (claim) =>
+          claim.jurisdiction === "EU" &&
+          (claim.fields.compliance_function === "recognized_compliance_path" ||
+            claim.fields.legal_force === "voluntary" ||
+            claim.fields.compliance_function === "direct_obligation"),
+      ),
+    executive: ({ selected, notes }) => {
+      const paths = has(selected, "compliance_function", "recognized_compliance_path");
+      const underlying = [
+        ...new Set(
+          paths
+            .map((claim) => claim.fields.underlying_regime_force)
+            .filter((force): force is string => Boolean(force)),
+        ),
+      ];
+      return [
+        {
+          text: sentence(
+            `${count(paths.length, "European Union record is", "European Union records are")} recorded as a recognised way of demonstrating compliance rather than as ${agree(paths.length, "a duty of its own", "duties of their own")}.`,
+          ),
+          notes: citeGroup(notes, paths, "compliance_function"),
+        },
+        {
+          text: underlying.length
+            ? sentence(
+                `${agree(paths.length, "It stands", "They stand")} beside a regime the reviewers recorded as ${joinList(underlying.map(forcePhrase))}, and ${agree(paths.length, "its", "their")} own legal force is recorded separately.`,
+              )
+            : "Its own legal force is recorded separately from the regime it sits beside.",
+          notes: [],
+        },
+      ];
+    },
+    conclusion: ({ selected, notes }) => {
+      const paths = has(selected, "compliance_function", "recognized_compliance_path");
+      const voluntaryPaths = paths.filter((claim) => claim.fields.legal_force === "voluntary");
+      const direct = has(selected, "compliance_function", "direct_obligation");
+      return [
+        {
+          text: "Signing the Code is a route, not a rule. Following it is a way of showing that an obligation recorded elsewhere has been met, and the obligation remains where it was.",
+          notes: citeGroup(notes, voluntaryPaths, "legal_force"),
+        },
+        {
+          text: sentence(
+            `${count(direct.length, "European Union record in this selection imposes", "European Union records in this selection impose")} a duty directly. The Code is not among them, and its voluntary force is unchanged by the fact that the duties it demonstrates compliance with are binding.`,
+          ),
+          notes: [],
+        },
+        {
+          text: "The reviewers also recorded that no source document is registered for the signatory notice, so this classification has not been checked against retrieved text.",
+          notes: [],
+        },
+      ];
+    },
+  },
   {
     id: "evaluation-trigger",
     question: "When does AI evaluation become a legal requirement?",

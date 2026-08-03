@@ -52,11 +52,11 @@ export function AboutPilot({ question }: { question: string }) {
           </p>
           <p>
             Selecting a question does not begin a new open-ended search. It uses the same reviewed
-            records to assemble a readable policy memo. Every judgment and footnote can be traced to
-            its source and underlying Writ profile.
+            records to assemble a readable answer. Every judgment and citation can be traced to its
+            source and underlying Writ profile.
           </p>
           <p className="text-foreground">
-            The Demo shows one saved analysis. Writ Lab shows how that analysis was structured.
+            Query answers from this corpus. Lab shows how one passage in it became one record.
           </p>
         </div>
       </DialogContent>

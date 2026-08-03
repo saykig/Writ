@@ -60,7 +60,9 @@ function CommandDialog({
         )}
         showCloseButton={showCloseButton}
       >
-        {children}
+        {/* The cmdk root must wrap the children: every other Command part reads
+            its store from this context, and Input throws without it. */}
+        <Command className="rounded-none! bg-transparent p-0">{children}</Command>
       </DialogContent>
     </Dialog>
   )

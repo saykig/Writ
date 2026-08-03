@@ -8,12 +8,16 @@ import { cn } from "@/lib/utils";
  * kintsugi seam (left border + wash) to point at where judgment enters. An
  * optional `caption` renders a seam-marked note below (e.g. a witness). The
  * header carries a mono `label` (left) and `filename` (right).
+ *
+ * `highlight` marks lines neutrally — the reader's current selection, not a
+ * claim about the code. Gold stays reserved for the seam, which means something.
  */
 export function CodeArtifact({
   code,
   label,
   filename,
   seam = [],
+  highlight = [],
   caption,
   showLineNumbers = true,
   className,
@@ -22,12 +26,14 @@ export function CodeArtifact({
   label?: string;
   filename?: string;
   seam?: readonly number[];
+  highlight?: readonly number[];
   caption?: ReactNode;
   showLineNumbers?: boolean;
   className?: string;
 }) {
   const lines = code.replace(/\n$/, "").split("\n");
   const marked = new Set(seam);
+  const selected = new Set(highlight);
   const gutter = String(lines.length).length;
 
   return (
@@ -53,7 +59,8 @@ export function CodeArtifact({
                 <span
                   key={i}
                   className={cn(
-                    "flex border-l-2 border-transparent pr-4 pl-3",
+                    "flex border-l-2 border-transparent pr-4 pl-3 transition-colors motion-reduce:transition-none",
+                    selected.has(n) && "border-border bg-muted",
                     isSeam && "border-gold bg-gold-wash",
                   )}
                 >

@@ -9,12 +9,14 @@ describe("frontend architecture", () => {
   test("the working surfaces lead with the work, not with a hero", () => {
     // Writ Lab opens on the readings chooser and How it works on its own
     // index; neither carries a page header above the thing it is for.
+    // The Lab and How it works lead with the thing they are for. The Builder is
+    // a stepper and legitimately carries a heading of its own.
     for (const path of ["app/lab/page.tsx", "app/how-it-works/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
-    // The demo is three columns with the questions always in view, and no
-    // free-text box: a memo is assembled from reviewed records, not searched for.
-    const workspace = read("components/demo/demo-workspace.tsx");
+    // Query is three columns with the questions always in view, and no
+    // free-text box: an answer is assembled from reviewed records, not searched for.
+    const workspace = read("components/query/query-workspace.tsx");
     expect(workspace).toContain("Policy questions");
     expect(workspace).toContain("lg:grid-cols-[14rem_minmax(0,1fr)_21rem]");
     expect(workspace).not.toContain("<input");
@@ -23,34 +25,57 @@ describe("frontend architecture", () => {
     expect(workspace).toContain("openRecord ?");
   });
 
-  test("Writ Lab is the tool, with no page header above it", () => {
+  test("the Lab is the tool, with no page header above it", () => {
     const lab = read("app/lab/page.tsx");
-    const home = read("app/page.tsx");
-    const navItems = read("components/site/nav-items.ts");
 
-    // The readings chooser is the only framing; no hero competes with it.
+    // The record and its passage are the only framing; no hero competes with them.
     expect(lab).not.toContain("PageHeader");
     expect(lab).not.toContain("eyebrow=");
-    expect(navItems).toContain('label: "Writ Lab"');
-    expect(home).toContain(">Try Writ</Link>");
-    expect(home).not.toContain("Try the Writ Lab");
   });
 
-  test("the retired Playground route redirects permanently to Writ Lab", () => {
+  test("the homepage hero offers the three destinations", () => {
+    const home = read("app/page.tsx");
+
+    expect(home).toContain("Write in Writ.");
+    expect(home).toContain(
+      "Writ turns complex political and institutional information into structured,",
+    );
+    expect(home).toContain("Ask a question");
+    expect(home).toContain(">Build a corpus</Link>");
+    expect(home).toContain(">See how Writ works</Link>");
+    expect(home).toContain('href="/query"');
+    expect(home).toContain('href="/build"');
+    expect(home).toContain('href="/lab"');
+
+    // The retired actions are gone rather than reworded.
+    expect(home).not.toContain("See a worked answer");
+    expect(home).not.toContain(">Try Writ</Link>");
+    expect(home).not.toContain("Try the Writ Lab");
+    // One primary action, not three.
+    expect(home).toContain('variant="outline"');
+    expect(home).toContain('variant="ghost"');
+  });
+
+  test("the retired routes redirect permanently to their replacements", () => {
     const config = read("next.config.ts");
     expect(config).toContain('source: "/playground"');
     expect(config).toContain('destination: "/lab"');
+    expect(config).toContain('source: "/demo"');
+    expect(config).toContain('destination: "/query"');
     expect(config).toContain("permanent: true");
   });
 
-  test("the site is four surfaces and the nav names exactly three", () => {
+  test("the nav names exactly the three destinations", () => {
     const navItems = read("components/site/nav-items.ts");
 
-    // Demo, Writ Lab, How it works; the homepage is reached from the wordmark.
-    expect(navItems).toContain('label: "Demo"');
-    expect(navItems).toContain('label: "Writ Lab"');
+    // Query, Build, Lab; the homepage is reached from the wordmark and How it
+    // works from the footer, which is a reading rather than a place to work.
+    expect(navItems).toContain('label: "Query"');
+    expect(navItems).toContain('label: "Build"');
+    expect(navItems).toContain('label: "Lab"');
     expect(navItems).toContain('label: "How it works"');
-    for (const removed of ["Benchmark", "Methodologies", "Receipts", "Policy Test"]) {
+    expect(read("components/site/site-footer.tsx")).toContain("FOOTER_NAV");
+    for (const removed of ["Demo", "Writ Lab", "Benchmark", "Methodologies", "Receipts"]) {
       expect(navItems).not.toContain(`label: "${removed}"`);
     }
     // The retired groups are gone rather than left dangling.
@@ -59,7 +84,8 @@ describe("frontend architecture", () => {
 
     for (const page of [
       "app/page.tsx",
-      "app/demo/page.tsx",
+      "app/query/page.tsx",
+      "app/build/page.tsx",
       "app/how-it-works/page.tsx",
       "app/lab/page.tsx",
     ]) {
@@ -71,6 +97,7 @@ describe("frontend architecture", () => {
       "app/receipts",
       "app/demo-analysis",
       "app/playground",
+      "app/demo",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
     }
@@ -92,6 +119,16 @@ describe("frontend architecture", () => {
     );
     expect(home).not.toContain("Why Writ?");
     expect(read("components/site/nav-items.ts").toLowerCase()).not.toContain("about");
+  });
+
+  test("the command palette wraps its parts in the cmdk root", () => {
+    // Every Command part reads its store from this context. Without the root
+    // the input throws on mount and the whole palette is dead, which is not
+    // visible until someone presses ⌘K.
+    const command = read("components/ui/command.tsx");
+    const dialogBody = command.slice(command.indexOf("function CommandDialog"));
+    expect(dialogBody).toContain("<Command");
+    expect(dialogBody).toMatch(/<Command[^>]*>\{children\}<\/Command>/);
   });
 
   test("the header has no visible search or benchmark CTA", () => {
@@ -121,31 +158,64 @@ describe("frontend architecture", () => {
     expect(globe).not.toContain("overflow-hidden rounded-full");
   });
 
-  test("the homepage globe answers for each jurisdiction without immediate navigation", () => {
+  test("the globe maps corpus coverage without navigating on selection", () => {
     const home = read("app/page.tsx");
-    const selector = read("components/pilot/pilot-globe-selector.tsx");
+    const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
-    expect(home).toContain("<PilotGlobeSelector");
-    expect(selector).toContain("Derived result");
-    expect(selector).toContain("Provisions considered");
-    // The gap in the record travels with the answer.
-    expect(selector).toContain("Not yet traced");
-    expect(selector).toContain("See how this was answered");
-    expect(selector).toContain('href="/demo"');
+    expect(home).toContain("<CorpusCoverageGlobe");
+    expect(home).toContain("CORPUS_COVERAGE");
+
+    // Selecting opens a panel; it does not leave the homepage. The panel's only
+    // action is the Lab, and it carries the jurisdiction with it.
+    expect(selector).toContain("Inspect in Lab");
+    expect(selector).toContain("selected.labHref");
+    expect(selector).not.toContain("router.push");
+    for (const gone of ["Derived result", "Provisions considered", "Not yet traced", "/query"]) {
+      expect(selector).not.toContain(gone);
+    }
+
+    // Hover and focus both raise the marker's label, and both carry the count.
     expect(globe).toContain("onPointerEnter");
     expect(globe).toContain("onFocus");
+    expect(globe).toContain("marker.sublabel");
+    expect(selector).toContain("corpusCountLabel");
+
     expect(globe).toContain("markerPausedRef.current");
     expect(globe).toContain("size-11");
-    expect(selector).toContain("MARKER_DISPLAY_OFFSETS");
     expect(selector).toContain("min-w-0 max-w-full");
     expect(selector).toContain("whitespace-normal");
     expect(selector).not.toContain("lg:absolute");
     expect(selector).not.toContain("min-[1400px]");
   });
 
+  test("the coverage config claims only what has been reviewed", () => {
+    const coverage = read("lib/corpus-coverage.ts");
+
+    // Exactly the two jurisdictions with a reviewed corpus, the Union as one
+    // entry rather than as member states, and no promise of anything else.
+    expect(coverage).toContain('id: "eu"');
+    expect(coverage).toContain('id: "us"');
+    expect(coverage).toContain('name: "European Union"');
+    expect(coverage).toContain('name: "United States"');
+    expect(coverage.toLowerCase()).not.toContain("coming soon");
+    for (const member of ["Germany", "France", "Ireland", "Netherlands"]) {
+      expect(coverage).not.toContain(member);
+    }
+
+    // The globe connects to the Lab and to nothing else for now.
+    expect(coverage).toContain("/lab?jurisdiction=eu");
+    expect(coverage).toContain("/lab?jurisdiction=us");
+    expect(coverage).not.toContain("/query");
+    expect(coverage).not.toContain("/build");
+
+    // …and the Lab honours that parameter rather than ignoring it.
+    expect(read("app/lab/page.tsx")).toContain("params.jurisdiction");
+    expect(read("components/lab/record-inspector.tsx")).toContain("initialJurisdiction");
+  });
+
   test("the globe is the only member selector and is keyboard operable", () => {
-    const selector = read("components/pilot/pilot-globe-selector.tsx");
+    const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
     // The globe replaced the dropdown, so no control may duplicate it.
@@ -201,6 +271,93 @@ describe("frontend architecture", () => {
     expect(existsSync(resolve(WEB_ROOT, "app/lab/page.tsx"))).toBe(true);
     expect(existsSync(resolve(WEB_ROOT, "components/g7"))).toBe(false);
     expect(existsSync(resolve(WEB_ROOT, "lib/g7-assessments.ts"))).toBe(false);
+  });
+
+  test("the workbench was demoted, not deleted", () => {
+    const lab = read("app/lab/page.tsx");
+    const technical = read("components/lab/technical-details.tsx");
+    const workbench = read("components/lab/writ-lab.tsx");
+
+    // Every panel is still there; it is reached through the disclosure instead
+    // of being the first thing a reader meets.
+    for (const panel of [
+      "components/lab/writ-lab.tsx",
+      "components/lab/writ-editor.tsx",
+      "components/lab/analysis-panel.tsx",
+      "components/lab/ir-panel.tsx",
+      "components/lab/receipt-panel.tsx",
+      "components/lab/evidence-panel.tsx",
+      "components/lab/verdict.tsx",
+    ]) {
+      expect(existsSync(resolve(WEB_ROOT, panel))).toBe(true);
+    }
+
+    // The Lab page reaches the workbench only through Technical details.
+    expect(lab).toContain("TechnicalDetails");
+    expect(lab).not.toContain("WritLab");
+    expect(technical).toContain("WritLab");
+
+    // Collapsed by default, and its children mount only once it is opened —
+    // the editor measures itself on mount and paints nothing while hidden.
+    expect(technical).toContain("defaultOpen = false");
+    expect(technical).toContain("everOpened");
+
+    // The four rule-branch cards and the totality verdict live inside it, and
+    // the two renamed tabs kept their values so nothing else had to change.
+    expect(workbench).toContain('role="radiogroup"');
+    expect(read("components/lab/verdict.tsx")).toContain("Total and non-overlapping");
+    expect(workbench).toContain("Processing trace");
+    expect(workbench).toContain("Retrieved records");
+    expect(workbench).not.toContain(">Trace<");
+    expect(workbench).not.toContain("100dvh");
+  });
+
+  test("the Lab leads with the passage, not the score program", () => {
+    const inspector = read("components/lab/record-inspector.tsx");
+
+    // Guided by default; Code available but never first.
+    expect(read("app/lab/page.tsx")).toContain('params.view === "code" ? "code" : "guided"');
+    expect(inspector).toContain("Source passage");
+    expect(inspector).toContain("Structured record");
+
+    // None of the retired vocabulary reaches the primary view.
+    for (const retired of [
+      "Total and non-overlapping",
+      "score program",
+      "input states",
+      "unreachable",
+    ]) {
+      expect(inspector).not.toContain(retired);
+      expect(read("components/lab/record-explanation.tsx")).not.toContain(retired);
+      expect(read("lib/lab-explanation.ts")).not.toContain(retired);
+    }
+  });
+
+  test("Build offers no publishing, contribution or local workflow", () => {
+    // Comments are stripped: these files say in prose that they do none of
+    // this, and that sentence must not read as an occurrence of it.
+    const withoutComments = (path: string) =>
+      read(path)
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/^\s*\/\/.*$/gm, "");
+    const validate = withoutComments("components/build/steps/validate.tsx");
+    const builder = withoutComments("components/build/builder.tsx");
+
+    expect(validate).toContain("Save draft");
+    expect(validate).toContain("Continue reviewing");
+    expect(validate).toContain("View structured record");
+    for (const forbidden of [
+      "Publish",
+      "Submit contribution",
+      "pull request",
+      "Open pull request",
+      "Sync repository",
+      "Export locally",
+      "Download",
+    ]) {
+      expect(validate).not.toContain(forbidden);
+      expect(builder).not.toContain(forbidden);
+    }
   });
 
   test("changing a receipt input cannot relabel a stale receipt", () => {

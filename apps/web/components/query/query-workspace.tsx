@@ -1,22 +1,28 @@
 "use client";
 
 /**
- * The Demo, as three columns.
+ * Query, as three columns.
  *
- * Questions on the left, always visible, so choosing one is a change of reading
- * rather than a step to be completed. The memo in the middle. The record behind
- * a citation on the right, closed until asked for and closable again.
+ * Preset questions on the left, always visible, so choosing one is a change of
+ * reading rather than a step to be completed. The answer in the middle. The
+ * record behind a citation on the right, closed until asked for and closable
+ * again.
  *
- * All three memos are built on the server and held here, so switching question
- * is immediate and the reader never waits to see what another question says.
+ * The questions are preset because they are the ones the reviewed corpus can
+ * answer. There is no free-text box: an answer here is assembled from records,
+ * not searched for, and offering a search field would promise otherwise.
+ *
+ * Every answer is built on the server and held here, so switching question is
+ * immediate and the reader never waits to see what another question says.
  */
 
 import * as React from "react";
 
-import type { Memo, MemoRecord } from "@/lib/demo-memo";
+import type { MemoRecord } from "@/lib/demo-memo";
+import type { QueryAnswer } from "@/lib/query-answer";
 import { cn } from "@/lib/utils";
 import { AboutPilot } from "./about-pilot";
-import { MemoDocument } from "./memo-document";
+import { AnswerDocument } from "./answer-document";
 import { RecordPanel } from "./record-panel";
 
 export interface QuestionEntry {
@@ -25,13 +31,13 @@ export interface QuestionEntry {
   kind: string;
 }
 
-export function DemoWorkspace({
-  memos,
+export function QueryWorkspace({
+  answers,
   questions,
   pilotQuestion,
   initialQuestionId,
 }: {
-  memos: Memo[];
+  answers: QueryAnswer[];
   questions: QuestionEntry[];
   pilotQuestion: string;
   initialQuestionId: string;
@@ -39,12 +45,12 @@ export function DemoWorkspace({
   const [questionId, setQuestionId] = React.useState(initialQuestionId);
   const [openClaimId, setOpenClaimId] = React.useState<string | null>(null);
 
-  const memo = memos.find((item) => item.questionId === questionId) ?? memos[0];
+  const answer = answers.find((item) => item.questionId === questionId) ?? answers[0];
   const openRecord: MemoRecord | undefined = openClaimId
-    ? memo.records.find((record) => record.claimId === openClaimId)
+    ? answer.evidence.find((record) => record.claimId === openClaimId)
     : undefined;
 
-  // A record is only meaningful beside its own memo, so changing question
+  // A record is only meaningful beside its own answer, so changing question
   // closes the panel rather than leaving a record from the previous reading.
   function selectQuestion(id: string) {
     setQuestionId(id);
@@ -53,10 +59,10 @@ export function DemoWorkspace({
 
   const openNote = React.useCallback(
     (n: number) => {
-      const record = memo.records.find((item) => item.n === n);
+      const record = answer.evidence.find((item) => item.n === n);
       if (record) setOpenClaimId(record.claimId);
     },
-    [memo.records],
+    [answer.evidence],
   );
 
   return (
@@ -77,6 +83,10 @@ export function DemoWorkspace({
             </h1>
             <AboutPilot question={pilotQuestion} />
           </div>
+          <p className="mt-2 text-[0.72rem] leading-6 text-muted-foreground">
+            Questions the reviewed EU–US AI evaluation pilot can answer. Writ answers from this
+            corpus, not from AI governance at large.
+          </p>
           <ul className="mt-3 space-y-1">
             {questions.map((entry) => {
               const active = entry.id === questionId;
@@ -107,10 +117,10 @@ export function DemoWorkspace({
           </ul>
         </nav>
 
-        {/* Middle: the memo. */}
+        {/* Middle: the answer. */}
         <div className="min-w-0">
-          <MemoDocument
-            memo={memo}
+          <AnswerDocument
+            answer={answer}
             onOpenNote={openNote}
             onOpenRecord={setOpenClaimId}
             activeClaimId={openClaimId}
@@ -119,11 +129,7 @@ export function DemoWorkspace({
 
         {/* Right: the record, when one is open. */}
         {openRecord ? (
-          <RecordPanel
-            record={openRecord}
-            questionId={memo.questionId}
-            onClose={() => setOpenClaimId(null)}
-          />
+          <RecordPanel record={openRecord} onClose={() => setOpenClaimId(null)} />
         ) : null}
       </div>
     </main>
