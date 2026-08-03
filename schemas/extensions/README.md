@@ -6,11 +6,14 @@ families and never from core back to an extension.
 
 | Family        | Classification          | Current schema |
 | ------------- | ----------------------- | -------------- |
-| institutional | institutional extension | none yet       |
-| legal         | legal extension         | none yet       |
-| policy        | policy extension        | none yet       |
+| institutional | institutional extension | `institutional-record.schema.json` |
+| legal/policy  | legal-policy extension  | `legal-policy-record.schema.json`  |
 | theoretical   | theoretical extension   | none yet       |
 | empirical     | empirical extension     | none yet       |
 
-This directory establishes authority boundaries only. Designing the family ontologies is outside
-the scope of the schema relocation.
+`record-judgment.schema.json` is a separate analytical judgment object about a target record. Its
+workflow states are `proposed`, `accepted`, `contested`, and `superseded`; record approval remains
+part of the record workflow and is not a judgment state.
+
+The extensions reference only reusable definitions from `core/record.schema.json`; the core does
+not depend on either family.

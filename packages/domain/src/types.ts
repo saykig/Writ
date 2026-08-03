@@ -12,6 +12,12 @@ import type { MethodologyInventory } from "./generated/methodology-inventory.js"
 import type { SourceRegistry } from "./generated/source-registry.js";
 import type { Discrepancy } from "./generated/discrepancy.js";
 import type { Release } from "./generated/release.js";
+import type {
+  WritRecord,
+  LegalPolicyRecord,
+  InstitutionalRecord,
+  RecordJudgment,
+} from "./records.js";
 import type { SchemaKind } from "./schemas.js";
 
 export type {
@@ -23,6 +29,10 @@ export type {
   SourceRegistry,
   Discrepancy,
   Release,
+  WritRecord,
+  LegalPolicyRecord,
+  InstitutionalRecord,
+  RecordJudgment,
 };
 
 /** Maps each schema kind to the TypeScript interface generated from it. */
@@ -36,6 +46,10 @@ export interface SchemaTypeMap {
   "source-registry": SourceRegistry;
   discrepancy: Discrepancy;
   release: Release;
+  record: WritRecord;
+  "legal-policy-record": LegalPolicyRecord;
+  "institutional-record": InstitutionalRecord;
+  "record-judgment": RecordJudgment;
 }
 
 /** The decoded value type for a given schema kind. */

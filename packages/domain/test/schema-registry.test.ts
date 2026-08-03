@@ -11,12 +11,14 @@ describe("schema-version registry", () => {
     expect(Object.keys(SCHEMA_REGISTRY).sort()).toEqual([...SCHEMA_KINDS].sort());
   });
 
-  test("current version is 1.0.0 for every kind and matches the schema $id", () => {
+  test("current version matches each schema and its $id", () => {
+    const stageOne = new Set(["record", "legal-policy-record", "institutional-record", "record-judgment"]);
     for (const kind of SCHEMA_KINDS) {
       const entry = SCHEMA_REGISTRY[kind];
-      expect(entry.current).toBe("1.0.0");
-      expect(entry.versions["1.0.0"]?.schemaId).toBe(SCHEMA_IDS[kind]);
-      expect(entry.versions["1.0.0"]?.kind).toBe(kind);
+      const expected = stageOne.has(kind) ? "0.1.0" : "1.0.0";
+      expect(entry.current).toBe(expected);
+      expect(entry.versions[expected]?.schemaId).toBe(SCHEMA_IDS[kind]);
+      expect(entry.versions[expected]?.kind).toBe(kind);
     }
   });
 

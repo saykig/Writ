@@ -37,15 +37,16 @@ trace; those requirements belong to their family or layer, not the shared core.
 | `core/evidence.schema.json`          | core           | Frozen source versions, passages, claims, relationships embedded in evidence actions, reviews, and snapshot provenance. |
 | `core/source-registry.schema.json`   | core           | Generated source-registry interchange document.                                                                         |
 | `core/corpus_vocabulary.schema.json` | core           | Reviewed controlled-vocabulary mappings shared by corpus adapters.                                                      |
+| `core/record.schema.json`            | core           | Closed shared record envelope: identity, assertion, scope, evidence, uncertainty, provenance, and workflow state.       |
 
 No core schema requires a commitment, obligation, compliance result, or score.
 
 ## Family extensions
 
 `extensions/` is the authority location for institutional, legal, policy, theoretical, and
-empirical contracts. No family-specific schema is introduced by this path-cleanup branch. The
-classification and dependency rules are recorded in
-[`extensions/README.md`](./extensions/README.md).
+empirical contracts. Stage 1 introduces combined `legal_policy` and `institutional` record
+contracts plus a separate analytical record-judgment contract. The classification and dependency
+rules are recorded in [`extensions/README.md`](./extensions/README.md).
 
 ## Analysis and output schemas
 

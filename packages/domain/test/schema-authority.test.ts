@@ -34,15 +34,20 @@ describe("schema authority", () => {
     expect(existsSync(join(REPO_ROOT, "specs"))).toBe(false);
   });
 
-  test("every authoritative schema has a path-derived id and local references", () => {
-    expect(files).toHaveLength(20);
+  test("every authoritative schema has a path-derived id and layer-safe references", () => {
+    expect(files).toHaveLength(24);
     for (const file of files) {
       const schema = JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
       const path = relative(REPO_ROOT, file).split(sep).join("/");
       expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema");
       expect(schema.$id).toBe(`https://writ.example/${path}`);
       walk(schema, (record) => {
-        if (typeof record.$ref === "string") expect(record.$ref.startsWith("#/")).toBe(true);
+        if (typeof record.$ref !== "string") return;
+        const local = record.$ref.startsWith("#/");
+        const coreDependency =
+          path.startsWith("schemas/extensions/") &&
+          record.$ref.startsWith("https://writ.example/schemas/core/record.schema.json#/");
+        expect(local || coreDependency).toBe(true);
       });
     }
   });

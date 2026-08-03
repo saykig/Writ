@@ -33,8 +33,16 @@ export interface SchemaRegistryEntry {
  */
 function declaredVersion(kind: SchemaKind): string {
   const schema = RAW_SCHEMAS[kind];
-  const properties = schema.properties as { schema_version?: { const?: unknown } } | undefined;
-  const constValue = properties?.schema_version?.const;
+  const properties = schema.properties as
+    | { schema_version?: { const?: unknown; $ref?: unknown } }
+    | undefined;
+  const versionProperty = properties?.schema_version;
+  let constValue = versionProperty?.const;
+  if (constValue === undefined && typeof versionProperty?.$ref === "string") {
+    const match = versionProperty.$ref.match(/^#\/\$defs\/([^/]+)$/);
+    const defs = schema.$defs as Record<string, { const?: unknown }> | undefined;
+    constValue = match ? defs?.[match[1]!]?.const : undefined;
+  }
   return typeof constValue === "string" ? constValue : "unknown";
 }
 
