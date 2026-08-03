@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { pilotPreviews } from "@/lib/pilot-assessments";
-import { PilotGlobeSelector } from "@/components/pilot/pilot-globe-selector";
-import { demoAnalysisDataset } from "@/lib/demo-analysis";
+import { CorpusCoverageGlobe } from "@/components/pilot/corpus-coverage-globe";
+import { CORPUS_COVERAGE } from "@/lib/corpus-coverage";
 import { Reveal } from "@/components/site/reveal";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const jurisdictions = pilotPreviews();
-  const question = demoAnalysisDataset().pilot_question;
-
   return (
     <main>
       <Reveal as="section" className="min-h-[calc(100svh-4.5rem)]">
@@ -52,7 +48,7 @@ export default function Home() {
           </div>
 
           <div className="mx-auto w-full min-w-0 max-w-[42rem] lg:justify-self-end">
-            <PilotGlobeSelector jurisdictions={jurisdictions} question={question} />
+            <CorpusCoverageGlobe coverage={CORPUS_COVERAGE} />
           </div>
         </div>
       </Reveal>

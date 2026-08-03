@@ -29,6 +29,8 @@ export function markerLeaderStyle(offset: readonly [number, number]): {
 export interface GlobeMarker {
   readonly id: string;
   readonly label: string;
+  /** A quieter second line under the label. Kept short; it is a hover label, not a panel. */
+  readonly sublabel?: string;
   readonly coordinates: readonly [number, number];
   /** Presentation-only offset from the geographic anchor, used to separate dense clusters. */
   readonly displayOffset?: readonly [number, number];
@@ -38,6 +40,8 @@ export interface WireframeDottedGlobeProps {
   className?: string;
   initialRotation?: [number, number, number];
   markers?: readonly GlobeMarker[];
+  /** Names the marker layer for assistive technology. */
+  markersLabel?: string;
   selectedMarkerId?: string | null;
   onMarkerSelect?: (markerId: string) => void;
 }
@@ -46,6 +50,7 @@ export function WireframeDottedGlobe({
   className,
   initialRotation = DEFAULT_ROTATION,
   markers = [],
+  markersLabel = "Markers",
   selectedMarkerId = null,
   onMarkerSelect,
 }: WireframeDottedGlobeProps) {
@@ -423,7 +428,7 @@ export function WireframeDottedGlobe({
         <div
           role="listbox"
           tabIndex={0}
-          aria-label="Jurisdictions assessed"
+          aria-label={markersLabel}
           aria-activedescendant={
             activeMarkerId ? `globe-marker-${activeMarkerId}` : undefined
           }
@@ -453,7 +458,11 @@ export function WireframeDottedGlobe({
                 type="button"
                 tabIndex={-1}
                 role="option"
-                aria-label={`Preview assessment for ${marker.label}`}
+                // The same two lines the hover label shows, so a screen reader
+                // is told the count rather than only the place.
+                aria-label={
+                  marker.sublabel ? `${marker.label}, ${marker.sublabel}` : marker.label
+                }
                 aria-selected={selected}
                 onPointerEnter={() => setHoveredMarkerId(marker.id)}
                 onPointerLeave={() =>
@@ -484,11 +493,16 @@ export function WireframeDottedGlobe({
                 <span
                   aria-hidden
                   className={cn(
-                    "pointer-events-none absolute bottom-[calc(100%+0.35rem)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-background/95 px-2 py-1 text-xs font-medium text-foreground shadow-sm transition-opacity",
+                    "pointer-events-none absolute bottom-[calc(100%+0.35rem)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-background/95 px-2 py-1 text-center text-xs font-medium text-foreground shadow-sm transition-opacity",
                     emphasized ? "opacity-100" : "opacity-0",
                   )}
                 >
                   {marker.label}
+                  {marker.sublabel ? (
+                    <span className="block text-[0.68rem] font-normal text-muted-foreground">
+                      {marker.sublabel}
+                    </span>
+                  ) : null}
                 </span>
               </button>
             );

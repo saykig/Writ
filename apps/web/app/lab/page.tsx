@@ -27,11 +27,15 @@ export default async function LabPage({
 }) {
   const params = await searchParams;
 
-  // Two parameters that compose rather than compete: `record` chooses what the
-  // inspector opens on, `example` seeds the workbench underneath it and forces
-  // the disclosure open, which is what the ⌘K entries and older links use.
+  // Parameters that compose rather than compete. `record` chooses what the
+  // inspector opens on; `jurisdiction` narrows the filter, and picks the record
+  // too when none was named, which is how the homepage globe arrives here;
+  // `example` seeds the workbench underneath and forces the disclosure open,
+  // which is what the ⌘K entries and older links use.
   const requested = typeof params.record === "string" ? params.record : null;
-  const resolution = resolveLabRecordId(requested);
+  const initialJurisdiction =
+    params.jurisdiction === "eu" ? "EU" : params.jurisdiction === "us" ? "US" : null;
+  const resolution = resolveLabRecordId(requested, initialJurisdiction);
   const initialView = params.view === "code" ? "code" : "guided";
   const rawExample = params.example;
   const initialExample =
@@ -50,6 +54,7 @@ export default async function LabPage({
         summaries={labRecordSummaries()}
         checks={checks}
         resolution={resolution}
+        initialJurisdiction={initialJurisdiction ?? "all"}
         initialView={initialView}
         corpusLabel={CORPUS_LABEL}
         technicalDetails={

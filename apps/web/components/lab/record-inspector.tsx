@@ -32,6 +32,8 @@ export interface RecordInspectorProps {
   summaries: readonly LabRecordSummary[];
   checks: Readonly<Record<string, readonly RecordCheck[]>>;
   resolution: LabRecordResolution;
+  /** Set by `?jurisdiction=`, so a link from the homepage globe arrives filtered. */
+  initialJurisdiction: JurisdictionFilter;
   initialView: "guided" | "code";
   corpusLabel: string;
   /** Rendered below the record; the workbench, collapsed. */
@@ -43,12 +45,13 @@ export function RecordInspector({
   summaries,
   checks,
   resolution,
+  initialJurisdiction,
   initialView,
   corpusLabel,
   technicalDetails,
 }: RecordInspectorProps) {
   const [selectedId, setSelectedId] = React.useState(resolution.id);
-  const [jurisdiction, setJurisdiction] = React.useState<JurisdictionFilter>("all");
+  const [jurisdiction, setJurisdiction] = React.useState<JurisdictionFilter>(initialJurisdiction);
   const [view, setView] = React.useState(initialView);
   const [activeSection, setActiveSection] = React.useState<string | null>(null);
   const [activeFields, setActiveFields] = React.useState<readonly RecordFieldKey[]>([]);

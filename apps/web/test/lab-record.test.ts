@@ -231,6 +231,24 @@ describe("resolving a requested record", () => {
   test("no request opens the binding model-evaluation duty", () => {
     expect(resolveLabRecordId(null)).toEqual({ id: "EU-06", requested: null, how: "default" });
   });
+
+  test("a jurisdiction with no named record opens that jurisdiction's first record", () => {
+    // How a link from the homepage globe arrives: it names where, not which.
+    expect(resolveLabRecordId(null, "US").id).toBe("US-03");
+    expect(resolveLabRecordId(null, "EU").id).toBe("EU-06");
+    for (const jurisdiction of ["EU", "US"] as const) {
+      const resolved = resolveLabRecordId(null, jurisdiction);
+      expect(labRecordView(resolved.id)?.jurisdiction).toBe(jurisdiction);
+    }
+  });
+
+  test("a named record wins over the jurisdiction it arrived with", () => {
+    expect(resolveLabRecordId("EU-05", "US")).toEqual({
+      id: "EU-05",
+      requested: "EU-05",
+      how: "exact",
+    });
+  });
 });
 
 describe("the record selector", () => {

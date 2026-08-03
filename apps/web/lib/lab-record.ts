@@ -25,7 +25,12 @@ import {
   demoAnalysisEvidenceEntries,
   type ClaimRecord,
 } from "./demo-analysis.js";
-import { humanize, instrumentLabel, type ClaimFields } from "./demo-analysis-format.js";
+import {
+  humanize,
+  instrumentLabel,
+  type ClaimFields,
+  type Jurisdiction,
+} from "./demo-analysis-format.js";
 import { sourceDocuments, sourcePassages, unsourcedRows } from "./pilot-sources.js";
 import {
   GUIDED_FIELD_ORDER,
@@ -392,8 +397,18 @@ export function labRecordSummaries(): readonly LabRecordSummary[] {
  * and the header says so. Silently swapping would misattribute a passage; a
  * not-found would lose the reader for a link that was nearly right.
  */
-export function resolveLabRecordId(requested: string | null): LabRecordResolution {
-  if (!requested) return { id: DEFAULT_RECORD_ID, requested: null, how: "default" };
+export function resolveLabRecordId(
+  requested: string | null,
+  jurisdiction: Jurisdiction | null = null,
+): LabRecordResolution {
+  if (!requested) {
+    // A link that names a jurisdiction but no record opens that jurisdiction's
+    // first curated record rather than the Lab's usual default.
+    const first = jurisdiction
+      ? labRecordViews().find((view) => view.jurisdiction === jurisdiction)
+      : undefined;
+    return { id: first?.claimId ?? DEFAULT_RECORD_ID, requested: null, how: "default" };
+  }
 
   const views = labRecordViews();
   if (views.some((view) => view.claimId === requested)) {

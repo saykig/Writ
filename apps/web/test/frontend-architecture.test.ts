@@ -158,31 +158,64 @@ describe("frontend architecture", () => {
     expect(globe).not.toContain("overflow-hidden rounded-full");
   });
 
-  test("the homepage globe answers for each jurisdiction without immediate navigation", () => {
+  test("the globe maps corpus coverage without navigating on selection", () => {
     const home = read("app/page.tsx");
-    const selector = read("components/pilot/pilot-globe-selector.tsx");
+    const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
-    expect(home).toContain("<PilotGlobeSelector");
-    expect(selector).toContain("Derived result");
-    expect(selector).toContain("Provisions considered");
-    // The gap in the record travels with the answer.
-    expect(selector).toContain("Not yet traced");
-    expect(selector).toContain("See how this was answered");
-    expect(selector).toContain('href="/query"');
+    expect(home).toContain("<CorpusCoverageGlobe");
+    expect(home).toContain("CORPUS_COVERAGE");
+
+    // Selecting opens a panel; it does not leave the homepage. The panel's only
+    // action is the Lab, and it carries the jurisdiction with it.
+    expect(selector).toContain("Inspect in Lab");
+    expect(selector).toContain("selected.labHref");
+    expect(selector).not.toContain("router.push");
+    for (const gone of ["Derived result", "Provisions considered", "Not yet traced", "/query"]) {
+      expect(selector).not.toContain(gone);
+    }
+
+    // Hover and focus both raise the marker's label, and both carry the count.
     expect(globe).toContain("onPointerEnter");
     expect(globe).toContain("onFocus");
+    expect(globe).toContain("marker.sublabel");
+    expect(selector).toContain("corpusCountLabel");
+
     expect(globe).toContain("markerPausedRef.current");
     expect(globe).toContain("size-11");
-    expect(selector).toContain("MARKER_DISPLAY_OFFSETS");
     expect(selector).toContain("min-w-0 max-w-full");
     expect(selector).toContain("whitespace-normal");
     expect(selector).not.toContain("lg:absolute");
     expect(selector).not.toContain("min-[1400px]");
   });
 
+  test("the coverage config claims only what has been reviewed", () => {
+    const coverage = read("lib/corpus-coverage.ts");
+
+    // Exactly the two jurisdictions with a reviewed corpus, the Union as one
+    // entry rather than as member states, and no promise of anything else.
+    expect(coverage).toContain('id: "eu"');
+    expect(coverage).toContain('id: "us"');
+    expect(coverage).toContain('name: "European Union"');
+    expect(coverage).toContain('name: "United States"');
+    expect(coverage.toLowerCase()).not.toContain("coming soon");
+    for (const member of ["Germany", "France", "Ireland", "Netherlands"]) {
+      expect(coverage).not.toContain(member);
+    }
+
+    // The globe connects to the Lab and to nothing else for now.
+    expect(coverage).toContain("/lab?jurisdiction=eu");
+    expect(coverage).toContain("/lab?jurisdiction=us");
+    expect(coverage).not.toContain("/query");
+    expect(coverage).not.toContain("/build");
+
+    // …and the Lab honours that parameter rather than ignoring it.
+    expect(read("app/lab/page.tsx")).toContain("params.jurisdiction");
+    expect(read("components/lab/record-inspector.tsx")).toContain("initialJurisdiction");
+  });
+
   test("the globe is the only member selector and is keyboard operable", () => {
-    const selector = read("components/pilot/pilot-globe-selector.tsx");
+    const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
     // The globe replaced the dropdown, so no control may duplicate it.
