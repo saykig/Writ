@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validate } from "@writ/domain";
+import { validate, type InstitutionalRecord, type LegalPolicyRecord } from "@writ/domain";
 import { compileSource } from "../src/index.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
@@ -29,9 +29,10 @@ describe("Stage 1 pilot corpora", () => {
       expect(record.review_state).toBe("draft");
       expect(record.topics).toEqual([]);
       if (record.family === "legal_policy") {
-        expect(record.force).toBe("unknown");
-        expect(record.applicability_status).toBe("unknown");
-        expect(record.enforcement_status).toBe("unknown");
+        const legal = record as LegalPolicyRecord;
+        expect(legal.force).toBe("unknown");
+        expect(legal.applicability_status).toBe("unknown");
+        expect(legal.enforcement_status).toBe("unknown");
       }
     }
   });
@@ -48,13 +49,18 @@ describe("Stage 1 pilot corpora", () => {
       expect(record.evidence.length).toBeGreaterThan(0);
       expect(validate("legal-policy-record", record).valid).toBe(false);
       if (record.family === "institutional") {
-        expect(record.operational_capacity.status).toBe("unknown");
+        const institutional = record as InstitutionalRecord;
+        expect(institutional.mandate.status).toBe("unknown");
+        expect(institutional.operational_capacity.status).toBe("unknown");
       }
     }
     const ai = compiled.records.filter((record) =>
       record.topics.includes("artificial_intelligence"),
     );
     expect(ai).toHaveLength(2);
+    expect(
+      compiled.records.filter((record) => "mission" in record && record.mission !== undefined),
+    ).toHaveLength(1);
     expect(
       ai.every((record) => record.assertion.text.includes("AI") || record.title.includes("AI")),
     ).toBe(true);

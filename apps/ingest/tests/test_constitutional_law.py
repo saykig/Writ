@@ -53,6 +53,11 @@ def test_only_constitutional_rows_render_as_draft_without_inference() -> None:
     assert "enforcement_status unknown;" in text
     assert "adoption_status unknown;" in text
     assert "topics {};" in text
+    assert "subject jurisdiction_al type jurisdiction" in text
+    assert 'jurisdictions { "Alabama Constitution" };' in text
+    assert "institutional_scope {};" in text
+    assert "temporal_scope {}" in text
+    assert "conditions {};" in text
     assert "source_row_identifier" in text
     assert 'dataset_snapshot "v2026.07";' in text
     assert 'source_url "https://example.gov/constitution";' in text

@@ -5,11 +5,16 @@ record us_constitution_article_i : legal_policy {
   corpus us.constitutional_law;
   version "0.1.0";
   title "United States Constitution, Article I";
-  subjects { united_states };
+  subjects {
+    subject united_states type jurisdiction label "United States" role "governing jurisdiction";
+  };
   assertion states "All legislative Powers herein granted shall be vested in a Congress of the United States.";
   topics {};
   scope {
-    jurisdiction "United States";
+    jurisdictions { "United States" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
   }
   evidence {
     support constitution.congress.gov document_version constitution.congress.gov.v1 passage constitution.article_i.p1 locator "Article I, Section 1" quote "All legislative Powers herein granted shall be vested in a Congress of the United States." passage_hash "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" document_hash "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" basis direct;

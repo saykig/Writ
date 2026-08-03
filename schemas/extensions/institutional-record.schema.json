@@ -3,96 +3,58 @@
   "$id": "https://writ.example/schemas/extensions/institutional-record.schema.json",
   "title": "Writ Institutional Record",
   "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "record_id",
-    "corpus_id",
-    "record_version",
-    "family",
-    "title",
-    "subjects",
-    "assertion",
-    "topics",
-    "scope",
-    "evidence",
-    "uncertainties",
-    "provenance",
-    "review_state",
-    "institution_id",
-    "institution_type",
-    "mandate",
-    "authority_sources",
-    "jurisdictions",
-    "functions",
-    "operational_capacity"
+  "allOf": [
+    {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/recordBase"
+    },
+    {
+      "type": "object",
+      "required": [
+        "institution_id",
+        "institution_type",
+        "mandate",
+        "jurisdictions",
+        "functions",
+        "operational_capacity"
+      ],
+      "properties": {
+        "family": { "const": "institutional" },
+        "institution_id": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+        },
+        "institution_type": { "$ref": "#/$defs/institutionType" },
+        "mandate": { "$ref": "#/$defs/mandate" },
+        "mission": { "$ref": "#/$defs/mission" },
+        "jurisdictions": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray"
+        },
+        "functions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/function" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "operational_capacity": { "$ref": "#/$defs/operationalCapacity" },
+        "decision_rights": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        },
+        "parent_institution_id": { "type": "string" },
+        "subunit_ids": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        },
+        "oversight_relationships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relationship" }
+        },
+        "institutional_relationships": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relationship" }
+        },
+        "applicable_period": { "$ref": "#/$defs/applicablePeriod" }
+      }
+    }
   ],
-  "properties": {
-    "schema_version": { "const": "0.1.0" },
-    "record_id": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
-    },
-    "corpus_id": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
-    },
-    "record_version": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/semanticVersion"
-    },
-    "family": { "const": "institutional" },
-    "title": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
-    },
-    "subjects": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray"
-    },
-    "assertion": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/assertion"
-    },
-    "topics": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" },
-    "scope": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/scope" },
-    "evidence": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/evidenceArray"
-    },
-    "uncertainties": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/uncertaintyArray"
-    },
-    "provenance": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/provenance"
-    },
-    "review_state": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/reviewState"
-    },
-    "institution_id": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
-    },
-    "institution_type": { "$ref": "#/$defs/institutionType" },
-    "mandate": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
-    },
-    "authority_sources": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray"
-    },
-    "jurisdictions": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray"
-    },
-    "functions": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/function" },
-      "minItems": 1,
-      "uniqueItems": true
-    },
-    "operational_capacity": { "$ref": "#/$defs/operationalCapacity" },
-    "decision_rights": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
-    },
-    "parent_institution_id": { "type": "string" },
-    "subunit_ids": {
-      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
-    },
-    "oversight_relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } },
-    "institutional_relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } },
-    "applicable_period": { "$ref": "#/$defs/applicablePeriod" }
-  },
+  "unevaluatedProperties": false,
   "$defs": {
     "institutionType": {
       "enum": [
@@ -122,6 +84,40 @@
         "procurement_support",
         "other"
       ]
+    },
+    "mandateStatus": { "enum": ["established", "unknown", "contested"] },
+    "mandate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/mandateStatus" },
+        "text": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+        },
+        "authority_source_ids": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        },
+        "evidence_refs": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        }
+      }
+    },
+    "mission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+        },
+        "source_ids": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        },
+        "evidence_refs": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+        }
+      }
     },
     "capacityStatus": { "enum": ["established", "partial", "unknown", "contested"] },
     "operationalCapacity": {

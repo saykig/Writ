@@ -5,11 +5,16 @@ record us_constitution_federal_be864187e936fc200bc37556 : legal_policy {
   corpus us.constitutional_law;
   version "0.1.0";
   title "Amendment XIII, Section 2";
-  subjects { jurisdiction_federal };
+  subjects {
+    subject jurisdiction_federal type jurisdiction label "US Constitution" role "governing jurisdiction";
+  };
   assertion states "Congress shall have power to enforce this article by appropriate legislation.";
   topics {};
   scope {
-    jurisdiction "US Constitution";
+    jurisdictions { "US Constitution" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
   }
   evidence {
     support open_us_law.federal document_version open_us_law.v2026_07.federal passage CONST_US_AM13_S2 locator "U.S. Const. amend. XIII, § 2" quote "Congress shall have power to enforce this article by appropriate legislation." passage_hash "sha256:8733d37547a9b846875eb767e816f9802b7eb12a2e1ce1c8c2737a13c89974f4" document_hash "sha256:a828d982470f2acd0394a976bc139fd30e193ef5d2b4d5592e6080b504c60111" basis direct;

@@ -34,6 +34,7 @@ import type {
   LegalPolicyRecord,
   InstitutionalRecord,
   RecordJudgment,
+  WritRecord,
 } from "@writ/domain";
 import type {
   Assertion,
@@ -79,7 +80,7 @@ export interface CompileResult {
   /** The canonical IR, or `undefined` when compilation could not proceed. */
   readonly ir?: CanonicalIr;
   /** Source-grounded records compiled from native record declarations. */
-  readonly records: readonly (LegalPolicyRecord | InstitutionalRecord)[];
+  readonly records: readonly WritRecord[];
   /** Analytical judgments compiled separately from record workflow state. */
   readonly judgments: readonly RecordJudgment[];
   /** Compiler diagnostics (lowering-time faults and warnings). */
@@ -188,6 +189,8 @@ function lowerInstitutional(
   extension: InstitutionalExtension | undefined,
 ): Record<string, unknown> {
   const result: Record<string, unknown> = {};
+  let mandate: Record<string, unknown> | undefined;
+  let legacyAuthoritySourceIds: string[] = [];
   for (const property of extension?.properties ?? []) {
     switch (property.$type) {
       case "InstitutionIdProperty":
@@ -197,10 +200,26 @@ function lowerInstitutional(
         result.institution_type = property.value;
         break;
       case "MandateProperty":
-        result.mandate = property.value;
+        mandate = {
+          status: property.status ?? "unknown",
+          ...(property.text !== undefined || property.legacyText !== undefined
+            ? { text: property.text ?? property.legacyText }
+            : {}),
+          ...(property.authoritySourceIds
+            ? { authority_source_ids: [...property.authoritySourceIds.values] }
+            : {}),
+          ...(property.evidenceRefs ? { evidence_refs: [...property.evidenceRefs.values] } : {}),
+        };
+        break;
+      case "MissionProperty":
+        result.mission = {
+          text: property.text,
+          ...(property.sourceIds ? { source_ids: [...property.sourceIds.values] } : {}),
+          ...(property.evidenceRefs ? { evidence_refs: [...property.evidenceRefs.values] } : {}),
+        };
         break;
       case "AuthoritySourcesProperty":
-        result.authority_sources = [...property.values.values];
+        legacyAuthoritySourceIds = [...property.values.values];
         break;
       case "InstitutionalJurisdictionsProperty":
         result.jurisdictions = [...property.values.values];
@@ -240,13 +259,19 @@ function lowerInstitutional(
         break;
     }
   }
+  if (mandate) {
+    if (legacyAuthoritySourceIds.length > 0) {
+      const current = Array.isArray(mandate.authority_source_ids)
+        ? (mandate.authority_source_ids as string[])
+        : [];
+      mandate.authority_source_ids = [...new Set([...current, ...legacyAuthoritySourceIds])];
+    }
+    result.mandate = mandate;
+  }
   return result;
 }
 
-function lowerRecord(
-  record: RecordDeclaration,
-  sourceMap: SourceMapEntry[],
-): LegalPolicyRecord | InstitutionalRecord {
+function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): WritRecord {
   const find = (type: string) => record.members.find((member) => member.$type === type);
   const corpus = find("RecordCorpus");
   const version = find("RecordVersion");
@@ -287,7 +312,20 @@ function lowerRecord(
     record_version: version?.$type === "RecordVersion" ? version.value : "",
     family: record.family,
     title: title?.$type === "RecordTitle" ? title.value : "",
-    subjects: subjects?.$type === "RecordSubjects" ? [...subjects.values.values] : [],
+    subjects:
+      subjects?.$type === "RecordSubjects"
+        ? subjects.structured
+          ? subjects.structured.subjects.map((subject) => ({
+              subject_id: subject.subjectId,
+              subject_type: subject.subjectType,
+              ...(subject.label !== undefined ? { label: subject.label } : {}),
+              ...(subject.role !== undefined ? { role: subject.role } : {}),
+            }))
+          : (subjects.legacy?.values ?? []).map((subjectId) => ({
+              subject_id: subjectId,
+              subject_type: "unspecified",
+            }))
+        : [],
     assertion:
       assertion?.$type === "RecordAssertion"
         ? { mode: assertion.mode, text: assertion.text }
@@ -295,8 +333,25 @@ function lowerRecord(
     topics: topics?.$type === "RecordTopics" ? topics.values.values.map(normalizeTopic) : [],
     scope:
       scope?.$type === "RecordScope"
-        ? { jurisdiction: scope.jurisdiction, conditions: [...scope.conditions] }
-        : { jurisdiction: "", conditions: [] },
+        ? {
+            jurisdictions: scope.jurisdictions
+              ? [...scope.jurisdictions.values]
+              : scope.legacyJurisdiction
+                ? [scope.legacyJurisdiction]
+                : [],
+            institutional_scope: [...(scope.institutionalScope?.values ?? [])],
+            temporal_scope: {
+              ...(scope.temporalScope?.from ? { from: scope.temporalScope.from } : {}),
+              ...(scope.temporalScope?.until ? { until: scope.temporalScope.until } : {}),
+            },
+            conditions: [...scope.legacyConditions, ...(scope.conditions?.values ?? [])],
+          }
+        : {
+            jurisdictions: [],
+            institutional_scope: [],
+            temporal_scope: {},
+            conditions: [],
+          },
     evidence,
     uncertainties,
     provenance:
@@ -314,11 +369,14 @@ function lowerRecord(
       ...lowerLegalPolicy(extension?.$type === "LegalPolicyExtension" ? extension : undefined),
     } as unknown as LegalPolicyRecord;
   }
-  const extension = find("InstitutionalExtension");
-  return {
-    ...common,
-    ...lowerInstitutional(extension?.$type === "InstitutionalExtension" ? extension : undefined),
-  } as unknown as InstitutionalRecord;
+  if (record.family === "institutional") {
+    const extension = find("InstitutionalExtension");
+    return {
+      ...common,
+      ...lowerInstitutional(extension?.$type === "InstitutionalExtension" ? extension : undefined),
+    } as unknown as InstitutionalRecord;
+  }
+  return common as unknown as WritRecord;
 }
 
 function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[]): RecordJudgment {

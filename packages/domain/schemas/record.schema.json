@@ -2,48 +2,58 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://writ.example/schemas/core/record.schema.json",
   "title": "Writ Shared Record",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "record_id",
-    "corpus_id",
-    "record_version",
-    "family",
-    "title",
-    "subjects",
-    "assertion",
-    "topics",
-    "scope",
-    "evidence",
-    "uncertainties",
-    "provenance",
-    "review_state"
-  ],
-  "properties": {
-    "schema_version": { "$ref": "#/$defs/schemaVersion" },
-    "record_id": { "$ref": "#/$defs/nonEmptyString" },
-    "corpus_id": { "$ref": "#/$defs/nonEmptyString" },
-    "record_version": { "$ref": "#/$defs/semanticVersion" },
-    "family": { "$ref": "#/$defs/family" },
-    "title": { "$ref": "#/$defs/nonEmptyString" },
-    "subjects": { "$ref": "#/$defs/nonEmptyStringArray" },
-    "assertion": { "$ref": "#/$defs/assertion" },
-    "topics": { "$ref": "#/$defs/stringArray" },
-    "scope": { "$ref": "#/$defs/scope" },
-    "evidence": { "$ref": "#/$defs/evidenceArray" },
-    "uncertainties": { "$ref": "#/$defs/uncertaintyArray" },
-    "provenance": { "$ref": "#/$defs/provenance" },
-    "review_state": { "$ref": "#/$defs/reviewState" }
-  },
+  "$ref": "#/$defs/recordBase",
+  "unevaluatedProperties": false,
   "$defs": {
+    "recordBase": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "record_id",
+        "corpus_id",
+        "record_version",
+        "family",
+        "title",
+        "subjects",
+        "assertion",
+        "topics",
+        "scope",
+        "evidence",
+        "uncertainties",
+        "provenance",
+        "review_state"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/schemaVersion" },
+        "record_id": { "$ref": "#/$defs/nonEmptyString" },
+        "corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+        "record_version": { "$ref": "#/$defs/semanticVersion" },
+        "family": { "$ref": "#/$defs/family" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "subjects": { "$ref": "#/$defs/subjectArray" },
+        "assertion": { "$ref": "#/$defs/assertion" },
+        "topics": { "$ref": "#/$defs/stringArray" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "evidence": { "$ref": "#/$defs/evidenceArray" },
+        "uncertainties": { "$ref": "#/$defs/uncertaintyArray" },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "review_state": { "$ref": "#/$defs/reviewState" }
+      }
+    },
     "schemaVersion": { "const": "0.1.0" },
     "nonEmptyString": { "type": "string", "minLength": 1 },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "family": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"
+    },
     "semanticVersion": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
     },
-    "family": { "enum": ["legal_policy", "institutional"] },
     "nonEmptyStringArray": {
       "type": "array",
       "items": { "$ref": "#/$defs/nonEmptyString" },
@@ -53,6 +63,23 @@
     "stringArray": {
       "type": "array",
       "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_id", "subject_type"],
+      "properties": {
+        "subject_id": { "$ref": "#/$defs/identifier" },
+        "subject_type": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "role": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "subjectArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/subject" },
+      "minItems": 1,
       "uniqueItems": true
     },
     "assertionMode": {
@@ -77,12 +104,22 @@
         "text": { "$ref": "#/$defs/nonEmptyString" }
       }
     },
+    "temporalScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": { "type": "string", "format": "date" },
+        "until": { "type": "string", "format": "date" }
+      }
+    },
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["jurisdiction", "conditions"],
+      "required": ["jurisdictions", "institutional_scope", "temporal_scope", "conditions"],
       "properties": {
-        "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
+        "jurisdictions": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "institutional_scope": { "$ref": "#/$defs/stringArray" },
+        "temporal_scope": { "$ref": "#/$defs/temporalScope" },
         "conditions": { "$ref": "#/$defs/stringArray" }
       }
     },

@@ -64,4 +64,18 @@ describe("schema authority", () => {
       });
     }
   });
+
+  test("record extensions inherit the complete base and close unevaluated fields", () => {
+    for (const name of ["legal-policy-record", "institutional-record"]) {
+      const file = join(SCHEMAS_ROOT, "extensions", `${name}.schema.json`);
+      const schema = JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
+      const allOf = schema.allOf as Array<Record<string, unknown>>;
+      expect(allOf[0]?.$ref).toBe(
+        "https://writ.example/schemas/core/record.schema.json#/$defs/recordBase",
+      );
+      expect(schema.unevaluatedProperties).toBe(false);
+      expect(schema.properties).toBeUndefined();
+      expect(schema.required).toBeUndefined();
+    }
+  });
 });

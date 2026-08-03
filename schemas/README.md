@@ -32,12 +32,12 @@ trace; those requirements belong to their family or layer, not the shared core.
 
 ## Current core schemas
 
-| Schema                               | Classification | Responsibility                                                                                                          |
-| ------------------------------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `core/evidence.schema.json`          | core           | Frozen source versions, passages, claims, relationships embedded in evidence actions, reviews, and snapshot provenance. |
-| `core/source-registry.schema.json`   | core           | Generated source-registry interchange document.                                                                         |
-| `core/corpus_vocabulary.schema.json` | core           | Reviewed controlled-vocabulary mappings shared by corpus adapters.                                                      |
-| `core/record.schema.json`            | core           | Closed shared record envelope: identity, assertion, scope, evidence, uncertainty, provenance, and workflow state.       |
+| Schema                               | Classification | Responsibility                                                                                                                                               |
+| ------------------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `core/evidence.schema.json`          | core           | Frozen source versions, passages, claims, relationships embedded in evidence actions, reviews, and snapshot provenance.                                      |
+| `core/source-registry.schema.json`   | core           | Generated source-registry interchange document.                                                                                                              |
+| `core/corpus_vocabulary.schema.json` | core           | Reviewed controlled-vocabulary mappings shared by corpus adapters.                                                                                           |
+| `core/record.schema.json`            | core           | Closed public record envelope plus the composable `recordBase`: identity, structured subjects, scope, evidence, uncertainty, provenance, and workflow state. |
 
 No core schema requires a commitment, obligation, compliance result, or score.
 

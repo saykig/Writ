@@ -7,6 +7,7 @@ measurement science, AI standards development, and AI technical guidance.
 The source passages are quoted exactly and include stable passage and retrieved-document hashes.
 The About NIST page version is its stated January 11, 2022 update; the AI Standards and Guidelines
 Group page is versioned by its August 3, 2026 retrieval. Mission and function statements are not
-represented as statutory authority. Every operational-capacity status remains `unknown`, and the AI
-topic appears only on the two records whose passages directly concern AI. The records were
-generated as automated drafts by OpenAI Codex and have no human reviewer.
+represented as statutory authority. Every mandate and operational-capacity status remains
+`unknown`; the mission is stored separately, and the AI topic appears only on the two records whose
+passages directly concern AI. The records were generated as automated drafts by OpenAI Codex and
+have no human reviewer.

@@ -451,8 +451,30 @@ function printInstitutionalProperty(property: InstitutionalProperty, indent: str
       return `${indent}institution_id ${property.value};`;
     case "InstitutionTypeProperty":
       return `${indent}institution_type ${property.value};`;
-    case "MandateProperty":
-      return `${indent}mandate ${quote(property.value)};`;
+    case "MandateProperty": {
+      if (property.legacyText !== undefined)
+        return `${indent}mandate ${quote(property.legacyText)};`;
+      const lines = [`${indent}mandate {`, `${indent}${INDENT}status ${property.status};`];
+      if (property.text !== undefined)
+        lines.push(`${indent}${INDENT}text ${quote(property.text)};`);
+      if (property.authoritySourceIds)
+        lines.push(
+          `${indent}${INDENT}authority_source_ids ${identifiers(property.authoritySourceIds.values)};`,
+        );
+      if (property.evidenceRefs)
+        lines.push(`${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    case "MissionProperty": {
+      const lines = [`${indent}mission {`, `${indent}${INDENT}text ${quote(property.text)};`];
+      if (property.sourceIds)
+        lines.push(`${indent}${INDENT}source_ids ${identifiers(property.sourceIds.values)};`);
+      if (property.evidenceRefs)
+        lines.push(`${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
     case "AuthoritySourcesProperty":
       return `${indent}authority_sources ${identifiers(property.values.values)};`;
     case "InstitutionalJurisdictionsProperty":
@@ -491,19 +513,43 @@ function printRecordMember(member: RecordMember, indent: string): string {
       return `${indent}version ${quote(member.value)};`;
     case "RecordTitle":
       return `${indent}title ${quote(member.value)};`;
-    case "RecordSubjects":
-      return `${indent}subjects ${identifiers(member.values.values)};`;
+    case "RecordSubjects": {
+      if (member.legacy) return `${indent}subjects ${identifiers(member.legacy.values)};`;
+      const lines = [`${indent}subjects {`];
+      for (const subject of member.structured?.subjects ?? []) {
+        lines.push(
+          `${indent}${INDENT}subject ${subject.subjectId} type ${subject.subjectType}${subject.label ? ` label ${quote(subject.label)}` : ""}${subject.role ? ` role ${quote(subject.role)}` : ""};`,
+        );
+      }
+      lines.push(`${indent}};`);
+      return lines.join("\n");
+    }
     case "RecordAssertion":
       return `${indent}assertion ${member.mode} ${quote(member.text)};`;
     case "RecordTopics":
       return `${indent}topics { ${member.values.values.map((value) => (value.includes(" ") ? quote(value) : value)).join(", ")} };`;
     case "RecordScope": {
-      const lines = [
-        `${indent}scope {`,
-        `${indent}${INDENT}jurisdiction ${quote(member.jurisdiction)};`,
-      ];
-      for (const condition of member.conditions)
+      const lines = [`${indent}scope {`];
+      if (member.legacyJurisdiction)
+        lines.push(`${indent}${INDENT}jurisdiction ${quote(member.legacyJurisdiction)};`);
+      if (member.jurisdictions)
+        lines.push(`${indent}${INDENT}jurisdictions ${strings(member.jurisdictions.values)};`);
+      if (member.institutionalScope)
+        lines.push(
+          `${indent}${INDENT}institutional_scope ${identifiers(member.institutionalScope.values)};`,
+        );
+      if (member.temporalScope) {
+        lines.push(`${indent}${INDENT}temporal_scope {`);
+        if (member.temporalScope.from)
+          lines.push(`${indent}${INDENT.repeat(2)}from ${member.temporalScope.from};`);
+        if (member.temporalScope.until)
+          lines.push(`${indent}${INDENT.repeat(2)}until ${member.temporalScope.until};`);
+        lines.push(`${indent}${INDENT}}`);
+      }
+      for (const condition of member.legacyConditions)
         lines.push(`${indent}${INDENT}condition ${quote(condition)};`);
+      if (member.conditions)
+        lines.push(`${indent}${INDENT}conditions ${strings(member.conditions.values)};`);
       lines.push(`${indent}}`);
       return lines.join("\n");
     }

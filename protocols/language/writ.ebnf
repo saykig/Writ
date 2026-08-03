@@ -18,7 +18,7 @@ Rationale       = "rationale", Identifier, "{", "text", String, ";",
 
 Record          = "record", Identifier, ":", RecordFamily, "{",
                   { RecordMember }, "}" ;
-RecordFamily    = "legal_policy" | "institutional" ;
+RecordFamily    = Identifier ;
 RecordMember    = RecordCorpus | RecordVersion | RecordTitle | RecordSubjects |
                   RecordAssertion | RecordTopics | RecordScope | RecordEvidence |
                   RecordUncertainty | RecordProvenance | RecordReviewState |
@@ -26,13 +26,22 @@ RecordMember    = RecordCorpus | RecordVersion | RecordTitle | RecordSubjects |
 RecordCorpus    = "corpus", QName, ";" ;
 RecordVersion   = "version", String, ";" ;
 RecordTitle     = "title", String, ";" ;
-RecordSubjects  = "subjects", IdentifierList, ";" ;
+RecordSubjects  = "subjects", ( IdentifierList | StructuredSubjectList ), ";" ;
+StructuredSubjectList = "{", RecordSubject, { RecordSubject }, "}" ;
+RecordSubject   = "subject", QName, "type", QName,
+                  [ "label", String ], [ "role", String ], ";" ;
 RecordAssertion = "assertion", AssertionMode, String, ";" ;
 AssertionMode   = "requires" | "permits" | "prohibits" | "defines" |
                   "authorizes" | "assigns" | "performs" | "states" | "observes" ;
 RecordTopics    = "topics", TopicList, ";" ;
-RecordScope     = "scope", "{", "jurisdiction", String, ";",
-                  { "condition", String, ";" }, "}" ;
+RecordScope     = "scope", "{",
+                  [ "jurisdiction", String, ";" ],
+                  [ "jurisdictions", StringList, ";" ],
+                  [ "institutional_scope", IdentifierList, ";" ],
+                  [ "temporal_scope", TemporalScope ],
+                  { "condition", String, ";" },
+                  [ "conditions", StringList, ";" ], "}" ;
+TemporalScope   = "{", [ "from", Date, ";" ], [ "until", Date, ";" ], "}" ;
 RecordEvidence  = "evidence", "{", EvidenceReference,
                   { EvidenceReference }, "}" ;
 EvidenceReference = "support", QName, "document_version", QName, "passage", QName,
@@ -59,11 +68,21 @@ SourceMetadata  = "source_metadata", "{",
                   "original_text", String, ";",
                   [ "last_amended_year", Integer, ";" ],
                   "row_hash", String, ";", "}" ;
-InstitutionalExtension = "institutional", "{", { Property }, "}" ;
+InstitutionalExtension = "institutional", "{",
+                  { Property | Mandate | Mission }, "}" ;
+Mandate         = "mandate", ( String, ";" | "{",
+                  "status", ( "established" | "unknown" | "contested" ), ";",
+                  [ "text", String, ";" ],
+                  [ "authority_source_ids", IdentifierList, ";" ],
+                  [ "evidence_refs", IdentifierList, ";" ], "}" ) ;
+Mission         = "mission", "{", "text", String, ";",
+                  [ "source_ids", IdentifierList, ";" ],
+                  [ "evidence_refs", IdentifierList, ";" ], "}" ;
 
 Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
 JudgmentMember  = Property ;
 IdentifierList  = "{", [ QName, { ",", QName } ], [ "," ], "}" ;
+StringList      = "{", [ String, { ",", String } ], [ "," ], "}" ;
 TopicList       = "{", [ ( QName | String ), { ",", ( QName | String ) } ], [ "," ], "}" ;
 
 Commitment      = "commitment", Identifier, "{", { CommitmentMember }, "}" ;

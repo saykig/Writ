@@ -9,10 +9,22 @@ const base = {
   record_version: "0.1.0",
   family: "legal_policy",
   title: "Example record",
-  subjects: ["united_states"],
+  subjects: [
+    {
+      subject_id: "united_states",
+      subject_type: "jurisdiction",
+      label: "United States",
+      role: "governing jurisdiction",
+    },
+  ],
   assertion: { mode: "states", text: "The source states an example proposition." },
   topics: [],
-  scope: { jurisdiction: "United States", conditions: [] },
+  scope: {
+    jurisdictions: ["United States"],
+    institutional_scope: [],
+    temporal_scope: {},
+    conditions: [],
+  },
   evidence: [
     {
       source_id: "source.example",
@@ -46,11 +58,15 @@ const institutional = {
   ...base,
   record_id: "record.us.nist",
   family: "institutional",
-  subjects: ["nist"],
+  subjects: [{ subject_id: "nist", subject_type: "institution" }],
   institution_id: "nist",
   institution_type: "federal_agency",
-  mandate: "A source-grounded mandate statement.",
-  authority_sources: ["source.example"],
+  mandate: { status: "unknown" },
+  mission: {
+    text: "A source-reported mission statement.",
+    source_ids: ["source.example"],
+    evidence_refs: ["source.example.p1"],
+  },
   jurisdictions: ["United States"],
   functions: ["measurement_science"],
   operational_capacity: { status: "unknown", dimensions: [], evidence_refs: [] },
@@ -71,6 +87,10 @@ const judgment = {
 
 describe("shared record schema", () => {
   test("valid base record passes", () => expect(validate("record", base).valid).toBe(true));
+  test("future family identifiers are accepted by the base", () => {
+    expect(validate("record", { ...base, family: "theoretical" }).valid).toBe(true);
+    expect(validate("record", { ...base, family: "future_family_2" }).valid).toBe(true);
+  });
   test("missing evidence fails", () =>
     expect(validate("record", { ...base, evidence: [] }).valid).toBe(false));
   test("missing identity fails", () => {
@@ -92,6 +112,20 @@ describe("shared record schema", () => {
     expect(validate("record", { ...base, arbitrary: true }).valid).toBe(false);
     expect(validate("record", { ...base, instrument_type: "constitution" }).valid).toBe(false);
   });
+  test("subjects and expanded scope remain structurally strict", () => {
+    expect(
+      validate("record", {
+        ...base,
+        subjects: [{ subject_id: "united_states", subject_type: "jurisdiction", extra: true }],
+      }).valid,
+    ).toBe(false);
+    expect(
+      validate("record", {
+        ...base,
+        scope: { ...base.scope, unexpected: true },
+      }).valid,
+    ).toBe(false);
+  });
 });
 
 describe("legal-policy record schema", () => {
@@ -112,6 +146,10 @@ describe("legal-policy record schema", () => {
     const { instrument_type: _, ...missing } = legal;
     expect(validate("legal-policy-record", missing).valid).toBe(false);
   });
+  test("the extension inherits required base fields without redeclaring them", () => {
+    const { scope: _, ...missingBaseScope } = legal;
+    expect(validate("legal-policy-record", missingBaseScope).valid).toBe(false);
+  });
   test("force, adoption, applicability, and enforcement remain independent", () => {
     expect(
       validate("legal-policy-record", {
@@ -130,19 +168,41 @@ describe("legal-policy record schema", () => {
 describe("institutional record schema", () => {
   test("valid NIST-shaped record with unknown capacity passes", () =>
     expect(validate("institutional-record", institutional).valid).toBe(true));
-  test("wrong family, missing mandate, and missing authority fail", () => {
+  test("the extension constrains family and inherits the base contract", () => {
     expect(
       validate("institutional-record", { ...institutional, family: "legal_policy" }).valid,
     ).toBe(false);
     const { mandate: _, ...missingMandate } = institutional;
     expect(validate("institutional-record", missingMandate).valid).toBe(false);
-    expect(
-      validate("institutional-record", { ...institutional, authority_sources: [] }).valid,
-    ).toBe(false);
+    const { subjects: __, ...missingSubjects } = institutional;
+    expect(validate("institutional-record", missingSubjects).valid).toBe(false);
   });
-  test("mandate does not imply capacity or legal-policy validity", () => {
+  test("unknown mandate status is valid for identity, placement, relationship, and function records", () => {
+    for (const mode of ["defines", "states", "assigns", "performs"] as const) {
+      expect(
+        validate("institutional-record", {
+          ...institutional,
+          assertion: { mode, text: `A ${mode} assertion.` },
+          mandate: { status: "unknown" },
+        }).valid,
+      ).toBe(true);
+    }
+  });
+  test("mission, mandate, functions, and operational capacity remain independent", () => {
+    expect(institutional.mission).toEqual({
+      text: "A source-reported mission statement.",
+      source_ids: ["source.example"],
+      evidence_refs: ["source.example.p1"],
+    });
+    expect(institutional.mandate).toEqual({ status: "unknown" });
     expect(institutional.operational_capacity.status).toBe("unknown");
+    expect(institutional.functions).toEqual(["measurement_science"]);
     expect(validate("legal-policy-record", institutional).valid).toBe(false);
+  });
+  test("unknown fields are rejected after base and extension composition", () => {
+    expect(validate("institutional-record", { ...institutional, authority: true }).valid).toBe(
+      false,
+    );
   });
 });
 

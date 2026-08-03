@@ -39,7 +39,7 @@ RecordDeclaration:
         members+=RecordMember*
     '}';
 
-RecordFamily returns string: 'legal_policy' | 'institutional';
+RecordFamily returns string: ID | 'legal_policy' | 'institutional';
 
 RecordMember:
       {infer RecordCorpus} 'corpus' value=QualifiedName ';'
@@ -56,7 +56,12 @@ RecordMember:
     | LegalPolicyExtension
     | InstitutionalExtension;
 
-RecordSubjects: 'subjects' values=IdentifierList ';';
+RecordSubjects:
+    'subjects' (structured=StructuredRecordSubjectList | legacy=IdentifierList) ';';
+StructuredRecordSubjectList: '{' subjects+=RecordSubject+ '}';
+RecordSubject:
+    'subject' subjectId=QualifiedName 'type' subjectType=QualifiedName
+    ('label' label=STRING)? ('role' role=STRING)? ';';
 RecordTopics: 'topics' values=TopicList ';';
 RecordAssertion: 'assertion' mode=RecordAssertionMode text=STRING ';';
 RecordAssertionMode returns string:
@@ -65,9 +70,14 @@ RecordAssertionMode returns string:
 
 RecordScope:
     'scope' '{'
-        'jurisdiction' jurisdiction=STRING ';'
-        ('condition' conditions+=STRING ';')*
+        ('jurisdiction' legacyJurisdiction=STRING ';')?
+        ('jurisdictions' jurisdictions=StringList ';')?
+        ('institutional_scope' institutionalScope=IdentifierList ';')?
+        ('temporal_scope' temporalScope=RecordTemporalScope)?
+        ('condition' legacyConditions+=STRING ';')*
+        ('conditions' conditions=StringList ';')?
     '}';
+RecordTemporalScope: '{' ('from' from=DATE ';')? ('until' until=DATE ';')? '}';
 
 RecordEvidence:
     'evidence' '{' references+=RecordEvidenceReference+ '}';
@@ -143,7 +153,8 @@ InstitutionalExtension:
 InstitutionalProperty:
       {infer InstitutionIdProperty} 'institution_id' value=QualifiedName ';'
     | {infer InstitutionTypeProperty} 'institution_type' value=InstitutionType ';'
-    | {infer MandateProperty} 'mandate' value=STRING ';'
+    | MandateProperty
+    | MissionProperty
     | {infer AuthoritySourcesProperty} 'authority_sources' values=IdentifierList ';'
     | {infer InstitutionalJurisdictionsProperty} 'jurisdictions' values=StringList ';'
     | {infer FunctionsProperty} 'functions' values=FunctionList ';'
@@ -157,6 +168,23 @@ InstitutionalProperty:
 
 InstitutionType returns string: 'government_department' | 'federal_agency' | 'independent_agency' | 'advisory_body' | 'regulator' | 'standards_body' | 'research_body' | 'interagency_body' | 'organizational_unit' | 'other' | 'unknown';
 InstitutionFunction returns string: 'standards_development' | 'measurement_science' | 'technical_guidance' | 'research' | 'evaluation' | 'coordination' | 'oversight' | 'grant_administration' | 'procurement_support' | 'other';
+MandateProperty:
+    'mandate' (
+        '{'
+            'status' status=MandateStatus ';'
+            ('text' text=STRING ';')?
+            ('authority_source_ids' authoritySourceIds=IdentifierList ';')?
+            ('evidence_refs' evidenceRefs=IdentifierList ';')?
+        '}'
+        | legacyText=STRING ';'
+    );
+MandateStatus returns string: 'established' | 'unknown' | 'contested';
+MissionProperty:
+    'mission' '{'
+        'text' text=STRING ';'
+        ('source_ids' sourceIds=IdentifierList ';')?
+        ('evidence_refs' evidenceRefs=IdentifierList ';')?
+    '}';
 OperationalCapacityProperty:
     'operational_capacity' '{'
         'status' status=CapacityStatus ';'
@@ -487,7 +515,8 @@ NamePart returns string:
     | 'unknown' | 'contested' | 'ambiguous' | 'incomplete_evidence'
     | 'draft' | 'reviewed' | 'approved' | 'superseded' | 'withdrawn'
     | 'requires' | 'permits' | 'prohibits' | 'defines' | 'authorizes' | 'assigns'
-    | 'performs' | 'states' | 'observes' | 'jurisdiction' | 'condition' | 'item'
+    | 'performs' | 'states' | 'observes' | 'jurisdiction' | 'condition' | 'conditions'
+    | 'institutional_scope' | 'temporal_scope' | 'subject' | 'label' | 'role' | 'item'
     | 'created_by' | 'created_at' | 'instrument_type' | 'jurisdiction_level'
     | 'force' | 'adoption_status' | 'applicability_status' | 'enforcement_status'
     | 'official_citation' | 'provision_identifier' | 'jurisdictions'
@@ -508,7 +537,8 @@ NamePart returns string:
     | 'organizational_unit' | 'standards_development' | 'measurement_science'
     | 'technical_guidance' | 'research' | 'evaluation' | 'coordination'
     | 'grant_administration' | 'procurement_support' | 'established' | 'partial'
-    | 'institution_id' | 'institution_type' | 'mandate' | 'authority_sources'
+    | 'institution_id' | 'institution_type' | 'mandate' | 'mission' | 'authority_sources'
+    | 'authority_source_ids' | 'source_ids'
     | 'functions' | 'operational_capacity' | 'status' | 'dimensions' | 'evidence_refs'
     | 'decision_rights' | 'parent_institution_id' | 'subunit_ids'
     | 'oversight_relationships' | 'institutional_relationships' | 'relation'

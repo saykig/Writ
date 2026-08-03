@@ -62,6 +62,7 @@ export type WritKeywordNames =
   | "assertion"
   | "assigns"
   | "authority"
+  | "authority_source_ids"
   | "authority_sources"
   | "authorizes"
   | "basis"
@@ -80,6 +81,7 @@ export type WritKeywordNames =
   | "component"
   | "concept"
   | "condition"
+  | "conditions"
   | "constitution"
   | "constitutional_amendment"
   | "contains"
@@ -159,6 +161,7 @@ export type WritKeywordNames =
   | "institutional"
   | "institutional_relationships"
   | "institutional_role_determination"
+  | "institutional_scope"
   | "instrument_type"
   | "intentional_overlap"
   | "interagency_body"
@@ -187,6 +190,7 @@ export type WritKeywordNames =
   | "measurement_science"
   | "media_type"
   | "min"
+  | "mission"
   | "monotonic"
   | "multi_label"
   | "no_unanchored_claims"
@@ -260,6 +264,7 @@ export type WritKeywordNames =
   | "review_state"
   | "reviewed"
   | "reviewer"
+  | "role"
   | "row_hash"
   | "safe_under_open_world"
   | "scale"
@@ -274,6 +279,7 @@ export type WritKeywordNames =
   | "set"
   | "sha256"
   | "source"
+  | "source_ids"
   | "source_metadata"
   | "source_row_identifier"
   | "source_url"
@@ -285,6 +291,7 @@ export type WritKeywordNames =
   | "statute"
   | "strict_deduplicate"
   | "strict_separate"
+  | "subject"
   | "subject_identification"
   | "subjects"
   | "subunit_ids"
@@ -296,6 +303,7 @@ export type WritKeywordNames =
   | "supports"
   | "target"
   | "technical_guidance"
+  | "temporal_scope"
   | "territorial"
   | "text"
   | "title"
@@ -1249,7 +1257,10 @@ export interface IdentifierList extends langium.AstNode {
   readonly $container:
     | AuthoritySourcesProperty
     | JudgmentEvidenceRefs
+    | MandateProperty
+    | MissionProperty
     | OperationalCapacityProperty
+    | RecordScope
     | RecordSubjects
     | RelatedJudgments
     | RelatedProvisionsProperty
@@ -1341,6 +1352,7 @@ export type InstitutionalProperty =
   | InstitutionalJurisdictionsProperty
   | InstitutionalRelationshipsProperty
   | MandateProperty
+  | MissionProperty
   | OperationalCapacityProperty
   | OversightRelationshipsProperty
   | ParentInstitutionProperty
@@ -1910,16 +1922,30 @@ export function isLinesAnchor(item: unknown): item is LinesAnchor {
 export interface MandateProperty extends langium.AstNode {
   readonly $container: InstitutionalExtension;
   readonly $type: "MandateProperty";
-  value: string;
+  authoritySourceIds?: IdentifierList;
+  evidenceRefs?: IdentifierList;
+  legacyText?: string;
+  status?: MandateStatus;
+  text?: string;
 }
 
 export const MandateProperty = {
   $type: "MandateProperty",
-  value: "value",
+  authoritySourceIds: "authoritySourceIds",
+  evidenceRefs: "evidenceRefs",
+  legacyText: "legacyText",
+  status: "status",
+  text: "text",
 } as const;
 
 export function isMandateProperty(item: unknown): item is MandateProperty {
   return reflection.isInstance(item, MandateProperty.$type);
+}
+
+export type MandateStatus = "contested" | "established" | "unknown";
+
+export function isMandateStatus(item: unknown): item is MandateStatus {
+  return item === "established" || item === "unknown" || item === "contested";
 }
 
 export interface Measure extends langium.AstNode {
@@ -1964,6 +1990,25 @@ export function isMeasureComponent(item: unknown): item is MeasureComponent {
   return reflection.isInstance(item, MeasureComponent.$type);
 }
 
+export interface MissionProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "MissionProperty";
+  evidenceRefs?: IdentifierList;
+  sourceIds?: IdentifierList;
+  text: string;
+}
+
+export const MissionProperty = {
+  $type: "MissionProperty",
+  evidenceRefs: "evidenceRefs",
+  sourceIds: "sourceIds",
+  text: "text",
+} as const;
+
+export function isMissionProperty(item: unknown): item is MissionProperty {
+  return reflection.isInstance(item, MissionProperty.$type);
+}
+
 export interface Model extends langium.AstNode {
   readonly $type: "Model";
   declarations: Array<Declaration>;
@@ -2001,6 +2046,7 @@ export type NamePart =
   | "approved"
   | "assertion"
   | "assigns"
+  | "authority_source_ids"
   | "authority_sources"
   | "authorizes"
   | "basis"
@@ -2009,6 +2055,7 @@ export type NamePart =
   | "code"
   | "compliance_pathway"
   | "condition"
+  | "conditions"
   | "constitution"
   | "constitutional_amendment"
   | "contested"
@@ -2062,6 +2109,7 @@ export type NamePart =
   | "institutional"
   | "institutional_relationships"
   | "institutional_role_determination"
+  | "institutional_scope"
   | "instrument_type"
   | "interagency_body"
   | "item"
@@ -2070,6 +2118,7 @@ export type NamePart =
   | "jurisdiction"
   | "jurisdiction_level"
   | "jurisdictions"
+  | "label"
   | "last_amended_year"
   | "legal_policy"
   | "legal_status_determination"
@@ -2077,6 +2126,7 @@ export type NamePart =
   | "mandate"
   | "market_wide"
   | "measurement_science"
+  | "mission"
   | "nonbinding"
   | "none_specified"
   | "not_yet_applicable"
@@ -2124,12 +2174,14 @@ export type NamePart =
   | "review_state"
   | "reviewed"
   | "reviewer"
+  | "role"
   | "row_hash"
   | "scope"
   | "scope_interpretation"
   | "section_number"
   | "section_title"
   | "self_executing"
+  | "source_ids"
   | "source_metadata"
   | "source_row_identifier"
   | "source_url"
@@ -2139,6 +2191,7 @@ export type NamePart =
   | "states"
   | "status"
   | "statute"
+  | "subject"
   | "subject_identification"
   | "subjects"
   | "subunit_ids"
@@ -2147,6 +2200,7 @@ export type NamePart =
   | "supports"
   | "target"
   | "technical_guidance"
+  | "temporal_scope"
   | "territorial"
   | "title"
   | "topic_classification"
@@ -2212,6 +2266,12 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "observes" ||
     item === "jurisdiction" ||
     item === "condition" ||
+    item === "conditions" ||
+    item === "institutional_scope" ||
+    item === "temporal_scope" ||
+    item === "subject" ||
+    item === "label" ||
+    item === "role" ||
     item === "item" ||
     item === "created_by" ||
     item === "created_at" ||
@@ -2296,7 +2356,10 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "institution_id" ||
     item === "institution_type" ||
     item === "mandate" ||
+    item === "mission" ||
     item === "authority_sources" ||
+    item === "authority_source_ids" ||
+    item === "source_ids" ||
     item === "functions" ||
     item === "operational_capacity" ||
     item === "status" ||
@@ -2918,10 +2981,14 @@ export function isRecordEvidenceReference(item: unknown): item is RecordEvidence
   return reflection.isInstance(item, RecordEvidenceReference.$type);
 }
 
-export type RecordFamily = "institutional" | "legal_policy";
+export type RecordFamily = "institutional" | "legal_policy" | string;
 
 export function isRecordFamily(item: unknown): item is RecordFamily {
-  return item === "legal_policy" || item === "institutional";
+  return (
+    item === "legal_policy" ||
+    item === "institutional" ||
+    (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
+  );
 }
 
 export type RecordMember =
@@ -2982,33 +3049,81 @@ export function isRecordReviewState(item: unknown): item is RecordReviewState {
 export interface RecordScope extends langium.AstNode {
   readonly $container: RecordDeclaration;
   readonly $type: "RecordScope";
-  conditions: Array<string>;
-  jurisdiction: string;
+  conditions?: StringList;
+  institutionalScope?: IdentifierList;
+  jurisdictions?: StringList;
+  legacyConditions: Array<string>;
+  legacyJurisdiction?: string;
+  temporalScope?: RecordTemporalScope;
 }
 
 export const RecordScope = {
   $type: "RecordScope",
   conditions: "conditions",
-  jurisdiction: "jurisdiction",
+  institutionalScope: "institutionalScope",
+  jurisdictions: "jurisdictions",
+  legacyConditions: "legacyConditions",
+  legacyJurisdiction: "legacyJurisdiction",
+  temporalScope: "temporalScope",
 } as const;
 
 export function isRecordScope(item: unknown): item is RecordScope {
   return reflection.isInstance(item, RecordScope.$type);
 }
 
+export interface RecordSubject extends langium.AstNode {
+  readonly $container: StructuredRecordSubjectList;
+  readonly $type: "RecordSubject";
+  label?: string;
+  role?: string;
+  subjectId: QualifiedName;
+  subjectType: QualifiedName;
+}
+
+export const RecordSubject = {
+  $type: "RecordSubject",
+  label: "label",
+  role: "role",
+  subjectId: "subjectId",
+  subjectType: "subjectType",
+} as const;
+
+export function isRecordSubject(item: unknown): item is RecordSubject {
+  return reflection.isInstance(item, RecordSubject.$type);
+}
+
 export interface RecordSubjects extends langium.AstNode {
   readonly $container: RecordDeclaration;
   readonly $type: "RecordSubjects";
-  values: IdentifierList;
+  legacy?: IdentifierList;
+  structured?: StructuredRecordSubjectList;
 }
 
 export const RecordSubjects = {
   $type: "RecordSubjects",
-  values: "values",
+  legacy: "legacy",
+  structured: "structured",
 } as const;
 
 export function isRecordSubjects(item: unknown): item is RecordSubjects {
   return reflection.isInstance(item, RecordSubjects.$type);
+}
+
+export interface RecordTemporalScope extends langium.AstNode {
+  readonly $container: RecordScope;
+  readonly $type: "RecordTemporalScope";
+  from?: string;
+  until?: string;
+}
+
+export const RecordTemporalScope = {
+  $type: "RecordTemporalScope",
+  from: "from",
+  until: "until",
+} as const;
+
+export function isRecordTemporalScope(item: unknown): item is RecordTemporalScope {
+  return reflection.isInstance(item, RecordTemporalScope.$type);
 }
 
 export interface RecordTitle extends langium.AstNode {
@@ -3481,6 +3596,21 @@ export function isStringLiteral(item: unknown): item is StringLiteral {
   return reflection.isInstance(item, StringLiteral.$type);
 }
 
+export interface StructuredRecordSubjectList extends langium.AstNode {
+  readonly $container: RecordSubjects;
+  readonly $type: "StructuredRecordSubjectList";
+  subjects: Array<RecordSubject>;
+}
+
+export const StructuredRecordSubjectList = {
+  $type: "StructuredRecordSubjectList",
+  subjects: "subjects",
+} as const;
+
+export function isStructuredRecordSubjectList(item: unknown): item is StructuredRecordSubjectList {
+  return reflection.isInstance(item, StructuredRecordSubjectList.$type);
+}
+
 export interface Subjects extends langium.AstNode {
   readonly $container: Commitment;
   readonly $type: "Subjects";
@@ -3777,6 +3907,7 @@ export type WritAstType = {
   MandateProperty: MandateProperty;
   Measure: Measure;
   MeasureComponent: MeasureComponent;
+  MissionProperty: MissionProperty;
   Model: Model;
   NumberLiteral: NumberLiteral;
   OfficialCitationProperty: OfficialCitationProperty;
@@ -3810,7 +3941,9 @@ export type WritAstType = {
   RecordProvenance: RecordProvenance;
   RecordReviewState: RecordReviewState;
   RecordScope: RecordScope;
+  RecordSubject: RecordSubject;
   RecordSubjects: RecordSubjects;
+  RecordTemporalScope: RecordTemporalScope;
   RecordTitle: RecordTitle;
   RecordTopics: RecordTopics;
   RecordUncertainty: RecordUncertainty;
@@ -3835,6 +3968,7 @@ export type WritAstType = {
   SourceUri: SourceUri;
   StringList: StringList;
   StringLiteral: StringLiteral;
+  StructuredRecordSubjectList: StructuredRecordSubjectList;
   Subjects: Subjects;
   SubunitIdsProperty: SubunitIdsProperty;
   Summit: Summit;
@@ -4617,8 +4751,25 @@ export class WritAstReflection extends langium.AbstractAstReflection {
     MandateProperty: {
       name: MandateProperty.$type,
       properties: {
-        value: {
-          name: MandateProperty.value,
+        authoritySourceIds: {
+          name: MandateProperty.authoritySourceIds,
+          optional: true,
+        },
+        evidenceRefs: {
+          name: MandateProperty.evidenceRefs,
+          optional: true,
+        },
+        legacyText: {
+          name: MandateProperty.legacyText,
+          optional: true,
+        },
+        status: {
+          name: MandateProperty.status,
+          optional: true,
+        },
+        text: {
+          name: MandateProperty.text,
+          optional: true,
         },
       },
       superTypes: [InstitutionalProperty.$type],
@@ -4661,6 +4812,23 @@ export class WritAstReflection extends langium.AbstractAstReflection {
         },
       },
       superTypes: [],
+    },
+    MissionProperty: {
+      name: MissionProperty.$type,
+      properties: {
+        evidenceRefs: {
+          name: MissionProperty.evidenceRefs,
+          optional: true,
+        },
+        sourceIds: {
+          name: MissionProperty.sourceIds,
+          optional: true,
+        },
+        text: {
+          name: MissionProperty.text,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
     },
     Model: {
       name: Model.$type,
@@ -5093,23 +5261,79 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       properties: {
         conditions: {
           name: RecordScope.conditions,
+          optional: true,
+        },
+        institutionalScope: {
+          name: RecordScope.institutionalScope,
+          optional: true,
+        },
+        jurisdictions: {
+          name: RecordScope.jurisdictions,
+          optional: true,
+        },
+        legacyConditions: {
+          name: RecordScope.legacyConditions,
           defaultValue: [],
           optional: true,
         },
-        jurisdiction: {
-          name: RecordScope.jurisdiction,
+        legacyJurisdiction: {
+          name: RecordScope.legacyJurisdiction,
+          optional: true,
+        },
+        temporalScope: {
+          name: RecordScope.temporalScope,
+          optional: true,
         },
       },
       superTypes: [RecordMember.$type],
     },
+    RecordSubject: {
+      name: RecordSubject.$type,
+      properties: {
+        label: {
+          name: RecordSubject.label,
+          optional: true,
+        },
+        role: {
+          name: RecordSubject.role,
+          optional: true,
+        },
+        subjectId: {
+          name: RecordSubject.subjectId,
+        },
+        subjectType: {
+          name: RecordSubject.subjectType,
+        },
+      },
+      superTypes: [],
+    },
     RecordSubjects: {
       name: RecordSubjects.$type,
       properties: {
-        values: {
-          name: RecordSubjects.values,
+        legacy: {
+          name: RecordSubjects.legacy,
+          optional: true,
+        },
+        structured: {
+          name: RecordSubjects.structured,
+          optional: true,
         },
       },
       superTypes: [RecordMember.$type],
+    },
+    RecordTemporalScope: {
+      name: RecordTemporalScope.$type,
+      properties: {
+        from: {
+          name: RecordTemporalScope.from,
+          optional: true,
+        },
+        until: {
+          name: RecordTemporalScope.until,
+          optional: true,
+        },
+      },
+      superTypes: [],
     },
     RecordTitle: {
       name: RecordTitle.$type,
@@ -5415,6 +5639,16 @@ export class WritAstReflection extends langium.AbstractAstReflection {
         },
       },
       superTypes: [Expression.$type],
+    },
+    StructuredRecordSubjectList: {
+      name: StructuredRecordSubjectList.$type,
+      properties: {
+        subjects: {
+          name: StructuredRecordSubjectList.subjects,
+          defaultValue: [],
+        },
+      },
+      superTypes: [],
     },
     Subjects: {
       name: Subjects.$type,

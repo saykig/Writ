@@ -5,11 +5,16 @@ record us_constitution_al_addc159f2d9f032ce5a5d7ee : legal_policy {
   corpus us.constitutional_law;
   version "0.1.0";
   title "Imprisonment for debts. That no person shall be imprisoned for debt.";
-  subjects { jurisdiction_al };
+  subjects {
+    subject jurisdiction_al type jurisdiction label "al" role "governing jurisdiction";
+  };
   assertion states "Sec. 20. Imprisonment for debts. That no person shall be imprisoned for debt.";
   topics {};
   scope {
-    jurisdiction "al";
+    jurisdictions { "al" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
   }
   evidence {
     support open_us_law.al document_version open_us_law.v2026_07.al passage SCONST_AL_A1_S20 locator "Alabama Const. art. 1, § 20" quote "Sec. 20. Imprisonment for debts. That no person shall be imprisoned for debt." passage_hash "sha256:36b062c8a81b9224a2ea17161042f907a2ae0e814c845178aa77247bad219c76" document_hash "sha256:57e54561f64ce3e248ec2f943c0f487760425c1e6a7de3a75fb6351d23333ab8" basis direct;

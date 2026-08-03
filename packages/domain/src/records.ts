@@ -1,6 +1,7 @@
 /** Canonical compiled types for native Writ records and analytical judgments. */
 
-export type RecordFamily = "legal_policy" | "institutional";
+/** Extensible family identifier; family schemas narrow this with a literal type. */
+export type RecordFamily = string;
 export type AssertionMode =
   | "requires"
   | "permits"
@@ -26,6 +27,20 @@ export interface RecordEvidenceReference {
   basis: EvidenceBasis;
 }
 
+export interface RecordSubject {
+  subject_id: string;
+  subject_type: string;
+  label?: string;
+  role?: string;
+}
+
+export interface RecordScope {
+  jurisdictions: string[];
+  institutional_scope: string[];
+  temporal_scope: { from?: string; until?: string };
+  conditions: string[];
+}
+
 export interface WritRecord {
   schema_version: "0.1.0";
   record_id: string;
@@ -33,10 +48,10 @@ export interface WritRecord {
   record_version: string;
   family: RecordFamily;
   title: string;
-  subjects: string[];
+  subjects: RecordSubject[];
   assertion: { mode: AssertionMode; text: string };
   topics: string[];
-  scope: { jurisdiction: string; conditions: string[] };
+  scope: RecordScope;
   evidence: RecordEvidenceReference[];
   uncertainties: Array<{ type: UncertaintyType; description: string }>;
   provenance: { created_by: string; created_at: string };
@@ -123,6 +138,19 @@ export type InstitutionalRelationType =
   | "reports_to"
   | "implements_for";
 
+export interface InstitutionalMandate {
+  status: "established" | "unknown" | "contested";
+  text?: string;
+  authority_source_ids?: string[];
+  evidence_refs?: string[];
+}
+
+export interface InstitutionalMission {
+  text: string;
+  source_ids?: string[];
+  evidence_refs?: string[];
+}
+
 export interface InstitutionalRecord extends WritRecord {
   family: "institutional";
   institution_id: string;
@@ -138,8 +166,8 @@ export interface InstitutionalRecord extends WritRecord {
     | "organizational_unit"
     | "other"
     | "unknown";
-  mandate: string;
-  authority_sources: string[];
+  mandate: InstitutionalMandate;
+  mission?: InstitutionalMission;
   jurisdictions: string[];
   functions: InstitutionalFunction[];
   operational_capacity: {

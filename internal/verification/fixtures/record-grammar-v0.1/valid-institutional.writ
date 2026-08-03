@@ -5,21 +5,35 @@ record nist_measurement_science : institutional {
   corpus us.institutions.nist;
   version "0.1.0";
   title "NIST measurement-science function";
-  subjects { nist };
+  subjects {
+    subject nist type institution label "National Institute of Standards and Technology" role "subject";
+  };
   assertion performs "NIST advances measurement science, standards, and technology.";
   topics {};
-  scope { jurisdiction "United States"; }
+  scope {
+    jurisdictions { "United States" };
+    institutional_scope { nist };
+    temporal_scope {}
+    conditions {};
+  }
   evidence {
     support nist.about document_version nist.about.v1 passage nist.about.mission locator "About NIST, mission" quote "NIST advances measurement science, standards, and technology." passage_hash "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" document_hash "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" basis direct;
   }
   uncertainty { item unknown "Operational capacity is not established by this mission passage."; }
   provenance { created_by "Writ fixture maintainers"; created_at 2026-08-03; }
-  review_state reviewed;
+  review_state draft;
   institutional {
     institution_id nist;
     institution_type federal_agency;
-    mandate "Advance measurement science, standards, and technology.";
-    authority_sources { nist.about };
+    mandate {
+      status unknown;
+      text "The cited mission statement does not establish a legal mandate.";
+    }
+    mission {
+      text "Advance measurement science, standards, and technology.";
+      source_ids { nist.about };
+      evidence_refs { nist.about.mission };
+    }
     jurisdictions { "United States" };
     functions { measurement_science };
     operational_capacity {

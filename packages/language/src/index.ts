@@ -7,12 +7,7 @@
  * never imports `@writ/api` or touches a database.
  */
 
-import type {
-  CanonicalIr,
-  InstitutionalRecord,
-  LegalPolicyRecord,
-  RecordJudgment,
-} from "@writ/domain";
+import type { CanonicalIr, RecordJudgment, WritRecord } from "@writ/domain";
 import { validate } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
@@ -63,7 +58,7 @@ export interface CompileSourceResult {
   readonly diagnostics: readonly LanguageDiagnostic[];
   /** The canonical IR (best-effort even when non-fatal diagnostics exist). */
   readonly ir?: CanonicalIr;
-  readonly records: readonly (LegalPolicyRecord | InstitutionalRecord)[];
+  readonly records: readonly WritRecord[];
   readonly judgments: readonly RecordJudgment[];
   /** Out-of-band node→span source map. */
   readonly sourceMap: readonly SourceMapEntry[];
@@ -110,13 +105,15 @@ export function compileSource(
   const ir = compiled.ir;
   const validations = [
     ...(ir ? [{ artifact: "canonical-ir", result: validate("canonical-ir", ir) }] : []),
-    ...compiled.records.map((record) => ({
-      artifact: record.family === "legal_policy" ? "legal-policy-record" : "institutional-record",
-      result: validate(
-        record.family === "legal_policy" ? "legal-policy-record" : "institutional-record",
-        record,
-      ),
-    })),
+    ...compiled.records.map((record) => {
+      const artifact =
+        record.family === "legal_policy"
+          ? "legal-policy-record"
+          : record.family === "institutional"
+            ? "institutional-record"
+            : "record";
+      return { artifact, result: validate(artifact, record) };
+    }),
     ...compiled.judgments.map((judgment) => ({
       artifact: "record-judgment",
       result: validate("record-judgment", judgment),

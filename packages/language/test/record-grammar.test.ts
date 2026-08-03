@@ -16,6 +16,7 @@ describe("native record grammar", () => {
   for (const name of [
     "valid-legal-policy.writ",
     "valid-institutional.writ",
+    "valid-legacy-record-syntax.writ",
     "valid-record-judgment.writ",
   ]) {
     test(`${name} parses, compiles, validates, and formats idempotently`, () => {
@@ -43,7 +44,7 @@ describe("native record grammar", () => {
 
   const invalid = [
     ["invalid-legal-policy-missing-evidence.writ", "evidence"],
-    ["invalid-institutional-missing-authority.writ", "authority_sources"],
+    ["invalid-institutional-missing-mandate.writ", "mandate"],
     ["invalid-record-judgment-missing-rationale.writ", "rationale"],
   ] as const;
   for (const [name, field] of invalid) {
@@ -58,6 +59,70 @@ describe("native record grammar", () => {
       ).toBe(true);
     });
   }
+});
+
+describe("structured record lowering", () => {
+  test("structured subjects, scope, mandate, and mission compile without semantic inference", () => {
+    const compiled = compileSource(fixture("valid-institutional.writ"));
+    expect(compiled.schemaValid).toBe(true);
+    expect(compiled.records[0]).toMatchObject({
+      subjects: [
+        {
+          subject_id: "nist",
+          subject_type: "institution",
+          label: "National Institute of Standards and Technology",
+          role: "subject",
+        },
+      ],
+      scope: {
+        jurisdictions: ["United States"],
+        institutional_scope: ["nist"],
+        temporal_scope: {},
+        conditions: [],
+      },
+      mandate: {
+        status: "unknown",
+        text: "The cited mission statement does not establish a legal mandate.",
+      },
+      mission: {
+        text: "Advance measurement science, standards, and technology.",
+        source_ids: ["nist.about"],
+        evidence_refs: ["nist.about.mission"],
+      },
+      operational_capacity: { status: "unknown" },
+    });
+  });
+
+  test("legacy syntax migrates deterministically to the structured contract", () => {
+    const source = fixture("valid-legacy-record-syntax.writ");
+    const first = compileSource(source);
+    const second = compileSource(source);
+    expect(first.records).toEqual(second.records);
+    expect(first.records[0]).toMatchObject({
+      subjects: [{ subject_id: "nist", subject_type: "unspecified" }],
+      scope: {
+        jurisdictions: ["United States"],
+        institutional_scope: [],
+        temporal_scope: {},
+        conditions: ["Measurement science"],
+      },
+      mandate: {
+        status: "unknown",
+        text: "Legacy source-reported text.",
+        authority_source_ids: ["nist.about"],
+      },
+    });
+  });
+
+  test("future record families compile and validate against the shared base", () => {
+    const source = fixture("valid-legal-policy.writ")
+      .replace(": legal_policy", ": theoretical")
+      .replace(/\n {2}legal_policy \{[\s\S]*\n {2}\}\n\}\s*$/, "\n}\n");
+    const compiled = compileSource(source);
+    expect(compiled.schemaValid).toBe(true);
+    expect(compiled.records[0]?.family).toBe("theoretical");
+    expect(validate("record", compiled.records[0]).valid).toBe(true);
+  });
 });
 
 describe("controlled AI topic aliases", () => {

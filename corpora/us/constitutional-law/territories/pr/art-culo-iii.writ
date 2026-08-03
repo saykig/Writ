@@ -5,11 +5,16 @@ record us_constitution_pr_78887fa6ae03260e6c2162ee : legal_policy {
   corpus us.constitutional_law;
   version "0.1.0";
   title "Constitución de Puerto Rico Artículo III, Sección 11";
-  subjects { jurisdiction_pr };
+  subjects {
+    subject jurisdiction_pr type jurisdiction label "Constitución de Puerto Rico" role "governing jurisdiction";
+  };
   assertion states "Las sesiones de las cámaras serán públicas.";
   topics {};
   scope {
-    jurisdiction "Constitución de Puerto Rico";
+    jurisdictions { "Constitución de Puerto Rico" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
   }
   evidence {
     support open_us_law.pr document_version open_us_law.v2026_07.pr passage SCONST_PR_AIII_S11 locator "P.R. Const. art. III, § 11" quote "Las sesiones de las cámaras serán públicas." passage_hash "sha256:07f97ad7a1910edac047aeb842e6dedbb22014d94e9ceb93c69daa0e9a94bbea" document_hash "sha256:ec4f657c10bc0b63468ace7fb53daf5ca4a98ea175dac23d6df930ec887ad1a7" basis direct;
