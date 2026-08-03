@@ -202,5 +202,41 @@ tasks:
       - corpora/us/constitutional-law
       - corpora/us/institutions/nist
 
+  - id: CORE-EVIDENCE-RECONCILIATION-001
+    title: Add the read-only Core evidence diagnostic crosswalk
+    status: done
+    dependencies:
+      - STAGE-1-RECORD-GRAMMAR
+    scope:
+      - Document basis, stance, support type, truth value, workflow status, reviewed parent decisions and snapshot review decisions as distinct concepts.
+      - Add an internal, pure and read-only diagnostic projection for explicit evidence semantics and object-specific compatibility identities.
+      - Resolve snapshot claims, passages, document versions and snapshot reviewed objects independently.
+      - Derive five separate unresolved evidence-identity results from the three applicable unresolved provenance entries.
+      - Test semantic totality, identity handling, determinism, semantic preservation and protected-byte integrity.
+    exclusions:
+      - A native Writ record, canonical Core schema or public interchange contract.
+      - Use by corpus generation, mutation or migration.
+      - Native Writ evidence syntax or language generation.
+      - Record or evidence schema changes.
+      - Manual claim rewrites or changes to reviewed, active or archived corpus semantics.
+      - NIST substantive review, frontend work, domain ontology work or corpus expansion.
+    acceptance:
+      - Explicit source semantics remain mapped independently of target-identity resolution.
+      - No basis, stance, support type, truth, workflow or review concept is inferred from another.
+      - Exactly 27 frozen snapshot claims resolve to active claims.
+      - Exactly 22 frozen passages resolve to active passages.
+      - Exactly 10 frozen document versions resolve to active sources.
+      - Exactly 27 snapshot reviews resolve to their reviewed snapshot claim objects without asserting active review-record equivalence.
+      - EU-10A, EU-10B, EU-10C, EU-12 and US-02 each produce a separate unresolved evidence-identity result and remain accepted.
+      - The existing 38-reference corpus-migration invariant remains valid and is reported separately.
+      - Reviewed YAML, all 17 U.S. claims, source and passage hashes, active corpora, archived pilot bytes, existing Writ programs and six draft NIST records remain unchanged.
+      - Formatting, linting, type checking, tests, conformance, build, corpus drift and checksum verification pass.
+    outputs:
+      - adr/0016-distinct-evidence-semantics-and-diagnostic-crosswalk.md
+      - apps/ingest/src/writ_ingest/corpus/eu_us_ai_governance.py
+      - apps/ingest/tests/test_evidence_crosswalk.py
+      - internal/verification/integration/corpora/test_eu_us_ai_governance.py
+      - MANIFEST.sha256
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml
