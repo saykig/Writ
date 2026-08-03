@@ -267,6 +267,11 @@ def _claim_record(claim: dict[str, Any], review_id: str) -> dict[str, Any]:
         for key, value in claim.items()
         if key not in REMOVED_NORMALIZED_FIELDS
     }
+    stage_one = (
+        {"family": "legal_policy", "topics": ["artificial_intelligence"]}
+        if claim["jurisdiction"] == "US"
+        else {}
+    )
     return {
         **_identity(
             record_kind="claim",
@@ -277,6 +282,7 @@ def _claim_record(claim: dict[str, Any], review_id: str) -> dict[str, Any]:
         ),
         "record_type": "political_claim",
         "record_family": "policy",
+        **stage_one,
         "review_status": "accepted",
         "imported_review_machine_id": review_id,
         **preserved,

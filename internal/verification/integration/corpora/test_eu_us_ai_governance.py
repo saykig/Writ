@@ -114,6 +114,8 @@ def test_every_reviewed_claim_field_survives_except_retired_pilot_fields() -> No
         "record_family",
         "review_status",
         "imported_review_machine_id",
+        "family",
+        "topics",
     }
     for reviewed in reviewed_claims:
         legacy_ref = reviewed["claim_id"]
@@ -128,6 +130,16 @@ def test_every_reviewed_claim_field_survives_except_retired_pilot_fields() -> No
             if key not in active_metadata
         }
         assert actual == expected, legacy_ref
+
+
+def test_us_claims_map_to_legal_policy_and_controlled_ai_topic_only() -> None:
+    us_claims = active("US", "records/claims.yaml")["claims"]
+    assert len(us_claims) == 17
+    assert all(claim["family"] == "legal_policy" for claim in us_claims)
+    assert all(claim["topics"] == ["artificial_intelligence"] for claim in us_claims)
+
+    eu_claims = active("EU", "records/claims.yaml")["claims"]
+    assert all("family" not in claim and "topics" not in claim for claim in eu_claims)
 
 
 def test_review_decisions_and_parent_groupings_are_preserved() -> None:
