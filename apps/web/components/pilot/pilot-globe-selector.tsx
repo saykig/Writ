@@ -111,7 +111,7 @@ export function PilotGlobeSelector({
               className="mt-3 min-h-9 w-full text-[0.72rem]"
               nativeButton={false}
               render={
-                <Link href="/demo">
+                <Link href="/query">
                   See how this was answered
                   <ArrowRight />
                 </Link>

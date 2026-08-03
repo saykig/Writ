@@ -21,7 +21,7 @@ export const OPEN_COMMAND_EVENT = "writ:open-command";
 /**
  * CommandMenu — the ⌘K palette. Mounted once (in SiteNav). Toggles on ⌘K/Ctrl+K
  * and opens on the `writ:open-command` window event, so any button can
- * trigger it. Jumps to a route or loads an interpretation in Writ Lab.
+ * trigger it. Jumps to a route or loads an interpretation in the Lab.
  */
 export function CommandMenu() {
   const [open, setOpen] = useState(false);
@@ -75,11 +75,12 @@ export function CommandMenu() {
             </CommandItem>
           ))}
         </CommandGroup>
-        <CommandGroup heading="Open in Writ Lab">
+        {/* These open the Lab's technical details, where the readings live. */}
+        <CommandGroup heading="Open a reading in the Lab">
           {EXAMPLE_ITEMS.map((example) => (
             <CommandItem
               key={example.id}
-              value={`load ${example.label} ${example.reading} Writ Lab`}
+              value={`load ${example.label} ${example.reading} Lab`}
               onSelect={() => go(`/lab?example=${example.id}` as Route)}
             >
               <FileCode2 />

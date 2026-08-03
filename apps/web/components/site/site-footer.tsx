@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
+import { FOOTER_NAV, GITHUB_URL } from "@/components/site/nav-items";
 
 /**
  * Quiet closing band shared by every non-homepage route.
@@ -27,7 +27,7 @@ export function SiteFooter() {
 
         <nav className="flex flex-col gap-3" aria-label="Site">
           <p className="text-sm font-semibold text-foreground">Site</p>
-          {PRIMARY_NAV.map((item) => (
+          {FOOTER_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}

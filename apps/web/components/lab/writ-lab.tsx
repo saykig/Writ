@@ -268,11 +268,11 @@ export function WritLab({
             Query IR
           </TabsTrigger>
           <TabsTrigger value="receipt" className="flex-none px-0 py-3">
-            Trace
+            Processing trace
           </TabsTrigger>
           {initialEvidence ? (
             <TabsTrigger value="evidence" className="flex-none px-0 py-3">
-              Records
+              Retrieved records
               <span className="ml-1.5 text-[0.7rem] text-ink-faint tabular-nums">
                 {initialEvidence.actions.length}
               </span>
@@ -312,7 +312,9 @@ export function WritLab({
 
   return (
     <div className="flex-1">
-      <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[112rem] flex-col gap-3 px-3 py-3 sm:px-5 sm:py-4">
+      {/* Sized to its container rather than the viewport: this now lives inside
+          a disclosure, where there is no viewport left to fill. */}
+      <div className="mx-auto flex h-full min-h-[44rem] w-full max-w-[112rem] flex-col gap-3 py-3 sm:py-4">
         <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-[0.72rem] text-muted-foreground">
           <span>Saved query · EU AI governance v1.0.0 + US AI governance v1.0.0</span>
           <span className="font-mono">queries/eu-us-ai-governance-pilot</span>

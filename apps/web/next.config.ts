@@ -7,7 +7,11 @@ const repoRoot = resolve(here, "..", "..");
 
 const nextConfig: NextConfig = {
   async redirects() {
-    return [{ source: "/playground", destination: "/lab", permanent: true }];
+    return [
+      { source: "/playground", destination: "/lab", permanent: true },
+      // The demo became Query: the same reviewed records, asked rather than shown.
+      { source: "/demo", destination: "/query", permanent: true },
+    ];
   },
   // The @writ/* workspace packages ship raw NodeNext TypeScript source
   // (exports point at ./src/index.ts), so Next must transpile them.

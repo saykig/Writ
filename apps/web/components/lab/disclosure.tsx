@@ -16,17 +16,23 @@ export function Disclosure({
   meta,
   children,
   defaultOpen = false,
+  onToggle,
   className,
 }: {
   summary: ReactNode;
   meta?: ReactNode;
   children: ReactNode;
   defaultOpen?: boolean;
+  /** Fires with the new state. Lets a caller defer mounting heavy children. */
+  onToggle?: (open: boolean) => void;
   className?: string;
 }) {
   return (
     <details
       open={defaultOpen}
+      onToggle={
+        onToggle ? (event) => onToggle((event.currentTarget as HTMLDetailsElement).open) : undefined
+      }
       className={cn("group border-t border-rule/70 first:border-t-0", className)}
     >
       <summary className="flex cursor-pointer list-none items-center gap-2 py-3 text-[0.86rem] text-ink-soft transition-colors marker:hidden hover:text-foreground focus-visible:outline-none focus-visible:text-foreground [&::-webkit-details-marker]:hidden">

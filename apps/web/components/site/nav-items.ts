@@ -9,12 +9,21 @@ export interface NavItem {
 }
 
 /**
- * The whole site: the answer, the workbench that produced it, and the reading
- * that explains what producing it means. The homepage carries the rest.
+ * Three destinations for three intentions: get an answer, make a record,
+ * understand how a passage becomes one. The homepage carries the rest.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
-  { href: "/demo", label: "Demo", hint: "One question, answered from the law" },
-  { href: "/lab", label: "Writ Lab", hint: "Inspect queries, records, choices, and traces" },
+  { href: "/query", label: "Query", hint: "Ask across the reviewed corpora" },
+  { href: "/build", label: "Build", hint: "Turn a source passage into a record" },
+  { href: "/lab", label: "Lab", hint: "See how one passage becomes one record" },
+];
+
+/**
+ * The footer also carries How it works. It is a reading rather than a place to
+ * work, so it stays out of the primary nav without becoming unreachable.
+ */
+export const FOOTER_NAV: readonly NavItem[] = [
+  ...PRIMARY_NAV,
   { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
 ];
 

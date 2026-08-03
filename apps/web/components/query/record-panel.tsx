@@ -1,15 +1,18 @@
 "use client";
 
 /**
- * The third column: the record behind a citation.
+ * The evidence drawer: the record behind a citation.
  *
  * Closed until a citation or a listed record is opened, and closable again. On
- * a wide screen it is a column beside the memo, so the sentence and its source
+ * a wide screen it is a column beside the answer, so the sentence and its source
  * are readable at once; on a narrow one it becomes a sheet over the page,
- * because a third column there would leave nothing for the memo.
+ * because a third column there would leave nothing for the answer.
  *
  * A record not yet traced to its source document says so rather than showing an
  * excerpt. That gap is the thing this panel exists to make visible.
+ *
+ * "Inspect in Lab" opens the same record in the Lab, where the passage and the
+ * structured record are shown side by side.
  */
 
 import * as React from "react";
@@ -29,7 +32,7 @@ function Row({ label, value }: { label: string; value: string }) {
         className={cn(
           "text-right text-[0.78rem]",
           // `unknown` is a recorded judgment, not a blank, and reads as one.
-          value === "unknown" ? "text-gold" : "text-foreground",
+          value === "unknown" ? "text-unknown" : "text-foreground",
         )}
       >
         {value}
@@ -38,15 +41,7 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function RecordPanel({
-  record,
-  questionId,
-  onClose,
-}: {
-  record: MemoRecord;
-  questionId: string;
-  onClose: () => void;
-}) {
+export function RecordPanel({ record, onClose }: { record: MemoRecord; onClose: () => void }) {
   // Keyed by record, so opening a different one collapses the raw view without
   // an effect that would re-render on every open.
   const [structuredFor, setStructuredFor] = React.useState<string | null>(null);
@@ -145,7 +140,9 @@ export function RecordPanel({
               <Row label="Legal force" value={humanize(record.legalForce)} />
               <Row label="Adoption" value={humanize(record.adoptionStatus)} />
               <Row label="Applicability" value={humanize(record.applicabilityStatus)} />
-              <Row label="Enforcement" value={record.enforcementStatus} />
+              {/* `humanize` returns `unknown` verbatim, so the reviewers'
+                  judgment survives while other tokens stop reading as code. */}
+              <Row label="Enforcement" value={humanize(record.enforcementStatus)} />
             </dl>
             {record.supportingFields.length > 0 ? (
               <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[0.7rem] text-muted-foreground">
@@ -198,10 +195,10 @@ export function RecordPanel({
           </section>
 
           <Link
-            href={{ pathname: "/lab", query: { example: "reviewed", from: questionId } }}
+            href={{ pathname: "/lab", query: { record: record.claimId } }}
             className="inline-flex items-center gap-1.5 text-[0.76rem] underline decoration-border underline-offset-4 hover:text-foreground"
           >
-            Trace this record in Writ Lab
+            Inspect in Lab
             <ExternalLink aria-hidden className="size-3" />
           </Link>
         </div>

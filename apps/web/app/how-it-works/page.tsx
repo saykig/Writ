@@ -327,7 +327,7 @@ export default function HowItWorksPage() {
                   nativeButton={false}
                   render={
                     <Link href="/lab">
-                      Open it in Writ Lab
+                      Open it in the Lab
                       <ArrowRight />
                     </Link>
                   }
@@ -442,7 +442,7 @@ export default function HowItWorksPage() {
                   nativeButton={false}
                   render={
                     <Link href="/lab">
-                      Run it yourself in Writ Lab
+                      Run it yourself in the Lab
                       <ArrowRight />
                     </Link>
                   }

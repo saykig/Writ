@@ -21,7 +21,7 @@ export interface RepoProvenance {
 
 export const REPO_PROVENANCE: RepoProvenance = {
   "repository": "https://github.com/saykig/Writ",
-  "commit": "b9a24eeda36928129bf35ea60821a27d10d7eb24",
+  "commit": "0ff8304e35805c1a03b0c0aee0e15d13e649171d",
   "softwareLicense": {
     "file": "LICENSE",
     "identifier": "Apache-2.0"
