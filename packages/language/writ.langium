@@ -112,7 +112,24 @@ LegalPolicyProperty:
     | {infer ExceptionsProperty} 'exceptions' values=StringList ';'
     | {infer CompliancePathwayProperty} 'compliance_pathway' value=STRING ';'
     | {infer ParentInstrumentProperty} 'parent_instrument_id' value=QualifiedName ';'
-    | {infer RelatedProvisionsProperty} 'related_provision_ids' values=IdentifierList ';';
+    | {infer RelatedProvisionsProperty} 'related_provision_ids' values=IdentifierList ';'
+    | SourceMetadataProperty;
+
+SourceMetadataProperty:
+    'source_metadata' '{'
+        'dataset_name' datasetName=STRING ';'
+        'dataset_snapshot' datasetSnapshot=STRING ';'
+        'source_row_identifier' sourceRowIdentifier=STRING ';'
+        ('source_url' sourceUrl=STRING ';')?
+        'jurisdiction' jurisdiction=STRING ';'
+        'title' title=STRING ';'
+        ('chapter' chapter=STRING ';')?
+        ('section_number' sectionNumber=STRING ';')?
+        ('section_title' sectionTitle=STRING ';')?
+        'original_text' originalText=STRING ';'
+        ('last_amended_year' lastAmendedYear=NUMBER ';')?
+        'row_hash' rowHash=STRING ';'
+    '}';
 
 InstrumentType returns string: 'constitution' | 'constitutional_amendment' | 'statute' | 'regulation' | 'executive_order' | 'agency_policy' | 'guidance' | 'code' | 'other' | 'unknown';
 JurisdictionLevel returns string: 'federal' | 'state' | 'territorial' | 'district' | 'institution_specific' | 'unknown';
@@ -469,6 +486,16 @@ NamePart returns string:
     | 'document_hash' | 'basis' | 'direct' | 'inferred' | 'inherited'
     | 'unknown' | 'contested' | 'ambiguous' | 'incomplete_evidence'
     | 'draft' | 'reviewed' | 'approved' | 'superseded' | 'withdrawn'
+    | 'requires' | 'permits' | 'prohibits' | 'defines' | 'authorizes' | 'assigns'
+    | 'performs' | 'states' | 'observes' | 'jurisdiction' | 'condition' | 'item'
+    | 'created_by' | 'created_at' | 'instrument_type' | 'jurisdiction_level'
+    | 'force' | 'adoption_status' | 'applicability_status' | 'enforcement_status'
+    | 'official_citation' | 'provision_identifier' | 'jurisdictions'
+    | 'responsible_authorities' | 'effective_from' | 'effective_until' | 'exceptions'
+    | 'compliance_pathway' | 'parent_instrument_id' | 'related_provision_ids'
+    | 'source_metadata' | 'dataset_name' | 'dataset_snapshot' | 'source_row_identifier'
+    | 'source_url' | 'chapter' | 'section_number' | 'section_title' | 'original_text'
+    | 'last_amended_year' | 'row_hash'
     | 'constitution' | 'constitutional_amendment' | 'statute' | 'regulation'
     | 'executive_order' | 'agency_policy' | 'guidance' | 'code' | 'other'
     | 'federal' | 'state' | 'territorial' | 'district' | 'institution_specific'
@@ -481,8 +508,18 @@ NamePart returns string:
     | 'organizational_unit' | 'standards_development' | 'measurement_science'
     | 'technical_guidance' | 'research' | 'evaluation' | 'coordination'
     | 'grant_administration' | 'procurement_support' | 'established' | 'partial'
-    | 'dimensions' | 'part_of' | 'oversees' | 'supports' | 'advises'
-    | 'coordinates_with' | 'reports_to' | 'implements_for';
+    | 'institution_id' | 'institution_type' | 'mandate' | 'authority_sources'
+    | 'functions' | 'operational_capacity' | 'status' | 'dimensions' | 'evidence_refs'
+    | 'decision_rights' | 'parent_institution_id' | 'subunit_ids'
+    | 'oversight_relationships' | 'institutional_relationships' | 'relation'
+    | 'applicable_period' | 'from' | 'until' | 'part_of' | 'oversees' | 'supports'
+    | 'advises' | 'coordinates_with' | 'reports_to' | 'implements_for'
+    | 'target' | 'type' | 'value' | 'rationale' | 'reviewer' | 'family_context'
+    | 'related_judgment_ids' | 'passage_selection' | 'record_family_classification'
+    | 'subject_identification' | 'scope_interpretation' | 'topic_classification'
+    | 'legal_status_determination' | 'institutional_role_determination'
+    | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement'
+    | 'adjudication' | 'accepted';
 
 TypeRef returns string: QualifiedName ('<' TypeRef (',' TypeRef)* '>')?;
 

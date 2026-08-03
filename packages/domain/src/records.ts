@@ -45,12 +45,38 @@ export interface WritRecord {
 
 export interface LegalPolicyRecord extends WritRecord {
   family: "legal_policy";
-  instrument_type: "constitution" | "constitutional_amendment" | "statute" | "regulation" | "executive_order" | "agency_policy" | "guidance" | "code" | "other" | "unknown";
-  jurisdiction_level: "federal" | "state" | "territorial" | "district" | "institution_specific" | "unknown";
+  instrument_type:
+    | "constitution"
+    | "constitutional_amendment"
+    | "statute"
+    | "regulation"
+    | "executive_order"
+    | "agency_policy"
+    | "guidance"
+    | "code"
+    | "other"
+    | "unknown";
+  jurisdiction_level:
+    "federal" | "state" | "territorial" | "district" | "institution_specific" | "unknown";
   force: "binding" | "nonbinding" | "voluntary" | "proposed" | "unknown";
   adoption_status: "adopted" | "proposed" | "rescinded" | "superseded" | "unknown";
-  applicability_status: "generally_applicable" | "market_wide" | "provider_specific" | "government_use" | "procurement" | "institution_specific" | "not_yet_applicable" | "unknown";
-  enforcement_status: "judicial" | "administrative" | "contractual" | "oversight" | "self_executing" | "none_specified" | "unknown";
+  applicability_status:
+    | "generally_applicable"
+    | "market_wide"
+    | "provider_specific"
+    | "government_use"
+    | "procurement"
+    | "institution_specific"
+    | "not_yet_applicable"
+    | "unknown";
+  enforcement_status:
+    | "judicial"
+    | "administrative"
+    | "contractual"
+    | "oversight"
+    | "self_executing"
+    | "none_specified"
+    | "unknown";
   official_citation: string;
   provision_identifier: string;
   jurisdictions?: string[];
@@ -61,20 +87,66 @@ export interface LegalPolicyRecord extends WritRecord {
   compliance_pathway?: string;
   parent_instrument_id?: string;
   related_provision_ids?: string[];
+  source_metadata?: {
+    dataset_name: string;
+    dataset_snapshot: string;
+    source_row_identifier: string;
+    source_url: string | null;
+    jurisdiction: string;
+    title: string;
+    chapter: string | null;
+    section_number: string | null;
+    section_title: string | null;
+    original_text: string;
+    last_amended_year: number | null;
+    row_hash: string;
+  };
 }
 
-export type InstitutionalFunction = "standards_development" | "measurement_science" | "technical_guidance" | "research" | "evaluation" | "coordination" | "oversight" | "grant_administration" | "procurement_support" | "other";
-export type InstitutionalRelationType = "part_of" | "oversees" | "supports" | "advises" | "coordinates_with" | "reports_to" | "implements_for";
+export type InstitutionalFunction =
+  | "standards_development"
+  | "measurement_science"
+  | "technical_guidance"
+  | "research"
+  | "evaluation"
+  | "coordination"
+  | "oversight"
+  | "grant_administration"
+  | "procurement_support"
+  | "other";
+export type InstitutionalRelationType =
+  | "part_of"
+  | "oversees"
+  | "supports"
+  | "advises"
+  | "coordinates_with"
+  | "reports_to"
+  | "implements_for";
 
 export interface InstitutionalRecord extends WritRecord {
   family: "institutional";
   institution_id: string;
-  institution_type: "government_department" | "federal_agency" | "independent_agency" | "advisory_body" | "regulator" | "standards_body" | "research_body" | "interagency_body" | "organizational_unit" | "other" | "unknown";
+  institution_type:
+    | "government_department"
+    | "federal_agency"
+    | "independent_agency"
+    | "advisory_body"
+    | "regulator"
+    | "standards_body"
+    | "research_body"
+    | "interagency_body"
+    | "organizational_unit"
+    | "other"
+    | "unknown";
   mandate: string;
   authority_sources: string[];
   jurisdictions: string[];
   functions: InstitutionalFunction[];
-  operational_capacity: { status: "established" | "partial" | "unknown" | "contested"; dimensions: string[]; evidence_refs: string[] };
+  operational_capacity: {
+    status: "established" | "partial" | "unknown" | "contested";
+    dimensions: string[];
+    evidence_refs: string[];
+  };
   decision_rights?: string[];
   parent_institution_id?: string;
   subunit_ids?: string[];
@@ -83,7 +155,18 @@ export interface InstitutionalRecord extends WritRecord {
   applicable_period?: { from?: string; until?: string };
 }
 
-export type JudgmentType = "passage_selection" | "record_family_classification" | "subject_identification" | "scope_interpretation" | "topic_classification" | "legal_status_determination" | "institutional_role_determination" | "operational_capacity_determination" | "direct_or_inferred" | "disagreement" | "adjudication";
+export type JudgmentType =
+  | "passage_selection"
+  | "record_family_classification"
+  | "subject_identification"
+  | "scope_interpretation"
+  | "topic_classification"
+  | "legal_status_determination"
+  | "institutional_role_determination"
+  | "operational_capacity_determination"
+  | "direct_or_inferred"
+  | "disagreement"
+  | "adjudication";
 
 export interface RecordJudgment {
   schema_version: "0.1.0";

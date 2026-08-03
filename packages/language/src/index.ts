@@ -7,7 +7,12 @@
  * never imports `@writ/api` or touches a database.
  */
 
-import type { CanonicalIr, InstitutionalRecord, LegalPolicyRecord, RecordJudgment } from "@writ/domain";
+import type {
+  CanonicalIr,
+  InstitutionalRecord,
+  LegalPolicyRecord,
+  RecordJudgment,
+} from "@writ/domain";
 import { validate } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
@@ -107,15 +112,26 @@ export function compileSource(
     ...(ir ? [{ artifact: "canonical-ir", result: validate("canonical-ir", ir) }] : []),
     ...compiled.records.map((record) => ({
       artifact: record.family === "legal_policy" ? "legal-policy-record" : "institutional-record",
-      result: validate(record.family === "legal_policy" ? "legal-policy-record" : "institutional-record", record),
+      result: validate(
+        record.family === "legal_policy" ? "legal-policy-record" : "institutional-record",
+        record,
+      ),
     })),
-    ...compiled.judgments.map((judgment) => ({ artifact: "record-judgment", result: validate("record-judgment", judgment) })),
+    ...compiled.judgments.map((judgment) => ({
+      artifact: "record-judgment",
+      result: validate("record-judgment", judgment),
+    })),
   ];
-  const schemaValid = validations.length > 0 && validations.every((validation) => validation.result.valid);
-  const schemaErrors = validations.flatMap(({ artifact, result }) => result.valid ? [] : result.errors.map((issue) => ({
-    instancePath: issue.instancePath,
-    message: `${artifact}: ${issue.message}${typeof issue.params.missingProperty === "string" ? ` ${issue.params.missingProperty}` : ""}`,
-  })));
+  const schemaValid =
+    validations.length > 0 && validations.every((validation) => validation.result.valid);
+  const schemaErrors = validations.flatMap(({ artifact, result }) =>
+    result.valid
+      ? []
+      : result.errors.map((issue) => ({
+          instancePath: issue.instancePath,
+          message: `${artifact}: ${issue.message}${typeof issue.params.missingProperty === "string" ? ` ${issue.params.missingProperty}` : ""}`,
+        })),
+  );
 
   return {
     model: parsed.model,

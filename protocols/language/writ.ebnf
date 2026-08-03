@@ -45,7 +45,20 @@ RecordProvenance = "provenance", "{", "created_by", String, ";",
                   "created_at", Date, ";", "}" ;
 RecordReviewState = "review_state", ( "draft" | "reviewed" | "approved" |
                   "superseded" | "withdrawn" ), ";" ;
-LegalPolicyExtension = "legal_policy", "{", { Property }, "}" ;
+LegalPolicyExtension = "legal_policy", "{", { Property | SourceMetadata }, "}" ;
+SourceMetadata  = "source_metadata", "{",
+                  "dataset_name", String, ";",
+                  "dataset_snapshot", String, ";",
+                  "source_row_identifier", String, ";",
+                  [ "source_url", String, ";" ],
+                  "jurisdiction", String, ";",
+                  "title", String, ";",
+                  [ "chapter", String, ";" ],
+                  [ "section_number", String, ";" ],
+                  [ "section_title", String, ";" ],
+                  "original_text", String, ";",
+                  [ "last_amended_year", Integer, ";" ],
+                  "row_hash", String, ";", "}" ;
 InstitutionalExtension = "institutional", "{", { Property }, "}" ;
 
 Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;

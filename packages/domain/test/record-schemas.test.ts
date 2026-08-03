@@ -13,16 +13,18 @@ const base = {
   assertion: { mode: "states", text: "The source states an example proposition." },
   topics: [],
   scope: { jurisdiction: "United States", conditions: [] },
-  evidence: [{
-    source_id: "source.example",
-    document_version_id: "source.example.v1",
-    passage_id: "source.example.p1",
-    locator: "section 1",
-    quote: "Exact source passage.",
-    passage_hash: hash,
-    document_hash: hash,
-    basis: "direct",
-  }],
+  evidence: [
+    {
+      source_id: "source.example",
+      document_version_id: "source.example.v1",
+      passage_id: "source.example.p1",
+      locator: "section 1",
+      quote: "Exact source passage.",
+      passage_hash: hash,
+      document_hash: hash,
+      basis: "direct",
+    },
+  ],
   uncertainties: [],
   provenance: { created_by: "test", created_at: "2026-08-03" },
   review_state: "draft",
@@ -69,15 +71,22 @@ const judgment = {
 
 describe("shared record schema", () => {
   test("valid base record passes", () => expect(validate("record", base).valid).toBe(true));
-  test("missing evidence fails", () => expect(validate("record", { ...base, evidence: [] }).valid).toBe(false));
+  test("missing evidence fails", () =>
+    expect(validate("record", { ...base, evidence: [] }).valid).toBe(false));
   test("missing identity fails", () => {
     const { record_id: _, ...missing } = base;
     expect(validate("record", missing).valid).toBe(false);
   });
-  test("empty subjects fail", () => expect(validate("record", { ...base, subjects: [] }).valid).toBe(false));
+  test("empty subjects fail", () =>
+    expect(validate("record", { ...base, subjects: [] }).valid).toBe(false));
   test("explicit uncertainty and an empty uncertainty array both pass", () => {
     expect(validate("record", base).valid).toBe(true);
-    expect(validate("record", { ...base, uncertainties: [{ type: "unknown", description: "Not established." }] }).valid).toBe(true);
+    expect(
+      validate("record", {
+        ...base,
+        uncertainties: [{ type: "unknown", description: "Not established." }],
+      }).valid,
+    ).toBe(true);
   });
   test("unsupported and family-specific properties fail", () => {
     expect(validate("record", { ...base, arbitrary: true }).valid).toBe(false);
@@ -88,26 +97,48 @@ describe("shared record schema", () => {
 describe("legal-policy record schema", () => {
   test("constitutional and AI-policy records pass", () => {
     expect(validate("legal-policy-record", legal).valid).toBe(true);
-    expect(validate("legal-policy-record", { ...legal, topics: ["artificial_intelligence"], instrument_type: "agency_policy" }).valid).toBe(true);
+    expect(
+      validate("legal-policy-record", {
+        ...legal,
+        topics: ["artificial_intelligence"],
+        instrument_type: "agency_policy",
+      }).valid,
+    ).toBe(true);
   });
   test("wrong family and missing instrument type fail", () => {
-    expect(validate("legal-policy-record", { ...legal, family: "institutional" }).valid).toBe(false);
+    expect(validate("legal-policy-record", { ...legal, family: "institutional" }).valid).toBe(
+      false,
+    );
     const { instrument_type: _, ...missing } = legal;
     expect(validate("legal-policy-record", missing).valid).toBe(false);
   });
   test("force, adoption, applicability, and enforcement remain independent", () => {
-    expect(validate("legal-policy-record", { ...legal, force: "voluntary", adoption_status: "proposed", applicability_status: "government_use", enforcement_status: "none_specified" }).valid).toBe(true);
+    expect(
+      validate("legal-policy-record", {
+        ...legal,
+        force: "voluntary",
+        adoption_status: "proposed",
+        applicability_status: "government_use",
+        enforcement_status: "none_specified",
+      }).valid,
+    ).toBe(true);
   });
-  test("draft imports preserve explicit unknowns", () => expect(validate("legal-policy-record", legal).valid).toBe(true));
+  test("draft imports preserve explicit unknowns", () =>
+    expect(validate("legal-policy-record", legal).valid).toBe(true));
 });
 
 describe("institutional record schema", () => {
-  test("valid NIST-shaped record with unknown capacity passes", () => expect(validate("institutional-record", institutional).valid).toBe(true));
+  test("valid NIST-shaped record with unknown capacity passes", () =>
+    expect(validate("institutional-record", institutional).valid).toBe(true));
   test("wrong family, missing mandate, and missing authority fail", () => {
-    expect(validate("institutional-record", { ...institutional, family: "legal_policy" }).valid).toBe(false);
+    expect(
+      validate("institutional-record", { ...institutional, family: "legal_policy" }).valid,
+    ).toBe(false);
     const { mandate: _, ...missingMandate } = institutional;
     expect(validate("institutional-record", missingMandate).valid).toBe(false);
-    expect(validate("institutional-record", { ...institutional, authority_sources: [] }).valid).toBe(false);
+    expect(
+      validate("institutional-record", { ...institutional, authority_sources: [] }).valid,
+    ).toBe(false);
   });
   test("mandate does not imply capacity or legal-policy validity", () => {
     expect(institutional.operational_capacity.status).toBe("unknown");
@@ -116,7 +147,8 @@ describe("institutional record schema", () => {
 });
 
 describe("record judgment schema", () => {
-  test("valid and contested judgments pass", () => expect(validate("record-judgment", judgment).valid).toBe(true));
+  test("valid and contested judgments pass", () =>
+    expect(validate("record-judgment", judgment).valid).toBe(true));
   test("missing target, rationale, or evidence fails", () => {
     const { target_record_id: _, ...missingTarget } = judgment;
     const { rationale: __, ...missingRationale } = judgment;
@@ -125,7 +157,13 @@ describe("record judgment schema", () => {
     expect(validate("record-judgment", { ...judgment, evidence_refs: [] }).valid).toBe(false);
   });
   test("supersession is traceable and approved is rejected", () => {
-    expect(validate("record-judgment", { ...judgment, status: "superseded", supersedes: "judgment.earlier" }).valid).toBe(true);
+    expect(
+      validate("record-judgment", {
+        ...judgment,
+        status: "superseded",
+        supersedes: "judgment.earlier",
+      }).valid,
+    ).toBe(true);
     expect(validate("record-judgment", { ...judgment, status: "superseded" }).valid).toBe(false);
     expect(validate("record-judgment", { ...judgment, status: "approved" }).valid).toBe(false);
   });

@@ -12,7 +12,12 @@ describe("schema-version registry", () => {
   });
 
   test("current version matches each schema and its $id", () => {
-    const stageOne = new Set(["record", "legal-policy-record", "institutional-record", "record-judgment"]);
+    const stageOne = new Set([
+      "record",
+      "legal-policy-record",
+      "institutional-record",
+      "record-judgment",
+    ]);
     for (const kind of SCHEMA_KINDS) {
       const entry = SCHEMA_REGISTRY[kind];
       const expected = stageOne.has(kind) ? "0.1.0" : "1.0.0";

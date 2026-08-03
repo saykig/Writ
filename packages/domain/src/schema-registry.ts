@@ -34,8 +34,7 @@ export interface SchemaRegistryEntry {
 function declaredVersion(kind: SchemaKind): string {
   const schema = RAW_SCHEMAS[kind];
   const properties = schema.properties as
-    | { schema_version?: { const?: unknown; $ref?: unknown } }
-    | undefined;
+    { schema_version?: { const?: unknown; $ref?: unknown } } | undefined;
   const versionProperty = properties?.schema_version;
   let constValue = versionProperty?.const;
   if (constValue === undefined && typeof versionProperty?.$ref === "string") {

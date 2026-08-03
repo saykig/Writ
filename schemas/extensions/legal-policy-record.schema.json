@@ -5,49 +5,170 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version", "record_id", "corpus_id", "record_version", "family", "title",
-    "subjects", "assertion", "topics", "scope", "evidence", "uncertainties", "provenance",
-    "review_state", "instrument_type", "jurisdiction_level", "force", "adoption_status",
-    "applicability_status", "enforcement_status", "official_citation", "provision_identifier"
+    "schema_version",
+    "record_id",
+    "corpus_id",
+    "record_version",
+    "family",
+    "title",
+    "subjects",
+    "assertion",
+    "topics",
+    "scope",
+    "evidence",
+    "uncertainties",
+    "provenance",
+    "review_state",
+    "instrument_type",
+    "jurisdiction_level",
+    "force",
+    "adoption_status",
+    "applicability_status",
+    "enforcement_status",
+    "official_citation",
+    "provision_identifier"
   ],
   "properties": {
     "schema_version": { "const": "0.1.0" },
-    "record_id": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "corpus_id": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "record_version": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/semanticVersion" },
+    "record_id": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+    },
+    "corpus_id": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+    },
+    "record_version": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/semanticVersion"
+    },
     "family": { "const": "legal_policy" },
-    "title": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "subjects": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray" },
-    "assertion": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/assertion" },
+    "title": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+    },
+    "subjects": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray"
+    },
+    "assertion": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/assertion"
+    },
     "topics": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" },
     "scope": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/scope" },
-    "evidence": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/evidenceArray" },
-    "uncertainties": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/uncertaintyArray" },
-    "provenance": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/provenance" },
-    "review_state": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/reviewState" },
+    "evidence": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/evidenceArray"
+    },
+    "uncertainties": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/uncertaintyArray"
+    },
+    "provenance": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/provenance"
+    },
+    "review_state": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/reviewState"
+    },
     "instrument_type": { "$ref": "#/$defs/instrumentType" },
     "jurisdiction_level": { "$ref": "#/$defs/jurisdictionLevel" },
     "force": { "$ref": "#/$defs/force" },
     "adoption_status": { "$ref": "#/$defs/adoptionStatus" },
     "applicability_status": { "$ref": "#/$defs/applicabilityStatus" },
     "enforcement_status": { "$ref": "#/$defs/enforcementStatus" },
-    "official_citation": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "provision_identifier": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "jurisdictions": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" },
-    "responsible_authorities": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" },
+    "official_citation": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+    },
+    "provision_identifier": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString"
+    },
+    "jurisdictions": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+    },
+    "responsible_authorities": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+    },
     "effective_from": { "type": "string", "format": "date" },
     "effective_until": { "type": "string", "format": "date" },
-    "exceptions": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" },
+    "exceptions": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+    },
     "compliance_pathway": { "type": "string" },
     "parent_instrument_id": { "type": "string" },
-    "related_provision_ids": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" }
+    "related_provision_ids": {
+      "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray"
+    },
+    "source_metadata": { "$ref": "#/$defs/sourceMetadata" }
   },
   "$defs": {
-    "instrumentType": { "enum": ["constitution", "constitutional_amendment", "statute", "regulation", "executive_order", "agency_policy", "guidance", "code", "other", "unknown"] },
-    "jurisdictionLevel": { "enum": ["federal", "state", "territorial", "district", "institution_specific", "unknown"] },
+    "instrumentType": {
+      "enum": [
+        "constitution",
+        "constitutional_amendment",
+        "statute",
+        "regulation",
+        "executive_order",
+        "agency_policy",
+        "guidance",
+        "code",
+        "other",
+        "unknown"
+      ]
+    },
+    "jurisdictionLevel": {
+      "enum": ["federal", "state", "territorial", "district", "institution_specific", "unknown"]
+    },
     "force": { "enum": ["binding", "nonbinding", "voluntary", "proposed", "unknown"] },
     "adoptionStatus": { "enum": ["adopted", "proposed", "rescinded", "superseded", "unknown"] },
-    "applicabilityStatus": { "enum": ["generally_applicable", "market_wide", "provider_specific", "government_use", "procurement", "institution_specific", "not_yet_applicable", "unknown"] },
-    "enforcementStatus": { "enum": ["judicial", "administrative", "contractual", "oversight", "self_executing", "none_specified", "unknown"] }
+    "applicabilityStatus": {
+      "enum": [
+        "generally_applicable",
+        "market_wide",
+        "provider_specific",
+        "government_use",
+        "procurement",
+        "institution_specific",
+        "not_yet_applicable",
+        "unknown"
+      ]
+    },
+    "enforcementStatus": {
+      "enum": [
+        "judicial",
+        "administrative",
+        "contractual",
+        "oversight",
+        "self_executing",
+        "none_specified",
+        "unknown"
+      ]
+    },
+    "sourceMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_name",
+        "dataset_snapshot",
+        "source_row_identifier",
+        "source_url",
+        "jurisdiction",
+        "title",
+        "chapter",
+        "section_number",
+        "section_title",
+        "original_text",
+        "last_amended_year",
+        "row_hash"
+      ],
+      "properties": {
+        "dataset_name": { "type": "string", "minLength": 1 },
+        "dataset_snapshot": { "type": "string", "minLength": 1 },
+        "source_row_identifier": { "type": "string", "minLength": 1 },
+        "source_url": {
+          "oneOf": [{ "type": "string", "format": "uri" }, { "type": "null" }]
+        },
+        "jurisdiction": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "chapter": { "type": ["string", "null"] },
+        "section_number": { "type": ["string", "null"] },
+        "section_title": { "type": ["string", "null"] },
+        "original_text": { "type": "string", "minLength": 1 },
+        "last_amended_year": { "type": ["integer", "null"] },
+        "row_hash": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/hash" }
+      }
+    }
   }
 }

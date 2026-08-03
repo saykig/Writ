@@ -4,4541 +4,5528 @@
  ******************************************************************************/
 
 /* eslint-disable */
-import * as langium from 'langium';
+import * as langium from "langium";
 
 export const WritTerminals = {
-    WS: /\s+/,
-    ML_COMMENT: /\/\*[\s\S]*?\*\//,
-    SL_COMMENT: /\/\/[^\n\r]*/,
-    DATETIME: /[0-9]{4}-[0-9]{2}-[0-9]{2}T[^;\s}]+/,
-    DATE: /[0-9]{4}-[0-9]{2}-[0-9]{2}/,
-    NUMBER: /[0-9]+(\.[0-9]+)?/,
-    ID: /[_a-zA-Z][\w-]*/,
-    STRING: /"(?:\\.|[^"\\])*"/,
+  WS: /\s+/,
+  ML_COMMENT: /\/\*[\s\S]*?\*\//,
+  SL_COMMENT: /\/\/[^\n\r]*/,
+  DATETIME: /[0-9]{4}-[0-9]{2}-[0-9]{2}T[^;\s}]+/,
+  DATE: /[0-9]{4}-[0-9]{2}-[0-9]{2}/,
+  NUMBER: /[0-9]+(\.[0-9]+)?/,
+  ID: /[_a-zA-Z][\w-]*/,
+  STRING: /"(?:\\.|[^"\\])*"/,
 };
 
 export type WritTerminalNames = keyof typeof WritTerminals;
 
 export type WritKeywordNames =
-    | "!="
-    | "("
-    | ")"
-    | "+"
-    | ","
-    | "-"
-    | "->"
-    | "."
-    | ".."
-    | ":"
-    | ";"
-    | "<"
-    | "<="
-    | "="
-    | "=="
-    | ">"
-    | ">="
-    | "["
-    | "]"
-    | "accepted"
-    | "action_identity"
-    | "adjudication"
-    | "administrative"
-    | "adopted"
-    | "adoption_status"
-    | "advises"
-    | "advisory_body"
-    | "after"
-    | "agency_policy"
-    | "aggregate"
-    | "all_score_inputs_reviewed"
-    | "allowed"
-    | "ambiguous"
-    | "anchor"
-    | "and"
-    | "applicability_status"
-    | "applicable_period"
-    | "approved"
-    | "assert"
-    | "assertion"
-    | "assigns"
-    | "authority"
-    | "authority_sources"
-    | "authorizes"
-    | "basis"
-    | "because"
-    | "before"
-    | "between"
-    | "binding"
-    | "by"
-    | "cite"
-    | "classify"
-    | "closed_world"
-    | "code"
-    | "commitment"
-    | "compliance_pathway"
-    | "component"
-    | "concept"
-    | "condition"
-    | "constitution"
-    | "constitutional_amendment"
-    | "contains"
-    | "contested"
-    | "contractual"
-    | "coordinates_with"
-    | "coordination"
-    | "corpus"
-    | "count"
-    | "count_distinct"
-    | "coverage"
-    | "created_at"
-    | "created_by"
-    | "decision_rights"
-    | "defines"
-    | "derive"
-    | "diagnostic"
-    | "dimension"
-    | "dimensions"
-    | "direct"
-    | "direct_or_inferred"
-    | "disagreement"
-    | "distinct_by"
-    | "district"
-    | "document_hash"
-    | "document_version"
-    | "dom"
-    | "draft"
-    | "effective_from"
-    | "effective_until"
-    | "enforcement_status"
-    | "enum"
-    | "established"
-    | "evaluation"
-    | "evaluation_window"
-    | "evidence"
-    | "evidence_policy"
-    | "evidence_refs"
-    | "except"
-    | "exceptions"
-    | "exclusive"
-    | "executive_order"
-    | "exhaustive"
-    | "exists"
-    | "expect"
-    | "explicit_rules_only"
-    | "false"
-    | "family_context"
-    | "federal"
-    | "federal_agency"
-    | "for"
-    | "forall"
-    | "force"
-    | "from"
-    | "functions"
-    | "generally_applicable"
-    | "given"
-    | "goal"
-    | "government_department"
-    | "government_use"
-    | "grant_administration"
-    | "guidance"
-    | "hash"
-    | "id"
-    | "implements_for"
-    | "import"
-    | "in"
-    | "incomplete_evidence"
-    | "independent_agency"
-    | "inferred"
-    | "inherited"
-    | "institution_id"
-    | "institution_specific"
-    | "institution_type"
-    | "institutional"
-    | "institutional_relationships"
-    | "institutional_role_determination"
-    | "instrument_type"
-    | "intentional_overlap"
-    | "interagency_body"
-    | "is_contested"
-    | "is_known"
-    | "issue_areas"
-    | "item"
-    | "json_pointer"
-    | "judgment"
-    | "judicial"
-    | "jurisdiction"
-    | "jurisdiction_level"
-    | "jurisdictions"
-    | "label"
-    | "language"
-    | "legal_policy"
-    | "legal_status_determination"
-    | "let"
-    | "lines"
-    | "locator"
-    | "mandate"
-    | "market_wide"
-    | "max"
-    | "measure"
-    | "measurement_science"
-    | "media_type"
-    | "min"
-    | "monotonic"
-    | "multi_label"
-    | "no_unanchored_claims"
-    | "non_overlapping"
-    | "nonbinding"
-    | "none_specified"
-    | "nonempty"
-    | "not"
-    | "not_applicable"
-    | "not_yet_applicable"
-    | "observes"
-    | "official_citation"
-    | "open_world"
-    | "operational_capacity"
-    | "operational_capacity_determination"
-    | "or"
-    | "organizational_unit"
-    | "other"
-    | "otherwise"
-    | "over"
-    | "overlaps"
-    | "oversees"
-    | "oversight"
-    | "oversight_relationships"
-    | "package"
-    | "page"
-    | "pages"
-    | "parameter"
-    | "parent_institution_id"
-    | "parent_instrument_id"
-    | "part_of"
-    | "partial"
-    | "partner_class"
-    | "passage"
-    | "passage_hash"
-    | "passage_selection"
-    | "performs"
-    | "permits"
-    | "predicate"
-    | "priority"
-    | "procurement"
-    | "procurement_support"
-    | "profile"
-    | "prohibits"
-    | "propagate"
-    | "propagate_uncertainty"
-    | "proposed"
-    | "provenance"
-    | "provider_specific"
-    | "provision_identifier"
-    | "quote"
-    | "ratio"
-    | "rationale"
-    | "record"
-    | "record_family_classification"
-    | "regulation"
-    | "regulator"
-    | "related_judgment_ids"
-    | "related_provision_ids"
-    | "relation"
-    | "reports_to"
-    | "requires"
-    | "rescinded"
-    | "research"
-    | "research_body"
-    | "responsible_authorities"
-    | "result"
-    | "retrieved"
-    | "review_required"
-    | "review_state"
-    | "reviewed"
-    | "reviewer"
-    | "safe_under_open_world"
-    | "scale"
-    | "scenario"
-    | "scope"
-    | "scope_interpretation"
-    | "score"
-    | "select"
-    | "self_executing"
-    | "set"
-    | "sha256"
-    | "source"
-    | "standards_body"
-    | "standards_development"
-    | "state"
-    | "states"
-    | "status"
-    | "statute"
-    | "strict_deduplicate"
-    | "strict_separate"
-    | "subject_identification"
-    | "subjects"
-    | "subunit_ids"
-    | "sum"
-    | "summit"
-    | "superseded"
-    | "supersedes"
-    | "support"
-    | "supports"
-    | "target"
-    | "technical_guidance"
-    | "territorial"
-    | "text"
-    | "title"
-    | "topic_classification"
-    | "topics"
-    | "treat_false"
-    | "treat_true"
-    | "true"
-    | "type"
-    | "uncertainty"
-    | "unknown"
-    | "unknown_policy"
-    | "unresolved"
-    | "until"
-    | "uri"
-    | "value"
-    | "version"
-    | "voluntary"
-    | "waive"
-    | "weight"
-    | "weighted_ordinal_percent"
-    | "when"
-    | "where"
-    | "withdrawn"
-    | "writ"
-    | "{"
-    | "}";
+  | "!="
+  | "("
+  | ")"
+  | "+"
+  | ","
+  | "-"
+  | "->"
+  | "."
+  | ".."
+  | ":"
+  | ";"
+  | "<"
+  | "<="
+  | "="
+  | "=="
+  | ">"
+  | ">="
+  | "["
+  | "]"
+  | "accepted"
+  | "action_identity"
+  | "adjudication"
+  | "administrative"
+  | "adopted"
+  | "adoption_status"
+  | "advises"
+  | "advisory_body"
+  | "after"
+  | "agency_policy"
+  | "aggregate"
+  | "all_score_inputs_reviewed"
+  | "allowed"
+  | "ambiguous"
+  | "anchor"
+  | "and"
+  | "applicability_status"
+  | "applicable_period"
+  | "approved"
+  | "assert"
+  | "assertion"
+  | "assigns"
+  | "authority"
+  | "authority_sources"
+  | "authorizes"
+  | "basis"
+  | "because"
+  | "before"
+  | "between"
+  | "binding"
+  | "by"
+  | "chapter"
+  | "cite"
+  | "classify"
+  | "closed_world"
+  | "code"
+  | "commitment"
+  | "compliance_pathway"
+  | "component"
+  | "concept"
+  | "condition"
+  | "constitution"
+  | "constitutional_amendment"
+  | "contains"
+  | "contested"
+  | "contractual"
+  | "coordinates_with"
+  | "coordination"
+  | "corpus"
+  | "count"
+  | "count_distinct"
+  | "coverage"
+  | "created_at"
+  | "created_by"
+  | "dataset_name"
+  | "dataset_snapshot"
+  | "decision_rights"
+  | "defines"
+  | "derive"
+  | "diagnostic"
+  | "dimension"
+  | "dimensions"
+  | "direct"
+  | "direct_or_inferred"
+  | "disagreement"
+  | "distinct_by"
+  | "district"
+  | "document_hash"
+  | "document_version"
+  | "dom"
+  | "draft"
+  | "effective_from"
+  | "effective_until"
+  | "enforcement_status"
+  | "enum"
+  | "established"
+  | "evaluation"
+  | "evaluation_window"
+  | "evidence"
+  | "evidence_policy"
+  | "evidence_refs"
+  | "except"
+  | "exceptions"
+  | "exclusive"
+  | "executive_order"
+  | "exhaustive"
+  | "exists"
+  | "expect"
+  | "explicit_rules_only"
+  | "false"
+  | "family_context"
+  | "federal"
+  | "federal_agency"
+  | "for"
+  | "forall"
+  | "force"
+  | "from"
+  | "functions"
+  | "generally_applicable"
+  | "given"
+  | "goal"
+  | "government_department"
+  | "government_use"
+  | "grant_administration"
+  | "guidance"
+  | "hash"
+  | "id"
+  | "implements_for"
+  | "import"
+  | "in"
+  | "incomplete_evidence"
+  | "independent_agency"
+  | "inferred"
+  | "inherited"
+  | "institution_id"
+  | "institution_specific"
+  | "institution_type"
+  | "institutional"
+  | "institutional_relationships"
+  | "institutional_role_determination"
+  | "instrument_type"
+  | "intentional_overlap"
+  | "interagency_body"
+  | "is_contested"
+  | "is_known"
+  | "issue_areas"
+  | "item"
+  | "json_pointer"
+  | "judgment"
+  | "judicial"
+  | "jurisdiction"
+  | "jurisdiction_level"
+  | "jurisdictions"
+  | "label"
+  | "language"
+  | "last_amended_year"
+  | "legal_policy"
+  | "legal_status_determination"
+  | "let"
+  | "lines"
+  | "locator"
+  | "mandate"
+  | "market_wide"
+  | "max"
+  | "measure"
+  | "measurement_science"
+  | "media_type"
+  | "min"
+  | "monotonic"
+  | "multi_label"
+  | "no_unanchored_claims"
+  | "non_overlapping"
+  | "nonbinding"
+  | "none_specified"
+  | "nonempty"
+  | "not"
+  | "not_applicable"
+  | "not_yet_applicable"
+  | "observes"
+  | "official_citation"
+  | "open_world"
+  | "operational_capacity"
+  | "operational_capacity_determination"
+  | "or"
+  | "organizational_unit"
+  | "original_text"
+  | "other"
+  | "otherwise"
+  | "over"
+  | "overlaps"
+  | "oversees"
+  | "oversight"
+  | "oversight_relationships"
+  | "package"
+  | "page"
+  | "pages"
+  | "parameter"
+  | "parent_institution_id"
+  | "parent_instrument_id"
+  | "part_of"
+  | "partial"
+  | "partner_class"
+  | "passage"
+  | "passage_hash"
+  | "passage_selection"
+  | "performs"
+  | "permits"
+  | "predicate"
+  | "priority"
+  | "procurement"
+  | "procurement_support"
+  | "profile"
+  | "prohibits"
+  | "propagate"
+  | "propagate_uncertainty"
+  | "proposed"
+  | "provenance"
+  | "provider_specific"
+  | "provision_identifier"
+  | "quote"
+  | "ratio"
+  | "rationale"
+  | "record"
+  | "record_family_classification"
+  | "regulation"
+  | "regulator"
+  | "related_judgment_ids"
+  | "related_provision_ids"
+  | "relation"
+  | "reports_to"
+  | "requires"
+  | "rescinded"
+  | "research"
+  | "research_body"
+  | "responsible_authorities"
+  | "result"
+  | "retrieved"
+  | "review_required"
+  | "review_state"
+  | "reviewed"
+  | "reviewer"
+  | "row_hash"
+  | "safe_under_open_world"
+  | "scale"
+  | "scenario"
+  | "scope"
+  | "scope_interpretation"
+  | "score"
+  | "section_number"
+  | "section_title"
+  | "select"
+  | "self_executing"
+  | "set"
+  | "sha256"
+  | "source"
+  | "source_metadata"
+  | "source_row_identifier"
+  | "source_url"
+  | "standards_body"
+  | "standards_development"
+  | "state"
+  | "states"
+  | "status"
+  | "statute"
+  | "strict_deduplicate"
+  | "strict_separate"
+  | "subject_identification"
+  | "subjects"
+  | "subunit_ids"
+  | "sum"
+  | "summit"
+  | "superseded"
+  | "supersedes"
+  | "support"
+  | "supports"
+  | "target"
+  | "technical_guidance"
+  | "territorial"
+  | "text"
+  | "title"
+  | "topic_classification"
+  | "topics"
+  | "treat_false"
+  | "treat_true"
+  | "true"
+  | "type"
+  | "uncertainty"
+  | "unknown"
+  | "unknown_policy"
+  | "unresolved"
+  | "until"
+  | "uri"
+  | "value"
+  | "version"
+  | "voluntary"
+  | "waive"
+  | "weight"
+  | "weighted_ordinal_percent"
+  | "when"
+  | "where"
+  | "withdrawn"
+  | "writ"
+  | "{"
+  | "}";
 
 export type WritTokenNames = WritTerminalNames | WritKeywordNames;
 
 export interface ActionIdentity extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'ActionIdentity';
-    keyPaths: Array<QualifiedName>;
-    policy: IdentityPolicy;
+  readonly $container: Commitment;
+  readonly $type: "ActionIdentity";
+  keyPaths: Array<QualifiedName>;
+  policy: IdentityPolicy;
 }
 
 export const ActionIdentity = {
-    $type: 'ActionIdentity',
-    keyPaths: 'keyPaths',
-    policy: 'policy'
+  $type: "ActionIdentity",
+  keyPaths: "keyPaths",
+  policy: "policy",
 } as const;
 
 export function isActionIdentity(item: unknown): item is ActionIdentity {
-    return reflection.isInstance(item, ActionIdentity.$type);
+  return reflection.isInstance(item, ActionIdentity.$type);
 }
 
 export interface Adopted extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Adopted';
-    value: string;
+  readonly $container: Commitment;
+  readonly $type: "Adopted";
+  value: string;
 }
 
 export const Adopted = {
-    $type: 'Adopted',
-    value: 'value'
+  $type: "Adopted",
+  value: "value",
 } as const;
 
 export function isAdopted(item: unknown): item is Adopted {
-    return reflection.isInstance(item, Adopted.$type);
+  return reflection.isInstance(item, Adopted.$type);
 }
 
-export type AdoptionStatus = 'adopted' | 'proposed' | 'rescinded' | 'superseded' | 'unknown';
+export type AdoptionStatus = "adopted" | "proposed" | "rescinded" | "superseded" | "unknown";
 
 export function isAdoptionStatus(item: unknown): item is AdoptionStatus {
-    return item === 'adopted' || item === 'proposed' || item === 'rescinded' || item === 'superseded' || item === 'unknown';
+  return (
+    item === "adopted" ||
+    item === "proposed" ||
+    item === "rescinded" ||
+    item === "superseded" ||
+    item === "unknown"
+  );
 }
 
 export interface AdoptionStatusProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'AdoptionStatusProperty';
-    value: AdoptionStatus;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "AdoptionStatusProperty";
+  value: AdoptionStatus;
 }
 
 export const AdoptionStatusProperty = {
-    $type: 'AdoptionStatusProperty',
-    value: 'value'
+  $type: "AdoptionStatusProperty",
+  value: "value",
 } as const;
 
 export function isAdoptionStatusProperty(item: unknown): item is AdoptionStatusProperty {
-    return reflection.isInstance(item, AdoptionStatusProperty.$type);
+  return reflection.isInstance(item, AdoptionStatusProperty.$type);
 }
 
-export type AggregationStrategy = 'weighted_ordinal_percent';
+export type AggregationStrategy = "weighted_ordinal_percent";
 
 export function isAggregationStrategy(item: unknown): item is AggregationStrategy {
-    return item === 'weighted_ordinal_percent';
+  return item === "weighted_ordinal_percent";
 }
 
 export interface AnchorRule extends langium.AstNode {
-    readonly $container: MeasureComponent;
-    readonly $type: 'AnchorRule';
-    rationale?: string;
-    value: number;
-    when: Expression;
+  readonly $container: MeasureComponent;
+  readonly $type: "AnchorRule";
+  rationale?: string;
+  value: number;
+  when: Expression;
 }
 
 export const AnchorRule = {
-    $type: 'AnchorRule',
-    rationale: 'rationale',
-    value: 'value',
-    when: 'when'
+  $type: "AnchorRule",
+  rationale: "rationale",
+  value: "value",
+  when: "when",
 } as const;
 
 export function isAnchorRule(item: unknown): item is AnchorRule {
-    return reflection.isInstance(item, AnchorRule.$type);
+  return reflection.isInstance(item, AnchorRule.$type);
 }
 
-export type ApplicabilityStatus = 'generally_applicable' | 'government_use' | 'institution_specific' | 'market_wide' | 'not_yet_applicable' | 'procurement' | 'provider_specific' | 'unknown';
+export type ApplicabilityStatus =
+  | "generally_applicable"
+  | "government_use"
+  | "institution_specific"
+  | "market_wide"
+  | "not_yet_applicable"
+  | "procurement"
+  | "provider_specific"
+  | "unknown";
 
 export function isApplicabilityStatus(item: unknown): item is ApplicabilityStatus {
-    return item === 'generally_applicable' || item === 'market_wide' || item === 'provider_specific' || item === 'government_use' || item === 'procurement' || item === 'institution_specific' || item === 'not_yet_applicable' || item === 'unknown';
+  return (
+    item === "generally_applicable" ||
+    item === "market_wide" ||
+    item === "provider_specific" ||
+    item === "government_use" ||
+    item === "procurement" ||
+    item === "institution_specific" ||
+    item === "not_yet_applicable" ||
+    item === "unknown"
+  );
 }
 
 export interface ApplicabilityStatusProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ApplicabilityStatusProperty';
-    value: ApplicabilityStatus;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ApplicabilityStatusProperty";
+  value: ApplicabilityStatus;
 }
 
 export const ApplicabilityStatusProperty = {
-    $type: 'ApplicabilityStatusProperty',
-    value: 'value'
+  $type: "ApplicabilityStatusProperty",
+  value: "value",
 } as const;
 
 export function isApplicabilityStatusProperty(item: unknown): item is ApplicabilityStatusProperty {
-    return reflection.isInstance(item, ApplicabilityStatusProperty.$type);
+  return reflection.isInstance(item, ApplicabilityStatusProperty.$type);
 }
 
 export interface ApplicablePeriodProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'ApplicablePeriodProperty';
-    from?: string;
-    until?: string;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "ApplicablePeriodProperty";
+  from?: string;
+  until?: string;
 }
 
 export const ApplicablePeriodProperty = {
-    $type: 'ApplicablePeriodProperty',
-    from: 'from',
-    until: 'until'
+  $type: "ApplicablePeriodProperty",
+  from: "from",
+  until: "until",
 } as const;
 
 export function isApplicablePeriodProperty(item: unknown): item is ApplicablePeriodProperty {
-    return reflection.isInstance(item, ApplicablePeriodProperty.$type);
+  return reflection.isInstance(item, ApplicablePeriodProperty.$type);
 }
 
 export interface Assertion extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Assertion';
-    domains: Array<Domain>;
-    exceptions?: Expression;
-    kind: AssertionKind;
+  readonly $container: Commitment;
+  readonly $type: "Assertion";
+  domains: Array<Domain>;
+  exceptions?: Expression;
+  kind: AssertionKind;
 }
 
 export const Assertion = {
-    $type: 'Assertion',
-    domains: 'domains',
-    exceptions: 'exceptions',
-    kind: 'kind'
+  $type: "Assertion",
+  domains: "domains",
+  exceptions: "exceptions",
+  kind: "kind",
 } as const;
 
 export function isAssertion(item: unknown): item is Assertion {
-    return reflection.isInstance(item, Assertion.$type);
+  return reflection.isInstance(item, Assertion.$type);
 }
 
-export type AssertionKind = 'all_score_inputs_reviewed' | 'exhaustive' | 'monotonic' | 'no_unanchored_claims' | 'non_overlapping';
+export type AssertionKind =
+  | "all_score_inputs_reviewed"
+  | "exhaustive"
+  | "monotonic"
+  | "no_unanchored_claims"
+  | "non_overlapping";
 
 export function isAssertionKind(item: unknown): item is AssertionKind {
-    return item === 'exhaustive' || item === 'non_overlapping' || item === 'monotonic' || item === 'no_unanchored_claims' || item === 'all_score_inputs_reviewed';
+  return (
+    item === "exhaustive" ||
+    item === "non_overlapping" ||
+    item === "monotonic" ||
+    item === "no_unanchored_claims" ||
+    item === "all_score_inputs_reviewed"
+  );
 }
 
 export interface Authority extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Authority';
-    anchor: CitationAnchor;
-    source: string;
+  readonly $container: Commitment;
+  readonly $type: "Authority";
+  anchor: CitationAnchor;
+  source: string;
 }
 
 export const Authority = {
-    $type: 'Authority',
-    anchor: 'anchor',
-    source: 'source'
+  $type: "Authority",
+  anchor: "anchor",
+  source: "source",
 } as const;
 
 export function isAuthority(item: unknown): item is Authority {
-    return reflection.isInstance(item, Authority.$type);
+  return reflection.isInstance(item, Authority.$type);
 }
 
 export interface AuthoritySourcesProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'AuthoritySourcesProperty';
-    values: IdentifierList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "AuthoritySourcesProperty";
+  values: IdentifierList;
 }
 
 export const AuthoritySourcesProperty = {
-    $type: 'AuthoritySourcesProperty',
-    values: 'values'
+  $type: "AuthoritySourcesProperty",
+  values: "values",
 } as const;
 
 export function isAuthoritySourcesProperty(item: unknown): item is AuthoritySourcesProperty {
-    return reflection.isInstance(item, AuthoritySourcesProperty.$type);
+  return reflection.isInstance(item, AuthoritySourcesProperty.$type);
 }
 
 export interface BinaryExpression extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'BinaryExpression';
-    left: Expression;
-    op: '+' | '-' | 'and' | 'or' | CompareOp;
-    right: Expression;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "BinaryExpression";
+  left: Expression;
+  op: "+" | "-" | "and" | "or" | CompareOp;
+  right: Expression;
 }
 
 export const BinaryExpression = {
-    $type: 'BinaryExpression',
-    left: 'left',
-    op: 'op',
-    right: 'right'
+  $type: "BinaryExpression",
+  left: "left",
+  op: "op",
+  right: "right",
 } as const;
 
 export function isBinaryExpression(item: unknown): item is BinaryExpression {
-    return reflection.isInstance(item, BinaryExpression.$type);
+  return reflection.isInstance(item, BinaryExpression.$type);
 }
 
 export interface BooleanLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'BooleanLiteral';
-    value: 'false' | 'true';
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "BooleanLiteral";
+  value: "false" | "true";
 }
 
 export const BooleanLiteral = {
-    $type: 'BooleanLiteral',
-    value: 'value'
+  $type: "BooleanLiteral",
+  value: "value",
 } as const;
 
 export function isBooleanLiteral(item: unknown): item is BooleanLiteral {
-    return reflection.isInstance(item, BooleanLiteral.$type);
+  return reflection.isInstance(item, BooleanLiteral.$type);
 }
 
 export interface CallExpression extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'CallExpression';
-    args: Array<Expression>;
-    func: QualifiedName;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "CallExpression";
+  args: Array<Expression>;
+  func: QualifiedName;
 }
 
 export const CallExpression = {
-    $type: 'CallExpression',
-    args: 'args',
-    func: 'func'
+  $type: "CallExpression",
+  args: "args",
+  func: "func",
 } as const;
 
 export function isCallExpression(item: unknown): item is CallExpression {
-    return reflection.isInstance(item, CallExpression.$type);
+  return reflection.isInstance(item, CallExpression.$type);
 }
 
-export type CapacityStatus = 'contested' | 'established' | 'partial' | 'unknown';
+export type CapacityStatus = "contested" | "established" | "partial" | "unknown";
 
 export function isCapacityStatus(item: unknown): item is CapacityStatus {
-    return item === 'established' || item === 'partial' || item === 'unknown' || item === 'contested';
+  return item === "established" || item === "partial" || item === "unknown" || item === "contested";
 }
 
-export type CitationAnchor = DomAnchor | JsonPointerAnchor | LinesAnchor | PageAnchor | PagesAnchor | QuoteAnchor;
+export type CitationAnchor =
+  DomAnchor | JsonPointerAnchor | LinesAnchor | PageAnchor | PagesAnchor | QuoteAnchor;
 
 export const CitationAnchor = {
-    $type: 'CitationAnchor'
+  $type: "CitationAnchor",
 } as const;
 
 export function isCitationAnchor(item: unknown): item is CitationAnchor {
-    return reflection.isInstance(item, CitationAnchor.$type);
+  return reflection.isInstance(item, CitationAnchor.$type);
 }
 
 export interface Classification extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Classification';
-    mode: 'exclusive' | 'multi_label';
-    name: string;
-    otherwise?: OtherwiseClass;
-    rules: Array<ClassificationRule>;
+  readonly $container: Commitment;
+  readonly $type: "Classification";
+  mode: "exclusive" | "multi_label";
+  name: string;
+  otherwise?: OtherwiseClass;
+  rules: Array<ClassificationRule>;
 }
 
 export const Classification = {
-    $type: 'Classification',
-    mode: 'mode',
-    name: 'name',
-    otherwise: 'otherwise',
-    rules: 'rules'
+  $type: "Classification",
+  mode: "mode",
+  name: "name",
+  otherwise: "otherwise",
+  rules: "rules",
 } as const;
 
 export function isClassification(item: unknown): item is Classification {
-    return reflection.isInstance(item, Classification.$type);
+  return reflection.isInstance(item, Classification.$type);
 }
 
 export interface ClassificationRule extends langium.AstNode {
-    readonly $container: Classification;
-    readonly $type: 'ClassificationRule';
-    label: string;
-    priority: number;
-    rationale?: string;
-    when: Expression;
+  readonly $container: Classification;
+  readonly $type: "ClassificationRule";
+  label: string;
+  priority: number;
+  rationale?: string;
+  when: Expression;
 }
 
 export const ClassificationRule = {
-    $type: 'ClassificationRule',
-    label: 'label',
-    priority: 'priority',
-    rationale: 'rationale',
-    when: 'when'
+  $type: "ClassificationRule",
+  label: "label",
+  priority: "priority",
+  rationale: "rationale",
+  when: "when",
 } as const;
 
 export function isClassificationRule(item: unknown): item is ClassificationRule {
-    return reflection.isInstance(item, ClassificationRule.$type);
+  return reflection.isInstance(item, ClassificationRule.$type);
 }
 
 export interface Commitment extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'Commitment';
-    members: Array<CommitmentMember>;
-    name: string;
+  readonly $container: Model;
+  readonly $type: "Commitment";
+  members: Array<CommitmentMember>;
+  name: string;
 }
 
 export const Commitment = {
-    $type: 'Commitment',
-    members: 'members',
-    name: 'name'
+  $type: "Commitment",
+  members: "members",
+  name: "name",
 } as const;
 
 export function isCommitment(item: unknown): item is Commitment {
-    return reflection.isInstance(item, Commitment.$type);
+  return reflection.isInstance(item, Commitment.$type);
 }
 
-export type CommitmentMember = ActionIdentity | Adopted | Assertion | Authority | Classification | CommitmentText | Dimension | EvidencePolicy | Goal | IssueAreas | Measure | Parameter | PartnerClass | Predicate | ScoreBlock | Subjects | Summit | Title | UnknownPolicy | Variable | Window;
+export type CommitmentMember =
+  | ActionIdentity
+  | Adopted
+  | Assertion
+  | Authority
+  | Classification
+  | CommitmentText
+  | Dimension
+  | EvidencePolicy
+  | Goal
+  | IssueAreas
+  | Measure
+  | Parameter
+  | PartnerClass
+  | Predicate
+  | ScoreBlock
+  | Subjects
+  | Summit
+  | Title
+  | UnknownPolicy
+  | Variable
+  | Window;
 
 export const CommitmentMember = {
-    $type: 'CommitmentMember'
+  $type: "CommitmentMember",
 } as const;
 
 export function isCommitmentMember(item: unknown): item is CommitmentMember {
-    return reflection.isInstance(item, CommitmentMember.$type);
+  return reflection.isInstance(item, CommitmentMember.$type);
 }
 
 export interface CommitmentText extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'CommitmentText';
-    value: string;
+  readonly $container: Commitment;
+  readonly $type: "CommitmentText";
+  value: string;
 }
 
 export const CommitmentText = {
-    $type: 'CommitmentText',
-    value: 'value'
+  $type: "CommitmentText",
+  value: "value",
 } as const;
 
 export function isCommitmentText(item: unknown): item is CommitmentText {
-    return reflection.isInstance(item, CommitmentText.$type);
+  return reflection.isInstance(item, CommitmentText.$type);
 }
 
-export type CompareOp = '!=' | '<' | '<=' | '==' | '>' | '>=' | 'after' | 'before' | 'between' | 'contains' | 'in' | 'overlaps';
+export type CompareOp =
+  | "!="
+  | "<"
+  | "<="
+  | "=="
+  | ">"
+  | ">="
+  | "after"
+  | "before"
+  | "between"
+  | "contains"
+  | "in"
+  | "overlaps";
 
 export function isCompareOp(item: unknown): item is CompareOp {
-    return item === '==' || item === '!=' || item === '>=' || item === '>' || item === '<=' || item === '<' || item === 'in' || item === 'between' || item === 'overlaps' || item === 'before' || item === 'after' || item === 'contains';
+  return (
+    item === "==" ||
+    item === "!=" ||
+    item === ">=" ||
+    item === ">" ||
+    item === "<=" ||
+    item === "<" ||
+    item === "in" ||
+    item === "between" ||
+    item === "overlaps" ||
+    item === "before" ||
+    item === "after" ||
+    item === "contains"
+  );
 }
 
 export interface CompliancePathwayProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'CompliancePathwayProperty';
-    value: string;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "CompliancePathwayProperty";
+  value: string;
 }
 
 export const CompliancePathwayProperty = {
-    $type: 'CompliancePathwayProperty',
-    value: 'value'
+  $type: "CompliancePathwayProperty",
+  value: "value",
 } as const;
 
 export function isCompliancePathwayProperty(item: unknown): item is CompliancePathwayProperty {
-    return reflection.isInstance(item, CompliancePathwayProperty.$type);
+  return reflection.isInstance(item, CompliancePathwayProperty.$type);
 }
 
 export interface ConceptDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'ConceptDeclaration';
-    base?: TypeRef;
-    name: string;
-    properties: Array<ConceptProperty>;
+  readonly $container: Model;
+  readonly $type: "ConceptDeclaration";
+  base?: TypeRef;
+  name: string;
+  properties: Array<ConceptProperty>;
 }
 
 export const ConceptDeclaration = {
-    $type: 'ConceptDeclaration',
-    base: 'base',
-    name: 'name',
-    properties: 'properties'
+  $type: "ConceptDeclaration",
+  base: "base",
+  name: "name",
+  properties: "properties",
 } as const;
 
 export function isConceptDeclaration(item: unknown): item is ConceptDeclaration {
-    return reflection.isInstance(item, ConceptDeclaration.$type);
+  return reflection.isInstance(item, ConceptDeclaration.$type);
 }
 
 export interface ConceptProperty extends langium.AstNode {
-    readonly $container: ConceptDeclaration;
-    readonly $type: 'ConceptProperty';
-    name: string;
-    value: QualifiedName | number | string;
+  readonly $container: ConceptDeclaration;
+  readonly $type: "ConceptProperty";
+  name: string;
+  value: QualifiedName | number | string;
 }
 
 export const ConceptProperty = {
-    $type: 'ConceptProperty',
-    name: 'name',
-    value: 'value'
+  $type: "ConceptProperty",
+  name: "name",
+  value: "value",
 } as const;
 
 export function isConceptProperty(item: unknown): item is ConceptProperty {
-    return reflection.isInstance(item, ConceptProperty.$type);
+  return reflection.isInstance(item, ConceptProperty.$type);
 }
 
 export interface DateLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'DateLiteral';
-    value: string;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "DateLiteral";
+  value: string;
 }
 
 export const DateLiteral = {
-    $type: 'DateLiteral',
-    value: 'value'
+  $type: "DateLiteral",
+  value: "value",
 } as const;
 
 export function isDateLiteral(item: unknown): item is DateLiteral {
-    return reflection.isInstance(item, DateLiteral.$type);
+  return reflection.isInstance(item, DateLiteral.$type);
 }
 
 export interface DecisionRightsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'DecisionRightsProperty';
-    values: StringList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "DecisionRightsProperty";
+  values: StringList;
 }
 
 export const DecisionRightsProperty = {
-    $type: 'DecisionRightsProperty',
-    values: 'values'
+  $type: "DecisionRightsProperty",
+  values: "values",
 } as const;
 
 export function isDecisionRightsProperty(item: unknown): item is DecisionRightsProperty {
-    return reflection.isInstance(item, DecisionRightsProperty.$type);
+  return reflection.isInstance(item, DecisionRightsProperty.$type);
 }
 
-export type Declaration = Commitment | ConceptDeclaration | EnumDeclaration | Import | JudgmentDeclaration | Profile | RationaleDeclaration | RecordDeclaration | Scenario | SetDeclaration | Source;
+export type Declaration =
+  | Commitment
+  | ConceptDeclaration
+  | EnumDeclaration
+  | Import
+  | JudgmentDeclaration
+  | Profile
+  | RationaleDeclaration
+  | RecordDeclaration
+  | Scenario
+  | SetDeclaration
+  | Source;
 
 export const Declaration = {
-    $type: 'Declaration'
+  $type: "Declaration",
 } as const;
 
 export function isDeclaration(item: unknown): item is Declaration {
-    return reflection.isInstance(item, Declaration.$type);
+  return reflection.isInstance(item, Declaration.$type);
 }
 
 export interface DeriveRule extends langium.AstNode {
-    readonly $container: Predicate;
-    readonly $type: 'DeriveRule';
-    conclusion: TruthValue;
-    priority?: number;
-    rationale?: string;
-    when: Expression;
+  readonly $container: Predicate;
+  readonly $type: "DeriveRule";
+  conclusion: TruthValue;
+  priority?: number;
+  rationale?: string;
+  when: Expression;
 }
 
 export const DeriveRule = {
-    $type: 'DeriveRule',
-    conclusion: 'conclusion',
-    priority: 'priority',
-    rationale: 'rationale',
-    when: 'when'
+  $type: "DeriveRule",
+  conclusion: "conclusion",
+  priority: "priority",
+  rationale: "rationale",
+  when: "when",
 } as const;
 
 export function isDeriveRule(item: unknown): item is DeriveRule {
-    return reflection.isInstance(item, DeriveRule.$type);
+  return reflection.isInstance(item, DeriveRule.$type);
 }
 
 export interface Dimension extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Dimension';
-    description?: string;
-    name: string;
+  readonly $container: Commitment;
+  readonly $type: "Dimension";
+  description?: string;
+  name: string;
 }
 
 export const Dimension = {
-    $type: 'Dimension',
-    description: 'description',
-    name: 'name'
+  $type: "Dimension",
+  description: "description",
+  name: "name",
 } as const;
 
 export function isDimension(item: unknown): item is Dimension {
-    return reflection.isInstance(item, Dimension.$type);
+  return reflection.isInstance(item, Dimension.$type);
 }
 
 export interface Domain extends langium.AstNode {
-    readonly $container: Assertion;
-    readonly $type: 'Domain';
-    range?: Range;
-    set?: Expression;
-    variable: QualifiedName;
+  readonly $container: Assertion;
+  readonly $type: "Domain";
+  range?: Range;
+  set?: Expression;
+  variable: QualifiedName;
 }
 
 export const Domain = {
-    $type: 'Domain',
-    range: 'range',
-    set: 'set',
-    variable: 'variable'
+  $type: "Domain",
+  range: "range",
+  set: "set",
+  variable: "variable",
 } as const;
 
 export function isDomain(item: unknown): item is Domain {
-    return reflection.isInstance(item, Domain.$type);
+  return reflection.isInstance(item, Domain.$type);
 }
 
 export interface DomAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'DomAnchor';
-    selector: string;
+  readonly $container: Authority;
+  readonly $type: "DomAnchor";
+  selector: string;
 }
 
 export const DomAnchor = {
-    $type: 'DomAnchor',
-    selector: 'selector'
+  $type: "DomAnchor",
+  selector: "selector",
 } as const;
 
 export function isDomAnchor(item: unknown): item is DomAnchor {
-    return reflection.isInstance(item, DomAnchor.$type);
+  return reflection.isInstance(item, DomAnchor.$type);
 }
 
 export interface EffectiveFromProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'EffectiveFromProperty';
-    value: string;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "EffectiveFromProperty";
+  value: string;
 }
 
 export const EffectiveFromProperty = {
-    $type: 'EffectiveFromProperty',
-    value: 'value'
+  $type: "EffectiveFromProperty",
+  value: "value",
 } as const;
 
 export function isEffectiveFromProperty(item: unknown): item is EffectiveFromProperty {
-    return reflection.isInstance(item, EffectiveFromProperty.$type);
+  return reflection.isInstance(item, EffectiveFromProperty.$type);
 }
 
 export interface EffectiveUntilProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'EffectiveUntilProperty';
-    value: string;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "EffectiveUntilProperty";
+  value: string;
 }
 
 export const EffectiveUntilProperty = {
-    $type: 'EffectiveUntilProperty',
-    value: 'value'
+  $type: "EffectiveUntilProperty",
+  value: "value",
 } as const;
 
 export function isEffectiveUntilProperty(item: unknown): item is EffectiveUntilProperty {
-    return reflection.isInstance(item, EffectiveUntilProperty.$type);
+  return reflection.isInstance(item, EffectiveUntilProperty.$type);
 }
 
 export interface EmptyStringList extends StringList {
-    readonly $type: 'EmptyStringList';
+  readonly $type: "EmptyStringList";
 }
 
 export const EmptyStringList = {
-    $type: 'EmptyStringList',
-    values: 'values'
+  $type: "EmptyStringList",
+  values: "values",
 } as const;
 
 export function isEmptyStringList(item: unknown): item is EmptyStringList {
-    return reflection.isInstance(item, EmptyStringList.$type);
+  return reflection.isInstance(item, EmptyStringList.$type);
 }
 
 export interface EmptyTopicList extends TopicList {
-    readonly $type: 'EmptyTopicList';
+  readonly $type: "EmptyTopicList";
 }
 
 export const EmptyTopicList = {
-    $type: 'EmptyTopicList',
-    values: 'values'
+  $type: "EmptyTopicList",
+  values: "values",
 } as const;
 
 export function isEmptyTopicList(item: unknown): item is EmptyTopicList {
-    return reflection.isInstance(item, EmptyTopicList.$type);
+  return reflection.isInstance(item, EmptyTopicList.$type);
 }
 
-export type EnforcementStatus = 'administrative' | 'contractual' | 'judicial' | 'none_specified' | 'oversight' | 'self_executing' | 'unknown';
+export type EnforcementStatus =
+  | "administrative"
+  | "contractual"
+  | "judicial"
+  | "none_specified"
+  | "oversight"
+  | "self_executing"
+  | "unknown";
 
 export function isEnforcementStatus(item: unknown): item is EnforcementStatus {
-    return item === 'judicial' || item === 'administrative' || item === 'contractual' || item === 'oversight' || item === 'self_executing' || item === 'none_specified' || item === 'unknown';
+  return (
+    item === "judicial" ||
+    item === "administrative" ||
+    item === "contractual" ||
+    item === "oversight" ||
+    item === "self_executing" ||
+    item === "none_specified" ||
+    item === "unknown"
+  );
 }
 
 export interface EnforcementStatusProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'EnforcementStatusProperty';
-    value: EnforcementStatus;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "EnforcementStatusProperty";
+  value: EnforcementStatus;
 }
 
 export const EnforcementStatusProperty = {
-    $type: 'EnforcementStatusProperty',
-    value: 'value'
+  $type: "EnforcementStatusProperty",
+  value: "value",
 } as const;
 
 export function isEnforcementStatusProperty(item: unknown): item is EnforcementStatusProperty {
-    return reflection.isInstance(item, EnforcementStatusProperty.$type);
+  return reflection.isInstance(item, EnforcementStatusProperty.$type);
 }
 
 export interface EnumDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'EnumDeclaration';
-    name: string;
-    values: Array<string>;
+  readonly $container: Model;
+  readonly $type: "EnumDeclaration";
+  name: string;
+  values: Array<string>;
 }
 
 export const EnumDeclaration = {
-    $type: 'EnumDeclaration',
-    name: 'name',
-    values: 'values'
+  $type: "EnumDeclaration",
+  name: "name",
+  values: "values",
 } as const;
 
 export function isEnumDeclaration(item: unknown): item is EnumDeclaration {
-    return reflection.isInstance(item, EnumDeclaration.$type);
+  return reflection.isInstance(item, EnumDeclaration.$type);
 }
 
-export type EvidenceBasis = 'direct' | 'inferred' | 'inherited';
+export type EvidenceBasis = "direct" | "inferred" | "inherited";
 
 export function isEvidenceBasis(item: unknown): item is EvidenceBasis {
-    return item === 'direct' || item === 'inferred' || item === 'inherited';
+  return item === "direct" || item === "inferred" || item === "inherited";
 }
 
 export interface EvidencePolicy extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'EvidencePolicy';
-    value: 'closed_world' | 'open_world';
+  readonly $container: Commitment;
+  readonly $type: "EvidencePolicy";
+  value: "closed_world" | "open_world";
 }
 
 export const EvidencePolicy = {
-    $type: 'EvidencePolicy',
-    value: 'value'
+  $type: "EvidencePolicy",
+  value: "value",
 } as const;
 
 export function isEvidencePolicy(item: unknown): item is EvidencePolicy {
-    return reflection.isInstance(item, EvidencePolicy.$type);
+  return reflection.isInstance(item, EvidencePolicy.$type);
 }
 
 export interface ExceptionsProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ExceptionsProperty';
-    values: StringList;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ExceptionsProperty";
+  values: StringList;
 }
 
 export const ExceptionsProperty = {
-    $type: 'ExceptionsProperty',
-    values: 'values'
+  $type: "ExceptionsProperty",
+  values: "values",
 } as const;
 
 export function isExceptionsProperty(item: unknown): item is ExceptionsProperty {
-    return reflection.isInstance(item, ExceptionsProperty.$type);
+  return reflection.isInstance(item, ExceptionsProperty.$type);
 }
 
 export interface Expect extends langium.AstNode {
-    readonly $container: Scenario;
-    readonly $type: 'Expect';
-    diagnostic?: string;
-    result?: string;
+  readonly $container: Scenario;
+  readonly $type: "Expect";
+  diagnostic?: string;
+  result?: string;
 }
 
 export const Expect = {
-    $type: 'Expect',
-    diagnostic: 'diagnostic',
-    result: 'result'
+  $type: "Expect",
+  diagnostic: "diagnostic",
+  result: "result",
 } as const;
 
 export function isExpect(item: unknown): item is Expect {
-    return reflection.isInstance(item, Expect.$type);
+  return reflection.isInstance(item, Expect.$type);
 }
 
-export type Expression = BinaryExpression | BooleanLiteral | CallExpression | DateLiteral | NumberLiteral | QueryExpression | ReferenceExpression | SetLiteral | StringLiteral | TruthLiteral | UnaryExpression;
+export type Expression =
+  | BinaryExpression
+  | BooleanLiteral
+  | CallExpression
+  | DateLiteral
+  | NumberLiteral
+  | QueryExpression
+  | ReferenceExpression
+  | SetLiteral
+  | StringLiteral
+  | TruthLiteral
+  | UnaryExpression;
 
 export const Expression = {
-    $type: 'Expression'
+  $type: "Expression",
 } as const;
 
 export function isExpression(item: unknown): item is Expression {
-    return reflection.isInstance(item, Expression.$type);
+  return reflection.isInstance(item, Expression.$type);
 }
 
 export interface ForceProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ForceProperty';
-    value: LegalForce;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ForceProperty";
+  value: LegalForce;
 }
 
 export const ForceProperty = {
-    $type: 'ForceProperty',
-    value: 'value'
+  $type: "ForceProperty",
+  value: "value",
 } as const;
 
 export function isForceProperty(item: unknown): item is ForceProperty {
-    return reflection.isInstance(item, ForceProperty.$type);
+  return reflection.isInstance(item, ForceProperty.$type);
 }
 
 export interface FunctionList extends langium.AstNode {
-    readonly $container: FunctionsProperty;
-    readonly $type: 'FunctionList';
-    values: Array<InstitutionFunction>;
+  readonly $container: FunctionsProperty;
+  readonly $type: "FunctionList";
+  values: Array<InstitutionFunction>;
 }
 
 export const FunctionList = {
-    $type: 'FunctionList',
-    values: 'values'
+  $type: "FunctionList",
+  values: "values",
 } as const;
 
 export function isFunctionList(item: unknown): item is FunctionList {
-    return reflection.isInstance(item, FunctionList.$type);
+  return reflection.isInstance(item, FunctionList.$type);
 }
 
 export interface FunctionsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'FunctionsProperty';
-    values: FunctionList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "FunctionsProperty";
+  values: FunctionList;
 }
 
 export const FunctionsProperty = {
-    $type: 'FunctionsProperty',
-    values: 'values'
+  $type: "FunctionsProperty",
+  values: "values",
 } as const;
 
 export function isFunctionsProperty(item: unknown): item is FunctionsProperty {
-    return reflection.isInstance(item, FunctionsProperty.$type);
+  return reflection.isInstance(item, FunctionsProperty.$type);
 }
 
 export interface Given extends langium.AstNode {
-    readonly $container: Scenario;
-    readonly $type: 'Given';
-    path: QualifiedName;
-    value: Expression;
+  readonly $container: Scenario;
+  readonly $type: "Given";
+  path: QualifiedName;
+  value: Expression;
 }
 
 export const Given = {
-    $type: 'Given',
-    path: 'path',
-    value: 'value'
+  $type: "Given",
+  path: "path",
+  value: "value",
 } as const;
 
 export function isGiven(item: unknown): item is Given {
-    return reflection.isInstance(item, Given.$type);
+  return reflection.isInstance(item, Given.$type);
 }
 
 export interface Goal extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Goal';
-    description?: string;
-    name: string;
+  readonly $container: Commitment;
+  readonly $type: "Goal";
+  description?: string;
+  name: string;
 }
 
 export const Goal = {
-    $type: 'Goal',
-    description: 'description',
-    name: 'name'
+  $type: "Goal",
+  description: "description",
+  name: "name",
 } as const;
 
 export function isGoal(item: unknown): item is Goal {
-    return reflection.isInstance(item, Goal.$type);
+  return reflection.isInstance(item, Goal.$type);
 }
 
 export interface IdentifierList extends langium.AstNode {
-    readonly $container: AuthoritySourcesProperty | JudgmentEvidenceRefs | OperationalCapacityProperty | RecordSubjects | RelatedJudgments | RelatedProvisionsProperty | ResponsibleAuthoritiesProperty | SubunitIdsProperty;
-    readonly $type: 'IdentifierList';
-    values: Array<QualifiedName>;
+  readonly $container:
+    | AuthoritySourcesProperty
+    | JudgmentEvidenceRefs
+    | OperationalCapacityProperty
+    | RecordSubjects
+    | RelatedJudgments
+    | RelatedProvisionsProperty
+    | ResponsibleAuthoritiesProperty
+    | SubunitIdsProperty;
+  readonly $type: "IdentifierList";
+  values: Array<QualifiedName>;
 }
 
 export const IdentifierList = {
-    $type: 'IdentifierList',
-    values: 'values'
+  $type: "IdentifierList",
+  values: "values",
 } as const;
 
 export function isIdentifierList(item: unknown): item is IdentifierList {
-    return reflection.isInstance(item, IdentifierList.$type);
+  return reflection.isInstance(item, IdentifierList.$type);
 }
 
-export type IdentityPolicy = 'propagate_uncertainty' | 'review_required' | 'strict_deduplicate' | 'strict_separate';
+export type IdentityPolicy =
+  "propagate_uncertainty" | "review_required" | "strict_deduplicate" | "strict_separate";
 
 export function isIdentityPolicy(item: unknown): item is IdentityPolicy {
-    return item === 'review_required' || item === 'strict_deduplicate' || item === 'strict_separate' || item === 'propagate_uncertainty';
+  return (
+    item === "review_required" ||
+    item === "strict_deduplicate" ||
+    item === "strict_separate" ||
+    item === "propagate_uncertainty"
+  );
 }
 
 export interface Import extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'Import';
-    contentHash?: string;
-    packageName: QualifiedName;
-    version: string;
+  readonly $container: Model;
+  readonly $type: "Import";
+  contentHash?: string;
+  packageName: QualifiedName;
+  version: string;
 }
 
 export const Import = {
-    $type: 'Import',
-    contentHash: 'contentHash',
-    packageName: 'packageName',
-    version: 'version'
+  $type: "Import",
+  contentHash: "contentHash",
+  packageName: "packageName",
+  version: "version",
 } as const;
 
 export function isImport(item: unknown): item is Import {
-    return reflection.isInstance(item, Import.$type);
+  return reflection.isInstance(item, Import.$type);
 }
 
 export interface InstitutionalExtension extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'InstitutionalExtension';
-    properties: Array<InstitutionalProperty>;
+  readonly $container: RecordDeclaration;
+  readonly $type: "InstitutionalExtension";
+  properties: Array<InstitutionalProperty>;
 }
 
 export const InstitutionalExtension = {
-    $type: 'InstitutionalExtension',
-    properties: 'properties'
+  $type: "InstitutionalExtension",
+  properties: "properties",
 } as const;
 
 export function isInstitutionalExtension(item: unknown): item is InstitutionalExtension {
-    return reflection.isInstance(item, InstitutionalExtension.$type);
+  return reflection.isInstance(item, InstitutionalExtension.$type);
 }
 
 export interface InstitutionalJurisdictionsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'InstitutionalJurisdictionsProperty';
-    values: StringList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionalJurisdictionsProperty";
+  values: StringList;
 }
 
 export const InstitutionalJurisdictionsProperty = {
-    $type: 'InstitutionalJurisdictionsProperty',
-    values: 'values'
+  $type: "InstitutionalJurisdictionsProperty",
+  values: "values",
 } as const;
 
-export function isInstitutionalJurisdictionsProperty(item: unknown): item is InstitutionalJurisdictionsProperty {
-    return reflection.isInstance(item, InstitutionalJurisdictionsProperty.$type);
+export function isInstitutionalJurisdictionsProperty(
+  item: unknown,
+): item is InstitutionalJurisdictionsProperty {
+  return reflection.isInstance(item, InstitutionalJurisdictionsProperty.$type);
 }
 
-export type InstitutionalProperty = ApplicablePeriodProperty | AuthoritySourcesProperty | DecisionRightsProperty | FunctionsProperty | InstitutionIdProperty | InstitutionTypeProperty | InstitutionalJurisdictionsProperty | InstitutionalRelationshipsProperty | MandateProperty | OperationalCapacityProperty | OversightRelationshipsProperty | ParentInstitutionProperty | SubunitIdsProperty;
+export type InstitutionalProperty =
+  | ApplicablePeriodProperty
+  | AuthoritySourcesProperty
+  | DecisionRightsProperty
+  | FunctionsProperty
+  | InstitutionIdProperty
+  | InstitutionTypeProperty
+  | InstitutionalJurisdictionsProperty
+  | InstitutionalRelationshipsProperty
+  | MandateProperty
+  | OperationalCapacityProperty
+  | OversightRelationshipsProperty
+  | ParentInstitutionProperty
+  | SubunitIdsProperty;
 
 export const InstitutionalProperty = {
-    $type: 'InstitutionalProperty'
+  $type: "InstitutionalProperty",
 } as const;
 
 export function isInstitutionalProperty(item: unknown): item is InstitutionalProperty {
-    return reflection.isInstance(item, InstitutionalProperty.$type);
+  return reflection.isInstance(item, InstitutionalProperty.$type);
 }
 
 export interface InstitutionalRelationship extends langium.AstNode {
-    readonly $container: RelationshipList;
-    readonly $type: 'InstitutionalRelationship';
-    target: QualifiedName;
-    type: InstitutionalRelationType;
+  readonly $container: RelationshipList;
+  readonly $type: "InstitutionalRelationship";
+  target: QualifiedName;
+  type: InstitutionalRelationType;
 }
 
 export const InstitutionalRelationship = {
-    $type: 'InstitutionalRelationship',
-    target: 'target',
-    type: 'type'
+  $type: "InstitutionalRelationship",
+  target: "target",
+  type: "type",
 } as const;
 
 export function isInstitutionalRelationship(item: unknown): item is InstitutionalRelationship {
-    return reflection.isInstance(item, InstitutionalRelationship.$type);
+  return reflection.isInstance(item, InstitutionalRelationship.$type);
 }
 
 export interface InstitutionalRelationshipsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'InstitutionalRelationshipsProperty';
-    relationships: RelationshipList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionalRelationshipsProperty";
+  relationships: RelationshipList;
 }
 
 export const InstitutionalRelationshipsProperty = {
-    $type: 'InstitutionalRelationshipsProperty',
-    relationships: 'relationships'
+  $type: "InstitutionalRelationshipsProperty",
+  relationships: "relationships",
 } as const;
 
-export function isInstitutionalRelationshipsProperty(item: unknown): item is InstitutionalRelationshipsProperty {
-    return reflection.isInstance(item, InstitutionalRelationshipsProperty.$type);
+export function isInstitutionalRelationshipsProperty(
+  item: unknown,
+): item is InstitutionalRelationshipsProperty {
+  return reflection.isInstance(item, InstitutionalRelationshipsProperty.$type);
 }
 
-export type InstitutionalRelationType = 'advises' | 'coordinates_with' | 'implements_for' | 'oversees' | 'part_of' | 'reports_to' | 'supports';
+export type InstitutionalRelationType =
+  | "advises"
+  | "coordinates_with"
+  | "implements_for"
+  | "oversees"
+  | "part_of"
+  | "reports_to"
+  | "supports";
 
 export function isInstitutionalRelationType(item: unknown): item is InstitutionalRelationType {
-    return item === 'part_of' || item === 'oversees' || item === 'supports' || item === 'advises' || item === 'coordinates_with' || item === 'reports_to' || item === 'implements_for';
+  return (
+    item === "part_of" ||
+    item === "oversees" ||
+    item === "supports" ||
+    item === "advises" ||
+    item === "coordinates_with" ||
+    item === "reports_to" ||
+    item === "implements_for"
+  );
 }
 
-export type InstitutionFunction = 'coordination' | 'evaluation' | 'grant_administration' | 'measurement_science' | 'other' | 'oversight' | 'procurement_support' | 'research' | 'standards_development' | 'technical_guidance';
+export type InstitutionFunction =
+  | "coordination"
+  | "evaluation"
+  | "grant_administration"
+  | "measurement_science"
+  | "other"
+  | "oversight"
+  | "procurement_support"
+  | "research"
+  | "standards_development"
+  | "technical_guidance";
 
 export function isInstitutionFunction(item: unknown): item is InstitutionFunction {
-    return item === 'standards_development' || item === 'measurement_science' || item === 'technical_guidance' || item === 'research' || item === 'evaluation' || item === 'coordination' || item === 'oversight' || item === 'grant_administration' || item === 'procurement_support' || item === 'other';
+  return (
+    item === "standards_development" ||
+    item === "measurement_science" ||
+    item === "technical_guidance" ||
+    item === "research" ||
+    item === "evaluation" ||
+    item === "coordination" ||
+    item === "oversight" ||
+    item === "grant_administration" ||
+    item === "procurement_support" ||
+    item === "other"
+  );
 }
 
 export interface InstitutionIdProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'InstitutionIdProperty';
-    value: QualifiedName;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionIdProperty";
+  value: QualifiedName;
 }
 
 export const InstitutionIdProperty = {
-    $type: 'InstitutionIdProperty',
-    value: 'value'
+  $type: "InstitutionIdProperty",
+  value: "value",
 } as const;
 
 export function isInstitutionIdProperty(item: unknown): item is InstitutionIdProperty {
-    return reflection.isInstance(item, InstitutionIdProperty.$type);
+  return reflection.isInstance(item, InstitutionIdProperty.$type);
 }
 
-export type InstitutionType = 'advisory_body' | 'federal_agency' | 'government_department' | 'independent_agency' | 'interagency_body' | 'organizational_unit' | 'other' | 'regulator' | 'research_body' | 'standards_body' | 'unknown';
+export type InstitutionType =
+  | "advisory_body"
+  | "federal_agency"
+  | "government_department"
+  | "independent_agency"
+  | "interagency_body"
+  | "organizational_unit"
+  | "other"
+  | "regulator"
+  | "research_body"
+  | "standards_body"
+  | "unknown";
 
 export function isInstitutionType(item: unknown): item is InstitutionType {
-    return item === 'government_department' || item === 'federal_agency' || item === 'independent_agency' || item === 'advisory_body' || item === 'regulator' || item === 'standards_body' || item === 'research_body' || item === 'interagency_body' || item === 'organizational_unit' || item === 'other' || item === 'unknown';
+  return (
+    item === "government_department" ||
+    item === "federal_agency" ||
+    item === "independent_agency" ||
+    item === "advisory_body" ||
+    item === "regulator" ||
+    item === "standards_body" ||
+    item === "research_body" ||
+    item === "interagency_body" ||
+    item === "organizational_unit" ||
+    item === "other" ||
+    item === "unknown"
+  );
 }
 
 export interface InstitutionTypeProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'InstitutionTypeProperty';
-    value: InstitutionType;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionTypeProperty";
+  value: InstitutionType;
 }
 
 export const InstitutionTypeProperty = {
-    $type: 'InstitutionTypeProperty',
-    value: 'value'
+  $type: "InstitutionTypeProperty",
+  value: "value",
 } as const;
 
 export function isInstitutionTypeProperty(item: unknown): item is InstitutionTypeProperty {
-    return reflection.isInstance(item, InstitutionTypeProperty.$type);
+  return reflection.isInstance(item, InstitutionTypeProperty.$type);
 }
 
-export type InstrumentType = 'agency_policy' | 'code' | 'constitution' | 'constitutional_amendment' | 'executive_order' | 'guidance' | 'other' | 'regulation' | 'statute' | 'unknown';
+export type InstrumentType =
+  | "agency_policy"
+  | "code"
+  | "constitution"
+  | "constitutional_amendment"
+  | "executive_order"
+  | "guidance"
+  | "other"
+  | "regulation"
+  | "statute"
+  | "unknown";
 
 export function isInstrumentType(item: unknown): item is InstrumentType {
-    return item === 'constitution' || item === 'constitutional_amendment' || item === 'statute' || item === 'regulation' || item === 'executive_order' || item === 'agency_policy' || item === 'guidance' || item === 'code' || item === 'other' || item === 'unknown';
+  return (
+    item === "constitution" ||
+    item === "constitutional_amendment" ||
+    item === "statute" ||
+    item === "regulation" ||
+    item === "executive_order" ||
+    item === "agency_policy" ||
+    item === "guidance" ||
+    item === "code" ||
+    item === "other" ||
+    item === "unknown"
+  );
 }
 
 export interface InstrumentTypeProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'InstrumentTypeProperty';
-    value: InstrumentType;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "InstrumentTypeProperty";
+  value: InstrumentType;
 }
 
 export const InstrumentTypeProperty = {
-    $type: 'InstrumentTypeProperty',
-    value: 'value'
+  $type: "InstrumentTypeProperty",
+  value: "value",
 } as const;
 
 export function isInstrumentTypeProperty(item: unknown): item is InstrumentTypeProperty {
-    return reflection.isInstance(item, InstrumentTypeProperty.$type);
+  return reflection.isInstance(item, InstrumentTypeProperty.$type);
 }
 
 export interface IssueAreas extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'IssueAreas';
-    areas: Array<string>;
+  readonly $container: Commitment;
+  readonly $type: "IssueAreas";
+  areas: Array<string>;
 }
 
 export const IssueAreas = {
-    $type: 'IssueAreas',
-    areas: 'areas'
+  $type: "IssueAreas",
+  areas: "areas",
 } as const;
 
 export function isIssueAreas(item: unknown): item is IssueAreas {
-    return reflection.isInstance(item, IssueAreas.$type);
+  return reflection.isInstance(item, IssueAreas.$type);
 }
 
 export interface JsonPointerAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'JsonPointerAnchor';
-    pointer: string;
+  readonly $container: Authority;
+  readonly $type: "JsonPointerAnchor";
+  pointer: string;
 }
 
 export const JsonPointerAnchor = {
-    $type: 'JsonPointerAnchor',
-    pointer: 'pointer'
+  $type: "JsonPointerAnchor",
+  pointer: "pointer",
 } as const;
 
 export function isJsonPointerAnchor(item: unknown): item is JsonPointerAnchor {
-    return reflection.isInstance(item, JsonPointerAnchor.$type);
+  return reflection.isInstance(item, JsonPointerAnchor.$type);
 }
 
 export interface JudgmentCreatedAt extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentCreatedAt';
-    value: string;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentCreatedAt";
+  value: string;
 }
 
 export const JudgmentCreatedAt = {
-    $type: 'JudgmentCreatedAt',
-    value: 'value'
+  $type: "JudgmentCreatedAt",
+  value: "value",
 } as const;
 
 export function isJudgmentCreatedAt(item: unknown): item is JudgmentCreatedAt {
-    return reflection.isInstance(item, JudgmentCreatedAt.$type);
+  return reflection.isInstance(item, JudgmentCreatedAt.$type);
 }
 
 export interface JudgmentDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'JudgmentDeclaration';
-    members: Array<JudgmentMember>;
-    name: string;
+  readonly $container: Model;
+  readonly $type: "JudgmentDeclaration";
+  members: Array<JudgmentMember>;
+  name: string;
 }
 
 export const JudgmentDeclaration = {
-    $type: 'JudgmentDeclaration',
-    members: 'members',
-    name: 'name'
+  $type: "JudgmentDeclaration",
+  members: "members",
+  name: "name",
 } as const;
 
 export function isJudgmentDeclaration(item: unknown): item is JudgmentDeclaration {
-    return reflection.isInstance(item, JudgmentDeclaration.$type);
+  return reflection.isInstance(item, JudgmentDeclaration.$type);
 }
 
 export interface JudgmentEvidenceRefs extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentEvidenceRefs';
-    values: IdentifierList;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentEvidenceRefs";
+  values: IdentifierList;
 }
 
 export const JudgmentEvidenceRefs = {
-    $type: 'JudgmentEvidenceRefs',
-    values: 'values'
+  $type: "JudgmentEvidenceRefs",
+  values: "values",
 } as const;
 
 export function isJudgmentEvidenceRefs(item: unknown): item is JudgmentEvidenceRefs {
-    return reflection.isInstance(item, JudgmentEvidenceRefs.$type);
+  return reflection.isInstance(item, JudgmentEvidenceRefs.$type);
 }
 
 export interface JudgmentFamilyContext extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentFamilyContext';
-    value: RecordFamily;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentFamilyContext";
+  value: RecordFamily;
 }
 
 export const JudgmentFamilyContext = {
-    $type: 'JudgmentFamilyContext',
-    value: 'value'
+  $type: "JudgmentFamilyContext",
+  value: "value",
 } as const;
 
 export function isJudgmentFamilyContext(item: unknown): item is JudgmentFamilyContext {
-    return reflection.isInstance(item, JudgmentFamilyContext.$type);
+  return reflection.isInstance(item, JudgmentFamilyContext.$type);
 }
 
-export type JudgmentMember = JudgmentCreatedAt | JudgmentEvidenceRefs | JudgmentFamilyContext | JudgmentRationale | JudgmentReviewer | JudgmentStatusProperty | JudgmentSupersedes | JudgmentTarget | JudgmentTypeProperty | JudgmentValue | RelatedJudgments;
+export type JudgmentMember =
+  | JudgmentCreatedAt
+  | JudgmentEvidenceRefs
+  | JudgmentFamilyContext
+  | JudgmentRationale
+  | JudgmentReviewer
+  | JudgmentStatusProperty
+  | JudgmentSupersedes
+  | JudgmentTarget
+  | JudgmentTypeProperty
+  | JudgmentValue
+  | RelatedJudgments;
 
 export const JudgmentMember = {
-    $type: 'JudgmentMember'
+  $type: "JudgmentMember",
 } as const;
 
 export function isJudgmentMember(item: unknown): item is JudgmentMember {
-    return reflection.isInstance(item, JudgmentMember.$type);
+  return reflection.isInstance(item, JudgmentMember.$type);
 }
 
 export interface JudgmentRationale extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentRationale';
-    value: string;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentRationale";
+  value: string;
 }
 
 export const JudgmentRationale = {
-    $type: 'JudgmentRationale',
-    value: 'value'
+  $type: "JudgmentRationale",
+  value: "value",
 } as const;
 
 export function isJudgmentRationale(item: unknown): item is JudgmentRationale {
-    return reflection.isInstance(item, JudgmentRationale.$type);
+  return reflection.isInstance(item, JudgmentRationale.$type);
 }
 
 export interface JudgmentReviewer extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentReviewer';
-    value: string;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentReviewer";
+  value: string;
 }
 
 export const JudgmentReviewer = {
-    $type: 'JudgmentReviewer',
-    value: 'value'
+  $type: "JudgmentReviewer",
+  value: "value",
 } as const;
 
 export function isJudgmentReviewer(item: unknown): item is JudgmentReviewer {
-    return reflection.isInstance(item, JudgmentReviewer.$type);
+  return reflection.isInstance(item, JudgmentReviewer.$type);
 }
 
-export type JudgmentStatus = 'accepted' | 'contested' | 'proposed' | 'superseded';
+export type JudgmentStatus = "accepted" | "contested" | "proposed" | "superseded";
 
 export function isJudgmentStatus(item: unknown): item is JudgmentStatus {
-    return item === 'proposed' || item === 'accepted' || item === 'contested' || item === 'superseded';
+  return (
+    item === "proposed" || item === "accepted" || item === "contested" || item === "superseded"
+  );
 }
 
 export interface JudgmentStatusProperty extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentStatusProperty';
-    value: JudgmentStatus;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentStatusProperty";
+  value: JudgmentStatus;
 }
 
 export const JudgmentStatusProperty = {
-    $type: 'JudgmentStatusProperty',
-    value: 'value'
+  $type: "JudgmentStatusProperty",
+  value: "value",
 } as const;
 
 export function isJudgmentStatusProperty(item: unknown): item is JudgmentStatusProperty {
-    return reflection.isInstance(item, JudgmentStatusProperty.$type);
+  return reflection.isInstance(item, JudgmentStatusProperty.$type);
 }
 
 export interface JudgmentSupersedes extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentSupersedes';
-    value: QualifiedName;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentSupersedes";
+  value: QualifiedName;
 }
 
 export const JudgmentSupersedes = {
-    $type: 'JudgmentSupersedes',
-    value: 'value'
+  $type: "JudgmentSupersedes",
+  value: "value",
 } as const;
 
 export function isJudgmentSupersedes(item: unknown): item is JudgmentSupersedes {
-    return reflection.isInstance(item, JudgmentSupersedes.$type);
+  return reflection.isInstance(item, JudgmentSupersedes.$type);
 }
 
 export interface JudgmentTarget extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentTarget';
-    value: QualifiedName;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentTarget";
+  value: QualifiedName;
 }
 
 export const JudgmentTarget = {
-    $type: 'JudgmentTarget',
-    value: 'value'
+  $type: "JudgmentTarget",
+  value: "value",
 } as const;
 
 export function isJudgmentTarget(item: unknown): item is JudgmentTarget {
-    return reflection.isInstance(item, JudgmentTarget.$type);
+  return reflection.isInstance(item, JudgmentTarget.$type);
 }
 
-export type JudgmentType = 'adjudication' | 'direct_or_inferred' | 'disagreement' | 'institutional_role_determination' | 'legal_status_determination' | 'operational_capacity_determination' | 'passage_selection' | 'record_family_classification' | 'scope_interpretation' | 'subject_identification' | 'topic_classification';
+export type JudgmentType =
+  | "adjudication"
+  | "direct_or_inferred"
+  | "disagreement"
+  | "institutional_role_determination"
+  | "legal_status_determination"
+  | "operational_capacity_determination"
+  | "passage_selection"
+  | "record_family_classification"
+  | "scope_interpretation"
+  | "subject_identification"
+  | "topic_classification";
 
 export function isJudgmentType(item: unknown): item is JudgmentType {
-    return item === 'passage_selection' || item === 'record_family_classification' || item === 'subject_identification' || item === 'scope_interpretation' || item === 'topic_classification' || item === 'legal_status_determination' || item === 'institutional_role_determination' || item === 'operational_capacity_determination' || item === 'direct_or_inferred' || item === 'disagreement' || item === 'adjudication';
+  return (
+    item === "passage_selection" ||
+    item === "record_family_classification" ||
+    item === "subject_identification" ||
+    item === "scope_interpretation" ||
+    item === "topic_classification" ||
+    item === "legal_status_determination" ||
+    item === "institutional_role_determination" ||
+    item === "operational_capacity_determination" ||
+    item === "direct_or_inferred" ||
+    item === "disagreement" ||
+    item === "adjudication"
+  );
 }
 
 export interface JudgmentTypeProperty extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentTypeProperty';
-    value: JudgmentType;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentTypeProperty";
+  value: JudgmentType;
 }
 
 export const JudgmentTypeProperty = {
-    $type: 'JudgmentTypeProperty',
-    value: 'value'
+  $type: "JudgmentTypeProperty",
+  value: "value",
 } as const;
 
 export function isJudgmentTypeProperty(item: unknown): item is JudgmentTypeProperty {
-    return reflection.isInstance(item, JudgmentTypeProperty.$type);
+  return reflection.isInstance(item, JudgmentTypeProperty.$type);
 }
 
 export interface JudgmentValue extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'JudgmentValue';
-    value: Expression;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentValue";
+  value: Expression;
 }
 
 export const JudgmentValue = {
-    $type: 'JudgmentValue',
-    value: 'value'
+  $type: "JudgmentValue",
+  value: "value",
 } as const;
 
 export function isJudgmentValue(item: unknown): item is JudgmentValue {
-    return reflection.isInstance(item, JudgmentValue.$type);
+  return reflection.isInstance(item, JudgmentValue.$type);
 }
 
-export type JurisdictionLevel = 'district' | 'federal' | 'institution_specific' | 'state' | 'territorial' | 'unknown';
+export type JurisdictionLevel =
+  "district" | "federal" | "institution_specific" | "state" | "territorial" | "unknown";
 
 export function isJurisdictionLevel(item: unknown): item is JurisdictionLevel {
-    return item === 'federal' || item === 'state' || item === 'territorial' || item === 'district' || item === 'institution_specific' || item === 'unknown';
+  return (
+    item === "federal" ||
+    item === "state" ||
+    item === "territorial" ||
+    item === "district" ||
+    item === "institution_specific" ||
+    item === "unknown"
+  );
 }
 
 export interface JurisdictionLevelProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'JurisdictionLevelProperty';
-    value: JurisdictionLevel;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "JurisdictionLevelProperty";
+  value: JurisdictionLevel;
 }
 
 export const JurisdictionLevelProperty = {
-    $type: 'JurisdictionLevelProperty',
-    value: 'value'
+  $type: "JurisdictionLevelProperty",
+  value: "value",
 } as const;
 
 export function isJurisdictionLevelProperty(item: unknown): item is JurisdictionLevelProperty {
-    return reflection.isInstance(item, JurisdictionLevelProperty.$type);
+  return reflection.isInstance(item, JurisdictionLevelProperty.$type);
 }
 
 export interface JurisdictionsProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'JurisdictionsProperty';
-    values: StringList;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "JurisdictionsProperty";
+  values: StringList;
 }
 
 export const JurisdictionsProperty = {
-    $type: 'JurisdictionsProperty',
-    values: 'values'
+  $type: "JurisdictionsProperty",
+  values: "values",
 } as const;
 
 export function isJurisdictionsProperty(item: unknown): item is JurisdictionsProperty {
-    return reflection.isInstance(item, JurisdictionsProperty.$type);
+  return reflection.isInstance(item, JurisdictionsProperty.$type);
 }
 
-export type LegalForce = 'binding' | 'nonbinding' | 'proposed' | 'unknown' | 'voluntary';
+export type LegalForce = "binding" | "nonbinding" | "proposed" | "unknown" | "voluntary";
 
 export function isLegalForce(item: unknown): item is LegalForce {
-    return item === 'binding' || item === 'nonbinding' || item === 'voluntary' || item === 'proposed' || item === 'unknown';
+  return (
+    item === "binding" ||
+    item === "nonbinding" ||
+    item === "voluntary" ||
+    item === "proposed" ||
+    item === "unknown"
+  );
 }
 
 export interface LegalPolicyExtension extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'LegalPolicyExtension';
-    properties: Array<LegalPolicyProperty>;
+  readonly $container: RecordDeclaration;
+  readonly $type: "LegalPolicyExtension";
+  properties: Array<LegalPolicyProperty>;
 }
 
 export const LegalPolicyExtension = {
-    $type: 'LegalPolicyExtension',
-    properties: 'properties'
+  $type: "LegalPolicyExtension",
+  properties: "properties",
 } as const;
 
 export function isLegalPolicyExtension(item: unknown): item is LegalPolicyExtension {
-    return reflection.isInstance(item, LegalPolicyExtension.$type);
+  return reflection.isInstance(item, LegalPolicyExtension.$type);
 }
 
-export type LegalPolicyProperty = AdoptionStatusProperty | ApplicabilityStatusProperty | CompliancePathwayProperty | EffectiveFromProperty | EffectiveUntilProperty | EnforcementStatusProperty | ExceptionsProperty | ForceProperty | InstrumentTypeProperty | JurisdictionLevelProperty | JurisdictionsProperty | OfficialCitationProperty | ParentInstrumentProperty | ProvisionIdentifierProperty | RelatedProvisionsProperty | ResponsibleAuthoritiesProperty;
+export type LegalPolicyProperty =
+  | AdoptionStatusProperty
+  | ApplicabilityStatusProperty
+  | CompliancePathwayProperty
+  | EffectiveFromProperty
+  | EffectiveUntilProperty
+  | EnforcementStatusProperty
+  | ExceptionsProperty
+  | ForceProperty
+  | InstrumentTypeProperty
+  | JurisdictionLevelProperty
+  | JurisdictionsProperty
+  | OfficialCitationProperty
+  | ParentInstrumentProperty
+  | ProvisionIdentifierProperty
+  | RelatedProvisionsProperty
+  | ResponsibleAuthoritiesProperty
+  | SourceMetadataProperty;
 
 export const LegalPolicyProperty = {
-    $type: 'LegalPolicyProperty'
+  $type: "LegalPolicyProperty",
 } as const;
 
 export function isLegalPolicyProperty(item: unknown): item is LegalPolicyProperty {
-    return reflection.isInstance(item, LegalPolicyProperty.$type);
+  return reflection.isInstance(item, LegalPolicyProperty.$type);
 }
 
 export interface LinesAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'LinesAnchor';
-    from: number;
-    to: number;
+  readonly $container: Authority;
+  readonly $type: "LinesAnchor";
+  from: number;
+  to: number;
 }
 
 export const LinesAnchor = {
-    $type: 'LinesAnchor',
-    from: 'from',
-    to: 'to'
+  $type: "LinesAnchor",
+  from: "from",
+  to: "to",
 } as const;
 
 export function isLinesAnchor(item: unknown): item is LinesAnchor {
-    return reflection.isInstance(item, LinesAnchor.$type);
+  return reflection.isInstance(item, LinesAnchor.$type);
 }
 
 export interface MandateProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'MandateProperty';
-    value: string;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "MandateProperty";
+  value: string;
 }
 
 export const MandateProperty = {
-    $type: 'MandateProperty',
-    value: 'value'
+  $type: "MandateProperty",
+  value: "value",
 } as const;
 
 export function isMandateProperty(item: unknown): item is MandateProperty {
-    return reflection.isInstance(item, MandateProperty.$type);
+  return reflection.isInstance(item, MandateProperty.$type);
 }
 
 export interface Measure extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Measure';
-    components: Array<MeasureComponent>;
-    name: string;
-    scale: number;
-    strategy: AggregationStrategy;
+  readonly $container: Commitment;
+  readonly $type: "Measure";
+  components: Array<MeasureComponent>;
+  name: string;
+  scale: number;
+  strategy: AggregationStrategy;
 }
 
 export const Measure = {
-    $type: 'Measure',
-    components: 'components',
-    name: 'name',
-    scale: 'scale',
-    strategy: 'strategy'
+  $type: "Measure",
+  components: "components",
+  name: "name",
+  scale: "scale",
+  strategy: "strategy",
 } as const;
 
 export function isMeasure(item: unknown): item is Measure {
-    return reflection.isInstance(item, Measure.$type);
+  return reflection.isInstance(item, Measure.$type);
 }
 
 export interface MeasureComponent extends langium.AstNode {
-    readonly $container: Measure;
-    readonly $type: 'MeasureComponent';
-    anchors: Array<AnchorRule>;
-    name: string;
-    source?: string;
-    weight: number;
+  readonly $container: Measure;
+  readonly $type: "MeasureComponent";
+  anchors: Array<AnchorRule>;
+  name: string;
+  source?: string;
+  weight: number;
 }
 
 export const MeasureComponent = {
-    $type: 'MeasureComponent',
-    anchors: 'anchors',
-    name: 'name',
-    source: 'source',
-    weight: 'weight'
+  $type: "MeasureComponent",
+  anchors: "anchors",
+  name: "name",
+  source: "source",
+  weight: "weight",
 } as const;
 
 export function isMeasureComponent(item: unknown): item is MeasureComponent {
-    return reflection.isInstance(item, MeasureComponent.$type);
+  return reflection.isInstance(item, MeasureComponent.$type);
 }
 
 export interface Model extends langium.AstNode {
-    readonly $type: 'Model';
-    declarations: Array<Declaration>;
-    imports: Array<Import>;
-    languageVersion: string;
-    packageName: QualifiedName;
-    packageVersion: string;
+  readonly $type: "Model";
+  declarations: Array<Declaration>;
+  imports: Array<Import>;
+  languageVersion: string;
+  packageName: QualifiedName;
+  packageVersion: string;
 }
 
 export const Model = {
-    $type: 'Model',
-    declarations: 'declarations',
-    imports: 'imports',
-    languageVersion: 'languageVersion',
-    packageName: 'packageName',
-    packageVersion: 'packageVersion'
+  $type: "Model",
+  declarations: "declarations",
+  imports: "imports",
+  languageVersion: "languageVersion",
+  packageName: "packageName",
+  packageVersion: "packageVersion",
 } as const;
 
 export function isModel(item: unknown): item is Model {
-    return reflection.isInstance(item, Model.$type);
+  return reflection.isInstance(item, Model.$type);
 }
 
-export type NamePart = 'administrative' | 'adopted' | 'advises' | 'advisory_body' | 'agency_policy' | 'ambiguous' | 'approved' | 'assertion' | 'basis' | 'binding' | 'code' | 'constitution' | 'constitutional_amendment' | 'contested' | 'contractual' | 'coordinates_with' | 'coordination' | 'corpus' | 'dimensions' | 'direct' | 'district' | 'document_hash' | 'document_version' | 'draft' | 'established' | 'evaluation' | 'evidence' | 'executive_order' | 'federal' | 'federal_agency' | 'generally_applicable' | 'government_department' | 'government_use' | 'grant_administration' | 'guidance' | 'id' | 'implements_for' | 'incomplete_evidence' | 'independent_agency' | 'inferred' | 'inherited' | 'institution_specific' | 'institutional' | 'interagency_body' | 'judgment' | 'judicial' | 'legal_policy' | 'locator' | 'market_wide' | 'measurement_science' | 'nonbinding' | 'none_specified' | 'not_yet_applicable' | 'organizational_unit' | 'other' | 'oversees' | 'oversight' | 'part_of' | 'partial' | 'passage' | 'passage_hash' | 'procurement' | 'procurement_support' | 'proposed' | 'provenance' | 'provider_specific' | 'quote' | 'record' | 'regulation' | 'regulator' | 'reports_to' | 'rescinded' | 'research' | 'research_body' | 'review_state' | 'reviewed' | 'scope' | 'self_executing' | 'standards_body' | 'standards_development' | 'state' | 'statute' | 'subjects' | 'superseded' | 'support' | 'supports' | 'technical_guidance' | 'territorial' | 'title' | 'topics' | 'uncertainty' | 'unknown' | 'version' | 'voluntary' | 'withdrawn' | 'writ' | string;
+export type NamePart =
+  | "accepted"
+  | "adjudication"
+  | "administrative"
+  | "adopted"
+  | "adoption_status"
+  | "advises"
+  | "advisory_body"
+  | "agency_policy"
+  | "ambiguous"
+  | "applicability_status"
+  | "applicable_period"
+  | "approved"
+  | "assertion"
+  | "assigns"
+  | "authority_sources"
+  | "authorizes"
+  | "basis"
+  | "binding"
+  | "chapter"
+  | "code"
+  | "compliance_pathway"
+  | "condition"
+  | "constitution"
+  | "constitutional_amendment"
+  | "contested"
+  | "contractual"
+  | "coordinates_with"
+  | "coordination"
+  | "corpus"
+  | "created_at"
+  | "created_by"
+  | "dataset_name"
+  | "dataset_snapshot"
+  | "decision_rights"
+  | "defines"
+  | "dimensions"
+  | "direct"
+  | "direct_or_inferred"
+  | "disagreement"
+  | "district"
+  | "document_hash"
+  | "document_version"
+  | "draft"
+  | "effective_from"
+  | "effective_until"
+  | "enforcement_status"
+  | "established"
+  | "evaluation"
+  | "evidence"
+  | "evidence_refs"
+  | "exceptions"
+  | "executive_order"
+  | "family_context"
+  | "federal"
+  | "federal_agency"
+  | "force"
+  | "from"
+  | "functions"
+  | "generally_applicable"
+  | "government_department"
+  | "government_use"
+  | "grant_administration"
+  | "guidance"
+  | "id"
+  | "implements_for"
+  | "incomplete_evidence"
+  | "independent_agency"
+  | "inferred"
+  | "inherited"
+  | "institution_id"
+  | "institution_specific"
+  | "institution_type"
+  | "institutional"
+  | "institutional_relationships"
+  | "institutional_role_determination"
+  | "instrument_type"
+  | "interagency_body"
+  | "item"
+  | "judgment"
+  | "judicial"
+  | "jurisdiction"
+  | "jurisdiction_level"
+  | "jurisdictions"
+  | "last_amended_year"
+  | "legal_policy"
+  | "legal_status_determination"
+  | "locator"
+  | "mandate"
+  | "market_wide"
+  | "measurement_science"
+  | "nonbinding"
+  | "none_specified"
+  | "not_yet_applicable"
+  | "observes"
+  | "official_citation"
+  | "operational_capacity"
+  | "operational_capacity_determination"
+  | "organizational_unit"
+  | "original_text"
+  | "other"
+  | "oversees"
+  | "oversight"
+  | "oversight_relationships"
+  | "parent_institution_id"
+  | "parent_instrument_id"
+  | "part_of"
+  | "partial"
+  | "passage"
+  | "passage_hash"
+  | "passage_selection"
+  | "performs"
+  | "permits"
+  | "procurement"
+  | "procurement_support"
+  | "prohibits"
+  | "proposed"
+  | "provenance"
+  | "provider_specific"
+  | "provision_identifier"
+  | "quote"
+  | "rationale"
+  | "record"
+  | "record_family_classification"
+  | "regulation"
+  | "regulator"
+  | "related_judgment_ids"
+  | "related_provision_ids"
+  | "relation"
+  | "reports_to"
+  | "requires"
+  | "rescinded"
+  | "research"
+  | "research_body"
+  | "responsible_authorities"
+  | "review_state"
+  | "reviewed"
+  | "reviewer"
+  | "row_hash"
+  | "scope"
+  | "scope_interpretation"
+  | "section_number"
+  | "section_title"
+  | "self_executing"
+  | "source_metadata"
+  | "source_row_identifier"
+  | "source_url"
+  | "standards_body"
+  | "standards_development"
+  | "state"
+  | "states"
+  | "status"
+  | "statute"
+  | "subject_identification"
+  | "subjects"
+  | "subunit_ids"
+  | "superseded"
+  | "support"
+  | "supports"
+  | "target"
+  | "technical_guidance"
+  | "territorial"
+  | "title"
+  | "topic_classification"
+  | "topics"
+  | "type"
+  | "uncertainty"
+  | "unknown"
+  | "until"
+  | "value"
+  | "version"
+  | "voluntary"
+  | "withdrawn"
+  | "writ"
+  | string;
 
 export function isNamePart(item: unknown): item is NamePart {
-    return item === 'id' || item === 'writ' || item === 'record' || item === 'judgment' || item === 'legal_policy' || item === 'institutional' || item === 'corpus' || item === 'version' || item === 'title' || item === 'subjects' || item === 'assertion' || item === 'topics' || item === 'scope' || item === 'evidence' || item === 'uncertainty' || item === 'provenance' || item === 'review_state' || item === 'support' || item === 'document_version' || item === 'passage' || item === 'locator' || item === 'quote' || item === 'passage_hash' || item === 'document_hash' || item === 'basis' || item === 'direct' || item === 'inferred' || item === 'inherited' || item === 'unknown' || item === 'contested' || item === 'ambiguous' || item === 'incomplete_evidence' || item === 'draft' || item === 'reviewed' || item === 'approved' || item === 'superseded' || item === 'withdrawn' || item === 'constitution' || item === 'constitutional_amendment' || item === 'statute' || item === 'regulation' || item === 'executive_order' || item === 'agency_policy' || item === 'guidance' || item === 'code' || item === 'other' || item === 'federal' || item === 'state' || item === 'territorial' || item === 'district' || item === 'institution_specific' || item === 'binding' || item === 'nonbinding' || item === 'voluntary' || item === 'proposed' || item === 'adopted' || item === 'rescinded' || item === 'generally_applicable' || item === 'market_wide' || item === 'provider_specific' || item === 'government_use' || item === 'procurement' || item === 'not_yet_applicable' || item === 'judicial' || item === 'administrative' || item === 'contractual' || item === 'oversight' || item === 'self_executing' || item === 'none_specified' || item === 'government_department' || item === 'federal_agency' || item === 'independent_agency' || item === 'advisory_body' || item === 'regulator' || item === 'standards_body' || item === 'research_body' || item === 'interagency_body' || item === 'organizational_unit' || item === 'standards_development' || item === 'measurement_science' || item === 'technical_guidance' || item === 'research' || item === 'evaluation' || item === 'coordination' || item === 'grant_administration' || item === 'procurement_support' || item === 'established' || item === 'partial' || item === 'dimensions' || item === 'part_of' || item === 'oversees' || item === 'supports' || item === 'advises' || item === 'coordinates_with' || item === 'reports_to' || item === 'implements_for' || (typeof item === 'string' && (/[_a-zA-Z][\w-]*/.test(item)));
+  return (
+    item === "id" ||
+    item === "writ" ||
+    item === "record" ||
+    item === "judgment" ||
+    item === "legal_policy" ||
+    item === "institutional" ||
+    item === "corpus" ||
+    item === "version" ||
+    item === "title" ||
+    item === "subjects" ||
+    item === "assertion" ||
+    item === "topics" ||
+    item === "scope" ||
+    item === "evidence" ||
+    item === "uncertainty" ||
+    item === "provenance" ||
+    item === "review_state" ||
+    item === "support" ||
+    item === "document_version" ||
+    item === "passage" ||
+    item === "locator" ||
+    item === "quote" ||
+    item === "passage_hash" ||
+    item === "document_hash" ||
+    item === "basis" ||
+    item === "direct" ||
+    item === "inferred" ||
+    item === "inherited" ||
+    item === "unknown" ||
+    item === "contested" ||
+    item === "ambiguous" ||
+    item === "incomplete_evidence" ||
+    item === "draft" ||
+    item === "reviewed" ||
+    item === "approved" ||
+    item === "superseded" ||
+    item === "withdrawn" ||
+    item === "requires" ||
+    item === "permits" ||
+    item === "prohibits" ||
+    item === "defines" ||
+    item === "authorizes" ||
+    item === "assigns" ||
+    item === "performs" ||
+    item === "states" ||
+    item === "observes" ||
+    item === "jurisdiction" ||
+    item === "condition" ||
+    item === "item" ||
+    item === "created_by" ||
+    item === "created_at" ||
+    item === "instrument_type" ||
+    item === "jurisdiction_level" ||
+    item === "force" ||
+    item === "adoption_status" ||
+    item === "applicability_status" ||
+    item === "enforcement_status" ||
+    item === "official_citation" ||
+    item === "provision_identifier" ||
+    item === "jurisdictions" ||
+    item === "responsible_authorities" ||
+    item === "effective_from" ||
+    item === "effective_until" ||
+    item === "exceptions" ||
+    item === "compliance_pathway" ||
+    item === "parent_instrument_id" ||
+    item === "related_provision_ids" ||
+    item === "source_metadata" ||
+    item === "dataset_name" ||
+    item === "dataset_snapshot" ||
+    item === "source_row_identifier" ||
+    item === "source_url" ||
+    item === "chapter" ||
+    item === "section_number" ||
+    item === "section_title" ||
+    item === "original_text" ||
+    item === "last_amended_year" ||
+    item === "row_hash" ||
+    item === "constitution" ||
+    item === "constitutional_amendment" ||
+    item === "statute" ||
+    item === "regulation" ||
+    item === "executive_order" ||
+    item === "agency_policy" ||
+    item === "guidance" ||
+    item === "code" ||
+    item === "other" ||
+    item === "federal" ||
+    item === "state" ||
+    item === "territorial" ||
+    item === "district" ||
+    item === "institution_specific" ||
+    item === "binding" ||
+    item === "nonbinding" ||
+    item === "voluntary" ||
+    item === "proposed" ||
+    item === "adopted" ||
+    item === "rescinded" ||
+    item === "generally_applicable" ||
+    item === "market_wide" ||
+    item === "provider_specific" ||
+    item === "government_use" ||
+    item === "procurement" ||
+    item === "not_yet_applicable" ||
+    item === "judicial" ||
+    item === "administrative" ||
+    item === "contractual" ||
+    item === "oversight" ||
+    item === "self_executing" ||
+    item === "none_specified" ||
+    item === "government_department" ||
+    item === "federal_agency" ||
+    item === "independent_agency" ||
+    item === "advisory_body" ||
+    item === "regulator" ||
+    item === "standards_body" ||
+    item === "research_body" ||
+    item === "interagency_body" ||
+    item === "organizational_unit" ||
+    item === "standards_development" ||
+    item === "measurement_science" ||
+    item === "technical_guidance" ||
+    item === "research" ||
+    item === "evaluation" ||
+    item === "coordination" ||
+    item === "grant_administration" ||
+    item === "procurement_support" ||
+    item === "established" ||
+    item === "partial" ||
+    item === "institution_id" ||
+    item === "institution_type" ||
+    item === "mandate" ||
+    item === "authority_sources" ||
+    item === "functions" ||
+    item === "operational_capacity" ||
+    item === "status" ||
+    item === "dimensions" ||
+    item === "evidence_refs" ||
+    item === "decision_rights" ||
+    item === "parent_institution_id" ||
+    item === "subunit_ids" ||
+    item === "oversight_relationships" ||
+    item === "institutional_relationships" ||
+    item === "relation" ||
+    item === "applicable_period" ||
+    item === "from" ||
+    item === "until" ||
+    item === "part_of" ||
+    item === "oversees" ||
+    item === "supports" ||
+    item === "advises" ||
+    item === "coordinates_with" ||
+    item === "reports_to" ||
+    item === "implements_for" ||
+    item === "target" ||
+    item === "type" ||
+    item === "value" ||
+    item === "rationale" ||
+    item === "reviewer" ||
+    item === "family_context" ||
+    item === "related_judgment_ids" ||
+    item === "passage_selection" ||
+    item === "record_family_classification" ||
+    item === "subject_identification" ||
+    item === "scope_interpretation" ||
+    item === "topic_classification" ||
+    item === "legal_status_determination" ||
+    item === "institutional_role_determination" ||
+    item === "operational_capacity_determination" ||
+    item === "direct_or_inferred" ||
+    item === "disagreement" ||
+    item === "adjudication" ||
+    item === "accepted" ||
+    (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
+  );
 }
 
 export interface NumberLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'NumberLiteral';
-    value: number;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "NumberLiteral";
+  value: number;
 }
 
 export const NumberLiteral = {
-    $type: 'NumberLiteral',
-    value: 'value'
+  $type: "NumberLiteral",
+  value: "value",
 } as const;
 
 export function isNumberLiteral(item: unknown): item is NumberLiteral {
-    return reflection.isInstance(item, NumberLiteral.$type);
+  return reflection.isInstance(item, NumberLiteral.$type);
 }
 
 export interface OfficialCitationProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'OfficialCitationProperty';
-    value: string;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "OfficialCitationProperty";
+  value: string;
 }
 
 export const OfficialCitationProperty = {
-    $type: 'OfficialCitationProperty',
-    value: 'value'
+  $type: "OfficialCitationProperty",
+  value: "value",
 } as const;
 
 export function isOfficialCitationProperty(item: unknown): item is OfficialCitationProperty {
-    return reflection.isInstance(item, OfficialCitationProperty.$type);
+  return reflection.isInstance(item, OfficialCitationProperty.$type);
 }
 
 export interface OperationalCapacityProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'OperationalCapacityProperty';
-    dimensions: StringList;
-    evidenceRefs: IdentifierList;
-    status: CapacityStatus;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "OperationalCapacityProperty";
+  dimensions: StringList;
+  evidenceRefs: IdentifierList;
+  status: CapacityStatus;
 }
 
 export const OperationalCapacityProperty = {
-    $type: 'OperationalCapacityProperty',
-    dimensions: 'dimensions',
-    evidenceRefs: 'evidenceRefs',
-    status: 'status'
+  $type: "OperationalCapacityProperty",
+  dimensions: "dimensions",
+  evidenceRefs: "evidenceRefs",
+  status: "status",
 } as const;
 
 export function isOperationalCapacityProperty(item: unknown): item is OperationalCapacityProperty {
-    return reflection.isInstance(item, OperationalCapacityProperty.$type);
+  return reflection.isInstance(item, OperationalCapacityProperty.$type);
 }
 
 export interface OtherwiseClass extends langium.AstNode {
-    readonly $container: Classification;
-    readonly $type: 'OtherwiseClass';
-    label: string;
-    safe: boolean;
+  readonly $container: Classification;
+  readonly $type: "OtherwiseClass";
+  label: string;
+  safe: boolean;
 }
 
 export const OtherwiseClass = {
-    $type: 'OtherwiseClass',
-    label: 'label',
-    safe: 'safe'
+  $type: "OtherwiseClass",
+  label: "label",
+  safe: "safe",
 } as const;
 
 export function isOtherwiseClass(item: unknown): item is OtherwiseClass {
-    return reflection.isInstance(item, OtherwiseClass.$type);
+  return reflection.isInstance(item, OtherwiseClass.$type);
 }
 
-export type OtherwiseKw = 'not_applicable' | 'unresolved';
+export type OtherwiseKw = "not_applicable" | "unresolved";
 
 export function isOtherwiseKw(item: unknown): item is OtherwiseKw {
-    return item === 'unresolved' || item === 'not_applicable';
+  return item === "unresolved" || item === "not_applicable";
 }
 
 export interface OtherwiseScore extends langium.AstNode {
-    readonly $container: ScoreBlock;
-    readonly $type: 'OtherwiseScore';
-    message: string;
-    resultKw?: OtherwiseKw;
-    resultValue?: string;
+  readonly $container: ScoreBlock;
+  readonly $type: "OtherwiseScore";
+  message: string;
+  resultKw?: OtherwiseKw;
+  resultValue?: string;
 }
 
 export const OtherwiseScore = {
-    $type: 'OtherwiseScore',
-    message: 'message',
-    resultKw: 'resultKw',
-    resultValue: 'resultValue'
+  $type: "OtherwiseScore",
+  message: "message",
+  resultKw: "resultKw",
+  resultValue: "resultValue",
 } as const;
 
 export function isOtherwiseScore(item: unknown): item is OtherwiseScore {
-    return reflection.isInstance(item, OtherwiseScore.$type);
+  return reflection.isInstance(item, OtherwiseScore.$type);
 }
 
 export interface OversightRelationshipsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'OversightRelationshipsProperty';
-    relationships: RelationshipList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "OversightRelationshipsProperty";
+  relationships: RelationshipList;
 }
 
 export const OversightRelationshipsProperty = {
-    $type: 'OversightRelationshipsProperty',
-    relationships: 'relationships'
+  $type: "OversightRelationshipsProperty",
+  relationships: "relationships",
 } as const;
 
-export function isOversightRelationshipsProperty(item: unknown): item is OversightRelationshipsProperty {
-    return reflection.isInstance(item, OversightRelationshipsProperty.$type);
+export function isOversightRelationshipsProperty(
+  item: unknown,
+): item is OversightRelationshipsProperty {
+  return reflection.isInstance(item, OversightRelationshipsProperty.$type);
 }
 
 export interface PageAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'PageAnchor';
-    page: number;
+  readonly $container: Authority;
+  readonly $type: "PageAnchor";
+  page: number;
 }
 
 export const PageAnchor = {
-    $type: 'PageAnchor',
-    page: 'page'
+  $type: "PageAnchor",
+  page: "page",
 } as const;
 
 export function isPageAnchor(item: unknown): item is PageAnchor {
-    return reflection.isInstance(item, PageAnchor.$type);
+  return reflection.isInstance(item, PageAnchor.$type);
 }
 
 export interface PagesAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'PagesAnchor';
-    from: number;
-    to: number;
+  readonly $container: Authority;
+  readonly $type: "PagesAnchor";
+  from: number;
+  to: number;
 }
 
 export const PagesAnchor = {
-    $type: 'PagesAnchor',
-    from: 'from',
-    to: 'to'
+  $type: "PagesAnchor",
+  from: "from",
+  to: "to",
 } as const;
 
 export function isPagesAnchor(item: unknown): item is PagesAnchor {
-    return reflection.isInstance(item, PagesAnchor.$type);
+  return reflection.isInstance(item, PagesAnchor.$type);
 }
 
 export interface Parameter extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Parameter';
-    allowed?: Expression;
-    default: Expression;
-    name: string;
-    type: TypeRef;
+  readonly $container: Commitment;
+  readonly $type: "Parameter";
+  allowed?: Expression;
+  default: Expression;
+  name: string;
+  type: TypeRef;
 }
 
 export const Parameter = {
-    $type: 'Parameter',
-    allowed: 'allowed',
-    default: 'default',
-    name: 'name',
-    type: 'type'
+  $type: "Parameter",
+  allowed: "allowed",
+  default: "default",
+  name: "name",
+  type: "type",
 } as const;
 
 export function isParameter(item: unknown): item is Parameter {
-    return reflection.isInstance(item, Parameter.$type);
+  return reflection.isInstance(item, Parameter.$type);
 }
 
 export interface ParentInstitutionProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'ParentInstitutionProperty';
-    value: QualifiedName;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "ParentInstitutionProperty";
+  value: QualifiedName;
 }
 
 export const ParentInstitutionProperty = {
-    $type: 'ParentInstitutionProperty',
-    value: 'value'
+  $type: "ParentInstitutionProperty",
+  value: "value",
 } as const;
 
 export function isParentInstitutionProperty(item: unknown): item is ParentInstitutionProperty {
-    return reflection.isInstance(item, ParentInstitutionProperty.$type);
+  return reflection.isInstance(item, ParentInstitutionProperty.$type);
 }
 
 export interface ParentInstrumentProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ParentInstrumentProperty';
-    value: QualifiedName;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ParentInstrumentProperty";
+  value: QualifiedName;
 }
 
 export const ParentInstrumentProperty = {
-    $type: 'ParentInstrumentProperty',
-    value: 'value'
+  $type: "ParentInstrumentProperty",
+  value: "value",
 } as const;
 
 export function isParentInstrumentProperty(item: unknown): item is ParentInstrumentProperty {
-    return reflection.isInstance(item, ParentInstrumentProperty.$type);
+  return reflection.isInstance(item, ParentInstrumentProperty.$type);
 }
 
 export interface PartnerClass extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'PartnerClass';
-    description?: string;
-    name: string;
+  readonly $container: Commitment;
+  readonly $type: "PartnerClass";
+  description?: string;
+  name: string;
 }
 
 export const PartnerClass = {
-    $type: 'PartnerClass',
-    description: 'description',
-    name: 'name'
+  $type: "PartnerClass",
+  description: "description",
+  name: "name",
 } as const;
 
 export function isPartnerClass(item: unknown): item is PartnerClass {
-    return reflection.isInstance(item, PartnerClass.$type);
+  return reflection.isInstance(item, PartnerClass.$type);
 }
 
 export interface Predicate extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Predicate';
-    name: string;
-    params: Array<PredicateParam>;
-    returnType: TypeRef;
-    rules: Array<DeriveRule>;
+  readonly $container: Commitment;
+  readonly $type: "Predicate";
+  name: string;
+  params: Array<PredicateParam>;
+  returnType: TypeRef;
+  rules: Array<DeriveRule>;
 }
 
 export const Predicate = {
-    $type: 'Predicate',
-    name: 'name',
-    params: 'params',
-    returnType: 'returnType',
-    rules: 'rules'
+  $type: "Predicate",
+  name: "name",
+  params: "params",
+  returnType: "returnType",
+  rules: "rules",
 } as const;
 
 export function isPredicate(item: unknown): item is Predicate {
-    return reflection.isInstance(item, Predicate.$type);
+  return reflection.isInstance(item, Predicate.$type);
 }
 
 export interface PredicateParam extends langium.AstNode {
-    readonly $container: Predicate;
-    readonly $type: 'PredicateParam';
-    name: string;
-    type: TypeRef;
+  readonly $container: Predicate;
+  readonly $type: "PredicateParam";
+  name: string;
+  type: TypeRef;
 }
 
 export const PredicateParam = {
-    $type: 'PredicateParam',
-    name: 'name',
-    type: 'type'
+  $type: "PredicateParam",
+  name: "name",
+  type: "type",
 } as const;
 
 export function isPredicateParam(item: unknown): item is PredicateParam {
-    return reflection.isInstance(item, PredicateParam.$type);
+  return reflection.isInstance(item, PredicateParam.$type);
 }
 
 export interface Profile extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'Profile';
-    commitment: QualifiedName;
-    members: Array<ProfileMember>;
-    name: string;
+  readonly $container: Model;
+  readonly $type: "Profile";
+  commitment: QualifiedName;
+  members: Array<ProfileMember>;
+  name: string;
 }
 
 export const Profile = {
-    $type: 'Profile',
-    commitment: 'commitment',
-    members: 'members',
-    name: 'name'
+  $type: "Profile",
+  commitment: "commitment",
+  members: "members",
+  name: "name",
 } as const;
 
 export function isProfile(item: unknown): item is Profile {
-    return reflection.isInstance(item, Profile.$type);
+  return reflection.isInstance(item, Profile.$type);
 }
 
 export type ProfileMember = ProfileSet | ProfileWaive;
 
 export const ProfileMember = {
-    $type: 'ProfileMember'
+  $type: "ProfileMember",
 } as const;
 
 export function isProfileMember(item: unknown): item is ProfileMember {
-    return reflection.isInstance(item, ProfileMember.$type);
+  return reflection.isInstance(item, ProfileMember.$type);
 }
 
 export interface ProfileSet extends langium.AstNode {
-    readonly $container: Profile;
-    readonly $type: 'ProfileSet';
-    path: QualifiedName;
-    value: Expression;
+  readonly $container: Profile;
+  readonly $type: "ProfileSet";
+  path: QualifiedName;
+  value: Expression;
 }
 
 export const ProfileSet = {
-    $type: 'ProfileSet',
-    path: 'path',
-    value: 'value'
+  $type: "ProfileSet",
+  path: "path",
+  value: "value",
 } as const;
 
 export function isProfileSet(item: unknown): item is ProfileSet {
-    return reflection.isInstance(item, ProfileSet.$type);
+  return reflection.isInstance(item, ProfileSet.$type);
 }
 
 export interface ProfileWaive extends langium.AstNode {
-    readonly $container: Profile;
-    readonly $type: 'ProfileWaive';
-    diagnostic: string;
-    reason: string;
+  readonly $container: Profile;
+  readonly $type: "ProfileWaive";
+  diagnostic: string;
+  reason: string;
 }
 
 export const ProfileWaive = {
-    $type: 'ProfileWaive',
-    diagnostic: 'diagnostic',
-    reason: 'reason'
+  $type: "ProfileWaive",
+  diagnostic: "diagnostic",
+  reason: "reason",
 } as const;
 
 export function isProfileWaive(item: unknown): item is ProfileWaive {
-    return reflection.isInstance(item, ProfileWaive.$type);
+  return reflection.isInstance(item, ProfileWaive.$type);
 }
 
 export interface ProvisionIdentifierProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ProvisionIdentifierProperty';
-    value: string;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ProvisionIdentifierProperty";
+  value: string;
 }
 
 export const ProvisionIdentifierProperty = {
-    $type: 'ProvisionIdentifierProperty',
-    value: 'value'
+  $type: "ProvisionIdentifierProperty",
+  value: "value",
 } as const;
 
 export function isProvisionIdentifierProperty(item: unknown): item is ProvisionIdentifierProperty {
-    return reflection.isInstance(item, ProvisionIdentifierProperty.$type);
+  return reflection.isInstance(item, ProvisionIdentifierProperty.$type);
 }
 
 export type QualifiedName = string;
 
 export function isQualifiedName(item: unknown): item is QualifiedName {
-    return typeof item === 'string';
+  return typeof item === "string";
 }
 
 export interface QueryExpression extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'QueryExpression';
-    collection: QualifiedName;
-    distinctBy?: QualifiedName;
-    extraArgs: Array<Expression>;
-    op: QueryOp;
-    select?: Expression;
-    where?: Expression;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "QueryExpression";
+  collection: QualifiedName;
+  distinctBy?: QualifiedName;
+  extraArgs: Array<Expression>;
+  op: QueryOp;
+  select?: Expression;
+  where?: Expression;
 }
 
 export const QueryExpression = {
-    $type: 'QueryExpression',
-    collection: 'collection',
-    distinctBy: 'distinctBy',
-    extraArgs: 'extraArgs',
-    op: 'op',
-    select: 'select',
-    where: 'where'
+  $type: "QueryExpression",
+  collection: "collection",
+  distinctBy: "distinctBy",
+  extraArgs: "extraArgs",
+  op: "op",
+  select: "select",
+  where: "where",
 } as const;
 
 export function isQueryExpression(item: unknown): item is QueryExpression {
-    return reflection.isInstance(item, QueryExpression.$type);
+  return reflection.isInstance(item, QueryExpression.$type);
 }
 
-export type QueryOp = 'count' | 'count_distinct' | 'coverage' | 'exists' | 'forall' | 'max' | 'min' | 'ratio' | 'sum';
+export type QueryOp =
+  "count" | "count_distinct" | "coverage" | "exists" | "forall" | "max" | "min" | "ratio" | "sum";
 
 export function isQueryOp(item: unknown): item is QueryOp {
-    return item === 'count_distinct' || item === 'count' || item === 'exists' || item === 'forall' || item === 'sum' || item === 'ratio' || item === 'coverage' || item === 'min' || item === 'max';
+  return (
+    item === "count_distinct" ||
+    item === "count" ||
+    item === "exists" ||
+    item === "forall" ||
+    item === "sum" ||
+    item === "ratio" ||
+    item === "coverage" ||
+    item === "min" ||
+    item === "max"
+  );
 }
 
 export interface QuoteAnchor extends langium.AstNode {
-    readonly $container: Authority;
-    readonly $type: 'QuoteAnchor';
-    quote: string;
+  readonly $container: Authority;
+  readonly $type: "QuoteAnchor";
+  quote: string;
 }
 
 export const QuoteAnchor = {
-    $type: 'QuoteAnchor',
-    quote: 'quote'
+  $type: "QuoteAnchor",
+  quote: "quote",
 } as const;
 
 export function isQuoteAnchor(item: unknown): item is QuoteAnchor {
-    return reflection.isInstance(item, QuoteAnchor.$type);
+  return reflection.isInstance(item, QuoteAnchor.$type);
 }
 
 export interface Range extends langium.AstNode {
-    readonly $container: Domain;
-    readonly $type: 'Range';
-    max?: number;
-    min?: number;
+  readonly $container: Domain;
+  readonly $type: "Range";
+  max?: number;
+  min?: number;
 }
 
 export const Range = {
-    $type: 'Range',
-    max: 'max',
-    min: 'min'
+  $type: "Range",
+  max: "max",
+  min: "min",
 } as const;
 
 export function isRange(item: unknown): item is Range {
-    return reflection.isInstance(item, Range.$type);
+  return reflection.isInstance(item, Range.$type);
 }
 
 export interface RationaleDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'RationaleDeclaration';
-    name: string;
-    text: string;
+  readonly $container: Model;
+  readonly $type: "RationaleDeclaration";
+  name: string;
+  text: string;
 }
 
 export const RationaleDeclaration = {
-    $type: 'RationaleDeclaration',
-    name: 'name',
-    text: 'text'
+  $type: "RationaleDeclaration",
+  name: "name",
+  text: "text",
 } as const;
 
 export function isRationaleDeclaration(item: unknown): item is RationaleDeclaration {
-    return reflection.isInstance(item, RationaleDeclaration.$type);
+  return reflection.isInstance(item, RationaleDeclaration.$type);
 }
 
 export interface RecordAssertion extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordAssertion';
-    mode: RecordAssertionMode;
-    text: string;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordAssertion";
+  mode: RecordAssertionMode;
+  text: string;
 }
 
 export const RecordAssertion = {
-    $type: 'RecordAssertion',
-    mode: 'mode',
-    text: 'text'
+  $type: "RecordAssertion",
+  mode: "mode",
+  text: "text",
 } as const;
 
 export function isRecordAssertion(item: unknown): item is RecordAssertion {
-    return reflection.isInstance(item, RecordAssertion.$type);
+  return reflection.isInstance(item, RecordAssertion.$type);
 }
 
-export type RecordAssertionMode = 'assigns' | 'authorizes' | 'defines' | 'observes' | 'performs' | 'permits' | 'prohibits' | 'requires' | 'states';
+export type RecordAssertionMode =
+  | "assigns"
+  | "authorizes"
+  | "defines"
+  | "observes"
+  | "performs"
+  | "permits"
+  | "prohibits"
+  | "requires"
+  | "states";
 
 export function isRecordAssertionMode(item: unknown): item is RecordAssertionMode {
-    return item === 'requires' || item === 'permits' || item === 'prohibits' || item === 'defines' || item === 'authorizes' || item === 'assigns' || item === 'performs' || item === 'states' || item === 'observes';
+  return (
+    item === "requires" ||
+    item === "permits" ||
+    item === "prohibits" ||
+    item === "defines" ||
+    item === "authorizes" ||
+    item === "assigns" ||
+    item === "performs" ||
+    item === "states" ||
+    item === "observes"
+  );
 }
 
 export interface RecordCorpus extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordCorpus';
-    value: QualifiedName;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordCorpus";
+  value: QualifiedName;
 }
 
 export const RecordCorpus = {
-    $type: 'RecordCorpus',
-    value: 'value'
+  $type: "RecordCorpus",
+  value: "value",
 } as const;
 
 export function isRecordCorpus(item: unknown): item is RecordCorpus {
-    return reflection.isInstance(item, RecordCorpus.$type);
+  return reflection.isInstance(item, RecordCorpus.$type);
 }
 
 export interface RecordDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'RecordDeclaration';
-    family: RecordFamily;
-    members: Array<RecordMember>;
-    name: string;
+  readonly $container: Model;
+  readonly $type: "RecordDeclaration";
+  family: RecordFamily;
+  members: Array<RecordMember>;
+  name: string;
 }
 
 export const RecordDeclaration = {
-    $type: 'RecordDeclaration',
-    family: 'family',
-    members: 'members',
-    name: 'name'
+  $type: "RecordDeclaration",
+  family: "family",
+  members: "members",
+  name: "name",
 } as const;
 
 export function isRecordDeclaration(item: unknown): item is RecordDeclaration {
-    return reflection.isInstance(item, RecordDeclaration.$type);
+  return reflection.isInstance(item, RecordDeclaration.$type);
 }
 
 export interface RecordEvidence extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordEvidence';
-    references: Array<RecordEvidenceReference>;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordEvidence";
+  references: Array<RecordEvidenceReference>;
 }
 
 export const RecordEvidence = {
-    $type: 'RecordEvidence',
-    references: 'references'
+  $type: "RecordEvidence",
+  references: "references",
 } as const;
 
 export function isRecordEvidence(item: unknown): item is RecordEvidence {
-    return reflection.isInstance(item, RecordEvidence.$type);
+  return reflection.isInstance(item, RecordEvidence.$type);
 }
 
 export interface RecordEvidenceReference extends langium.AstNode {
-    readonly $container: RecordEvidence;
-    readonly $type: 'RecordEvidenceReference';
-    basis: EvidenceBasis;
-    documentHash: string;
-    documentVersion: QualifiedName;
-    locator: string;
-    passage: QualifiedName;
-    passageHash: string;
-    quote: string;
-    source: QualifiedName;
+  readonly $container: RecordEvidence;
+  readonly $type: "RecordEvidenceReference";
+  basis: EvidenceBasis;
+  documentHash: string;
+  documentVersion: QualifiedName;
+  locator: string;
+  passage: QualifiedName;
+  passageHash: string;
+  quote: string;
+  source: QualifiedName;
 }
 
 export const RecordEvidenceReference = {
-    $type: 'RecordEvidenceReference',
-    basis: 'basis',
-    documentHash: 'documentHash',
-    documentVersion: 'documentVersion',
-    locator: 'locator',
-    passage: 'passage',
-    passageHash: 'passageHash',
-    quote: 'quote',
-    source: 'source'
+  $type: "RecordEvidenceReference",
+  basis: "basis",
+  documentHash: "documentHash",
+  documentVersion: "documentVersion",
+  locator: "locator",
+  passage: "passage",
+  passageHash: "passageHash",
+  quote: "quote",
+  source: "source",
 } as const;
 
 export function isRecordEvidenceReference(item: unknown): item is RecordEvidenceReference {
-    return reflection.isInstance(item, RecordEvidenceReference.$type);
+  return reflection.isInstance(item, RecordEvidenceReference.$type);
 }
 
-export type RecordFamily = 'institutional' | 'legal_policy';
+export type RecordFamily = "institutional" | "legal_policy";
 
 export function isRecordFamily(item: unknown): item is RecordFamily {
-    return item === 'legal_policy' || item === 'institutional';
+  return item === "legal_policy" || item === "institutional";
 }
 
-export type RecordMember = InstitutionalExtension | LegalPolicyExtension | RecordAssertion | RecordCorpus | RecordEvidence | RecordProvenance | RecordReviewState | RecordScope | RecordSubjects | RecordTitle | RecordTopics | RecordUncertainty | RecordVersion;
+export type RecordMember =
+  | InstitutionalExtension
+  | LegalPolicyExtension
+  | RecordAssertion
+  | RecordCorpus
+  | RecordEvidence
+  | RecordProvenance
+  | RecordReviewState
+  | RecordScope
+  | RecordSubjects
+  | RecordTitle
+  | RecordTopics
+  | RecordUncertainty
+  | RecordVersion;
 
 export const RecordMember = {
-    $type: 'RecordMember'
+  $type: "RecordMember",
 } as const;
 
 export function isRecordMember(item: unknown): item is RecordMember {
-    return reflection.isInstance(item, RecordMember.$type);
+  return reflection.isInstance(item, RecordMember.$type);
 }
 
 export interface RecordProvenance extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordProvenance';
-    createdAt: string;
-    createdBy: string;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordProvenance";
+  createdAt: string;
+  createdBy: string;
 }
 
 export const RecordProvenance = {
-    $type: 'RecordProvenance',
-    createdAt: 'createdAt',
-    createdBy: 'createdBy'
+  $type: "RecordProvenance",
+  createdAt: "createdAt",
+  createdBy: "createdBy",
 } as const;
 
 export function isRecordProvenance(item: unknown): item is RecordProvenance {
-    return reflection.isInstance(item, RecordProvenance.$type);
+  return reflection.isInstance(item, RecordProvenance.$type);
 }
 
 export interface RecordReviewState extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordReviewState';
-    value: ReviewState;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordReviewState";
+  value: ReviewState;
 }
 
 export const RecordReviewState = {
-    $type: 'RecordReviewState',
-    value: 'value'
+  $type: "RecordReviewState",
+  value: "value",
 } as const;
 
 export function isRecordReviewState(item: unknown): item is RecordReviewState {
-    return reflection.isInstance(item, RecordReviewState.$type);
+  return reflection.isInstance(item, RecordReviewState.$type);
 }
 
 export interface RecordScope extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordScope';
-    conditions: Array<string>;
-    jurisdiction: string;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordScope";
+  conditions: Array<string>;
+  jurisdiction: string;
 }
 
 export const RecordScope = {
-    $type: 'RecordScope',
-    conditions: 'conditions',
-    jurisdiction: 'jurisdiction'
+  $type: "RecordScope",
+  conditions: "conditions",
+  jurisdiction: "jurisdiction",
 } as const;
 
 export function isRecordScope(item: unknown): item is RecordScope {
-    return reflection.isInstance(item, RecordScope.$type);
+  return reflection.isInstance(item, RecordScope.$type);
 }
 
 export interface RecordSubjects extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordSubjects';
-    values: IdentifierList;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordSubjects";
+  values: IdentifierList;
 }
 
 export const RecordSubjects = {
-    $type: 'RecordSubjects',
-    values: 'values'
+  $type: "RecordSubjects",
+  values: "values",
 } as const;
 
 export function isRecordSubjects(item: unknown): item is RecordSubjects {
-    return reflection.isInstance(item, RecordSubjects.$type);
+  return reflection.isInstance(item, RecordSubjects.$type);
 }
 
 export interface RecordTitle extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordTitle';
-    value: string;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordTitle";
+  value: string;
 }
 
 export const RecordTitle = {
-    $type: 'RecordTitle',
-    value: 'value'
+  $type: "RecordTitle",
+  value: "value",
 } as const;
 
 export function isRecordTitle(item: unknown): item is RecordTitle {
-    return reflection.isInstance(item, RecordTitle.$type);
+  return reflection.isInstance(item, RecordTitle.$type);
 }
 
 export interface RecordTopics extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordTopics';
-    values: TopicList;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordTopics";
+  values: TopicList;
 }
 
 export const RecordTopics = {
-    $type: 'RecordTopics',
-    values: 'values'
+  $type: "RecordTopics",
+  values: "values",
 } as const;
 
 export function isRecordTopics(item: unknown): item is RecordTopics {
-    return reflection.isInstance(item, RecordTopics.$type);
+  return reflection.isInstance(item, RecordTopics.$type);
 }
 
 export interface RecordUncertainty extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordUncertainty';
-    items: Array<RecordUncertaintyItem>;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordUncertainty";
+  items: Array<RecordUncertaintyItem>;
 }
 
 export const RecordUncertainty = {
-    $type: 'RecordUncertainty',
-    items: 'items'
+  $type: "RecordUncertainty",
+  items: "items",
 } as const;
 
 export function isRecordUncertainty(item: unknown): item is RecordUncertainty {
-    return reflection.isInstance(item, RecordUncertainty.$type);
+  return reflection.isInstance(item, RecordUncertainty.$type);
 }
 
 export interface RecordUncertaintyItem extends langium.AstNode {
-    readonly $container: RecordUncertainty;
-    readonly $type: 'RecordUncertaintyItem';
-    description: string;
-    kind: UncertaintyType;
+  readonly $container: RecordUncertainty;
+  readonly $type: "RecordUncertaintyItem";
+  description: string;
+  kind: UncertaintyType;
 }
 
 export const RecordUncertaintyItem = {
-    $type: 'RecordUncertaintyItem',
-    description: 'description',
-    kind: 'kind'
+  $type: "RecordUncertaintyItem",
+  description: "description",
+  kind: "kind",
 } as const;
 
 export function isRecordUncertaintyItem(item: unknown): item is RecordUncertaintyItem {
-    return reflection.isInstance(item, RecordUncertaintyItem.$type);
+  return reflection.isInstance(item, RecordUncertaintyItem.$type);
 }
 
 export interface RecordVersion extends langium.AstNode {
-    readonly $container: RecordDeclaration;
-    readonly $type: 'RecordVersion';
-    value: string;
+  readonly $container: RecordDeclaration;
+  readonly $type: "RecordVersion";
+  value: string;
 }
 
 export const RecordVersion = {
-    $type: 'RecordVersion',
-    value: 'value'
+  $type: "RecordVersion",
+  value: "value",
 } as const;
 
 export function isRecordVersion(item: unknown): item is RecordVersion {
-    return reflection.isInstance(item, RecordVersion.$type);
+  return reflection.isInstance(item, RecordVersion.$type);
 }
 
 export interface ReferenceExpression extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'ReferenceExpression';
-    path: QualifiedName;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "ReferenceExpression";
+  path: QualifiedName;
 }
 
 export const ReferenceExpression = {
-    $type: 'ReferenceExpression',
-    path: 'path'
+  $type: "ReferenceExpression",
+  path: "path",
 } as const;
 
 export function isReferenceExpression(item: unknown): item is ReferenceExpression {
-    return reflection.isInstance(item, ReferenceExpression.$type);
+  return reflection.isInstance(item, ReferenceExpression.$type);
 }
 
 export interface RelatedJudgments extends langium.AstNode {
-    readonly $container: JudgmentDeclaration;
-    readonly $type: 'RelatedJudgments';
-    values: IdentifierList;
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "RelatedJudgments";
+  values: IdentifierList;
 }
 
 export const RelatedJudgments = {
-    $type: 'RelatedJudgments',
-    values: 'values'
+  $type: "RelatedJudgments",
+  values: "values",
 } as const;
 
 export function isRelatedJudgments(item: unknown): item is RelatedJudgments {
-    return reflection.isInstance(item, RelatedJudgments.$type);
+  return reflection.isInstance(item, RelatedJudgments.$type);
 }
 
 export interface RelatedProvisionsProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'RelatedProvisionsProperty';
-    values: IdentifierList;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "RelatedProvisionsProperty";
+  values: IdentifierList;
 }
 
 export const RelatedProvisionsProperty = {
-    $type: 'RelatedProvisionsProperty',
-    values: 'values'
+  $type: "RelatedProvisionsProperty",
+  values: "values",
 } as const;
 
 export function isRelatedProvisionsProperty(item: unknown): item is RelatedProvisionsProperty {
-    return reflection.isInstance(item, RelatedProvisionsProperty.$type);
+  return reflection.isInstance(item, RelatedProvisionsProperty.$type);
 }
 
 export interface RelationshipList extends langium.AstNode {
-    readonly $container: InstitutionalRelationshipsProperty | OversightRelationshipsProperty;
-    readonly $type: 'RelationshipList';
-    relationships: Array<InstitutionalRelationship>;
+  readonly $container: InstitutionalRelationshipsProperty | OversightRelationshipsProperty;
+  readonly $type: "RelationshipList";
+  relationships: Array<InstitutionalRelationship>;
 }
 
 export const RelationshipList = {
-    $type: 'RelationshipList',
-    relationships: 'relationships'
+  $type: "RelationshipList",
+  relationships: "relationships",
 } as const;
 
 export function isRelationshipList(item: unknown): item is RelationshipList {
-    return reflection.isInstance(item, RelationshipList.$type);
+  return reflection.isInstance(item, RelationshipList.$type);
 }
 
 export interface ResponsibleAuthoritiesProperty extends langium.AstNode {
-    readonly $container: LegalPolicyExtension;
-    readonly $type: 'ResponsibleAuthoritiesProperty';
-    values: IdentifierList;
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "ResponsibleAuthoritiesProperty";
+  values: IdentifierList;
 }
 
 export const ResponsibleAuthoritiesProperty = {
-    $type: 'ResponsibleAuthoritiesProperty',
-    values: 'values'
+  $type: "ResponsibleAuthoritiesProperty",
+  values: "values",
 } as const;
 
-export function isResponsibleAuthoritiesProperty(item: unknown): item is ResponsibleAuthoritiesProperty {
-    return reflection.isInstance(item, ResponsibleAuthoritiesProperty.$type);
+export function isResponsibleAuthoritiesProperty(
+  item: unknown,
+): item is ResponsibleAuthoritiesProperty {
+  return reflection.isInstance(item, ResponsibleAuthoritiesProperty.$type);
 }
 
-export type ReviewState = 'approved' | 'draft' | 'reviewed' | 'superseded' | 'withdrawn';
+export type ReviewState = "approved" | "draft" | "reviewed" | "superseded" | "withdrawn";
 
 export function isReviewState(item: unknown): item is ReviewState {
-    return item === 'draft' || item === 'reviewed' || item === 'approved' || item === 'superseded' || item === 'withdrawn';
+  return (
+    item === "draft" ||
+    item === "reviewed" ||
+    item === "approved" ||
+    item === "superseded" ||
+    item === "withdrawn"
+  );
 }
 
 export interface Scenario extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'Scenario';
-    commitment: QualifiedName;
-    expect: Expect;
-    givens: Array<Given>;
-    name: string;
+  readonly $container: Model;
+  readonly $type: "Scenario";
+  commitment: QualifiedName;
+  expect: Expect;
+  givens: Array<Given>;
+  name: string;
 }
 
 export const Scenario = {
-    $type: 'Scenario',
-    commitment: 'commitment',
-    expect: 'expect',
-    givens: 'givens',
-    name: 'name'
+  $type: "Scenario",
+  commitment: "commitment",
+  expect: "expect",
+  givens: "givens",
+  name: "name",
 } as const;
 
 export function isScenario(item: unknown): item is Scenario {
-    return reflection.isInstance(item, Scenario.$type);
+  return reflection.isInstance(item, Scenario.$type);
 }
 
 export interface ScoreBlock extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'ScoreBlock';
-    otherwise: OtherwiseScore;
-    rules: Array<ScoreRule>;
+  readonly $container: Commitment;
+  readonly $type: "ScoreBlock";
+  otherwise: OtherwiseScore;
+  rules: Array<ScoreRule>;
 }
 
 export const ScoreBlock = {
-    $type: 'ScoreBlock',
-    otherwise: 'otherwise',
-    rules: 'rules'
+  $type: "ScoreBlock",
+  otherwise: "otherwise",
+  rules: "rules",
 } as const;
 
 export function isScoreBlock(item: unknown): item is ScoreBlock {
-    return reflection.isInstance(item, ScoreBlock.$type);
+  return reflection.isInstance(item, ScoreBlock.$type);
 }
 
 export interface ScoreRule extends langium.AstNode {
-    readonly $container: ScoreBlock;
-    readonly $type: 'ScoreRule';
-    intentionalOverlap: boolean;
-    name?: NamePart;
-    priority: number;
-    rationale?: string;
-    result: string;
-    when: Expression;
+  readonly $container: ScoreBlock;
+  readonly $type: "ScoreRule";
+  intentionalOverlap: boolean;
+  name?: NamePart;
+  priority: number;
+  rationale?: string;
+  result: string;
+  when: Expression;
 }
 
 export const ScoreRule = {
-    $type: 'ScoreRule',
-    intentionalOverlap: 'intentionalOverlap',
-    name: 'name',
-    priority: 'priority',
-    rationale: 'rationale',
-    result: 'result',
-    when: 'when'
+  $type: "ScoreRule",
+  intentionalOverlap: "intentionalOverlap",
+  name: "name",
+  priority: "priority",
+  rationale: "rationale",
+  result: "result",
+  when: "when",
 } as const;
 
 export function isScoreRule(item: unknown): item is ScoreRule {
-    return reflection.isInstance(item, ScoreRule.$type);
+  return reflection.isInstance(item, ScoreRule.$type);
 }
 
 export interface SetDeclaration extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'SetDeclaration';
-    name: string;
-    type: TypeRef;
-    value: Expression;
+  readonly $container: Model;
+  readonly $type: "SetDeclaration";
+  name: string;
+  type: TypeRef;
+  value: Expression;
 }
 
 export const SetDeclaration = {
-    $type: 'SetDeclaration',
-    name: 'name',
-    type: 'type',
-    value: 'value'
+  $type: "SetDeclaration",
+  name: "name",
+  type: "type",
+  value: "value",
 } as const;
 
 export function isSetDeclaration(item: unknown): item is SetDeclaration {
-    return reflection.isInstance(item, SetDeclaration.$type);
+  return reflection.isInstance(item, SetDeclaration.$type);
 }
 
 export interface SetLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'SetLiteral';
-    elements: Array<Expression>;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "SetLiteral";
+  elements: Array<Expression>;
 }
 
 export const SetLiteral = {
-    $type: 'SetLiteral',
-    elements: 'elements'
+  $type: "SetLiteral",
+  elements: "elements",
 } as const;
 
 export function isSetLiteral(item: unknown): item is SetLiteral {
-    return reflection.isInstance(item, SetLiteral.$type);
+  return reflection.isInstance(item, SetLiteral.$type);
 }
 
 export interface Source extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'Source';
-    name: string;
-    properties: Array<SourceProperty>;
+  readonly $container: Model;
+  readonly $type: "Source";
+  name: string;
+  properties: Array<SourceProperty>;
 }
 
 export const Source = {
-    $type: 'Source',
-    name: 'name',
-    properties: 'properties'
+  $type: "Source",
+  name: "name",
+  properties: "properties",
 } as const;
 
 export function isSource(item: unknown): item is Source {
-    return reflection.isInstance(item, Source.$type);
+  return reflection.isInstance(item, Source.$type);
 }
 
 export interface SourceMediaType extends langium.AstNode {
-    readonly $container: Source;
-    readonly $type: 'SourceMediaType';
-    value: string;
+  readonly $container: Source;
+  readonly $type: "SourceMediaType";
+  value: string;
 }
 
 export const SourceMediaType = {
-    $type: 'SourceMediaType',
-    value: 'value'
+  $type: "SourceMediaType",
+  value: "value",
 } as const;
 
 export function isSourceMediaType(item: unknown): item is SourceMediaType {
-    return reflection.isInstance(item, SourceMediaType.$type);
+  return reflection.isInstance(item, SourceMediaType.$type);
+}
+
+export interface SourceMetadataProperty extends langium.AstNode {
+  readonly $container: LegalPolicyExtension;
+  readonly $type: "SourceMetadataProperty";
+  chapter?: string;
+  datasetName: string;
+  datasetSnapshot: string;
+  jurisdiction: string;
+  lastAmendedYear?: number;
+  originalText: string;
+  rowHash: string;
+  sectionNumber?: string;
+  sectionTitle?: string;
+  sourceRowIdentifier: string;
+  sourceUrl?: string;
+  title: string;
+}
+
+export const SourceMetadataProperty = {
+  $type: "SourceMetadataProperty",
+  chapter: "chapter",
+  datasetName: "datasetName",
+  datasetSnapshot: "datasetSnapshot",
+  jurisdiction: "jurisdiction",
+  lastAmendedYear: "lastAmendedYear",
+  originalText: "originalText",
+  rowHash: "rowHash",
+  sectionNumber: "sectionNumber",
+  sectionTitle: "sectionTitle",
+  sourceRowIdentifier: "sourceRowIdentifier",
+  sourceUrl: "sourceUrl",
+  title: "title",
+} as const;
+
+export function isSourceMetadataProperty(item: unknown): item is SourceMetadataProperty {
+  return reflection.isInstance(item, SourceMetadataProperty.$type);
 }
 
 export type SourceProperty = SourceMediaType | SourceRetrieved | SourceSha | SourceUri;
 
 export const SourceProperty = {
-    $type: 'SourceProperty'
+  $type: "SourceProperty",
 } as const;
 
 export function isSourceProperty(item: unknown): item is SourceProperty {
-    return reflection.isInstance(item, SourceProperty.$type);
+  return reflection.isInstance(item, SourceProperty.$type);
 }
 
 export interface SourceRetrieved extends langium.AstNode {
-    readonly $container: Source;
-    readonly $type: 'SourceRetrieved';
-    value: string;
+  readonly $container: Source;
+  readonly $type: "SourceRetrieved";
+  value: string;
 }
 
 export const SourceRetrieved = {
-    $type: 'SourceRetrieved',
-    value: 'value'
+  $type: "SourceRetrieved",
+  value: "value",
 } as const;
 
 export function isSourceRetrieved(item: unknown): item is SourceRetrieved {
-    return reflection.isInstance(item, SourceRetrieved.$type);
+  return reflection.isInstance(item, SourceRetrieved.$type);
 }
 
 export interface SourceSha extends langium.AstNode {
-    readonly $container: Source;
-    readonly $type: 'SourceSha';
-    value: string;
+  readonly $container: Source;
+  readonly $type: "SourceSha";
+  value: string;
 }
 
 export const SourceSha = {
-    $type: 'SourceSha',
-    value: 'value'
+  $type: "SourceSha",
+  value: "value",
 } as const;
 
 export function isSourceSha(item: unknown): item is SourceSha {
-    return reflection.isInstance(item, SourceSha.$type);
+  return reflection.isInstance(item, SourceSha.$type);
 }
 
 export interface SourceUri extends langium.AstNode {
-    readonly $container: Source;
-    readonly $type: 'SourceUri';
-    value: string;
+  readonly $container: Source;
+  readonly $type: "SourceUri";
+  value: string;
 }
 
 export const SourceUri = {
-    $type: 'SourceUri',
-    value: 'value'
+  $type: "SourceUri",
+  value: "value",
 } as const;
 
 export function isSourceUri(item: unknown): item is SourceUri {
-    return reflection.isInstance(item, SourceUri.$type);
+  return reflection.isInstance(item, SourceUri.$type);
 }
 
 export interface StringList extends langium.AstNode {
-    readonly $type: 'EmptyStringList' | 'StringList';
-    values: Array<string>;
+  readonly $type: "EmptyStringList" | "StringList";
+  values: Array<string>;
 }
 
 export const StringList = {
-    $type: 'StringList',
-    values: 'values'
+  $type: "StringList",
+  values: "values",
 } as const;
 
 export function isStringList(item: unknown): item is StringList {
-    return reflection.isInstance(item, StringList.$type);
+  return reflection.isInstance(item, StringList.$type);
 }
 
 export interface StringLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'StringLiteral';
-    value: string;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "StringLiteral";
+  value: string;
 }
 
 export const StringLiteral = {
-    $type: 'StringLiteral',
-    value: 'value'
+  $type: "StringLiteral",
+  value: "value",
 } as const;
 
 export function isStringLiteral(item: unknown): item is StringLiteral {
-    return reflection.isInstance(item, StringLiteral.$type);
+  return reflection.isInstance(item, StringLiteral.$type);
 }
 
 export interface Subjects extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Subjects';
-    value: Expression;
+  readonly $container: Commitment;
+  readonly $type: "Subjects";
+  value: Expression;
 }
 
 export const Subjects = {
-    $type: 'Subjects',
-    value: 'value'
+  $type: "Subjects",
+  value: "value",
 } as const;
 
 export function isSubjects(item: unknown): item is Subjects {
-    return reflection.isInstance(item, Subjects.$type);
+  return reflection.isInstance(item, Subjects.$type);
 }
 
 export interface SubunitIdsProperty extends langium.AstNode {
-    readonly $container: InstitutionalExtension;
-    readonly $type: 'SubunitIdsProperty';
-    values: IdentifierList;
+  readonly $container: InstitutionalExtension;
+  readonly $type: "SubunitIdsProperty";
+  values: IdentifierList;
 }
 
 export const SubunitIdsProperty = {
-    $type: 'SubunitIdsProperty',
-    values: 'values'
+  $type: "SubunitIdsProperty",
+  values: "values",
 } as const;
 
 export function isSubunitIdsProperty(item: unknown): item is SubunitIdsProperty {
-    return reflection.isInstance(item, SubunitIdsProperty.$type);
+  return reflection.isInstance(item, SubunitIdsProperty.$type);
 }
 
 export interface Summit extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Summit';
-    value: QualifiedName;
+  readonly $container: Commitment;
+  readonly $type: "Summit";
+  value: QualifiedName;
 }
 
 export const Summit = {
-    $type: 'Summit',
-    value: 'value'
+  $type: "Summit",
+  value: "value",
 } as const;
 
 export function isSummit(item: unknown): item is Summit {
-    return reflection.isInstance(item, Summit.$type);
+  return reflection.isInstance(item, Summit.$type);
 }
 
 export interface Title extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Title';
-    value: string;
+  readonly $container: Commitment;
+  readonly $type: "Title";
+  value: string;
 }
 
 export const Title = {
-    $type: 'Title',
-    value: 'value'
+  $type: "Title",
+  value: "value",
 } as const;
 
 export function isTitle(item: unknown): item is Title {
-    return reflection.isInstance(item, Title.$type);
+  return reflection.isInstance(item, Title.$type);
 }
 
 export interface TopicList extends langium.AstNode {
-    readonly $type: 'EmptyTopicList' | 'TopicList';
-    values: Array<QualifiedName | string>;
+  readonly $type: "EmptyTopicList" | "TopicList";
+  values: Array<QualifiedName | string>;
 }
 
 export const TopicList = {
-    $type: 'TopicList',
-    values: 'values'
+  $type: "TopicList",
+  values: "values",
 } as const;
 
 export function isTopicList(item: unknown): item is TopicList {
-    return reflection.isInstance(item, TopicList.$type);
+  return reflection.isInstance(item, TopicList.$type);
 }
 
 export interface TruthLiteral extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'TruthLiteral';
-    value: 'contested' | 'unknown';
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "TruthLiteral";
+  value: "contested" | "unknown";
 }
 
 export const TruthLiteral = {
-    $type: 'TruthLiteral',
-    value: 'value'
+  $type: "TruthLiteral",
+  value: "value",
 } as const;
 
 export function isTruthLiteral(item: unknown): item is TruthLiteral {
-    return reflection.isInstance(item, TruthLiteral.$type);
+  return reflection.isInstance(item, TruthLiteral.$type);
 }
 
-export type TruthValue = 'contested' | 'false' | 'true' | 'unknown';
+export type TruthValue = "contested" | "false" | "true" | "unknown";
 
 export function isTruthValue(item: unknown): item is TruthValue {
-    return item === 'true' || item === 'false' || item === 'unknown' || item === 'contested';
+  return item === "true" || item === "false" || item === "unknown" || item === "contested";
 }
 
 export type TypeRef = string;
 
 export function isTypeRef(item: unknown): item is TypeRef {
-    return typeof item === 'string';
+  return typeof item === "string";
 }
 
 export interface UnaryExpression extends langium.AstNode {
-    readonly $container: AnchorRule | Assertion | BinaryExpression | CallExpression | ClassificationRule | DeriveRule | Domain | Given | JudgmentValue | Parameter | ProfileSet | QueryExpression | ScoreRule | SetDeclaration | SetLiteral | Subjects | UnaryExpression | Variable;
-    readonly $type: 'UnaryExpression';
-    op: 'is_contested' | 'is_known' | 'nonempty' | 'not';
-    operand: Expression;
+  readonly $container:
+    | AnchorRule
+    | Assertion
+    | BinaryExpression
+    | CallExpression
+    | ClassificationRule
+    | DeriveRule
+    | Domain
+    | Given
+    | JudgmentValue
+    | Parameter
+    | ProfileSet
+    | QueryExpression
+    | ScoreRule
+    | SetDeclaration
+    | SetLiteral
+    | Subjects
+    | UnaryExpression
+    | Variable;
+  readonly $type: "UnaryExpression";
+  op: "is_contested" | "is_known" | "nonempty" | "not";
+  operand: Expression;
 }
 
 export const UnaryExpression = {
-    $type: 'UnaryExpression',
-    op: 'op',
-    operand: 'operand'
+  $type: "UnaryExpression",
+  op: "op",
+  operand: "operand",
 } as const;
 
 export function isUnaryExpression(item: unknown): item is UnaryExpression {
-    return reflection.isInstance(item, UnaryExpression.$type);
+  return reflection.isInstance(item, UnaryExpression.$type);
 }
 
-export type UncertaintyType = 'ambiguous' | 'contested' | 'incomplete_evidence' | 'unknown';
+export type UncertaintyType = "ambiguous" | "contested" | "incomplete_evidence" | "unknown";
 
 export function isUncertaintyType(item: unknown): item is UncertaintyType {
-    return item === 'unknown' || item === 'contested' || item === 'ambiguous' || item === 'incomplete_evidence';
+  return (
+    item === "unknown" ||
+    item === "contested" ||
+    item === "ambiguous" ||
+    item === "incomplete_evidence"
+  );
 }
 
 export interface UnknownPolicy extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'UnknownPolicy';
-    value: 'explicit_rules_only' | 'propagate' | 'treat_false' | 'treat_true';
+  readonly $container: Commitment;
+  readonly $type: "UnknownPolicy";
+  value: "explicit_rules_only" | "propagate" | "treat_false" | "treat_true";
 }
 
 export const UnknownPolicy = {
-    $type: 'UnknownPolicy',
-    value: 'value'
+  $type: "UnknownPolicy",
+  value: "value",
 } as const;
 
 export function isUnknownPolicy(item: unknown): item is UnknownPolicy {
-    return reflection.isInstance(item, UnknownPolicy.$type);
+  return reflection.isInstance(item, UnknownPolicy.$type);
 }
 
 export interface Variable extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Variable';
-    expression: Expression;
-    name: string;
-    type: TypeRef;
+  readonly $container: Commitment;
+  readonly $type: "Variable";
+  expression: Expression;
+  name: string;
+  type: TypeRef;
 }
 
 export const Variable = {
-    $type: 'Variable',
-    expression: 'expression',
-    name: 'name',
-    type: 'type'
+  $type: "Variable",
+  expression: "expression",
+  name: "name",
+  type: "type",
 } as const;
 
 export function isVariable(item: unknown): item is Variable {
-    return reflection.isInstance(item, Variable.$type);
+  return reflection.isInstance(item, Variable.$type);
 }
 
 export interface Window extends langium.AstNode {
-    readonly $container: Commitment;
-    readonly $type: 'Window';
-    end: string;
-    endBracket: ')' | ']';
-    start: string;
-    startBracket: '(' | '[';
+  readonly $container: Commitment;
+  readonly $type: "Window";
+  end: string;
+  endBracket: ")" | "]";
+  start: string;
+  startBracket: "(" | "[";
 }
 
 export const Window = {
-    $type: 'Window',
-    end: 'end',
-    endBracket: 'endBracket',
-    start: 'start',
-    startBracket: 'startBracket'
+  $type: "Window",
+  end: "end",
+  endBracket: "endBracket",
+  start: "start",
+  startBracket: "startBracket",
 } as const;
 
 export function isWindow(item: unknown): item is Window {
-    return reflection.isInstance(item, Window.$type);
+  return reflection.isInstance(item, Window.$type);
 }
 
 export type WritAstType = {
-    ActionIdentity: ActionIdentity
-    Adopted: Adopted
-    AdoptionStatusProperty: AdoptionStatusProperty
-    AnchorRule: AnchorRule
-    ApplicabilityStatusProperty: ApplicabilityStatusProperty
-    ApplicablePeriodProperty: ApplicablePeriodProperty
-    Assertion: Assertion
-    Authority: Authority
-    AuthoritySourcesProperty: AuthoritySourcesProperty
-    BinaryExpression: BinaryExpression
-    BooleanLiteral: BooleanLiteral
-    CallExpression: CallExpression
-    CitationAnchor: CitationAnchor
-    Classification: Classification
-    ClassificationRule: ClassificationRule
-    Commitment: Commitment
-    CommitmentMember: CommitmentMember
-    CommitmentText: CommitmentText
-    CompliancePathwayProperty: CompliancePathwayProperty
-    ConceptDeclaration: ConceptDeclaration
-    ConceptProperty: ConceptProperty
-    DateLiteral: DateLiteral
-    DecisionRightsProperty: DecisionRightsProperty
-    Declaration: Declaration
-    DeriveRule: DeriveRule
-    Dimension: Dimension
-    DomAnchor: DomAnchor
-    Domain: Domain
-    EffectiveFromProperty: EffectiveFromProperty
-    EffectiveUntilProperty: EffectiveUntilProperty
-    EmptyStringList: EmptyStringList
-    EmptyTopicList: EmptyTopicList
-    EnforcementStatusProperty: EnforcementStatusProperty
-    EnumDeclaration: EnumDeclaration
-    EvidencePolicy: EvidencePolicy
-    ExceptionsProperty: ExceptionsProperty
-    Expect: Expect
-    Expression: Expression
-    ForceProperty: ForceProperty
-    FunctionList: FunctionList
-    FunctionsProperty: FunctionsProperty
-    Given: Given
-    Goal: Goal
-    IdentifierList: IdentifierList
-    Import: Import
-    InstitutionIdProperty: InstitutionIdProperty
-    InstitutionTypeProperty: InstitutionTypeProperty
-    InstitutionalExtension: InstitutionalExtension
-    InstitutionalJurisdictionsProperty: InstitutionalJurisdictionsProperty
-    InstitutionalProperty: InstitutionalProperty
-    InstitutionalRelationship: InstitutionalRelationship
-    InstitutionalRelationshipsProperty: InstitutionalRelationshipsProperty
-    InstrumentTypeProperty: InstrumentTypeProperty
-    IssueAreas: IssueAreas
-    JsonPointerAnchor: JsonPointerAnchor
-    JudgmentCreatedAt: JudgmentCreatedAt
-    JudgmentDeclaration: JudgmentDeclaration
-    JudgmentEvidenceRefs: JudgmentEvidenceRefs
-    JudgmentFamilyContext: JudgmentFamilyContext
-    JudgmentMember: JudgmentMember
-    JudgmentRationale: JudgmentRationale
-    JudgmentReviewer: JudgmentReviewer
-    JudgmentStatusProperty: JudgmentStatusProperty
-    JudgmentSupersedes: JudgmentSupersedes
-    JudgmentTarget: JudgmentTarget
-    JudgmentTypeProperty: JudgmentTypeProperty
-    JudgmentValue: JudgmentValue
-    JurisdictionLevelProperty: JurisdictionLevelProperty
-    JurisdictionsProperty: JurisdictionsProperty
-    LegalPolicyExtension: LegalPolicyExtension
-    LegalPolicyProperty: LegalPolicyProperty
-    LinesAnchor: LinesAnchor
-    MandateProperty: MandateProperty
-    Measure: Measure
-    MeasureComponent: MeasureComponent
-    Model: Model
-    NumberLiteral: NumberLiteral
-    OfficialCitationProperty: OfficialCitationProperty
-    OperationalCapacityProperty: OperationalCapacityProperty
-    OtherwiseClass: OtherwiseClass
-    OtherwiseScore: OtherwiseScore
-    OversightRelationshipsProperty: OversightRelationshipsProperty
-    PageAnchor: PageAnchor
-    PagesAnchor: PagesAnchor
-    Parameter: Parameter
-    ParentInstitutionProperty: ParentInstitutionProperty
-    ParentInstrumentProperty: ParentInstrumentProperty
-    PartnerClass: PartnerClass
-    Predicate: Predicate
-    PredicateParam: PredicateParam
-    Profile: Profile
-    ProfileMember: ProfileMember
-    ProfileSet: ProfileSet
-    ProfileWaive: ProfileWaive
-    ProvisionIdentifierProperty: ProvisionIdentifierProperty
-    QueryExpression: QueryExpression
-    QuoteAnchor: QuoteAnchor
-    Range: Range
-    RationaleDeclaration: RationaleDeclaration
-    RecordAssertion: RecordAssertion
-    RecordCorpus: RecordCorpus
-    RecordDeclaration: RecordDeclaration
-    RecordEvidence: RecordEvidence
-    RecordEvidenceReference: RecordEvidenceReference
-    RecordMember: RecordMember
-    RecordProvenance: RecordProvenance
-    RecordReviewState: RecordReviewState
-    RecordScope: RecordScope
-    RecordSubjects: RecordSubjects
-    RecordTitle: RecordTitle
-    RecordTopics: RecordTopics
-    RecordUncertainty: RecordUncertainty
-    RecordUncertaintyItem: RecordUncertaintyItem
-    RecordVersion: RecordVersion
-    ReferenceExpression: ReferenceExpression
-    RelatedJudgments: RelatedJudgments
-    RelatedProvisionsProperty: RelatedProvisionsProperty
-    RelationshipList: RelationshipList
-    ResponsibleAuthoritiesProperty: ResponsibleAuthoritiesProperty
-    Scenario: Scenario
-    ScoreBlock: ScoreBlock
-    ScoreRule: ScoreRule
-    SetDeclaration: SetDeclaration
-    SetLiteral: SetLiteral
-    Source: Source
-    SourceMediaType: SourceMediaType
-    SourceProperty: SourceProperty
-    SourceRetrieved: SourceRetrieved
-    SourceSha: SourceSha
-    SourceUri: SourceUri
-    StringList: StringList
-    StringLiteral: StringLiteral
-    Subjects: Subjects
-    SubunitIdsProperty: SubunitIdsProperty
-    Summit: Summit
-    Title: Title
-    TopicList: TopicList
-    TruthLiteral: TruthLiteral
-    UnaryExpression: UnaryExpression
-    UnknownPolicy: UnknownPolicy
-    Variable: Variable
-    Window: Window
-}
+  ActionIdentity: ActionIdentity;
+  Adopted: Adopted;
+  AdoptionStatusProperty: AdoptionStatusProperty;
+  AnchorRule: AnchorRule;
+  ApplicabilityStatusProperty: ApplicabilityStatusProperty;
+  ApplicablePeriodProperty: ApplicablePeriodProperty;
+  Assertion: Assertion;
+  Authority: Authority;
+  AuthoritySourcesProperty: AuthoritySourcesProperty;
+  BinaryExpression: BinaryExpression;
+  BooleanLiteral: BooleanLiteral;
+  CallExpression: CallExpression;
+  CitationAnchor: CitationAnchor;
+  Classification: Classification;
+  ClassificationRule: ClassificationRule;
+  Commitment: Commitment;
+  CommitmentMember: CommitmentMember;
+  CommitmentText: CommitmentText;
+  CompliancePathwayProperty: CompliancePathwayProperty;
+  ConceptDeclaration: ConceptDeclaration;
+  ConceptProperty: ConceptProperty;
+  DateLiteral: DateLiteral;
+  DecisionRightsProperty: DecisionRightsProperty;
+  Declaration: Declaration;
+  DeriveRule: DeriveRule;
+  Dimension: Dimension;
+  DomAnchor: DomAnchor;
+  Domain: Domain;
+  EffectiveFromProperty: EffectiveFromProperty;
+  EffectiveUntilProperty: EffectiveUntilProperty;
+  EmptyStringList: EmptyStringList;
+  EmptyTopicList: EmptyTopicList;
+  EnforcementStatusProperty: EnforcementStatusProperty;
+  EnumDeclaration: EnumDeclaration;
+  EvidencePolicy: EvidencePolicy;
+  ExceptionsProperty: ExceptionsProperty;
+  Expect: Expect;
+  Expression: Expression;
+  ForceProperty: ForceProperty;
+  FunctionList: FunctionList;
+  FunctionsProperty: FunctionsProperty;
+  Given: Given;
+  Goal: Goal;
+  IdentifierList: IdentifierList;
+  Import: Import;
+  InstitutionIdProperty: InstitutionIdProperty;
+  InstitutionTypeProperty: InstitutionTypeProperty;
+  InstitutionalExtension: InstitutionalExtension;
+  InstitutionalJurisdictionsProperty: InstitutionalJurisdictionsProperty;
+  InstitutionalProperty: InstitutionalProperty;
+  InstitutionalRelationship: InstitutionalRelationship;
+  InstitutionalRelationshipsProperty: InstitutionalRelationshipsProperty;
+  InstrumentTypeProperty: InstrumentTypeProperty;
+  IssueAreas: IssueAreas;
+  JsonPointerAnchor: JsonPointerAnchor;
+  JudgmentCreatedAt: JudgmentCreatedAt;
+  JudgmentDeclaration: JudgmentDeclaration;
+  JudgmentEvidenceRefs: JudgmentEvidenceRefs;
+  JudgmentFamilyContext: JudgmentFamilyContext;
+  JudgmentMember: JudgmentMember;
+  JudgmentRationale: JudgmentRationale;
+  JudgmentReviewer: JudgmentReviewer;
+  JudgmentStatusProperty: JudgmentStatusProperty;
+  JudgmentSupersedes: JudgmentSupersedes;
+  JudgmentTarget: JudgmentTarget;
+  JudgmentTypeProperty: JudgmentTypeProperty;
+  JudgmentValue: JudgmentValue;
+  JurisdictionLevelProperty: JurisdictionLevelProperty;
+  JurisdictionsProperty: JurisdictionsProperty;
+  LegalPolicyExtension: LegalPolicyExtension;
+  LegalPolicyProperty: LegalPolicyProperty;
+  LinesAnchor: LinesAnchor;
+  MandateProperty: MandateProperty;
+  Measure: Measure;
+  MeasureComponent: MeasureComponent;
+  Model: Model;
+  NumberLiteral: NumberLiteral;
+  OfficialCitationProperty: OfficialCitationProperty;
+  OperationalCapacityProperty: OperationalCapacityProperty;
+  OtherwiseClass: OtherwiseClass;
+  OtherwiseScore: OtherwiseScore;
+  OversightRelationshipsProperty: OversightRelationshipsProperty;
+  PageAnchor: PageAnchor;
+  PagesAnchor: PagesAnchor;
+  Parameter: Parameter;
+  ParentInstitutionProperty: ParentInstitutionProperty;
+  ParentInstrumentProperty: ParentInstrumentProperty;
+  PartnerClass: PartnerClass;
+  Predicate: Predicate;
+  PredicateParam: PredicateParam;
+  Profile: Profile;
+  ProfileMember: ProfileMember;
+  ProfileSet: ProfileSet;
+  ProfileWaive: ProfileWaive;
+  ProvisionIdentifierProperty: ProvisionIdentifierProperty;
+  QueryExpression: QueryExpression;
+  QuoteAnchor: QuoteAnchor;
+  Range: Range;
+  RationaleDeclaration: RationaleDeclaration;
+  RecordAssertion: RecordAssertion;
+  RecordCorpus: RecordCorpus;
+  RecordDeclaration: RecordDeclaration;
+  RecordEvidence: RecordEvidence;
+  RecordEvidenceReference: RecordEvidenceReference;
+  RecordMember: RecordMember;
+  RecordProvenance: RecordProvenance;
+  RecordReviewState: RecordReviewState;
+  RecordScope: RecordScope;
+  RecordSubjects: RecordSubjects;
+  RecordTitle: RecordTitle;
+  RecordTopics: RecordTopics;
+  RecordUncertainty: RecordUncertainty;
+  RecordUncertaintyItem: RecordUncertaintyItem;
+  RecordVersion: RecordVersion;
+  ReferenceExpression: ReferenceExpression;
+  RelatedJudgments: RelatedJudgments;
+  RelatedProvisionsProperty: RelatedProvisionsProperty;
+  RelationshipList: RelationshipList;
+  ResponsibleAuthoritiesProperty: ResponsibleAuthoritiesProperty;
+  Scenario: Scenario;
+  ScoreBlock: ScoreBlock;
+  ScoreRule: ScoreRule;
+  SetDeclaration: SetDeclaration;
+  SetLiteral: SetLiteral;
+  Source: Source;
+  SourceMediaType: SourceMediaType;
+  SourceMetadataProperty: SourceMetadataProperty;
+  SourceProperty: SourceProperty;
+  SourceRetrieved: SourceRetrieved;
+  SourceSha: SourceSha;
+  SourceUri: SourceUri;
+  StringList: StringList;
+  StringLiteral: StringLiteral;
+  Subjects: Subjects;
+  SubunitIdsProperty: SubunitIdsProperty;
+  Summit: Summit;
+  Title: Title;
+  TopicList: TopicList;
+  TruthLiteral: TruthLiteral;
+  UnaryExpression: UnaryExpression;
+  UnknownPolicy: UnknownPolicy;
+  Variable: Variable;
+  Window: Window;
+};
 
 export class WritAstReflection extends langium.AbstractAstReflection {
-    override readonly types = {
-        ActionIdentity: {
-            name: ActionIdentity.$type,
-            properties: {
-                keyPaths: {
-                    name: ActionIdentity.keyPaths,
-                    defaultValue: []
-                },
-                policy: {
-                    name: ActionIdentity.policy
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Adopted: {
-            name: Adopted.$type,
-            properties: {
-                value: {
-                    name: Adopted.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        AdoptionStatusProperty: {
-            name: AdoptionStatusProperty.$type,
-            properties: {
-                value: {
-                    name: AdoptionStatusProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        AnchorRule: {
-            name: AnchorRule.$type,
-            properties: {
-                rationale: {
-                    name: AnchorRule.rationale,
-                    optional: true
-                },
-                value: {
-                    name: AnchorRule.value
-                },
-                when: {
-                    name: AnchorRule.when
-                }
-            },
-            superTypes: []
-        },
-        ApplicabilityStatusProperty: {
-            name: ApplicabilityStatusProperty.$type,
-            properties: {
-                value: {
-                    name: ApplicabilityStatusProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        ApplicablePeriodProperty: {
-            name: ApplicablePeriodProperty.$type,
-            properties: {
-                from: {
-                    name: ApplicablePeriodProperty.from,
-                    optional: true
-                },
-                until: {
-                    name: ApplicablePeriodProperty.until,
-                    optional: true
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        Assertion: {
-            name: Assertion.$type,
-            properties: {
-                domains: {
-                    name: Assertion.domains,
-                    defaultValue: [],
-                    optional: true
-                },
-                exceptions: {
-                    name: Assertion.exceptions,
-                    optional: true
-                },
-                kind: {
-                    name: Assertion.kind
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Authority: {
-            name: Authority.$type,
-            properties: {
-                anchor: {
-                    name: Authority.anchor
-                },
-                source: {
-                    name: Authority.source
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        AuthoritySourcesProperty: {
-            name: AuthoritySourcesProperty.$type,
-            properties: {
-                values: {
-                    name: AuthoritySourcesProperty.values
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        BinaryExpression: {
-            name: BinaryExpression.$type,
-            properties: {
-                left: {
-                    name: BinaryExpression.left
-                },
-                op: {
-                    name: BinaryExpression.op
-                },
-                right: {
-                    name: BinaryExpression.right
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        BooleanLiteral: {
-            name: BooleanLiteral.$type,
-            properties: {
-                value: {
-                    name: BooleanLiteral.value
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        CallExpression: {
-            name: CallExpression.$type,
-            properties: {
-                args: {
-                    name: CallExpression.args,
-                    defaultValue: [],
-                    optional: true
-                },
-                func: {
-                    name: CallExpression.func
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        CitationAnchor: {
-            name: CitationAnchor.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        Classification: {
-            name: Classification.$type,
-            properties: {
-                mode: {
-                    name: Classification.mode
-                },
-                name: {
-                    name: Classification.name
-                },
-                otherwise: {
-                    name: Classification.otherwise,
-                    optional: true
-                },
-                rules: {
-                    name: Classification.rules,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        ClassificationRule: {
-            name: ClassificationRule.$type,
-            properties: {
-                label: {
-                    name: ClassificationRule.label
-                },
-                priority: {
-                    name: ClassificationRule.priority
-                },
-                rationale: {
-                    name: ClassificationRule.rationale,
-                    optional: true
-                },
-                when: {
-                    name: ClassificationRule.when
-                }
-            },
-            superTypes: []
-        },
-        Commitment: {
-            name: Commitment.$type,
-            properties: {
-                members: {
-                    name: Commitment.members,
-                    defaultValue: [],
-                    optional: true
-                },
-                name: {
-                    name: Commitment.name
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        CommitmentMember: {
-            name: CommitmentMember.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        CommitmentText: {
-            name: CommitmentText.$type,
-            properties: {
-                value: {
-                    name: CommitmentText.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        CompliancePathwayProperty: {
-            name: CompliancePathwayProperty.$type,
-            properties: {
-                value: {
-                    name: CompliancePathwayProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        ConceptDeclaration: {
-            name: ConceptDeclaration.$type,
-            properties: {
-                base: {
-                    name: ConceptDeclaration.base,
-                    optional: true
-                },
-                name: {
-                    name: ConceptDeclaration.name
-                },
-                properties: {
-                    name: ConceptDeclaration.properties,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        ConceptProperty: {
-            name: ConceptProperty.$type,
-            properties: {
-                name: {
-                    name: ConceptProperty.name
-                },
-                value: {
-                    name: ConceptProperty.value
-                }
-            },
-            superTypes: []
-        },
-        DateLiteral: {
-            name: DateLiteral.$type,
-            properties: {
-                value: {
-                    name: DateLiteral.value
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        DecisionRightsProperty: {
-            name: DecisionRightsProperty.$type,
-            properties: {
-                values: {
-                    name: DecisionRightsProperty.values
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        Declaration: {
-            name: Declaration.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        DeriveRule: {
-            name: DeriveRule.$type,
-            properties: {
-                conclusion: {
-                    name: DeriveRule.conclusion
-                },
-                priority: {
-                    name: DeriveRule.priority,
-                    optional: true
-                },
-                rationale: {
-                    name: DeriveRule.rationale,
-                    optional: true
-                },
-                when: {
-                    name: DeriveRule.when
-                }
-            },
-            superTypes: []
-        },
-        Dimension: {
-            name: Dimension.$type,
-            properties: {
-                description: {
-                    name: Dimension.description,
-                    optional: true
-                },
-                name: {
-                    name: Dimension.name
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        DomAnchor: {
-            name: DomAnchor.$type,
-            properties: {
-                selector: {
-                    name: DomAnchor.selector
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        Domain: {
-            name: Domain.$type,
-            properties: {
-                range: {
-                    name: Domain.range,
-                    optional: true
-                },
-                set: {
-                    name: Domain.set,
-                    optional: true
-                },
-                variable: {
-                    name: Domain.variable
-                }
-            },
-            superTypes: []
-        },
-        EffectiveFromProperty: {
-            name: EffectiveFromProperty.$type,
-            properties: {
-                value: {
-                    name: EffectiveFromProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        EffectiveUntilProperty: {
-            name: EffectiveUntilProperty.$type,
-            properties: {
-                value: {
-                    name: EffectiveUntilProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        EmptyStringList: {
-            name: EmptyStringList.$type,
-            properties: {
-                values: {
-                    name: EmptyStringList.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: [StringList.$type]
-        },
-        EmptyTopicList: {
-            name: EmptyTopicList.$type,
-            properties: {
-                values: {
-                    name: EmptyTopicList.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: [TopicList.$type]
-        },
-        EnforcementStatusProperty: {
-            name: EnforcementStatusProperty.$type,
-            properties: {
-                value: {
-                    name: EnforcementStatusProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        EnumDeclaration: {
-            name: EnumDeclaration.$type,
-            properties: {
-                name: {
-                    name: EnumDeclaration.name
-                },
-                values: {
-                    name: EnumDeclaration.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        EvidencePolicy: {
-            name: EvidencePolicy.$type,
-            properties: {
-                value: {
-                    name: EvidencePolicy.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        ExceptionsProperty: {
-            name: ExceptionsProperty.$type,
-            properties: {
-                values: {
-                    name: ExceptionsProperty.values
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        Expect: {
-            name: Expect.$type,
-            properties: {
-                diagnostic: {
-                    name: Expect.diagnostic,
-                    optional: true
-                },
-                result: {
-                    name: Expect.result,
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        Expression: {
-            name: Expression.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        ForceProperty: {
-            name: ForceProperty.$type,
-            properties: {
-                value: {
-                    name: ForceProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        FunctionList: {
-            name: FunctionList.$type,
-            properties: {
-                values: {
-                    name: FunctionList.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: []
-        },
-        FunctionsProperty: {
-            name: FunctionsProperty.$type,
-            properties: {
-                values: {
-                    name: FunctionsProperty.values
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        Given: {
-            name: Given.$type,
-            properties: {
-                path: {
-                    name: Given.path
-                },
-                value: {
-                    name: Given.value
-                }
-            },
-            superTypes: []
-        },
-        Goal: {
-            name: Goal.$type,
-            properties: {
-                description: {
-                    name: Goal.description,
-                    optional: true
-                },
-                name: {
-                    name: Goal.name
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        IdentifierList: {
-            name: IdentifierList.$type,
-            properties: {
-                values: {
-                    name: IdentifierList.values,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        Import: {
-            name: Import.$type,
-            properties: {
-                contentHash: {
-                    name: Import.contentHash,
-                    optional: true
-                },
-                packageName: {
-                    name: Import.packageName
-                },
-                version: {
-                    name: Import.version
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        InstitutionIdProperty: {
-            name: InstitutionIdProperty.$type,
-            properties: {
-                value: {
-                    name: InstitutionIdProperty.value
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        InstitutionTypeProperty: {
-            name: InstitutionTypeProperty.$type,
-            properties: {
-                value: {
-                    name: InstitutionTypeProperty.value
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        InstitutionalExtension: {
-            name: InstitutionalExtension.$type,
-            properties: {
-                properties: {
-                    name: InstitutionalExtension.properties,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        InstitutionalJurisdictionsProperty: {
-            name: InstitutionalJurisdictionsProperty.$type,
-            properties: {
-                values: {
-                    name: InstitutionalJurisdictionsProperty.values
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        InstitutionalProperty: {
-            name: InstitutionalProperty.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        InstitutionalRelationship: {
-            name: InstitutionalRelationship.$type,
-            properties: {
-                target: {
-                    name: InstitutionalRelationship.target
-                },
-                type: {
-                    name: InstitutionalRelationship.type
-                }
-            },
-            superTypes: []
-        },
-        InstitutionalRelationshipsProperty: {
-            name: InstitutionalRelationshipsProperty.$type,
-            properties: {
-                relationships: {
-                    name: InstitutionalRelationshipsProperty.relationships
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        InstrumentTypeProperty: {
-            name: InstrumentTypeProperty.$type,
-            properties: {
-                value: {
-                    name: InstrumentTypeProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        IssueAreas: {
-            name: IssueAreas.$type,
-            properties: {
-                areas: {
-                    name: IssueAreas.areas,
-                    defaultValue: []
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        JsonPointerAnchor: {
-            name: JsonPointerAnchor.$type,
-            properties: {
-                pointer: {
-                    name: JsonPointerAnchor.pointer
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        JudgmentCreatedAt: {
-            name: JudgmentCreatedAt.$type,
-            properties: {
-                value: {
-                    name: JudgmentCreatedAt.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentDeclaration: {
-            name: JudgmentDeclaration.$type,
-            properties: {
-                members: {
-                    name: JudgmentDeclaration.members,
-                    defaultValue: [],
-                    optional: true
-                },
-                name: {
-                    name: JudgmentDeclaration.name
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        JudgmentEvidenceRefs: {
-            name: JudgmentEvidenceRefs.$type,
-            properties: {
-                values: {
-                    name: JudgmentEvidenceRefs.values
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentFamilyContext: {
-            name: JudgmentFamilyContext.$type,
-            properties: {
-                value: {
-                    name: JudgmentFamilyContext.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentMember: {
-            name: JudgmentMember.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        JudgmentRationale: {
-            name: JudgmentRationale.$type,
-            properties: {
-                value: {
-                    name: JudgmentRationale.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentReviewer: {
-            name: JudgmentReviewer.$type,
-            properties: {
-                value: {
-                    name: JudgmentReviewer.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentStatusProperty: {
-            name: JudgmentStatusProperty.$type,
-            properties: {
-                value: {
-                    name: JudgmentStatusProperty.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentSupersedes: {
-            name: JudgmentSupersedes.$type,
-            properties: {
-                value: {
-                    name: JudgmentSupersedes.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentTarget: {
-            name: JudgmentTarget.$type,
-            properties: {
-                value: {
-                    name: JudgmentTarget.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentTypeProperty: {
-            name: JudgmentTypeProperty.$type,
-            properties: {
-                value: {
-                    name: JudgmentTypeProperty.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JudgmentValue: {
-            name: JudgmentValue.$type,
-            properties: {
-                value: {
-                    name: JudgmentValue.value
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        JurisdictionLevelProperty: {
-            name: JurisdictionLevelProperty.$type,
-            properties: {
-                value: {
-                    name: JurisdictionLevelProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        JurisdictionsProperty: {
-            name: JurisdictionsProperty.$type,
-            properties: {
-                values: {
-                    name: JurisdictionsProperty.values
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        LegalPolicyExtension: {
-            name: LegalPolicyExtension.$type,
-            properties: {
-                properties: {
-                    name: LegalPolicyExtension.properties,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        LegalPolicyProperty: {
-            name: LegalPolicyProperty.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        LinesAnchor: {
-            name: LinesAnchor.$type,
-            properties: {
-                from: {
-                    name: LinesAnchor.from
-                },
-                to: {
-                    name: LinesAnchor.to
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        MandateProperty: {
-            name: MandateProperty.$type,
-            properties: {
-                value: {
-                    name: MandateProperty.value
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        Measure: {
-            name: Measure.$type,
-            properties: {
-                components: {
-                    name: Measure.components,
-                    defaultValue: []
-                },
-                name: {
-                    name: Measure.name
-                },
-                scale: {
-                    name: Measure.scale
-                },
-                strategy: {
-                    name: Measure.strategy
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        MeasureComponent: {
-            name: MeasureComponent.$type,
-            properties: {
-                anchors: {
-                    name: MeasureComponent.anchors,
-                    defaultValue: []
-                },
-                name: {
-                    name: MeasureComponent.name
-                },
-                source: {
-                    name: MeasureComponent.source,
-                    optional: true
-                },
-                weight: {
-                    name: MeasureComponent.weight
-                }
-            },
-            superTypes: []
-        },
-        Model: {
-            name: Model.$type,
-            properties: {
-                declarations: {
-                    name: Model.declarations,
-                    defaultValue: [],
-                    optional: true
-                },
-                imports: {
-                    name: Model.imports,
-                    defaultValue: [],
-                    optional: true
-                },
-                languageVersion: {
-                    name: Model.languageVersion
-                },
-                packageName: {
-                    name: Model.packageName
-                },
-                packageVersion: {
-                    name: Model.packageVersion
-                }
-            },
-            superTypes: []
-        },
-        NumberLiteral: {
-            name: NumberLiteral.$type,
-            properties: {
-                value: {
-                    name: NumberLiteral.value
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        OfficialCitationProperty: {
-            name: OfficialCitationProperty.$type,
-            properties: {
-                value: {
-                    name: OfficialCitationProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        OperationalCapacityProperty: {
-            name: OperationalCapacityProperty.$type,
-            properties: {
-                dimensions: {
-                    name: OperationalCapacityProperty.dimensions
-                },
-                evidenceRefs: {
-                    name: OperationalCapacityProperty.evidenceRefs
-                },
-                status: {
-                    name: OperationalCapacityProperty.status
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        OtherwiseClass: {
-            name: OtherwiseClass.$type,
-            properties: {
-                label: {
-                    name: OtherwiseClass.label
-                },
-                safe: {
-                    name: OtherwiseClass.safe,
-                    defaultValue: false,
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        OtherwiseScore: {
-            name: OtherwiseScore.$type,
-            properties: {
-                message: {
-                    name: OtherwiseScore.message
-                },
-                resultKw: {
-                    name: OtherwiseScore.resultKw,
-                    optional: true
-                },
-                resultValue: {
-                    name: OtherwiseScore.resultValue,
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        OversightRelationshipsProperty: {
-            name: OversightRelationshipsProperty.$type,
-            properties: {
-                relationships: {
-                    name: OversightRelationshipsProperty.relationships
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        PageAnchor: {
-            name: PageAnchor.$type,
-            properties: {
-                page: {
-                    name: PageAnchor.page
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        PagesAnchor: {
-            name: PagesAnchor.$type,
-            properties: {
-                from: {
-                    name: PagesAnchor.from
-                },
-                to: {
-                    name: PagesAnchor.to
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        Parameter: {
-            name: Parameter.$type,
-            properties: {
-                allowed: {
-                    name: Parameter.allowed,
-                    optional: true
-                },
-                default: {
-                    name: Parameter.default
-                },
-                name: {
-                    name: Parameter.name
-                },
-                type: {
-                    name: Parameter.type
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        ParentInstitutionProperty: {
-            name: ParentInstitutionProperty.$type,
-            properties: {
-                value: {
-                    name: ParentInstitutionProperty.value
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        ParentInstrumentProperty: {
-            name: ParentInstrumentProperty.$type,
-            properties: {
-                value: {
-                    name: ParentInstrumentProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        PartnerClass: {
-            name: PartnerClass.$type,
-            properties: {
-                description: {
-                    name: PartnerClass.description,
-                    optional: true
-                },
-                name: {
-                    name: PartnerClass.name
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Predicate: {
-            name: Predicate.$type,
-            properties: {
-                name: {
-                    name: Predicate.name
-                },
-                params: {
-                    name: Predicate.params,
-                    defaultValue: [],
-                    optional: true
-                },
-                returnType: {
-                    name: Predicate.returnType
-                },
-                rules: {
-                    name: Predicate.rules,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        PredicateParam: {
-            name: PredicateParam.$type,
-            properties: {
-                name: {
-                    name: PredicateParam.name
-                },
-                type: {
-                    name: PredicateParam.type
-                }
-            },
-            superTypes: []
-        },
-        Profile: {
-            name: Profile.$type,
-            properties: {
-                commitment: {
-                    name: Profile.commitment
-                },
-                members: {
-                    name: Profile.members,
-                    defaultValue: [],
-                    optional: true
-                },
-                name: {
-                    name: Profile.name
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        ProfileMember: {
-            name: ProfileMember.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        ProfileSet: {
-            name: ProfileSet.$type,
-            properties: {
-                path: {
-                    name: ProfileSet.path
-                },
-                value: {
-                    name: ProfileSet.value
-                }
-            },
-            superTypes: [ProfileMember.$type]
-        },
-        ProfileWaive: {
-            name: ProfileWaive.$type,
-            properties: {
-                diagnostic: {
-                    name: ProfileWaive.diagnostic
-                },
-                reason: {
-                    name: ProfileWaive.reason
-                }
-            },
-            superTypes: [ProfileMember.$type]
-        },
-        ProvisionIdentifierProperty: {
-            name: ProvisionIdentifierProperty.$type,
-            properties: {
-                value: {
-                    name: ProvisionIdentifierProperty.value
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        QueryExpression: {
-            name: QueryExpression.$type,
-            properties: {
-                collection: {
-                    name: QueryExpression.collection
-                },
-                distinctBy: {
-                    name: QueryExpression.distinctBy,
-                    optional: true
-                },
-                extraArgs: {
-                    name: QueryExpression.extraArgs,
-                    defaultValue: [],
-                    optional: true
-                },
-                op: {
-                    name: QueryExpression.op
-                },
-                select: {
-                    name: QueryExpression.select,
-                    optional: true
-                },
-                where: {
-                    name: QueryExpression.where,
-                    optional: true
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        QuoteAnchor: {
-            name: QuoteAnchor.$type,
-            properties: {
-                quote: {
-                    name: QuoteAnchor.quote
-                }
-            },
-            superTypes: [CitationAnchor.$type]
-        },
-        Range: {
-            name: Range.$type,
-            properties: {
-                max: {
-                    name: Range.max,
-                    optional: true
-                },
-                min: {
-                    name: Range.min,
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        RationaleDeclaration: {
-            name: RationaleDeclaration.$type,
-            properties: {
-                name: {
-                    name: RationaleDeclaration.name
-                },
-                text: {
-                    name: RationaleDeclaration.text
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        RecordAssertion: {
-            name: RecordAssertion.$type,
-            properties: {
-                mode: {
-                    name: RecordAssertion.mode
-                },
-                text: {
-                    name: RecordAssertion.text
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordCorpus: {
-            name: RecordCorpus.$type,
-            properties: {
-                value: {
-                    name: RecordCorpus.value
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordDeclaration: {
-            name: RecordDeclaration.$type,
-            properties: {
-                family: {
-                    name: RecordDeclaration.family
-                },
-                members: {
-                    name: RecordDeclaration.members,
-                    defaultValue: [],
-                    optional: true
-                },
-                name: {
-                    name: RecordDeclaration.name
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        RecordEvidence: {
-            name: RecordEvidence.$type,
-            properties: {
-                references: {
-                    name: RecordEvidence.references,
-                    defaultValue: []
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordEvidenceReference: {
-            name: RecordEvidenceReference.$type,
-            properties: {
-                basis: {
-                    name: RecordEvidenceReference.basis
-                },
-                documentHash: {
-                    name: RecordEvidenceReference.documentHash
-                },
-                documentVersion: {
-                    name: RecordEvidenceReference.documentVersion
-                },
-                locator: {
-                    name: RecordEvidenceReference.locator
-                },
-                passage: {
-                    name: RecordEvidenceReference.passage
-                },
-                passageHash: {
-                    name: RecordEvidenceReference.passageHash
-                },
-                quote: {
-                    name: RecordEvidenceReference.quote
-                },
-                source: {
-                    name: RecordEvidenceReference.source
-                }
-            },
-            superTypes: []
-        },
-        RecordMember: {
-            name: RecordMember.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        RecordProvenance: {
-            name: RecordProvenance.$type,
-            properties: {
-                createdAt: {
-                    name: RecordProvenance.createdAt
-                },
-                createdBy: {
-                    name: RecordProvenance.createdBy
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordReviewState: {
-            name: RecordReviewState.$type,
-            properties: {
-                value: {
-                    name: RecordReviewState.value
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordScope: {
-            name: RecordScope.$type,
-            properties: {
-                conditions: {
-                    name: RecordScope.conditions,
-                    defaultValue: [],
-                    optional: true
-                },
-                jurisdiction: {
-                    name: RecordScope.jurisdiction
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordSubjects: {
-            name: RecordSubjects.$type,
-            properties: {
-                values: {
-                    name: RecordSubjects.values
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordTitle: {
-            name: RecordTitle.$type,
-            properties: {
-                value: {
-                    name: RecordTitle.value
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordTopics: {
-            name: RecordTopics.$type,
-            properties: {
-                values: {
-                    name: RecordTopics.values
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordUncertainty: {
-            name: RecordUncertainty.$type,
-            properties: {
-                items: {
-                    name: RecordUncertainty.items,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        RecordUncertaintyItem: {
-            name: RecordUncertaintyItem.$type,
-            properties: {
-                description: {
-                    name: RecordUncertaintyItem.description
-                },
-                kind: {
-                    name: RecordUncertaintyItem.kind
-                }
-            },
-            superTypes: []
-        },
-        RecordVersion: {
-            name: RecordVersion.$type,
-            properties: {
-                value: {
-                    name: RecordVersion.value
-                }
-            },
-            superTypes: [RecordMember.$type]
-        },
-        ReferenceExpression: {
-            name: ReferenceExpression.$type,
-            properties: {
-                path: {
-                    name: ReferenceExpression.path
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        RelatedJudgments: {
-            name: RelatedJudgments.$type,
-            properties: {
-                values: {
-                    name: RelatedJudgments.values
-                }
-            },
-            superTypes: [JudgmentMember.$type]
-        },
-        RelatedProvisionsProperty: {
-            name: RelatedProvisionsProperty.$type,
-            properties: {
-                values: {
-                    name: RelatedProvisionsProperty.values
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        RelationshipList: {
-            name: RelationshipList.$type,
-            properties: {
-                relationships: {
-                    name: RelationshipList.relationships,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: []
-        },
-        ResponsibleAuthoritiesProperty: {
-            name: ResponsibleAuthoritiesProperty.$type,
-            properties: {
-                values: {
-                    name: ResponsibleAuthoritiesProperty.values
-                }
-            },
-            superTypes: [LegalPolicyProperty.$type]
-        },
-        Scenario: {
-            name: Scenario.$type,
-            properties: {
-                commitment: {
-                    name: Scenario.commitment
-                },
-                expect: {
-                    name: Scenario.expect
-                },
-                givens: {
-                    name: Scenario.givens,
-                    defaultValue: [],
-                    optional: true
-                },
-                name: {
-                    name: Scenario.name
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        ScoreBlock: {
-            name: ScoreBlock.$type,
-            properties: {
-                otherwise: {
-                    name: ScoreBlock.otherwise
-                },
-                rules: {
-                    name: ScoreBlock.rules,
-                    defaultValue: []
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        ScoreRule: {
-            name: ScoreRule.$type,
-            properties: {
-                intentionalOverlap: {
-                    name: ScoreRule.intentionalOverlap,
-                    defaultValue: false,
-                    optional: true
-                },
-                name: {
-                    name: ScoreRule.name,
-                    optional: true
-                },
-                priority: {
-                    name: ScoreRule.priority
-                },
-                rationale: {
-                    name: ScoreRule.rationale,
-                    optional: true
-                },
-                result: {
-                    name: ScoreRule.result
-                },
-                when: {
-                    name: ScoreRule.when
-                }
-            },
-            superTypes: []
-        },
-        SetDeclaration: {
-            name: SetDeclaration.$type,
-            properties: {
-                name: {
-                    name: SetDeclaration.name
-                },
-                type: {
-                    name: SetDeclaration.type
-                },
-                value: {
-                    name: SetDeclaration.value
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        SetLiteral: {
-            name: SetLiteral.$type,
-            properties: {
-                elements: {
-                    name: SetLiteral.elements,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        Source: {
-            name: Source.$type,
-            properties: {
-                name: {
-                    name: Source.name
-                },
-                properties: {
-                    name: Source.properties,
-                    defaultValue: [],
-                    optional: true
-                }
-            },
-            superTypes: [Declaration.$type]
-        },
-        SourceMediaType: {
-            name: SourceMediaType.$type,
-            properties: {
-                value: {
-                    name: SourceMediaType.value
-                }
-            },
-            superTypes: [SourceProperty.$type]
-        },
-        SourceProperty: {
-            name: SourceProperty.$type,
-            properties: {
-            },
-            superTypes: []
-        },
-        SourceRetrieved: {
-            name: SourceRetrieved.$type,
-            properties: {
-                value: {
-                    name: SourceRetrieved.value
-                }
-            },
-            superTypes: [SourceProperty.$type]
-        },
-        SourceSha: {
-            name: SourceSha.$type,
-            properties: {
-                value: {
-                    name: SourceSha.value
-                }
-            },
-            superTypes: [SourceProperty.$type]
-        },
-        SourceUri: {
-            name: SourceUri.$type,
-            properties: {
-                value: {
-                    name: SourceUri.value
-                }
-            },
-            superTypes: [SourceProperty.$type]
-        },
-        StringList: {
-            name: StringList.$type,
-            properties: {
-                values: {
-                    name: StringList.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: []
-        },
-        StringLiteral: {
-            name: StringLiteral.$type,
-            properties: {
-                value: {
-                    name: StringLiteral.value
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        Subjects: {
-            name: Subjects.$type,
-            properties: {
-                value: {
-                    name: Subjects.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        SubunitIdsProperty: {
-            name: SubunitIdsProperty.$type,
-            properties: {
-                values: {
-                    name: SubunitIdsProperty.values
-                }
-            },
-            superTypes: [InstitutionalProperty.$type]
-        },
-        Summit: {
-            name: Summit.$type,
-            properties: {
-                value: {
-                    name: Summit.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Title: {
-            name: Title.$type,
-            properties: {
-                value: {
-                    name: Title.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        TopicList: {
-            name: TopicList.$type,
-            properties: {
-                values: {
-                    name: TopicList.values,
-                    defaultValue: []
-                }
-            },
-            superTypes: []
-        },
-        TruthLiteral: {
-            name: TruthLiteral.$type,
-            properties: {
-                value: {
-                    name: TruthLiteral.value
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        UnaryExpression: {
-            name: UnaryExpression.$type,
-            properties: {
-                op: {
-                    name: UnaryExpression.op
-                },
-                operand: {
-                    name: UnaryExpression.operand
-                }
-            },
-            superTypes: [Expression.$type]
-        },
-        UnknownPolicy: {
-            name: UnknownPolicy.$type,
-            properties: {
-                value: {
-                    name: UnknownPolicy.value
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Variable: {
-            name: Variable.$type,
-            properties: {
-                expression: {
-                    name: Variable.expression
-                },
-                name: {
-                    name: Variable.name
-                },
-                type: {
-                    name: Variable.type
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        },
-        Window: {
-            name: Window.$type,
-            properties: {
-                end: {
-                    name: Window.end
-                },
-                endBracket: {
-                    name: Window.endBracket
-                },
-                start: {
-                    name: Window.start
-                },
-                startBracket: {
-                    name: Window.startBracket
-                }
-            },
-            superTypes: [CommitmentMember.$type]
-        }
-    } as const satisfies langium.AstMetaData
+  override readonly types = {
+    ActionIdentity: {
+      name: ActionIdentity.$type,
+      properties: {
+        keyPaths: {
+          name: ActionIdentity.keyPaths,
+          defaultValue: [],
+        },
+        policy: {
+          name: ActionIdentity.policy,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Adopted: {
+      name: Adopted.$type,
+      properties: {
+        value: {
+          name: Adopted.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    AdoptionStatusProperty: {
+      name: AdoptionStatusProperty.$type,
+      properties: {
+        value: {
+          name: AdoptionStatusProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    AnchorRule: {
+      name: AnchorRule.$type,
+      properties: {
+        rationale: {
+          name: AnchorRule.rationale,
+          optional: true,
+        },
+        value: {
+          name: AnchorRule.value,
+        },
+        when: {
+          name: AnchorRule.when,
+        },
+      },
+      superTypes: [],
+    },
+    ApplicabilityStatusProperty: {
+      name: ApplicabilityStatusProperty.$type,
+      properties: {
+        value: {
+          name: ApplicabilityStatusProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    ApplicablePeriodProperty: {
+      name: ApplicablePeriodProperty.$type,
+      properties: {
+        from: {
+          name: ApplicablePeriodProperty.from,
+          optional: true,
+        },
+        until: {
+          name: ApplicablePeriodProperty.until,
+          optional: true,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    Assertion: {
+      name: Assertion.$type,
+      properties: {
+        domains: {
+          name: Assertion.domains,
+          defaultValue: [],
+          optional: true,
+        },
+        exceptions: {
+          name: Assertion.exceptions,
+          optional: true,
+        },
+        kind: {
+          name: Assertion.kind,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Authority: {
+      name: Authority.$type,
+      properties: {
+        anchor: {
+          name: Authority.anchor,
+        },
+        source: {
+          name: Authority.source,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    AuthoritySourcesProperty: {
+      name: AuthoritySourcesProperty.$type,
+      properties: {
+        values: {
+          name: AuthoritySourcesProperty.values,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    BinaryExpression: {
+      name: BinaryExpression.$type,
+      properties: {
+        left: {
+          name: BinaryExpression.left,
+        },
+        op: {
+          name: BinaryExpression.op,
+        },
+        right: {
+          name: BinaryExpression.right,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    BooleanLiteral: {
+      name: BooleanLiteral.$type,
+      properties: {
+        value: {
+          name: BooleanLiteral.value,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    CallExpression: {
+      name: CallExpression.$type,
+      properties: {
+        args: {
+          name: CallExpression.args,
+          defaultValue: [],
+          optional: true,
+        },
+        func: {
+          name: CallExpression.func,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    CitationAnchor: {
+      name: CitationAnchor.$type,
+      properties: {},
+      superTypes: [],
+    },
+    Classification: {
+      name: Classification.$type,
+      properties: {
+        mode: {
+          name: Classification.mode,
+        },
+        name: {
+          name: Classification.name,
+        },
+        otherwise: {
+          name: Classification.otherwise,
+          optional: true,
+        },
+        rules: {
+          name: Classification.rules,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    ClassificationRule: {
+      name: ClassificationRule.$type,
+      properties: {
+        label: {
+          name: ClassificationRule.label,
+        },
+        priority: {
+          name: ClassificationRule.priority,
+        },
+        rationale: {
+          name: ClassificationRule.rationale,
+          optional: true,
+        },
+        when: {
+          name: ClassificationRule.when,
+        },
+      },
+      superTypes: [],
+    },
+    Commitment: {
+      name: Commitment.$type,
+      properties: {
+        members: {
+          name: Commitment.members,
+          defaultValue: [],
+          optional: true,
+        },
+        name: {
+          name: Commitment.name,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    CommitmentMember: {
+      name: CommitmentMember.$type,
+      properties: {},
+      superTypes: [],
+    },
+    CommitmentText: {
+      name: CommitmentText.$type,
+      properties: {
+        value: {
+          name: CommitmentText.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    CompliancePathwayProperty: {
+      name: CompliancePathwayProperty.$type,
+      properties: {
+        value: {
+          name: CompliancePathwayProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    ConceptDeclaration: {
+      name: ConceptDeclaration.$type,
+      properties: {
+        base: {
+          name: ConceptDeclaration.base,
+          optional: true,
+        },
+        name: {
+          name: ConceptDeclaration.name,
+        },
+        properties: {
+          name: ConceptDeclaration.properties,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    ConceptProperty: {
+      name: ConceptProperty.$type,
+      properties: {
+        name: {
+          name: ConceptProperty.name,
+        },
+        value: {
+          name: ConceptProperty.value,
+        },
+      },
+      superTypes: [],
+    },
+    DateLiteral: {
+      name: DateLiteral.$type,
+      properties: {
+        value: {
+          name: DateLiteral.value,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    DecisionRightsProperty: {
+      name: DecisionRightsProperty.$type,
+      properties: {
+        values: {
+          name: DecisionRightsProperty.values,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    Declaration: {
+      name: Declaration.$type,
+      properties: {},
+      superTypes: [],
+    },
+    DeriveRule: {
+      name: DeriveRule.$type,
+      properties: {
+        conclusion: {
+          name: DeriveRule.conclusion,
+        },
+        priority: {
+          name: DeriveRule.priority,
+          optional: true,
+        },
+        rationale: {
+          name: DeriveRule.rationale,
+          optional: true,
+        },
+        when: {
+          name: DeriveRule.when,
+        },
+      },
+      superTypes: [],
+    },
+    Dimension: {
+      name: Dimension.$type,
+      properties: {
+        description: {
+          name: Dimension.description,
+          optional: true,
+        },
+        name: {
+          name: Dimension.name,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    DomAnchor: {
+      name: DomAnchor.$type,
+      properties: {
+        selector: {
+          name: DomAnchor.selector,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    Domain: {
+      name: Domain.$type,
+      properties: {
+        range: {
+          name: Domain.range,
+          optional: true,
+        },
+        set: {
+          name: Domain.set,
+          optional: true,
+        },
+        variable: {
+          name: Domain.variable,
+        },
+      },
+      superTypes: [],
+    },
+    EffectiveFromProperty: {
+      name: EffectiveFromProperty.$type,
+      properties: {
+        value: {
+          name: EffectiveFromProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    EffectiveUntilProperty: {
+      name: EffectiveUntilProperty.$type,
+      properties: {
+        value: {
+          name: EffectiveUntilProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    EmptyStringList: {
+      name: EmptyStringList.$type,
+      properties: {
+        values: {
+          name: EmptyStringList.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [StringList.$type],
+    },
+    EmptyTopicList: {
+      name: EmptyTopicList.$type,
+      properties: {
+        values: {
+          name: EmptyTopicList.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [TopicList.$type],
+    },
+    EnforcementStatusProperty: {
+      name: EnforcementStatusProperty.$type,
+      properties: {
+        value: {
+          name: EnforcementStatusProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    EnumDeclaration: {
+      name: EnumDeclaration.$type,
+      properties: {
+        name: {
+          name: EnumDeclaration.name,
+        },
+        values: {
+          name: EnumDeclaration.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    EvidencePolicy: {
+      name: EvidencePolicy.$type,
+      properties: {
+        value: {
+          name: EvidencePolicy.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    ExceptionsProperty: {
+      name: ExceptionsProperty.$type,
+      properties: {
+        values: {
+          name: ExceptionsProperty.values,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    Expect: {
+      name: Expect.$type,
+      properties: {
+        diagnostic: {
+          name: Expect.diagnostic,
+          optional: true,
+        },
+        result: {
+          name: Expect.result,
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    Expression: {
+      name: Expression.$type,
+      properties: {},
+      superTypes: [],
+    },
+    ForceProperty: {
+      name: ForceProperty.$type,
+      properties: {
+        value: {
+          name: ForceProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    FunctionList: {
+      name: FunctionList.$type,
+      properties: {
+        values: {
+          name: FunctionList.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [],
+    },
+    FunctionsProperty: {
+      name: FunctionsProperty.$type,
+      properties: {
+        values: {
+          name: FunctionsProperty.values,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    Given: {
+      name: Given.$type,
+      properties: {
+        path: {
+          name: Given.path,
+        },
+        value: {
+          name: Given.value,
+        },
+      },
+      superTypes: [],
+    },
+    Goal: {
+      name: Goal.$type,
+      properties: {
+        description: {
+          name: Goal.description,
+          optional: true,
+        },
+        name: {
+          name: Goal.name,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    IdentifierList: {
+      name: IdentifierList.$type,
+      properties: {
+        values: {
+          name: IdentifierList.values,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    Import: {
+      name: Import.$type,
+      properties: {
+        contentHash: {
+          name: Import.contentHash,
+          optional: true,
+        },
+        packageName: {
+          name: Import.packageName,
+        },
+        version: {
+          name: Import.version,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    InstitutionIdProperty: {
+      name: InstitutionIdProperty.$type,
+      properties: {
+        value: {
+          name: InstitutionIdProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    InstitutionTypeProperty: {
+      name: InstitutionTypeProperty.$type,
+      properties: {
+        value: {
+          name: InstitutionTypeProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    InstitutionalExtension: {
+      name: InstitutionalExtension.$type,
+      properties: {
+        properties: {
+          name: InstitutionalExtension.properties,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    InstitutionalJurisdictionsProperty: {
+      name: InstitutionalJurisdictionsProperty.$type,
+      properties: {
+        values: {
+          name: InstitutionalJurisdictionsProperty.values,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    InstitutionalProperty: {
+      name: InstitutionalProperty.$type,
+      properties: {},
+      superTypes: [],
+    },
+    InstitutionalRelationship: {
+      name: InstitutionalRelationship.$type,
+      properties: {
+        target: {
+          name: InstitutionalRelationship.target,
+        },
+        type: {
+          name: InstitutionalRelationship.type,
+        },
+      },
+      superTypes: [],
+    },
+    InstitutionalRelationshipsProperty: {
+      name: InstitutionalRelationshipsProperty.$type,
+      properties: {
+        relationships: {
+          name: InstitutionalRelationshipsProperty.relationships,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    InstrumentTypeProperty: {
+      name: InstrumentTypeProperty.$type,
+      properties: {
+        value: {
+          name: InstrumentTypeProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    IssueAreas: {
+      name: IssueAreas.$type,
+      properties: {
+        areas: {
+          name: IssueAreas.areas,
+          defaultValue: [],
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    JsonPointerAnchor: {
+      name: JsonPointerAnchor.$type,
+      properties: {
+        pointer: {
+          name: JsonPointerAnchor.pointer,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    JudgmentCreatedAt: {
+      name: JudgmentCreatedAt.$type,
+      properties: {
+        value: {
+          name: JudgmentCreatedAt.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentDeclaration: {
+      name: JudgmentDeclaration.$type,
+      properties: {
+        members: {
+          name: JudgmentDeclaration.members,
+          defaultValue: [],
+          optional: true,
+        },
+        name: {
+          name: JudgmentDeclaration.name,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    JudgmentEvidenceRefs: {
+      name: JudgmentEvidenceRefs.$type,
+      properties: {
+        values: {
+          name: JudgmentEvidenceRefs.values,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentFamilyContext: {
+      name: JudgmentFamilyContext.$type,
+      properties: {
+        value: {
+          name: JudgmentFamilyContext.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentMember: {
+      name: JudgmentMember.$type,
+      properties: {},
+      superTypes: [],
+    },
+    JudgmentRationale: {
+      name: JudgmentRationale.$type,
+      properties: {
+        value: {
+          name: JudgmentRationale.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentReviewer: {
+      name: JudgmentReviewer.$type,
+      properties: {
+        value: {
+          name: JudgmentReviewer.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentStatusProperty: {
+      name: JudgmentStatusProperty.$type,
+      properties: {
+        value: {
+          name: JudgmentStatusProperty.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentSupersedes: {
+      name: JudgmentSupersedes.$type,
+      properties: {
+        value: {
+          name: JudgmentSupersedes.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentTarget: {
+      name: JudgmentTarget.$type,
+      properties: {
+        value: {
+          name: JudgmentTarget.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentTypeProperty: {
+      name: JudgmentTypeProperty.$type,
+      properties: {
+        value: {
+          name: JudgmentTypeProperty.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentValue: {
+      name: JudgmentValue.$type,
+      properties: {
+        value: {
+          name: JudgmentValue.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JurisdictionLevelProperty: {
+      name: JurisdictionLevelProperty.$type,
+      properties: {
+        value: {
+          name: JurisdictionLevelProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    JurisdictionsProperty: {
+      name: JurisdictionsProperty.$type,
+      properties: {
+        values: {
+          name: JurisdictionsProperty.values,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    LegalPolicyExtension: {
+      name: LegalPolicyExtension.$type,
+      properties: {
+        properties: {
+          name: LegalPolicyExtension.properties,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    LegalPolicyProperty: {
+      name: LegalPolicyProperty.$type,
+      properties: {},
+      superTypes: [],
+    },
+    LinesAnchor: {
+      name: LinesAnchor.$type,
+      properties: {
+        from: {
+          name: LinesAnchor.from,
+        },
+        to: {
+          name: LinesAnchor.to,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    MandateProperty: {
+      name: MandateProperty.$type,
+      properties: {
+        value: {
+          name: MandateProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    Measure: {
+      name: Measure.$type,
+      properties: {
+        components: {
+          name: Measure.components,
+          defaultValue: [],
+        },
+        name: {
+          name: Measure.name,
+        },
+        scale: {
+          name: Measure.scale,
+        },
+        strategy: {
+          name: Measure.strategy,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    MeasureComponent: {
+      name: MeasureComponent.$type,
+      properties: {
+        anchors: {
+          name: MeasureComponent.anchors,
+          defaultValue: [],
+        },
+        name: {
+          name: MeasureComponent.name,
+        },
+        source: {
+          name: MeasureComponent.source,
+          optional: true,
+        },
+        weight: {
+          name: MeasureComponent.weight,
+        },
+      },
+      superTypes: [],
+    },
+    Model: {
+      name: Model.$type,
+      properties: {
+        declarations: {
+          name: Model.declarations,
+          defaultValue: [],
+          optional: true,
+        },
+        imports: {
+          name: Model.imports,
+          defaultValue: [],
+          optional: true,
+        },
+        languageVersion: {
+          name: Model.languageVersion,
+        },
+        packageName: {
+          name: Model.packageName,
+        },
+        packageVersion: {
+          name: Model.packageVersion,
+        },
+      },
+      superTypes: [],
+    },
+    NumberLiteral: {
+      name: NumberLiteral.$type,
+      properties: {
+        value: {
+          name: NumberLiteral.value,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    OfficialCitationProperty: {
+      name: OfficialCitationProperty.$type,
+      properties: {
+        value: {
+          name: OfficialCitationProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    OperationalCapacityProperty: {
+      name: OperationalCapacityProperty.$type,
+      properties: {
+        dimensions: {
+          name: OperationalCapacityProperty.dimensions,
+        },
+        evidenceRefs: {
+          name: OperationalCapacityProperty.evidenceRefs,
+        },
+        status: {
+          name: OperationalCapacityProperty.status,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    OtherwiseClass: {
+      name: OtherwiseClass.$type,
+      properties: {
+        label: {
+          name: OtherwiseClass.label,
+        },
+        safe: {
+          name: OtherwiseClass.safe,
+          defaultValue: false,
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    OtherwiseScore: {
+      name: OtherwiseScore.$type,
+      properties: {
+        message: {
+          name: OtherwiseScore.message,
+        },
+        resultKw: {
+          name: OtherwiseScore.resultKw,
+          optional: true,
+        },
+        resultValue: {
+          name: OtherwiseScore.resultValue,
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    OversightRelationshipsProperty: {
+      name: OversightRelationshipsProperty.$type,
+      properties: {
+        relationships: {
+          name: OversightRelationshipsProperty.relationships,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    PageAnchor: {
+      name: PageAnchor.$type,
+      properties: {
+        page: {
+          name: PageAnchor.page,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    PagesAnchor: {
+      name: PagesAnchor.$type,
+      properties: {
+        from: {
+          name: PagesAnchor.from,
+        },
+        to: {
+          name: PagesAnchor.to,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    Parameter: {
+      name: Parameter.$type,
+      properties: {
+        allowed: {
+          name: Parameter.allowed,
+          optional: true,
+        },
+        default: {
+          name: Parameter.default,
+        },
+        name: {
+          name: Parameter.name,
+        },
+        type: {
+          name: Parameter.type,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    ParentInstitutionProperty: {
+      name: ParentInstitutionProperty.$type,
+      properties: {
+        value: {
+          name: ParentInstitutionProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    ParentInstrumentProperty: {
+      name: ParentInstrumentProperty.$type,
+      properties: {
+        value: {
+          name: ParentInstrumentProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    PartnerClass: {
+      name: PartnerClass.$type,
+      properties: {
+        description: {
+          name: PartnerClass.description,
+          optional: true,
+        },
+        name: {
+          name: PartnerClass.name,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Predicate: {
+      name: Predicate.$type,
+      properties: {
+        name: {
+          name: Predicate.name,
+        },
+        params: {
+          name: Predicate.params,
+          defaultValue: [],
+          optional: true,
+        },
+        returnType: {
+          name: Predicate.returnType,
+        },
+        rules: {
+          name: Predicate.rules,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    PredicateParam: {
+      name: PredicateParam.$type,
+      properties: {
+        name: {
+          name: PredicateParam.name,
+        },
+        type: {
+          name: PredicateParam.type,
+        },
+      },
+      superTypes: [],
+    },
+    Profile: {
+      name: Profile.$type,
+      properties: {
+        commitment: {
+          name: Profile.commitment,
+        },
+        members: {
+          name: Profile.members,
+          defaultValue: [],
+          optional: true,
+        },
+        name: {
+          name: Profile.name,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    ProfileMember: {
+      name: ProfileMember.$type,
+      properties: {},
+      superTypes: [],
+    },
+    ProfileSet: {
+      name: ProfileSet.$type,
+      properties: {
+        path: {
+          name: ProfileSet.path,
+        },
+        value: {
+          name: ProfileSet.value,
+        },
+      },
+      superTypes: [ProfileMember.$type],
+    },
+    ProfileWaive: {
+      name: ProfileWaive.$type,
+      properties: {
+        diagnostic: {
+          name: ProfileWaive.diagnostic,
+        },
+        reason: {
+          name: ProfileWaive.reason,
+        },
+      },
+      superTypes: [ProfileMember.$type],
+    },
+    ProvisionIdentifierProperty: {
+      name: ProvisionIdentifierProperty.$type,
+      properties: {
+        value: {
+          name: ProvisionIdentifierProperty.value,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    QueryExpression: {
+      name: QueryExpression.$type,
+      properties: {
+        collection: {
+          name: QueryExpression.collection,
+        },
+        distinctBy: {
+          name: QueryExpression.distinctBy,
+          optional: true,
+        },
+        extraArgs: {
+          name: QueryExpression.extraArgs,
+          defaultValue: [],
+          optional: true,
+        },
+        op: {
+          name: QueryExpression.op,
+        },
+        select: {
+          name: QueryExpression.select,
+          optional: true,
+        },
+        where: {
+          name: QueryExpression.where,
+          optional: true,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    QuoteAnchor: {
+      name: QuoteAnchor.$type,
+      properties: {
+        quote: {
+          name: QuoteAnchor.quote,
+        },
+      },
+      superTypes: [CitationAnchor.$type],
+    },
+    Range: {
+      name: Range.$type,
+      properties: {
+        max: {
+          name: Range.max,
+          optional: true,
+        },
+        min: {
+          name: Range.min,
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    RationaleDeclaration: {
+      name: RationaleDeclaration.$type,
+      properties: {
+        name: {
+          name: RationaleDeclaration.name,
+        },
+        text: {
+          name: RationaleDeclaration.text,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    RecordAssertion: {
+      name: RecordAssertion.$type,
+      properties: {
+        mode: {
+          name: RecordAssertion.mode,
+        },
+        text: {
+          name: RecordAssertion.text,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordCorpus: {
+      name: RecordCorpus.$type,
+      properties: {
+        value: {
+          name: RecordCorpus.value,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordDeclaration: {
+      name: RecordDeclaration.$type,
+      properties: {
+        family: {
+          name: RecordDeclaration.family,
+        },
+        members: {
+          name: RecordDeclaration.members,
+          defaultValue: [],
+          optional: true,
+        },
+        name: {
+          name: RecordDeclaration.name,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    RecordEvidence: {
+      name: RecordEvidence.$type,
+      properties: {
+        references: {
+          name: RecordEvidence.references,
+          defaultValue: [],
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordEvidenceReference: {
+      name: RecordEvidenceReference.$type,
+      properties: {
+        basis: {
+          name: RecordEvidenceReference.basis,
+        },
+        documentHash: {
+          name: RecordEvidenceReference.documentHash,
+        },
+        documentVersion: {
+          name: RecordEvidenceReference.documentVersion,
+        },
+        locator: {
+          name: RecordEvidenceReference.locator,
+        },
+        passage: {
+          name: RecordEvidenceReference.passage,
+        },
+        passageHash: {
+          name: RecordEvidenceReference.passageHash,
+        },
+        quote: {
+          name: RecordEvidenceReference.quote,
+        },
+        source: {
+          name: RecordEvidenceReference.source,
+        },
+      },
+      superTypes: [],
+    },
+    RecordMember: {
+      name: RecordMember.$type,
+      properties: {},
+      superTypes: [],
+    },
+    RecordProvenance: {
+      name: RecordProvenance.$type,
+      properties: {
+        createdAt: {
+          name: RecordProvenance.createdAt,
+        },
+        createdBy: {
+          name: RecordProvenance.createdBy,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordReviewState: {
+      name: RecordReviewState.$type,
+      properties: {
+        value: {
+          name: RecordReviewState.value,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordScope: {
+      name: RecordScope.$type,
+      properties: {
+        conditions: {
+          name: RecordScope.conditions,
+          defaultValue: [],
+          optional: true,
+        },
+        jurisdiction: {
+          name: RecordScope.jurisdiction,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordSubjects: {
+      name: RecordSubjects.$type,
+      properties: {
+        values: {
+          name: RecordSubjects.values,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordTitle: {
+      name: RecordTitle.$type,
+      properties: {
+        value: {
+          name: RecordTitle.value,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordTopics: {
+      name: RecordTopics.$type,
+      properties: {
+        values: {
+          name: RecordTopics.values,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordUncertainty: {
+      name: RecordUncertainty.$type,
+      properties: {
+        items: {
+          name: RecordUncertainty.items,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    RecordUncertaintyItem: {
+      name: RecordUncertaintyItem.$type,
+      properties: {
+        description: {
+          name: RecordUncertaintyItem.description,
+        },
+        kind: {
+          name: RecordUncertaintyItem.kind,
+        },
+      },
+      superTypes: [],
+    },
+    RecordVersion: {
+      name: RecordVersion.$type,
+      properties: {
+        value: {
+          name: RecordVersion.value,
+        },
+      },
+      superTypes: [RecordMember.$type],
+    },
+    ReferenceExpression: {
+      name: ReferenceExpression.$type,
+      properties: {
+        path: {
+          name: ReferenceExpression.path,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    RelatedJudgments: {
+      name: RelatedJudgments.$type,
+      properties: {
+        values: {
+          name: RelatedJudgments.values,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    RelatedProvisionsProperty: {
+      name: RelatedProvisionsProperty.$type,
+      properties: {
+        values: {
+          name: RelatedProvisionsProperty.values,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    RelationshipList: {
+      name: RelationshipList.$type,
+      properties: {
+        relationships: {
+          name: RelationshipList.relationships,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [],
+    },
+    ResponsibleAuthoritiesProperty: {
+      name: ResponsibleAuthoritiesProperty.$type,
+      properties: {
+        values: {
+          name: ResponsibleAuthoritiesProperty.values,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    Scenario: {
+      name: Scenario.$type,
+      properties: {
+        commitment: {
+          name: Scenario.commitment,
+        },
+        expect: {
+          name: Scenario.expect,
+        },
+        givens: {
+          name: Scenario.givens,
+          defaultValue: [],
+          optional: true,
+        },
+        name: {
+          name: Scenario.name,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    ScoreBlock: {
+      name: ScoreBlock.$type,
+      properties: {
+        otherwise: {
+          name: ScoreBlock.otherwise,
+        },
+        rules: {
+          name: ScoreBlock.rules,
+          defaultValue: [],
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    ScoreRule: {
+      name: ScoreRule.$type,
+      properties: {
+        intentionalOverlap: {
+          name: ScoreRule.intentionalOverlap,
+          defaultValue: false,
+          optional: true,
+        },
+        name: {
+          name: ScoreRule.name,
+          optional: true,
+        },
+        priority: {
+          name: ScoreRule.priority,
+        },
+        rationale: {
+          name: ScoreRule.rationale,
+          optional: true,
+        },
+        result: {
+          name: ScoreRule.result,
+        },
+        when: {
+          name: ScoreRule.when,
+        },
+      },
+      superTypes: [],
+    },
+    SetDeclaration: {
+      name: SetDeclaration.$type,
+      properties: {
+        name: {
+          name: SetDeclaration.name,
+        },
+        type: {
+          name: SetDeclaration.type,
+        },
+        value: {
+          name: SetDeclaration.value,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    SetLiteral: {
+      name: SetLiteral.$type,
+      properties: {
+        elements: {
+          name: SetLiteral.elements,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    Source: {
+      name: Source.$type,
+      properties: {
+        name: {
+          name: Source.name,
+        },
+        properties: {
+          name: Source.properties,
+          defaultValue: [],
+          optional: true,
+        },
+      },
+      superTypes: [Declaration.$type],
+    },
+    SourceMediaType: {
+      name: SourceMediaType.$type,
+      properties: {
+        value: {
+          name: SourceMediaType.value,
+        },
+      },
+      superTypes: [SourceProperty.$type],
+    },
+    SourceMetadataProperty: {
+      name: SourceMetadataProperty.$type,
+      properties: {
+        chapter: {
+          name: SourceMetadataProperty.chapter,
+          optional: true,
+        },
+        datasetName: {
+          name: SourceMetadataProperty.datasetName,
+        },
+        datasetSnapshot: {
+          name: SourceMetadataProperty.datasetSnapshot,
+        },
+        jurisdiction: {
+          name: SourceMetadataProperty.jurisdiction,
+        },
+        lastAmendedYear: {
+          name: SourceMetadataProperty.lastAmendedYear,
+          optional: true,
+        },
+        originalText: {
+          name: SourceMetadataProperty.originalText,
+        },
+        rowHash: {
+          name: SourceMetadataProperty.rowHash,
+        },
+        sectionNumber: {
+          name: SourceMetadataProperty.sectionNumber,
+          optional: true,
+        },
+        sectionTitle: {
+          name: SourceMetadataProperty.sectionTitle,
+          optional: true,
+        },
+        sourceRowIdentifier: {
+          name: SourceMetadataProperty.sourceRowIdentifier,
+        },
+        sourceUrl: {
+          name: SourceMetadataProperty.sourceUrl,
+          optional: true,
+        },
+        title: {
+          name: SourceMetadataProperty.title,
+        },
+      },
+      superTypes: [LegalPolicyProperty.$type],
+    },
+    SourceProperty: {
+      name: SourceProperty.$type,
+      properties: {},
+      superTypes: [],
+    },
+    SourceRetrieved: {
+      name: SourceRetrieved.$type,
+      properties: {
+        value: {
+          name: SourceRetrieved.value,
+        },
+      },
+      superTypes: [SourceProperty.$type],
+    },
+    SourceSha: {
+      name: SourceSha.$type,
+      properties: {
+        value: {
+          name: SourceSha.value,
+        },
+      },
+      superTypes: [SourceProperty.$type],
+    },
+    SourceUri: {
+      name: SourceUri.$type,
+      properties: {
+        value: {
+          name: SourceUri.value,
+        },
+      },
+      superTypes: [SourceProperty.$type],
+    },
+    StringList: {
+      name: StringList.$type,
+      properties: {
+        values: {
+          name: StringList.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [],
+    },
+    StringLiteral: {
+      name: StringLiteral.$type,
+      properties: {
+        value: {
+          name: StringLiteral.value,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    Subjects: {
+      name: Subjects.$type,
+      properties: {
+        value: {
+          name: Subjects.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    SubunitIdsProperty: {
+      name: SubunitIdsProperty.$type,
+      properties: {
+        values: {
+          name: SubunitIdsProperty.values,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    Summit: {
+      name: Summit.$type,
+      properties: {
+        value: {
+          name: Summit.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Title: {
+      name: Title.$type,
+      properties: {
+        value: {
+          name: Title.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    TopicList: {
+      name: TopicList.$type,
+      properties: {
+        values: {
+          name: TopicList.values,
+          defaultValue: [],
+        },
+      },
+      superTypes: [],
+    },
+    TruthLiteral: {
+      name: TruthLiteral.$type,
+      properties: {
+        value: {
+          name: TruthLiteral.value,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    UnaryExpression: {
+      name: UnaryExpression.$type,
+      properties: {
+        op: {
+          name: UnaryExpression.op,
+        },
+        operand: {
+          name: UnaryExpression.operand,
+        },
+      },
+      superTypes: [Expression.$type],
+    },
+    UnknownPolicy: {
+      name: UnknownPolicy.$type,
+      properties: {
+        value: {
+          name: UnknownPolicy.value,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Variable: {
+      name: Variable.$type,
+      properties: {
+        expression: {
+          name: Variable.expression,
+        },
+        name: {
+          name: Variable.name,
+        },
+        type: {
+          name: Variable.type,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+    Window: {
+      name: Window.$type,
+      properties: {
+        end: {
+          name: Window.end,
+        },
+        endBracket: {
+          name: Window.endBracket,
+        },
+        start: {
+          name: Window.start,
+        },
+        startBracket: {
+          name: Window.startBracket,
+        },
+      },
+      superTypes: [CommitmentMember.$type],
+    },
+  } as const satisfies langium.AstMetaData;
 }
 
 export const reflection = new WritAstReflection();

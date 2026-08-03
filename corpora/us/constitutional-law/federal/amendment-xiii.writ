@@ -1,0 +1,47 @@
+language writ "0.1"
+package us.constitutional_law version "0.1.0";
+
+record us_constitution_federal_be864187e936fc200bc37556 : legal_policy {
+  corpus us.constitutional_law;
+  version "0.1.0";
+  title "Amendment XIII, Section 2";
+  subjects { jurisdiction_federal };
+  assertion states "Congress shall have power to enforce this article by appropriate legislation.";
+  topics {};
+  scope {
+    jurisdiction "US Constitution";
+  }
+  evidence {
+    support open_us_law.federal document_version open_us_law.v2026_07.federal passage CONST_US_AM13_S2 locator "U.S. Const. amend. XIII, § 2" quote "Congress shall have power to enforce this article by appropriate legislation." passage_hash "sha256:8733d37547a9b846875eb767e816f9802b7eb12a2e1ce1c8c2737a13c89974f4" document_hash "sha256:a828d982470f2acd0394a976bc139fd30e193ef5d2b4d5592e6080b504c60111" basis direct;
+  }
+  uncertainty {
+    item unknown "Legal force, applicability, and enforcement are not inferred during import.";
+  }
+  provenance {
+    created_by "Writ Open US Law constitutional importer";
+    created_at 2026-08-03;
+  }
+  review_state draft;
+  legal_policy {
+    instrument_type constitutional_amendment;
+    jurisdiction_level federal;
+    force unknown;
+    adoption_status unknown;
+    applicability_status unknown;
+    enforcement_status unknown;
+    official_citation "U.S. Const. amend. XIII, § 2";
+    provision_identifier "CONST_US_AM13_S2";
+    jurisdictions { "US Constitution" };
+    source_metadata {
+      dataset_name "vaquill/open-us-law";
+      dataset_snapshot "v2026.07";
+      source_row_identifier "CONST_US_AM13_S2";
+      jurisdiction "federal";
+      title "US Constitution";
+      section_number "2";
+      section_title "Amendment XIII, Section 2";
+      original_text "Congress shall have power to enforce this article by appropriate legislation.";
+      row_hash "sha256:a828d982470f2acd0394a976bc139fd30e193ef5d2b4d5592e6080b504c60111";
+    }
+  }
+}
