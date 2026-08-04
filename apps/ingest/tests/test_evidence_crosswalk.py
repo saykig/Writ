@@ -313,13 +313,55 @@ def test_snapshot_review_resolves_only_to_its_snapshot_object() -> None:
     assert absent_key["reason_code"] == "REVIEWED_OBJECT_IDENTIFIER_MISSING"
 
 
-def test_sorting_uses_pointer_passage_and_evidence_link_position_as_final_keys() -> None:
+def test_sorting_uses_source_pointer_before_other_link_coordinates() -> None:
     second = project_explicit_semantic(
         source_concept="stance",
         value="supports",
         source_identity=source_identity(),
         source_pointer="fixture#/claims/0/evidence_links/1/stance",
+        passage_id="passage-1",
+        evidence_link_position=0,
+    )
+    first = project_explicit_semantic(
+        source_concept="stance",
+        value="supports",
+        source_identity=source_identity(),
+        source_pointer="fixture#/claims/0/evidence_links/0/stance",
+        passage_id="passage-1",
+        evidence_link_position=0,
+    )
+
+    assert sorted([second, first], key=diagnostic_result_sort_key) == [first, second]
+
+
+def test_sorting_uses_passage_id_when_source_pointers_match() -> None:
+    second = project_explicit_semantic(
+        source_concept="stance",
+        value="supports",
+        source_identity=source_identity(),
+        source_pointer="fixture#/claims/0/evidence_links/0/stance",
         passage_id="passage-2",
+        evidence_link_position=0,
+    )
+    first = project_explicit_semantic(
+        source_concept="stance",
+        value="supports",
+        source_identity=source_identity(),
+        source_pointer="fixture#/claims/0/evidence_links/0/stance",
+        passage_id="passage-1",
+        evidence_link_position=0,
+    )
+
+    assert sorted([second, first], key=diagnostic_result_sort_key) == [first, second]
+
+
+def test_sorting_uses_evidence_position_when_pointers_and_passages_match() -> None:
+    second = project_explicit_semantic(
+        source_concept="stance",
+        value="supports",
+        source_identity=source_identity(),
+        source_pointer="fixture#/claims/0/evidence_links/0/stance",
+        passage_id="passage-1",
         evidence_link_position=1,
     )
     first = project_explicit_semantic(

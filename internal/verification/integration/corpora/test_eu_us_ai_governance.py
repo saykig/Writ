@@ -289,29 +289,33 @@ def test_source_passages_and_hashes_are_traceable_without_loss() -> None:
 def test_evidence_crosswalk_has_exact_object_specific_coverage() -> None:
     results = build_evidence_diagnostic_projection(root=ROOT)
 
-    exact_counts = {
-        concept: sum(
-            result["source_concept"] == concept
+    identity_expectations = (
+        ("snapshot_claim_identity", "CLAIM_IDENTITY_EXACT", 27),
+        ("snapshot_passage_identity", "PASSAGE_IDENTITY_EXACT", 22),
+        (
+            "snapshot_document_version_identity",
+            "DOCUMENT_SOURCE_IDENTITY_EXACT",
+            10,
+        ),
+        ("snapshot_review_identity", "REVIEWED_OBJECT_IDENTITY_EXACT", 27),
+    )
+    for concept, reason, expected_count in identity_expectations:
+        mappings = [
+            result
+            for result in results
+            if result["source_concept"] == concept
             and result["mapping_status"] == "mapped"
             and result["reason_code"] == reason
-            for result in results
-        )
-        for concept, reason in (
-            ("snapshot_claim_identity", "CLAIM_IDENTITY_EXACT"),
-            ("snapshot_passage_identity", "PASSAGE_IDENTITY_EXACT"),
-            (
-                "snapshot_document_version_identity",
-                "DOCUMENT_SOURCE_IDENTITY_EXACT",
-            ),
-            ("snapshot_review_identity", "REVIEWED_OBJECT_IDENTITY_EXACT"),
-        )
-    }
-    assert exact_counts == {
-        "snapshot_claim_identity": 27,
-        "snapshot_passage_identity": 22,
-        "snapshot_document_version_identity": 10,
-        "snapshot_review_identity": 27,
-    }
+        ]
+        target_identities: list[tuple[str, str, str]] = []
+        for mapping in mappings:
+            target = mapping["target_identity"]
+            assert target is not None
+            target_identities.append(
+                (target["jurisdiction"], target["object_kind"], target["id"])
+            )
+        assert len(target_identities) == expected_count
+        assert len(set(target_identities)) == expected_count
 
     reviewed_objects = [
         result
@@ -364,13 +368,16 @@ def test_five_accepted_claims_have_separate_unresolved_evidence_identities() -> 
         for jurisdiction in ("EU", "US")
         for claim in active(jurisdiction, "records/claims.yaml")["claims"]
     }
-    for claim_id in parent_decisions.keys() & {
+    expected_unresolved_claim_ids = {
         "EU-10A",
         "EU-10B",
         "EU-10C",
         "EU-12",
         "US-02",
-    }:
+    }
+    parent_decision_claim_ids = parent_decisions.keys() & expected_unresolved_claim_ids
+    assert parent_decision_claim_ids == expected_unresolved_claim_ids
+    for claim_id in sorted(parent_decision_claim_ids):
         assert parent_decisions[claim_id]["mapped_values"] == {
             "reviewed_parent_decision": "accepted"
         }
