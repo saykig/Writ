@@ -1,0 +1,31 @@
+language writ "0.1"
+package writ.fixtures.records version "0.1.0";
+
+// Compatibility fixture: legacy subjects, scope, mandate, and authority syntax.
+record legacy_nist_function : institutional {
+  corpus us.institutions.nist;
+  version "0.1.0";
+  title "Legacy NIST function syntax";
+  subjects { nist };
+  assertion performs "NIST advances measurement science.";
+  topics {};
+  scope {
+    jurisdiction "United States";
+    condition "Measurement science";
+  }
+  evidence {
+    support nist.about document_version nist.about.v1 passage nist.about.mission locator "About NIST, mission" quote "NIST advances measurement science." passage_hash "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" document_hash "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" basis direct;
+  }
+  uncertainty { item unknown "The legacy syntax does not establish mandate or capacity."; }
+  provenance { created_by "Writ fixture maintainers"; created_at 2026-08-03; }
+  review_state draft;
+  institutional {
+    institution_id nist;
+    institution_type federal_agency;
+    mandate "Legacy source-reported text.";
+    authority_sources { nist.about };
+    jurisdictions { "United States" };
+    functions { measurement_science };
+    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
+  }
+}

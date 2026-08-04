@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 import re
 import uuid
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, TypedDict
 
 import yaml
 
@@ -23,6 +24,10 @@ DOCUMENT_VERSIONS_RELATIVE_PATH = (
 )
 PASSAGES_RELATIVE_PATH = ARCHIVE_ORIGINAL_RELATIVE_DIR / "provenance" / "passages.json"
 UNRESOLVED_RELATIVE_PATH = ARCHIVE_ORIGINAL_RELATIVE_DIR / "provenance" / "unresolved.json"
+SNAPSHOT_RELATIVE_PATHS = {
+    "EU": ARCHIVE_ORIGINAL_RELATIVE_DIR / "evidence" / "eu.snapshot.json",
+    "US": ARCHIVE_ORIGINAL_RELATIVE_DIR / "evidence" / "us.snapshot.json",
+}
 
 CORPUS_RELATIVE_DIRS = {
     "EU": Path("corpora/jurisdictions/eu/ai-governance"),
@@ -137,6 +142,61 @@ REMOVED_NORMALIZED_FIELDS = frozenset(
     }
 )
 
+MappingStatus = Literal["mapped", "unmapped", "unresolved", "error"]
+ResultKind = Literal["semantic", "identity"]
+
+
+class DiagnosticIdentity(TypedDict, total=False):
+    """Identity coordinates carried only by the read-only diagnostic projection."""
+
+    jurisdiction: str
+    object_kind: str
+    id: str
+    parent_id: str
+    document_version_id: str
+    passage_id: str
+    legacy_refs: list[str]
+
+
+class DiagnosticResult(TypedDict):
+    """Internal result shape; it is not a schema or public interchange contract."""
+
+    result_kind: ResultKind
+    mapping_status: MappingStatus
+    reason_code: str
+    source_concept: str
+    target_concept: str | None
+    source_identity: DiagnosticIdentity
+    target_identity: DiagnosticIdentity | None
+    mapped_values: dict[str, str]
+    unmapped_concepts: list[str]
+    source_pointer: str
+    passage_id: str | None
+    evidence_link_position: int | None
+
+
+SEMANTIC_VALUES = {
+    "stance": frozenset({"supports", "contradicts", "qualifies", "context_only"}),
+    "support_type": frozenset({"direct", "derived", "corroborating", "negative_search"}),
+    "truth_value": frozenset({"true", "false", "unknown", "contested"}),
+    "workflow_status": frozenset(
+        {"candidate", "accepted", "rejected", "contested", "superseded", "withdrawn"}
+    ),
+    "reviewed_parent_decision": frozenset({"accepted"}),
+    "snapshot_review_decision": frozenset(
+        {"accept", "reject", "contest", "request_changes", "approve", "withdraw"}
+    ),
+}
+
+INVALID_SEMANTIC_REASONS = {
+    "stance": "INVALID_STANCE",
+    "support_type": "INVALID_SUPPORT_TYPE",
+    "truth_value": "INVALID_TRUTH_VALUE",
+    "workflow_status": "INVALID_WORKFLOW_STATUS",
+    "reviewed_parent_decision": "INVALID_REVIEWED_PARENT_DECISION",
+    "snapshot_review_decision": "INVALID_SNAPSHOT_REVIEW_DECISION",
+}
+
 
 class CorpusMigrationError(ValueError):
     """The archived review input or active corpus violates the migration contract."""
@@ -173,11 +233,16 @@ def _read_yaml(path: Path) -> dict[str, Any]:
 
 
 def _read_json(path: Path) -> list[dict[str, Any]]:
-    import json
-
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
         raise CorpusMigrationError(f"expected JSON object array: {path}")
+    return value
+
+
+def _read_json_object(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise CorpusMigrationError(f"expected JSON object: {path}")
     return value
 
 
@@ -231,6 +296,633 @@ def normalize_reviewed_claims(dataset: dict[str, Any]) -> list[dict[str, Any]]:
     return claims
 
 
+def semantic_dimensions_correspond(source_concept: str, target_concept: str) -> bool:
+    """Return true only for like-for-like semantic dimensions.
+
+    This guard documents that record basis is distinct without adding a basis projector or
+    reading native Writ records into this compatibility adapter.
+    """
+
+    return source_concept == target_concept
+
+
+def _diagnostic_result(
+    *,
+    result_kind: ResultKind,
+    mapping_status: MappingStatus,
+    reason_code: str,
+    source_concept: str,
+    target_concept: str | None,
+    source_identity: DiagnosticIdentity,
+    source_pointer: str,
+    target_identity: DiagnosticIdentity | None = None,
+    mapped_values: dict[str, str] | None = None,
+    unmapped_concepts: list[str] | None = None,
+    passage_id: str | None = None,
+    evidence_link_position: int | None = None,
+) -> DiagnosticResult:
+    return {
+        "result_kind": result_kind,
+        "mapping_status": mapping_status,
+        "reason_code": reason_code,
+        "source_concept": source_concept,
+        "target_concept": target_concept,
+        "source_identity": copy.deepcopy(source_identity),
+        "target_identity": copy.deepcopy(target_identity),
+        "mapped_values": copy.deepcopy(mapped_values or {}),
+        "unmapped_concepts": list(unmapped_concepts or []),
+        "source_pointer": source_pointer,
+        "passage_id": passage_id,
+        "evidence_link_position": evidence_link_position,
+    }
+
+
+def project_explicit_semantic(
+    *,
+    source_concept: str,
+    value: Any,
+    source_identity: DiagnosticIdentity,
+    source_pointer: str,
+    target_concept: str | None = None,
+    passage_id: str | None = None,
+    evidence_link_position: int | None = None,
+) -> DiagnosticResult:
+    """Project an explicit Phase 1 source value without performing an identity join."""
+
+    target = target_concept or source_concept
+    allowed = SEMANTIC_VALUES.get(source_concept)
+    if allowed is None:
+        return _diagnostic_result(
+            result_kind="semantic",
+            mapping_status="error",
+            reason_code="UNSUPPORTED_SEMANTIC_CONCEPT",
+            source_concept=source_concept,
+            target_concept=target,
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+            passage_id=passage_id,
+            evidence_link_position=evidence_link_position,
+        )
+    if value is None:
+        return _diagnostic_result(
+            result_kind="semantic",
+            mapping_status="unmapped",
+            reason_code="SOURCE_VALUE_ABSENT",
+            source_concept=source_concept,
+            target_concept=target,
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+            unmapped_concepts=[target],
+            passage_id=passage_id,
+            evidence_link_position=evidence_link_position,
+        )
+    if not isinstance(value, str) or value not in allowed:
+        return _diagnostic_result(
+            result_kind="semantic",
+            mapping_status="error",
+            reason_code=INVALID_SEMANTIC_REASONS[source_concept],
+            source_concept=source_concept,
+            target_concept=target,
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+            passage_id=passage_id,
+            evidence_link_position=evidence_link_position,
+        )
+    if not semantic_dimensions_correspond(source_concept, target):
+        return _diagnostic_result(
+            result_kind="semantic",
+            mapping_status="unmapped",
+            reason_code="NO_SEMANTIC_CORRESPONDENCE",
+            source_concept=source_concept,
+            target_concept=target,
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+            unmapped_concepts=[target],
+            passage_id=passage_id,
+            evidence_link_position=evidence_link_position,
+        )
+    return _diagnostic_result(
+        result_kind="semantic",
+        mapping_status="mapped",
+        reason_code="EXACT_SOURCE_VALUE",
+        source_concept=source_concept,
+        target_concept=target,
+        source_identity=source_identity,
+        source_pointer=source_pointer,
+        mapped_values={target: value},
+        passage_id=passage_id,
+        evidence_link_position=evidence_link_position,
+    )
+
+
+def _active_identity(record: dict[str, Any], object_kind: str) -> DiagnosticIdentity:
+    return {
+        "jurisdiction": str(record.get("jurisdiction", "")),
+        "object_kind": object_kind,
+        "id": str(record.get("machine_id", "")),
+        "legacy_refs": [str(value) for value in record.get("legacy_refs", [])],
+    }
+
+
+def _legacy_matches(records: list[dict[str, Any]], legacy_ref: str) -> list[dict[str, Any]]:
+    return [record for record in records if legacy_ref in record.get("legacy_refs", [])]
+
+
+def resolve_snapshot_claim_identity(
+    *,
+    snapshot_claim: dict[str, Any],
+    active_claims: list[dict[str, Any]],
+    jurisdiction: str,
+    source_pointer: str,
+) -> DiagnosticResult:
+    snapshot_id = snapshot_claim.get("id")
+    qualifiers = snapshot_claim.get("qualifiers")
+    legacy_ref = qualifiers.get("row_id") if isinstance(qualifiers, dict) else None
+    source_identity: DiagnosticIdentity = {
+        "jurisdiction": jurisdiction,
+        "object_kind": "snapshot_claim",
+        "id": snapshot_id if isinstance(snapshot_id, str) else "",
+        "legacy_refs": [legacy_ref] if isinstance(legacy_ref, str) else [],
+    }
+    if not isinstance(snapshot_id, str) or not snapshot_id or not isinstance(legacy_ref, str) or not legacy_ref:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="error",
+            reason_code="CLAIM_IDENTIFIER_MISSING",
+            source_concept="snapshot_claim_identity",
+            target_concept="active_claim_identity",
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+        )
+    matches = _legacy_matches(active_claims, legacy_ref)
+    if not matches:
+        status: MappingStatus = "unresolved"
+        reason = "CLAIM_IDENTITY_NOT_FOUND"
+    elif len(matches) > 1:
+        status = "error"
+        reason = "CLAIM_IDENTITY_AMBIGUOUS"
+    else:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="mapped",
+            reason_code="CLAIM_IDENTITY_EXACT",
+            source_concept="snapshot_claim_identity",
+            target_concept="active_claim_identity",
+            source_identity=source_identity,
+            target_identity=_active_identity(matches[0], "active_claim"),
+            source_pointer=source_pointer,
+        )
+    return _diagnostic_result(
+        result_kind="identity",
+        mapping_status=status,
+        reason_code=reason,
+        source_concept="snapshot_claim_identity",
+        target_concept="active_claim_identity",
+        source_identity=source_identity,
+        source_pointer=source_pointer,
+        unmapped_concepts=["active_claim_identity"],
+    )
+
+
+def resolve_snapshot_document_version_identity(
+    *,
+    snapshot_document: dict[str, Any],
+    active_sources: list[dict[str, Any]],
+    jurisdiction: str,
+    source_pointer: str,
+) -> DiagnosticResult:
+    document_id = snapshot_document.get("id")
+    source_identity: DiagnosticIdentity = {
+        "jurisdiction": jurisdiction,
+        "object_kind": "snapshot_document_version",
+        "id": document_id if isinstance(document_id, str) else "",
+        "legacy_refs": [document_id] if isinstance(document_id, str) else [],
+    }
+    if not isinstance(document_id, str) or not document_id:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="error",
+            reason_code="DOCUMENT_VERSION_IDENTIFIER_MISSING",
+            source_concept="snapshot_document_version_identity",
+            target_concept="active_source_identity",
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+        )
+    matches = _legacy_matches(active_sources, document_id)
+    if not matches:
+        status: MappingStatus = "unresolved"
+        reason = "DOCUMENT_SOURCE_IDENTITY_NOT_FOUND"
+    elif len(matches) > 1:
+        status = "error"
+        reason = "DOCUMENT_SOURCE_IDENTITY_AMBIGUOUS"
+    else:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="mapped",
+            reason_code="DOCUMENT_SOURCE_IDENTITY_EXACT",
+            source_concept="snapshot_document_version_identity",
+            target_concept="active_source_identity",
+            source_identity=source_identity,
+            target_identity=_active_identity(matches[0], "active_source"),
+            source_pointer=source_pointer,
+        )
+    return _diagnostic_result(
+        result_kind="identity",
+        mapping_status=status,
+        reason_code=reason,
+        source_concept="snapshot_document_version_identity",
+        target_concept="active_source_identity",
+        source_identity=source_identity,
+        source_pointer=source_pointer,
+        unmapped_concepts=["active_source_identity"],
+    )
+
+
+def resolve_snapshot_passage_identity(
+    *,
+    snapshot_passage: dict[str, Any],
+    active_passages: list[dict[str, Any]],
+    active_sources: list[dict[str, Any]],
+    jurisdiction: str,
+    source_pointer: str,
+) -> DiagnosticResult:
+    passage_id = snapshot_passage.get("id")
+    document_version_id = snapshot_passage.get("document_version_id")
+    source_identity: DiagnosticIdentity = {
+        "jurisdiction": jurisdiction,
+        "object_kind": "snapshot_passage",
+        "id": passage_id if isinstance(passage_id, str) else "",
+        "passage_id": passage_id if isinstance(passage_id, str) else "",
+        "document_version_id": (
+            document_version_id if isinstance(document_version_id, str) else ""
+        ),
+        "legacy_refs": [passage_id] if isinstance(passage_id, str) else [],
+    }
+    if not isinstance(passage_id, str) or not passage_id:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="error",
+            reason_code="PASSAGE_IDENTIFIER_MISSING",
+            source_concept="snapshot_passage_identity",
+            target_concept="active_passage_identity",
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+        )
+    if not isinstance(document_version_id, str) or not document_version_id:
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="error",
+            reason_code="DOCUMENT_VERSION_IDENTIFIER_MISSING",
+            source_concept="snapshot_passage_identity",
+            target_concept="active_passage_identity",
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+            passage_id=passage_id,
+        )
+    matches = _legacy_matches(active_passages, passage_id)
+    if not matches:
+        status: MappingStatus = "unresolved"
+        reason = "PASSAGE_IDENTITY_NOT_FOUND"
+    elif len(matches) > 1:
+        status = "error"
+        reason = "PASSAGE_IDENTITY_AMBIGUOUS"
+    else:
+        source_matches = _legacy_matches(active_sources, document_version_id)
+        if len(source_matches) == 1 and matches[0].get("source_machine_id") != source_matches[0].get(
+            "machine_id"
+        ):
+            return _diagnostic_result(
+                result_kind="identity",
+                mapping_status="error",
+                reason_code="PASSAGE_DOCUMENT_IDENTITY_INCONSISTENT",
+                source_concept="snapshot_passage_identity",
+                target_concept="active_passage_identity",
+                source_identity=source_identity,
+                source_pointer=source_pointer,
+                passage_id=passage_id,
+            )
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="mapped",
+            reason_code="PASSAGE_IDENTITY_EXACT",
+            source_concept="snapshot_passage_identity",
+            target_concept="active_passage_identity",
+            source_identity=source_identity,
+            target_identity=_active_identity(matches[0], "active_passage"),
+            source_pointer=source_pointer,
+            passage_id=passage_id,
+        )
+    return _diagnostic_result(
+        result_kind="identity",
+        mapping_status=status,
+        reason_code=reason,
+        source_concept="snapshot_passage_identity",
+        target_concept="active_passage_identity",
+        source_identity=source_identity,
+        source_pointer=source_pointer,
+        unmapped_concepts=["active_passage_identity"],
+        passage_id=passage_id,
+    )
+
+
+def resolve_snapshot_reviewed_object_identity(
+    *,
+    snapshot_review: dict[str, Any],
+    snapshot_objects: dict[str, list[dict[str, Any]]],
+    jurisdiction: str,
+    source_pointer: str,
+) -> DiagnosticResult:
+    review_id = snapshot_review.get("id")
+    object_type = snapshot_review.get("object_type")
+    object_id = snapshot_review.get("object_id")
+    source_identity: DiagnosticIdentity = {
+        "jurisdiction": jurisdiction,
+        "object_kind": "snapshot_review",
+        "id": review_id if isinstance(review_id, str) else "",
+    }
+    if (
+        not isinstance(review_id, str)
+        or not review_id
+        or not isinstance(object_type, str)
+        or not object_type
+        or not isinstance(object_id, str)
+        or not object_id
+    ):
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="error",
+            reason_code="REVIEWED_OBJECT_IDENTIFIER_MISSING",
+            source_concept="snapshot_review_identity",
+            target_concept="snapshot_reviewed_object_identity",
+            source_identity=source_identity,
+            source_pointer=source_pointer,
+        )
+    declared_matches = [
+        value for value in snapshot_objects.get(object_type, []) if value.get("id") == object_id
+    ]
+    other_matches = [
+        value
+        for kind, values in snapshot_objects.items()
+        if kind != object_type
+        for value in values
+        if value.get("id") == object_id
+    ]
+    if len(declared_matches) > 1:
+        status: MappingStatus = "error"
+        reason = "REVIEWED_OBJECT_AMBIGUOUS"
+    elif not declared_matches and other_matches:
+        status = "error"
+        reason = "REVIEWED_OBJECT_TYPE_MISMATCH"
+    elif not declared_matches:
+        status = "unresolved"
+        reason = "REVIEWED_OBJECT_NOT_FOUND"
+    else:
+        target_identity: DiagnosticIdentity = {
+            "jurisdiction": jurisdiction,
+            "object_kind": f"snapshot_{object_type}",
+            "id": object_id,
+        }
+        return _diagnostic_result(
+            result_kind="identity",
+            mapping_status="mapped",
+            reason_code="REVIEWED_OBJECT_IDENTITY_EXACT",
+            source_concept="snapshot_review_identity",
+            target_concept="snapshot_reviewed_object_identity",
+            source_identity=source_identity,
+            target_identity=target_identity,
+            source_pointer=source_pointer,
+        )
+    return _diagnostic_result(
+        result_kind="identity",
+        mapping_status=status,
+        reason_code=reason,
+        source_concept="snapshot_review_identity",
+        target_concept="snapshot_reviewed_object_identity",
+        source_identity=source_identity,
+        source_pointer=source_pointer,
+        unmapped_concepts=["snapshot_reviewed_object_identity"],
+    )
+
+
+def diagnostic_result_sort_key(result: DiagnosticResult) -> tuple[Any, ...]:
+    """Sort by stable identity and finish with source/link coordinates."""
+
+    source_identity = result["source_identity"]
+    legacy_refs = source_identity.get("legacy_refs", [])
+    stable_source_id = legacy_refs[0] if legacy_refs else source_identity.get("id", "")
+    return (
+        source_identity.get("jurisdiction", ""),
+        stable_source_id,
+        result["result_kind"],
+        source_identity.get("object_kind", ""),
+        result["source_concept"],
+        result["target_concept"] or "",
+        result["source_pointer"],
+        result["passage_id"] or "",
+        result["evidence_link_position"] if result["evidence_link_position"] is not None else -1,
+    )
+
+
+def build_evidence_diagnostic_projection(
+    *, root: Path | None = None
+) -> list[DiagnosticResult]:
+    """Build an internal read-only compatibility diagnostic over frozen inputs.
+
+    The result is not persisted, is not a native Writ record or Core schema, and is not consumed
+    by corpus generation or mutation.
+    """
+
+    repo_root = root or find_repo_root()
+    dataset = load_reviewed_input(root=repo_root)
+    reviewed_claims = normalize_reviewed_claims(dataset)
+    parent_by_id = {parent["row_id"]: parent for parent in dataset["records"]}
+    parent_index = {parent["row_id"]: index for index, parent in enumerate(dataset["records"])}
+    unresolved = _read_json(repo_root / UNRESOLVED_RELATIVE_PATH)
+    unresolved_by_parent = {entry["row_id"]: (index, entry) for index, entry in enumerate(unresolved)}
+
+    active_by_jurisdiction: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    for jurisdiction, relative_dir in CORPUS_RELATIVE_DIRS.items():
+        active_by_jurisdiction[jurisdiction] = {
+            "claim": _read_yaml(repo_root / relative_dir / "records" / "claims.yaml")["claims"],
+            "passage": _read_yaml(repo_root / relative_dir / "passages" / "passages.yaml")[
+                "passages"
+            ],
+            "source": _read_yaml(repo_root / relative_dir / "sources" / "sources.yaml")[
+                "sources"
+            ],
+        }
+
+    results: list[DiagnosticResult] = []
+    snapshot_claim_refs: set[str] = set()
+    for jurisdiction in ("EU", "US"):
+        snapshot_path = SNAPSHOT_RELATIVE_PATHS[jurisdiction]
+        snapshot = _read_json_object(repo_root / snapshot_path)
+        active = active_by_jurisdiction[jurisdiction]
+
+        for index, document in enumerate(snapshot["document_versions"]):
+            pointer = f"{snapshot_path.as_posix()}#/document_versions/{index}"
+            results.append(
+                resolve_snapshot_document_version_identity(
+                    snapshot_document=document,
+                    active_sources=active["source"],
+                    jurisdiction=jurisdiction,
+                    source_pointer=pointer,
+                )
+            )
+
+        for index, passage in enumerate(snapshot["passages"]):
+            pointer = f"{snapshot_path.as_posix()}#/passages/{index}"
+            results.append(
+                resolve_snapshot_passage_identity(
+                    snapshot_passage=passage,
+                    active_passages=active["passage"],
+                    active_sources=active["source"],
+                    jurisdiction=jurisdiction,
+                    source_pointer=pointer,
+                )
+            )
+
+        for index, claim in enumerate(snapshot["claims"]):
+            pointer = f"{snapshot_path.as_posix()}#/claims/{index}"
+            qualifiers = claim.get("qualifiers")
+            legacy_ref = qualifiers.get("row_id") if isinstance(qualifiers, dict) else None
+            if isinstance(legacy_ref, str):
+                snapshot_claim_refs.add(legacy_ref)
+            claim_identity: DiagnosticIdentity = {
+                "jurisdiction": jurisdiction,
+                "object_kind": "snapshot_claim",
+                "id": str(claim.get("id", "")),
+                "legacy_refs": [legacy_ref] if isinstance(legacy_ref, str) else [],
+            }
+            results.append(
+                resolve_snapshot_claim_identity(
+                    snapshot_claim=claim,
+                    active_claims=active["claim"],
+                    jurisdiction=jurisdiction,
+                    source_pointer=pointer,
+                )
+            )
+            results.append(
+                project_explicit_semantic(
+                    source_concept="truth_value",
+                    value=claim.get("truth_value"),
+                    source_identity=claim_identity,
+                    source_pointer=f"{pointer}/truth_value",
+                )
+            )
+            results.append(
+                project_explicit_semantic(
+                    source_concept="workflow_status",
+                    value=claim.get("status"),
+                    source_identity=claim_identity,
+                    source_pointer=f"{pointer}/status",
+                )
+            )
+            for link_position, evidence_link in enumerate(claim.get("evidence_links", [])):
+                link_pointer = f"{pointer}/evidence_links/{link_position}"
+                passage_id = evidence_link.get("passage_id")
+                for concept in ("stance", "support_type"):
+                    results.append(
+                        project_explicit_semantic(
+                            source_concept=concept,
+                            value=evidence_link.get(concept),
+                            source_identity=claim_identity,
+                            source_pointer=f"{link_pointer}/{concept}",
+                            passage_id=passage_id if isinstance(passage_id, str) else None,
+                            evidence_link_position=link_position,
+                        )
+                    )
+
+        snapshot_objects = {
+            "claim": snapshot["claims"],
+            "action": snapshot.get("actions", []),
+        }
+        for index, review in enumerate(snapshot["reviews"]):
+            pointer = f"{snapshot_path.as_posix()}#/reviews/{index}"
+            review_identity: DiagnosticIdentity = {
+                "jurisdiction": jurisdiction,
+                "object_kind": "snapshot_review",
+                "id": str(review.get("id", "")),
+            }
+            results.append(
+                resolve_snapshot_reviewed_object_identity(
+                    snapshot_review=review,
+                    snapshot_objects=snapshot_objects,
+                    jurisdiction=jurisdiction,
+                    source_pointer=pointer,
+                )
+            )
+            results.append(
+                project_explicit_semantic(
+                    source_concept="snapshot_review_decision",
+                    value=review.get("decision"),
+                    source_identity=review_identity,
+                    source_pointer=f"{pointer}/decision",
+                )
+            )
+
+    for claim in reviewed_claims:
+        claim_id = claim["claim_id"]
+        parent_id = claim["parent_row_id"]
+        parent = parent_by_id[parent_id]
+        jurisdiction = claim["jurisdiction"]
+        reviewed_claim_identity: DiagnosticIdentity = {
+            "jurisdiction": jurisdiction,
+            "object_kind": "reviewed_claim",
+            "id": claim_id,
+            "parent_id": parent_id,
+            "legacy_refs": [claim_id],
+        }
+        parent_pointer = (
+            f"{REVIEWED_RELATIVE_PATH.as_posix()}#/records/{parent_index[parent_id]}"
+        )
+        results.append(
+            project_explicit_semantic(
+                source_concept="reviewed_parent_decision",
+                value=parent.get("review_decision"),
+                source_identity=reviewed_claim_identity,
+                source_pointer=f"{parent_pointer}/review_decision",
+            )
+        )
+        if claim_id in snapshot_claim_refs:
+            continue
+        unresolved_match = unresolved_by_parent.get(parent_id)
+        if unresolved_match is None:
+            results.append(
+                _diagnostic_result(
+                    result_kind="identity",
+                    mapping_status="error",
+                    reason_code="UNRESOLVED_PROVENANCE_NOT_FOUND",
+                    source_concept="evidence_identity",
+                    target_concept="snapshot_evidence_identity",
+                    source_identity=reviewed_claim_identity,
+                    source_pointer=parent_pointer,
+                )
+            )
+            continue
+        unresolved_index, _ = unresolved_match
+        results.append(
+            _diagnostic_result(
+                result_kind="identity",
+                mapping_status="unresolved",
+                reason_code="EVIDENCE_IDENTITY_NOT_AVAILABLE",
+                source_concept="evidence_identity",
+                target_concept="snapshot_evidence_identity",
+                source_identity=reviewed_claim_identity,
+                source_pointer=(
+                    f"{UNRESOLVED_RELATIVE_PATH.as_posix()}#/{unresolved_index}"
+                ),
+                unmapped_concepts=[
+                    "snapshot_claim_identity",
+                    "snapshot_passage_identity",
+                    "snapshot_document_version_identity",
+                ],
+            )
+        )
+
+    return sorted(results, key=diagnostic_result_sort_key)
+
+
 def _claim_display_ref(claim: dict[str, Any]) -> str:
     label = CLAIM_REFS[claim["claim_id"]].split("#", 1)[1].replace("-", " ")
     return f"{claim['source_locator'].strip()} — {label}"
@@ -267,6 +959,11 @@ def _claim_record(claim: dict[str, Any], review_id: str) -> dict[str, Any]:
         for key, value in claim.items()
         if key not in REMOVED_NORMALIZED_FIELDS
     }
+    stage_one = (
+        {"family": "legal_policy", "topics": ["artificial_intelligence"]}
+        if claim["jurisdiction"] == "US"
+        else {}
+    )
     return {
         **_identity(
             record_kind="claim",
@@ -277,6 +974,7 @@ def _claim_record(claim: dict[str, Any], review_id: str) -> dict[str, Any]:
         ),
         "record_type": "political_claim",
         "record_family": "policy",
+        **stage_one,
         "review_status": "accepted",
         "imported_review_machine_id": review_id,
         **preserved,

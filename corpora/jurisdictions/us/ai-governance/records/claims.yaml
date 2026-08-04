@@ -9,6 +9,9 @@ claims:
   - US-01
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 20932931-1e58-5740-96f5-7216c676fd63
   claim_record_type: guidance
@@ -45,6 +48,9 @@ claims:
   - US-02
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: dd587055-ce88-50a5-af0f-ff903f9d6612
   claim_record_type: implementation_guidance
@@ -85,6 +91,9 @@ claims:
   - US-03
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: c6b98ba4-dfb9-5a2a-ba89-ebe1ea0028ba
   claim_record_type: guidance
@@ -126,6 +135,9 @@ claims:
   - US-04
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: ba7a6ec1-0f25-570c-a723-d02117e47c3d
   claim_record_type: institutional_program
@@ -164,6 +176,9 @@ claims:
   - US-05A
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
   claim_record_type: guidance
@@ -206,6 +221,9 @@ claims:
   - US-05B
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
   claim_record_type: proposed_guidance
@@ -247,6 +265,9 @@ claims:
   - US-06
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 143b5063-6ce9-51b4-b414-e5977aa27351
   claim_record_type: executive_direction
@@ -282,6 +303,9 @@ claims:
   - US-07
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 5708c65d-f30f-5904-8f08-e984d3e846bd
   claim_record_type: scope_rule
@@ -315,6 +339,9 @@ claims:
   - US-08A
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
   claim_record_type: obligation
@@ -351,6 +378,9 @@ claims:
   - US-08B
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
   claim_record_type: obligation
@@ -386,6 +416,9 @@ claims:
   - US-09A
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
   claim_record_type: obligation
@@ -422,6 +455,9 @@ claims:
   - US-09B
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
   claim_record_type: procurement_requirement
@@ -459,6 +495,9 @@ claims:
   - US-09C
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
   claim_record_type: contract_mediated_obligation
@@ -495,6 +534,9 @@ claims:
   - US-10A
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
   claim_record_type: contract_mediated_obligation
@@ -534,6 +576,9 @@ claims:
   - US-10B
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
   claim_record_type: contract_mediated_obligation
@@ -574,6 +619,9 @@ claims:
   - US-11
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 3051f3ef-790d-5c6f-8a40-c19c4e1c4fad
   claim_record_type: proposed_policy
@@ -616,6 +664,9 @@ claims:
   - US-12
   record_type: political_claim
   record_family: policy
+  family: legal_policy
+  topics:
+  - artificial_intelligence
   review_status: accepted
   imported_review_machine_id: 38500024-ec53-5469-bb78-f8c714aa96f4
   claim_record_type: policy_context

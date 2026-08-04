@@ -32,6 +32,6 @@ describe("vendored schemas match the authoritative schemas/ tree", () => {
   test("every runtime schema kind has one authority mapping", () => {
     expect(Object.keys(SCHEMA_AUTHORITY_FILES).sort()).toEqual([...SCHEMA_KINDS].sort());
     expect(new Set(Object.values(SCHEMA_AUTHORITY_FILES)).size).toBe(SCHEMA_KINDS.length);
-    expect(SCHEMA_KINDS.length).toBe(9);
+    expect(SCHEMA_KINDS.length).toBe(13);
   });
 });

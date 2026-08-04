@@ -1,0 +1,11 @@
+language writ "0.1"
+package us.constitutional_law.vocabulary version "0.1.0";
+
+concept constitutional_provision {
+  family legal_policy;
+  instrument_kind constitution;
+}
+
+concept constitutional_amendment_provision: constitutional_provision {
+  instrument_kind constitutional_amendment;
+}

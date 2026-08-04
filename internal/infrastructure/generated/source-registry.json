@@ -3157,6 +3157,36 @@
         "application/pdf"
       ],
       "notes": "Use licensed feed or links; do not redistribute full articles."
+    },
+    {
+      "id": "writ.controlled_topics",
+      "name": "Writ controlled topic vocabulary",
+      "publisher": "Writ",
+      "jurisdictions": [
+        "International"
+      ],
+      "source_tier": 0,
+      "source_types": [
+        "methodology"
+      ],
+      "base_uri": "https://github.com/saykig/Writ/blob/main/internal/infrastructure/config/corpus_vocabulary.yml",
+      "discovery_method": "manual",
+      "fetch_method": "manual",
+      "authentication": {
+        "type": "none"
+      },
+      "robots_policy": "not_applicable",
+      "terms_status": "reviewed",
+      "languages": [
+        "en"
+      ],
+      "expected_formats": [
+        "application/yaml"
+      ],
+      "enabled": true,
+      "verification_status": "verified",
+      "last_verified": "2026-08-03",
+      "notes": "Repository-authored controlled topic concepts and exact aliases."
     }
   ]
 }

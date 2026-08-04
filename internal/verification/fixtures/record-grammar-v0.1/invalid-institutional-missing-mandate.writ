@@ -1,0 +1,32 @@
+language writ "0.1"
+package writ.fixtures.records version "0.1.0";
+
+record nist_missing_mandate : institutional {
+  corpus us.institutions.nist;
+  version "0.1.0";
+  title "Missing explicit mandate status";
+  subjects {
+    subject nist type institution;
+  };
+  assertion states "This fixture intentionally omits mandate status.";
+  topics {};
+  scope {
+    jurisdictions { "United States" };
+    institutional_scope { nist };
+    temporal_scope {}
+    conditions {};
+  }
+  evidence {
+    support nist.about document_version nist.about.v1 passage nist.about.p1 locator "About" quote "A passage." passage_hash "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" document_hash "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" basis direct;
+  }
+  uncertainty {}
+  provenance { created_by "Writ fixture maintainers"; created_at 2026-08-03; }
+  review_state draft;
+  institutional {
+    institution_id nist;
+    institution_type federal_agency;
+    jurisdictions { "United States" };
+    functions { measurement_science };
+    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
+  }
+}

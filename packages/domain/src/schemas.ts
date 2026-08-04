@@ -20,6 +20,10 @@ export const SCHEMA_KINDS = [
   "source-registry",
   "discrepancy",
   "release",
+  "record",
+  "legal-policy-record",
+  "institutional-record",
+  "record-judgment",
 ] as const;
 
 /** A schema kind, e.g. `"canonical-ir"`. */
@@ -36,6 +40,10 @@ export const SCHEMA_FILES: Readonly<Record<SchemaKind, string>> = Object.freeze(
   "source-registry": "source-registry.schema.json",
   discrepancy: "discrepancy.schema.json",
   release: "release.schema.json",
+  record: "record.schema.json",
+  "legal-policy-record": "legal-policy-record.schema.json",
+  "institutional-record": "institutional-record.schema.json",
+  "record-judgment": "record-judgment.schema.json",
 });
 
 /** Authoritative path (relative to repository `schemas/`) for each vendored kind. */
@@ -49,6 +57,10 @@ export const SCHEMA_AUTHORITY_FILES: Readonly<Record<SchemaKind, string>> = Obje
   "source-registry": "core/source-registry.schema.json",
   discrepancy: "analysis/discrepancy.schema.json",
   release: "analysis/release.schema.json",
+  record: "core/record.schema.json",
+  "legal-policy-record": "extensions/legal-policy-record.schema.json",
+  "institutional-record": "extensions/institutional-record.schema.json",
+  "record-judgment": "extensions/record-judgment.schema.json",
 });
 
 /** A JSON Schema document as a plain object. */

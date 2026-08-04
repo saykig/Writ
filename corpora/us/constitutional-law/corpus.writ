@@ -1,0 +1,9 @@
+language writ "0.1"
+package us.constitutional_law.corpus version "0.1.0";
+
+concept ConstitutionalLawCorpus {
+  corpus_id us.constitutional_law;
+  dataset "vaquill/open-us-law";
+  snapshot_value "v2026.07";
+  workflow_state draft;
+}

@@ -1,0 +1,30 @@
+language writ "0.1"
+package us.institutions.nist.sources version "0.1.0";
+
+source nist_about {
+  uri "https://www.nist.gov/about-nist";
+  media_type "text/html";
+  retrieved 2026-08-03T00:00:00-04:00;
+  sha256 "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2";
+}
+
+concept NistAboutSource {
+  source_id nist.about;
+  source_title "About NIST";
+  source_version "updated-2022-01-11";
+  source_date 2022-01-11;
+}
+
+source nist_ai_standards_group {
+  uri "https://www.nist.gov/itl/ai/ai-standards-and-guidelines-group";
+  media_type "text/html";
+  retrieved 2026-08-03T00:00:00-04:00;
+  sha256 "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96";
+}
+
+concept NistAiStandardsGroupSource {
+  source_id nist.ai_standards_group;
+  source_title "AI Standards and Guidelines Group";
+  source_version "retrieved-2026-08-03";
+  source_date 2026-08-03;
+}

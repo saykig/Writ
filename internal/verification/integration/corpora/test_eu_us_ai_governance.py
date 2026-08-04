@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import uuid
 from pathlib import Path
@@ -20,6 +21,7 @@ from writ_ingest.corpus.eu_us_ai_governance import (
     REMOVED_NORMALIZED_FIELDS,
     REVIEWED_RELATIVE_PATH,
     build_corpus_documents,
+    build_evidence_diagnostic_projection,
     load_reviewed_input,
     normalize_reviewed_claims,
     validate_active_corpora,
@@ -114,6 +116,8 @@ def test_every_reviewed_claim_field_survives_except_retired_pilot_fields() -> No
         "record_family",
         "review_status",
         "imported_review_machine_id",
+        "family",
+        "topics",
     }
     for reviewed in reviewed_claims:
         legacy_ref = reviewed["claim_id"]
@@ -128,6 +132,16 @@ def test_every_reviewed_claim_field_survives_except_retired_pilot_fields() -> No
             if key not in active_metadata
         }
         assert actual == expected, legacy_ref
+
+
+def test_us_claims_map_to_legal_policy_and_controlled_ai_topic_only() -> None:
+    us_claims = active("US", "records/claims.yaml")["claims"]
+    assert len(us_claims) == 17
+    assert all(claim["family"] == "legal_policy" for claim in us_claims)
+    assert all(claim["topics"] == ["artificial_intelligence"] for claim in us_claims)
+
+    eu_claims = active("EU", "records/claims.yaml")["claims"]
+    assert all("family" not in claim and "topics" not in claim for claim in eu_claims)
 
 
 def test_review_decisions_and_parent_groupings_are_preserved() -> None:
@@ -153,7 +167,7 @@ def test_review_decisions_and_parent_groupings_are_preserved() -> None:
         assert len(review["claim_machine_ids"]) == expected_children
 
 
-def test_every_old_row_or_claim_id_resolves_exactly_once() -> None:
+def test_corpus_migration_resolves_all_38_old_row_or_claim_ids_exactly_once() -> None:
     reviewed = load_reviewed_input(root=ROOT)
     expected: list[str] = []
     for parent in reviewed["records"]:
@@ -232,8 +246,6 @@ def test_active_corpus_documents_have_no_comparative_or_headline_fields() -> Non
 
 
 def test_source_passages_and_hashes_are_traceable_without_loss() -> None:
-    import json
-
     archived_sources = json.loads(
         (
             ROOT
@@ -272,6 +284,140 @@ def test_source_passages_and_hashes_are_traceable_without_loss() -> None:
         migrated = passage_by_legacy[passage["id"]]
         for field in passage.keys() - {"id", "row_id", "document_version_id"}:
             assert migrated[field] == passage[field]
+
+
+def test_evidence_crosswalk_has_exact_object_specific_coverage() -> None:
+    results = build_evidence_diagnostic_projection(root=ROOT)
+
+    identity_expectations = (
+        ("snapshot_claim_identity", "CLAIM_IDENTITY_EXACT", 27),
+        ("snapshot_passage_identity", "PASSAGE_IDENTITY_EXACT", 22),
+        (
+            "snapshot_document_version_identity",
+            "DOCUMENT_SOURCE_IDENTITY_EXACT",
+            10,
+        ),
+        ("snapshot_review_identity", "REVIEWED_OBJECT_IDENTITY_EXACT", 27),
+    )
+    for concept, reason, expected_count in identity_expectations:
+        mappings = [
+            result
+            for result in results
+            if result["source_concept"] == concept
+            and result["mapping_status"] == "mapped"
+            and result["reason_code"] == reason
+        ]
+        target_identities: list[tuple[str, str, str]] = []
+        for mapping in mappings:
+            target = mapping["target_identity"]
+            assert target is not None
+            target_identities.append(
+                (target["jurisdiction"], target["object_kind"], target["id"])
+            )
+        assert len(target_identities) == expected_count
+        assert len(set(target_identities)) == expected_count
+
+    reviewed_objects = [
+        result
+        for result in results
+        if result["source_concept"] == "snapshot_review_identity"
+    ]
+    assert all(
+        result["target_identity"] is not None
+        and result["target_identity"]["object_kind"] == "snapshot_claim"
+        for result in reviewed_objects
+    )
+    assert all(
+        result["target_identity"] is None
+        or result["target_identity"]["object_kind"] != "active_review"
+        for result in reviewed_objects
+    )
+
+
+def test_five_accepted_claims_have_separate_unresolved_evidence_identities() -> None:
+    results = build_evidence_diagnostic_projection(root=ROOT)
+    unresolved = [
+        result
+        for result in results
+        if result["reason_code"] == "EVIDENCE_IDENTITY_NOT_AVAILABLE"
+    ]
+    assert [result["source_identity"]["id"] for result in unresolved] == [
+        "EU-10A",
+        "EU-10B",
+        "EU-10C",
+        "EU-12",
+        "US-02",
+    ]
+    assert all(result["mapping_status"] == "unresolved" for result in unresolved)
+    assert [result["source_pointer"].rsplit("/", 1)[-1] for result in unresolved] == [
+        "0",
+        "0",
+        "0",
+        "1",
+        "2",
+    ]
+    assert [result for result in results if result["mapping_status"] != "mapped"] == unresolved
+
+    parent_decisions = {
+        result["source_identity"]["id"]: result
+        for result in results
+        if result["source_concept"] == "reviewed_parent_decision"
+    }
+    active_claims = {
+        claim["legacy_refs"][0]: claim
+        for jurisdiction in ("EU", "US")
+        for claim in active(jurisdiction, "records/claims.yaml")["claims"]
+    }
+    expected_unresolved_claim_ids = {
+        "EU-10A",
+        "EU-10B",
+        "EU-10C",
+        "EU-12",
+        "US-02",
+    }
+    parent_decision_claim_ids = parent_decisions.keys() & expected_unresolved_claim_ids
+    assert parent_decision_claim_ids == expected_unresolved_claim_ids
+    for claim_id in sorted(parent_decision_claim_ids):
+        assert parent_decisions[claim_id]["mapped_values"] == {
+            "reviewed_parent_decision": "accepted"
+        }
+        assert active_claims[claim_id]["review_status"] == "accepted"
+
+
+def test_crosswalk_semantics_are_deterministic_and_independent_of_identity() -> None:
+    first = build_evidence_diagnostic_projection(root=ROOT)
+    second = build_evidence_diagnostic_projection(root=ROOT)
+    assert first == second
+    assert json.dumps(first, sort_keys=True, separators=(",", ":")) == json.dumps(
+        second, sort_keys=True, separators=(",", ":")
+    )
+
+    semantic_results = [
+        result
+        for result in first
+        if result["source_concept"]
+        in {
+            "stance",
+            "support_type",
+            "truth_value",
+            "workflow_status",
+            "reviewed_parent_decision",
+            "snapshot_review_decision",
+        }
+    ]
+    assert semantic_results
+    assert all(result["mapping_status"] == "mapped" for result in semantic_results)
+    assert all(result["target_identity"] is None for result in semantic_results)
+    assert {
+        result["mapped_values"]["snapshot_review_decision"]
+        for result in semantic_results
+        if result["source_concept"] == "snapshot_review_decision"
+    } == {"accept"}
+    assert {
+        result["mapped_values"]["reviewed_parent_decision"]
+        for result in semantic_results
+        if result["source_concept"] == "reviewed_parent_decision"
+    } == {"accepted"}
 
 
 def test_unknowns_and_legal_distinctions_remain_explicit() -> None:

@@ -28,13 +28,38 @@ export interface SchemaRegistryEntry {
 }
 
 /**
- * Extract the declared `schema_version` const from a vendored schema.
- * The contracts pin it with `{ "const": "1.0.0" }`.
+ * Extract the declared `schema_version` const from a vendored schema. Family
+ * extensions inherit the version from the shared record base rather than
+ * duplicating that property.
  */
 function declaredVersion(kind: SchemaKind): string {
   const schema = RAW_SCHEMAS[kind];
-  const properties = schema.properties as { schema_version?: { const?: unknown } } | undefined;
-  const constValue = properties?.schema_version?.const;
+  const rootProperties = schema.properties as
+    { schema_version?: { const?: unknown; $ref?: unknown } } | undefined;
+  const defs = schema.$defs as
+    | Record<
+        string,
+        {
+          const?: unknown;
+          properties?: { schema_version?: { const?: unknown; $ref?: unknown } };
+        }
+      >
+    | undefined;
+  const baseProperties = defs?.recordBase?.properties;
+  const versionProperty = rootProperties?.schema_version ?? baseProperties?.schema_version;
+  let constValue = versionProperty?.const;
+  if (constValue === undefined && typeof versionProperty?.$ref === "string") {
+    const match = versionProperty.$ref.match(/^#\/\$defs\/([^/]+)$/);
+    constValue = match ? defs?.[match[1]!]?.const : undefined;
+  }
+  if (constValue === undefined && kind !== "record") {
+    const allOf = schema.allOf as Array<{ $ref?: unknown }> | undefined;
+    const inheritsRecordBase = allOf?.some(
+      (item) =>
+        item.$ref === "https://writ.example/schemas/core/record.schema.json#/$defs/recordBase",
+    );
+    if (inheritsRecordBase) return declaredVersion("record");
+  }
   return typeof constValue === "string" ? constValue : "unknown";
 }
 

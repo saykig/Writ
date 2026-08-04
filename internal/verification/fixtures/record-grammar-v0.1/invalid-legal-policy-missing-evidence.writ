@@ -1,0 +1,32 @@
+language writ "0.1"
+package writ.fixtures.records version "0.1.0";
+
+record missing_evidence : legal_policy {
+  corpus us.constitutional_law;
+  version "0.1.0";
+  title "Missing evidence";
+  subjects {
+    subject united_states type jurisdiction;
+  };
+  assertion states "This fixture intentionally omits evidence.";
+  topics {};
+  scope {
+    jurisdictions { "United States" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
+  }
+  uncertainty {}
+  provenance { created_by "Writ fixture maintainers"; created_at 2026-08-03; }
+  review_state draft;
+  legal_policy {
+    instrument_type constitution;
+    jurisdiction_level federal;
+    force unknown;
+    adoption_status unknown;
+    applicability_status unknown;
+    enforcement_status unknown;
+    official_citation "Fixture";
+    provision_identifier "missing-evidence";
+  }
+}
