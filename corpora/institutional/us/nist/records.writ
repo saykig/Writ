@@ -1,14 +1,14 @@
-language writ "0.1"
-package us.institutions.nist.records version "0.1.0";
+language writ "0.2"
+package us.institutions.nist.records version "0.2.0";
 
 record nist_identity : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
+  version "0.2.0";
   title "NIST identity";
   subjects {
     subject nist type institution role "subject";
   };
-  assertion defines "NIST as the National Institute of Standards and Technology.";
+  assertion defines "NIST is the National Institute of Standards and Technology.";
   topics {};
   scope {
     jurisdictions { "United States" };
@@ -19,30 +19,24 @@ record nist_identity : institutional {
   evidence {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
-  uncertainty { item unknown "This identity passage does not determine NIST's legal mandate or operational capacity."; }
+  uncertainty { item unknown "This identity passage does not establish NIST's legal mandate, decision rights, regulatory authority or operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist;
+    fact_type identity;
     institution_type federal_agency;
-    mandate {
-      status unknown;
-      text "This source establishes identity, not a legal mandate.";
-    }
-    jurisdictions { "United States" };
-    functions { other };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
   }
 }
 
 record nist_organizational_placement : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
+  version "0.2.0";
   title "NIST organizational placement";
   subjects {
     subject nist type institution role "subunit";
   };
-  assertion states "NIST is part of the U.S. Department of Commerce.";
+  assertion states "NIST is organizationally situated within the U.S. Department of Commerce.";
   topics {};
   scope {
     jurisdictions { "United States" };
@@ -53,62 +47,51 @@ record nist_organizational_placement : institutional {
   evidence {
     support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
-  uncertainty { item unknown "Organizational placement does not establish operational capacity."; }
+  uncertainty { item unknown "The passage establishes NIST's organizational placement. It does not establish the Department of Commerce's precise decision rights over NIST, NIST's degree of institutional independence or NIST's operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist;
-    institution_type federal_agency;
-    mandate {
-      status unknown;
-      text "This source establishes structure, not a legal mandate.";
-    }
-    jurisdictions { "United States" };
-    functions { other };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
+    fact_type placement;
     parent_institution_id department_of_commerce;
   }
 }
 
-record nist_department_of_commerce_relationship : institutional {
+record nist_mission : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
-  title "NIST relationship to the Department of Commerce";
+  version "0.2.0";
+  title "NIST source-reported mission";
   subjects {
-    subject nist type institution role "subunit";
-    subject department_of_commerce type institution role "parent";
+    subject nist type institution role "subject";
   };
-  assertion states "NIST is part of the U.S. Department of Commerce.";
+  assertion states "NIST states that its mission is to promote U.S. innovation and industrial competitiveness by advancing measurement science, standards and technology in ways that enhance economic security and quality of life.";
   topics {};
   scope {
     jurisdictions { "United States" };
-    institutional_scope { nist, department_of_commerce };
+    institutional_scope { nist };
     temporal_scope {}
     conditions {};
   }
   evidence {
-    support nist.about document_version nist.about.v2022_01_11 passage nist.about.identity locator "About NIST, opening paragraph" quote "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce." passage_hash "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
+    support nist.about document_version nist.about.v2022_01_11 passage nist.about.mission locator "About NIST, Mission" quote "To promote U.S. innovation and industrial competitiveness by advancing measurement science, standards, and technology in ways that enhance economic security and improve our quality of life." passage_hash "sha256:b7c73bafbedd9701baee1cadf74dc7668b215f3d6f5d19d6b6d51a179120c219" document_hash "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2" basis direct;
   }
-  uncertainty { item unknown "The cited relationship does not establish decision rights or operational capacity."; }
-  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  uncertainty { item unknown "This is NIST's source-reported mission. The passage does not independently establish statutory mandate, demonstrated performance, staffing, funding or operational capacity."; }
+  provenance { created_by "Claude Code implementation of approved human review"; created_at 2026-08-04; }
+  review_state approved;
   institutional {
     institution_id nist;
-    institution_type federal_agency;
-    mandate {
-      status unknown;
-      text "This source establishes a relationship, not a legal mandate.";
+    fact_type mission;
+    mission {
+      text "NIST states that its mission is to promote U.S. innovation and industrial competitiveness by advancing measurement science, standards and technology in ways that enhance economic security and quality of life.";
+      source_ids { nist.about };
+      evidence_refs { nist.about.mission };
     }
-    jurisdictions { "United States" };
-    functions { other };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
-    institutional_relationships { relation part_of department_of_commerce; };
   }
 }
 
 record nist_measurement_science_function : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
+  version "0.2.0";
   title "NIST measurement-science function";
   subjects {
     subject nist type institution role "subject";
@@ -126,33 +109,22 @@ record nist_measurement_science_function : institutional {
   }
   uncertainty { item ambiguous "The page labels this text as mission; this record does not treat it as statutory authority or evidence of operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  review_state superseded;
   institutional {
     institution_id nist;
-    institution_type federal_agency;
-    mandate {
-      status unknown;
-      text "The source-reported mission does not establish a legal mandate.";
-    }
-    mission {
-      text "Promote U.S. innovation and industrial competitiveness by advancing measurement science, standards, and technology.";
-      source_ids { nist.about };
-      evidence_refs { nist.about.mission };
-    }
-    jurisdictions { "United States" };
-    functions { measurement_science };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
+    fact_type function;
+    function measurement_science;
   }
 }
 
 record nist_ai_standards_development_function : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
+  version "0.2.0";
   title "NIST AI standards-development function";
   subjects {
     subject nist.ai_standards_guidelines_group type organizational_unit role "subject";
   };
-  assertion performs "The group leads NIST participation in voluntary consensus standards development for AI.";
+  assertion performs "The NIST AI Standards and Guidelines Group leads NIST's participation in the development of voluntary consensus standards, including international standards, concerning AI.";
   topics { artificial_intelligence };
   scope {
     jurisdictions { "United States" };
@@ -163,31 +135,24 @@ record nist_ai_standards_development_function : institutional {
   evidence {
     support nist.ai_standards_group document_version nist.ai_standards_group.v2026_08_03 passage nist.ai_standards_group.standards locator "AI Standards and Guidelines Group, overview paragraph 2" quote "In addition to developing its own publications, the Group leads NIST's participation in the development of voluntary consensus standards, including international standards, that promote innovation and trustworthiness in systems and organizations that use AI." passage_hash "sha256:ec5b9883154946b69ee3623b9e7394501ced98354288e4167a2eedf4c31609b8" document_hash "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96" basis direct;
   }
-  uncertainty { item unknown "The passage establishes a function, not operational capacity or a legal obligation imposed on external organizations."; }
+  uncertainty { item unknown "The passage establishes a standards-development function and a coordinating role in NIST's participation. It does not establish statutory mandate, authority over external standards bodies, binding regulatory power or operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist.ai_standards_guidelines_group;
-    institution_type organizational_unit;
-    mandate {
-      status unknown;
-      text "The cited page establishes a group function, not a legal mandate.";
-    }
-    jurisdictions { "United States" };
-    functions { standards_development };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
-    parent_institution_id nist;
+    fact_type function;
+    function standards_development;
   }
 }
 
 record nist_ai_technical_guidance_function : institutional {
   corpus us.institutions.nist;
-  version "0.1.0";
+  version "0.2.0";
   title "NIST AI technical-guidance function";
   subjects {
     subject nist.ai_standards_guidelines_group type organizational_unit role "subject";
   };
-  assertion performs "The group develops technical resources and guidelines for organizations that develop, deploy, and use AI.";
+  assertion performs "The NIST AI Standards and Guidelines Group develops technical resources and guidelines intended to help organizations develop, deploy and use AI.";
   topics { artificial_intelligence };
   scope {
     jurisdictions { "United States" };
@@ -198,19 +163,12 @@ record nist_ai_technical_guidance_function : institutional {
   evidence {
     support nist.ai_standards_group document_version nist.ai_standards_group.v2026_08_03 passage nist.ai_standards_group.guidance locator "AI Standards and Guidelines Group, overview paragraph 1" quote "The Artificial Intelligence (AI) Standards and Guidelines Group develops technical resources and guidelines that help organizations to develop, deploy, and use AI with confidence, enabling U.S. industry to position itself at the forefront of technology development and AI governance." passage_hash "sha256:7a9c75b43200b400de56a5c983cc3c13c2127122e33a86ad8169548ef405f903" document_hash "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96" basis direct;
   }
-  uncertainty { item unknown "Technical guidance is not encoded as a legal obligation and does not establish operational capacity."; }
+  uncertainty { item unknown "The passage establishes a stated technical-guidance function. It does not establish that the guidance is legally binding, that the group has authority over external organizations or that it possesses any particular level of operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-03; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist.ai_standards_guidelines_group;
-    institution_type organizational_unit;
-    mandate {
-      status unknown;
-      text "The cited page establishes a group function, not a legal mandate.";
-    }
-    jurisdictions { "United States" };
-    functions { technical_guidance };
-    operational_capacity { status unknown; dimensions {}; evidence_refs {}; }
-    parent_institution_id nist;
+    fact_type function;
+    function technical_guidance;
   }
 }

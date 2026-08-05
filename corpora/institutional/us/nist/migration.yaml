@@ -1,0 +1,99 @@
+schema_version: 1.0.0
+corpus_id: us.institutions.nist
+stage: stage_a_human_review
+base_sha: d3bb0d4c52d03ebef2d21987db60032c35509be7
+reviewer: Sara Kim
+# Stage A implements the approved human review of the six automated drafts against
+# the native institutional v0.2 contract. No object was deleted: the relationship
+# record became a Core link and the misclassified function is retained as history.
+previous_contract:
+  kind: compatibility
+  id: https://writ.example/schemas/compatibility/record-grammar-v0.1/institutional-record.schema.json
+  version: 0.1.0
+final_contract:
+  kind: native
+  id: https://writ.example/schemas/extensions/institutional-record.schema.json
+  version: 0.2.0
+entries:
+  - previous_object: nist_identity
+    previous_form: v0.1 compatibility institutional record
+    final_object: nist_identity
+    final_form: native v0.2 atomic identity record
+    final_review_state: approved
+    identity_preserved: true
+  - previous_object: nist_organizational_placement
+    previous_form: v0.1 compatibility institutional record
+    final_object: nist_organizational_placement
+    final_form: native v0.2 atomic placement record
+    final_review_state: approved
+    identity_preserved: true
+  - previous_object: nist_department_of_commerce_relationship
+    previous_form: v0.1 institutional record duplicating the placement fact
+    final_object: nist_department_of_commerce_relationship
+    final_form: standalone Core record link, relation_type part_of
+    final_review_state: approved
+    identity_preserved: true
+    note: The object became a Core record link rather than being deleted. It cites
+      nist_organizational_placement in supporting_record_ids; that record remains the
+      authoritative institutional fact and the link is not a second assertion of it.
+  - previous_object: nist_measurement_science_function
+    previous_form: v0.1 compatibility function record
+    final_object: nist_measurement_science_function
+    final_form: native v0.2 function record retained as history
+    final_review_state: superseded
+    identity_preserved: true
+    note: The cited passage is explicitly a mission statement. The record remains resolvable as
+      superseded review history; it is not deleted and carries no record-level superseded_by
+      field. Its replacement is stated by the Core supersession link.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_mission
+    final_form: native v0.2 atomic mission record
+    final_review_state: approved
+    identity_preserved: false
+    note: New record produced by the approved human-review split. Its provenance is the
+      implementation of that review, not an original automated draft.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_mission_supersedes_nist_measurement_science_function
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: Directed from the newer approved mission record to the older superseded function record.
+  - previous_object: nist_ai_standards_development_function
+    previous_form: v0.1 compatibility institutional record
+    final_object: nist_ai_standards_development_function
+    final_form: native v0.2 atomic function record
+    final_review_state: approved
+    identity_preserved: true
+  - previous_object: nist_ai_technical_guidance_function
+    previous_form: v0.1 compatibility institutional record
+    final_object: nist_ai_technical_guidance_function
+    final_form: native v0.2 atomic function record
+    final_review_state: approved
+    identity_preserved: true
+preserved_evidence:
+  sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
+  sources:
+    - source_id: nist.about
+      source_version: updated-2022-01-11
+      document_version_id: nist.about.v2022_01_11
+      document_hash: sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2
+    - source_id: nist.ai_standards_group
+      source_version: retrieved-2026-08-03
+      document_version_id: nist.ai_standards_group.v2026_08_03
+      document_hash: sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96
+  passages:
+    - passage_id: nist.about.identity
+      passage_hash: sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277
+    - passage_id: nist.about.mission
+      passage_hash: sha256:b7c73bafbedd9701baee1cadf74dc7668b215f3d6f5d19d6b6d51a179120c219
+    - passage_id: nist.ai_standards_group.standards
+      passage_hash: sha256:ec5b9883154946b69ee3623b9e7394501ced98354288e4167a2eedf4c31609b8
+    - passage_id: nist.ai_standards_group.guidance
+      passage_hash: sha256:7a9c75b43200b400de56a5c983cc3c13c2127122e33a86ad8169548ef405f903
+outstanding_stage_b:
+  - mandate
+  - decision_right
+  - operational_capacity
+  - ai_standards_guidelines_group identity and placement

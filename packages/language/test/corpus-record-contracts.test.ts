@@ -2,12 +2,28 @@
  * The manifest-to-record gate.
  *
  * A corpus manifest declares one `record_contract`. This loads every catalogued
- * manifest and validates every record file it lists against exactly that contract.
- * A manifest cannot pass because its own structure is valid while the files it
- * points at fail the contract it names.
+ * manifest and validates the files it lists against exactly the contract that
+ * governs them. A manifest cannot pass because its own structure is valid while
+ * the files it points at fail the contract it names.
  *
- * `.writ` files are compiled first and their lowered records are validated, so the
- * native-grammar corpora are held to the same rule as the YAML ones.
+ * Validation is routed by `locations` category, because a manifest lists more than
+ * records. For a corpus whose contract is a per-object grammar:
+ *
+ *   locations.records        -> the manifest's declared record contract
+ *   locations.relationships  -> schemas/core/record-link.schema.json
+ *   locations.judgments      -> schemas/analysis/record-judgment.schema.json
+ *   locations.sources        -> not validated as records
+ *   locations.passages       -> not validated as records
+ *   locations.migration      -> not validated as records
+ *
+ * A preserved compatibility payload is different: its contract is document-level and
+ * already describes every file kind the corpus lists, including its relationship,
+ * review and ledger documents. Those corpora keep whole-manifest coverage against
+ * that one contract, since routing them to the Core object contracts would check
+ * imported documents against grammars they were never written to.
+ *
+ * `.writ` files are compiled first, and their lowered records or judgments are
+ * validated, so the native-grammar corpora are held to the same rule as the YAML ones.
  */
 import { describe, expect, test } from "bun:test";
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -72,6 +88,72 @@ const corpora = catalog.native_corpora.map((entry) => ({
   manifest: yaml<Manifest>(entry.manifest),
 }));
 
+const CORE_RECORD_LINK = "https://writ.example/schemas/core/record-link.schema.json";
+const RECORD_JUDGMENT = "https://writ.example/schemas/analysis/record-judgment.schema.json";
+
+/**
+ * Contracts that describe a whole preserved corpus payload rather than one object
+ * kind. Every file such a corpus lists is governed by the single declared contract.
+ */
+const DOCUMENT_LEVEL_CONTRACTS = new Set([
+  "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json",
+]);
+
+/** The contract governing one `locations` category, or null when it holds no records. */
+function contractFor(manifest: Manifest, category: string): string | null {
+  const declared = manifest.record_contract.id;
+  if (DOCUMENT_LEVEL_CONTRACTS.has(declared)) return declared;
+  if (category === "records") return declared;
+  if (category === "relationships") return CORE_RECORD_LINK;
+  if (category === "judgments") return RECORD_JUDGMENT;
+  return null;
+}
+
+/** Every owned file the manifest lists, paired with the contract that governs it. */
+function routedFiles(
+  entry: CatalogEntry,
+  manifest: Manifest,
+): { file: string; contract: string }[] {
+  const routed = new Map<string, string>();
+  for (const [category, locations] of Object.entries(manifest.locations)) {
+    const contract = contractFor(manifest, category);
+    if (contract === null) continue;
+    for (const location of locations) {
+      for (const file of expand(entry.path, location)) {
+        if (ownedBy(entry.path, file)) routed.set(file, contract);
+      }
+    }
+  }
+  return [...routed].sort().map(([file, contract]) => ({ file, contract }));
+}
+
+/** Validate one file against `contract`, returning human-readable failures. */
+function checkFile(file: string, contract: string): string[] {
+  const label = relative(ROOT, file);
+  const text = readFileSync(file, "utf8");
+  if (!file.endsWith(".writ")) {
+    return validateContract(contract, Bun.YAML.parse(text)).errors.map(
+      (issue) => `${label} ${issue.instancePath}: ${issue.message}`,
+    );
+  }
+  const parsed = parseDocument(text, { fileName: label });
+  if (!parsed.ok) return [`${label} does not parse`];
+  const compiled = compileSource(text, { fileName: label });
+  const failures = compiled.diagnostics
+    .filter((diagnostic) => diagnostic.severity === "error")
+    .map((diagnostic) => `${label} compile error: ${diagnostic.message}`);
+  const objects: readonly unknown[] =
+    contract === RECORD_JUDGMENT ? compiled.judgments : compiled.records;
+  for (const object of objects) {
+    failures.push(
+      ...validateContract(contract, object).errors.map(
+        (issue) => `${label} ${issue.instancePath}: ${issue.message}`,
+      ),
+    );
+  }
+  return failures;
+}
+
 describe("every catalogued manifest declares the contract its record files satisfy", () => {
   test("the catalog is not empty and matches the manifests it points at", () => {
     expect(corpora).toHaveLength(16);
@@ -81,30 +163,35 @@ describe("every catalogued manifest declares the contract its record files satis
     }
   });
 
-  test("the gate actually validates every corpus and both file kinds", () => {
+  test("the gate actually validates every corpus and every routed file kind", () => {
     // Without this, an empty walk would let the per-corpus tests pass vacuously.
     let yamlDocuments = 0;
     let writRecords = 0;
+    let writJudgments = 0;
+    let linkDocuments = 0;
     const covered = new Set<string>();
     for (const { entry, manifest } of corpora) {
-      const files = [...new Set(Object.values(manifest.locations).flat())]
-        .flatMap((location) => expand(entry.path, location))
-        .filter((file) => ownedBy(entry.path, file));
-      for (const file of new Set(files)) {
+      for (const { file, contract } of routedFiles(entry, manifest)) {
         covered.add(entry.corpus_id);
-        if (file.endsWith(".writ")) {
-          writRecords += compileSource(readFileSync(file, "utf8"), { fileName: file }).records
-            .length;
-        } else {
+        if (!file.endsWith(".writ")) {
           yamlDocuments += 1;
+          if (contract === CORE_RECORD_LINK) linkDocuments += 1;
+          continue;
         }
+        const compiled = compileSource(readFileSync(file, "utf8"), { fileName: file });
+        if (contract === RECORD_JUDGMENT) writJudgments += compiled.judgments.length;
+        else writRecords += compiled.records.length;
       }
     }
     expect(covered.size).toBe(16);
-    // Nine generated files across each of the thirteen reviewed corpora.
-    expect(yamlDocuments).toBe(117);
+    // Nine generated files across each of the thirteen reviewed corpora, plus the
+    // two standalone NIST Core links.
+    expect(yamlDocuments).toBe(117 + 2);
+    expect(linkDocuments).toBe(2);
     // Three constitutional drafts, six NIST drafts, three Commission function drafts.
     expect(writRecords).toBe(12);
+    // The eight NIST Stage A disposition judgments.
+    expect(writJudgments).toBe(8);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -116,37 +203,11 @@ describe("every catalogued manifest declares the contract its record files satis
       expect(contract.id.includes("/compatibility/")).toBe(contract.kind === "compatibility");
     });
 
-    test(`${entry.corpus_id} record files satisfy the declared contract`, () => {
-      const contract = manifest.record_contract;
-      const files = [...new Set(Object.values(manifest.locations).flat())].flatMap((location) =>
-        expand(entry.path, location),
-      );
-      const owned = [...new Set(files.filter((file) => ownedBy(entry.path, file)))].sort();
-      expect(owned.length).toBeGreaterThan(0);
-
-      for (const file of owned) {
-        const label = relative(ROOT, file);
-        const text = readFileSync(file, "utf8");
-        if (file.endsWith(".writ")) {
-          const parsed = parseDocument(text, { fileName: label });
-          expect(parsed.ok, `${label} does not parse`).toBe(true);
-          const compiled = compileSource(text, { fileName: label });
-          expect(
-            compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error"),
-            `${label} has compile errors`,
-          ).toEqual([]);
-          for (const record of compiled.records) {
-            const result = validateContract(contract.id, record);
-            expect(
-              result.errors.map((issue) => `${label} ${issue.instancePath}: ${issue.message}`),
-            ).toEqual([]);
-          }
-          continue;
-        }
-        const result = validateContract(contract.id, Bun.YAML.parse(text));
-        expect(
-          result.errors.map((issue) => `${label} ${issue.instancePath}: ${issue.message}`),
-        ).toEqual([]);
+    test(`${entry.corpus_id} record files satisfy the contract that governs them`, () => {
+      const routed = routedFiles(entry, manifest);
+      expect(routed.length).toBeGreaterThan(0);
+      for (const { file, contract } of routed) {
+        expect(checkFile(file, contract)).toEqual([]);
       }
     });
 
@@ -163,6 +224,55 @@ describe("every catalogued manifest declares the contract its record files satis
       }
     });
   }
+
+  test("validation is routed by location category, not by mere presence in the manifest", () => {
+    const nist = corpora.find(({ entry }) => entry.corpus_id === "us.institutions.nist")!;
+    const { manifest } = nist;
+    expect(manifest.record_contract.kind).toBe("native");
+
+    expect(contractFor(manifest, "records")).toBe(manifest.record_contract.id);
+    expect(contractFor(manifest, "relationships")).toBe(CORE_RECORD_LINK);
+    expect(contractFor(manifest, "judgments")).toBe(RECORD_JUDGMENT);
+    for (const category of ["sources", "passages", "migration"]) {
+      expect(contractFor(manifest, category)).toBeNull();
+    }
+
+    // `sources.writ` is listed under sources and passages, and is never checked as
+    // an institutional record. `migration.yaml` is likewise not a record file.
+    const routed = new Map(
+      routedFiles(nist.entry, manifest).map((r) => [relative(ROOT, r.file), r.contract]),
+    );
+    expect([...routed.keys()].sort()).toEqual([
+      "corpora/institutional/us/nist/judgments.writ",
+      "corpora/institutional/us/nist/records.writ",
+      "corpora/institutional/us/nist/relationships/nist_department_of_commerce_relationship.yaml",
+      "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
+    ]);
+
+    // Routing is what makes this correct. A record link is not an institutional
+    // record and fails the manifest's own contract outright.
+    const declared = manifest.record_contract.id;
+    for (const [file, contract] of routed) {
+      if (contract !== CORE_RECORD_LINK) continue;
+      expect(checkFile(join(ROOT, file), declared).length).toBeGreaterThan(0);
+    }
+
+    // Judgments are the subtler case, and the reason routing must be by category
+    // rather than by file: `judgments.writ` lowers to judgments and no records, so
+    // checking it "as records" inspects nothing and passes vacuously. Routed to the
+    // judgment contract it is really checked; routed to the record contract the
+    // judgment objects fail.
+    const judgmentsPath = join(ROOT, "corpora/institutional/us/nist/judgments.writ");
+    const compiled = compileSource(readFileSync(judgmentsPath, "utf8"), {
+      fileName: judgmentsPath,
+    });
+    expect(compiled.records).toHaveLength(0);
+    expect(compiled.judgments).toHaveLength(8);
+    expect(checkFile(judgmentsPath, RECORD_JUDGMENT)).toEqual([]);
+    for (const judgment of compiled.judgments) {
+      expect(validateContract(declared, judgment).valid).toBe(false);
+    }
+  });
 });
 
 describe("a manifest cannot pass while its record files fail", () => {

@@ -3,11 +3,14 @@ corpus_id: us.institutions.nist
 title: National Institute of Standards and Technology institutional facts
 family: institutional
 jurisdiction: US
-corpus_version: 0.1.0
+corpus_version: 0.2.0
 record_contract:
-  kind: compatibility
-  id: https://writ.example/schemas/compatibility/record-grammar-v0.1/institutional-record.schema.json
-  version: 0.1.0
+  kind: native
+  id: https://writ.example/schemas/extensions/institutional-record.schema.json
+  version: 0.2.0
+# Record approval does not publish or activate the corpus. Stage B research into
+# mandate, decision rights, operational capacity and AI-group placement is
+# outstanding, so the corpus itself remains draft.
 status: draft
 identity_namespace: us.institutions.nist
 migration_aliases:
@@ -15,8 +18,13 @@ migration_aliases:
 root_institution_id: nist
 record_counts:
   institutional_records: 6
+  record_links: 2
+  disposition_judgments: 8
 review_counts:
-  draft_records: 6
+  approved_records: 5
+  superseded_records: 1
+  approved_record_links: 2
+  accepted_disposition_judgments: 8
 unresolved_evidence_count: 0
 locations:
   sources:
@@ -25,6 +33,10 @@ locations:
     - sources.writ
   records:
     - records.writ
-  relationships: []
-  judgments: []
-  migration: []
+  relationships:
+    - relationships/nist_department_of_commerce_relationship.yaml
+    - relationships/nist_mission_supersedes_nist_measurement_science_function.yaml
+  judgments:
+    - judgments.writ
+  migration:
+    - migration.yaml

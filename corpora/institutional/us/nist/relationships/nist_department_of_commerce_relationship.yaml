@@ -1,0 +1,27 @@
+# Converted from the v0.1 institutional record of the same ID, which duplicated the
+# placement fact. `nist_organizational_placement` remains the authoritative
+# institutional fact; this link provides graph traversal and cites that record
+# rather than restating the assertion. Reverse traversal is derived: no inverse
+# `department_of_commerce has_part nist` link is stored.
+schema_version: 1.0.0
+link_id: nist_department_of_commerce_relationship
+owning_corpus_id: us.institutions.nist
+source_id: nist
+source_kind: institution
+target_id: department_of_commerce
+target_kind: institution
+relation_type: part_of
+basis: direct
+evidence_refs:
+  - nist.about.identity
+supporting_record_ids:
+  - nist_organizational_placement
+uncertainties:
+  - type: incomplete_evidence
+    description:
+      The placement evidence does not establish the Department of Commerce's precise decision
+      rights over NIST.
+provenance:
+  created_by: OpenAI Codex automated draft
+  created_at: 2026-08-03
+review_state: approved

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validate, type LegacyInstitutionalRecord, type LegalPolicyRecord } from "@writ/domain";
+import { validate, type LegalPolicyRecord } from "@writ/domain";
 import { compileSource } from "../src/index.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
@@ -42,18 +42,24 @@ describe("Stage 1 pilot corpora", () => {
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
     expect(compiled.records).toHaveLength(6);
+    // Stage A human review dispositioned these six records and moved them onto the
+    // native atomic contract, so the v0.1 draft state and its placeholder mandate and
+    // capacity payloads are gone. What this test still guards is the evidence layer:
+    // the exact quotations below must survive every review. The dispositions
+    // themselves are asserted in `nist-stage-a.test.ts`.
     for (const record of compiled.records) {
       expect(record.family).toBe("institutional");
-      expect(record.review_state).toBe("draft");
-      expect(record.provenance.created_by).toBe("OpenAI Codex automated draft");
+      expect(["approved", "superseded"]).toContain(record.review_state);
       expect(record.evidence.length).toBeGreaterThan(0);
       expect(validate("legal-policy-record", record).valid).toBe(false);
-      if (record.family === "institutional") {
-        const institutional = record as LegacyInstitutionalRecord;
-        expect(institutional.mandate.status).toBe("unknown");
-        expect(institutional.operational_capacity.status).toBe("unknown");
-      }
+      expect(record).not.toHaveProperty("mandate");
+      expect(record).not.toHaveProperty("operational_capacity");
     }
+    expect(
+      compiled.records.filter(
+        (record) => record.provenance.created_by === "OpenAI Codex automated draft",
+      ),
+    ).toHaveLength(5);
     const ai = compiled.records.filter((record) =>
       record.topics.includes("artificial_intelligence"),
     );
