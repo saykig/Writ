@@ -1,0 +1,42 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: 607f31ce-c675-5f2b-935e-a02cbbf188bb
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#source-passage
+    display_ref: Source passage — testing and evaluation in procurement
+    aliases: []
+    legacy_refs:
+      - passage-us-09
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: 886e0e3d-fe58-5c0d-8af7-dad652df7927
+    imported_source_legacy_ref: US-09
+    anchor_type: pdf_text
+    anchor_phrase: Testing and Evaluation. When evaluating proposals
+    quote: Testing and Evaluation. When evaluating proposals agencies must, to the greatest extent practicable,
+      test proposed solutions to understand the capabilities and limitations of any offered AI system
+      or service. As part of this work, agencies should consider whether it is appropriate to create a
+      testing environment in agency networks specifically to enable testing ofproposed solutions on government-owned
+      systems.
+    anchor_hash: sha256:9862e16c2b07b00201280573a8982525cca83cf2f9e01f0dcb9b0d2501d14d7a
+    language: en
+    page_number: 9
+  - machine_id: 67ab682a-54e4-5813-9133-66ed8316c7eb
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#source-passage
+    display_ref: Source passage — disclosure and performance monitoring for contracted AI use
+    aliases: []
+    legacy_refs:
+      - passage-us-10
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: 886e0e3d-fe58-5c0d-8af7-dad652df7927
+    imported_source_legacy_ref: US-10
+    anchor_type: pdf_text
+    anchor_phrase: Ongoing Testing and Monitoring
+    quote: 'E. Ongoing Testing and Monitoring. Contractual terms must provide the contracting agency the
+      ability to regularly monitor and evaluate ( e.g., on a quarterly or biannual basis, based on the
+      needs of the program) performance, risks, and effectiveness of an AI system or service. To achieve
+      that outcome:'
+    anchor_hash: sha256:42e794873e540128c5fa3440f2d6ff4bf456e0bec2ebb5a482cd4262126662f3
+    language: en
+    page_number: 10

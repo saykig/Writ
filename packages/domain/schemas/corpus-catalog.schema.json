@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/core/corpus-catalog.schema.json",
+  "title": "Writ Corpus Catalog",
+  "description": "The active corpus-ID-to-path resolver. It lists only native, family-governed corpora. Compatibility datasets are archived outside `corpora/` and are deliberately absent. Retired corpus IDs are recorded in a separate one-to-many migration ledger so they can never be resolved as active aliases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "implemented_native_families",
+    "native_corpora",
+    "retired_corpus_migrations"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "implemented_native_families": {
+      "type": "array",
+      "prefixItems": [{ "const": "legal_policy" }, { "const": "institutional" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "native_corpora": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/catalogEntry" }
+    },
+    "retired_corpus_migrations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/retiredCorpusMigration" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "catalogEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["corpus_id", "family", "jurisdiction", "status", "path", "manifest"],
+      "properties": {
+        "corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+        "family": { "enum": ["legal_policy", "institutional"] },
+        "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["draft", "active", "superseded", "withdrawn", "transitional"] },
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "manifest": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "retiredCorpusMigration": {
+      "description": "One retired corpus and every active corpus that replaced it. The mapping is historical and one-to-many, so it must never be used as an ID-to-path alias.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retired_corpus_id", "old_path", "replacement_corpus_ids"],
+      "properties": {
+        "retired_corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+        "old_path": { "$ref": "#/$defs/nonEmptyString" },
+        "replacement_corpus_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    }
+  }
+}

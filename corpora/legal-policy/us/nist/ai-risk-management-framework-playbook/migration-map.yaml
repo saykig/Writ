@@ -1,0 +1,44 @@
+schema_version: 1.0.0
+jurisdiction: US
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+identity_derivation: UUIDv5(namespace, 'eu-us-ai-governance-v1:<record-kind>:<immutable-import-key>')
+entries:
+  - legacy_ref: US-02
+    target_record_type: claim
+    machine_id: ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#implementation-guidance
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/13
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/claims.yaml
+moved_objects:
+  - object_type: source
+    machine_id: f5d4568f-8be9-5def-89e6-730bef1247cd
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/sources/sources.yaml
+    active_path: sources/sources.yaml
+  - object_type: claim
+    machine_id: ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: relationship
+    machine_id: c8d45b2b-189c-5592-a0a4-ad6f08cc5585
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: 14a756da-d80e-503a-9e4c-03551a42fd95
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: review
+    machine_id: dd587055-ce88-50a5-af0f-ff903f9d6612
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/reviews/parent-annotations.yaml
+    active_path: reviews/parent-annotations.yaml
+  - object_type: unresolved_coverage
+    machine_id: d22da9ba-8264-5bf0-b286-51235002e7ed
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/passages/unresolved.yaml
+    active_path: passages/unresolved.yaml

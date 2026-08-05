@@ -5,13 +5,21 @@ status: saved_historical_analysis
 question: >-
   Does the jurisdiction currently impose a binding model-evaluation requirement on providers of
   advanced or general-purpose AI models?
-corpora:
-  - corpus_id: writ.corpus.eu.ai-governance
-    corpus_version: 1.0.0
-    manifest: corpora/jurisdictions/eu/ai-governance/corpus.yaml
-  - corpus_id: writ.corpus.us.ai-governance
-    corpus_version: 1.0.0
-    manifest: corpora/jurisdictions/us/ai-governance/corpus.yaml
+catalog: corpora/catalog.yaml
+corpus_ids:
+  - writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+  - writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+  - writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice
+  - writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0
+  - writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook
+  - writ.corpus.legal-policy.us.nist.generative-ai-profile
+  - writ.corpus.legal-policy.us.nist.caisi.overview
+  - writ.corpus.legal-policy.us.nist.caisi.guidelines
+  - writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+  - writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+  - writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01
+  - writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12
+  - writ.corpus.legal-policy.us.white-house.americas-ai-action-plan
 scope:
   jurisdictions: [EU, US]
   field: ai-governance

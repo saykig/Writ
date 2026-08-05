@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: c6b98ba4-dfb9-5a2a-ba89-ebe1ea0028ba
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#imported-review-group
+    display_ref: Imported review — abstract
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-03
+    review_decision: accepted
+    original_record_type: guidance
+    instrument: NIST_GENERATIVE_AI_PROFILE
+    source_locator: abstract
+    claim_machine_ids:
+      - 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    interpretation_note: 'The Profile directly concerns evaluation, but its voluntary status means it
+      does not create a binding provider obligation.
+
+      '

@@ -1,0 +1,16 @@
+schema_version: 1.0.0
+jurisdiction: EU
+unresolved:
+  - machine_id: 92393fff-5ee8-56f8-aa97-7847e2b689ac
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#missing-source-coverage
+    display_ref: Missing source coverage — Commission GPAI guidelines
+    aliases: []
+    legacy_refs: []
+    record_type: coverage_record
+    jurisdiction: EU
+    coverage_status: unresolved
+    source_machine_id: 5243cf6c-cc84-5a5e-b928-db1211a07a26
+    imported_parent_legacy_ref: EU-10
+    instrument: COMMISSION_GPAI_GUIDELINES
+    source_locator: Commission GPAI guidelines
+    reason: no source document is registered for this instrument

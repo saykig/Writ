@@ -152,21 +152,36 @@ InstitutionalExtension:
     'institutional' '{' properties+=InstitutionalProperty* '}';
 InstitutionalProperty:
       {infer InstitutionIdProperty} 'institution_id' value=QualifiedName ';'
+    | {infer InstitutionalFactTypeProperty} 'fact_type' value=InstitutionalFactType ';'
     | {infer InstitutionTypeProperty} 'institution_type' value=InstitutionType ';'
     | MandateProperty
     | MissionProperty
     | {infer AuthoritySourcesProperty} 'authority_sources' values=IdentifierList ';'
     | {infer InstitutionalJurisdictionsProperty} 'jurisdictions' values=StringList ';'
     | {infer FunctionsProperty} 'functions' values=FunctionList ';'
+    | {infer InstitutionalFunctionProperty} 'function' value=QualifiedName ';'
     | OperationalCapacityProperty
     | {infer DecisionRightsProperty} 'decision_rights' values=StringList ';'
+    | DecisionRightProperty
     | {infer ParentInstitutionProperty} 'parent_institution_id' value=QualifiedName ';'
+    | InstitutionalRecordLinkProperty
     | {infer SubunitIdsProperty} 'subunit_ids' values=IdentifierList ';'
     | OversightRelationshipsProperty
     | InstitutionalRelationshipsProperty
     | ApplicablePeriodProperty;
 
 InstitutionType returns string: 'government_department' | 'federal_agency' | 'independent_agency' | 'advisory_body' | 'regulator' | 'standards_body' | 'research_body' | 'interagency_body' | 'organizational_unit' | 'other' | 'unknown';
+InstitutionalFactType returns string: 'identity' | 'placement' | 'relationship' | 'mission' | 'mandate' | 'function' | 'decision_right' | 'operational_capacity';
+InstitutionalRecordLinkProperty:
+    'record_link' '{'
+        'link_id' linkId=QualifiedName ';'
+        'source' sourceId=QualifiedName 'kind' sourceKind=QualifiedName ';'
+        'target' targetId=QualifiedName 'kind' targetKind=QualifiedName ';'
+        'relation' relationType=RecordLinkRelationType ';'
+        'basis' basis=EvidenceBasis ';'
+        'evidence_refs' evidenceRefs=IdentifierList ';'
+    '}';
+RecordLinkRelationType returns string: 'issued_by' | 'administered_by' | 'implemented_by' | 'enforced_by' | 'establishes' | 'authorizes' | 'assigns_function_to' | 'derives_authority_from' | 'part_of' | 'oversees' | 'applies_to';
 InstitutionFunction returns string: 'standards_development' | 'measurement_science' | 'technical_guidance' | 'research' | 'evaluation' | 'coordination' | 'oversight' | 'grant_administration' | 'procurement_support' | 'other';
 MandateProperty:
     'mandate' (
@@ -192,6 +207,13 @@ OperationalCapacityProperty:
         'evidence_refs' evidenceRefs=IdentifierList ';'
     '}';
 CapacityStatus returns string: 'established' | 'partial' | 'unknown' | 'contested';
+DecisionRightProperty:
+    'decision_right' '{'
+        'status' status=MandateStatus ';'
+        ('text' text=STRING ';')?
+        ('authority_source_ids' authoritySourceIds=IdentifierList ';')?
+        ('evidence_refs' evidenceRefs=IdentifierList ';')?
+    '}';
 OversightRelationshipsProperty: 'oversight_relationships' relationships=RelationshipList ';';
 InstitutionalRelationshipsProperty: 'institutional_relationships' relationships=RelationshipList ';';
 RelationshipList: '{' relationships+=InstitutionalRelationship* '}';
@@ -202,7 +224,7 @@ ApplicablePeriodProperty: 'applicable_period' '{' ('from' from=DATE ';')? ('unti
 JudgmentDeclaration:
     'judgment' name=ID '{' members+=JudgmentMember* '}';
 JudgmentMember:
-      {infer JudgmentTarget} 'target' value=QualifiedName ';'
+      {infer JudgmentTarget} 'target' (kind=JudgmentTargetKind)? value=QualifiedName ';'
     | {infer JudgmentTypeProperty} 'type' value=JudgmentType ';'
     | {infer JudgmentValue} 'value' value=Literal ';'
     | {infer JudgmentRationale} 'rationale' value=STRING ';'
@@ -212,9 +234,12 @@ JudgmentMember:
     | {infer JudgmentCreatedAt} 'created_at' value=DATE ';'
     | {infer JudgmentFamilyContext} 'family_context' value=RecordFamily ';'
     | {infer JudgmentSupersedes} 'supersedes' value=QualifiedName ';'
+    | {infer JudgmentSupersedesIds} 'supersedes_judgment_ids' values=IdentifierList ';'
+    | {infer JudgmentSupersededBy} 'superseded_by_judgment_id' value=QualifiedName ';'
     | {infer RelatedJudgments} 'related_judgment_ids' values=IdentifierList ';';
-JudgmentType returns string: 'passage_selection' | 'record_family_classification' | 'subject_identification' | 'scope_interpretation' | 'topic_classification' | 'legal_status_determination' | 'institutional_role_determination' | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement' | 'adjudication';
+JudgmentType returns string: 'passage_selection' | 'record_family_classification' | 'subject_identification' | 'scope_interpretation' | 'topic_classification' | 'legal_status_determination' | 'institutional_role_determination' | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement' | 'adjudication' | 'review_disposition' | 'record_link_disposition';
 JudgmentStatus returns string: 'proposed' | 'accepted' | 'contested' | 'superseded';
+JudgmentTargetKind returns string: 'record' | 'record_link';
 
 IdentifierList: '{' (values+=QualifiedName (',' values+=QualifiedName)* ','?)? '}';
 StringList: '{' values+=STRING (',' values+=STRING)* ','? '}' | {infer EmptyStringList} '{' '}';
@@ -549,7 +574,11 @@ NamePart returns string:
     | 'subject_identification' | 'scope_interpretation' | 'topic_classification'
     | 'legal_status_determination' | 'institutional_role_determination'
     | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement'
-    | 'adjudication' | 'accepted';
+    | 'adjudication' | 'accepted'
+    | 'fact_type' | 'identity' | 'placement' | 'relationship' | 'function'
+    | 'decision_right' | 'record_link' | 'link_id' | 'source' | 'kind'
+    | 'issued_by' | 'administered_by' | 'implemented_by' | 'enforced_by'
+    | 'establishes' | 'assigns_function_to' | 'derives_authority_from' | 'applies_to';
 
 TypeRef returns string: QualifiedName ('<' TypeRef (',' TypeRef)* '>')?;
 

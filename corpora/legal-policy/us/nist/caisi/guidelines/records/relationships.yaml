@@ -1,0 +1,75 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: d6038f3d-5fde-5708-8a1c-329204896245
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#model-evaluation-in-jurisdiction
+    display_ref: model evaluation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: cde7d451-7b2f-5532-94ca-1fe5cfc9524e
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#model-evaluation-reviewed-under-parent
+    display_ref: model evaluation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+    subject_type: claim
+    object_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
+    object_type: review
+  - machine_id: d2f0e5e2-ca75-50e5-8fde-afa332da42f8
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#model-evaluation-supported-by-passage
+    display_ref: model evaluation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+    subject_type: claim
+    object_machine_id: bed66980-0986-5455-88f0-d1088d2bb653
+    object_type: passage
+  - machine_id: c1bed743-a4ac-5174-86bc-59073cbe1498
+    ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#proposed-model-evaluation-guidance-in-jurisdiction
+    display_ref: proposed model evaluation guidance — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 774b58d2-8517-5113-a7d0-64f8c17ed277
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: a7e8503c-731c-5437-919f-571c512ffd44
+    ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#proposed-model-evaluation-guidance-reviewed-under-parent
+    display_ref: proposed model evaluation guidance — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 774b58d2-8517-5113-a7d0-64f8c17ed277
+    subject_type: claim
+    object_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
+    object_type: review
+  - machine_id: c9e54499-87b5-5f2c-a257-42ba48fe8c15
+    ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#proposed-model-evaluation-guidance-supported-by-passage
+    display_ref: proposed model evaluation guidance — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 774b58d2-8517-5113-a7d0-64f8c17ed277
+    subject_type: claim
+    object_machine_id: 8fdce8b1-4b08-50bc-beb2-dc01bf4c5f91
+    object_type: passage

@@ -1,0 +1,40 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: 5708c65d-f30f-5904-8f08-e984d3e846bd
+    ref: us/ai-governance/omb-m-25-21/covered-ai#imported-review-group
+    display_ref: Imported review — scope statement
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-07
+    review_decision: accepted
+    original_record_type: scope_rule
+    instrument: OMB_M_25_21
+    source_locator: scope statement
+    claim_machine_ids:
+      - 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    interpretation_note: 'M-25-21 binds agencies in their use of AI and must not be generalized into market-wide
+      duties for private providers.
+
+      '
+  - machine_id: 1917494f-eca8-597b-aac4-26b76234081a
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#imported-review-group
+    display_ref: Imported review — high-impact AI requirements
+    aliases: []
+    legacy_refs:
+      - US-08
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-08
+    review_decision: accepted
+    original_record_type: source_bundle
+    instrument: OMB_M_25_21
+    source_locator: high-impact AI requirements
+    claim_machine_ids:
+      - 3675454a-3cb3-5799-9fd3-3dc90f3add50
+      - d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    interpretation_note: 'These are binding government-use controls, not general market-provider obligations.
+
+      '

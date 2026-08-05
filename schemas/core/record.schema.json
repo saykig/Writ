@@ -40,7 +40,7 @@
         "review_state": { "$ref": "#/$defs/reviewState" }
       }
     },
-    "schemaVersion": { "const": "0.1.0" },
+    "schemaVersion": { "const": "0.2.0" },
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "identifier": {
       "type": "string",

@@ -1,0 +1,15 @@
+schema_version: 1.0.0
+jurisdiction: US
+sources:
+  - machine_id: f5d4568f-8be9-5def-89e6-730bef1247cd
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#unresolved-source
+    display_ref: Unresolved source — overview
+    aliases: []
+    legacy_refs: []
+    record_type: unresolved_source
+    jurisdiction: US
+    verification_status: unresolved
+    imported_parent_legacy_ref: US-02
+    instrument: NIST_AI_RMF_PLAYBOOK
+    source_locator: overview
+    reason: no source document is registered for this instrument

@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: b0b83174-8401-527c-90a5-ab2af4c16ebf
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#administrative-policy-revision-in-jurisdiction
+    display_ref: administrative policy revision — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: af0898a6-7575-5af0-b270-cb615f6cd43f
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 14f40d1d-8cee-57fa-8107-e3a4a3a6bfb7
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#administrative-policy-revision-reviewed-under-parent
+    display_ref: administrative policy revision — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: af0898a6-7575-5af0-b270-cb615f6cd43f
+    subject_type: claim
+    object_machine_id: 143b5063-6ce9-51b4-b414-e5977aa27351
+    object_type: review
+  - machine_id: 1ea932d9-afd8-55f2-9f66-ab737d32166a
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#administrative-policy-revision-supported-by-passage
+    display_ref: administrative policy revision — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: af0898a6-7575-5af0-b270-cb615f6cd43f
+    subject_type: claim
+    object_machine_id: 6ef96ed8-6190-5771-8f8f-7fceb7350349
+    object_type: passage

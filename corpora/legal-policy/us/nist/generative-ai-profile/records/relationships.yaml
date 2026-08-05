@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 61d3aeb2-711e-5b01-b782-3c75be2c97d5
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#model-evaluation-in-jurisdiction
+    display_ref: model evaluation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 286eec41-8898-5224-ad9f-658d89c94720
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#model-evaluation-reviewed-under-parent
+    display_ref: model evaluation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    subject_type: claim
+    object_machine_id: c6b98ba4-dfb9-5a2a-ba89-ebe1ea0028ba
+    object_type: review
+  - machine_id: 3ea64fae-052e-5c53-8ea3-41089587ed43
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#model-evaluation-supported-by-passage
+    display_ref: model evaluation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    subject_type: claim
+    object_machine_id: d1d75f12-6499-5b45-a291-4c475770f0bd
+    object_type: passage

@@ -35,7 +35,7 @@ describe("schema authority", () => {
   });
 
   test("every authoritative schema has a path-derived id and layer-safe references", () => {
-    expect(files).toHaveLength(24);
+    expect(files).toHaveLength(32);
     for (const file of files) {
       const schema = JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
       const path = relative(REPO_ROOT, file).split(sep).join("/");
@@ -44,10 +44,10 @@ describe("schema authority", () => {
       walk(schema, (record) => {
         if (typeof record.$ref !== "string") return;
         const local = record.$ref.startsWith("#/");
-        const coreDependency =
-          path.startsWith("schemas/extensions/") &&
-          record.$ref.startsWith("https://writ.example/schemas/core/record.schema.json#/");
-        expect(local || coreDependency).toBe(true);
+        const repositoryDependency =
+          record.$ref.startsWith("https://writ.example/schemas/core/") ||
+          record.$ref.startsWith("https://writ.example/schemas/compatibility/");
+        expect(local || repositoryDependency).toBe(true);
       });
     }
   });

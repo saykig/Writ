@@ -18,7 +18,7 @@
  * Run: `bun scripts/embed-demo-analysis.ts` (wired into the web app `embed` and
  * `build` scripts, alongside `embed-frozen.ts`).
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -27,10 +27,7 @@ const repoRoot = join(here, "..", "..", "..");
 const outFile = join(here, "..", "lib", "demo-analysis-data.ts");
 
 const SOURCE_REL = "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml";
-const ACTIVE_CORPORA = {
-  EU: "corpora/jurisdictions/eu/ai-governance",
-  US: "corpora/jurisdictions/us/ai-governance",
-} as const;
+const CATALOG_REL = "corpora/catalog.yaml";
 
 /** Collapse folded-scalar whitespace. Whitespace-only, and idempotent. */
 function collapse(value: string): string {
@@ -66,6 +63,29 @@ function requireFields(value: Record<string, unknown>, path: string, fields: str
 
 const text = readFileSync(join(repoRoot, SOURCE_REL), "utf8");
 const dataset = requireObject(normalize(Bun.YAML.parse(text)), "<root>");
+const catalog = requireObject(
+  normalize(Bun.YAML.parse(readFileSync(join(repoRoot, CATALOG_REL), "utf8"))),
+  "catalog",
+);
+if (!Array.isArray(catalog.native_corpora)) fail("catalog.native_corpora must be an array");
+const ACTIVE_CORPORA: Record<"EU" | "US", string[]> = { EU: [], US: [] };
+const CORPUS_RESOLVERS = {
+  EU: `${CATALOG_REL}#EU`,
+  US: `${CATALOG_REL}#US`,
+} as const;
+for (const rawEntry of catalog.native_corpora) {
+  const entry = requireObject(rawEntry, "catalog.native_corpora[]");
+  if (
+    entry.family !== "legal_policy" ||
+    (entry.jurisdiction !== "EU" && entry.jurisdiction !== "US")
+  ) {
+    continue;
+  }
+  const path = String(entry.path);
+  if (existsSync(join(repoRoot, path, "records/claims.yaml"))) {
+    ACTIVE_CORPORA[entry.jurisdiction].push(path);
+  }
+}
 
 // 1. Required top-level fields. A missing one fails the build rather than
 //    rendering a page with a silently absent section.
@@ -200,28 +220,36 @@ for (const record of records) {
 const activeClaimIds = new Set<string>();
 const activeLegacyRefs = new Map<string, string>();
 const activeParentRefs = new Set<string>();
-for (const [jurisdiction, base] of Object.entries(ACTIVE_CORPORA)) {
-  const claimsDoc = requireObject(
-    normalize(Bun.YAML.parse(readFileSync(join(repoRoot, base, "records/claims.yaml"), "utf8"))),
-    `${jurisdiction}.claims`,
-  );
-  const reviewsDoc = requireObject(
-    normalize(
-      Bun.YAML.parse(readFileSync(join(repoRoot, base, "reviews/parent-annotations.yaml"), "utf8")),
-    ),
-    `${jurisdiction}.reviews`,
-  );
-  if (!Array.isArray(claimsDoc.claims) || !Array.isArray(reviewsDoc.reviews)) {
-    fail(`${jurisdiction} active claims or reviews are not arrays`);
+for (const [jurisdiction, bases] of Object.entries(ACTIVE_CORPORA)) {
+  const activeClaims: unknown[] = [];
+  const activeReviews: unknown[] = [];
+  for (const base of bases) {
+    const claimsDoc = requireObject(
+      normalize(Bun.YAML.parse(readFileSync(join(repoRoot, base, "records/claims.yaml"), "utf8"))),
+      `${jurisdiction}.claims`,
+    );
+    const reviewsDoc = requireObject(
+      normalize(
+        Bun.YAML.parse(
+          readFileSync(join(repoRoot, base, "reviews/parent-annotations.yaml"), "utf8"),
+        ),
+      ),
+      `${jurisdiction}.reviews`,
+    );
+    if (!Array.isArray(claimsDoc.claims) || !Array.isArray(reviewsDoc.reviews)) {
+      fail(`${jurisdiction} active claims or reviews are not arrays`);
+    }
+    activeClaims.push(...claimsDoc.claims);
+    activeReviews.push(...reviewsDoc.reviews);
   }
   const expectedClaims = jurisdiction === "EU" ? 15 : 17;
-  if (claimsDoc.claims.length !== expectedClaims || reviewsDoc.reviews.length !== 12) {
+  if (activeClaims.length !== expectedClaims || activeReviews.length !== 12) {
     fail(
-      `${jurisdiction} active corpus count mismatch: ${claimsDoc.claims.length} claims, ` +
-        `${reviewsDoc.reviews.length} parent reviews`,
+      `${jurisdiction} active corpus count mismatch: ${activeClaims.length} claims, ` +
+        `${activeReviews.length} parent reviews`,
     );
   }
-  for (const rawClaim of claimsDoc.claims) {
+  for (const rawClaim of activeClaims) {
     const claim = requireObject(rawClaim, `${jurisdiction}.claim`);
     requireFields(claim, `${jurisdiction}.claim`, ["machine_id", "legacy_refs"]);
     const machineId = String(claim.machine_id);
@@ -233,7 +261,7 @@ for (const [jurisdiction, base] of Object.entries(ACTIVE_CORPORA)) {
       activeLegacyRefs.set(legacy, machineId);
     }
   }
-  for (const rawReview of reviewsDoc.reviews) {
+  for (const rawReview of activeReviews) {
     const review = requireObject(rawReview, `${jurisdiction}.review`);
     requireFields(review, `${jurisdiction}.review`, ["imported_parent_legacy_ref"]);
     activeParentRefs.add(String(review.imported_parent_legacy_ref));
@@ -280,7 +308,7 @@ const body = `// AUTO-GENERATED by scripts/embed-demo-analysis.ts — do not edi
 import type { ReviewedDataset } from "./demo-analysis";
 
 export const DEMO_ANALYSIS_SOURCE_PATH = ${JSON.stringify(SOURCE_REL)};
-export const DEMO_ANALYSIS_CORPUS_PATHS = ${JSON.stringify(ACTIVE_CORPORA, null, 2)} as const;
+export const DEMO_ANALYSIS_CORPUS_PATHS = ${JSON.stringify(CORPUS_RESOLVERS, null, 2)} as const;
 
 export const DEMO_ANALYSIS_DATASET: ReviewedDataset = ${JSON.stringify(dataset, null, 2)};
 `;

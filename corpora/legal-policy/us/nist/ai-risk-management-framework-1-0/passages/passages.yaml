@@ -1,0 +1,24 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: db05b616-2950-55c2-85fa-0305804c0fc1
+    ref: us/ai-governance/nist-ai-rmf/abstract#source-passage
+    display_ref: Source passage — abstract
+    aliases: []
+    legacy_refs:
+      - passage-us-01
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: da200131-c90f-5cc1-ad94-f05082f992c5
+    imported_source_legacy_ref: US-01
+    anchor_type: pdf_text
+    anchor_phrase: the goal of the AI RMF is to offer a resource
+    quote: As directed by the National Artificial Intelligence Initiative Act of 2020 (P.L. 116-283),
+      the goal of the AI RMF is to offer a resource to the organizations designing, developing, deploying,
+      or using AI systems to help manage the many risks of AI and promote trustwor- thy and responsible
+      development and use of AI systems. The Framework is intended to be voluntary, rights-preserving,
+      non-sector-specific, and use-case agnostic, providing flexibil- ity to organizations of all sizes
+      and in all sectors and throughout society to implement the approaches in the Framework.
+    anchor_hash: sha256:9d14cb88da2be575a8d36ccd2366c4d65208f21271f70e50ba77bb122e219a05
+    language: en
+    page_number: 7

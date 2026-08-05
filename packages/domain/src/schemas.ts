@@ -7,7 +7,11 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { EMBEDDED_SCHEMA_TEXT } from "./schemas.embedded.js";
+import {
+  EMBEDDED_COMPATIBILITY_SCHEMA_TEXT,
+  EMBEDDED_CORPUS_COMPATIBILITY_CONTRACT_TEXT,
+  EMBEDDED_SCHEMA_TEXT,
+} from "./schemas.embedded.js";
 
 /** The canonical set of schema kinds, ordered. */
 export const SCHEMA_KINDS = [
@@ -21,6 +25,9 @@ export const SCHEMA_KINDS = [
   "discrepancy",
   "release",
   "record",
+  "corpus-manifest",
+  "corpus-catalog",
+  "record-link",
   "legal-policy-record",
   "institutional-record",
   "record-judgment",
@@ -41,6 +48,9 @@ export const SCHEMA_FILES: Readonly<Record<SchemaKind, string>> = Object.freeze(
   discrepancy: "discrepancy.schema.json",
   release: "release.schema.json",
   record: "record.schema.json",
+  "corpus-manifest": "corpus-manifest.schema.json",
+  "corpus-catalog": "corpus-catalog.schema.json",
+  "record-link": "record-link.schema.json",
   "legal-policy-record": "legal-policy-record.schema.json",
   "institutional-record": "institutional-record.schema.json",
   "record-judgment": "record-judgment.schema.json",
@@ -58,9 +68,47 @@ export const SCHEMA_AUTHORITY_FILES: Readonly<Record<SchemaKind, string>> = Obje
   discrepancy: "analysis/discrepancy.schema.json",
   release: "analysis/release.schema.json",
   record: "core/record.schema.json",
+  "corpus-manifest": "core/corpus-manifest.schema.json",
+  "corpus-catalog": "core/corpus-catalog.schema.json",
+  "record-link": "core/record-link.schema.json",
   "legal-policy-record": "extensions/legal-policy-record.schema.json",
   "institutional-record": "extensions/institutional-record.schema.json",
-  "record-judgment": "extensions/record-judgment.schema.json",
+  "record-judgment": "analysis/record-judgment.schema.json",
+});
+
+/** Versioned compatibility contracts retained for existing native programs. */
+export const COMPATIBILITY_SCHEMA_KINDS = [
+  "record",
+  "legal-policy-record",
+  "institutional-record",
+  "record-judgment",
+] as const;
+
+export type CompatibilitySchemaKind = (typeof COMPATIBILITY_SCHEMA_KINDS)[number];
+
+export const COMPATIBILITY_SCHEMA_FILES: Readonly<Record<CompatibilitySchemaKind, string>> =
+  Object.freeze({
+    record: "compatibility/record-grammar-v0.1/record.schema.json",
+    "legal-policy-record": "compatibility/record-grammar-v0.1/legal-policy-record.schema.json",
+    "institutional-record": "compatibility/record-grammar-v0.1/institutional-record.schema.json",
+    "record-judgment": "compatibility/record-grammar-v0.1/record-judgment.schema.json",
+  });
+
+/**
+ * Preserved corpus payload formats that are not a versioned variant of a native
+ * record kind. A corpus manifest names one of these by `$id` in its
+ * `record_contract` when its files are an imported format rather than a native
+ * family grammar, so validation can resolve exactly the declared contract.
+ */
+export const CORPUS_COMPATIBILITY_CONTRACT_KINDS = ["eu-us-ai-reviewed-document"] as const;
+
+export type CorpusCompatibilityContractKind = (typeof CORPUS_COMPATIBILITY_CONTRACT_KINDS)[number];
+
+export const CORPUS_COMPATIBILITY_CONTRACT_FILES: Readonly<
+  Record<CorpusCompatibilityContractKind, string>
+> = Object.freeze({
+  "eu-us-ai-reviewed-document":
+    "compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json",
 });
 
 /** A JSON Schema document as a plain object. */
@@ -82,6 +130,27 @@ export const RAW_SCHEMAS: Readonly<Record<SchemaKind, JsonSchema>> = Object.free
     SchemaKind,
     JsonSchema
   >,
+);
+
+export const RAW_COMPATIBILITY_SCHEMAS: Readonly<Record<CompatibilitySchemaKind, JsonSchema>> =
+  Object.freeze(
+    Object.fromEntries(
+      COMPATIBILITY_SCHEMA_KINDS.map((kind) => [
+        kind,
+        Object.freeze(JSON.parse(EMBEDDED_COMPATIBILITY_SCHEMA_TEXT[kind]) as JsonSchema),
+      ]),
+    ) as Record<CompatibilitySchemaKind, JsonSchema>,
+  );
+
+export const RAW_CORPUS_COMPATIBILITY_CONTRACTS: Readonly<
+  Record<CorpusCompatibilityContractKind, JsonSchema>
+> = Object.freeze(
+  Object.fromEntries(
+    CORPUS_COMPATIBILITY_CONTRACT_KINDS.map((kind) => [
+      kind,
+      Object.freeze(JSON.parse(EMBEDDED_CORPUS_COMPATIBILITY_CONTRACT_TEXT[kind]) as JsonSchema),
+    ]),
+  ) as Record<CorpusCompatibilityContractKind, JsonSchema>,
 );
 
 /** The declared `$id` of each schema. */

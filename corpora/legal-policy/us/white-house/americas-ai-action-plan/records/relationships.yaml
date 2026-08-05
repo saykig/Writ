@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 9c42bb2c-dc68-598c-aa2c-dd9990171856
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#evaluation-infrastructure-in-jurisdiction
+    display_ref: evaluation infrastructure — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 07e3604d-321e-5621-9fde-357ab058412c
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 332e4d40-152d-541c-8d5f-dda0f8a388c1
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#evaluation-infrastructure-reviewed-under-parent
+    display_ref: evaluation infrastructure — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 07e3604d-321e-5621-9fde-357ab058412c
+    subject_type: claim
+    object_machine_id: 38500024-ec53-5469-bb78-f8c714aa96f4
+    object_type: review
+  - machine_id: 613ed7d1-0779-553c-8937-b91129cd99a1
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#evaluation-infrastructure-supported-by-passage
+    display_ref: evaluation infrastructure — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 07e3604d-321e-5621-9fde-357ab058412c
+    subject_type: claim
+    object_machine_id: f6e37323-f678-5515-92bf-475776e887b9
+    object_type: passage

@@ -11,6 +11,10 @@ The canonical record contract uses structured subjects and expanded scope. New s
 `temporal_scope`, and `conditions`. Institutional mandates use an explicit `status`; mission text
 is a separate object and does not imply mandate, authority, function, or operational capacity.
 
+Institutional grammar v0.2 adds an atomic `fact_type` and one fact-specific payload. Record
+judgments may target either a `record` or a `record_link`; judgments remain outside both native
+record families.
+
 Writ 0.1 source compatibility is deterministic:
 
 - `subjects { id };` compiles to `{ subject_id: "id", subject_type: "unspecified" }`;

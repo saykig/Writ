@@ -116,13 +116,13 @@ tasks:
     dependencies:
       - RESET-005
     acceptance:
-      - G7 and G20 authoritative political records live under corpora/multilateral.
+      - G7 and G20 authoritative political records are preserved as one compatibility dataset each.
       - Source-reported judgments and Writ-derived results remain distinguishable.
       - G7's 87 actions and G20's incomplete 13-of-174 coverage remain explicit.
     outputs:
-      - corpora/multilateral/g7/2025-ai-sme
+      - archive/compatibility/g7/2025-ai-sme
       - internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction
-      - corpora/multilateral/g20/2024-rio
+      - archive/compatibility/g20/2024-rio
 
   - id: RESET-007
     title: Establish saved queries and align interface language
@@ -237,6 +237,82 @@ tasks:
       - apps/ingest/tests/test_evidence_crosswalk.py
       - internal/verification/integration/corpora/test_eu_us_ai_governance.py
       - MANIFEST.sha256
+
+  - id: CORPUS-FAMILY-FOUNDATION-001
+    title: Establish the permanent corpus-family and issuer-instrument architecture
+    status: done
+    dependencies:
+      - CORE-EVIDENCE-RECONCILIATION-001
+    scope:
+      - Establish legal-policy and institutional as the two implemented native families.
+      - Add authoritative corpus manifest, catalog and family-neutral record-link contracts.
+      - Split the reviewed EU and US AI policy material into issuer-and-instrument corpora.
+      - Move constitutional law and NIST institutional records into family-first paths.
+      - Add only directly supported European Commission or AI Office institutional drafts.
+      - Move record judgments to the analysis layer while preserving v0.1 compatibility.
+      - Resolve active corpus paths through the root catalog.
+    exclusions:
+      - Changes to accepted EU or US substantive claim values or review decisions.
+      - NIST substantive review or changes to its six records.
+      - Open US Law adapter-metadata migration.
+      - G7, G20, archived pilot, query architecture or frontend redesign.
+    acceptance:
+      - Every active native corpus has exactly one family and a valid family-first path.
+      - All 15 EU and 17 US accepted claims occur once in their approved instrument corpora.
+      - Stable identities, hashes, legacy references and unresolved states match the preservation inventory.
+      - The retired EU and US subject-based corpus IDs are absent from the active catalog.
+      - The six NIST records remain byte-identical automated drafts.
+      - v0.1 record, institutional and judgment contracts remain available under compatibility.
+      - All required local checks, drift guards and checksum verifications pass.
+    outputs:
+      - adr/0017-permanent-corpus-family-architecture.md
+      - schemas/core/corpus-manifest.schema.json
+      - schemas/core/corpus-catalog.schema.json
+      - schemas/core/record-link.schema.json
+      - corpora/catalog.yaml
+      - corpora/legal-policy
+      - corpora/institutional
+      - docs/migrations/corpus-family-foundation
+
+  - id: CORPUS-FAMILY-FOUNDATION-002
+    title: Correct the corpus contract, boundary, supersession and determinism defects
+    status: done
+    dependencies:
+      - CORPUS-FAMILY-FOUNDATION-001
+    scope:
+      - Replace the manifest record_schema declaration with an explicit native or compatibility record contract.
+      - Add a narrowly scoped compatibility contract for the preserved reviewed EU-US payload.
+      - Allow a publication corpus boundary and correct every leaf that overclaimed an instrument.
+      - Make v0.2 judgment supersession directional and add explicit review-disposition judgment types.
+      - Add record-to-record supersession and supporting records to the Core record-link contract.
+      - Replace ambiguous leaf migration aliases with a root-level retired-corpus migration ledger.
+      - Restore byte-level drift checking for the generated EU and US corpus files.
+      - Preserve G7 and G20 as archived compatibility datasets outside the active corpora tree.
+    exclusions:
+      - Changes to accepted EU or US substantive claim values, identities, hashes or review decisions.
+      - NIST substantive review or changes to its six automated draft records.
+      - Changes to the approved issuer-and-instrument hierarchy.
+      - Changes to G7, G20 or archived pilot bytes, or to frontend design.
+    acceptance:
+      - Every catalogued manifest declares one resolvable record contract and every listed record file validates against it.
+      - No manifest describes the preserved reviewed payload as native legal-policy v0.2.
+      - Every legal-policy boundary matches a registered source document or a preserved claim instrument label.
+      - A judgment states supersession direction explicitly; self-supersession and cycles are rejected.
+      - The v0.1 judgment contract is unchanged.
+      - Active corpus IDs and aliases resolve uniquely and retired one-to-many IDs do not resolve.
+      - A serialization-only change fails the generator drift check.
+      - G7 and G20 are absent from the catalog and byte-identical to the recorded inventory.
+    outputs:
+      - schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json
+      - schemas/core/corpus-manifest.schema.json
+      - schemas/core/corpus-catalog.schema.json
+      - schemas/core/record-link.schema.json
+      - schemas/analysis/record-judgment.schema.json
+      - packages/domain/src/judgments.ts
+      - packages/language/test/corpus-record-contracts.test.ts
+      - internal/verification/integration/corpora
+      - archive/compatibility
+      - docs/migrations/corpus-family-foundation/g7-g20-archive-path-map.md
 
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

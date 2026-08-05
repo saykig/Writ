@@ -40,26 +40,26 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/**": [
       "../../internal/verification/fixtures/compatibility/g7-ai-sme/**",
-      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../archive/compatibility/g7/2025-ai-sme/**",
       "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
       "../../internal/verification/conformance/**",
     ],
     "/lab": [
       "../../internal/verification/fixtures/compatibility/g7-ai-sme/**",
-      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../archive/compatibility/g7/2025-ai-sme/**",
       "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
     ],
     "/benchmark": [
-      "../../corpora/multilateral/g7/2025-ai-sme/**",
-      "../../corpora/multilateral/g20/2024-rio/**",
+      "../../archive/compatibility/g7/2025-ai-sme/**",
+      "../../archive/compatibility/g20/2024-rio/**",
       "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
     ],
     "/how-it-works": [
       "../../internal/verification/fixtures/compatibility/g7-ai-sme/**",
-      "../../corpora/multilateral/g7/2025-ai-sme/**",
+      "../../archive/compatibility/g7/2025-ai-sme/**",
       "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
       "../../internal/verification/conformance/**",

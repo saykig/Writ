@@ -1,0 +1,98 @@
+schema_version: 1.0.0
+jurisdiction: EU
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+identity_derivation: UUIDv5(namespace, 'eu-us-ai-governance-v1:<record-kind>:<immutable-import-key>')
+entries:
+  - legacy_ref: EU-10
+    target_record_type: review
+    machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#imported-review-group
+    active_file: reviews/parent-annotations.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/9
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/reviews/parent-annotations.yaml
+  - legacy_ref: EU-10A
+    target_record_type: claim
+    machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#regulatory-classification
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/9/derived_claims/0
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+  - legacy_ref: EU-10B
+    target_record_type: claim
+    machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    ref: eu/ai-governance/commission-gpai-guidelines/notification#regulatory-notification
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/9/derived_claims/1
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+  - legacy_ref: EU-10C
+    target_record_type: claim
+    machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+    ref: eu/ai-governance/commission-gpai-guidelines/compliance#compliance-demonstration
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/9/derived_claims/2
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+moved_objects:
+  - object_type: source
+    machine_id: 5243cf6c-cc84-5a5e-b928-db1211a07a26
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/sources/sources.yaml
+    active_path: sources/sources.yaml
+  - object_type: claim
+    machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: claim
+    machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: claim
+    machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: relationship
+    machine_id: ca3e1351-823c-5f9c-b98f-f287fb602961
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: e5e7d313-a9b1-5874-a3b6-62dd9439e629
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: fde86edb-e8b9-5a07-9cbf-37542b6f2cb9
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: c25a8f19-eb1a-597e-bd07-3f3d285183f7
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: 81ef3664-49d0-5775-8743-2f53e3688b47
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: a49b12b3-b3ae-5561-85b4-71c1abf03434
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: review
+    machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/reviews/parent-annotations.yaml
+    active_path: reviews/parent-annotations.yaml
+  - object_type: unresolved_coverage
+    machine_id: 92393fff-5ee8-56f8-aa97-7847e2b689ac
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/passages/unresolved.yaml
+    active_path: passages/unresolved.yaml

@@ -8,7 +8,7 @@
  */
 
 import type { CanonicalIr, RecordJudgment, WritRecord } from "@writ/domain";
-import { validate } from "@writ/domain";
+import { validate, validateVersion } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
 import { checkModel } from "./checker.js";
@@ -112,11 +112,14 @@ export function compileSource(
           : record.family === "institutional"
             ? "institutional-record"
             : "record";
-      return { artifact, result: validate(artifact, record) };
+      return {
+        artifact,
+        result: validateVersion(artifact, record, record.schema_version),
+      };
     }),
     ...compiled.judgments.map((judgment) => ({
       artifact: "record-judgment",
-      result: validate("record-judgment", judgment),
+      result: validateVersion("record-judgment", judgment, judgment.schema_version),
     })),
   ];
   const schemaValid =

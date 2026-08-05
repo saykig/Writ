@@ -1,0 +1,42 @@
+schema_version: 1.0.0
+jurisdiction: EU
+claims:
+  - machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#recognized-compliance-path
+    display_ref: AI Office signatory notice — recognized compliance path
+    aliases: []
+    legacy_refs:
+      - EU-12
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice
+    review_status: accepted
+    imported_review_machine_id: f0d4ca5f-4432-5980-8b82-4609e9126ef4
+    claim_record_type: compliance_path
+    jurisdiction: EU
+    instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
+    source_locator: AI Office signatory notice
+    actor_type: market_provider
+    actor_term_local: 'provider of a general-purpose AI model choosing to become a signatory to the Code
+      of Practice
+
+      '
+    conduct_type: compliance_demonstration
+    conduct_term_local: 'adhere to the General-Purpose AI Code of Practice as a means of demonstrating
+      compliance with relevant AI Act obligations
+
+      '
+    legal_force: voluntary
+    compliance_function: recognized_compliance_path
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: European Commission
+    implementation_body: AI Office
+    underlying_regime_force: binding
+    underlying_instrument: EU_AI_ACT
+    interpretation_note: 'The Code is voluntary but operates as a recognized route for demonstrating compliance
+      with binding statutory duties.
+
+      '

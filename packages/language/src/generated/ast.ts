@@ -42,6 +42,7 @@ export type WritKeywordNames =
   | "accepted"
   | "action_identity"
   | "adjudication"
+  | "administered_by"
   | "administrative"
   | "adopted"
   | "adoption_status"
@@ -57,10 +58,12 @@ export type WritKeywordNames =
   | "and"
   | "applicability_status"
   | "applicable_period"
+  | "applies_to"
   | "approved"
   | "assert"
   | "assertion"
   | "assigns"
+  | "assigns_function_to"
   | "authority"
   | "authority_source_ids"
   | "authority_sources"
@@ -97,9 +100,11 @@ export type WritKeywordNames =
   | "created_by"
   | "dataset_name"
   | "dataset_snapshot"
+  | "decision_right"
   | "decision_rights"
   | "defines"
   | "derive"
+  | "derives_authority_from"
   | "diagnostic"
   | "dimension"
   | "dimensions"
@@ -114,9 +119,11 @@ export type WritKeywordNames =
   | "draft"
   | "effective_from"
   | "effective_until"
+  | "enforced_by"
   | "enforcement_status"
   | "enum"
   | "established"
+  | "establishes"
   | "evaluation"
   | "evaluation_window"
   | "evidence"
@@ -130,6 +137,7 @@ export type WritKeywordNames =
   | "exists"
   | "expect"
   | "explicit_rules_only"
+  | "fact_type"
   | "false"
   | "family_context"
   | "federal"
@@ -138,6 +146,7 @@ export type WritKeywordNames =
   | "forall"
   | "force"
   | "from"
+  | "function"
   | "functions"
   | "generally_applicable"
   | "given"
@@ -148,6 +157,8 @@ export type WritKeywordNames =
   | "guidance"
   | "hash"
   | "id"
+  | "identity"
+  | "implemented_by"
   | "implements_for"
   | "import"
   | "in"
@@ -168,6 +179,7 @@ export type WritKeywordNames =
   | "is_contested"
   | "is_known"
   | "issue_areas"
+  | "issued_by"
   | "item"
   | "json_pointer"
   | "judgment"
@@ -175,6 +187,7 @@ export type WritKeywordNames =
   | "jurisdiction"
   | "jurisdiction_level"
   | "jurisdictions"
+  | "kind"
   | "label"
   | "language"
   | "last_amended_year"
@@ -182,6 +195,7 @@ export type WritKeywordNames =
   | "legal_status_determination"
   | "let"
   | "lines"
+  | "link_id"
   | "locator"
   | "mandate"
   | "market_wide"
@@ -230,6 +244,7 @@ export type WritKeywordNames =
   | "passage_selection"
   | "performs"
   | "permits"
+  | "placement"
   | "predicate"
   | "priority"
   | "procurement"
@@ -247,11 +262,14 @@ export type WritKeywordNames =
   | "rationale"
   | "record"
   | "record_family_classification"
+  | "record_link"
+  | "record_link_disposition"
   | "regulation"
   | "regulator"
   | "related_judgment_ids"
   | "related_provision_ids"
   | "relation"
+  | "relationship"
   | "reports_to"
   | "requires"
   | "rescinded"
@@ -260,6 +278,7 @@ export type WritKeywordNames =
   | "responsible_authorities"
   | "result"
   | "retrieved"
+  | "review_disposition"
   | "review_required"
   | "review_state"
   | "reviewed"
@@ -298,7 +317,9 @@ export type WritKeywordNames =
   | "sum"
   | "summit"
   | "superseded"
+  | "superseded_by_judgment_id"
   | "supersedes"
+  | "supersedes_judgment_ids"
   | "support"
   | "supports"
   | "target"
@@ -883,6 +904,27 @@ export function isDateLiteral(item: unknown): item is DateLiteral {
   return reflection.isInstance(item, DateLiteral.$type);
 }
 
+export interface DecisionRightProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "DecisionRightProperty";
+  authoritySourceIds?: IdentifierList;
+  evidenceRefs?: IdentifierList;
+  status: MandateStatus;
+  text?: string;
+}
+
+export const DecisionRightProperty = {
+  $type: "DecisionRightProperty",
+  authoritySourceIds: "authoritySourceIds",
+  evidenceRefs: "evidenceRefs",
+  status: "status",
+  text: "text",
+} as const;
+
+export function isDecisionRightProperty(item: unknown): item is DecisionRightProperty {
+  return reflection.isInstance(item, DecisionRightProperty.$type);
+}
+
 export interface DecisionRightsProperty extends langium.AstNode {
   readonly $container: InstitutionalExtension;
   readonly $type: "DecisionRightsProperty";
@@ -1256,7 +1298,10 @@ export function isGoal(item: unknown): item is Goal {
 export interface IdentifierList extends langium.AstNode {
   readonly $container:
     | AuthoritySourcesProperty
+    | DecisionRightProperty
+    | InstitutionalRecordLinkProperty
     | JudgmentEvidenceRefs
+    | JudgmentSupersedesIds
     | MandateProperty
     | MissionProperty
     | OperationalCapacityProperty
@@ -1325,6 +1370,63 @@ export function isInstitutionalExtension(item: unknown): item is InstitutionalEx
   return reflection.isInstance(item, InstitutionalExtension.$type);
 }
 
+export type InstitutionalFactType =
+  | "decision_right"
+  | "function"
+  | "identity"
+  | "mandate"
+  | "mission"
+  | "operational_capacity"
+  | "placement"
+  | "relationship";
+
+export function isInstitutionalFactType(item: unknown): item is InstitutionalFactType {
+  return (
+    item === "identity" ||
+    item === "placement" ||
+    item === "relationship" ||
+    item === "mission" ||
+    item === "mandate" ||
+    item === "function" ||
+    item === "decision_right" ||
+    item === "operational_capacity"
+  );
+}
+
+export interface InstitutionalFactTypeProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionalFactTypeProperty";
+  value: InstitutionalFactType;
+}
+
+export const InstitutionalFactTypeProperty = {
+  $type: "InstitutionalFactTypeProperty",
+  value: "value",
+} as const;
+
+export function isInstitutionalFactTypeProperty(
+  item: unknown,
+): item is InstitutionalFactTypeProperty {
+  return reflection.isInstance(item, InstitutionalFactTypeProperty.$type);
+}
+
+export interface InstitutionalFunctionProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionalFunctionProperty";
+  value: QualifiedName;
+}
+
+export const InstitutionalFunctionProperty = {
+  $type: "InstitutionalFunctionProperty",
+  value: "value",
+} as const;
+
+export function isInstitutionalFunctionProperty(
+  item: unknown,
+): item is InstitutionalFunctionProperty {
+  return reflection.isInstance(item, InstitutionalFunctionProperty.$type);
+}
+
 export interface InstitutionalJurisdictionsProperty extends langium.AstNode {
   readonly $container: InstitutionalExtension;
   readonly $type: "InstitutionalJurisdictionsProperty";
@@ -1345,11 +1447,15 @@ export function isInstitutionalJurisdictionsProperty(
 export type InstitutionalProperty =
   | ApplicablePeriodProperty
   | AuthoritySourcesProperty
+  | DecisionRightProperty
   | DecisionRightsProperty
   | FunctionsProperty
   | InstitutionIdProperty
   | InstitutionTypeProperty
+  | InstitutionalFactTypeProperty
+  | InstitutionalFunctionProperty
   | InstitutionalJurisdictionsProperty
+  | InstitutionalRecordLinkProperty
   | InstitutionalRelationshipsProperty
   | MandateProperty
   | MissionProperty
@@ -1364,6 +1470,37 @@ export const InstitutionalProperty = {
 
 export function isInstitutionalProperty(item: unknown): item is InstitutionalProperty {
   return reflection.isInstance(item, InstitutionalProperty.$type);
+}
+
+export interface InstitutionalRecordLinkProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "InstitutionalRecordLinkProperty";
+  basis: EvidenceBasis;
+  evidenceRefs: IdentifierList;
+  linkId: QualifiedName;
+  relationType: RecordLinkRelationType;
+  sourceId: QualifiedName;
+  sourceKind: QualifiedName;
+  targetId: QualifiedName;
+  targetKind: QualifiedName;
+}
+
+export const InstitutionalRecordLinkProperty = {
+  $type: "InstitutionalRecordLinkProperty",
+  basis: "basis",
+  evidenceRefs: "evidenceRefs",
+  linkId: "linkId",
+  relationType: "relationType",
+  sourceId: "sourceId",
+  sourceKind: "sourceKind",
+  targetId: "targetId",
+  targetKind: "targetKind",
+} as const;
+
+export function isInstitutionalRecordLinkProperty(
+  item: unknown,
+): item is InstitutionalRecordLinkProperty {
+  return reflection.isInstance(item, InstitutionalRecordLinkProperty.$type);
 }
 
 export interface InstitutionalRelationship extends langium.AstNode {
@@ -1648,7 +1785,9 @@ export type JudgmentMember =
   | JudgmentRationale
   | JudgmentReviewer
   | JudgmentStatusProperty
+  | JudgmentSupersededBy
   | JudgmentSupersedes
+  | JudgmentSupersedesIds
   | JudgmentTarget
   | JudgmentTypeProperty
   | JudgmentValue
@@ -1715,6 +1854,21 @@ export function isJudgmentStatusProperty(item: unknown): item is JudgmentStatusP
   return reflection.isInstance(item, JudgmentStatusProperty.$type);
 }
 
+export interface JudgmentSupersededBy extends langium.AstNode {
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentSupersededBy";
+  value: QualifiedName;
+}
+
+export const JudgmentSupersededBy = {
+  $type: "JudgmentSupersededBy",
+  value: "value",
+} as const;
+
+export function isJudgmentSupersededBy(item: unknown): item is JudgmentSupersededBy {
+  return reflection.isInstance(item, JudgmentSupersededBy.$type);
+}
+
 export interface JudgmentSupersedes extends langium.AstNode {
   readonly $container: JudgmentDeclaration;
   readonly $type: "JudgmentSupersedes";
@@ -1730,19 +1884,42 @@ export function isJudgmentSupersedes(item: unknown): item is JudgmentSupersedes 
   return reflection.isInstance(item, JudgmentSupersedes.$type);
 }
 
+export interface JudgmentSupersedesIds extends langium.AstNode {
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentSupersedesIds";
+  values: IdentifierList;
+}
+
+export const JudgmentSupersedesIds = {
+  $type: "JudgmentSupersedesIds",
+  values: "values",
+} as const;
+
+export function isJudgmentSupersedesIds(item: unknown): item is JudgmentSupersedesIds {
+  return reflection.isInstance(item, JudgmentSupersedesIds.$type);
+}
+
 export interface JudgmentTarget extends langium.AstNode {
   readonly $container: JudgmentDeclaration;
   readonly $type: "JudgmentTarget";
+  kind?: JudgmentTargetKind;
   value: QualifiedName;
 }
 
 export const JudgmentTarget = {
   $type: "JudgmentTarget",
+  kind: "kind",
   value: "value",
 } as const;
 
 export function isJudgmentTarget(item: unknown): item is JudgmentTarget {
   return reflection.isInstance(item, JudgmentTarget.$type);
+}
+
+export type JudgmentTargetKind = "record" | "record_link";
+
+export function isJudgmentTargetKind(item: unknown): item is JudgmentTargetKind {
+  return item === "record" || item === "record_link";
 }
 
 export type JudgmentType =
@@ -1754,6 +1931,8 @@ export type JudgmentType =
   | "operational_capacity_determination"
   | "passage_selection"
   | "record_family_classification"
+  | "record_link_disposition"
+  | "review_disposition"
   | "scope_interpretation"
   | "subject_identification"
   | "topic_classification";
@@ -1770,7 +1949,9 @@ export function isJudgmentType(item: unknown): item is JudgmentType {
     item === "operational_capacity_determination" ||
     item === "direct_or_inferred" ||
     item === "disagreement" ||
-    item === "adjudication"
+    item === "adjudication" ||
+    item === "review_disposition" ||
+    item === "record_link_disposition"
   );
 }
 
@@ -2034,6 +2215,7 @@ export function isModel(item: unknown): item is Model {
 export type NamePart =
   | "accepted"
   | "adjudication"
+  | "administered_by"
   | "administrative"
   | "adopted"
   | "adoption_status"
@@ -2043,9 +2225,11 @@ export type NamePart =
   | "ambiguous"
   | "applicability_status"
   | "applicable_period"
+  | "applies_to"
   | "approved"
   | "assertion"
   | "assigns"
+  | "assigns_function_to"
   | "authority_source_ids"
   | "authority_sources"
   | "authorizes"
@@ -2067,8 +2251,10 @@ export type NamePart =
   | "created_by"
   | "dataset_name"
   | "dataset_snapshot"
+  | "decision_right"
   | "decision_rights"
   | "defines"
+  | "derives_authority_from"
   | "dimensions"
   | "direct"
   | "direct_or_inferred"
@@ -2079,18 +2265,22 @@ export type NamePart =
   | "draft"
   | "effective_from"
   | "effective_until"
+  | "enforced_by"
   | "enforcement_status"
   | "established"
+  | "establishes"
   | "evaluation"
   | "evidence"
   | "evidence_refs"
   | "exceptions"
   | "executive_order"
+  | "fact_type"
   | "family_context"
   | "federal"
   | "federal_agency"
   | "force"
   | "from"
+  | "function"
   | "functions"
   | "generally_applicable"
   | "government_department"
@@ -2098,6 +2288,8 @@ export type NamePart =
   | "grant_administration"
   | "guidance"
   | "id"
+  | "identity"
+  | "implemented_by"
   | "implements_for"
   | "incomplete_evidence"
   | "independent_agency"
@@ -2112,16 +2304,19 @@ export type NamePart =
   | "institutional_scope"
   | "instrument_type"
   | "interagency_body"
+  | "issued_by"
   | "item"
   | "judgment"
   | "judicial"
   | "jurisdiction"
   | "jurisdiction_level"
   | "jurisdictions"
+  | "kind"
   | "label"
   | "last_amended_year"
   | "legal_policy"
   | "legal_status_determination"
+  | "link_id"
   | "locator"
   | "mandate"
   | "market_wide"
@@ -2149,6 +2344,7 @@ export type NamePart =
   | "passage_selection"
   | "performs"
   | "permits"
+  | "placement"
   | "procurement"
   | "procurement_support"
   | "prohibits"
@@ -2160,11 +2356,13 @@ export type NamePart =
   | "rationale"
   | "record"
   | "record_family_classification"
+  | "record_link"
   | "regulation"
   | "regulator"
   | "related_judgment_ids"
   | "related_provision_ids"
   | "relation"
+  | "relationship"
   | "reports_to"
   | "requires"
   | "rescinded"
@@ -2181,6 +2379,7 @@ export type NamePart =
   | "section_number"
   | "section_title"
   | "self_executing"
+  | "source"
   | "source_ids"
   | "source_metadata"
   | "source_row_identifier"
@@ -2400,6 +2599,24 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "disagreement" ||
     item === "adjudication" ||
     item === "accepted" ||
+    item === "fact_type" ||
+    item === "identity" ||
+    item === "placement" ||
+    item === "relationship" ||
+    item === "function" ||
+    item === "decision_right" ||
+    item === "record_link" ||
+    item === "link_id" ||
+    item === "source" ||
+    item === "kind" ||
+    item === "issued_by" ||
+    item === "administered_by" ||
+    item === "implemented_by" ||
+    item === "enforced_by" ||
+    item === "establishes" ||
+    item === "assigns_function_to" ||
+    item === "derives_authority_from" ||
+    item === "applies_to" ||
     (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
   );
 }
@@ -2988,6 +3205,35 @@ export function isRecordFamily(item: unknown): item is RecordFamily {
     item === "legal_policy" ||
     item === "institutional" ||
     (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
+  );
+}
+
+export type RecordLinkRelationType =
+  | "administered_by"
+  | "applies_to"
+  | "assigns_function_to"
+  | "authorizes"
+  | "derives_authority_from"
+  | "enforced_by"
+  | "establishes"
+  | "implemented_by"
+  | "issued_by"
+  | "oversees"
+  | "part_of";
+
+export function isRecordLinkRelationType(item: unknown): item is RecordLinkRelationType {
+  return (
+    item === "issued_by" ||
+    item === "administered_by" ||
+    item === "implemented_by" ||
+    item === "enforced_by" ||
+    item === "establishes" ||
+    item === "authorizes" ||
+    item === "assigns_function_to" ||
+    item === "derives_authority_from" ||
+    item === "part_of" ||
+    item === "oversees" ||
+    item === "applies_to"
   );
 }
 
@@ -3854,6 +4100,7 @@ export type WritAstType = {
   ConceptDeclaration: ConceptDeclaration;
   ConceptProperty: ConceptProperty;
   DateLiteral: DateLiteral;
+  DecisionRightProperty: DecisionRightProperty;
   DecisionRightsProperty: DecisionRightsProperty;
   Declaration: Declaration;
   DeriveRule: DeriveRule;
@@ -3880,8 +4127,11 @@ export type WritAstType = {
   InstitutionIdProperty: InstitutionIdProperty;
   InstitutionTypeProperty: InstitutionTypeProperty;
   InstitutionalExtension: InstitutionalExtension;
+  InstitutionalFactTypeProperty: InstitutionalFactTypeProperty;
+  InstitutionalFunctionProperty: InstitutionalFunctionProperty;
   InstitutionalJurisdictionsProperty: InstitutionalJurisdictionsProperty;
   InstitutionalProperty: InstitutionalProperty;
+  InstitutionalRecordLinkProperty: InstitutionalRecordLinkProperty;
   InstitutionalRelationship: InstitutionalRelationship;
   InstitutionalRelationshipsProperty: InstitutionalRelationshipsProperty;
   InstrumentTypeProperty: InstrumentTypeProperty;
@@ -3895,7 +4145,9 @@ export type WritAstType = {
   JudgmentRationale: JudgmentRationale;
   JudgmentReviewer: JudgmentReviewer;
   JudgmentStatusProperty: JudgmentStatusProperty;
+  JudgmentSupersededBy: JudgmentSupersededBy;
   JudgmentSupersedes: JudgmentSupersedes;
+  JudgmentSupersedesIds: JudgmentSupersedesIds;
   JudgmentTarget: JudgmentTarget;
   JudgmentTypeProperty: JudgmentTypeProperty;
   JudgmentValue: JudgmentValue;
@@ -4251,6 +4503,27 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [Expression.$type],
     },
+    DecisionRightProperty: {
+      name: DecisionRightProperty.$type,
+      properties: {
+        authoritySourceIds: {
+          name: DecisionRightProperty.authoritySourceIds,
+          optional: true,
+        },
+        evidenceRefs: {
+          name: DecisionRightProperty.evidenceRefs,
+          optional: true,
+        },
+        status: {
+          name: DecisionRightProperty.status,
+        },
+        text: {
+          name: DecisionRightProperty.text,
+          optional: true,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
     DecisionRightsProperty: {
       name: DecisionRightsProperty.$type,
       properties: {
@@ -4530,6 +4803,24 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [RecordMember.$type],
     },
+    InstitutionalFactTypeProperty: {
+      name: InstitutionalFactTypeProperty.$type,
+      properties: {
+        value: {
+          name: InstitutionalFactTypeProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
+    InstitutionalFunctionProperty: {
+      name: InstitutionalFunctionProperty.$type,
+      properties: {
+        value: {
+          name: InstitutionalFunctionProperty.value,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
     InstitutionalJurisdictionsProperty: {
       name: InstitutionalJurisdictionsProperty.$type,
       properties: {
@@ -4543,6 +4834,36 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       name: InstitutionalProperty.$type,
       properties: {},
       superTypes: [],
+    },
+    InstitutionalRecordLinkProperty: {
+      name: InstitutionalRecordLinkProperty.$type,
+      properties: {
+        basis: {
+          name: InstitutionalRecordLinkProperty.basis,
+        },
+        evidenceRefs: {
+          name: InstitutionalRecordLinkProperty.evidenceRefs,
+        },
+        linkId: {
+          name: InstitutionalRecordLinkProperty.linkId,
+        },
+        relationType: {
+          name: InstitutionalRecordLinkProperty.relationType,
+        },
+        sourceId: {
+          name: InstitutionalRecordLinkProperty.sourceId,
+        },
+        sourceKind: {
+          name: InstitutionalRecordLinkProperty.sourceKind,
+        },
+        targetId: {
+          name: InstitutionalRecordLinkProperty.targetId,
+        },
+        targetKind: {
+          name: InstitutionalRecordLinkProperty.targetKind,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
     },
     InstitutionalRelationship: {
       name: InstitutionalRelationship.$type,
@@ -4666,6 +4987,15 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [JudgmentMember.$type],
     },
+    JudgmentSupersededBy: {
+      name: JudgmentSupersededBy.$type,
+      properties: {
+        value: {
+          name: JudgmentSupersededBy.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
     JudgmentSupersedes: {
       name: JudgmentSupersedes.$type,
       properties: {
@@ -4675,9 +5005,22 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [JudgmentMember.$type],
     },
+    JudgmentSupersedesIds: {
+      name: JudgmentSupersedesIds.$type,
+      properties: {
+        values: {
+          name: JudgmentSupersedesIds.values,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
     JudgmentTarget: {
       name: JudgmentTarget.$type,
       properties: {
+        kind: {
+          name: JudgmentTarget.kind,
+          optional: true,
+        },
         value: {
           name: JudgmentTarget.value,
         },

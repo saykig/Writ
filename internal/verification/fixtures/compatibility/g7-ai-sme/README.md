@@ -5,7 +5,7 @@ literal, alternative, and resolved methodologies plus their schema and analyzer 
 packages can verify deterministic compilation, diagnostics, evaluation, and receipt behavior.
 
 It is not a current general corpus model and is not Writ's primary demonstration. Authoritative G7
-political records remain under `corpora/multilateral/g7/2025-ai-sme/`; the historical score
+political records remain under `archive/compatibility/g7/2025-ai-sme/`; the historical score
 reproduction remains an internal evaluator benchmark.
 
 - `language/` contains the historical Writ programs.

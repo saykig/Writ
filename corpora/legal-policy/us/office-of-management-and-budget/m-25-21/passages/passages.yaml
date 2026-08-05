@@ -1,0 +1,41 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: 5f0a429a-91fe-5d95-a521-47ca2e1e7e29
+    ref: us/ai-governance/omb-m-25-21/covered-ai#source-passage
+    display_ref: Source passage — scope statement
+    aliases: []
+    legacy_refs:
+      - passage-us-07
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: bf581ece-d43b-5ea1-af38-c781dc4b43fe
+    imported_source_legacy_ref: US-07
+    anchor_type: pdf_text
+    anchor_phrase: Covered AI. This memorandum provides requirements
+    quote: U.S.C. § 901(b), and other requirements do not apply to elements of the Intelligence Community,
+      as defined in 50 U.S.C. § 3003. b. Covered AI. This memorandum provides requirements and recommendations
+      that apply to new and existing AI that is developed, used, or acquired by or on behalf of covered
+      agencies.
+    anchor_hash: sha256:c045e47d8ed0cc96c49971dcadbf4161fbcb7930d1f1f6cb831e83fb9403a614
+    language: en
+    page_number: 4
+  - machine_id: c9635ad9-3c53-50d0-ad66-047eb614e319
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#source-passage
+    display_ref: Source passage — high-impact AI requirements
+    aliases: []
+    legacy_refs:
+      - passage-us-08
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: bf581ece-d43b-5ea1-af38-c781dc4b43fe
+    imported_source_legacy_ref: US-08
+    anchor_type: pdf_text
+    anchor_phrase: Conduct Pre-Deployment Testing
+    quote: Conduct Pre-Deployment Testing. Agencies must develop pre-deployment testing and prepare risk
+      mitigation plans that reflect expected real-world outcomes and identify expected benefits to the
+      AI use. In conducting pre-deployment testing, if an agency does not have access to the underlying
+      AI source code, models, or data, the agency must use
+    anchor_hash: sha256:e6ab6b37d63100ddbc57b5811d6d6a60efd99b657188887dc6354a5aaedcd2df
+    language: en
+    page_number: 15

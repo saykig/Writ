@@ -1,0 +1,49 @@
+schema_version: 1.0.0
+jurisdiction: US
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+identity_derivation: UUIDv5(namespace, 'eu-us-ai-governance-v1:<record-kind>:<immutable-import-key>')
+entries:
+  - legacy_ref: US-11
+    target_record_type: claim
+    machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#proposed-reporting-and-disclosure
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/22
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/claims.yaml
+moved_objects:
+  - object_type: source
+    machine_id: 6585f13f-46c2-5bdc-846c-5581c45468c9
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/sources/sources.yaml
+    active_path: sources/sources.yaml
+  - object_type: passage
+    machine_id: 67e6f3b3-8207-54bb-a94c-c461bfc77774
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/passages/passages.yaml
+    active_path: passages/passages.yaml
+  - object_type: claim
+    machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: relationship
+    machine_id: b93f1be8-e976-5a5f-b3e8-ec6e178b52c7
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: ec564227-cb0c-5780-aa41-c54ed61c3e5a
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: d8b5d299-06ee-552d-b9b8-b12148d563e1
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: review
+    machine_id: 3051f3ef-790d-5c6f-8a40-c19c4e1c4fad
+    old_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance/reviews/parent-annotations.yaml
+    active_path: reviews/parent-annotations.yaml

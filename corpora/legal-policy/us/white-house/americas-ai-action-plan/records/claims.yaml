@@ -1,0 +1,57 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 07e3604d-321e-5621-9fde-357ab058412c
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#evaluation-infrastructure
+    display_ref: AI Action Plan and later White House policy-action materials — evaluation infrastructure
+    aliases: []
+    legacy_refs:
+      - US-12
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.white-house.americas-ai-action-plan
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 38500024-ec53-5469-bb78-f8c714aa96f4
+    claim_record_type: policy_context
+    jurisdiction: US
+    instrument: WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS
+    source_locator: 'AI Action Plan and later White House policy-action materials
+
+      '
+    actor_type: federal_agency
+    actor_term_local: federal agency
+    additional_affected_actor_type: ecosystem_stakeholder
+    additional_actor_term_local: 'stakeholder participating in the United States artificial-intelligence
+      ecosystem
+
+      '
+    conduct_type: evaluation_infrastructure_coordination
+    conduct_term_local: 'advance standards, evaluation tools, procurement practices and security coordination
+
+      '
+    source_topics:
+      - innovation
+      - infrastructure
+      - standards
+      - evaluation_tools
+      - procurement
+      - security_coordination
+    legal_force: mixed
+    compliance_function: policy_direction
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_determinable_from_passage
+    responsible_authorities:
+      - White House
+      - NIST
+      - CAISI
+    scope:
+      - government_policy
+      - cross_sector_support
+    interpretation_note: 'Current policy supports standards, evaluation tools and coordination but does
+      not itself impose a binding model-evaluation obligation on private market providers.
+
+      '

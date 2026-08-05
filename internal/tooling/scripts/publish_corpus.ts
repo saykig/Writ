@@ -103,7 +103,7 @@ function phase1aArtifacts(options: Options): CorpusArtifactInput[] {
     ),
     artifact(
       options,
-      `corpora/multilateral/g20/${options.summitSlug}/provenance/source-manifest.json`,
+      `archive/compatibility/g20/${options.summitSlug}/provenance/source-manifest.json`,
       `manifest.${options.summitSlug}`,
       "source_manifest",
       "application/json",
@@ -111,7 +111,7 @@ function phase1aArtifacts(options: Options): CorpusArtifactInput[] {
     ),
     artifact(
       options,
-      `corpora/multilateral/g20/${options.summitSlug}/provenance/ingestion-report.md`,
+      `archive/compatibility/g20/${options.summitSlug}/provenance/ingestion-report.md`,
       `ingestion_report.${options.summitSlug}`,
       "ingestion_report",
       "text/markdown",

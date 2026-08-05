@@ -1,0 +1,44 @@
+schema_version: 1.0.0
+jurisdiction: EU
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+identity_derivation: UUIDv5(namespace, 'eu-us-ai-governance-v1:<record-kind>:<immutable-import-key>')
+entries:
+  - legacy_ref: EU-12
+    target_record_type: claim
+    machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#recognized-compliance-path
+    active_file: records/claims.yaml
+    archive_pointer: original/annotations/human-reviewed.yaml#/records/11
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+moved_objects:
+  - object_type: source
+    machine_id: cc6f9844-f11c-506b-837e-39a604c9e1ef
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/sources/sources.yaml
+    active_path: sources/sources.yaml
+  - object_type: claim
+    machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/claims.yaml
+    active_path: records/claims.yaml
+  - object_type: relationship
+    machine_id: 437faea5-2fff-5c74-848b-f14d2a842188
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: relationship
+    machine_id: be9a36be-56bd-5cb4-954e-661cf3582325
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/records/relationships.yaml
+    active_path: records/relationships.yaml
+  - object_type: review
+    machine_id: f0d4ca5f-4432-5980-8b82-4609e9126ef4
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/reviews/parent-annotations.yaml
+    active_path: reviews/parent-annotations.yaml
+  - object_type: unresolved_coverage
+    machine_id: aa006750-2c54-589a-91de-3456e55210c6
+    old_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance/passages/unresolved.yaml
+    active_path: passages/unresolved.yaml

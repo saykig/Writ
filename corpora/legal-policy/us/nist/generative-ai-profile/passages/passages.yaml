@@ -1,0 +1,25 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: d1d75f12-6499-5b45-a291-4c475770f0bd
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#source-passage
+    display_ref: Source passage — abstract
+    aliases: []
+    legacy_refs:
+      - passage-us-03
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: 75af4748-ab29-5fb4-8ada-606f11f5a359
+    imported_source_legacy_ref: US-03
+    anchor_type: pdf_text
+    anchor_phrase: is an implementation of the AI RMF functions
+    quote: A proﬁle is an implementation of the AI RMF functions, categories, and subcategories for a
+      speciﬁc setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements,
+      risk tolerance, and resources of the Framework user. AI RMF proﬁles assist organizations in deciding
+      how to best manage AI risks in a manner that is well-aligned with their goals, considers legal/regulatory
+      requirements and best practices, and reﬂects risk management priorities. Consistent with other AI
+      RMF proﬁles, this proﬁle oﬀers insights into how risk can be managed across various stages of the
+      AI lifecycle and for GAI as a technology.
+    anchor_hash: sha256:615b647fbbc415b5df6123cecd118dc6801d3906b06978b32f9bb4622ad76ff7
+    language: en
+    page_number: 5

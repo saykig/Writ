@@ -1,0 +1,119 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    ref: us/ai-governance/omb-m-25-21/covered-ai#agency-scope
+    display_ref: scope statement — agency scope
+    aliases: []
+    legacy_refs:
+      - US-07
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 5708c65d-f30f-5904-8f08-e984d3e846bd
+    claim_record_type: scope_rule
+    jurisdiction: US
+    instrument: OMB_M_25_21
+    source_locator: scope statement
+    actor_type: federal_agency
+    actor_term_local: federal agency
+    covered_scope:
+      - government_use
+    excluded_direct_actor_types:
+      - market_provider
+      - government_vendor
+      - public
+    legal_force: binding
+    binding_scope: federal_agencies_only
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_government_implementation
+    responsible_authority: OMB
+    target_system: agency_used_ai_system
+    interpretation_note: 'M-25-21 binds agencies in their use of AI and must not be generalized into market-wide
+      duties for private providers.
+
+      '
+  - machine_id: 3675454a-3cb3-5799-9fd3-3dc90f3add50
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#pre-deployment-testing
+    display_ref: high-impact AI requirements — pre deployment testing
+    aliases: []
+    legacy_refs:
+      - US-08A
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
+    claim_record_type: obligation
+    jurisdiction: US
+    instrument: OMB_M_25_21
+    source_locator: high-impact AI requirements
+    interpretation_note: 'These are binding government-use controls, not general market-provider obligations.
+
+      '
+    actor_type: federal_agency
+    actor_term_local: federal agency using high-impact AI
+    conduct_type: pre_deployment_testing
+    conduct_family: evaluation
+    conduct_term_local: 'conduct pre-deployment testing of high-impact AI
+
+      '
+    legal_force: binding
+    binding_scope: federal_agencies_only
+    compliance_function: direct_obligation
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_government_implementation
+    responsible_authority: OMB
+    implementation_body: federal_agencies
+    scope:
+      - government_use
+    target_system: high_impact_ai_system
+    noncompliance_consequence: discontinue_ai_use
+  - machine_id: d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#risk-assessment
+    display_ref: high-impact AI requirements — risk assessment
+    aliases: []
+    legacy_refs:
+      - US-08B
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
+    claim_record_type: obligation
+    jurisdiction: US
+    instrument: OMB_M_25_21
+    source_locator: high-impact AI requirements
+    interpretation_note: 'These are binding government-use controls, not general market-provider obligations.
+
+      '
+    actor_type: federal_agency
+    actor_term_local: federal agency using high-impact AI
+    conduct_type: risk_assessment
+    conduct_term_local: 'complete an AI impact assessment for high-impact AI
+
+      '
+    legal_force: binding
+    binding_scope: federal_agencies_only
+    compliance_function: direct_obligation
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_government_implementation
+    responsible_authority: OMB
+    implementation_body: federal_agencies
+    scope:
+      - government_use
+    target_system: high_impact_ai_system
+    noncompliance_consequence: discontinue_ai_use

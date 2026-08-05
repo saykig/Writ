@@ -44,7 +44,7 @@ published scores are source-reported historical judgments; Writ's score reproduc
 benchmark, not a universal label.
 
 The G20 Rio adapter is implemented and remains fetch-disabled by default. The authoritative corpus
-exists under `corpora/multilateral/g20/2024-rio/`: 13 ingested political statements, 13 selections,
+exists under `archive/compatibility/g20/2024-rio/`: 13 ingested political statements, 13 selections,
 two reports, 546 source-reported member judgments, one incomplete reconciliation record, and 15 review items.
 The source reports 174 commitments; the 161 not ingested remain explicitly absent.
 

@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 2e2716f7-ea57-52bd-9842-57de8e8e4144
+    ref: us/ai-governance/nist-ai-rmf/abstract#risk-management-in-jurisdiction
+    display_ref: risk management — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 2e169e44-5094-5ebc-ac67-330cabf22462
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 0751b898-3deb-5d83-8b62-3551b85099a9
+    ref: us/ai-governance/nist-ai-rmf/abstract#risk-management-reviewed-under-parent
+    display_ref: risk management — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 2e169e44-5094-5ebc-ac67-330cabf22462
+    subject_type: claim
+    object_machine_id: 20932931-1e58-5740-96f5-7216c676fd63
+    object_type: review
+  - machine_id: a1729820-8fad-58ca-b552-96d23a391dd6
+    ref: us/ai-governance/nist-ai-rmf/abstract#risk-management-supported-by-passage
+    display_ref: risk management — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 2e169e44-5094-5ebc-ac67-330cabf22462
+    subject_type: claim
+    object_machine_id: db05b616-2950-55c2-85fa-0305804c0fc1
+    object_type: passage

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/core/record-link.schema.json",
+  "title": "Writ Record Link",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "link_id",
+    "owning_corpus_id",
+    "source_id",
+    "source_kind",
+    "target_id",
+    "target_kind",
+    "relation_type",
+    "basis",
+    "evidence_refs",
+    "uncertainties",
+    "provenance",
+    "review_state"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "link_id": { "$ref": "#/$defs/nonEmptyString" },
+    "owning_corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+    "source_id": { "$ref": "#/$defs/nonEmptyString" },
+    "source_kind": { "$ref": "#/$defs/nonEmptyString" },
+    "target_id": { "$ref": "#/$defs/nonEmptyString" },
+    "target_kind": { "$ref": "#/$defs/nonEmptyString" },
+    "relation_type": { "$ref": "#/$defs/relationType" },
+    "basis": { "enum": ["direct", "inherited", "inferred"] },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "supporting_record_ids": { "$ref": "#/$defs/supportingRecordIds" },
+    "uncertainties": { "type": "array", "items": { "$ref": "#/$defs/uncertainty" } },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "review_state": { "enum": ["draft", "reviewed", "approved", "superseded", "withdrawn"] }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "relationType": {
+      "enum": [
+        "issued_by",
+        "administered_by",
+        "implemented_by",
+        "enforced_by",
+        "establishes",
+        "authorizes",
+        "assigns_function_to",
+        "derives_authority_from",
+        "part_of",
+        "oversees",
+        "applies_to",
+        "supersedes"
+      ]
+    },
+    "supportingRecordIds": {
+      "description": "Records that already assert the fact this link rests on, cited instead of restating it. The link is still reviewed on its own; a supporting record's review approval does not transfer to it. Reverse traversal is derived from the stored direction, so no inverse link is stored.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "description"],
+      "properties": {
+        "type": { "enum": ["unknown", "contested", "ambiguous", "incomplete_evidence"] },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at"],
+      "properties": {
+        "created_by": { "$ref": "#/$defs/nonEmptyString" },
+        "created_at": { "type": "string", "format": "date" }
+      }
+    },
+    "linkPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "link_id",
+        "source_id",
+        "source_kind",
+        "target_id",
+        "target_kind",
+        "relation_type",
+        "basis",
+        "evidence_refs"
+      ],
+      "properties": {
+        "link_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_kind": { "$ref": "#/$defs/nonEmptyString" },
+        "target_id": { "$ref": "#/$defs/nonEmptyString" },
+        "target_kind": { "$ref": "#/$defs/nonEmptyString" },
+        "relation_type": { "$ref": "#/$defs/relationType" },
+        "basis": { "enum": ["direct", "inherited", "inferred"] },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        },
+        "supporting_record_ids": { "$ref": "#/$defs/supportingRecordIds" }
+      }
+    }
+  }
+}

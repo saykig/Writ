@@ -30,7 +30,8 @@ Documents under `archive/` are historical evidence, never current instructions.
 5. Writ-derived results declare their methodology, version, inputs, and trace.
 6. Unknown and contested values remain explicit; unknown is never silently treated as false.
 7. Visualizations and memos are views, not sources of truth.
-8. The initial knowledge families are institutional, legal, policy, theoretical, and empirical.
+8. The implemented native families are `legal_policy` and `institutional`; future family
+   identifiers remain extensible at the shared record base.
 9. Deterministic derivation performs no network access, model inference, randomness, wall-clock
    reads, or mutation.
 10. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,

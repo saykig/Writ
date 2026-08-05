@@ -35,12 +35,12 @@ class G7AiSmeFixtureAdapter:
             "methodology-inventory.json"
         )
         sources = self._json(
-            "corpora/multilateral/g7/2025-ai-sme/sources/source-manifest.json"
+            "archive/compatibility/g7/2025-ai-sme/sources/source-manifest.json"
         )
         judgments = json.loads(
             (
                 self.root
-                / "corpora/multilateral/g7/2025-ai-sme/records/"
+                / "archive/compatibility/g7/2025-ai-sme/records/"
                 "published-judgments.json"
             ).read_text(encoding="utf-8")
         )

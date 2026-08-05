@@ -8,10 +8,8 @@ families and never from core back to an extension.
 | ------------- | ----------------------- | ---------------------------------- |
 | institutional | institutional extension | `institutional-record.schema.json` |
 | legal/policy  | legal-policy extension  | `legal-policy-record.schema.json`  |
-| theoretical   | theoretical extension   | none yet                           |
-| empirical     | empirical extension     | none yet                           |
 
-`record-judgment.schema.json` is a separate analytical judgment object about a target record. Its
+Record judgments are authoritative under `schemas/analysis/record-judgment.schema.json`. Their
 workflow states are `proposed`, `accepted`, `contested`, and `superseded`; record approval remains
 part of the record workflow and is not a judgment state.
 
@@ -20,7 +18,7 @@ Each record extension composes the complete shared `recordBase`, constrains its 
 neither the base nor the extension. The public core record schema applies the same closure to base
 records while accepting future family identifiers. Core does not depend on either family.
 
-Institutional `mandate`, optional `mission`, `functions`, and `operational_capacity` are separate
-facts. A mission or function never establishes a mandate, authority, or capacity; each field must
-carry its own status and sources. In particular, identity, placement, relationship, and function
-records may state `mandate.status` as `unknown`.
+Institutional v0.2 records are atomic discriminated facts. Identity, placement, relationship,
+mission, mandate, function, decision-right, and operational-capacity payloads remain separate. A
+mission or function never establishes a mandate, authority, or capacity. The frozen v0.1 profile
+contract remains available under compatibility.

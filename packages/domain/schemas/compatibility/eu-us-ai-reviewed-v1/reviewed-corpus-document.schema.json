@@ -1,0 +1,650 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json",
+  "title": "EU-US Reviewed AI Corpus Document",
+  "description": "The preserved reviewed EU/US AI-governance corpus format, exactly as generated from the frozen human-reviewed pilot input. This is a compatibility contract: it describes the imported reviewed payload and its migration ledger, it does not convert any substantive value, and it is not the native legal-policy record grammar. One schema governs every file listed in a corpus manifest that declares it, discriminated by the document's collection key.",
+  "type": "object",
+  "required": ["schema_version", "jurisdiction"],
+  "oneOf": [
+    { "$ref": "#/$defs/sourcesDocument" },
+    { "$ref": "#/$defs/passagesDocument" },
+    { "$ref": "#/$defs/unresolvedDocument" },
+    { "$ref": "#/$defs/entitiesDocument" },
+    { "$ref": "#/$defs/claimsDocument" },
+    { "$ref": "#/$defs/relationshipsDocument" },
+    { "$ref": "#/$defs/reviewsDocument" },
+    { "$ref": "#/$defs/reconciliationDocument" },
+    { "$ref": "#/$defs/migrationMapDocument" }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "jurisdiction": { "enum": ["EU", "US"] },
+    "machineId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "identity": {
+      "type": "object",
+      "required": ["machine_id", "ref", "display_ref", "aliases", "legacy_refs"],
+      "properties": {
+        "machine_id": { "$ref": "#/$defs/machineId" },
+        "ref": { "$ref": "#/$defs/nonEmptyString" },
+        "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "aliases": { "$ref": "#/$defs/stringArray" },
+        "legacy_refs": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "documentHeader": {
+      "type": "object",
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "jurisdiction": { "$ref": "#/$defs/jurisdiction" }
+      }
+    },
+
+    "verifiedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/identity" }],
+      "required": [
+        "machine_id",
+        "ref",
+        "display_ref",
+        "aliases",
+        "legacy_refs",
+        "record_type",
+        "jurisdiction",
+        "verification_status",
+        "document_id",
+        "title",
+        "uri",
+        "media_type",
+        "retrieved_at",
+        "issued_at",
+        "publisher",
+        "source_tier",
+        "sha256"
+      ],
+      "properties": {
+        "machine_id": { "$ref": "#/$defs/machineId" },
+        "ref": { "$ref": "#/$defs/nonEmptyString" },
+        "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "aliases": { "$ref": "#/$defs/stringArray" },
+        "legacy_refs": { "$ref": "#/$defs/stringArray" },
+        "record_type": { "const": "source_document_version" },
+        "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+        "verification_status": { "const": "verified" },
+        "document_id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "uri": { "type": "string", "format": "uri" },
+        "media_type": { "enum": ["application/pdf", "text/html"] },
+        "retrieved_at": { "$ref": "#/$defs/timestamp" },
+        "issued_at": { "$ref": "#/$defs/timestamp" },
+        "publisher": { "$ref": "#/$defs/nonEmptyString" },
+        "source_tier": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "unresolvedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "machine_id",
+        "ref",
+        "display_ref",
+        "aliases",
+        "legacy_refs",
+        "record_type",
+        "jurisdiction",
+        "verification_status",
+        "imported_parent_legacy_ref",
+        "instrument",
+        "source_locator",
+        "reason"
+      ],
+      "properties": {
+        "machine_id": { "$ref": "#/$defs/machineId" },
+        "ref": { "$ref": "#/$defs/nonEmptyString" },
+        "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "aliases": { "$ref": "#/$defs/stringArray" },
+        "legacy_refs": { "$ref": "#/$defs/stringArray" },
+        "record_type": { "const": "unresolved_source" },
+        "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+        "verification_status": { "const": "unresolved" },
+        "imported_parent_legacy_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "instrument": { "$ref": "#/$defs/nonEmptyString" },
+        "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sourcesDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "sources"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "sources": {
+          "type": "array",
+          "items": {
+            "oneOf": [{ "$ref": "#/$defs/verifiedSource" }, { "$ref": "#/$defs/unresolvedSource" }]
+          }
+        }
+      }
+    },
+
+    "passagesDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "passages"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "passages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "machine_id",
+              "ref",
+              "display_ref",
+              "aliases",
+              "legacy_refs",
+              "record_type",
+              "jurisdiction",
+              "source_machine_id",
+              "imported_source_legacy_ref",
+              "anchor_type",
+              "quote",
+              "anchor_hash",
+              "language"
+            ],
+            "properties": {
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "aliases": { "$ref": "#/$defs/stringArray" },
+              "legacy_refs": { "$ref": "#/$defs/stringArray" },
+              "record_type": { "const": "source_passage" },
+              "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+              "source_machine_id": { "$ref": "#/$defs/machineId" },
+              "imported_source_legacy_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "anchor_type": { "enum": ["html_dom", "pdf_text"] },
+              "dom_path": { "$ref": "#/$defs/nonEmptyString" },
+              "page_number": { "type": "integer", "minimum": 1 },
+              "anchor_phrase": { "$ref": "#/$defs/nonEmptyString" },
+              "quote": { "$ref": "#/$defs/nonEmptyString" },
+              "anchor_hash": { "$ref": "#/$defs/hash" },
+              "language": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "anchor_type": { "const": "html_dom" } },
+                  "required": ["anchor_type"]
+                },
+                "then": {
+                  "not": { "required": ["page_number"] },
+                  "oneOf": [{ "required": ["dom_path"] }, { "required": ["anchor_phrase"] }]
+                }
+              },
+              {
+                "if": {
+                  "properties": { "anchor_type": { "const": "pdf_text" } },
+                  "required": ["anchor_type"]
+                },
+                "then": { "required": ["page_number", "anchor_phrase"] }
+              }
+            ]
+          }
+        }
+      }
+    },
+
+    "unresolvedDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "unresolved"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "unresolved": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "machine_id",
+              "ref",
+              "display_ref",
+              "aliases",
+              "legacy_refs",
+              "record_type",
+              "jurisdiction",
+              "coverage_status",
+              "source_machine_id",
+              "imported_parent_legacy_ref",
+              "instrument",
+              "source_locator",
+              "reason"
+            ],
+            "properties": {
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "aliases": { "$ref": "#/$defs/stringArray" },
+              "legacy_refs": { "$ref": "#/$defs/stringArray" },
+              "record_type": { "const": "coverage_record" },
+              "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+              "coverage_status": { "const": "unresolved" },
+              "source_machine_id": { "$ref": "#/$defs/machineId" },
+              "imported_parent_legacy_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "instrument": { "$ref": "#/$defs/nonEmptyString" },
+              "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+              "reason": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        }
+      }
+    },
+
+    "entitiesDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "entities"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "machine_id",
+              "ref",
+              "display_ref",
+              "aliases",
+              "legacy_refs",
+              "record_type",
+              "entity_type",
+              "name",
+              "jurisdiction"
+            ],
+            "properties": {
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "aliases": { "$ref": "#/$defs/stringArray" },
+              "legacy_refs": { "$ref": "#/$defs/stringArray" },
+              "record_type": { "const": "political_entity" },
+              "entity_type": { "const": "jurisdiction" },
+              "name": { "$ref": "#/$defs/nonEmptyString" },
+              "jurisdiction": { "$ref": "#/$defs/jurisdiction" }
+            }
+          }
+        }
+      }
+    },
+
+    "claimsDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "claims"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "claims": { "type": "array", "items": { "$ref": "#/$defs/reviewedClaim" } }
+      }
+    },
+    "reviewedClaim": {
+      "description": "One imported reviewed claim. Identity, corpus placement and workflow state are constrained; the substantive descriptive fields are the reviewed vocabulary carried over unchanged. The property set is closed so no field can be introduced without amending this contract.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "machine_id",
+        "ref",
+        "display_ref",
+        "aliases",
+        "legacy_refs",
+        "record_type",
+        "record_family",
+        "family",
+        "corpus_id",
+        "review_status",
+        "imported_review_machine_id",
+        "claim_record_type",
+        "jurisdiction",
+        "instrument",
+        "source_locator",
+        "legal_force",
+        "adoption_status",
+        "applicability_status",
+        "enforcement_status",
+        "interpretation_note"
+      ],
+      "properties": {
+        "machine_id": { "$ref": "#/$defs/machineId" },
+        "ref": { "$ref": "#/$defs/nonEmptyString" },
+        "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+        "aliases": { "$ref": "#/$defs/stringArray" },
+        "legacy_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^(?:EU|US)-[0-9]{2}[A-Z]?$" }
+        },
+        "record_type": { "const": "political_claim" },
+        "record_family": { "const": "policy" },
+        "family": { "const": "legal_policy" },
+        "corpus_id": { "type": "string", "pattern": "^writ\\.corpus\\.legal-policy\\." },
+        "review_status": { "const": "accepted" },
+        "imported_review_machine_id": { "$ref": "#/$defs/machineId" },
+        "claim_record_type": { "$ref": "#/$defs/nonEmptyString" },
+        "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+        "instrument": { "$ref": "#/$defs/nonEmptyString" },
+        "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+        "legal_force": { "$ref": "#/$defs/nonEmptyString" },
+        "adoption_status": { "$ref": "#/$defs/nonEmptyString" },
+        "applicability_status": { "$ref": "#/$defs/nonEmptyString" },
+        "enforcement_status": { "$ref": "#/$defs/nonEmptyString" },
+        "interpretation_note": { "$ref": "#/$defs/nonEmptyString" },
+        "topics": { "$ref": "#/$defs/stringArray" },
+        "scope": { "$ref": "#/$defs/stringArray" },
+        "actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "actor_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "actor_relationship": { "$ref": "#/$defs/nonEmptyString" },
+        "additional_actor_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "additional_affected_actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "additional_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "binding_scope": { "$ref": "#/$defs/nonEmptyString" },
+        "classification_indicators": { "type": "object" },
+        "compliance_deadline": { "$ref": "#/$defs/nonEmptyString" },
+        "compliance_function": { "$ref": "#/$defs/nonEmptyString" },
+        "conduct_family": { "$ref": "#/$defs/nonEmptyString" },
+        "conduct_type": { "$ref": "#/$defs/nonEmptyString" },
+        "conduct_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "covered_scope": { "$ref": "#/$defs/stringArray" },
+        "current_actor_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "current_actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "defined_actor_class": { "$ref": "#/$defs/nonEmptyString" },
+        "described_obligation_force": { "$ref": "#/$defs/nonEmptyString" },
+        "effective_from": { "$ref": "#/$defs/nonEmptyString" },
+        "evaluation_method": { "$ref": "#/$defs/stringArray" },
+        "exception_conditions_status": { "$ref": "#/$defs/nonEmptyString" },
+        "exception_scope_local": { "$ref": "#/$defs/nonEmptyString" },
+        "exception_target": { "$ref": "#/$defs/stringArray" },
+        "excluded_direct_actor_types": { "$ref": "#/$defs/stringArray" },
+        "framework_functions": { "$ref": "#/$defs/stringArray" },
+        "implementation_body": { "$ref": "#/$defs/nonEmptyString" },
+        "indirectly_affected_actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "noncompliance_consequence": { "$ref": "#/$defs/nonEmptyString" },
+        "policy_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "policy_origin": { "$ref": "#/$defs/nonEmptyString" },
+        "potential_responsible_authorities": { "$ref": "#/$defs/stringArray" },
+        "proposal_action": { "$ref": "#/$defs/nonEmptyString" },
+        "prospective_actor_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "prospective_actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "recipient_actor_term_local": { "$ref": "#/$defs/nonEmptyString" },
+        "recipient_actor_type": { "$ref": "#/$defs/nonEmptyString" },
+        "required_vendor_conduct": { "$ref": "#/$defs/stringArray" },
+        "responsible_authorities": { "$ref": "#/$defs/stringArray" },
+        "responsible_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "source_actions": { "$ref": "#/$defs/stringArray" },
+        "source_instrument_force": { "$ref": "#/$defs/nonEmptyString" },
+        "source_legal_force_label": { "$ref": "#/$defs/nonEmptyString" },
+        "source_lifecycle_activities": { "$ref": "#/$defs/stringArray" },
+        "source_topics": { "$ref": "#/$defs/stringArray" },
+        "target_actor": { "$ref": "#/$defs/nonEmptyString" },
+        "target_system": { "$ref": "#/$defs/nonEmptyString" },
+        "underlying_instrument": { "$ref": "#/$defs/nonEmptyString" },
+        "underlying_regime_force": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+
+    "relationshipsDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "relationships"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "machine_id",
+              "ref",
+              "display_ref",
+              "aliases",
+              "legacy_refs",
+              "record_type",
+              "jurisdiction",
+              "relationship_type",
+              "subject_machine_id",
+              "subject_type",
+              "object_machine_id",
+              "object_type"
+            ],
+            "properties": {
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "aliases": { "$ref": "#/$defs/stringArray" },
+              "legacy_refs": { "$ref": "#/$defs/stringArray" },
+              "record_type": { "const": "relationship" },
+              "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+              "relationship_type": {
+                "enum": ["in_jurisdiction", "reviewed_under_parent", "supported_by_passage"]
+              },
+              "subject_machine_id": { "$ref": "#/$defs/machineId" },
+              "subject_type": { "const": "claim" },
+              "object_machine_id": { "$ref": "#/$defs/machineId" },
+              "object_type": { "enum": ["entity", "passage", "review"] }
+            }
+          }
+        }
+      }
+    },
+
+    "reviewsDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": ["schema_version", "jurisdiction", "reviews"],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "machine_id",
+              "ref",
+              "display_ref",
+              "aliases",
+              "legacy_refs",
+              "record_type",
+              "jurisdiction",
+              "imported_parent_legacy_ref",
+              "review_decision",
+              "original_record_type",
+              "instrument",
+              "source_locator",
+              "claim_machine_ids"
+            ],
+            "properties": {
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "display_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "aliases": { "$ref": "#/$defs/stringArray" },
+              "legacy_refs": { "$ref": "#/$defs/stringArray" },
+              "record_type": { "const": "imported_parent_review" },
+              "jurisdiction": { "$ref": "#/$defs/jurisdiction" },
+              "imported_parent_legacy_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "review_decision": { "const": "accepted" },
+              "original_record_type": { "$ref": "#/$defs/nonEmptyString" },
+              "instrument": { "$ref": "#/$defs/nonEmptyString" },
+              "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+              "claim_machine_ids": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/machineId" }
+              },
+              "interpretation_note": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        }
+      }
+    },
+
+    "reconciliationDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": [
+        "schema_version",
+        "jurisdiction",
+        "row_order_authority",
+        "removed_from_reviewed_corpus",
+        "corrected_numbering"
+      ],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "row_order_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "removed_from_reviewed_corpus": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/removedAssignment" }
+        },
+        "corrected_numbering": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/correctedNumbering" }
+        }
+      }
+    },
+    "removedAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["temporary_row_id", "source_locator", "reason"],
+      "properties": {
+        "temporary_row_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "correctedNumbering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["previous_row_id", "source_locator", "corrected_row_id"],
+      "properties": {
+        "previous_row_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_locator": { "$ref": "#/$defs/nonEmptyString" },
+        "corrected_row_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+
+    "migrationMapDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/documentHeader" }],
+      "required": [
+        "schema_version",
+        "jurisdiction",
+        "identity_namespace",
+        "identity_derivation",
+        "entries",
+        "moved_objects"
+      ],
+      "properties": {
+        "schema_version": true,
+        "jurisdiction": true,
+        "identity_namespace": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "identity_derivation": { "$ref": "#/$defs/nonEmptyString" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "legacy_ref",
+              "target_record_type",
+              "machine_id",
+              "ref",
+              "active_file",
+              "archive_pointer",
+              "old_corpus_id",
+              "old_path"
+            ],
+            "properties": {
+              "legacy_ref": { "$ref": "#/$defs/nonEmptyString" },
+              "target_record_type": { "enum": ["claim", "review"] },
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "ref": { "$ref": "#/$defs/nonEmptyString" },
+              "active_file": { "$ref": "#/$defs/nonEmptyString" },
+              "archive_pointer": { "$ref": "#/$defs/nonEmptyString" },
+              "old_corpus_id": {
+                "enum": ["writ.corpus.eu.ai-governance", "writ.corpus.us.ai-governance"]
+              },
+              "old_path": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        },
+        "moved_objects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["object_type", "machine_id", "old_corpus_id", "old_path", "active_path"],
+            "properties": {
+              "object_type": {
+                "enum": [
+                  "source",
+                  "passage",
+                  "entity",
+                  "claim",
+                  "relationship",
+                  "review",
+                  "unresolved_coverage"
+                ]
+              },
+              "machine_id": { "$ref": "#/$defs/machineId" },
+              "old_corpus_id": {
+                "enum": ["writ.corpus.eu.ai-governance", "writ.corpus.us.ai-governance"]
+              },
+              "old_path": { "$ref": "#/$defs/nonEmptyString" },
+              "active_path": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        },
+        "excluded_temporary_assignments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/removedAssignment" }
+        },
+        "corrected_numbering": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/correctedNumbering" }
+        }
+      }
+    }
+  }
+}

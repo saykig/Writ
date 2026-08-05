@@ -2,7 +2,7 @@
 
 This internal directory is a historical evaluator benchmark, not a political corpus or Writ's
 primary demonstration. It consumes
-the authoritative G7 records in `corpora/multilateral/g7/2025-ai-sme/`.
+the authoritative G7 records in `archive/compatibility/g7/2025-ai-sme/`.
 
 `assignments.json` holds the 87 reviewed strong/weak/counter assignments made
 under the reconstructed methodology. `assignment-reviews.json` preserves their

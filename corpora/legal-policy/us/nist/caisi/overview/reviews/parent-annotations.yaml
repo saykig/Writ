@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: ba7a6ec1-0f25-570c-a723-d02117e47c3d
+    ref: us/ai-governance/caisi/overview#imported-review-group
+    display_ref: Imported review — overview concerning voluntary agreements and unclassified evaluations
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-04
+    review_decision: accepted
+    original_record_type: institutional_program
+    instrument: CAISI_OVERVIEW
+    source_locator: 'overview concerning voluntary agreements and unclassified evaluations
+
+      '
+    claim_machine_ids:
+      - 5f39309f-df22-5c9a-88bd-ebd9a288cb4d
+    interpretation_note: 'CAISI provides federal evaluation infrastructure, but private participation
+      is voluntary rather than a market-wide legal duty.
+
+      '

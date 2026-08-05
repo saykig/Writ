@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validate, type InstitutionalRecord, type LegalPolicyRecord } from "@writ/domain";
+import { validate, type LegacyInstitutionalRecord, type LegalPolicyRecord } from "@writ/domain";
 import { compileSource } from "../src/index.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
@@ -16,7 +16,7 @@ function writFiles(root: string): string[] {
 
 describe("Stage 1 pilot corpora", () => {
   test("checked-in constitutional sample records compile and remain draft without topics", () => {
-    const files = writFiles(join(ROOT, "corpora/us/constitutional-law")).filter(
+    const files = writFiles(join(ROOT, "corpora/legal-policy/us/constitutional-law")).filter(
       (path) => !path.endsWith("corpus.writ") && !path.endsWith("vocabulary.writ"),
     );
     const records = files.flatMap(
@@ -38,7 +38,7 @@ describe("Stage 1 pilot corpora", () => {
   });
 
   test("NIST records preserve exact evidence and institutional semantics", () => {
-    const path = join(ROOT, "corpora/us/institutions/nist/records.writ");
+    const path = join(ROOT, "corpora/institutional/us/nist/records.writ");
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
     expect(compiled.records).toHaveLength(6);
@@ -49,7 +49,7 @@ describe("Stage 1 pilot corpora", () => {
       expect(record.evidence.length).toBeGreaterThan(0);
       expect(validate("legal-policy-record", record).valid).toBe(false);
       if (record.family === "institutional") {
-        const institutional = record as InstitutionalRecord;
+        const institutional = record as LegacyInstitutionalRecord;
         expect(institutional.mandate.status).toBe("unknown");
         expect(institutional.operational_capacity.status).toBe("unknown");
       }

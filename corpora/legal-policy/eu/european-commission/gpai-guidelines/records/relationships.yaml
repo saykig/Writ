@@ -1,0 +1,75 @@
+schema_version: 1.0.0
+jurisdiction: EU
+relationships:
+  - machine_id: ca3e1351-823c-5f9c-b98f-f287fb602961
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#regulatory-classification-in-jurisdiction
+    display_ref: regulatory classification — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: e5e7d313-a9b1-5874-a3b6-62dd9439e629
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#regulatory-classification-reviewed-under-parent
+    display_ref: regulatory classification — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    subject_type: claim
+    object_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    object_type: review
+  - machine_id: fde86edb-e8b9-5a07-9cbf-37542b6f2cb9
+    ref: eu/ai-governance/commission-gpai-guidelines/notification#regulatory-notification-in-jurisdiction
+    display_ref: regulatory notification — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: c25a8f19-eb1a-597e-bd07-3f3d285183f7
+    ref: eu/ai-governance/commission-gpai-guidelines/notification#regulatory-notification-reviewed-under-parent
+    display_ref: regulatory notification — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    subject_type: claim
+    object_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    object_type: review
+  - machine_id: 81ef3664-49d0-5775-8743-2f53e3688b47
+    ref: eu/ai-governance/commission-gpai-guidelines/compliance#compliance-demonstration-in-jurisdiction
+    display_ref: compliance demonstration — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: a49b12b3-b3ae-5561-85b4-71c1abf03434
+    ref: eu/ai-governance/commission-gpai-guidelines/compliance#compliance-demonstration-reviewed-under-parent
+    display_ref: compliance demonstration — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+    subject_type: claim
+    object_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    object_type: review

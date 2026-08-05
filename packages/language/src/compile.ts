@@ -196,6 +196,9 @@ function lowerInstitutional(
       case "InstitutionIdProperty":
         result.institution_id = property.value;
         break;
+      case "InstitutionalFactTypeProperty":
+        result.institutional_fact_type = property.value;
+        break;
       case "InstitutionTypeProperty":
         result.institution_type = property.value;
         break;
@@ -227,6 +230,9 @@ function lowerInstitutional(
       case "FunctionsProperty":
         result.functions = [...property.values.values];
         break;
+      case "InstitutionalFunctionProperty":
+        result.function = property.value;
+        break;
       case "OperationalCapacityProperty":
         result.operational_capacity = {
           status: property.status,
@@ -237,8 +243,30 @@ function lowerInstitutional(
       case "DecisionRightsProperty":
         result.decision_rights = [...property.values.values];
         break;
+      case "DecisionRightProperty":
+        result.decision_right = {
+          status: property.status,
+          ...(property.text !== undefined ? { text: property.text } : {}),
+          ...(property.authoritySourceIds
+            ? { authority_source_ids: [...property.authoritySourceIds.values] }
+            : {}),
+          ...(property.evidenceRefs ? { evidence_refs: [...property.evidenceRefs.values] } : {}),
+        };
+        break;
       case "ParentInstitutionProperty":
         result.parent_institution_id = property.value;
+        break;
+      case "InstitutionalRecordLinkProperty":
+        result.record_link = {
+          link_id: property.linkId,
+          source_id: property.sourceId,
+          source_kind: property.sourceKind,
+          target_id: property.targetId,
+          target_kind: property.targetKind,
+          relation_type: property.relationType,
+          basis: property.basis,
+          evidence_refs: [...property.evidenceRefs.values],
+        };
         break;
       case "SubunitIdsProperty":
         result.subunit_ids = [...property.values.values];
@@ -371,9 +399,14 @@ function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): Wr
   }
   if (record.family === "institutional") {
     const extension = find("InstitutionalExtension");
+    const institutional = extension?.$type === "InstitutionalExtension" ? extension : undefined;
+    const atomic = institutional?.properties.some(
+      (property) => property.$type === "InstitutionalFactTypeProperty",
+    );
     return {
       ...common,
-      ...lowerInstitutional(extension?.$type === "InstitutionalExtension" ? extension : undefined),
+      ...(atomic ? { schema_version: "0.2.0" } : {}),
+      ...lowerInstitutional(institutional),
     } as unknown as InstitutionalRecord;
   }
   return common as unknown as WritRecord;
@@ -391,13 +424,15 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
   const createdAt = find("JudgmentCreatedAt");
   const family = find("JudgmentFamilyContext");
   const supersedes = find("JudgmentSupersedes");
+  const supersedesIds = find("JudgmentSupersedesIds");
+  const supersededBy = find("JudgmentSupersededBy");
   const related = find("RelatedJudgments");
   const span = spanOf(judgment);
   if (span) sourceMap.push({ key: `judgment:${judgment.name}`, span });
-  return {
-    schema_version: "0.1.0",
+  const targetKind = target?.$type === "JudgmentTarget" ? target.kind : undefined;
+  const common = {
+    schema_version: targetKind ? "0.2.0" : "0.1.0",
     judgment_id: judgment.name,
-    target_record_id: target?.$type === "JudgmentTarget" ? target.value : "",
     judgment_type: type?.$type === "JudgmentTypeProperty" ? type.value : "disagreement",
     value: value?.$type === "JudgmentValue" ? literalScalar(value.value) : null,
     rationale: rationale?.$type === "JudgmentRationale" ? rationale.value : "",
@@ -406,11 +441,28 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
     status: status?.$type === "JudgmentStatusProperty" ? status.value : "proposed",
     created_at: createdAt?.$type === "JudgmentCreatedAt" ? createdAt.value : "",
     ...(family?.$type === "JudgmentFamilyContext" ? { family_context: family.value } : {}),
+    // `supersedes` is the frozen v0.1 spelling and stays undirected; v0.2 states
+    // the direction explicitly with a separate field at each end.
     ...(supersedes?.$type === "JudgmentSupersedes" ? { supersedes: supersedes.value } : {}),
+    ...(supersedesIds?.$type === "JudgmentSupersedesIds"
+      ? { supersedes_judgment_ids: [...supersedesIds.values.values] }
+      : {}),
+    ...(supersededBy?.$type === "JudgmentSupersededBy"
+      ? { superseded_by_judgment_id: supersededBy.value }
+      : {}),
     ...(related?.$type === "RelatedJudgments"
       ? { related_judgment_ids: [...related.values.values] }
       : {}),
   };
+  return {
+    ...common,
+    ...(targetKind
+      ? {
+          target_kind: targetKind,
+          target_id: target?.$type === "JudgmentTarget" ? target.value : "",
+        }
+      : { target_record_id: target?.$type === "JudgmentTarget" ? target.value : "" }),
+  } as RecordJudgment;
 }
 
 const COMPARE_OP: Readonly<Record<string, CompareOp>> = {

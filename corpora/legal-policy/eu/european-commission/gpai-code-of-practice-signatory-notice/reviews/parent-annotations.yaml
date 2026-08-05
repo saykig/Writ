@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+jurisdiction: EU
+reviews:
+  - machine_id: f0d4ca5f-4432-5980-8b82-4609e9126ef4
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#imported-review-group
+    display_ref: Imported review — AI Office signatory notice
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: EU
+    imported_parent_legacy_ref: EU-12
+    review_decision: accepted
+    original_record_type: compliance_path
+    instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
+    source_locator: AI Office signatory notice
+    claim_machine_ids:
+      - 66a51aec-420c-5b38-accc-2b60d2805a0b
+    interpretation_note: 'The Code is voluntary but operates as a recognized route for demonstrating compliance
+      with binding statutory duties.
+
+      '

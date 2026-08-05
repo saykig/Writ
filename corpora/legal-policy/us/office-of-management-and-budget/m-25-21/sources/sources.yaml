@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+jurisdiction: US
+sources:
+  - machine_id: bf581ece-d43b-5ea1-af38-c781dc4b43fe
+    ref: us/ai-governance/omb-m-25-21/official-document#source-version
+    display_ref: 'M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust'
+    aliases: []
+    legacy_refs:
+      - dv-omb-m-25-21
+    record_type: source_document_version
+    jurisdiction: US
+    verification_status: verified
+    document_id: omb-m-25-21
+    title: 'M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust'
+    uri: https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf
+    media_type: application/pdf
+    retrieved_at: '2026-07-28T00:00:00Z'
+    issued_at: '2025-04-03T00:00:00Z'
+    sha256: sha256:0aab0aa4eaeac969ed93894d3940c5dc9d0b7377048171b164a439e8b9e49813
+    publisher: Office of Management and Budget
+    source_tier: 1

@@ -19,7 +19,17 @@ const Ajv2020 = ((_Ajv2020 as { default?: unknown }).default ?? _Ajv2020) as Def
 const addFormats = ((_addFormats as { default?: unknown }).default ?? _addFormats) as DefaultExport<
   typeof _addFormats
 >;
-import { RAW_SCHEMAS, SCHEMA_IDS, SCHEMA_KINDS, type SchemaKind } from "./schemas.js";
+import {
+  COMPATIBILITY_SCHEMA_KINDS,
+  CORPUS_COMPATIBILITY_CONTRACT_KINDS,
+  RAW_COMPATIBILITY_SCHEMAS,
+  RAW_CORPUS_COMPATIBILITY_CONTRACTS,
+  RAW_SCHEMAS,
+  SCHEMA_IDS,
+  SCHEMA_KINDS,
+  type CompatibilitySchemaKind,
+  type SchemaKind,
+} from "./schemas.js";
 import type { SchemaTypeMap } from "./types.js";
 
 /** A single validation failure, with the JSON path to the offending value. */
@@ -79,23 +89,80 @@ addFormats(ajv);
 for (const kind of SCHEMA_KINDS) {
   ajv.addSchema(RAW_SCHEMAS[kind], SCHEMA_IDS[kind] || kind);
 }
+for (const kind of COMPATIBILITY_SCHEMA_KINDS) {
+  const schema = RAW_COMPATIBILITY_SCHEMAS[kind];
+  ajv.addSchema(schema, String(schema.$id));
+}
+for (const kind of CORPUS_COMPATIBILITY_CONTRACT_KINDS) {
+  const schema = RAW_CORPUS_COMPATIBILITY_CONTRACTS[kind];
+  ajv.addSchema(schema, String(schema.$id));
+}
 
 const validators: Record<SchemaKind, ValidateFunction> = Object.fromEntries(
   SCHEMA_KINDS.map((kind) => [kind, ajv.compile(RAW_SCHEMAS[kind])]),
 ) as Record<SchemaKind, ValidateFunction>;
+
+const compatibilityValidators: Record<CompatibilitySchemaKind, ValidateFunction> =
+  Object.fromEntries(
+    COMPATIBILITY_SCHEMA_KINDS.map((kind) => [kind, ajv.compile(RAW_COMPATIBILITY_SCHEMAS[kind])]),
+  ) as Record<CompatibilitySchemaKind, ValidateFunction>;
+
+function validationResult(validator: ValidateFunction, data: unknown): ValidationResult {
+  const ok = validator(data);
+  if (ok) return { valid: true, errors: [] };
+  return { valid: false, errors: (validator.errors ?? []).map(toIssue) };
+}
 
 /**
  * Validate `data` against the schema for `kind`, returning a structured result.
  * Never throws for schema-invalid input; errors carry the failing JSON path.
  */
 export function validate(kind: SchemaKind, data: unknown): ValidationResult {
-  const validator = validators[kind];
-  const ok = validator(data);
-  if (ok) {
-    return { valid: true, errors: [] };
+  if (
+    data !== null &&
+    typeof data === "object" &&
+    (data as { schema_version?: unknown }).schema_version === "0.1.0" &&
+    (COMPATIBILITY_SCHEMA_KINDS as readonly string[]).includes(kind)
+  ) {
+    return validationResult(compatibilityValidators[kind as CompatibilitySchemaKind], data);
   }
-  const errors = (validator.errors ?? []).map(toIssue);
-  return { valid: false, errors };
+  return validationResult(validators[kind], data);
+}
+
+/** Validate against an explicitly selected native record grammar version. */
+export function validateVersion(
+  kind: SchemaKind,
+  data: unknown,
+  schemaVersion: string,
+): ValidationResult {
+  if (
+    schemaVersion === "0.1.0" &&
+    (COMPATIBILITY_SCHEMA_KINDS as readonly string[]).includes(kind)
+  ) {
+    return validationResult(compatibilityValidators[kind as CompatibilitySchemaKind], data);
+  }
+  return validationResult(validators[kind], data);
+}
+
+/**
+ * Validate `data` against a contract named by its schema `$id`.
+ *
+ * A corpus manifest declares the exact contract its record files satisfy. This
+ * resolves that declaration against the registered schemas, so a manifest can
+ * never be checked against a contract other than the one it names. An `$id` that
+ * is not registered is an error rather than a silent pass.
+ */
+export function validateContract(contractId: string, data: unknown): ValidationResult {
+  const validator = ajv.getSchema(contractId);
+  if (!validator) {
+    throw new Error(`Unknown record contract: ${contractId}`);
+  }
+  return validationResult(validator as ValidateFunction, data);
+}
+
+/** True when `contractId` resolves to a registered contract. */
+export function isKnownContract(contractId: string): boolean {
+  return ajv.getSchema(contractId) !== undefined;
 }
 
 /**

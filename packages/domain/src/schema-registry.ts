@@ -4,7 +4,15 @@
  * contract declares `schema_version` `"1.0.0"`; new versions are added here
  * additively (a version's meaning is never repurposed).
  */
-import { RAW_SCHEMAS, SCHEMA_IDS, SCHEMA_KINDS, type SchemaKind } from "./schemas.js";
+import {
+  COMPATIBILITY_SCHEMA_KINDS,
+  RAW_COMPATIBILITY_SCHEMAS,
+  RAW_SCHEMAS,
+  SCHEMA_IDS,
+  SCHEMA_KINDS,
+  type CompatibilitySchemaKind,
+  type SchemaKind,
+} from "./schemas.js";
 
 /** Metadata for one concrete schema version. */
 export interface SchemaVersionEntry {
@@ -79,10 +87,24 @@ export const SCHEMA_REGISTRY: Readonly<Record<SchemaKind, SchemaRegistryEntry>> 
         schemaId: SCHEMA_IDS[kind],
         title: declaredTitle(kind),
       };
+      const legacySchema = (COMPATIBILITY_SCHEMA_KINDS as readonly string[]).includes(kind)
+        ? RAW_COMPATIBILITY_SCHEMAS[kind as CompatibilitySchemaKind]
+        : undefined;
+      const legacyEntry: SchemaVersionEntry | undefined = legacySchema
+        ? {
+            kind,
+            schemaVersion: "0.1.0",
+            schemaId: String(legacySchema.$id),
+            title: String(legacySchema.title ?? kind),
+          }
+        : undefined;
       const registryEntry: SchemaRegistryEntry = {
         kind,
         current: schemaVersion,
-        versions: Object.freeze({ [schemaVersion]: Object.freeze(entry) }),
+        versions: Object.freeze({
+          ...(legacyEntry ? { "0.1.0": Object.freeze(legacyEntry) } : {}),
+          [schemaVersion]: Object.freeze(entry),
+        }),
       };
       return [kind, Object.freeze(registryEntry)];
     }),

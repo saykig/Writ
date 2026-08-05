@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record-judgment.schema.json",
+  "title": "Writ Record Judgment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "judgment_id",
+    "target_record_id",
+    "judgment_type",
+    "value",
+    "rationale",
+    "evidence_refs",
+    "reviewer",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "judgment_id": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyString"
+    },
+    "target_record_id": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyString"
+    },
+    "judgment_type": { "$ref": "#/$defs/judgmentType" },
+    "value": {},
+    "rationale": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyString"
+    },
+    "evidence_refs": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyStringArray"
+    },
+    "reviewer": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyString"
+    },
+    "status": { "$ref": "#/$defs/status" },
+    "created_at": { "type": "string", "format": "date" },
+    "family_context": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/family"
+    },
+    "supersedes": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/nonEmptyString"
+    },
+    "related_judgment_ids": {
+      "$ref": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json#/$defs/stringArray"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
+      "then": { "required": ["supersedes"] }
+    }
+  ],
+  "$defs": {
+    "judgmentType": {
+      "enum": [
+        "passage_selection",
+        "record_family_classification",
+        "subject_identification",
+        "scope_interpretation",
+        "topic_classification",
+        "legal_status_determination",
+        "institutional_role_determination",
+        "operational_capacity_determination",
+        "direct_or_inferred",
+        "disagreement",
+        "adjudication"
+      ]
+    },
+    "status": { "enum": ["proposed", "accepted", "contested", "superseded"] }
+  }
+}

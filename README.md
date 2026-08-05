@@ -83,7 +83,8 @@ Material under `archive/` is historical and non-authoritative. Material under `i
 ## Working rules
 
 - Keep jurisdictional corpora independent from comparisons and saved queries.
-- Keep institutional, legal, policy, theoretical and empirical records distinct.
+- Keep the implemented `legal_policy` and `institutional` families distinct; add future families
+  through explicit family profiles.
 - Preserve unknown and contested values instead of forcing a conclusion.
 - Treat external ratings as source-reported judgments.
 - Make every Writ-derived result reproducible from named and versioned inputs.

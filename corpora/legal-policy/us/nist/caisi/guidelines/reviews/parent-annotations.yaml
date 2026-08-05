@@ -1,0 +1,25 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#imported-review-group
+    display_ref: Imported review — voluntary guidelines and draft benchmark-evaluation practices
+    aliases: []
+    legacy_refs:
+      - US-05
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-05
+    review_decision: accepted
+    original_record_type: source_bundle
+    instrument: CAISI_GUIDELINES_PAGE
+    source_locator: 'voluntary guidelines and draft benchmark-evaluation practices
+
+      '
+    claim_machine_ids:
+      - bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+      - 774b58d2-8517-5113-a7d0-64f8c17ed277
+    interpretation_note: 'Both claims concern model evaluation, but neither creates a binding market-wide
+      provider obligation.
+
+      '

@@ -26,7 +26,8 @@ INSTITUTION = "G20"
 SUMMIT_ID = "G20.rio.2024"
 SUMMIT_SLUG = "2024-rio"
 PARSER_VERSION = "g20-2024-rio-adapter@2.0.0"
-SOURCES_FIXTURE = "corpora/multilateral/g20/2024-rio/sources/source-manifest.json"
+DATASET_DIR = "archive/compatibility/g20/2024-rio"
+SOURCES_FIXTURE = f"{DATASET_DIR}/sources/source-manifest.json"
 
 REPORT_IDS = {
     "final": "g20.2024.rio.final.compliance",
@@ -77,7 +78,12 @@ class G20RioAdapter:
         document_id = str(document_version["document_id"])
         if document_id in self.payloads:
             return self.payloads[document_id]
-        return (self.root / document_version["fixture_path"]).read_bytes()
+        # The archived manifest records the dataset-relative path from the layout
+        # in use before the dataset moved under `archive/compatibility/`. Its bytes
+        # are frozen, so the recorded path is rebased onto the current dataset root.
+        recorded = str(document_version["fixture_path"])
+        _, _, within = recorded.partition(f"/{SUMMIT_SLUG}/")
+        return (self.root / DATASET_DIR / (within or recorded)).read_bytes()
 
     def emit(self) -> AdapterOutput:
         vocabulary = load_vocabulary()

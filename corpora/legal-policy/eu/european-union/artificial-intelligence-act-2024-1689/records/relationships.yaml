@@ -1,0 +1,399 @@
+schema_version: 1.0.0
+jurisdiction: EU
+relationships:
+  - machine_id: a2e55a5d-feee-5549-82c5-f11489ee1093
+    ref: eu/ai-governance/ai-act/art-53-1-a#technical-documentation-in-jurisdiction
+    display_ref: technical documentation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: d1abd7ce-c46b-57af-a071-43f12ebbe0ee
+    ref: eu/ai-governance/ai-act/art-53-1-a#technical-documentation-reviewed-under-parent
+    display_ref: technical documentation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+    subject_type: claim
+    object_machine_id: 1f52448f-ec85-579f-8b92-a707487b8f95
+    object_type: review
+  - machine_id: 55d67f4c-1c1f-532f-b3be-dfd888e570bf
+    ref: eu/ai-governance/ai-act/art-53-1-a#technical-documentation-supported-by-passage
+    display_ref: technical documentation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+    subject_type: claim
+    object_machine_id: 32dfed45-b1d4-523c-a426-224fea22a6d3
+    object_type: passage
+  - machine_id: 771f0d6d-561d-5a93-8697-e2f5f705ccb8
+    ref: eu/ai-governance/ai-act/art-53-1-b#downstream-documentation-in-jurisdiction
+    display_ref: downstream documentation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: d6c03e83-d88c-572e-9b77-35a818346675
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: 412b0c18-b35f-5d3a-b7fb-b7038b4719fc
+    ref: eu/ai-governance/ai-act/art-53-1-b#downstream-documentation-reviewed-under-parent
+    display_ref: downstream documentation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: d6c03e83-d88c-572e-9b77-35a818346675
+    subject_type: claim
+    object_machine_id: da6a678b-6903-5380-acd3-2c0d7e1c3b12
+    object_type: review
+  - machine_id: d24228b8-8836-5879-85d1-624b9d45d02a
+    ref: eu/ai-governance/ai-act/art-53-1-b#downstream-documentation-supported-by-passage
+    display_ref: downstream documentation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: d6c03e83-d88c-572e-9b77-35a818346675
+    subject_type: claim
+    object_machine_id: fc47f385-3eeb-5e5a-a301-e23e32e4a2ea
+    object_type: passage
+  - machine_id: 491302e6-a4ce-5f40-946b-b62d25f0cad1
+    ref: eu/ai-governance/ai-act/art-53-1-c#copyright-policy-in-jurisdiction
+    display_ref: copyright policy — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 5fe186b5-b05a-5e49-b065-3296c2617f4e
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: fef43943-24b3-5746-b4da-9b7c69229475
+    ref: eu/ai-governance/ai-act/art-53-1-c#copyright-policy-reviewed-under-parent
+    display_ref: copyright policy — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 5fe186b5-b05a-5e49-b065-3296c2617f4e
+    subject_type: claim
+    object_machine_id: 30246e59-7f3b-5f39-9767-12e59bd87fcd
+    object_type: review
+  - machine_id: 32bec4ce-f2b1-587d-a2ce-d6dcd0b43571
+    ref: eu/ai-governance/ai-act/art-53-1-c#copyright-policy-supported-by-passage
+    display_ref: copyright policy — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 5fe186b5-b05a-5e49-b065-3296c2617f4e
+    subject_type: claim
+    object_machine_id: 43a0c132-2287-5a05-b096-6628e4dbc271
+    object_type: passage
+  - machine_id: 13f5ddc1-54d0-59e2-b853-317e48ab7deb
+    ref: eu/ai-governance/ai-act/art-53-1-d#training-content-summary-in-jurisdiction
+    display_ref: training content summary — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 456bd51b-75bf-5313-8863-bd6ba767e625
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: 1e917581-1263-54fd-9def-69c84bd772d3
+    ref: eu/ai-governance/ai-act/art-53-1-d#training-content-summary-reviewed-under-parent
+    display_ref: training content summary — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 456bd51b-75bf-5313-8863-bd6ba767e625
+    subject_type: claim
+    object_machine_id: 33efe1eb-2724-51d6-850f-af35826cdaeb
+    object_type: review
+  - machine_id: f09bae09-658f-544b-adac-429477874016
+    ref: eu/ai-governance/ai-act/art-53-1-d#training-content-summary-supported-by-passage
+    display_ref: training content summary — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 456bd51b-75bf-5313-8863-bd6ba767e625
+    subject_type: claim
+    object_machine_id: f334f6ec-fe5c-5bdb-ac74-0c71cef77a18
+    object_type: passage
+  - machine_id: d66bf7a2-e66e-5fe2-ac21-d1cfad247122
+    ref: eu/ai-governance/ai-act/art-53-2#open-source-exception-in-jurisdiction
+    display_ref: open source exception — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: d71ce4ea-9a43-5f39-85d0-a6af61aa6b40
+    ref: eu/ai-governance/ai-act/art-53-2#open-source-exception-reviewed-under-parent
+    display_ref: open source exception — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
+    subject_type: claim
+    object_machine_id: 705984a5-7b33-513a-8c4c-f883720c0387
+    object_type: review
+  - machine_id: a91418df-ec32-53d8-b40b-9a0497c46691
+    ref: eu/ai-governance/ai-act/art-53-2#open-source-exception-supported-by-passage
+    display_ref: open source exception — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
+    subject_type: claim
+    object_machine_id: af59d44f-2881-5d5f-b9ec-270a59d4e522
+    object_type: passage
+  - machine_id: e3ed7522-9023-5e10-a879-f1ffffdb1726
+    ref: eu/ai-governance/ai-act/art-55-1-a#model-evaluation-in-jurisdiction
+    display_ref: model evaluation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: d4dfd16f-33bb-5956-b313-fde572c8d808
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: ca6a18e4-0e54-56ff-8391-453153ecf5dc
+    ref: eu/ai-governance/ai-act/art-55-1-a#model-evaluation-reviewed-under-parent
+    display_ref: model evaluation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: d4dfd16f-33bb-5956-b313-fde572c8d808
+    subject_type: claim
+    object_machine_id: 30df19d5-9cab-53f8-ab14-9750fdbbee3b
+    object_type: review
+  - machine_id: c38d63fc-b402-547c-bd82-0819e003c4df
+    ref: eu/ai-governance/ai-act/art-55-1-a#model-evaluation-supported-by-passage
+    display_ref: model evaluation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: d4dfd16f-33bb-5956-b313-fde572c8d808
+    subject_type: claim
+    object_machine_id: 467fbe4a-c95c-5d4b-98cc-f079836b4a84
+    object_type: passage
+  - machine_id: 231759b6-99ef-5b36-80e2-60ad582a64a4
+    ref: eu/ai-governance/ai-act/art-55-1-b#systemic-risk-assessment-in-jurisdiction
+    display_ref: systemic risk assessment — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: dbea8929-5274-55dc-9702-f136a2e1faa3
+    ref: eu/ai-governance/ai-act/art-55-1-b#systemic-risk-assessment-reviewed-under-parent
+    display_ref: systemic risk assessment — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+    subject_type: claim
+    object_machine_id: fb181ee6-b9e7-5ef6-8502-a06ef583f122
+    object_type: review
+  - machine_id: d7a8c18e-c581-5acf-a726-2186b972d527
+    ref: eu/ai-governance/ai-act/art-55-1-b#systemic-risk-assessment-supported-by-passage
+    display_ref: systemic risk assessment — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+    subject_type: claim
+    object_machine_id: 81841968-dfb5-5f49-9f0d-42e0ce012bf0
+    object_type: passage
+  - machine_id: 12a3d0a6-4ad5-51f0-9835-39382cdf4434
+    ref: eu/ai-governance/ai-act/art-55-1-c#incident-reporting-in-jurisdiction
+    display_ref: incident reporting — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: c05e55e6-eba6-5d00-abb5-4c2d118f69f0
+    ref: eu/ai-governance/ai-act/art-55-1-c#incident-reporting-reviewed-under-parent
+    display_ref: incident reporting — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+    subject_type: claim
+    object_machine_id: d0c820ef-b220-5ca6-89aa-a2efd4e171da
+    object_type: review
+  - machine_id: 891d45d5-77e3-5f43-91ae-f9ecf189e7d5
+    ref: eu/ai-governance/ai-act/art-55-1-c#incident-reporting-supported-by-passage
+    display_ref: incident reporting — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+    subject_type: claim
+    object_machine_id: d17b89de-0b30-547e-84a2-65c5740105ae
+    object_type: passage
+  - machine_id: 98af5ad5-fa67-589e-baf2-cd6f8c9d88da
+    ref: eu/ai-governance/ai-act/art-55-1-d#cybersecurity-protection-in-jurisdiction
+    display_ref: cybersecurity protection — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 493e990c-81ae-55d5-8279-cf56812b1959
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: 8637e289-d242-5649-a1e8-b1741659bd5e
+    ref: eu/ai-governance/ai-act/art-55-1-d#cybersecurity-protection-reviewed-under-parent
+    display_ref: cybersecurity protection — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 493e990c-81ae-55d5-8279-cf56812b1959
+    subject_type: claim
+    object_machine_id: 575b40a6-e524-57fd-9b5c-b571ce5cb33f
+    object_type: review
+  - machine_id: 0df50317-9d32-5053-b358-c477e329f5a0
+    ref: eu/ai-governance/ai-act/art-55-1-d#cybersecurity-protection-supported-by-passage
+    display_ref: cybersecurity protection — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 493e990c-81ae-55d5-8279-cf56812b1959
+    subject_type: claim
+    object_machine_id: 84b6cf62-3bf7-51a5-a0bf-6594f1d68a10
+    object_type: passage
+  - machine_id: 09e1b915-762a-510d-bb10-0ee5df9fced7
+    ref: eu/ai-governance/ai-act/art-113#application-from-2025-08-02-in-jurisdiction
+    display_ref: application from 2025 08 02 — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: e54e3962-be7f-5610-83b2-d297cc904664
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: 184ffcc7-b65f-5516-84dd-9b4432eb6551
+    ref: eu/ai-governance/ai-act/art-113#application-from-2025-08-02-reviewed-under-parent
+    display_ref: application from 2025 08 02 — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: e54e3962-be7f-5610-83b2-d297cc904664
+    subject_type: claim
+    object_machine_id: 4e7a709a-675c-5c86-a414-b3952ae3d17e
+    object_type: review
+  - machine_id: 8f33e1fd-b540-54b9-8ff9-e1d23b07ac20
+    ref: eu/ai-governance/ai-act/art-113#application-from-2025-08-02-supported-by-passage
+    display_ref: application from 2025 08 02 — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: e54e3962-be7f-5610-83b2-d297cc904664
+    subject_type: claim
+    object_machine_id: 469d9aa6-7ea4-59ae-9e54-69aac6b66427
+    object_type: passage
+  - machine_id: 388dcfab-8ce8-5b5d-9fef-a88b1c0d6906
+    ref: eu/ai-governance/ai-act/art-113#existing-model-transition-in-jurisdiction
+    display_ref: existing model transition — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 1bf6ede3-45ca-588d-9123-2f69e501cb08
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: 680d98b6-7ea8-5f67-8238-590337c60dea
+    ref: eu/ai-governance/ai-act/art-113#existing-model-transition-reviewed-under-parent
+    display_ref: existing model transition — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 1bf6ede3-45ca-588d-9123-2f69e501cb08
+    subject_type: claim
+    object_machine_id: 4e7a709a-675c-5c86-a414-b3952ae3d17e
+    object_type: review
+  - machine_id: 5fdd197b-d643-5dfd-b936-2d7e09f288eb
+    ref: eu/ai-governance/ai-act/art-113#existing-model-transition-supported-by-passage
+    display_ref: existing model transition — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: supported_by_passage
+    subject_machine_id: 1bf6ede3-45ca-588d-9123-2f69e501cb08
+    subject_type: claim
+    object_machine_id: 469d9aa6-7ea4-59ae-9e54-69aac6b66427
+    object_type: passage

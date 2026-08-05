@@ -69,7 +69,18 @@ SourceMetadata  = "source_metadata", "{",
                   [ "last_amended_year", Integer, ";" ],
                   "row_hash", String, ";", "}" ;
 InstitutionalExtension = "institutional", "{",
-                  { Property | Mandate | Mission }, "}" ;
+                  { Property | InstitutionalFactType | InstitutionalRecordLink |
+                    Mandate | Mission | DecisionRight }, "}" ;
+InstitutionalFactType = "fact_type", ( "identity" | "placement" | "relationship" |
+                  "mission" | "mandate" | "function" | "decision_right" |
+                  "operational_capacity" ), ";" ;
+InstitutionalRecordLink = "record_link", "{",
+                  "link_id", QName, ";",
+                  "source", QName, "kind", QName, ";",
+                  "target", QName, "kind", QName, ";",
+                  "relation", QName, ";",
+                  "basis", EvidenceBasis, ";",
+                  "evidence_refs", IdentifierList, ";", "}" ;
 Mandate         = "mandate", ( String, ";" | "{",
                   "status", ( "established" | "unknown" | "contested" ), ";",
                   [ "text", String, ";" ],
@@ -78,9 +89,15 @@ Mandate         = "mandate", ( String, ";" | "{",
 Mission         = "mission", "{", "text", String, ";",
                   [ "source_ids", IdentifierList, ";" ],
                   [ "evidence_refs", IdentifierList, ";" ], "}" ;
+DecisionRight   = "decision_right", "{",
+                  "status", ( "established" | "unknown" | "contested" ), ";",
+                  [ "text", String, ";" ],
+                  [ "authority_source_ids", IdentifierList, ";" ],
+                  [ "evidence_refs", IdentifierList, ";" ], "}" ;
 
 Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
-JudgmentMember  = Property ;
+JudgmentMember  = JudgmentTarget | Property ;
+JudgmentTarget  = "target", [ "record" | "record_link" ], QName, ";" ;
 IdentifierList  = "{", [ QName, { ",", QName } ], [ "," ], "}" ;
 StringList      = "{", [ String, { ",", String } ], [ "," ], "}" ;
 TopicList       = "{", [ ( QName | String ), { ",", ( QName | String ) } ], [ "," ], "}" ;

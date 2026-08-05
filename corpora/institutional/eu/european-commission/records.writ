@@ -1,0 +1,80 @@
+language writ "0.2"
+package eu.institutions.european_commission.records version "0.2.0";
+
+record eu_ai_office_technical_documentation_receipt : institutional {
+  corpus eu.institutions.european_commission;
+  version "0.2.0";
+  title "AI Office receives requested GPAI technical documentation";
+  subjects { subject eu_ai_office type institution role "recipient"; };
+  assertion performs "Receive general-purpose AI model technical documentation provided upon request.";
+  topics { artificial_intelligence };
+  scope {
+    jurisdictions { "European Union" };
+    institutional_scope { eu_ai_office };
+    temporal_scope {}
+    conditions { "When the AI Office requests the documentation under Article 53(1)(a)." };
+  }
+  evidence {
+    support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_01 locator "Article 53(1)(a)" quote "draw up and keep up-to-date the technical documentation of the model, including its training and testing process and the results of its evaluation, which shall contain, at a minimum, the information set out in Annex XI for the purpose of providing it, upon request, to the AI Office and the national competent authorities;" passage_hash "sha256:0101b7b55177edc152a905f7efe578bcf5b25eea55bc506443806fb66ac4c32c" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct;
+  }
+  uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
+  review_state draft;
+  institutional {
+    institution_id eu_ai_office;
+    fact_type function;
+    function technical_documentation_receipt;
+  }
+}
+
+record eu_ai_office_training_summary_template_function : institutional {
+  corpus eu.institutions.european_commission;
+  version "0.2.0";
+  title "AI Office provides the GPAI training-content summary template";
+  subjects { subject eu_ai_office type institution role "template provider"; };
+  assertion performs "Provide the template for public summaries of general-purpose AI model training content.";
+  topics { artificial_intelligence };
+  scope {
+    jurisdictions { "European Union" };
+    institutional_scope { eu_ai_office };
+    temporal_scope {}
+    conditions { "For summaries required by Article 53(1)(d)." };
+  }
+  evidence {
+    support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_04 locator "Article 53(1)(d)" quote "draw up and make publicly available a sufficiently detailed summary about the content used for training of the general-purpose AI model, according to a template provided by the AI Office." passage_hash "sha256:1632b4fcf65d91903b28959b5c6f4eff1fe04a5fa5488eab936fa42de4baff62" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct;
+  }
+  uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
+  review_state draft;
+  institutional {
+    institution_id eu_ai_office;
+    fact_type function;
+    function training_summary_template_provision;
+  }
+}
+
+record eu_ai_office_serious_incident_report_receipt : institutional {
+  corpus eu.institutions.european_commission;
+  version "0.2.0";
+  title "AI Office receives serious-incident reports";
+  subjects { subject eu_ai_office type institution role "report recipient"; };
+  assertion performs "Receive relevant information about serious incidents and possible corrective measures.";
+  topics { artificial_intelligence };
+  scope {
+    jurisdictions { "European Union" };
+    institutional_scope { eu_ai_office };
+    temporal_scope {}
+    conditions { "For reporting under Article 55(1)(c)." };
+  }
+  evidence {
+    support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_08 locator "Article 55(1)(c)" quote "keep track of, document, and report, without undue delay, to the AI Office and, as appropriate, to national competent authorities, relevant information about serious incidents and possible corrective measures to address them;" passage_hash "sha256:1c3afb657c97c87921ea145a445ce67aa7d6eed4d45789bd5054f500a05502b2" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct;
+  }
+  uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
+  review_state draft;
+  institutional {
+    institution_id eu_ai_office;
+    fact_type function;
+    function serious_incident_report_receipt;
+  }
+}
