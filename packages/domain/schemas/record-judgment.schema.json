@@ -1,24 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://writ.example/schemas/extensions/record-judgment.schema.json",
-  "title": "Writ Record Judgment",
+  "$id": "https://writ.example/schemas/analysis/record-judgment.schema.json",
+  "title": "Writ Record or Record-Link Judgment",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "judgment_id", "target_record_id", "judgment_type", "value", "rationale", "evidence_refs", "reviewer", "status", "created_at"],
+  "required": [
+    "schema_version",
+    "judgment_id",
+    "target_kind",
+    "target_id",
+    "judgment_type",
+    "value",
+    "rationale",
+    "evidence_refs",
+    "reviewer",
+    "status",
+    "created_at"
+  ],
   "properties": {
-    "schema_version": { "const": "0.1.0" },
-    "judgment_id": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "target_record_id": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
+    "schema_version": { "const": "0.2.0" },
+    "judgment_id": { "type": "string", "minLength": 1 },
+    "target_kind": { "enum": ["record", "record_link"] },
+    "target_id": { "type": "string", "minLength": 1 },
     "judgment_type": { "$ref": "#/$defs/judgmentType" },
     "value": {},
-    "rationale": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "evidence_refs": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyStringArray" },
-    "reviewer": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "status": { "$ref": "#/$defs/status" },
+    "rationale": { "type": "string", "minLength": 1 },
+    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true },
+    "reviewer": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["proposed", "accepted", "contested", "superseded"] },
     "created_at": { "type": "string", "format": "date" },
-    "family_context": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/family" },
-    "supersedes": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/nonEmptyString" },
-    "related_judgment_ids": { "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/stringArray" }
+    "family_context": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" },
+    "supersedes": { "type": "string", "minLength": 1 },
+    "related_judgment_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
   },
   "allOf": [
     {
@@ -27,7 +40,20 @@
     }
   ],
   "$defs": {
-    "judgmentType": { "enum": ["passage_selection", "record_family_classification", "subject_identification", "scope_interpretation", "topic_classification", "legal_status_determination", "institutional_role_determination", "operational_capacity_determination", "direct_or_inferred", "disagreement", "adjudication"] },
-    "status": { "enum": ["proposed", "accepted", "contested", "superseded"] }
+    "judgmentType": {
+      "enum": [
+        "passage_selection",
+        "record_family_classification",
+        "subject_identification",
+        "scope_interpretation",
+        "topic_classification",
+        "legal_status_determination",
+        "institutional_role_determination",
+        "operational_capacity_determination",
+        "direct_or_inferred",
+        "disagreement",
+        "adjudication"
+      ]
+    }
   }
 }

@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 8f5835d5-6756-52b5-8a4d-b0d2fdca3d31
+    ref: us/ai-governance/caisi/overview#evaluation-participation-in-jurisdiction
+    display_ref: evaluation participation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 5f39309f-df22-5c9a-88bd-ebd9a288cb4d
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 8e7c3d18-c57b-5bee-b8bb-47536dd57460
+    ref: us/ai-governance/caisi/overview#evaluation-participation-reviewed-under-parent
+    display_ref: evaluation participation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 5f39309f-df22-5c9a-88bd-ebd9a288cb4d
+    subject_type: claim
+    object_machine_id: ba7a6ec1-0f25-570c-a723-d02117e47c3d
+    object_type: review
+  - machine_id: ec618ba6-0f10-599c-ab99-9456eb1e7254
+    ref: us/ai-governance/caisi/overview#evaluation-participation-supported-by-passage
+    display_ref: evaluation participation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 5f39309f-df22-5c9a-88bd-ebd9a288cb4d
+    subject_type: claim
+    object_machine_id: 3b34ae14-da0b-544d-972c-cb065a12c17a
+    object_type: passage

@@ -1,0 +1,44 @@
+schema_version: 1.0.0
+corpus_id: writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook
+title: NIST AI Risk Management Framework Playbook
+family: legal_policy
+jurisdiction: US
+corpus_version: 1.0.0
+record_schema:
+  id: https://writ.example/schemas/extensions/legal-policy-record.schema.json
+  version: 0.2.0
+status: active
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+migration_aliases:
+  - writ.corpus.us.ai-governance
+instrument_id: NIST_AI_RMF_PLAYBOOK
+record_counts:
+  sources: 1
+  verified_source_documents: 0
+  unresolved_sources: 1
+  passages: 0
+  entities: 0
+  claims: 1
+  relationships: 2
+  imported_parent_reviews: 1
+  legacy_mappings: 1
+review_counts:
+  accepted_parent_reviews: 1
+  accepted_claims: 1
+unresolved_evidence_count: 1
+locations:
+  sources:
+    - sources/sources.yaml
+  passages:
+    - passages/passages.yaml
+    - passages/unresolved.yaml
+  records:
+    - records/entities.yaml
+    - records/claims.yaml
+  relationships:
+    - records/relationships.yaml
+  judgments:
+    - reviews/parent-annotations.yaml
+    - reviews/reconciliation.yaml
+  migration:
+    - migration-map.yaml

@@ -1,0 +1,27 @@
+schema_version: 1.0.0
+jurisdiction: EU
+relationships:
+  - machine_id: 437faea5-2fff-5c74-848b-f14d2a842188
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#recognized-compliance-path-in-jurisdiction
+    display_ref: recognized compliance path — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: in_jurisdiction
+    subject_machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+    subject_type: claim
+    object_machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    object_type: entity
+  - machine_id: be9a36be-56bd-5cb4-954e-661cf3582325
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#recognized-compliance-path-reviewed-under-parent
+    display_ref: recognized compliance path — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: EU
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 66a51aec-420c-5b38-accc-2b60d2805a0b
+    subject_type: claim
+    object_machine_id: f0d4ca5f-4432-5980-8b82-4609e9126ef4
+    object_type: review

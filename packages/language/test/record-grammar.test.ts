@@ -62,6 +62,52 @@ describe("native record grammar", () => {
 });
 
 describe("structured record lowering", () => {
+  test("atomic institutional functions compile without mandate or capacity", () => {
+    const path = fileURLToPath(
+      new URL(
+        "../../../corpora/institutional/eu/european-commission/records.writ",
+        import.meta.url,
+      ),
+    );
+    const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
+    expect(compiled.schemaValid).toBe(true);
+    expect(compiled.records).toHaveLength(3);
+    for (const record of compiled.records) {
+      expect(record).toMatchObject({
+        schema_version: "0.2.0",
+        family: "institutional",
+        institutional_fact_type: "function",
+        review_state: "draft",
+      });
+      expect(record).not.toHaveProperty("mandate");
+      expect(record).not.toHaveProperty("operational_capacity");
+    }
+  });
+
+  test("current judgments preserve an explicit record-link target", () => {
+    const source = `language writ "0.2"
+package test.judgment version "0.2.0";
+judgment link_review {
+  target record_link example_link;
+  type disagreement;
+  value unknown;
+  rationale "Independent link review.";
+  evidence_refs { passage_one };
+  reviewer "reviewer";
+  status proposed;
+  created_at 2026-08-04;
+}`;
+    const compiled = compileSource(source);
+    expect(compiled.schemaValid).toBe(true);
+    expect(compiled.judgments[0]).toMatchObject({
+      schema_version: "0.2.0",
+      target_kind: "record_link",
+      target_id: "example_link",
+    });
+    expect(compiled.judgments[0]).not.toHaveProperty("target_record_id");
+    expect(formatText(formatText(source))).toBe(formatText(source));
+  });
+
   test("structured subjects, scope, mandate, and mission compile without semantic inference", () => {
     const compiled = compileSource(fixture("valid-institutional.writ"));
     expect(compiled.schemaValid).toBe(true);

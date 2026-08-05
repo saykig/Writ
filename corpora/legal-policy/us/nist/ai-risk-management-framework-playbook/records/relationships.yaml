@@ -1,0 +1,27 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: c8d45b2b-189c-5592-a0a4-ad6f08cc5585
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#implementation-guidance-in-jurisdiction
+    display_ref: implementation guidance — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 14a756da-d80e-503a-9e4c-03551a42fd95
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#implementation-guidance-reviewed-under-parent
+    display_ref: implementation guidance — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    subject_type: claim
+    object_machine_id: dd587055-ce88-50a5-af0f-ff903f9d6612
+    object_type: review

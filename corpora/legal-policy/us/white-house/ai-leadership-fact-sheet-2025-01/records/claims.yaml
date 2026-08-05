@@ -1,0 +1,43 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: af0898a6-7575-5af0-b270-cb615f6cd43f
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#administrative-policy-revision
+    display_ref: January 2025 White House fact sheet — administrative policy revision
+    aliases: []
+    legacy_refs:
+      - US-06
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 143b5063-6ce9-51b4-b414-e5977aa27351
+    claim_record_type: executive_direction
+    jurisdiction: US
+    instrument: WHITE_HOUSE_AI_EXECUTIVE_POLICY
+    source_locator: January 2025 White House fact sheet
+    actor_type: federal_agency
+    actor_term_local: executive department or agency
+    indirectly_affected_actor_type: market_provider
+    conduct_type: administrative_policy_revision
+    conduct_term_local:
+      "review, revise or rescind agency actions inconsistent with federal artificial-intelligence
+      leadership policy
+
+      "
+    legal_force: binding
+    binding_scope: executive_branch_only
+    compliance_function: agency_policy_direction
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_executive_implementation
+    responsible_authority: White House
+    implementation_body: executive_agencies
+    scope:
+      - government_policy
+    interpretation_note: "The direction binds executive agencies, not private providers.
+
+      "

@@ -8,8 +8,8 @@ import type { ReviewedDataset } from "./demo-analysis";
 
 export const DEMO_ANALYSIS_SOURCE_PATH = "archive/pilots/eu-us-ai-evaluation-v1/original/annotations/human-reviewed.yaml";
 export const DEMO_ANALYSIS_CORPUS_PATHS = {
-  "EU": "corpora/jurisdictions/eu/ai-governance",
-  "US": "corpora/jurisdictions/us/ai-governance"
+  "EU": "corpora/catalog.yaml#EU",
+  "US": "corpora/catalog.yaml#US"
 } as const;
 
 export const DEMO_ANALYSIS_DATASET: ReviewedDataset = {

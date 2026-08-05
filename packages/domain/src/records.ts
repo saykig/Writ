@@ -42,7 +42,7 @@ export interface RecordScope {
 }
 
 export interface WritRecord {
-  schema_version: "0.1.0";
+  schema_version: "0.1.0" | "0.2.0";
   record_id: string;
   corpus_id: string;
   record_version: string;
@@ -151,7 +151,8 @@ export interface InstitutionalMission {
   evidence_refs?: string[];
 }
 
-export interface InstitutionalRecord extends WritRecord {
+export interface LegacyInstitutionalRecord extends WritRecord {
+  schema_version: "0.1.0";
   family: "institutional";
   institution_id: string;
   institution_type:
@@ -183,6 +184,51 @@ export interface InstitutionalRecord extends WritRecord {
   applicable_period?: { from?: string; until?: string };
 }
 
+export type InstitutionalFactType =
+  | "identity"
+  | "placement"
+  | "relationship"
+  | "mission"
+  | "mandate"
+  | "function"
+  | "decision_right"
+  | "operational_capacity";
+
+interface AtomicInstitutionalBase extends WritRecord {
+  schema_version: "0.2.0";
+  family: "institutional";
+  institution_id: string;
+  institutional_fact_type: InstitutionalFactType;
+  institution_type?: LegacyInstitutionalRecord["institution_type"];
+  parent_institution_id?: string;
+  record_link?: RecordLinkPayload;
+  mission?: InstitutionalMission;
+  mandate?: InstitutionalMandate;
+  function?: string;
+  decision_right?: InstitutionalMandate;
+  operational_capacity?: LegacyInstitutionalRecord["operational_capacity"];
+}
+
+export type AtomicInstitutionalRecord = AtomicInstitutionalBase &
+  (
+    | {
+        institutional_fact_type: "identity";
+        institution_type: LegacyInstitutionalRecord["institution_type"];
+      }
+    | { institutional_fact_type: "placement"; parent_institution_id: string }
+    | { institutional_fact_type: "relationship"; record_link: RecordLinkPayload }
+    | { institutional_fact_type: "mission"; mission: InstitutionalMission }
+    | { institutional_fact_type: "mandate"; mandate: InstitutionalMandate }
+    | { institutional_fact_type: "function"; function: string }
+    | { institutional_fact_type: "decision_right"; decision_right: InstitutionalMandate }
+    | {
+        institutional_fact_type: "operational_capacity";
+        operational_capacity: LegacyInstitutionalRecord["operational_capacity"];
+      }
+  );
+
+export type InstitutionalRecord = LegacyInstitutionalRecord | AtomicInstitutionalRecord;
+
 export type JudgmentType =
   | "passage_selection"
   | "record_family_classification"
@@ -196,7 +242,7 @@ export type JudgmentType =
   | "disagreement"
   | "adjudication";
 
-export interface RecordJudgment {
+export interface LegacyRecordJudgment {
   schema_version: "0.1.0";
   judgment_id: string;
   target_record_id: string;
@@ -210,4 +256,78 @@ export interface RecordJudgment {
   family_context?: RecordFamily;
   supersedes?: string;
   related_judgment_ids?: string[];
+}
+
+export interface CurrentRecordJudgment {
+  schema_version: "0.2.0";
+  judgment_id: string;
+  target_kind: "record" | "record_link";
+  target_id: string;
+  judgment_type: JudgmentType;
+  value: unknown;
+  rationale: string;
+  evidence_refs: string[];
+  reviewer: string;
+  status: "proposed" | "accepted" | "contested" | "superseded";
+  created_at: string;
+  family_context?: RecordFamily;
+  supersedes?: string;
+  related_judgment_ids?: string[];
+}
+
+export type RecordJudgment = LegacyRecordJudgment | CurrentRecordJudgment;
+
+export type RecordLinkRelation =
+  | "issued_by"
+  | "administered_by"
+  | "implemented_by"
+  | "enforced_by"
+  | "establishes"
+  | "authorizes"
+  | "assigns_function_to"
+  | "derives_authority_from"
+  | "part_of"
+  | "oversees"
+  | "applies_to";
+
+export interface RecordLinkPayload {
+  link_id: string;
+  source_id: string;
+  source_kind: string;
+  target_id: string;
+  target_kind: string;
+  relation_type: RecordLinkRelation;
+  basis: EvidenceBasis;
+  evidence_refs: string[];
+}
+
+export interface RecordLink extends RecordLinkPayload {
+  schema_version: "1.0.0";
+  owning_corpus_id: string;
+  uncertainties: Array<{ type: UncertaintyType; description: string }>;
+  provenance: { created_by: string; created_at: string };
+  review_state: RecordReviewState;
+}
+
+export interface CorpusManifest {
+  schema_version: "1.0.0";
+  corpus_id: string;
+  title: string;
+  family: "legal_policy" | "institutional";
+  jurisdiction: string;
+  corpus_version: string;
+  [key: string]: unknown;
+}
+
+export interface CorpusCatalog {
+  schema_version: "1.0.0";
+  implemented_native_families: ["legal_policy", "institutional"];
+  corpora: Array<{
+    corpus_id: string;
+    family: "legal_policy" | "institutional";
+    jurisdiction: string;
+    status: string;
+    path: string;
+    manifest: string;
+  }>;
 }

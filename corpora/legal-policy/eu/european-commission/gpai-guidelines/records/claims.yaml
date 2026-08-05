@@ -1,0 +1,129 @@
+schema_version: 1.0.0
+jurisdiction: EU
+claims:
+  - machine_id: 1b73dfb9-9b6f-5eca-8d44-0c88d8b2dcb7
+    ref: eu/ai-governance/commission-gpai-guidelines/classification#regulatory-classification
+    display_ref: Commission GPAI guidelines — regulatory classification
+    aliases: []
+    legacy_refs:
+      - EU-10A
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+    review_status: accepted
+    imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    claim_record_type: interpretive_guidance
+    jurisdiction: EU
+    instrument: COMMISSION_GPAI_GUIDELINES
+    source_locator: Commission GPAI guidelines
+    interpretation_note:
+      "The guidelines are interpretive and do not independently create statutory duties.
+      The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+      is voluntary and functions as a recognized compliance path.
+
+      "
+    actor_type: market_provider
+    actor_relationship: possible_provider
+    actor_term_local:
+      "provider or undertaking determining whether it is the provider of a general-purpose
+      AI model
+
+      "
+    conduct_type: regulatory_classification
+    conduct_term_local: "determine whether the model qualifies as a general-purpose AI model
+
+      "
+    classification_indicators:
+      indicative_gpai_compute_threshold: 10^23_FLOP
+      systemic_risk_presumption_threshold: 10^25_FLOP
+    legal_force: interpretive
+    compliance_function: implementation_guidance
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: European Commission
+    implementation_body: AI Office
+  - machine_id: 97f296c8-cd6b-5cda-80b3-3a2ba880f223
+    ref: eu/ai-governance/commission-gpai-guidelines/notification#regulatory-notification
+    display_ref: Commission GPAI guidelines — regulatory notification
+    aliases: []
+    legacy_refs:
+      - EU-10B
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+    review_status: accepted
+    imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    claim_record_type: obligation
+    jurisdiction: EU
+    instrument: COMMISSION_GPAI_GUIDELINES
+    source_locator: Commission GPAI guidelines
+    interpretation_note:
+      "The guidelines are interpretive and do not independently create statutory duties.
+      The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+      is voluntary and functions as a recognized compliance path.
+
+      "
+    actor_type: market_provider
+    actor_term_local:
+      "provider of a general-purpose AI model meeting or expected to meet the systemic-risk
+      compute threshold
+
+      "
+    conduct_type: regulatory_notification
+    conduct_term_local:
+      "notify the Commission when the systemic-risk threshold is met or expected to
+      be met
+
+      "
+    source_instrument_force: interpretive
+    described_obligation_force: binding
+    legal_force: binding
+    compliance_function: direct_obligation
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: unknown
+    responsible_authority: European Commission
+    implementation_body: AI Office
+    target_system: "general_purpose_ai_model_meeting_systemic_risk_threshold
+
+      "
+  - machine_id: 3291437a-2606-5737-b0b8-b798efb11c7d
+    ref: eu/ai-governance/commission-gpai-guidelines/compliance#compliance-demonstration
+    display_ref: Commission GPAI guidelines — compliance demonstration
+    aliases: []
+    legacy_refs:
+      - EU-10C
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+    review_status: accepted
+    imported_review_machine_id: 5249dfea-bd51-5c80-a888-0b0dcd5c261c
+    claim_record_type: compliance_path
+    jurisdiction: EU
+    instrument: COMMISSION_GPAI_GUIDELINES
+    source_locator: Commission GPAI guidelines
+    interpretation_note:
+      "The guidelines are interpretive and do not independently create statutory duties.
+      The notification duty remains binding because it originates in the AI Act. Use of the Code of Practice
+      is voluntary and functions as a recognized compliance path.
+
+      "
+    actor_type: market_provider
+    actor_term_local: provider of a general-purpose AI model
+    conduct_type: compliance_demonstration
+    conduct_term_local:
+      "rely on adherence to the Code of Practice as a means of demonstrating compliance
+      with relevant AI Act obligations
+
+      "
+    legal_force: voluntary
+    compliance_function: recognized_compliance_path
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: European Commission
+    implementation_body: AI Office

@@ -1,0 +1,45 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 2e169e44-5094-5ebc-ac67-330cabf22462
+    ref: us/ai-governance/nist-ai-rmf/abstract#risk-management
+    display_ref: abstract — risk management
+    aliases: []
+    legacy_refs:
+      - US-01
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 20932931-1e58-5740-96f5-7216c676fd63
+    claim_record_type: guidance
+    jurisdiction: US
+    instrument: NIST_AI_RMF
+    source_locator: abstract
+    actor_type: ai_lifecycle_organization
+    actor_term_local: "organization designing, developing, deploying or using AI
+
+      "
+    conduct_type: risk_management
+    conduct_term_local:
+      "use the AI Risk Management Framework to manage risks associated with artificial
+      intelligence
+
+      "
+    legal_force: voluntary
+    compliance_function: general_guidance
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: NIST
+    scope:
+      - cross_sector
+    target_system: artificial_intelligence_system
+    interpretation_note:
+      "The AI RMF is an active cross-sector framework but does not establish a binding
+      model-evaluation duty for private providers.
+
+      "

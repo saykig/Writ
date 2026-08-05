@@ -14,7 +14,8 @@ and revision history. Questions are asked across corpora; they do not define cor
 5. Writ-derived results declare their methodology, version, inputs, and trace.
 6. Unknown and contested values remain explicit.
 7. Visualizations and memos are views, not sources of truth.
-8. The initial knowledge families are institutional, legal, policy, theoretical, and empirical.
+8. The implemented native families are `legal_policy` and `institutional`; the shared record base
+   remains extensible for future family profiles.
 
 ## Preserved technical strengths
 
@@ -37,18 +38,18 @@ Corpora hold reviewed knowledge. Queries ask questions across one or more corpor
 derive a comparison, classification, measure, or other result, but the result remains a named,
 versioned analytical object with explicit inputs.
 
-The shared core provides a small provenance and revision envelope. Institutional, legal, policy,
-theoretical, and empirical families keep fields appropriate to their subject matter. A legal record
-may need legal force and applicability; an empirical finding may need study design and population;
-a theory may need propositions and scope conditions. None of those fields is universal merely
-because one family needs it.
+The shared core provides a small provenance and revision envelope. The implemented institutional
+and legal-policy family profiles keep fields appropriate to their subject matter, and future family
+profiles may do the same. A legal-policy record may need legal force and applicability; neither
+field is universal merely because one family needs it.
 
 External scores and ratings remain statements made by their identified sources. Writ may reproduce
 or analyze them, but a source-reported judgment and a Writ-derived result are different records.
 
 ## Current material
 
-- The EU and US AI-governance corpora are independent jurisdictional corpora. The former EU–US
+- The reviewed EU and US AI claims are distributed across issuer-and-instrument legal-policy
+  corpora resolved through the native corpus catalog. The former EU–US
   comparison question, headline rule, and conclusion are preserved only in the archived pilot.
 - G20 Rio records exist as multilateral political material. The current frozen review copy contains
   13 ingested statements and 546 source-reported member judgments; it explicitly records that 161

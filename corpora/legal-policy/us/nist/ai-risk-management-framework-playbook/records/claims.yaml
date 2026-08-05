@@ -1,0 +1,48 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#implementation-guidance
+    display_ref: overview — implementation guidance
+    aliases: []
+    legacy_refs:
+      - US-02
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: dd587055-ce88-50a5-af0f-ff903f9d6612
+    claim_record_type: implementation_guidance
+    jurisdiction: US
+    instrument: NIST_AI_RMF_PLAYBOOK
+    source_locator: overview
+    actor_type: ai_lifecycle_organization
+    actor_term_local: "organization using the AI Risk Management Framework
+
+      "
+    conduct_type: risk_management
+    conduct_term_local: "use suggested actions across the Govern, Map, Measure and Manage functions
+
+      "
+    framework_functions:
+      - govern
+      - map
+      - measure
+      - manage
+    legal_force: voluntary
+    compliance_function: implementation_guidance
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: NIST
+    scope:
+      - cross_sector
+    target_system: artificial_intelligence_system
+    interpretation_note:
+      "The Playbook provides voluntary implementation guidance. Its overview does not
+      independently require model evaluation.
+
+      "

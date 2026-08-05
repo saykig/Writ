@@ -6,6 +6,7 @@ import pytest
 
 from writ_ingest.corpus.eu_us_ai_governance import (
     SEMANTIC_VALUES,
+    DiagnosticIdentity,
     diagnostic_result_sort_key,
     project_explicit_semantic,
     resolve_snapshot_claim_identity,
@@ -16,7 +17,7 @@ from writ_ingest.corpus.eu_us_ai_governance import (
 )
 
 
-def source_identity(object_kind: str = "snapshot_claim") -> dict[str, object]:
+def source_identity(object_kind: str = "snapshot_claim") -> DiagnosticIdentity:
     return {
         "jurisdiction": "US",
         "object_kind": object_kind,

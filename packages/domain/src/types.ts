@@ -17,6 +17,9 @@ import type {
   LegalPolicyRecord,
   InstitutionalRecord,
   RecordJudgment,
+  RecordLink,
+  CorpusManifest,
+  CorpusCatalog,
 } from "./records.js";
 import type { SchemaKind } from "./schemas.js";
 
@@ -33,6 +36,9 @@ export type {
   LegalPolicyRecord,
   InstitutionalRecord,
   RecordJudgment,
+  RecordLink,
+  CorpusManifest,
+  CorpusCatalog,
 };
 
 /** Maps each schema kind to the TypeScript interface generated from it. */
@@ -47,6 +53,9 @@ export interface SchemaTypeMap {
   discrepancy: Discrepancy;
   release: Release;
   record: WritRecord;
+  "corpus-manifest": CorpusManifest;
+  "corpus-catalog": CorpusCatalog;
+  "record-link": RecordLink;
   "legal-policy-record": LegalPolicyRecord;
   "institutional-record": InstitutionalRecord;
   "record-judgment": RecordJudgment;

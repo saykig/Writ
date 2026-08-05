@@ -1,0 +1,29 @@
+schema_version: 1.0.0
+corpus_id: us.institutions.nist
+title: National Institute of Standards and Technology institutional facts
+family: institutional
+jurisdiction: US
+corpus_version: 0.1.0
+record_schema:
+  id: https://writ.example/schemas/compatibility/record-grammar-v0.1/institutional-record.schema.json
+  version: 0.1.0
+status: draft
+identity_namespace: us.institutions.nist
+migration_aliases:
+  - corpora/us/institutions/nist
+root_institution_id: nist
+record_counts:
+  institutional_records: 6
+review_counts:
+  draft_records: 6
+unresolved_evidence_count: 0
+locations:
+  sources:
+    - sources.writ
+  passages:
+    - sources.writ
+  records:
+    - records.writ
+  relationships: []
+  judgments: []
+  migration: []

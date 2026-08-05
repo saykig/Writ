@@ -1,0 +1,51 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
+    ref: us/ai-governance/nist-generative-ai-profile/abstract#model-evaluation
+    display_ref: abstract — model evaluation
+    aliases: []
+    legacy_refs:
+      - US-03
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.nist.generative-ai-profile
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: c6b98ba4-dfb9-5a2a-ba89-ebe1ea0028ba
+    claim_record_type: guidance
+    jurisdiction: US
+    instrument: NIST_GENERATIVE_AI_PROFILE
+    source_locator: abstract
+    actor_type: ai_lifecycle_organization
+    actor_term_local:
+      "organization designing, developing, using or evaluating generative artificial intelligence
+
+      "
+    conduct_type: model_evaluation
+    conduct_term_local:
+      "use the Generative AI Profile to incorporate trustworthiness considerations into
+      the evaluation of generative AI systems
+
+      "
+    source_lifecycle_activities:
+      - design
+      - development
+      - use
+      - evaluation
+    legal_force: voluntary
+    compliance_function: evaluation_guidance
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: NIST
+    scope:
+      - cross_sector
+    target_system: generative_ai_system
+    interpretation_note:
+      "The Profile directly concerns evaluation, but its voluntary status means it
+      does not create a binding provider obligation.
+
+      "

@@ -1,0 +1,44 @@
+schema_version: 1.0.0
+corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+title: OMB Memorandum M-25-21
+family: legal_policy
+jurisdiction: US
+corpus_version: 1.0.0
+record_schema:
+  id: https://writ.example/schemas/extensions/legal-policy-record.schema.json
+  version: 0.2.0
+status: active
+identity_namespace: urn:uuid:6f806bca-a20b-5e2f-a445-6a15e6958ef4
+migration_aliases:
+  - writ.corpus.us.ai-governance
+instrument_id: OMB_M_25_21
+record_counts:
+  sources: 1
+  verified_source_documents: 1
+  unresolved_sources: 0
+  passages: 2
+  entities: 0
+  claims: 3
+  relationships: 9
+  imported_parent_reviews: 2
+  legacy_mappings: 4
+review_counts:
+  accepted_parent_reviews: 2
+  accepted_claims: 3
+unresolved_evidence_count: 0
+locations:
+  sources:
+    - sources/sources.yaml
+  passages:
+    - passages/passages.yaml
+    - passages/unresolved.yaml
+  records:
+    - records/entities.yaml
+    - records/claims.yaml
+  relationships:
+    - records/relationships.yaml
+  judgments:
+    - reviews/parent-annotations.yaml
+    - reviews/reconciliation.yaml
+  migration:
+    - migration-map.yaml

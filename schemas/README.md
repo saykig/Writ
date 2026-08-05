@@ -38,15 +38,18 @@ trace; those requirements belong to their family or layer, not the shared core.
 | `core/source-registry.schema.json`   | core           | Generated source-registry interchange document.                                                                                                              |
 | `core/corpus_vocabulary.schema.json` | core           | Reviewed controlled-vocabulary mappings shared by corpus adapters.                                                                                           |
 | `core/record.schema.json`            | core           | Closed public record envelope plus the composable `recordBase`: identity, structured subjects, scope, evidence, uncertainty, provenance, and workflow state. |
+| `core/corpus-manifest.schema.json`   | core           | Native corpus identity, family, locations, counts, and migration aliases.                                                                                    |
+| `core/corpus-catalog.schema.json`    | core           | Stable corpus-ID-to-path resolution without topic or query ownership.                                                                                        |
+| `core/record-link.schema.json`       | core           | Family-neutral, directed record relationships with independent evidence and review state.                                                                    |
 
 No core schema requires a commitment, obligation, compliance result, or score.
 
 ## Family extensions
 
-`extensions/` is the authority location for institutional, legal, policy, theoretical, and
-empirical contracts. Stage 1 introduces combined `legal_policy` and `institutional` record
-contracts plus a separate analytical record-judgment contract. The classification and dependency
-rules are recorded in [`extensions/README.md`](./extensions/README.md).
+`extensions/` is the authority location for native family profiles. The implemented profiles are
+`legal_policy` and `institutional`. Record judgments are analysis objects rather than family
+extensions. The classification and dependency rules are recorded in
+[`extensions/README.md`](./extensions/README.md).
 
 ## Analysis and output schemas
 
@@ -58,6 +61,7 @@ rules are recorded in [`extensions/README.md`](./extensions/README.md).
 | `analysis/search-protocol.schema.json`        | analysis/output | Reviewed evidence-coverage protocol for negative analytical claims.                                                         |
 | `analysis/discrepancy.schema.json`            | analysis/output | Differences between source-reported judgments and derived benchmark results.                                                |
 | `analysis/release.schema.json`                | analysis/output | Reproducible publication bundle and dependency hashes.                                                                      |
+| `analysis/record-judgment.schema.json`        | analysis        | Independent judgments targeting a record or record link.                                                                    |
 
 ## Compatibility-only schemas
 
@@ -65,6 +69,7 @@ rules are recorded in [`extensions/README.md`](./extensions/README.md).
 | ----------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `compatibility/compliance-corpus-v2/*.schema.json`                | compatibility-only | Version 2 G7/G20 summit-compliance records. These contracts remain active only for existing adapters and records; they are not the universal Writ model. |
 | `compatibility/g7-benchmark-v1/methodology-inventory.schema.json` | compatibility-only | Historical G7 benchmark extraction worksheet.                                                                                                            |
+| `compatibility/record-grammar-v0.1/*.schema.json`                 | compatibility-only | Frozen v0.1 base, legal-policy, institutional-profile, and record-judgment contracts.                                                                    |
 
 The compliance-corpus-v2 family contains `assessment`, `commitment`, `compliance_report`,
 `evidence`, `methodology`, `reconciliation_manifest`, `review_item`, `source_document`,

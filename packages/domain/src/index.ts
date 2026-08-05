@@ -13,6 +13,9 @@ export {
   SCHEMA_AUTHORITY_FILES,
   SCHEMA_IDS,
   RAW_SCHEMAS,
+  COMPATIBILITY_SCHEMA_KINDS,
+  COMPATIBILITY_SCHEMA_FILES,
+  RAW_COMPATIBILITY_SCHEMAS,
   VENDORED_SCHEMAS_DIR,
   isSchemaKind,
   readVendoredSchemaText,
@@ -23,6 +26,7 @@ export {
 // Validation API.
 export {
   validate,
+  validateVersion,
   isValid,
   assertValid,
   getAjv,

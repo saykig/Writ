@@ -1,0 +1,22 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: 3051f3ef-790d-5c6f-8a40-c19c4e1c4fad
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#imported-review-group
+    display_ref: Imported review — December 2025 fact sheet
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-11
+    review_decision: accepted
+    original_record_type: proposed_policy
+    instrument: WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET
+    source_locator: December 2025 fact sheet
+    claim_machine_ids:
+      - 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    interpretation_note:
+      "The fact sheet describes possible future regulation. It does not create a currently
+      applicable model-evaluation duty.
+
+      "

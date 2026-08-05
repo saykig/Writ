@@ -1,0 +1,41 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: bed66980-0986-5455-88f0-d1088d2bb653
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#source-passage
+    display_ref: Source passage — voluntary guidelines and draft benchmark-evaluation practices
+    aliases: []
+    legacy_refs:
+      - passage-us-05a
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: b31d1ebb-697b-5310-a51e-1018d1bc48ce
+    imported_source_legacy_ref: US-05A
+    anchor_type: html_dom
+    anchor_phrase: develops and publishes voluntary guidelines
+    quote:
+      The Center for AI Standards and Innovation develops and publishes voluntary guidelines to support
+      the responsible design, development, deployment, use, and governance of advanced AI models, systems,
+      and agents.
+    anchor_hash: sha256:73577c3d9ffb66f15dc0a0f871667e072ebdc8d83f27b9a603fa0567a3f1565a
+    language: en
+  - machine_id: 8fdce8b1-4b08-50bc-beb2-dc01bf4c5f91
+    ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#source-passage
+    display_ref: Source passage — voluntary guidelines and draft benchmark-evaluation practices
+    aliases: []
+    legacy_refs:
+      - passage-us-05b
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: b31d1ebb-697b-5310-a51e-1018d1bc48ce
+    imported_source_legacy_ref: US-05B
+    anchor_type: html_dom
+    anchor_phrase: These draft guidelines identify preliminary best practices
+    quote:
+      Practices for Automated Benchmark Evaluations of Language Models (Initial Public Draft) – These
+      draft guidelines identify preliminary best practices for evaluating language models and AI agent
+      systems. We are soliciting public comment on this document until March 31, 2026, at 11:59 PM Eastern
+      Time. To provide feedback, please email NISTAI800-1 [at] nist.gov ( NISTAI800-2[at]nist[dot]gov
+      ) .
+    anchor_hash: sha256:e6535ddcaa9b2f661f28ab334d5a177308f2be56d2b2b50686a7c55ac0ae147c
+    language: en

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/core/corpus-manifest.schema.json",
+  "title": "Writ Corpus Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "corpus_id",
+    "title",
+    "family",
+    "jurisdiction",
+    "corpus_version",
+    "record_schema",
+    "status",
+    "locations",
+    "identity_namespace",
+    "migration_aliases",
+    "record_counts",
+    "review_counts",
+    "unresolved_evidence_count"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+    "title": { "$ref": "#/$defs/nonEmptyString" },
+    "family": { "$ref": "#/$defs/family" },
+    "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
+    "corpus_version": { "$ref": "#/$defs/semanticVersion" },
+    "record_schema": { "$ref": "#/$defs/recordSchema" },
+    "status": { "enum": ["draft", "active", "superseded", "withdrawn"] },
+    "locations": { "$ref": "#/$defs/locations" },
+    "identity_namespace": { "$ref": "#/$defs/nonEmptyString" },
+    "migration_aliases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "record_counts": { "$ref": "#/$defs/counts" },
+    "review_counts": { "$ref": "#/$defs/counts" },
+    "unresolved_evidence_count": { "type": "integer", "minimum": 0 },
+    "instrument_id": { "$ref": "#/$defs/nonEmptyString" },
+    "instrument_series_id": { "$ref": "#/$defs/nonEmptyString" },
+    "dataset_collection_id": { "$ref": "#/$defs/nonEmptyString" },
+    "root_institution_id": { "$ref": "#/$defs/nonEmptyString" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "family": { "const": "legal_policy" } }, "required": ["family"] },
+      "then": {
+        "oneOf": [
+          { "required": ["instrument_id"] },
+          { "required": ["instrument_series_id"] },
+          { "required": ["dataset_collection_id"] }
+        ],
+        "not": { "required": ["root_institution_id"] }
+      }
+    },
+    {
+      "if": { "properties": { "family": { "const": "institutional" } }, "required": ["family"] },
+      "then": {
+        "required": ["root_institution_id"],
+        "not": {
+          "anyOf": [
+            { "required": ["instrument_id"] },
+            { "required": ["instrument_series_id"] },
+            { "required": ["dataset_collection_id"] }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "family": { "enum": ["legal_policy", "institutional"] },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "recordSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/semanticVersion" }
+      }
+    },
+    "pathArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "locations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sources", "passages", "records", "relationships", "judgments", "migration"],
+      "properties": {
+        "sources": { "$ref": "#/$defs/pathArray" },
+        "passages": { "$ref": "#/$defs/pathArray" },
+        "records": { "$ref": "#/$defs/pathArray" },
+        "relationships": { "$ref": "#/$defs/pathArray" },
+        "judgments": { "$ref": "#/$defs/pathArray" },
+        "migration": { "$ref": "#/$defs/pathArray" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    }
+  }
+}

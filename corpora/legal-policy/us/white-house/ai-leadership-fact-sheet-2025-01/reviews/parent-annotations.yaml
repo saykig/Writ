@@ -1,0 +1,20 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: 143b5063-6ce9-51b4-b414-e5977aa27351
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#imported-review-group
+    display_ref: Imported review — January 2025 White House fact sheet
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-06
+    review_decision: accepted
+    original_record_type: executive_direction
+    instrument: WHITE_HOUSE_AI_EXECUTIVE_POLICY
+    source_locator: January 2025 White House fact sheet
+    claim_machine_ids:
+      - af0898a6-7575-5af0-b270-cb615f6cd43f
+    interpretation_note: "The direction binds executive agencies, not private providers.
+
+      "

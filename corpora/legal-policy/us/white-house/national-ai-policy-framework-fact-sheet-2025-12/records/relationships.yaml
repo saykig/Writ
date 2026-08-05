@@ -1,0 +1,39 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: b93f1be8-e976-5a5f-b3e8-ec6e178b52c7
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#proposed-reporting-and-disclosure-in-jurisdiction
+    display_ref: proposed reporting and disclosure — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: ec564227-cb0c-5780-aa41-c54ed61c3e5a
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#proposed-reporting-and-disclosure-reviewed-under-parent
+    display_ref: proposed reporting and disclosure — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    subject_type: claim
+    object_machine_id: 3051f3ef-790d-5c6f-8a40-c19c4e1c4fad
+    object_type: review
+  - machine_id: d8b5d299-06ee-552d-b9b8-b12148d563e1
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#proposed-reporting-and-disclosure-supported-by-passage
+    display_ref: proposed reporting and disclosure — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    subject_type: claim
+    object_machine_id: 67e6f3b3-8207-54bb-a94c-c461bfc77774
+    object_type: passage

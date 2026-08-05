@@ -1,0 +1,28 @@
+schema_version: 1.0.0
+corpus_id: eu.institutions.european_commission
+title: European Commission institutional facts
+family: institutional
+jurisdiction: EU
+corpus_version: 0.2.0
+record_schema:
+  id: https://writ.example/schemas/extensions/institutional-record.schema.json
+  version: 0.2.0
+status: draft
+identity_namespace: eu.institutions.european_commission
+migration_aliases: []
+root_institution_id: european_commission
+record_counts:
+  institutional_records: 3
+review_counts:
+  draft_records: 3
+unresolved_evidence_count: 0
+locations:
+  sources:
+    - ../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/sources/sources.yaml
+  passages:
+    - ../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/passages/passages.yaml
+  records:
+    - records.writ
+  relationships: []
+  judgments: []
+  migration: []

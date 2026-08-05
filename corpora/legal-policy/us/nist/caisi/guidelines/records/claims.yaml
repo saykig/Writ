@@ -1,0 +1,97 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: bd28e3d7-effa-5c3a-b469-b3fc48cb2588
+    ref: us/ai-governance/caisi-guidelines/published-guidelines#model-evaluation
+    display_ref: voluntary guidelines and draft benchmark-evaluation practices — model evaluation
+    aliases: []
+    legacy_refs:
+      - US-05A
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.nist.caisi.guidelines
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
+    claim_record_type: guidance
+    jurisdiction: US
+    instrument: CAISI_EVALUATION_GUIDELINES
+    source_locator: "voluntary guidelines and draft benchmark-evaluation practices
+
+      "
+    interpretation_note:
+      "Both claims concern model evaluation, but neither creates a binding market-wide
+      provider obligation.
+
+      "
+    actor_type: ai_lifecycle_organization
+    actor_term_local: "advanced AI model, system or agent developer or evaluator
+
+      "
+    conduct_type: model_evaluation
+    conduct_term_local: "use voluntary guidelines and best practices for automated AI evaluations
+
+      "
+    evaluation_method:
+      - automated_evaluation
+      - benchmark_evaluation
+    legal_force: voluntary
+    compliance_function: evaluation_guidance
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: not_applicable
+    responsible_authority: NIST
+    implementation_body: CAISI
+    scope:
+      - cross_sector
+    target_system: advanced_ai_model_system_or_agent
+  - machine_id: 774b58d2-8517-5113-a7d0-64f8c17ed277
+    ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#proposed-model-evaluation-guidance
+    display_ref:
+      voluntary guidelines and draft benchmark-evaluation practices — proposed model evaluation
+      guidance
+    aliases: []
+    legacy_refs:
+      - US-05B
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.nist.caisi.guidelines
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: ad1e9665-fbe5-5e5b-aefe-2c9a8206c5dc
+    claim_record_type: proposed_guidance
+    jurisdiction: US
+    instrument: CAISI_DRAFT_BENCHMARK_PRACTICES
+    source_locator: "voluntary guidelines and draft benchmark-evaluation practices
+
+      "
+    interpretation_note:
+      "Both claims concern model evaluation, but neither creates a binding market-wide
+      provider obligation.
+
+      "
+    actor_type: ai_lifecycle_organization
+    actor_term_local: "advanced AI model, system or agent developer or evaluator
+
+      "
+    conduct_type: model_evaluation
+    conduct_term_local: "use proposed best practices for automated benchmark evaluations
+
+      "
+    evaluation_method:
+      - automated_evaluation
+      - benchmark_evaluation
+    legal_force: voluntary
+    compliance_function: evaluation_guidance
+    adoption_status: proposed
+    applicability_status: draft_available
+    enforcement_status: not_applicable
+    responsible_authority: NIST
+    implementation_body: CAISI
+    scope:
+      - cross_sector
+    target_system: advanced_ai_model_system_or_agent

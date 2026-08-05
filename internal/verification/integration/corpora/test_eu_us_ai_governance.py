@@ -12,7 +12,7 @@ from typing import Any
 import yaml
 from writ_ingest.corpus.eu_us_ai_governance import (
     CLAIM_REFS,
-    CORPUS_RELATIVE_DIRS,
+    CORPUS_SPECS,
     EXPECTED_REVIEWED_SHA256,
     FORBIDDEN_ACTIVE_KEYS,
     IDENTITY_DERIVATION,
@@ -38,7 +38,38 @@ def load_yaml(relative_path: Path) -> dict[str, Any]:
 
 
 def active(jurisdiction: str, relative_path: str) -> dict[str, Any]:
-    return load_yaml(CORPUS_RELATIVE_DIRS[jurisdiction] / relative_path)
+    documents = [
+        load_yaml(spec["path"] / relative_path)
+        for spec in CORPUS_SPECS
+        if spec["jurisdiction"] == jurisdiction
+    ]
+    if relative_path == "migration-map.yaml":
+        return {
+            "entries": [entry for document in documents for entry in document["entries"]],
+            "moved_objects": [
+                entry for document in documents for entry in document["moved_objects"]
+            ],
+            "excluded_temporary_assignments": [
+                entry
+                for document in documents
+                for entry in document.get("excluded_temporary_assignments", [])
+            ],
+            "corrected_numbering": [
+                entry
+                for document in documents
+                for entry in document.get("corrected_numbering", [])
+            ],
+        }
+    key = {
+        "records/claims.yaml": "claims",
+        "records/entities.yaml": "entities",
+        "records/relationships.yaml": "relationships",
+        "reviews/parent-annotations.yaml": "reviews",
+        "passages/passages.yaml": "passages",
+        "passages/unresolved.yaml": "unresolved",
+        "sources/sources.yaml": "sources",
+    }[relative_path]
+    return {key: [record for document in documents for record in document[key]]}
 
 
 def walk(value: Any):
@@ -80,8 +111,8 @@ def test_exact_parent_and_atomic_claim_counts_are_preserved() -> None:
 def test_checked_in_corpora_match_a_fresh_deterministic_migration() -> None:
     write_corpus_documents(root=ROOT, check=True)
     assert set(build_corpus_documents(root=ROOT)) == {
-        CORPUS_RELATIVE_DIRS[jurisdiction] / relative
-        for jurisdiction in ("EU", "US")
+        spec["path"] / relative
+        for spec in CORPUS_SPECS
         for relative in (
             "corpus.yaml",
             "sources/sources.yaml",
@@ -117,6 +148,7 @@ def test_every_reviewed_claim_field_survives_except_retired_pilot_fields() -> No
         "review_status",
         "imported_review_machine_id",
         "family",
+        "corpus_id",
         "topics",
     }
     for reviewed in reviewed_claims:
@@ -141,7 +173,8 @@ def test_us_claims_map_to_legal_policy_and_controlled_ai_topic_only() -> None:
     assert all(claim["topics"] == ["artificial_intelligence"] for claim in us_claims)
 
     eu_claims = active("EU", "records/claims.yaml")["claims"]
-    assert all("family" not in claim and "topics" not in claim for claim in eu_claims)
+    assert all(claim["family"] == "legal_policy" for claim in eu_claims)
+    assert all("topics" not in claim for claim in eu_claims)
 
 
 def test_review_decisions_and_parent_groupings_are_preserved() -> None:
@@ -237,7 +270,7 @@ def test_relationships_depend_only_on_machine_ids() -> None:
 
 
 def test_active_corpus_documents_have_no_comparative_or_headline_fields() -> None:
-    for relative_dir in CORPUS_RELATIVE_DIRS.values():
+    for relative_dir in (spec["path"] for spec in CORPUS_SPECS):
         for path in (ROOT / relative_dir).rglob("*.yaml"):
             document = yaml.safe_load(path.read_text())
             for node in walk(document):

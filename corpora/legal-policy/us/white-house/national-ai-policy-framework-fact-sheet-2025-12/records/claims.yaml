@@ -1,0 +1,51 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 2bb20867-98a9-57bc-b25f-61697ed2f2f2
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#proposed-reporting-and-disclosure
+    display_ref: December 2025 fact sheet — proposed reporting and disclosure
+    aliases: []
+    legacy_refs:
+      - US-11
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 3051f3ef-790d-5c6f-8a40-c19c4e1c4fad
+    claim_record_type: proposed_policy
+    jurisdiction: US
+    instrument: WHITE_HOUSE_AI_FRAMEWORK_FACT_SHEET
+    source_locator: December 2025 fact sheet
+    current_actor_type: federal_agency
+    current_actor_term_local: FTC or FCC
+    prospective_actor_type: market_provider
+    prospective_actor_term_local: AI model company
+    conduct_type: reporting_and_disclosure
+    conduct_term_local:
+      "comply with a possible future federal reporting and disclosure standard for AI
+      models
+
+      "
+    proposal_action: "consider adopting a federal reporting and disclosure standard for AI models
+
+      "
+    legal_force: proposed
+    compliance_function: prospective_regulatory_requirement
+    adoption_status: proposed
+    applicability_status: not_yet_applicable
+    enforcement_status: not_applicable
+    policy_origin: White House
+    potential_responsible_authorities:
+      - FTC
+      - FCC
+    scope:
+      - cross_sector
+    target_system: artificial_intelligence_model
+    interpretation_note:
+      "The fact sheet describes possible future regulation. It does not create a currently
+      applicable model-evaluation duty.
+
+      "

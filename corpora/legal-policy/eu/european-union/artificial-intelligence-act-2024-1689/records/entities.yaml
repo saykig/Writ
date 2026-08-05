@@ -1,0 +1,13 @@
+schema_version: 1.0.0
+jurisdiction: EU
+entities:
+  - machine_id: eac9ce38-9244-5d8b-be11-80e9cebcbc88
+    ref: eu/ai-governance/jurisdiction/eu#political-entity
+    display_ref: European Union
+    aliases:
+      - EU
+    legacy_refs: []
+    record_type: political_entity
+    entity_type: jurisdiction
+    name: European Union
+    jurisdiction: EU

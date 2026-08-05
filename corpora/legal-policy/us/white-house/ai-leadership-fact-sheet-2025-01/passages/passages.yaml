@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: 6ef96ed8-6190-5771-8f8f-7fceb7350349
+    ref: us/ai-governance/executive-order-14179/january-2025-fact-sheet#source-passage
+    display_ref: Source passage — January 2025 White House fact sheet
+    aliases: []
+    legacy_refs:
+      - passage-us-06
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: 4868eb7f-5d92-57f8-8fb5-0b27149ae634
+    imported_source_legacy_ref: US-06
+    anchor_type: html_dom
+    anchor_phrase: revise or rescind all policies, directives, regulations
+    quote:
+      Calls for departments and agencies to revise or rescind all policies, directives, regulations,
+      orders, and other actions taken under the Biden AI order that are inconsistent with enhancing America’s
+      leadership in AI.
+    anchor_hash: sha256:18ab1889b5a5a00ef21eb4e912053ad699857e75b0181b6e44dd00d6625ad350
+    language: en

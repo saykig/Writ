@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/compatibility/record-grammar-v0.1/record.schema.json",
+  "title": "Writ Shared Record",
+  "$ref": "#/$defs/recordBase",
+  "unevaluatedProperties": false,
+  "$defs": {
+    "recordBase": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "record_id",
+        "corpus_id",
+        "record_version",
+        "family",
+        "title",
+        "subjects",
+        "assertion",
+        "topics",
+        "scope",
+        "evidence",
+        "uncertainties",
+        "provenance",
+        "review_state"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/schemaVersion" },
+        "record_id": { "$ref": "#/$defs/nonEmptyString" },
+        "corpus_id": { "$ref": "#/$defs/nonEmptyString" },
+        "record_version": { "$ref": "#/$defs/semanticVersion" },
+        "family": { "$ref": "#/$defs/family" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "subjects": { "$ref": "#/$defs/subjectArray" },
+        "assertion": { "$ref": "#/$defs/assertion" },
+        "topics": { "$ref": "#/$defs/stringArray" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "evidence": { "$ref": "#/$defs/evidenceArray" },
+        "uncertainties": { "$ref": "#/$defs/uncertaintyArray" },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "review_state": { "$ref": "#/$defs/reviewState" }
+      }
+    },
+    "schemaVersion": { "const": "0.1.0" },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "family": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_id", "subject_type"],
+      "properties": {
+        "subject_id": { "$ref": "#/$defs/identifier" },
+        "subject_type": { "$ref": "#/$defs/identifier" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "role": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "subjectArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/subject" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "assertionMode": {
+      "enum": [
+        "requires",
+        "permits",
+        "prohibits",
+        "defines",
+        "authorizes",
+        "assigns",
+        "performs",
+        "states",
+        "observes"
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "text"],
+      "properties": {
+        "mode": { "$ref": "#/$defs/assertionMode" },
+        "text": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "temporalScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": { "type": "string", "format": "date" },
+        "until": { "type": "string", "format": "date" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jurisdictions", "institutional_scope", "temporal_scope", "conditions"],
+      "properties": {
+        "jurisdictions": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "institutional_scope": { "$ref": "#/$defs/stringArray" },
+        "temporal_scope": { "$ref": "#/$defs/temporalScope" },
+        "conditions": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "evidenceBasis": { "enum": ["direct", "inferred", "inherited"] },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "document_version_id",
+        "passage_id",
+        "locator",
+        "quote",
+        "passage_hash",
+        "document_hash",
+        "basis"
+      ],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "passage_id": { "$ref": "#/$defs/nonEmptyString" },
+        "locator": { "$ref": "#/$defs/nonEmptyString" },
+        "quote": { "$ref": "#/$defs/nonEmptyString" },
+        "passage_hash": { "$ref": "#/$defs/hash" },
+        "document_hash": { "$ref": "#/$defs/hash" },
+        "basis": { "$ref": "#/$defs/evidenceBasis" }
+      }
+    },
+    "evidenceArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceReference" },
+      "minItems": 1
+    },
+    "uncertaintyType": {
+      "enum": ["unknown", "contested", "ambiguous", "incomplete_evidence"]
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "description"],
+      "properties": {
+        "type": { "$ref": "#/$defs/uncertaintyType" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "uncertaintyArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/uncertainty" }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at"],
+      "properties": {
+        "created_by": { "$ref": "#/$defs/nonEmptyString" },
+        "created_at": { "type": "string", "format": "date" }
+      }
+    },
+    "reviewState": {
+      "enum": ["draft", "reviewed", "approved", "superseded", "withdrawn"]
+    }
+  }
+}

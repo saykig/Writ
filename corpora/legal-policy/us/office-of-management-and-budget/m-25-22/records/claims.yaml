@@ -1,0 +1,221 @@
+schema_version: 1.0.0
+jurisdiction: US
+claims:
+  - machine_id: 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#procurement-testing
+    display_ref: testing and evaluation in procurement — procurement testing
+    aliases: []
+    legacy_refs:
+      - US-09A
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    claim_record_type: obligation
+    jurisdiction: US
+    instrument: OMB_M_25_22
+    source_locator: testing and evaluation in procurement
+    interpretation_note:
+      "Agency duties arise directly from the memorandum, while vendor duties arise
+      through government contracts.
+
+      "
+    actor_type: federal_agency
+    actor_term_local: federal agency procuring AI
+    conduct_type: procurement_testing
+    conduct_family: evaluation
+    conduct_term_local:
+      "test proposed artificial-intelligence solutions during the procurement process
+
+      "
+    legal_force: binding
+    binding_scope: federal_agencies_only
+    compliance_function: direct_obligation
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_government_implementation
+    responsible_authority: OMB
+    implementation_body: procuring_agencies
+    scope:
+      - government_procurement
+    target_system: proposed_ai_solution
+  - machine_id: 94800da1-6467-5ffb-9892-bfe0565a8194
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#contract-terms-requirement
+    display_ref: testing and evaluation in procurement — contract terms requirement
+    aliases: []
+    legacy_refs:
+      - US-09B
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    claim_record_type: procurement_requirement
+    jurisdiction: US
+    instrument: OMB_M_25_22
+    source_locator: testing and evaluation in procurement
+    interpretation_note:
+      "Agency duties arise directly from the memorandum, while vendor duties arise
+      through government contracts.
+
+      "
+    actor_type: federal_agency
+    actor_term_local: federal agency procuring AI
+    conduct_type: contract_terms_requirement
+    conduct_term_local: "require ongoing testing and monitoring through the procurement contract
+
+      "
+    required_vendor_conduct:
+      - ongoing_testing
+      - performance_monitoring
+    legal_force: binding
+    binding_scope: federal_agencies_only
+    compliance_function: contract_condition_creation
+    adoption_status: adopted
+    applicability_status: applicable
+    enforcement_status: internal_government_implementation
+    responsible_authority: OMB
+    implementation_body: procuring_agencies
+    scope:
+      - government_procurement
+  - machine_id: 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#vendor-evaluation-access
+    display_ref: testing and evaluation in procurement — vendor evaluation access
+    aliases: []
+    legacy_refs:
+      - US-09C
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    claim_record_type: contract_mediated_obligation
+    jurisdiction: US
+    instrument: OMB_M_25_22
+    source_locator: testing and evaluation in procurement
+    interpretation_note:
+      "Agency duties arise directly from the memorandum, while vendor duties arise
+      through government contracts.
+
+      "
+    actor_type: government_vendor
+    actor_term_local: AI vendor performing a federal contract
+    conduct_type: evaluation_access
+    conduct_term_local:
+      "preserve access necessary for independent evaluation of the contracted artificial-intelligence
+      system
+
+      "
+    legal_force: contractual
+    binding_scope: government_contract_only
+    compliance_function: procurement_contract_obligation
+    adoption_status: adopted
+    applicability_status: contingent_on_contract
+    enforcement_status: contractual_enforcement
+    responsible_authority: procuring_agency
+    policy_authority: OMB
+    scope:
+      - government_procurement
+    target_system: contracted_ai_system
+  - machine_id: e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#contract-documentation
+    display_ref: disclosure and performance monitoring for contracted AI use — contract documentation
+    aliases: []
+    legacy_refs:
+      - US-10A
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
+    claim_record_type: contract_mediated_obligation
+    jurisdiction: US
+    instrument: OMB_M_25_22
+    source_locator: "disclosure and performance monitoring for contracted AI use
+
+      "
+    interpretation_note:
+      "These duties are limited to the government-contract relationship and do not
+      apply to providers generally.
+
+      "
+    actor_type: government_vendor
+    actor_term_local: "federal vendor performing an AI-related government contract
+
+      "
+    conduct_type: contract_documentation
+    conduct_term_local:
+      "provide documentation required for government oversight of the contracted AI
+      system
+
+      "
+    legal_force: contractual
+    binding_scope: government_contract_only
+    compliance_function: procurement_contract_obligation
+    adoption_status: adopted
+    applicability_status: contingent_on_contract
+    enforcement_status: contractual_enforcement
+    responsible_authority: procuring_agency
+    policy_authority: OMB
+    scope:
+      - government_procurement
+    target_system: contracted_ai_system
+  - machine_id: a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#monitoring-support
+    display_ref: disclosure and performance monitoring for contracted AI use — monitoring support
+    aliases: []
+    legacy_refs:
+      - US-10B
+    record_type: political_claim
+    record_family: policy
+    family: legal_policy
+    corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+    topics:
+      - artificial_intelligence
+    review_status: accepted
+    imported_review_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
+    claim_record_type: contract_mediated_obligation
+    jurisdiction: US
+    instrument: OMB_M_25_22
+    source_locator: "disclosure and performance monitoring for contracted AI use
+
+      "
+    interpretation_note:
+      "These duties are limited to the government-contract relationship and do not
+      apply to providers generally.
+
+      "
+    actor_type: government_vendor
+    actor_term_local: "federal vendor performing an AI-related government contract
+
+      "
+    conduct_type: monitoring_support
+    conduct_term_local:
+      "support monitoring and enable performance-based oversight of the contracted AI
+      system
+
+      "
+    legal_force: contractual
+    binding_scope: government_contract_only
+    compliance_function: procurement_contract_obligation
+    adoption_status: adopted
+    applicability_status: contingent_on_contract
+    enforcement_status: contractual_enforcement
+    responsible_authority: procuring_agency
+    policy_authority: OMB
+    scope:
+      - government_procurement
+    target_system: contracted_ai_system

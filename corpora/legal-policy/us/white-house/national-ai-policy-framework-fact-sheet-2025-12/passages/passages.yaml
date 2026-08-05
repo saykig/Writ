@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: 67e6f3b3-8207-54bb-a94c-c461bfc77774
+    ref: us/ai-governance/national-ai-policy-framework/december-2025-fact-sheet#source-passage
+    display_ref: Source passage — December 2025 fact sheet
+    aliases: []
+    legacy_refs:
+      - passage-us-11
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: 6585f13f-46c2-5bdc-846c-5581c45468c9
+    imported_source_legacy_ref: US-11
+    anchor_type: html_dom
+    anchor_phrase: considering whether to adopt a Federal reporting and disclosure
+    quote:
+      The Order instructs the Federal Trade Commission and Federal Communications Commission to take
+      actions that will limit States’ ability to force AI companies to deceive consumers, including determining
+      whether laws that force companies to embed DEI into their models cause those companies to violate
+      the Federal Trade Commission Act, and considering whether to adopt a Federal reporting and disclosure
+      standard for AI models.
+    anchor_hash: sha256:bddf15e3f242b9cad1c7efa44e3a4bb49617b70c78cbc87adec45dd349cfe080
+    language: en

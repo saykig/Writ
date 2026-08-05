@@ -238,5 +238,41 @@ tasks:
       - internal/verification/integration/corpora/test_eu_us_ai_governance.py
       - MANIFEST.sha256
 
+  - id: CORPUS-FAMILY-FOUNDATION-001
+    title: Establish the permanent corpus-family and issuer-instrument architecture
+    status: done
+    dependencies:
+      - CORE-EVIDENCE-RECONCILIATION-001
+    scope:
+      - Establish legal-policy and institutional as the two implemented native families.
+      - Add authoritative corpus manifest, catalog and family-neutral record-link contracts.
+      - Split the reviewed EU and US AI policy material into issuer-and-instrument corpora.
+      - Move constitutional law and NIST institutional records into family-first paths.
+      - Add only directly supported European Commission or AI Office institutional drafts.
+      - Move record judgments to the analysis layer while preserving v0.1 compatibility.
+      - Resolve active corpus paths through the root catalog.
+    exclusions:
+      - Changes to accepted EU or US substantive claim values or review decisions.
+      - NIST substantive review or changes to its six records.
+      - Open US Law adapter-metadata migration.
+      - G7, G20, archived pilot, query architecture or frontend redesign.
+    acceptance:
+      - Every active native corpus has exactly one family and a valid family-first path.
+      - All 15 EU and 17 US accepted claims occur once in their approved instrument corpora.
+      - Stable identities, hashes, legacy references and unresolved states match the preservation inventory.
+      - The retired EU and US subject-based corpus IDs are absent from the active catalog.
+      - The six NIST records remain byte-identical automated drafts.
+      - v0.1 record, institutional and judgment contracts remain available under compatibility.
+      - All required local checks, drift guards and checksum verifications pass.
+    outputs:
+      - adr/0017-permanent-corpus-family-architecture.md
+      - schemas/core/corpus-manifest.schema.json
+      - schemas/core/corpus-catalog.schema.json
+      - schemas/core/record-link.schema.json
+      - corpora/catalog.yaml
+      - corpora/legal-policy
+      - corpora/institutional
+      - docs/migrations/corpus-family-foundation
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

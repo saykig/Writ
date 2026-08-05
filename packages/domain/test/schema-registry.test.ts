@@ -12,7 +12,7 @@ describe("schema-version registry", () => {
   });
 
   test("current version matches each schema and its $id", () => {
-    const stageOne = new Set([
+    const versionTwo = new Set([
       "record",
       "legal-policy-record",
       "institutional-record",
@@ -20,10 +20,23 @@ describe("schema-version registry", () => {
     ]);
     for (const kind of SCHEMA_KINDS) {
       const entry = SCHEMA_REGISTRY[kind];
-      const expected = stageOne.has(kind) ? "0.1.0" : "1.0.0";
+      const expected = versionTwo.has(kind) ? "0.2.0" : "1.0.0";
       expect(entry.current).toBe(expected);
       expect(entry.versions[expected]?.schemaId).toBe(SCHEMA_IDS[kind]);
       expect(entry.versions[expected]?.kind).toBe(kind);
+    }
+  });
+
+  test("retains explicit v0.1 native compatibility contracts", () => {
+    for (const kind of [
+      "record",
+      "legal-policy-record",
+      "institutional-record",
+      "record-judgment",
+    ] as const) {
+      expect(resolveSchemaVersion(kind, "0.1.0")?.schemaId).toContain(
+        "/compatibility/record-grammar-v0.1/",
+      );
     }
   });
 

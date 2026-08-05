@@ -1,0 +1,22 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: 20932931-1e58-5740-96f5-7216c676fd63
+    ref: us/ai-governance/nist-ai-rmf/abstract#imported-review-group
+    display_ref: Imported review — abstract
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-01
+    review_decision: accepted
+    original_record_type: guidance
+    instrument: NIST_AI_RMF
+    source_locator: abstract
+    claim_machine_ids:
+      - 2e169e44-5094-5ebc-ac67-330cabf22462
+    interpretation_note:
+      "The AI RMF is an active cross-sector framework but does not establish a binding
+      model-evaluation duty for private providers.
+
+      "

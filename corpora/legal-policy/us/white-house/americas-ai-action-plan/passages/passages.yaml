@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+jurisdiction: US
+passages:
+  - machine_id: f6e37323-f678-5515-92bf-475776e887b9
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#source-passage
+    display_ref: Source passage — AI Action Plan and later White House policy-action materials
+    aliases: []
+    legacy_refs:
+      - passage-us-12
+    record_type: source_passage
+    jurisdiction: US
+    source_machine_id: a656c34b-cac2-5bde-8d71-4472fb1a00e8
+    imported_source_legacy_ref: US-12
+    anchor_type: pdf_text
+    anchor_phrase: Publish guidelines and resources through NIST at DOC
+    quote:
+      Recommended Policy Actions • Publish guidelines and resources through NIST at DOC, including
+      CAISI, for Federal agencies to conduct their own evaluations of AI systems for their distinct missions
+      and operations and for compliance with existing law. • Support the development of the science of
+      measuring and evaluating AI models, led by
+    anchor_hash: sha256:8e11665921d345528d27da71cef5d7974fde9e79a59b78de8379ebeb864addc2
+    language: en
+    page_number: 13

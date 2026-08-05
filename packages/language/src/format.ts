@@ -449,6 +449,8 @@ function printInstitutionalProperty(property: InstitutionalProperty, indent: str
   switch (property.$type) {
     case "InstitutionIdProperty":
       return `${indent}institution_id ${property.value};`;
+    case "InstitutionalFactTypeProperty":
+      return `${indent}fact_type ${property.value};`;
     case "InstitutionTypeProperty":
       return `${indent}institution_type ${property.value};`;
     case "MandateProperty": {
@@ -481,12 +483,29 @@ function printInstitutionalProperty(property: InstitutionalProperty, indent: str
       return `${indent}jurisdictions ${strings(property.values.values)};`;
     case "FunctionsProperty":
       return `${indent}functions ${identifiers(property.values.values)};`;
+    case "InstitutionalFunctionProperty":
+      return `${indent}function ${property.value};`;
     case "OperationalCapacityProperty":
       return `${indent}operational_capacity {\n${indent}${INDENT}status ${property.status};\n${indent}${INDENT}dimensions ${strings(property.dimensions.values)};\n${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};\n${indent}}`;
     case "DecisionRightsProperty":
       return `${indent}decision_rights ${strings(property.values.values)};`;
+    case "DecisionRightProperty": {
+      const lines = [`${indent}decision_right {`, `${indent}${INDENT}status ${property.status};`];
+      if (property.text !== undefined)
+        lines.push(`${indent}${INDENT}text ${quote(property.text)};`);
+      if (property.authoritySourceIds)
+        lines.push(
+          `${indent}${INDENT}authority_source_ids ${identifiers(property.authoritySourceIds.values)};`,
+        );
+      if (property.evidenceRefs)
+        lines.push(`${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
     case "ParentInstitutionProperty":
       return `${indent}parent_institution_id ${property.value};`;
+    case "InstitutionalRecordLinkProperty":
+      return `${indent}record_link {\n${indent}${INDENT}link_id ${property.linkId};\n${indent}${INDENT}source ${property.sourceId} kind ${property.sourceKind};\n${indent}${INDENT}target ${property.targetId} kind ${property.targetKind};\n${indent}${INDENT}relation ${property.relationType};\n${indent}${INDENT}basis ${property.basis};\n${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};\n${indent}}`;
     case "SubunitIdsProperty":
       return `${indent}subunit_ids ${identifiers(property.values.values)};`;
     case "OversightRelationshipsProperty":
@@ -595,7 +614,7 @@ function printJudgment(judgment: JudgmentDeclaration): string {
   for (const member of judgment.members) {
     switch (member.$type) {
       case "JudgmentTarget":
-        lines.push(`${INDENT}target ${member.value};`);
+        lines.push(`${INDENT}target ${member.kind ? `${member.kind} ` : ""}${member.value};`);
         break;
       case "JudgmentTypeProperty":
         lines.push(`${INDENT}type ${member.value};`);

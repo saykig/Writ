@@ -72,6 +72,17 @@ const institutional = {
   operational_capacity: { status: "unknown", dimensions: [], evidence_refs: [] },
 } as const;
 
+const atomicFunction = {
+  ...base,
+  schema_version: "0.2.0",
+  record_id: "record.eu.ai-office.function",
+  record_version: "0.2.0",
+  family: "institutional",
+  institution_id: "eu_ai_office",
+  institutional_fact_type: "function",
+  function: "serious_incident_report_receipt",
+} as const;
+
 const judgment = {
   schema_version: "0.1.0",
   judgment_id: "judgment.example",
@@ -204,6 +215,39 @@ describe("institutional record schema", () => {
       false,
     );
   });
+  test("v0.2 identity and placement facts require only their own payload", () => {
+    const common = { ...atomicFunction } as Record<string, unknown>;
+    delete common.function;
+    expect(
+      validate("institutional-record", {
+        ...common,
+        institutional_fact_type: "identity",
+        institution_type: "organizational_unit",
+      }).valid,
+    ).toBe(true);
+    expect(
+      validate("institutional-record", {
+        ...common,
+        institutional_fact_type: "placement",
+        parent_institution_id: "european_commission",
+      }).valid,
+    ).toBe(true);
+  });
+  test("function does not imply or permit mandate or operational capacity", () => {
+    expect(validate("institutional-record", atomicFunction).valid).toBe(true);
+    expect(
+      validate("institutional-record", {
+        ...atomicFunction,
+        mandate: { status: "established" },
+      }).valid,
+    ).toBe(false);
+    expect(
+      validate("institutional-record", {
+        ...atomicFunction,
+        operational_capacity: { status: "established", dimensions: [], evidence_refs: [] },
+      }).valid,
+    ).toBe(false);
+  });
 });
 
 describe("record judgment schema", () => {
@@ -226,5 +270,46 @@ describe("record judgment schema", () => {
     ).toBe(true);
     expect(validate("record-judgment", { ...judgment, status: "superseded" }).valid).toBe(false);
     expect(validate("record-judgment", { ...judgment, status: "approved" }).valid).toBe(false);
+  });
+});
+
+describe("record links and current judgments", () => {
+  test("a family-neutral link has independent review state", () => {
+    expect(
+      validate("record-link", {
+        schema_version: "1.0.0",
+        link_id: "link.example",
+        owning_corpus_id: "corpus.example",
+        source_id: "record.example",
+        source_kind: "record",
+        target_id: "institution.example",
+        target_kind: "institution",
+        relation_type: "issued_by",
+        basis: "direct",
+        evidence_refs: ["passage.example"],
+        uncertainties: [],
+        provenance: { created_by: "test", created_at: "2026-08-04" },
+        review_state: "draft",
+      }).valid,
+    ).toBe(true);
+  });
+  test("v0.2 judgments target records or record links without changing workflow state", () => {
+    for (const target_kind of ["record", "record_link"] as const) {
+      expect(
+        validate("record-judgment", {
+          schema_version: "0.2.0",
+          judgment_id: `judgment.${target_kind}`,
+          target_kind,
+          target_id: "target.example",
+          judgment_type: "disagreement",
+          value: "unknown",
+          rationale: "Independent review rationale.",
+          evidence_refs: ["passage.example"],
+          reviewer: "test-reviewer",
+          status: "proposed",
+          created_at: "2026-08-04",
+        }).valid,
+      ).toBe(true);
+    }
   });
 });

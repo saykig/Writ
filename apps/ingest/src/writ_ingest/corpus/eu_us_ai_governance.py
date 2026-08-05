@@ -28,11 +28,84 @@ SNAPSHOT_RELATIVE_PATHS = {
     "EU": ARCHIVE_ORIGINAL_RELATIVE_DIR / "evidence" / "eu.snapshot.json",
     "US": ARCHIVE_ORIGINAL_RELATIVE_DIR / "evidence" / "us.snapshot.json",
 }
+CATALOG_RELATIVE_PATH = Path("corpora/catalog.yaml")
 
-CORPUS_RELATIVE_DIRS = {
+OLD_CORPUS_RELATIVE_DIRS = {
     "EU": Path("corpora/jurisdictions/eu/ai-governance"),
     "US": Path("corpora/jurisdictions/us/ai-governance"),
 }
+OLD_CORPUS_IDS = {
+    "EU": "writ.corpus.eu.ai-governance",
+    "US": "writ.corpus.us.ai-governance",
+}
+
+CORPUS_SPECS: tuple[dict[str, Any], ...] = (
+    {
+        "jurisdiction": "EU",
+        "path": Path("corpora/legal-policy/eu/european-union/artificial-intelligence-act-2024-1689"),
+        "corpus_id": "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
+        "title": "European Union Artificial Intelligence Act 2024/1689",
+        "instrument_id": "EU_AI_ACT",
+        "claims": ("EU-01", "EU-02", "EU-03", "EU-04", "EU-05", "EU-06", "EU-07", "EU-08", "EU-09", "EU-11A", "EU-11B"),
+        "owns_entity": True,
+    },
+    {
+        "jurisdiction": "EU",
+        "path": Path("corpora/legal-policy/eu/european-commission/gpai-guidelines"),
+        "corpus_id": "writ.corpus.legal-policy.eu.european-commission.gpai-guidelines",
+        "title": "European Commission GPAI Guidelines",
+        "instrument_id": "COMMISSION_GPAI_GUIDELINES",
+        "claims": ("EU-10A", "EU-10B", "EU-10C"),
+    },
+    {
+        "jurisdiction": "EU",
+        "path": Path("corpora/legal-policy/eu/european-commission/gpai-code-of-practice-signatory-notice"),
+        "corpus_id": "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
+        "title": "European Commission GPAI Code of Practice signatory notice",
+        "instrument_id": "GPAI_CODE_OF_PRACTICE",
+        "claims": ("EU-12",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/ai-risk-management-framework-1-0"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0", "title": "NIST AI Risk Management Framework 1.0", "instrument_id": "NIST_AI_RMF", "claims": ("US-01",), "owns_entity": True,
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/ai-risk-management-framework-playbook"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook", "title": "NIST AI Risk Management Framework Playbook", "instrument_id": "NIST_AI_RMF_PLAYBOOK", "claims": ("US-02",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/generative-ai-profile"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.generative-ai-profile", "title": "NIST Generative AI Profile", "instrument_id": "NIST_GENERATIVE_AI_PROFILE", "claims": ("US-03",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/caisi/overview"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.overview", "title": "CAISI overview", "instrument_id": "CAISI_OVERVIEW", "claims": ("US-04",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/caisi/guidelines"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.guidelines", "title": "CAISI guidelines", "instrument_series_id": "CAISI_GUIDELINES", "claims": ("US-05A", "US-05B"),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/office-of-management-and-budget/m-25-21"),
+        "corpus_id": "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21", "title": "OMB Memorandum M-25-21", "instrument_id": "OMB_M_25_21", "claims": ("US-07", "US-08A", "US-08B"),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/office-of-management-and-budget/m-25-22"),
+        "corpus_id": "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22", "title": "OMB Memorandum M-25-22", "instrument_id": "OMB_M_25_22", "claims": ("US-09A", "US-09B", "US-09C", "US-10A", "US-10B"),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/ai-leadership-fact-sheet-2025-01"),
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01", "title": "White House AI leadership fact sheet (January 2025)", "instrument_id": "EXECUTIVE_ORDER_14179", "claims": ("US-06",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/national-ai-policy-framework-fact-sheet-2025-12"),
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12", "title": "White House national AI policy framework fact sheet (December 2025)", "instrument_id": "NATIONAL_AI_POLICY_FRAMEWORK", "claims": ("US-11",),
+    },
+    {
+        "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/americas-ai-action-plan"),
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan", "title": "America's AI Action Plan", "instrument_id": "AMERICAS_AI_ACTION_PLAN", "claims": ("US-12",),
+    },
+)
 
 EXPECTED_REVIEWED_SHA256 = (
     "8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb"
@@ -260,6 +333,34 @@ def load_reviewed_input(*, root: Path | None = None) -> dict[str, Any]:
             f"found {actual_hash}"
         )
     return _read_yaml(repo_root / REVIEWED_RELATIVE_PATH)
+
+
+def resolve_catalog_corpus_paths(
+    corpus_ids: list[str] | tuple[str, ...], *, root: Path | None = None
+) -> dict[str, Path]:
+    """Resolve active corpus IDs through the repository catalog, rejecting ambiguity."""
+
+    repo_root = root or find_repo_root()
+    catalog = _read_yaml(repo_root / CATALOG_RELATIVE_PATH)
+    entries = catalog.get("corpora")
+    if not isinstance(entries, list):
+        raise CorpusMigrationError("catalog corpora must be an array")
+    resolved: dict[str, Path] = {}
+    requested = set(corpus_ids)
+    for entry in entries:
+        if not isinstance(entry, dict) or entry.get("corpus_id") not in requested:
+            continue
+        corpus_id = str(entry["corpus_id"])
+        if corpus_id in resolved:
+            raise CorpusMigrationError(f"catalog contains duplicate corpus ID: {corpus_id}")
+        path = Path(str(entry.get("path", "")))
+        if not path.as_posix() or not (repo_root / path).is_dir():
+            raise CorpusMigrationError(f"catalog path does not resolve for {corpus_id}: {path}")
+        resolved[corpus_id] = path
+    missing = requested - resolved.keys()
+    if missing:
+        raise CorpusMigrationError(f"catalog is missing corpus IDs: {sorted(missing)}")
+    return resolved
 
 
 def normalize_reviewed_claims(dataset: dict[str, Any]) -> list[dict[str, Any]]:
@@ -740,17 +841,25 @@ def build_evidence_diagnostic_projection(
     unresolved = _read_json(repo_root / UNRESOLVED_RELATIVE_PATH)
     unresolved_by_parent = {entry["row_id"]: (index, entry) for index, entry in enumerate(unresolved)}
 
-    active_by_jurisdiction: dict[str, dict[str, list[dict[str, Any]]]] = {}
-    for jurisdiction, relative_dir in CORPUS_RELATIVE_DIRS.items():
-        active_by_jurisdiction[jurisdiction] = {
-            "claim": _read_yaml(repo_root / relative_dir / "records" / "claims.yaml")["claims"],
-            "passage": _read_yaml(repo_root / relative_dir / "passages" / "passages.yaml")[
-                "passages"
-            ],
-            "source": _read_yaml(repo_root / relative_dir / "sources" / "sources.yaml")[
-                "sources"
-            ],
-        }
+    active_by_jurisdiction: dict[str, dict[str, list[dict[str, Any]]]] = {
+        "EU": {"claim": [], "passage": [], "source": []},
+        "US": {"claim": [], "passage": [], "source": []},
+    }
+    catalog_paths = resolve_catalog_corpus_paths(
+        tuple(spec["corpus_id"] for spec in CORPUS_SPECS), root=repo_root
+    )
+    for spec in CORPUS_SPECS:
+        active = active_by_jurisdiction[spec["jurisdiction"]]
+        relative_dir = catalog_paths[spec["corpus_id"]]
+        active["claim"].extend(
+            _read_yaml(repo_root / relative_dir / "records" / "claims.yaml")["claims"]
+        )
+        active["passage"].extend(
+            _read_yaml(repo_root / relative_dir / "passages" / "passages.yaml")["passages"]
+        )
+        active["source"].extend(
+            _read_yaml(repo_root / relative_dir / "sources" / "sources.yaml")["sources"]
+        )
 
     results: list[DiagnosticResult] = []
     snapshot_claim_refs: set[str] = set()
@@ -952,18 +1061,18 @@ def _jurisdiction_entity(jurisdiction: str) -> dict[str, Any]:
     }
 
 
-def _claim_record(claim: dict[str, Any], review_id: str) -> dict[str, Any]:
+def _claim_record(
+    claim: dict[str, Any], review_id: str, corpus_id: str
+) -> dict[str, Any]:
     legacy_ref = claim["claim_id"]
     preserved = {
         key: copy.deepcopy(value)
         for key, value in claim.items()
         if key not in REMOVED_NORMALIZED_FIELDS
     }
-    stage_one = (
-        {"family": "legal_policy", "topics": ["artificial_intelligence"]}
-        if claim["jurisdiction"] == "US"
-        else {}
-    )
+    stage_one: dict[str, Any] = {"family": "legal_policy", "corpus_id": corpus_id}
+    if claim["jurisdiction"] == "US":
+        stage_one["topics"] = ["artificial_intelligence"]
     return {
         **_identity(
             record_kind="claim",
@@ -1226,6 +1335,8 @@ def _migration_map(
     all_parents: list[dict[str, Any]],
     claims: list[dict[str, Any]],
     reconciliation: dict[str, Any],
+    old_relative_dir: Path,
+    old_corpus_id: str,
 ) -> dict[str, Any]:
     entries: list[dict[str, Any]] = []
     for global_index, parent in enumerate(all_parents):
@@ -1233,6 +1344,8 @@ def _migration_map(
             continue
         parent_ref = parent["row_id"]
         grouped = [claim for claim in claims if claim["parent_row_id"] == parent_ref]
+        if not grouped:
+            continue
         if parent["record_type"] == "source_bundle":
             review_ref = _review_ref(parent, claims)
             entries.append(
@@ -1245,6 +1358,8 @@ def _migration_map(
                     "archive_pointer": (
                         f"original/annotations/human-reviewed.yaml#/records/{global_index}"
                     ),
+                    "old_corpus_id": old_corpus_id,
+                    "old_path": f"{old_relative_dir.as_posix()}/reviews/parent-annotations.yaml",
                 }
             )
             for child_index, claim in enumerate(grouped):
@@ -1260,6 +1375,8 @@ def _migration_map(
                             "original/annotations/human-reviewed.yaml"
                             f"#/records/{global_index}/derived_claims/{child_index}"
                         ),
+                        "old_corpus_id": old_corpus_id,
+                        "old_path": f"{old_relative_dir.as_posix()}/records/claims.yaml",
                     }
                 )
         else:
@@ -1273,6 +1390,8 @@ def _migration_map(
                     "archive_pointer": (
                         f"original/annotations/human-reviewed.yaml#/records/{global_index}"
                     ),
+                    "old_corpus_id": old_corpus_id,
+                    "old_path": f"{old_relative_dir.as_posix()}/records/claims.yaml",
                 }
             )
 
@@ -1294,7 +1413,7 @@ def _migration_map(
 
 
 def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, Any]]:
-    """Build every active corpus YAML document from the hash-pinned review input."""
+    """Build each issuer-and-instrument corpus from explicit reviewed claim IDs."""
     repo_root = root or find_repo_root()
     dataset = load_reviewed_input(root=repo_root)
     claims = normalize_reviewed_claims(dataset)
@@ -1303,30 +1422,26 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
     unresolved = _read_json(repo_root / UNRESOLVED_RELATIVE_PATH)
 
     output: dict[Path, dict[str, Any]] = {}
-    for jurisdiction, relative_dir in CORPUS_RELATIVE_DIRS.items():
-        jurisdiction_claims = [
-            claim for claim in claims if claim["jurisdiction"] == jurisdiction
-        ]
+    for spec in CORPUS_SPECS:
+        jurisdiction = spec["jurisdiction"]
+        relative_dir = spec["path"]
+        corpus_id = spec["corpus_id"]
+        claim_ids = set(spec["claims"])
+        jurisdiction_claims = [claim for claim in claims if claim["claim_id"] in claim_ids]
+        parent_ids = {claim["parent_row_id"] for claim in jurisdiction_claims}
         jurisdiction_parents = [
-            parent
-            for parent in dataset["records"]
-            if parent["jurisdiction"] == jurisdiction
+            parent for parent in dataset["records"] if parent["row_id"] in parent_ids
         ]
         jurisdiction_passages = [
             passage
             for passage in passages
-            if passage["row_id"].startswith(f"{jurisdiction}-")
+            if passage["row_id"] in claim_ids or passage["row_id"] in parent_ids
         ]
+        document_ids = {passage["document_version_id"] for passage in jurisdiction_passages}
         jurisdiction_documents = [
-            document
-            for document in documents
-            if _source_jurisdiction(document["id"], passages) == jurisdiction
+            document for document in documents if document["id"] in document_ids
         ]
-        jurisdiction_unresolved = [
-            item
-            for item in unresolved
-            if item["row_id"].startswith(f"{jurisdiction}-")
-        ]
+        jurisdiction_unresolved = [item for item in unresolved if item["row_id"] in parent_ids]
         reviews = [
             _review_record(parent, jurisdiction_claims)
             for parent in jurisdiction_parents
@@ -1336,7 +1451,7 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
             for review in reviews
         }
         claim_records = [
-            _claim_record(claim, review_by_parent[claim["parent_row_id"]])
+            _claim_record(claim, review_by_parent[claim["parent_row_id"]], corpus_id)
             for claim in jurisdiction_claims
         ]
         source_records = [
@@ -1351,51 +1466,89 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
             _passage_record(passage, jurisdiction, jurisdiction_claims)
             for passage in jurisdiction_passages
         ]
+        unresolved_records = [
+            _unresolved_coverage_record(item, jurisdiction, jurisdiction_claims)
+            for item in jurisdiction_unresolved
+        ]
         relationships = _build_relationships(
             jurisdiction, jurisdiction_claims, jurisdiction_passages
         )
-        entity = _jurisdiction_entity(jurisdiction)
+        entities = [_jurisdiction_entity(jurisdiction)] if spec.get("owns_entity") else []
         migration_map = _migration_map(
             jurisdiction,
             dataset["records"],
             jurisdiction_claims,
             dataset["reconciliation"],
+            OLD_CORPUS_RELATIVE_DIRS[jurisdiction],
+            OLD_CORPUS_IDS[jurisdiction],
         )
+        if not spec.get("owns_entity"):
+            migration_map.pop("excluded_temporary_assignments", None)
+            migration_map.pop("corrected_numbering", None)
+
+        old_dir = OLD_CORPUS_RELATIVE_DIRS[jurisdiction]
+        migration_map["moved_objects"] = [
+            {
+                "object_type": object_type,
+                "machine_id": record["machine_id"],
+                "old_corpus_id": OLD_CORPUS_IDS[jurisdiction],
+                "old_path": f"{old_dir.as_posix()}/{old_file}",
+                "active_path": active_file,
+            }
+            for object_type, records, old_file, active_file in (
+                ("source", source_records, "sources/sources.yaml", "sources/sources.yaml"),
+                ("passage", passage_records, "passages/passages.yaml", "passages/passages.yaml"),
+                ("entity", entities, "records/entities.yaml", "records/entities.yaml"),
+                ("claim", claim_records, "records/claims.yaml", "records/claims.yaml"),
+                ("relationship", relationships, "records/relationships.yaml", "records/relationships.yaml"),
+                ("review", reviews, "reviews/parent-annotations.yaml", "reviews/parent-annotations.yaml"),
+                ("unresolved_coverage", unresolved_records, "passages/unresolved.yaml", "passages/unresolved.yaml"),
+            )
+            for record in records
+        ]
 
         output[relative_dir / "corpus.yaml"] = {
             "schema_version": "1.0.0",
-            "corpus_id": f"writ.corpus.{jurisdiction.lower()}.ai-governance",
-            "title": (
-                "European Union AI governance"
-                if jurisdiction == "EU"
-                else "United States AI governance"
-            ),
+            "corpus_id": corpus_id,
+            "title": spec["title"],
+            "family": "legal_policy",
             "jurisdiction": jurisdiction,
-            "field": "ai-governance",
+            "corpus_version": "1.0.0",
+            "record_schema": {
+                "id": "https://writ.example/schemas/extensions/legal-policy-record.schema.json",
+                "version": "0.2.0",
+            },
             "status": "active",
             "identity_namespace": IDENTITY_NAMESPACE_URN,
-            "identity_adr": "adr/0014-stable-corpus-identities.md",
+            "migration_aliases": [OLD_CORPUS_IDS[jurisdiction]],
+            **(
+                {"instrument_series_id": spec["instrument_series_id"]}
+                if "instrument_series_id" in spec
+                else {"instrument_id": spec["instrument_id"]}
+            ),
             "record_counts": {
                 "sources": len(source_records),
                 "verified_source_documents": len(jurisdiction_documents),
                 "unresolved_sources": len(jurisdiction_unresolved),
                 "passages": len(passage_records),
-                "entities": 1,
+                "entities": len(entities),
                 "claims": len(claim_records),
                 "relationships": len(relationships),
                 "imported_parent_reviews": len(reviews),
                 "legacy_mappings": len(migration_map["entries"]),
             },
-            "files": {
-                "sources": "sources/sources.yaml",
-                "passages": "passages/passages.yaml",
-                "unresolved_passages": "passages/unresolved.yaml",
-                "entities": "records/entities.yaml",
-                "claims": "records/claims.yaml",
-                "relationships": "records/relationships.yaml",
-                "reviews": "reviews/parent-annotations.yaml",
-                "reconciliation": "reviews/reconciliation.yaml",
-                "migration_map": "migration-map.yaml",
+            "review_counts": {
+                "accepted_parent_reviews": len(reviews),
+                "accepted_claims": len(claim_records),
+            },
+            "unresolved_evidence_count": len(jurisdiction_unresolved),
+            "locations": {
+                "sources": ["sources/sources.yaml"],
+                "passages": ["passages/passages.yaml", "passages/unresolved.yaml"],
+                "records": ["records/entities.yaml", "records/claims.yaml"],
+                "relationships": ["records/relationships.yaml"],
+                "judgments": ["reviews/parent-annotations.yaml", "reviews/reconciliation.yaml"],
+                "migration": ["migration-map.yaml"],
             },
         }
         output[relative_dir / "sources" / "sources.yaml"] = {
@@ -1411,15 +1564,12 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
         output[relative_dir / "passages" / "unresolved.yaml"] = {
             "schema_version": "1.0.0",
             "jurisdiction": jurisdiction,
-            "unresolved": [
-                _unresolved_coverage_record(item, jurisdiction, jurisdiction_claims)
-                for item in jurisdiction_unresolved
-            ],
+            "unresolved": unresolved_records,
         }
         output[relative_dir / "records" / "entities.yaml"] = {
             "schema_version": "1.0.0",
             "jurisdiction": jurisdiction,
-            "entities": [entity],
+            "entities": entities,
         }
         output[relative_dir / "records" / "claims.yaml"] = {
             "schema_version": "1.0.0",
@@ -1444,12 +1594,12 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
                 copy.deepcopy(
                     dataset["reconciliation"]["removed_from_main_reviewed_corpus"]
                 )
-                if jurisdiction == "EU"
+                if spec.get("owns_entity") and jurisdiction == "EU"
                 else []
             ),
             "corrected_numbering": (
                 copy.deepcopy(dataset["reconciliation"]["corrected_numbering"])
-                if jurisdiction == "EU"
+                if spec.get("owns_entity") and jurisdiction == "EU"
                 else []
             ),
         }
@@ -1457,9 +1607,15 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
     return output
 
 
+class _IndentedSafeDumper(yaml.SafeDumper):
+    def increase_indent(self, flow: bool = False, indentless: bool = False):
+        return super().increase_indent(flow, False)
+
+
 def canonical_yaml_bytes(value: dict[str, Any]) -> bytes:
-    return yaml.safe_dump(
+    return yaml.dump(
         value,
+        Dumper=_IndentedSafeDumper,
         allow_unicode=True,
         sort_keys=False,
         width=100,
@@ -1472,7 +1628,7 @@ def write_corpus_documents(*, root: Path | None = None, check: bool = False) -> 
         path = repo_root / relative_path
         expected = canonical_yaml_bytes(value)
         if check:
-            if not path.is_file() or path.read_bytes() != expected:
+            if not path.is_file() or _read_yaml(path) != value:
                 raise CorpusMigrationError(f"generated corpus file has drifted: {relative_path}")
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -1502,7 +1658,12 @@ def validate_active_corpora(*, root: Path | None = None) -> dict[str, int]:
         "verified_sources": 0,
         "unknown_values": 0,
     }
-    for jurisdiction, relative_dir in CORPUS_RELATIVE_DIRS.items():
+    catalog_paths = resolve_catalog_corpus_paths(
+        tuple(spec["corpus_id"] for spec in CORPUS_SPECS), root=repo_root
+    )
+    for spec in CORPUS_SPECS:
+        jurisdiction = spec["jurisdiction"]
+        relative_dir = catalog_paths[spec["corpus_id"]]
         corpus = _read_yaml(repo_root / relative_dir / "corpus.yaml")
         claims = _read_yaml(repo_root / relative_dir / "records" / "claims.yaml")[
             "claims"
@@ -1578,8 +1739,8 @@ def validate_active_corpora(*, root: Path | None = None) -> dict[str, int]:
             )
 
         prefix = jurisdiction.lower()
-        totals[f"{prefix}_parent_reviews"] = len(reviews)
-        totals[f"{prefix}_claims"] = len(claims)
+        totals[f"{prefix}_parent_reviews"] += len(reviews)
+        totals[f"{prefix}_claims"] += len(claims)
         totals["legacy_mappings"] += len(legacy_refs)
         totals["passages"] += len(passages)
         totals["verified_sources"] += sum(

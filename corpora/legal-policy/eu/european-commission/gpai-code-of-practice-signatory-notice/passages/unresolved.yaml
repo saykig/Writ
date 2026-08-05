@@ -1,0 +1,16 @@
+schema_version: 1.0.0
+jurisdiction: EU
+unresolved:
+  - machine_id: aa006750-2c54-589a-91de-3456e55210c6
+    ref: eu/ai-governance/gpai-code-of-practice/signatory-notice#missing-source-coverage
+    display_ref: Missing source coverage — AI Office signatory notice
+    aliases: []
+    legacy_refs: []
+    record_type: coverage_record
+    jurisdiction: EU
+    coverage_status: unresolved
+    source_machine_id: cc6f9844-f11c-506b-837e-39a604c9e1ef
+    imported_parent_legacy_ref: EU-12
+    instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
+    source_locator: AI Office signatory notice
+    reason: no source document is registered for this instrument

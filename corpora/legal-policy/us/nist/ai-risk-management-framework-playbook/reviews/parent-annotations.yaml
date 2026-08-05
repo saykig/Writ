@@ -1,0 +1,22 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: dd587055-ce88-50a5-af0f-ff903f9d6612
+    ref: us/ai-governance/nist-ai-rmf/playbook-overview#imported-review-group
+    display_ref: Imported review — overview
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-02
+    review_decision: accepted
+    original_record_type: implementation_guidance
+    instrument: NIST_AI_RMF_PLAYBOOK
+    source_locator: overview
+    claim_machine_ids:
+      - ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
+    interpretation_note:
+      "The Playbook provides voluntary implementation guidance. Its overview does not
+      independently require model evaluation.
+
+      "

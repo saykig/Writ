@@ -23,7 +23,7 @@ def main() -> int:
     parser.add_argument("--sample", type=int)
     parser.add_argument("--max-bytes", type=int, default=10 * 1024 * 1024)
     parser.add_argument(
-        "--output", type=Path, default=Path("corpora/us/constitutional-law")
+        "--output", type=Path, default=Path("corpora/legal-policy/us/constitutional-law")
     )
     parser.add_argument("--snapshot", default=DATASET_SNAPSHOT)
     args = parser.parse_args()

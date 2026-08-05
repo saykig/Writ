@@ -1,0 +1,111 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 08722593-14f8-571c-9220-203c751a516f
+    ref: us/ai-governance/omb-m-25-21/covered-ai#agency-scope-in-jurisdiction
+    display_ref: agency scope — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 5a38e75a-817d-5a19-8141-fa6aa9772f3d
+    ref: us/ai-governance/omb-m-25-21/covered-ai#agency-scope-reviewed-under-parent
+    display_ref: agency scope — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    subject_type: claim
+    object_machine_id: 5708c65d-f30f-5904-8f08-e984d3e846bd
+    object_type: review
+  - machine_id: 73b87e15-0b26-536d-82f2-cb3bcdc94bc3
+    ref: us/ai-governance/omb-m-25-21/covered-ai#agency-scope-supported-by-passage
+    display_ref: agency scope — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    subject_type: claim
+    object_machine_id: 5f0a429a-91fe-5d95-a521-47ca2e1e7e29
+    object_type: passage
+  - machine_id: 174303f4-fe40-56bd-83bd-fb7587c64479
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#pre-deployment-testing-in-jurisdiction
+    display_ref: pre deployment testing — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 3675454a-3cb3-5799-9fd3-3dc90f3add50
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 52df344f-9641-5828-a085-f7b7937044f4
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#pre-deployment-testing-reviewed-under-parent
+    display_ref: pre deployment testing — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 3675454a-3cb3-5799-9fd3-3dc90f3add50
+    subject_type: claim
+    object_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
+    object_type: review
+  - machine_id: 1738fdba-3247-5f45-8074-13bc521ff249
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#pre-deployment-testing-supported-by-passage
+    display_ref: pre deployment testing — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 3675454a-3cb3-5799-9fd3-3dc90f3add50
+    subject_type: claim
+    object_machine_id: c9635ad9-3c53-50d0-ad66-047eb614e319
+    object_type: passage
+  - machine_id: 786dd3f7-9a25-5763-a731-b63dcf6e6672
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#risk-assessment-in-jurisdiction
+    display_ref: risk assessment — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 048b0b94-fd45-5c63-ab42-50f32d710a64
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#risk-assessment-reviewed-under-parent
+    display_ref: risk assessment — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    subject_type: claim
+    object_machine_id: 1917494f-eca8-597b-aac4-26b76234081a
+    object_type: review
+  - machine_id: 9739797c-0e91-5324-b862-53590a77d602
+    ref: us/ai-governance/omb-m-25-21/high-impact-ai#risk-assessment-supported-by-passage
+    display_ref: risk assessment — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: d924a75e-81b0-58ad-93aa-c8ebfb6103a4
+    subject_type: claim
+    object_machine_id: c9635ad9-3c53-50d0-ad66-047eb614e319
+    object_type: passage

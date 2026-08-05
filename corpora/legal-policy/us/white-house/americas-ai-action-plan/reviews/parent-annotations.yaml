@@ -1,0 +1,24 @@
+schema_version: 1.0.0
+jurisdiction: US
+reviews:
+  - machine_id: 38500024-ec53-5469-bb78-f8c714aa96f4
+    ref: us/ai-governance/americas-ai-action-plan/evaluation-ecosystem#imported-review-group
+    display_ref: Imported review — AI Action Plan and later White House policy-action materials
+    aliases: []
+    legacy_refs: []
+    record_type: imported_parent_review
+    jurisdiction: US
+    imported_parent_legacy_ref: US-12
+    review_decision: accepted
+    original_record_type: policy_context
+    instrument: WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS
+    source_locator: "AI Action Plan and later White House policy-action materials
+
+      "
+    claim_machine_ids:
+      - 07e3604d-321e-5621-9fde-357ab058412c
+    interpretation_note:
+      "Current policy supports standards, evaluation tools and coordination but does
+      not itself impose a binding model-evaluation obligation on private market providers.
+
+      "

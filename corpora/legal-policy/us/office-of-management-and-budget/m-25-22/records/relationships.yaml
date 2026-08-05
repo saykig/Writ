@@ -1,0 +1,183 @@
+schema_version: 1.0.0
+jurisdiction: US
+relationships:
+  - machine_id: 8174cb74-3949-5c44-ad3d-d51f2dfec493
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#procurement-testing-in-jurisdiction
+    display_ref: procurement testing — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 218265db-baa4-5733-ab97-24effb2f33a2
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#procurement-testing-reviewed-under-parent
+    display_ref: procurement testing — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    subject_type: claim
+    object_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    object_type: review
+  - machine_id: 3c8d5ebe-7ce3-5024-8457-721f4126583b
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#procurement-testing-supported-by-passage
+    display_ref: procurement testing — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 346a46e4-d0b9-55af-923a-fb98e38b42b6
+    subject_type: claim
+    object_machine_id: 607f31ce-c675-5f2b-935e-a02cbbf188bb
+    object_type: passage
+  - machine_id: 81984975-f2f4-51e2-933f-d2c2bfe07909
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#contract-terms-requirement-in-jurisdiction
+    display_ref: contract terms requirement — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 94800da1-6467-5ffb-9892-bfe0565a8194
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 40cbb83e-c97e-5d83-8a05-5b042bc7f2a1
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#contract-terms-requirement-reviewed-under-parent
+    display_ref: contract terms requirement — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 94800da1-6467-5ffb-9892-bfe0565a8194
+    subject_type: claim
+    object_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    object_type: review
+  - machine_id: 331d1a79-2f86-5d80-93f6-17d378b3434a
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#contract-terms-requirement-supported-by-passage
+    display_ref: contract terms requirement — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 94800da1-6467-5ffb-9892-bfe0565a8194
+    subject_type: claim
+    object_machine_id: 607f31ce-c675-5f2b-935e-a02cbbf188bb
+    object_type: passage
+  - machine_id: 15e8cc24-cd6e-5767-8e0e-9799ff369384
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#vendor-evaluation-access-in-jurisdiction
+    display_ref: vendor evaluation access — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 95599664-c062-5e89-b5a3-06aa108c01b6
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#vendor-evaluation-access-reviewed-under-parent
+    display_ref: vendor evaluation access — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
+    subject_type: claim
+    object_machine_id: 805d43cc-9ad2-5a5e-857e-7f24faa87c5b
+    object_type: review
+  - machine_id: 663617d3-5e66-592c-b253-171578a319c1
+    ref: us/ai-governance/omb-m-25-22/selection-and-award#vendor-evaluation-access-supported-by-passage
+    display_ref: vendor evaluation access — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
+    subject_type: claim
+    object_machine_id: 607f31ce-c675-5f2b-935e-a02cbbf188bb
+    object_type: passage
+  - machine_id: fcc5391a-4f40-5a54-a8f0-7ab772bdb909
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#contract-documentation-in-jurisdiction
+    display_ref: contract documentation — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 907dd32a-f714-5d7a-acec-7558adff0864
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#contract-documentation-reviewed-under-parent
+    display_ref: contract documentation — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
+    subject_type: claim
+    object_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
+    object_type: review
+  - machine_id: e0be4c1b-b7a6-5039-bf0f-b2c1dc3f802e
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#contract-documentation-supported-by-passage
+    display_ref: contract documentation — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
+    subject_type: claim
+    object_machine_id: 67ab682a-54e4-5813-9133-66ed8316c7eb
+    object_type: passage
+  - machine_id: 0cc21296-ca78-5c46-8391-cf962186666e
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#monitoring-support-in-jurisdiction
+    display_ref: monitoring support — in jurisdiction
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: in_jurisdiction
+    subject_machine_id: a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
+    subject_type: claim
+    object_machine_id: 71863b1e-69d2-5f5d-881a-8a148b97fd56
+    object_type: entity
+  - machine_id: 5efd5ac7-fec3-5de4-8881-da7d5cc9d1cd
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#monitoring-support-reviewed-under-parent
+    display_ref: monitoring support — reviewed under parent
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: reviewed_under_parent
+    subject_machine_id: a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
+    subject_type: claim
+    object_machine_id: cd80133c-95ff-550b-9c17-814a887a0547
+    object_type: review
+  - machine_id: 6a8ca284-1329-5efa-a525-3cd988820569
+    ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#monitoring-support-supported-by-passage
+    display_ref: monitoring support — supported by passage
+    aliases: []
+    legacy_refs: []
+    record_type: relationship
+    jurisdiction: US
+    relationship_type: supported_by_passage
+    subject_machine_id: a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
+    subject_type: claim
+    object_machine_id: 67ab682a-54e4-5813-9133-66ed8316c7eb
+    object_type: passage

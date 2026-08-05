@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+jurisdiction: US
+sources:
+  - machine_id: da200131-c90f-5cc1-ad94-f05082f992c5
+    ref: us/ai-governance/nist-ai-100-1/official-document#source-version
+    display_ref: "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0)"
+    aliases: []
+    legacy_refs:
+      - dv-nist-ai-100-1
+    record_type: source_document_version
+    jurisdiction: US
+    verification_status: verified
+    document_id: nist-ai-100-1
+    title: "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0)"
+    uri: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+    media_type: application/pdf
+    retrieved_at: "2026-07-28T00:00:00Z"
+    issued_at: "2023-01-26T00:00:00Z"
+    sha256: sha256:7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1
+    publisher: National Institute of Standards and Technology
+    source_tier: 1
