@@ -20,13 +20,13 @@ claims:
     instrument: NIST_AI_RMF_PLAYBOOK
     source_locator: overview
     actor_type: ai_lifecycle_organization
-    actor_term_local: "organization using the AI Risk Management Framework
+    actor_term_local: 'organization using the AI Risk Management Framework
 
-      "
+      '
     conduct_type: risk_management
-    conduct_term_local: "use suggested actions across the Govern, Map, Measure and Manage functions
+    conduct_term_local: 'use suggested actions across the Govern, Map, Measure and Manage functions
 
-      "
+      '
     framework_functions:
       - govern
       - map
@@ -41,8 +41,7 @@ claims:
     scope:
       - cross_sector
     target_system: artificial_intelligence_system
-    interpretation_note:
-      "The Playbook provides voluntary implementation guidance. Its overview does not
+    interpretation_note: 'The Playbook provides voluntary implementation guidance. Its overview does not
       independently require model evaluation.
 
-      "
+      '

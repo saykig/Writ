@@ -14,8 +14,8 @@ sources:
     title: Center for AI Standards and Innovation (CAISI)
     uri: https://www.nist.gov/caisi
     media_type: text/html
-    retrieved_at: "2026-07-28T00:00:00Z"
-    issued_at: "2025-06-03T00:00:00Z"
+    retrieved_at: '2026-07-28T00:00:00Z'
+    issued_at: '2025-06-03T00:00:00Z'
     sha256: sha256:b326283a21d1c9e8f4ad128345a1ddc1eae8f4b27e3ec7ce929015262a15f584
     publisher: National Institute of Standards and Technology
     source_tier: 1

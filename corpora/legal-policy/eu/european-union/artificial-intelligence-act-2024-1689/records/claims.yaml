@@ -20,11 +20,10 @@ claims:
     actor_type: market_provider
     actor_term_local: provider of a general-purpose AI model
     conduct_type: evaluation_documentation
-    conduct_term_local:
-      "draw up and maintain technical documentation, including training, testing and
+    conduct_term_local: 'draw up and maintain technical documentation, including training, testing and
       evaluation results
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -36,11 +35,10 @@ claims:
     scope:
       - cross_sector
     target_system: general_purpose_ai_model
-    interpretation_note:
-      "The provision requires documentation that includes evaluation results but does
+    interpretation_note: 'The provision requires documentation that includes evaluation results but does
       not independently create a direct duty to perform model evaluation.
 
-      "
+      '
   - machine_id: d6c03e83-d88c-572e-9b77-35a818346675
     ref: eu/ai-governance/ai-act/art-53-1-b#downstream-documentation
     display_ref: Article 53(1)(b) — downstream documentation
@@ -60,17 +58,15 @@ claims:
     actor_type: market_provider
     actor_term_local: provider of a general-purpose AI model
     recipient_actor_type: downstream_provider
-    recipient_actor_term_local:
-      "provider intending to integrate the general-purpose AI model into an
+    recipient_actor_term_local: 'provider intending to integrate the general-purpose AI model into an
       artificial-intelligence system
 
-      "
+      '
     conduct_type: downstream_documentation
-    conduct_term_local:
-      "provide information and documentation to downstream artificial-intelligence system
+    conduct_term_local: 'provide information and documentation to downstream artificial-intelligence system
       providers
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -82,12 +78,11 @@ claims:
     scope:
       - cross_sector
     target_system: general_purpose_ai_model
-    interpretation_note:
-      "This is a binding information and documentation obligation for downstream integration.
+    interpretation_note: 'This is a binding information and documentation obligation for downstream integration.
       It may support evaluation and oversight but does not itself require the GPAI provider to perform
       model evaluation.
 
-      "
+      '
   - machine_id: 5fe186b5-b05a-5e49-b065-3296c2617f4e
     ref: eu/ai-governance/ai-act/art-53-1-c#copyright-policy
     display_ref: Article 53(1)(c) — copyright policy
@@ -107,9 +102,9 @@ claims:
     actor_type: market_provider
     actor_term_local: provider of a general-purpose AI model
     conduct_type: copyright_policy
-    conduct_term_local: "put in place a policy to comply with Union copyright law
+    conduct_term_local: 'put in place a policy to comply with Union copyright law
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -121,11 +116,10 @@ claims:
     scope:
       - cross_sector
     target_system: general_purpose_ai_model
-    interpretation_note:
-      "This is a binding copyright-compliance policy obligation. It does not require
+    interpretation_note: 'This is a binding copyright-compliance policy obligation. It does not require
       model evaluation, testing or risk assessment.
 
-      "
+      '
   - machine_id: 456bd51b-75bf-5313-8863-bd6ba767e625
     ref: eu/ai-governance/ai-act/art-53-1-d#training-content-summary
     display_ref: Article 53(1)(d) — training content summary
@@ -145,11 +139,10 @@ claims:
     actor_type: market_provider
     actor_term_local: provider of a general-purpose AI model
     conduct_type: training_content_summary
-    conduct_term_local:
-      "draw up and make publicly available a sufficiently detailed summary of the content
+    conduct_term_local: 'draw up and make publicly available a sufficiently detailed summary of the content
       used to train the model
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -160,11 +153,10 @@ claims:
     scope:
       - cross_sector
     target_system: general_purpose_ai_model
-    interpretation_note:
-      "This is a binding public-transparency obligation concerning training content.
+    interpretation_note: 'This is a binding public-transparency obligation concerning training content.
       It does not require model evaluation, testing or risk assessment.
 
-      "
+      '
   - machine_id: 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
     ref: eu/ai-governance/ai-act/art-53-2#open-source-exception
     display_ref: Article 53(2) — open source exception
@@ -184,16 +176,15 @@ claims:
     actor_type: market_provider
     actor_term_local: open-source general-purpose AI model provider
     defined_actor_class: open_source_gpai_provider
-    exception_scope_local: "possible exemption from some Article 53 documentation obligations
+    exception_scope_local: 'possible exemption from some Article 53 documentation obligations
 
-      "
+      '
     exception_target:
       - specified_Article_53_documentation_obligations
-    exception_conditions_status:
-      "statutory conditions apply but are not fully encoded from the uploaded
+    exception_conditions_status: 'statutory conditions apply but are not fully encoded from the uploaded
       annotation table
 
-      "
+      '
     legal_force: binding
     source_legal_force_label: binding_exception
     compliance_function: obligation_exception
@@ -205,12 +196,11 @@ claims:
     scope:
       - cross_sector
     target_system: open_source_general_purpose_ai_model
-    interpretation_note:
-      "Article 53(2) provides a conditional exception from specified Article 53 documentation
+    interpretation_note: 'Article 53(2) provides a conditional exception from specified Article 53 documentation
       obligations for qualifying open-source GPAI providers. It does not create a general exemption from
       the AI Act or erase every obligation that may apply.
 
-      "
+      '
   - machine_id: d4dfd16f-33bb-5956-b313-fde572c8d808
     ref: eu/ai-governance/ai-act/art-55-1-a#model-evaluation
     display_ref: Article 55(1)(a) — model evaluation
@@ -228,15 +218,14 @@ claims:
     instrument: EU_AI_ACT
     source_locator: Article 55(1)(a)
     actor_type: market_provider
-    actor_term_local: "provider of a general-purpose AI model with systemic risk
+    actor_term_local: 'provider of a general-purpose AI model with systemic risk
 
-      "
+      '
     conduct_type: model_evaluation
-    conduct_term_local:
-      "perform model evaluation using standardized protocols and state-of-the-art tools,
+    conduct_term_local: 'perform model evaluation using standardized protocols and state-of-the-art tools,
       including adversarial testing
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -245,11 +234,10 @@ claims:
     responsible_authority: European Commission
     implementation_body: AI Office
     target_system: general_purpose_ai_model_with_systemic_risk
-    interpretation_note:
-      "This is the clearest EU positive example of a binding and currently applicable
+    interpretation_note: 'This is the clearest EU positive example of a binding and currently applicable
       model-evaluation duty for a defined class of market providers.
 
-      "
+      '
   - machine_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
     ref: eu/ai-governance/ai-act/art-55-1-b#systemic-risk-assessment
     display_ref: Article 55(1)(b) — systemic risk assessment
@@ -267,13 +255,13 @@ claims:
     instrument: EU_AI_ACT
     source_locator: Article 55(1)(b)
     actor_type: market_provider
-    actor_term_local: "provider of a general-purpose AI model with systemic risk
+    actor_term_local: 'provider of a general-purpose AI model with systemic risk
 
-      "
+      '
     conduct_type: risk_assessment
-    conduct_term_local: "assess possible systemic risks at Union level
+    conduct_term_local: 'assess possible systemic risks at Union level
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -282,11 +270,10 @@ claims:
     responsible_authority: European Commission
     implementation_body: AI Office
     target_system: general_purpose_ai_model_with_systemic_risk
-    interpretation_note:
-      "The systemic-risk assessment obligation supports evaluation governance but remains
+    interpretation_note: 'The systemic-risk assessment obligation supports evaluation governance but remains
       distinct from the direct model-evaluation duty.
 
-      "
+      '
   - machine_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
     ref: eu/ai-governance/ai-act/art-55-1-c#incident-reporting
     display_ref: Article 55(1)(c) — incident reporting
@@ -304,14 +291,13 @@ claims:
     instrument: EU_AI_ACT
     source_locator: Article 55(1)(c)
     actor_type: market_provider
-    actor_term_local: "provider of a general-purpose AI model with systemic risk
+    actor_term_local: 'provider of a general-purpose AI model with systemic risk
 
-      "
+      '
     conduct_type: incident_reporting
-    conduct_term_local:
-      "report relevant information about serious incidents and possible corrective measures
+    conduct_term_local: 'report relevant information about serious incidents and possible corrective measures
 
-      "
+      '
     source_actions:
       - incident_tracking
       - incident_documentation
@@ -323,15 +309,14 @@ claims:
     enforcement_status: unknown
     responsible_authority: European Commission
     implementation_body: AI Office
-    additional_authority: "national competent authorities, where appropriate
+    additional_authority: 'national competent authorities, where appropriate
 
-      "
+      '
     target_system: general_purpose_ai_model_with_systemic_risk
-    interpretation_note:
-      "Incident reporting is binding within the systemic-risk regime, but it is distinct
+    interpretation_note: 'Incident reporting is binding within the systemic-risk regime, but it is distinct
       from model evaluation.
 
-      "
+      '
   - machine_id: 493e990c-81ae-55d5-8279-cf56812b1959
     ref: eu/ai-governance/ai-act/art-55-1-d#cybersecurity-protection
     display_ref: Article 55(1)(d) — cybersecurity protection
@@ -349,15 +334,14 @@ claims:
     instrument: EU_AI_ACT
     source_locator: Article 55(1)(d)
     actor_type: market_provider
-    actor_term_local: "provider of a general-purpose AI model with systemic risk
+    actor_term_local: 'provider of a general-purpose AI model with systemic risk
 
-      "
+      '
     conduct_type: cybersecurity_protection
-    conduct_term_local:
-      "ensure an appropriate level of cybersecurity protection for the model and its
+    conduct_term_local: 'ensure an appropriate level of cybersecurity protection for the model and its
       infrastructure
 
-      "
+      '
     legal_force: binding
     compliance_function: direct_obligation
     adoption_status: adopted
@@ -366,11 +350,10 @@ claims:
     responsible_authority: European Commission
     implementation_body: AI Office
     target_system: general_purpose_ai_model_with_systemic_risk
-    interpretation_note:
-      "Cybersecurity protection is a distinct binding duty but does not independently
+    interpretation_note: 'Cybersecurity protection is a distinct binding duty but does not independently
       establish a model-evaluation obligation.
 
-      "
+      '
   - machine_id: e54e3962-be7f-5610-83b2-d297cc904664
     ref: eu/ai-governance/ai-act/art-113#application-from-2025-08-02
     display_ref: Article 113 application timetable — application from 2025 08 02
@@ -387,17 +370,16 @@ claims:
     jurisdiction: EU
     instrument: EU_AI_ACT
     source_locator: Article 113 application timetable
-    interpretation_note:
-      "Article 113 is a binding lifecycle rule rather than a separate model-evaluation
+    interpretation_note: 'Article 113 is a binding lifecycle rule rather than a separate model-evaluation
       obligation.
 
-      "
+      '
     target_actor: market_provider
     target_system: general_purpose_ai_model
     legal_force: binding
     adoption_status: adopted
     applicability_status: applicable
-    effective_from: "2025-08-02"
+    effective_from: '2025-08-02'
     enforcement_status: unknown
     responsible_authority: European Commission
   - machine_id: 1bf6ede3-45ca-588d-9123-2f69e501cb08
@@ -416,18 +398,17 @@ claims:
     jurisdiction: EU
     instrument: EU_AI_ACT
     source_locator: Article 113 application timetable
-    interpretation_note:
-      "Article 113 is a binding lifecycle rule rather than a separate model-evaluation
+    interpretation_note: 'Article 113 is a binding lifecycle rule rather than a separate model-evaluation
       obligation.
 
-      "
+      '
     target_actor: market_provider
-    target_system: "general-purpose AI model placed on the market before 2025-08-02
+    target_system: 'general-purpose AI model placed on the market before 2025-08-02
 
-      "
+      '
     legal_force: binding
     adoption_status: adopted
     applicability_status: transition_for_existing_models
-    compliance_deadline: "2027-08-02"
+    compliance_deadline: '2027-08-02'
     enforcement_status: unknown
     responsible_authority: European Commission

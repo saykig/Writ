@@ -263,6 +263,7 @@ export type WritKeywordNames =
   | "record"
   | "record_family_classification"
   | "record_link"
+  | "record_link_disposition"
   | "regulation"
   | "regulator"
   | "related_judgment_ids"
@@ -277,6 +278,7 @@ export type WritKeywordNames =
   | "responsible_authorities"
   | "result"
   | "retrieved"
+  | "review_disposition"
   | "review_required"
   | "review_state"
   | "reviewed"
@@ -315,7 +317,9 @@ export type WritKeywordNames =
   | "sum"
   | "summit"
   | "superseded"
+  | "superseded_by_judgment_id"
   | "supersedes"
+  | "supersedes_judgment_ids"
   | "support"
   | "supports"
   | "target"
@@ -1297,6 +1301,7 @@ export interface IdentifierList extends langium.AstNode {
     | DecisionRightProperty
     | InstitutionalRecordLinkProperty
     | JudgmentEvidenceRefs
+    | JudgmentSupersedesIds
     | MandateProperty
     | MissionProperty
     | OperationalCapacityProperty
@@ -1780,7 +1785,9 @@ export type JudgmentMember =
   | JudgmentRationale
   | JudgmentReviewer
   | JudgmentStatusProperty
+  | JudgmentSupersededBy
   | JudgmentSupersedes
+  | JudgmentSupersedesIds
   | JudgmentTarget
   | JudgmentTypeProperty
   | JudgmentValue
@@ -1847,6 +1854,21 @@ export function isJudgmentStatusProperty(item: unknown): item is JudgmentStatusP
   return reflection.isInstance(item, JudgmentStatusProperty.$type);
 }
 
+export interface JudgmentSupersededBy extends langium.AstNode {
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentSupersededBy";
+  value: QualifiedName;
+}
+
+export const JudgmentSupersededBy = {
+  $type: "JudgmentSupersededBy",
+  value: "value",
+} as const;
+
+export function isJudgmentSupersededBy(item: unknown): item is JudgmentSupersededBy {
+  return reflection.isInstance(item, JudgmentSupersededBy.$type);
+}
+
 export interface JudgmentSupersedes extends langium.AstNode {
   readonly $container: JudgmentDeclaration;
   readonly $type: "JudgmentSupersedes";
@@ -1860,6 +1882,21 @@ export const JudgmentSupersedes = {
 
 export function isJudgmentSupersedes(item: unknown): item is JudgmentSupersedes {
   return reflection.isInstance(item, JudgmentSupersedes.$type);
+}
+
+export interface JudgmentSupersedesIds extends langium.AstNode {
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentSupersedesIds";
+  values: IdentifierList;
+}
+
+export const JudgmentSupersedesIds = {
+  $type: "JudgmentSupersedesIds",
+  values: "values",
+} as const;
+
+export function isJudgmentSupersedesIds(item: unknown): item is JudgmentSupersedesIds {
+  return reflection.isInstance(item, JudgmentSupersedesIds.$type);
 }
 
 export interface JudgmentTarget extends langium.AstNode {
@@ -1894,6 +1931,8 @@ export type JudgmentType =
   | "operational_capacity_determination"
   | "passage_selection"
   | "record_family_classification"
+  | "record_link_disposition"
+  | "review_disposition"
   | "scope_interpretation"
   | "subject_identification"
   | "topic_classification";
@@ -1910,7 +1949,9 @@ export function isJudgmentType(item: unknown): item is JudgmentType {
     item === "operational_capacity_determination" ||
     item === "direct_or_inferred" ||
     item === "disagreement" ||
-    item === "adjudication"
+    item === "adjudication" ||
+    item === "review_disposition" ||
+    item === "record_link_disposition"
   );
 }
 
@@ -4104,7 +4145,9 @@ export type WritAstType = {
   JudgmentRationale: JudgmentRationale;
   JudgmentReviewer: JudgmentReviewer;
   JudgmentStatusProperty: JudgmentStatusProperty;
+  JudgmentSupersededBy: JudgmentSupersededBy;
   JudgmentSupersedes: JudgmentSupersedes;
+  JudgmentSupersedesIds: JudgmentSupersedesIds;
   JudgmentTarget: JudgmentTarget;
   JudgmentTypeProperty: JudgmentTypeProperty;
   JudgmentValue: JudgmentValue;
@@ -4944,11 +4987,29 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [JudgmentMember.$type],
     },
+    JudgmentSupersededBy: {
+      name: JudgmentSupersededBy.$type,
+      properties: {
+        value: {
+          name: JudgmentSupersededBy.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
     JudgmentSupersedes: {
       name: JudgmentSupersedes.$type,
       properties: {
         value: {
           name: JudgmentSupersedes.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentSupersedesIds: {
+      name: JudgmentSupersedesIds.$type,
+      properties: {
+        values: {
+          name: JudgmentSupersedesIds.values,
         },
       },
       superTypes: [JudgmentMember.$type],

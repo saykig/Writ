@@ -29,7 +29,12 @@
     "target_kind": { "$ref": "#/$defs/nonEmptyString" },
     "relation_type": { "$ref": "#/$defs/relationType" },
     "basis": { "enum": ["direct", "inherited", "inferred"] },
-    "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" }, "uniqueItems": true },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "supporting_record_ids": { "$ref": "#/$defs/supportingRecordIds" },
     "uncertainties": { "type": "array", "items": { "$ref": "#/$defs/uncertainty" } },
     "provenance": { "$ref": "#/$defs/provenance" },
     "review_state": { "enum": ["draft", "reviewed", "approved", "superseded", "withdrawn"] }
@@ -48,8 +53,16 @@
         "derives_authority_from",
         "part_of",
         "oversees",
-        "applies_to"
+        "applies_to",
+        "supersedes"
       ]
+    },
+    "supportingRecordIds": {
+      "description": "Records that already assert the fact this link rests on, cited instead of restating it. The link is still reviewed on its own; a supporting record's review approval does not transfer to it. Reverse traversal is derived from the stored direction, so no inverse link is stored.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "minItems": 1,
+      "uniqueItems": true
     },
     "uncertainty": {
       "type": "object",
@@ -72,7 +85,16 @@
     "linkPayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["link_id", "source_id", "source_kind", "target_id", "target_kind", "relation_type", "basis", "evidence_refs"],
+      "required": [
+        "link_id",
+        "source_id",
+        "source_kind",
+        "target_id",
+        "target_kind",
+        "relation_type",
+        "basis",
+        "evidence_refs"
+      ],
       "properties": {
         "link_id": { "$ref": "#/$defs/nonEmptyString" },
         "source_id": { "$ref": "#/$defs/nonEmptyString" },
@@ -81,7 +103,12 @@
         "target_kind": { "$ref": "#/$defs/nonEmptyString" },
         "relation_type": { "$ref": "#/$defs/relationType" },
         "basis": { "enum": ["direct", "inherited", "inferred"] },
-        "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" }, "uniqueItems": true }
+        "evidence_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        },
+        "supporting_record_ids": { "$ref": "#/$defs/supportingRecordIds" }
       }
     }
   }

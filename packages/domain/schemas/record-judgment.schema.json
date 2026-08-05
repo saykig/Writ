@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://writ.example/schemas/analysis/record-judgment.schema.json",
   "title": "Writ Record or Record-Link Judgment",
+  "description": "An independent judgment about a record or a record link. A judgment carries its own `status` vocabulary (`proposed`, `accepted`, `contested`, `superseded`) which is distinct from the `review_state` of the record or record link it targets (`draft`, `reviewed`, `approved`, `superseded`, `withdrawn`). Accepting a judgment never changes the workflow state of its target.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -25,20 +26,49 @@
     "judgment_type": { "$ref": "#/$defs/judgmentType" },
     "value": {},
     "rationale": { "type": "string", "minLength": 1 },
-    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "reviewer": { "type": "string", "minLength": 1 },
     "status": { "enum": ["proposed", "accepted", "contested", "superseded"] },
     "created_at": { "type": "string", "format": "date" },
     "family_context": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" },
-    "supersedes": { "type": "string", "minLength": 1 },
-    "related_judgment_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+    "supersedes_judgment_ids": {
+      "description": "Older judgments this judgment replaces. Only a judgment that was accepted can have replaced anything, so this is allowed when `status` is `accepted`, and retained when that judgment has itself since been `superseded`. A `proposed` or `contested` judgment has not replaced anything.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "superseded_by_judgment_id": {
+      "description": "The newer judgment that replaced this one. Required when `status` is `superseded`.",
+      "type": "string",
+      "minLength": 1
+    },
+    "related_judgment_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
   },
   "allOf": [
     {
       "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
-      "then": { "required": ["supersedes"] }
+      "then": { "required": ["superseded_by_judgment_id"] },
+      "else": { "not": { "required": ["superseded_by_judgment_id"] } }
+    },
+    {
+      "if": { "required": ["supersedes_judgment_ids"] },
+      "then": {
+        "properties": { "status": { "enum": ["accepted", "superseded"] } },
+        "required": ["status"]
+      }
     }
   ],
+  "$comment": "Self-supersession and longer supersession cycles are cross-instance properties of a judgment set, not of a single document, so they are enforced by `validateJudgmentSupersession` in `@writ/domain` rather than by this schema.",
   "$defs": {
     "judgmentType": {
       "enum": [
@@ -52,7 +82,9 @@
         "operational_capacity_determination",
         "direct_or_inferred",
         "disagreement",
-        "adjudication"
+        "adjudication",
+        "review_disposition",
+        "record_link_disposition"
       ]
     }
   }

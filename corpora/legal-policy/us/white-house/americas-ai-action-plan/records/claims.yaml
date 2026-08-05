@@ -18,22 +18,20 @@ claims:
     claim_record_type: policy_context
     jurisdiction: US
     instrument: WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS
-    source_locator: "AI Action Plan and later White House policy-action materials
+    source_locator: 'AI Action Plan and later White House policy-action materials
 
-      "
+      '
     actor_type: federal_agency
     actor_term_local: federal agency
     additional_affected_actor_type: ecosystem_stakeholder
-    additional_actor_term_local:
-      "stakeholder participating in the United States artificial-intelligence
+    additional_actor_term_local: 'stakeholder participating in the United States artificial-intelligence
       ecosystem
 
-      "
+      '
     conduct_type: evaluation_infrastructure_coordination
-    conduct_term_local:
-      "advance standards, evaluation tools, procurement practices and security coordination
+    conduct_term_local: 'advance standards, evaluation tools, procurement practices and security coordination
 
-      "
+      '
     source_topics:
       - innovation
       - infrastructure
@@ -53,8 +51,7 @@ claims:
     scope:
       - government_policy
       - cross_sector_support
-    interpretation_note:
-      "Current policy supports standards, evaluation tools and coordination but does
+    interpretation_note: 'Current policy supports standards, evaluation tools and coordination but does
       not itself impose a binding model-evaluation obligation on private market providers.
 
-      "
+      '

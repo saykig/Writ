@@ -15,11 +15,10 @@ reviews:
     source_locator: Article 53(1)(a)
     claim_machine_ids:
       - 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
-    interpretation_note:
-      "The provision requires documentation that includes evaluation results but does
+    interpretation_note: 'The provision requires documentation that includes evaluation results but does
       not independently create a direct duty to perform model evaluation.
 
-      "
+      '
   - machine_id: da6a678b-6903-5380-acd3-2c0d7e1c3b12
     ref: eu/ai-governance/ai-act/art-53-1-b#imported-review-group
     display_ref: Imported review — Article 53(1)(b)
@@ -34,12 +33,11 @@ reviews:
     source_locator: Article 53(1)(b)
     claim_machine_ids:
       - d6c03e83-d88c-572e-9b77-35a818346675
-    interpretation_note:
-      "This is a binding information and documentation obligation for downstream integration.
+    interpretation_note: 'This is a binding information and documentation obligation for downstream integration.
       It may support evaluation and oversight but does not itself require the GPAI provider to perform
       model evaluation.
 
-      "
+      '
   - machine_id: 30246e59-7f3b-5f39-9767-12e59bd87fcd
     ref: eu/ai-governance/ai-act/art-53-1-c#imported-review-group
     display_ref: Imported review — Article 53(1)(c)
@@ -54,11 +52,10 @@ reviews:
     source_locator: Article 53(1)(c)
     claim_machine_ids:
       - 5fe186b5-b05a-5e49-b065-3296c2617f4e
-    interpretation_note:
-      "This is a binding copyright-compliance policy obligation. It does not require
+    interpretation_note: 'This is a binding copyright-compliance policy obligation. It does not require
       model evaluation, testing or risk assessment.
 
-      "
+      '
   - machine_id: 33efe1eb-2724-51d6-850f-af35826cdaeb
     ref: eu/ai-governance/ai-act/art-53-1-d#imported-review-group
     display_ref: Imported review — Article 53(1)(d)
@@ -73,11 +70,10 @@ reviews:
     source_locator: Article 53(1)(d)
     claim_machine_ids:
       - 456bd51b-75bf-5313-8863-bd6ba767e625
-    interpretation_note:
-      "This is a binding public-transparency obligation concerning training content.
+    interpretation_note: 'This is a binding public-transparency obligation concerning training content.
       It does not require model evaluation, testing or risk assessment.
 
-      "
+      '
   - machine_id: 705984a5-7b33-513a-8c4c-f883720c0387
     ref: eu/ai-governance/ai-act/art-53-2#imported-review-group
     display_ref: Imported review — Article 53(2)
@@ -92,12 +88,11 @@ reviews:
     source_locator: Article 53(2)
     claim_machine_ids:
       - 2fbd9b82-f19b-5c12-9f15-d1e3da32c558
-    interpretation_note:
-      "Article 53(2) provides a conditional exception from specified Article 53 documentation
+    interpretation_note: 'Article 53(2) provides a conditional exception from specified Article 53 documentation
       obligations for qualifying open-source GPAI providers. It does not create a general exemption from
       the AI Act or erase every obligation that may apply.
 
-      "
+      '
   - machine_id: 30df19d5-9cab-53f8-ab14-9750fdbbee3b
     ref: eu/ai-governance/ai-act/art-55-1-a#imported-review-group
     display_ref: Imported review — Article 55(1)(a)
@@ -112,11 +107,10 @@ reviews:
     source_locator: Article 55(1)(a)
     claim_machine_ids:
       - d4dfd16f-33bb-5956-b313-fde572c8d808
-    interpretation_note:
-      "This is the clearest EU positive example of a binding and currently applicable
+    interpretation_note: 'This is the clearest EU positive example of a binding and currently applicable
       model-evaluation duty for a defined class of market providers.
 
-      "
+      '
   - machine_id: fb181ee6-b9e7-5ef6-8502-a06ef583f122
     ref: eu/ai-governance/ai-act/art-55-1-b#imported-review-group
     display_ref: Imported review — Article 55(1)(b)
@@ -131,11 +125,10 @@ reviews:
     source_locator: Article 55(1)(b)
     claim_machine_ids:
       - 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
-    interpretation_note:
-      "The systemic-risk assessment obligation supports evaluation governance but remains
+    interpretation_note: 'The systemic-risk assessment obligation supports evaluation governance but remains
       distinct from the direct model-evaluation duty.
 
-      "
+      '
   - machine_id: d0c820ef-b220-5ca6-89aa-a2efd4e171da
     ref: eu/ai-governance/ai-act/art-55-1-c#imported-review-group
     display_ref: Imported review — Article 55(1)(c)
@@ -150,11 +143,10 @@ reviews:
     source_locator: Article 55(1)(c)
     claim_machine_ids:
       - 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
-    interpretation_note:
-      "Incident reporting is binding within the systemic-risk regime, but it is distinct
+    interpretation_note: 'Incident reporting is binding within the systemic-risk regime, but it is distinct
       from model evaluation.
 
-      "
+      '
   - machine_id: 575b40a6-e524-57fd-9b5c-b571ce5cb33f
     ref: eu/ai-governance/ai-act/art-55-1-d#imported-review-group
     display_ref: Imported review — Article 55(1)(d)
@@ -169,11 +161,10 @@ reviews:
     source_locator: Article 55(1)(d)
     claim_machine_ids:
       - 493e990c-81ae-55d5-8279-cf56812b1959
-    interpretation_note:
-      "Cybersecurity protection is a distinct binding duty but does not independently
+    interpretation_note: 'Cybersecurity protection is a distinct binding duty but does not independently
       establish a model-evaluation obligation.
 
-      "
+      '
   - machine_id: 4e7a709a-675c-5c86-a414-b3952ae3d17e
     ref: eu/ai-governance/ai-act/art-113#imported-review-group
     display_ref: Imported review — Article 113 application timetable
@@ -190,8 +181,7 @@ reviews:
     claim_machine_ids:
       - e54e3962-be7f-5610-83b2-d297cc904664
       - 1bf6ede3-45ca-588d-9123-2f69e501cb08
-    interpretation_note:
-      "Article 113 is a binding lifecycle rule rather than a separate model-evaluation
+    interpretation_note: 'Article 113 is a binding lifecycle rule rather than a separate model-evaluation
       obligation.
 
-      "
+      '

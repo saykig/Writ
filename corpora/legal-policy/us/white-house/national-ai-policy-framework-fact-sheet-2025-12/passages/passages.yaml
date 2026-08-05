@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-11
     anchor_type: html_dom
     anchor_phrase: considering whether to adopt a Federal reporting and disclosure
-    quote:
-      The Order instructs the Federal Trade Commission and Federal Communications Commission to take
+    quote: The Order instructs the Federal Trade Commission and Federal Communications Commission to take
       actions that will limit States’ ability to force AI companies to deceive consumers, including determining
       whether laws that force companies to embed DEI into their models cause those companies to violate
       the Federal Trade Commission Act, and considering whether to adopt a Federal reporting and disclosure

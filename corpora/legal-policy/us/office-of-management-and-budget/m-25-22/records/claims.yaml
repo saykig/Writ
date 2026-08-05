@@ -19,19 +19,17 @@ claims:
     jurisdiction: US
     instrument: OMB_M_25_22
     source_locator: testing and evaluation in procurement
-    interpretation_note:
-      "Agency duties arise directly from the memorandum, while vendor duties arise
+    interpretation_note: 'Agency duties arise directly from the memorandum, while vendor duties arise
       through government contracts.
 
-      "
+      '
     actor_type: federal_agency
     actor_term_local: federal agency procuring AI
     conduct_type: procurement_testing
     conduct_family: evaluation
-    conduct_term_local:
-      "test proposed artificial-intelligence solutions during the procurement process
+    conduct_term_local: 'test proposed artificial-intelligence solutions during the procurement process
 
-      "
+      '
     legal_force: binding
     binding_scope: federal_agencies_only
     compliance_function: direct_obligation
@@ -61,17 +59,16 @@ claims:
     jurisdiction: US
     instrument: OMB_M_25_22
     source_locator: testing and evaluation in procurement
-    interpretation_note:
-      "Agency duties arise directly from the memorandum, while vendor duties arise
+    interpretation_note: 'Agency duties arise directly from the memorandum, while vendor duties arise
       through government contracts.
 
-      "
+      '
     actor_type: federal_agency
     actor_term_local: federal agency procuring AI
     conduct_type: contract_terms_requirement
-    conduct_term_local: "require ongoing testing and monitoring through the procurement contract
+    conduct_term_local: 'require ongoing testing and monitoring through the procurement contract
 
-      "
+      '
     required_vendor_conduct:
       - ongoing_testing
       - performance_monitoring
@@ -103,19 +100,17 @@ claims:
     jurisdiction: US
     instrument: OMB_M_25_22
     source_locator: testing and evaluation in procurement
-    interpretation_note:
-      "Agency duties arise directly from the memorandum, while vendor duties arise
+    interpretation_note: 'Agency duties arise directly from the memorandum, while vendor duties arise
       through government contracts.
 
-      "
+      '
     actor_type: government_vendor
     actor_term_local: AI vendor performing a federal contract
     conduct_type: evaluation_access
-    conduct_term_local:
-      "preserve access necessary for independent evaluation of the contracted artificial-intelligence
+    conduct_term_local: 'preserve access necessary for independent evaluation of the contracted artificial-intelligence
       system
 
-      "
+      '
     legal_force: contractual
     binding_scope: government_contract_only
     compliance_function: procurement_contract_obligation
@@ -144,24 +139,22 @@ claims:
     claim_record_type: contract_mediated_obligation
     jurisdiction: US
     instrument: OMB_M_25_22
-    source_locator: "disclosure and performance monitoring for contracted AI use
+    source_locator: 'disclosure and performance monitoring for contracted AI use
 
-      "
-    interpretation_note:
-      "These duties are limited to the government-contract relationship and do not
+      '
+    interpretation_note: 'These duties are limited to the government-contract relationship and do not
       apply to providers generally.
 
-      "
+      '
     actor_type: government_vendor
-    actor_term_local: "federal vendor performing an AI-related government contract
+    actor_term_local: 'federal vendor performing an AI-related government contract
 
-      "
+      '
     conduct_type: contract_documentation
-    conduct_term_local:
-      "provide documentation required for government oversight of the contracted AI
+    conduct_term_local: 'provide documentation required for government oversight of the contracted AI
       system
 
-      "
+      '
     legal_force: contractual
     binding_scope: government_contract_only
     compliance_function: procurement_contract_obligation
@@ -190,24 +183,22 @@ claims:
     claim_record_type: contract_mediated_obligation
     jurisdiction: US
     instrument: OMB_M_25_22
-    source_locator: "disclosure and performance monitoring for contracted AI use
+    source_locator: 'disclosure and performance monitoring for contracted AI use
 
-      "
-    interpretation_note:
-      "These duties are limited to the government-contract relationship and do not
+      '
+    interpretation_note: 'These duties are limited to the government-contract relationship and do not
       apply to providers generally.
 
-      "
+      '
     actor_type: government_vendor
-    actor_term_local: "federal vendor performing an AI-related government contract
+    actor_term_local: 'federal vendor performing an AI-related government contract
 
-      "
+      '
     conduct_type: monitoring_support
-    conduct_term_local:
-      "support monitoring and enable performance-based oversight of the contracted AI
+    conduct_term_local: 'support monitoring and enable performance-based oversight of the contracted AI
       system
 
-      "
+      '
     legal_force: contractual
     binding_scope: government_contract_only
     compliance_function: procurement_contract_obligation

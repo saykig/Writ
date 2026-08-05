@@ -424,6 +424,8 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
   const createdAt = find("JudgmentCreatedAt");
   const family = find("JudgmentFamilyContext");
   const supersedes = find("JudgmentSupersedes");
+  const supersedesIds = find("JudgmentSupersedesIds");
+  const supersededBy = find("JudgmentSupersededBy");
   const related = find("RelatedJudgments");
   const span = spanOf(judgment);
   if (span) sourceMap.push({ key: `judgment:${judgment.name}`, span });
@@ -439,7 +441,15 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
     status: status?.$type === "JudgmentStatusProperty" ? status.value : "proposed",
     created_at: createdAt?.$type === "JudgmentCreatedAt" ? createdAt.value : "",
     ...(family?.$type === "JudgmentFamilyContext" ? { family_context: family.value } : {}),
+    // `supersedes` is the frozen v0.1 spelling and stays undirected; v0.2 states
+    // the direction explicitly with a separate field at each end.
     ...(supersedes?.$type === "JudgmentSupersedes" ? { supersedes: supersedes.value } : {}),
+    ...(supersedesIds?.$type === "JudgmentSupersedesIds"
+      ? { supersedes_judgment_ids: [...supersedesIds.values.values] }
+      : {}),
+    ...(supersededBy?.$type === "JudgmentSupersededBy"
+      ? { superseded_by_judgment_id: supersededBy.value }
+      : {}),
     ...(related?.$type === "RelatedJudgments"
       ? { related_judgment_ids: [...related.values.values] }
       : {}),

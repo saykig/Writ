@@ -34,11 +34,10 @@ claims:
     enforcement_status: internal_government_implementation
     responsible_authority: OMB
     target_system: agency_used_ai_system
-    interpretation_note:
-      "M-25-21 binds agencies in their use of AI and must not be generalized into market-wide
+    interpretation_note: 'M-25-21 binds agencies in their use of AI and must not be generalized into market-wide
       duties for private providers.
 
-      "
+      '
   - machine_id: 3675454a-3cb3-5799-9fd3-3dc90f3add50
     ref: us/ai-governance/omb-m-25-21/high-impact-ai#pre-deployment-testing
     display_ref: high-impact AI requirements — pre deployment testing
@@ -57,17 +56,16 @@ claims:
     jurisdiction: US
     instrument: OMB_M_25_21
     source_locator: high-impact AI requirements
-    interpretation_note:
-      "These are binding government-use controls, not general market-provider obligations.
+    interpretation_note: 'These are binding government-use controls, not general market-provider obligations.
 
-      "
+      '
     actor_type: federal_agency
     actor_term_local: federal agency using high-impact AI
     conduct_type: pre_deployment_testing
     conduct_family: evaluation
-    conduct_term_local: "conduct pre-deployment testing of high-impact AI
+    conduct_term_local: 'conduct pre-deployment testing of high-impact AI
 
-      "
+      '
     legal_force: binding
     binding_scope: federal_agencies_only
     compliance_function: direct_obligation
@@ -98,16 +96,15 @@ claims:
     jurisdiction: US
     instrument: OMB_M_25_21
     source_locator: high-impact AI requirements
-    interpretation_note:
-      "These are binding government-use controls, not general market-provider obligations.
+    interpretation_note: 'These are binding government-use controls, not general market-provider obligations.
 
-      "
+      '
     actor_type: federal_agency
     actor_term_local: federal agency using high-impact AI
     conduct_type: risk_assessment
-    conduct_term_local: "complete an AI impact assessment for high-impact AI
+    conduct_term_local: 'complete an AI impact assessment for high-impact AI
 
-      "
+      '
     legal_force: binding
     binding_scope: federal_agencies_only
     compliance_function: direct_obligation

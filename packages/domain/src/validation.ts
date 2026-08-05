@@ -21,7 +21,9 @@ const addFormats = ((_addFormats as { default?: unknown }).default ?? _addFormat
 >;
 import {
   COMPATIBILITY_SCHEMA_KINDS,
+  CORPUS_COMPATIBILITY_CONTRACT_KINDS,
   RAW_COMPATIBILITY_SCHEMAS,
+  RAW_CORPUS_COMPATIBILITY_CONTRACTS,
   RAW_SCHEMAS,
   SCHEMA_IDS,
   SCHEMA_KINDS,
@@ -91,6 +93,10 @@ for (const kind of COMPATIBILITY_SCHEMA_KINDS) {
   const schema = RAW_COMPATIBILITY_SCHEMAS[kind];
   ajv.addSchema(schema, String(schema.$id));
 }
+for (const kind of CORPUS_COMPATIBILITY_CONTRACT_KINDS) {
+  const schema = RAW_CORPUS_COMPATIBILITY_CONTRACTS[kind];
+  ajv.addSchema(schema, String(schema.$id));
+}
 
 const validators: Record<SchemaKind, ValidateFunction> = Object.fromEntries(
   SCHEMA_KINDS.map((kind) => [kind, ajv.compile(RAW_SCHEMAS[kind])]),
@@ -136,6 +142,27 @@ export function validateVersion(
     return validationResult(compatibilityValidators[kind as CompatibilitySchemaKind], data);
   }
   return validationResult(validators[kind], data);
+}
+
+/**
+ * Validate `data` against a contract named by its schema `$id`.
+ *
+ * A corpus manifest declares the exact contract its record files satisfy. This
+ * resolves that declaration against the registered schemas, so a manifest can
+ * never be checked against a contract other than the one it names. An `$id` that
+ * is not registered is an error rather than a silent pass.
+ */
+export function validateContract(contractId: string, data: unknown): ValidationResult {
+  const validator = ajv.getSchema(contractId);
+  if (!validator) {
+    throw new Error(`Unknown record contract: ${contractId}`);
+  }
+  return validationResult(validator as ValidateFunction, data);
+}
+
+/** True when `contractId` resolves to a registered contract. */
+export function isKnownContract(contractId: string): boolean {
+  return ajv.getSchema(contractId) !== undefined;
 }
 
 /**

@@ -18,11 +18,10 @@ reviews:
       - 346a46e4-d0b9-55af-923a-fb98e38b42b6
       - 94800da1-6467-5ffb-9892-bfe0565a8194
       - 4e9bf795-af35-5a88-bd5f-f99a73ca5f04
-    interpretation_note:
-      "Agency duties arise directly from the memorandum, while vendor duties arise
+    interpretation_note: 'Agency duties arise directly from the memorandum, while vendor duties arise
       through government contracts.
 
-      "
+      '
   - machine_id: cd80133c-95ff-550b-9c17-814a887a0547
     ref: us/ai-governance/omb-m-25-22/ongoing-testing-and-monitoring#imported-review-group
     display_ref: Imported review — disclosure and performance monitoring for contracted AI use
@@ -35,14 +34,13 @@ reviews:
     review_decision: accepted
     original_record_type: source_bundle
     instrument: OMB_M_25_22
-    source_locator: "disclosure and performance monitoring for contracted AI use
+    source_locator: 'disclosure and performance monitoring for contracted AI use
 
-      "
+      '
     claim_machine_ids:
       - e2c93bdc-5cb6-5493-ba0a-7b70781ad1c2
       - a015189f-2dcb-5f79-9f8a-f40d4dd8fa3c
-    interpretation_note:
-      "These duties are limited to the government-contract relationship and do not
+    interpretation_note: 'These duties are limited to the government-contract relationship and do not
       apply to providers generally.
 
-      "
+      '

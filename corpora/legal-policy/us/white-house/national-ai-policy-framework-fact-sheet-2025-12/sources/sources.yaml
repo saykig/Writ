@@ -3,9 +3,8 @@ jurisdiction: US
 sources:
   - machine_id: 6585f13f-46c2-5bdc-846c-5581c45468c9
     ref: us/ai-governance/wh-fact-sheet-2025-12-national-framework/official-document#source-version
-    display_ref:
-      "Fact Sheet: President Donald J. Trump Ensures a National Policy Framework for Artificial
-      Intelligence"
+    display_ref: 'Fact Sheet: President Donald J. Trump Ensures a National Policy Framework for Artificial
+      Intelligence'
     aliases: []
     legacy_refs:
       - dv-wh-fact-sheet-2025-12-national-framework
@@ -13,11 +12,11 @@ sources:
     jurisdiction: US
     verification_status: verified
     document_id: wh-fact-sheet-2025-12-national-framework
-    title: "Fact Sheet: President Donald J. Trump Ensures a National Policy Framework for Artificial Intelligence"
+    title: 'Fact Sheet: President Donald J. Trump Ensures a National Policy Framework for Artificial Intelligence'
     uri: https://www.whitehouse.gov/fact-sheets/2025/12/fact-sheet-president-donald-j-trump-ensures-a-national-policy-framework-for-artificial-intelligence/
     media_type: text/html
-    retrieved_at: "2026-07-28T00:00:00Z"
-    issued_at: "2025-12-11T00:00:00Z"
+    retrieved_at: '2026-07-28T00:00:00Z'
+    issued_at: '2025-12-11T00:00:00Z'
     sha256: sha256:fca8b14c9e8e719e9433a017345d3f5a3495a95add7bcbb1fd5a3c2e7348b0d1
     publisher: The White House
     source_tier: 2

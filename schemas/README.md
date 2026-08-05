@@ -38,8 +38,8 @@ trace; those requirements belong to their family or layer, not the shared core.
 | `core/source-registry.schema.json`   | core           | Generated source-registry interchange document.                                                                                                              |
 | `core/corpus_vocabulary.schema.json` | core           | Reviewed controlled-vocabulary mappings shared by corpus adapters.                                                                                           |
 | `core/record.schema.json`            | core           | Closed public record envelope plus the composable `recordBase`: identity, structured subjects, scope, evidence, uncertainty, provenance, and workflow state. |
-| `core/corpus-manifest.schema.json`   | core           | Native corpus identity, family, locations, counts, and migration aliases.                                                                                    |
-| `core/corpus-catalog.schema.json`    | core           | Stable corpus-ID-to-path resolution without topic or query ownership.                                                                                        |
+| `core/corpus-manifest.schema.json`   | core           | Native corpus identity, family, boundary, locations, counts, and the declared record contract.                                                               |
+| `core/corpus-catalog.schema.json`    | core           | Stable corpus-ID-to-path resolution for native corpora, plus the retired-corpus migration ledger.                                                            |
 | `core/record-link.schema.json`       | core           | Family-neutral, directed record relationships with independent evidence and review state.                                                                    |
 
 No core schema requires a commitment, obligation, compliance result, or score.
@@ -63,13 +63,52 @@ extensions. The classification and dependency rules are recorded in
 | `analysis/release.schema.json`                | analysis/output | Reproducible publication bundle and dependency hashes.                                                                      |
 | `analysis/record-judgment.schema.json`        | analysis        | Independent judgments targeting a record or record link.                                                                    |
 
+### Declared record contracts
+
+Every corpus manifest declares one `record_contract`:
+
+```yaml
+record_contract:
+  kind: native | compatibility
+  id: <authoritative contract $id>
+  version: <contract version>
+```
+
+`kind` states whether the files are a native Writ family grammar or a preserved
+compatibility format, and `id` names the contract every file listed in `locations` is
+validated against. A corpus holding an imported payload declares `compatibility` and names
+the contract that actually validates it. A manifest never advertises a native grammar its
+own record files cannot satisfy, and a manifest whose structure is valid does not pass if
+its record files fail the contract it names.
+
+### Workflow vocabularies
+
+Two vocabularies are deliberately distinct and are never mixed:
+
+| Concept                      | Field          | Values                                                     |
+| ---------------------------- | -------------- | ---------------------------------------------------------- |
+| Record or record-link review | `review_state` | `draft`, `reviewed`, `approved`, `superseded`, `withdrawn` |
+| Judgment disposition         | `status`       | `proposed`, `accepted`, `contested`, `superseded`          |
+
+`accepted` is a judgment status, not a record or record-link review state. Accepting a
+judgment does not move its target through review; record acceptance is expressed with the
+`review_disposition` and `record_link_disposition` judgment types rather than by overloading
+an unrelated judgment type.
+
+v0.2 judgment supersession is directional: an accepted judgment lists what it replaced in
+`supersedes_judgment_ids`, and a superseded judgment names its replacement in
+`superseded_by_judgment_id`. Self-supersession and cycles are rejected by
+`validateJudgmentSupersession` in `@writ/domain`. The v0.1 judgment contract keeps its
+original undirected `supersedes` field unchanged.
+
 ## Compatibility-only schemas
 
-| Schema family                                                     | Classification     | Status                                                                                                                                                   |
-| ----------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `compatibility/compliance-corpus-v2/*.schema.json`                | compatibility-only | Version 2 G7/G20 summit-compliance records. These contracts remain active only for existing adapters and records; they are not the universal Writ model. |
-| `compatibility/g7-benchmark-v1/methodology-inventory.schema.json` | compatibility-only | Historical G7 benchmark extraction worksheet.                                                                                                            |
-| `compatibility/record-grammar-v0.1/*.schema.json`                 | compatibility-only | Frozen v0.1 base, legal-policy, institutional-profile, and record-judgment contracts.                                                                    |
+| Schema family                                                             | Classification     | Status                                                                                                                                                                                          |
+| ------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compatibility/compliance-corpus-v2/*.schema.json`                        | compatibility-only | Version 2 G7/G20 summit-compliance records. These contracts remain active only for existing adapters and records; they are not the universal Writ model.                                        |
+| `compatibility/g7-benchmark-v1/methodology-inventory.schema.json`         | compatibility-only | Historical G7 benchmark extraction worksheet.                                                                                                                                                   |
+| `compatibility/record-grammar-v0.1/*.schema.json`                         | compatibility-only | Frozen v0.1 base, legal-policy, institutional-profile, and record-judgment contracts.                                                                                                           |
+| `compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json` | compatibility-only | The preserved reviewed EU/US AI-governance corpus format. It describes the imported payload exactly as generated from the frozen pilot input; it is not the native legal-policy record grammar. |
 
 The compliance-corpus-v2 family contains `assessment`, `commitment`, `compliance_report`,
 `evidence`, `methodology`, `reconciliation_manifest`, `review_item`, `source_document`,

@@ -4,7 +4,8 @@ title: European Commission institutional facts
 family: institutional
 jurisdiction: EU
 corpus_version: 0.2.0
-record_schema:
+record_contract:
+  kind: native
   id: https://writ.example/schemas/extensions/institutional-record.schema.json
   version: 0.2.0
 status: draft

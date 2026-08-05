@@ -18,17 +18,15 @@ claims:
     instrument: GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE
     source_locator: AI Office signatory notice
     actor_type: market_provider
-    actor_term_local:
-      "provider of a general-purpose AI model choosing to become a signatory to the Code
+    actor_term_local: 'provider of a general-purpose AI model choosing to become a signatory to the Code
       of Practice
 
-      "
+      '
     conduct_type: compliance_demonstration
-    conduct_term_local:
-      "adhere to the General-Purpose AI Code of Practice as a means of demonstrating
+    conduct_term_local: 'adhere to the General-Purpose AI Code of Practice as a means of demonstrating
       compliance with relevant AI Act obligations
 
-      "
+      '
     legal_force: voluntary
     compliance_function: recognized_compliance_path
     adoption_status: adopted
@@ -38,8 +36,7 @@ claims:
     implementation_body: AI Office
     underlying_regime_force: binding
     underlying_instrument: EU_AI_ACT
-    interpretation_note:
-      "The Code is voluntary but operates as a recognized route for demonstrating compliance
+    interpretation_note: 'The Code is voluntary but operates as a recognized route for demonstrating compliance
       with binding statutory duties.
 
-      "
+      '

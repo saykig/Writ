@@ -13,14 +13,13 @@ reviews:
     review_decision: accepted
     original_record_type: source_bundle
     instrument: CAISI_GUIDELINES_PAGE
-    source_locator: "voluntary guidelines and draft benchmark-evaluation practices
+    source_locator: 'voluntary guidelines and draft benchmark-evaluation practices
 
-      "
+      '
     claim_machine_ids:
       - bd28e3d7-effa-5c3a-b469-b3fc48cb2588
       - 774b58d2-8517-5113-a7d0-64f8c17ed277
-    interpretation_note:
-      "Both claims concern model evaluation, but neither creates a binding market-wide
+    interpretation_note: 'Both claims concern model evaluation, but neither creates a binding market-wide
       provider obligation.
 
-      "
+      '

@@ -15,8 +15,7 @@ reviews:
     source_locator: abstract
     claim_machine_ids:
       - 2e169e44-5094-5ebc-ac67-330cabf22462
-    interpretation_note:
-      "The AI RMF is an active cross-sector framework but does not establish a binding
+    interpretation_note: 'The AI RMF is an active cross-sector framework but does not establish a binding
       model-evaluation duty for private providers.
 
-      "
+      '

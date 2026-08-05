@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-07
     anchor_type: pdf_text
     anchor_phrase: Covered AI. This memorandum provides requirements
-    quote:
-      U.S.C. § 901(b), and other requirements do not apply to elements of the Intelligence Community,
+    quote: U.S.C. § 901(b), and other requirements do not apply to elements of the Intelligence Community,
       as defined in 50 U.S.C. § 3003. b. Covered AI. This memorandum provides requirements and recommendations
       that apply to new and existing AI that is developed, used, or acquired by or on behalf of covered
       agencies.
@@ -33,8 +32,7 @@ passages:
     imported_source_legacy_ref: US-08
     anchor_type: pdf_text
     anchor_phrase: Conduct Pre-Deployment Testing
-    quote:
-      Conduct Pre-Deployment Testing. Agencies must develop pre-deployment testing and prepare risk
+    quote: Conduct Pre-Deployment Testing. Agencies must develop pre-deployment testing and prepare risk
       mitigation plans that reflect expected real-world outcomes and identify expected benefits to the
       AI use. In conducting pre-deployment testing, if an agency does not have access to the underlying
       AI source code, models, or data, the agency must use

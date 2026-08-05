@@ -20,16 +20,14 @@ claims:
     instrument: NIST_GENERATIVE_AI_PROFILE
     source_locator: abstract
     actor_type: ai_lifecycle_organization
-    actor_term_local:
-      "organization designing, developing, using or evaluating generative artificial intelligence
+    actor_term_local: 'organization designing, developing, using or evaluating generative artificial intelligence
 
-      "
+      '
     conduct_type: model_evaluation
-    conduct_term_local:
-      "use the Generative AI Profile to incorporate trustworthiness considerations into
+    conduct_term_local: 'use the Generative AI Profile to incorporate trustworthiness considerations into
       the evaluation of generative AI systems
 
-      "
+      '
     source_lifecycle_activities:
       - design
       - development
@@ -44,8 +42,7 @@ claims:
     scope:
       - cross_sector
     target_system: generative_ai_system
-    interpretation_note:
-      "The Profile directly concerns evaluation, but its voluntary status means it
+    interpretation_note: 'The Profile directly concerns evaluation, but its voluntary status means it
       does not create a binding provider obligation.
 
-      "
+      '

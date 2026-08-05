@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-12
     anchor_type: pdf_text
     anchor_phrase: Publish guidelines and resources through NIST at DOC
-    quote:
-      Recommended Policy Actions • Publish guidelines and resources through NIST at DOC, including
+    quote: Recommended Policy Actions • Publish guidelines and resources through NIST at DOC, including
       CAISI, for Federal agencies to conduct their own evaluations of AI systems for their distinct missions
       and operations and for compliance with existing law. • Support the development of the science of
       measuring and evaluating AI models, led by

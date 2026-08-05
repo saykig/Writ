@@ -24,14 +24,13 @@ claims:
     prospective_actor_type: market_provider
     prospective_actor_term_local: AI model company
     conduct_type: reporting_and_disclosure
-    conduct_term_local:
-      "comply with a possible future federal reporting and disclosure standard for AI
+    conduct_term_local: 'comply with a possible future federal reporting and disclosure standard for AI
       models
 
-      "
-    proposal_action: "consider adopting a federal reporting and disclosure standard for AI models
+      '
+    proposal_action: 'consider adopting a federal reporting and disclosure standard for AI models
 
-      "
+      '
     legal_force: proposed
     compliance_function: prospective_regulatory_requirement
     adoption_status: proposed
@@ -44,8 +43,7 @@ claims:
     scope:
       - cross_sector
     target_system: artificial_intelligence_model
-    interpretation_note:
-      "The fact sheet describes possible future regulation. It does not create a currently
+    interpretation_note: 'The fact sheet describes possible future regulation. It does not create a currently
       applicable model-evaluation duty.
 
-      "
+      '

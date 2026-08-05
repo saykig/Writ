@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-03
     anchor_type: pdf_text
     anchor_phrase: is an implementation of the AI RMF functions
-    quote:
-      A proﬁle is an implementation of the AI RMF functions, categories, and subcategories for a
+    quote: A proﬁle is an implementation of the AI RMF functions, categories, and subcategories for a
       speciﬁc setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements,
       risk tolerance, and resources of the Framework user. AI RMF proﬁles assist organizations in deciding
       how to best manage AI risks in a manner that is well-aligned with their goals, considers legal/regulatory

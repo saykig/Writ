@@ -33,7 +33,7 @@
       "enabled": true,
       "verification_status": "verified",
       "last_verified": "2026-07-24",
-      "notes": "Authoritative frozen Rio records and source excerpts are under corpora/multilateral/g20/2024-rio."
+      "notes": "Authoritative frozen Rio records and source excerpts are under archive/compatibility/g20/2024-rio."
     },
     {
       "id": "g7.compliance.index",
@@ -139,7 +139,7 @@
       "fetch_method": "http",
       "enabled": true,
       "verification_status": "verified",
-      "notes": "Authoritative AI-for-SMEs political records are under corpora/multilateral/g7/2025-ai-sme; score-reproduction methodology is benchmark-local.",
+      "notes": "Authoritative AI-for-SMEs political records are under archive/compatibility/g7/2025-ai-sme; score-reproduction methodology is benchmark-local.",
       "authentication": {
         "type": "none"
       },

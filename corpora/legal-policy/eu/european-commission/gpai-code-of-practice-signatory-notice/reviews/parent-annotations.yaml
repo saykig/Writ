@@ -15,8 +15,7 @@ reviews:
     source_locator: AI Office signatory notice
     claim_machine_ids:
       - 66a51aec-420c-5b38-accc-2b60d2805a0b
-    interpretation_note:
-      "The Code is voluntary but operates as a recognized route for demonstrating compliance
+    interpretation_note: 'The Code is voluntary but operates as a recognized route for demonstrating compliance
       with binding statutory duties.
 
-      "
+      '

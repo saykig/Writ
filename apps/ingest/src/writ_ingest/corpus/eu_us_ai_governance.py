@@ -62,7 +62,8 @@ CORPUS_SPECS: tuple[dict[str, Any], ...] = (
         "path": Path("corpora/legal-policy/eu/european-commission/gpai-code-of-practice-signatory-notice"),
         "corpus_id": "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
         "title": "European Commission GPAI Code of Practice signatory notice",
-        "instrument_id": "GPAI_CODE_OF_PRACTICE",
+        # The corpus captures the AI Office signatory notice, not the Code itself.
+        "publication_id": "GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE",
         "claims": ("EU-12",),
     },
     {
@@ -79,11 +80,12 @@ CORPUS_SPECS: tuple[dict[str, Any], ...] = (
     },
     {
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/caisi/overview"),
-        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.overview", "title": "CAISI overview", "instrument_id": "CAISI_OVERVIEW", "claims": ("US-04",),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.overview", "title": "CAISI overview", "publication_id": "CAISI_OVERVIEW", "claims": ("US-04",),
     },
     {
+        # One registered source bundle carrying two differently labelled CAISI documents.
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/nist/caisi/guidelines"),
-        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.guidelines", "title": "CAISI guidelines", "instrument_series_id": "CAISI_GUIDELINES", "claims": ("US-05A", "US-05B"),
+        "corpus_id": "writ.corpus.legal-policy.us.nist.caisi.guidelines", "title": "CAISI guidelines", "publication_id": "CAISI_GUIDELINES", "claims": ("US-05A", "US-05B"),
     },
     {
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/office-of-management-and-budget/m-25-21"),
@@ -95,17 +97,36 @@ CORPUS_SPECS: tuple[dict[str, Any], ...] = (
     },
     {
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/ai-leadership-fact-sheet-2025-01"),
-        "corpus_id": "writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01", "title": "White House AI leadership fact sheet (January 2025)", "instrument_id": "EXECUTIVE_ORDER_14179", "claims": ("US-06",),
+        # The fact sheet is registered; Executive Order 14179 itself is not.
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01", "title": "White House AI leadership fact sheet (January 2025)", "publication_id": "WH_FACT_SHEET_2025_01_AI_LEADERSHIP", "claims": ("US-06",),
     },
     {
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/national-ai-policy-framework-fact-sheet-2025-12"),
-        "corpus_id": "writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12", "title": "White House national AI policy framework fact sheet (December 2025)", "instrument_id": "NATIONAL_AI_POLICY_FRAMEWORK", "claims": ("US-11",),
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12", "title": "White House national AI policy framework fact sheet (December 2025)", "publication_id": "WH_FACT_SHEET_2025_12_NATIONAL_FRAMEWORK", "claims": ("US-11",),
     },
     {
         "jurisdiction": "US", "path": Path("corpora/legal-policy/us/white-house/americas-ai-action-plan"),
-        "corpus_id": "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan", "title": "America's AI Action Plan", "instrument_id": "AMERICAS_AI_ACTION_PLAN", "claims": ("US-12",),
+        "corpus_id": "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan", "title": "America's AI Action Plan", "publication_id": "WH_AMERICAS_AI_ACTION_PLAN", "claims": ("US-12",),
     },
 )
+
+BOUNDARY_KEYS = (
+    "instrument_id",
+    "instrument_series_id",
+    "publication_id",
+    "dataset_collection_id",
+)
+
+# These corpora hold the preserved reviewed EU-US payload, not native legal-policy
+# v0.2 records. The manifest must name the contract that actually validates them.
+REVIEWED_RECORD_CONTRACT: dict[str, str] = {
+    "kind": "compatibility",
+    "id": (
+        "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/"
+        "reviewed-corpus-document.schema.json"
+    ),
+    "version": "1.0.0",
+}
 
 EXPECTED_REVIEWED_SHA256 = (
     "8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb"
@@ -275,6 +296,17 @@ class CorpusMigrationError(ValueError):
     """The archived review input or active corpus violates the migration contract."""
 
 
+def _corpus_boundary(spec: dict[str, Any]) -> dict[str, str]:
+    """Return the single declared corpus boundary, rejecting an ambiguous spec."""
+
+    declared = [key for key in BOUNDARY_KEYS if key in spec]
+    if len(declared) != 1:
+        raise CorpusMigrationError(
+            f"{spec['corpus_id']} must declare exactly one corpus boundary, found {declared}"
+        )
+    return {declared[0]: str(spec[declared[0]])}
+
+
 def _machine_id(record_kind: str, immutable_import_key: str) -> str:
     name = f"eu-us-ai-governance-v1:{record_kind}:{immutable_import_key}"
     return str(uuid.uuid5(IDENTITY_NAMESPACE, name))
@@ -342,11 +374,21 @@ def resolve_catalog_corpus_paths(
 
     repo_root = root or find_repo_root()
     catalog = _read_yaml(repo_root / CATALOG_RELATIVE_PATH)
-    entries = catalog.get("corpora")
+    entries = catalog.get("native_corpora")
     if not isinstance(entries, list):
-        raise CorpusMigrationError("catalog corpora must be an array")
+        raise CorpusMigrationError("catalog native_corpora must be an array")
+    retired = {
+        str(migration.get("retired_corpus_id"))
+        for migration in catalog.get("retired_corpus_migrations", [])
+        if isinstance(migration, dict)
+    }
     resolved: dict[str, Path] = {}
     requested = set(corpus_ids)
+    if requested & retired:
+        raise CorpusMigrationError(
+            "retired corpus IDs are one-to-many and cannot be resolved as active corpora: "
+            f"{sorted(requested & retired)}"
+        )
     for entry in entries:
         if not isinstance(entry, dict) or entry.get("corpus_id") not in requested:
             continue
@@ -1514,18 +1556,14 @@ def build_corpus_documents(*, root: Path | None = None) -> dict[Path, dict[str, 
             "family": "legal_policy",
             "jurisdiction": jurisdiction,
             "corpus_version": "1.0.0",
-            "record_schema": {
-                "id": "https://writ.example/schemas/extensions/legal-policy-record.schema.json",
-                "version": "0.2.0",
-            },
+            "record_contract": dict(REVIEWED_RECORD_CONTRACT),
             "status": "active",
             "identity_namespace": IDENTITY_NAMESPACE_URN,
-            "migration_aliases": [OLD_CORPUS_IDS[jurisdiction]],
-            **(
-                {"instrument_series_id": spec["instrument_series_id"]}
-                if "instrument_series_id" in spec
-                else {"instrument_id": spec["instrument_id"]}
-            ),
+            # The retired subject-based IDs map one-to-many onto these corpora, so they
+            # are recorded once in the catalog migration ledger rather than repeated
+            # here as resolvable per-leaf aliases.
+            "migration_aliases": [],
+            **_corpus_boundary(spec),
             "record_counts": {
                 "sources": len(source_records),
                 "verified_source_documents": len(jurisdiction_documents),
@@ -1613,6 +1651,8 @@ class _IndentedSafeDumper(yaml.SafeDumper):
 
 
 def canonical_yaml_bytes(value: dict[str, Any]) -> bytes:
+    """The one canonical serializer. Generation and drift checking both use it."""
+
     return yaml.dump(
         value,
         Dumper=_IndentedSafeDumper,
@@ -1623,13 +1663,31 @@ def canonical_yaml_bytes(value: dict[str, Any]) -> bytes:
 
 
 def write_corpus_documents(*, root: Path | None = None, check: bool = False) -> None:
+    """Write the generated corpus files, or assert that the checked-in bytes match.
+
+    The check is byte-level, not parsed-structure equality: key reordering, indentation
+    and line-wrapping drift are real drift for a generated file, and a parsed comparison
+    would silently accept all three.
+    """
+
     repo_root = root or find_repo_root()
     for relative_path, value in build_corpus_documents(root=repo_root).items():
         path = repo_root / relative_path
         expected = canonical_yaml_bytes(value)
         if check:
-            if not path.is_file() or _read_yaml(path) != value:
-                raise CorpusMigrationError(f"generated corpus file has drifted: {relative_path}")
+            if not path.is_file():
+                raise CorpusMigrationError(f"generated corpus file is missing: {relative_path}")
+            actual = path.read_bytes()
+            if actual != expected:
+                detail = (
+                    "content differs"
+                    if _read_yaml(path) != value
+                    else "serialization differs while parsed content matches"
+                )
+                raise CorpusMigrationError(
+                    f"generated corpus file has drifted: {relative_path} ({detail}; "
+                    f"expected {len(expected)} bytes, found {len(actual)})"
+                )
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(expected)

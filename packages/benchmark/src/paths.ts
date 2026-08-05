@@ -7,7 +7,7 @@ import { join } from "node:path";
 const ROOT_REL = `${"../".repeat(3)}`;
 const REPOSITORY_ROOT = fileURLToPath(new URL(ROOT_REL, import.meta.url));
 
-export const G7_CORPUS_DIR = join(REPOSITORY_ROOT, "corpora/multilateral/g7/2025-ai-sme");
+export const G7_CORPUS_DIR = join(REPOSITORY_ROOT, "archive/compatibility/g7/2025-ai-sme");
 export const BENCHMARK_DIR = join(
   REPOSITORY_ROOT,
   "internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction",

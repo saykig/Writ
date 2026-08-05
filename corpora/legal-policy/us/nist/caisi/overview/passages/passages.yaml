@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-04
     anchor_type: html_dom
     anchor_phrase: Establish voluntary agreements with private sector AI developers
-    quote:
-      Establish voluntary agreements with private sector AI developers and evaluators, and lead unclassified
+    quote: Establish voluntary agreements with private sector AI developers and evaluators, and lead unclassified
       evaluations of AI capabilities that may pose risks to national security. In conducting these evaluations,
       CAISI will focus on demonstrable risks, such as cybersecurity, biosecurity, and chemical weapons.
     anchor_hash: sha256:219e4fd9b26170f216190e78b7fad9861b37e40d7b656decefcad8344169dc2c

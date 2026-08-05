@@ -36,11 +36,24 @@ same institutional name may occur in both families: an issuer namespace contains
 instruments, while an institutional corpus contains independently evidenced facts about the
 institution.
 
-The root `corpora/catalog.yaml` resolves stable corpus IDs to current paths. Paths never determine
-identity. Each leaf manifest declares one family and either an instrument, instrument series or
-dataset collection; each institutional manifest declares a root institution. The two transitional
-corpus IDs `writ.corpus.eu.ai-governance` and `writ.corpus.us.ai-governance` are retired and are not
-reused. Their record-level legacy references remain resolvable through migration ledgers.
+The root `corpora/catalog.yaml` resolves stable corpus IDs to current paths. It lists native,
+family-governed corpora only. Paths never determine identity. Each leaf manifest declares one
+family and exactly one boundary: an instrument, an instrument series, a publication or a dataset
+collection; each institutional manifest declares a root institution. The boundary must describe
+what the corpus actually captures, so a corpus whose registered source is a fact sheet or notice
+declares `publication_id` rather than claiming an underlying instrument it does not contain.
+
+Every manifest also declares one `record_contract` naming the exact contract its record files
+satisfy and whether that contract is `native` or `compatibility`. A corpus holding a preserved
+imported payload declares the compatibility contract that validates it; it never advertises a
+native family grammar its files cannot satisfy.
+
+The two transitional corpus IDs `writ.corpus.eu.ai-governance` and `writ.corpus.us.ai-governance`
+are retired and are not reused. Because each maps to several replacement corpora, they are recorded
+once in a root-level `retired_corpus_migrations` ledger rather than repeated as leaf-level
+`migration_aliases`: a one-to-many historical mapping cannot function as an ID-to-path alias, and
+resolving one as an active corpus is an error. Their record-level legacy references remain
+resolvable through the per-corpus migration ledgers.
 
 Institutional v0.2 records are atomic facts discriminated as identity, placement, relationship,
 mission, mandate, function, decision right or operational capacity. No fact type requires fields
@@ -52,7 +65,9 @@ and may be targeted by analytical judgments. Record judgments are analysis-layer
 third family. Existing v0.1 record, institutional and judgment contracts remain versioned
 compatibility inputs.
 
-G7/G20 compatibility corpora and archived pilot material remain outside this native migration.
+The G7 and G20 datasets are compliance-oriented compatibility material rather than a native family.
+They are preserved byte-for-byte under `archive/compatibility/`, are absent from the catalog, and
+have no native corpus manifest. Archived pilot material likewise remains outside this migration.
 
 ## Consequences
 

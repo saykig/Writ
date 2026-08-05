@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-05A
     anchor_type: html_dom
     anchor_phrase: develops and publishes voluntary guidelines
-    quote:
-      The Center for AI Standards and Innovation develops and publishes voluntary guidelines to support
+    quote: The Center for AI Standards and Innovation develops and publishes voluntary guidelines to support
       the responsible design, development, deployment, use, and governance of advanced AI models, systems,
       and agents.
     anchor_hash: sha256:73577c3d9ffb66f15dc0a0f871667e072ebdc8d83f27b9a603fa0567a3f1565a
@@ -31,8 +30,7 @@ passages:
     imported_source_legacy_ref: US-05B
     anchor_type: html_dom
     anchor_phrase: These draft guidelines identify preliminary best practices
-    quote:
-      Practices for Automated Benchmark Evaluations of Language Models (Initial Public Draft) – These
+    quote: Practices for Automated Benchmark Evaluations of Language Models (Initial Public Draft) – These
       draft guidelines identify preliminary best practices for evaluating language models and AI agent
       systems. We are soliciting public comment on this document until March 31, 2026, at 11:59 PM Eastern
       Time. To provide feedback, please email NISTAI800-1 [at] nist.gov ( NISTAI800-2[at]nist[dot]gov

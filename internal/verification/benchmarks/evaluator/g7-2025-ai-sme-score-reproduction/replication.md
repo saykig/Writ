@@ -17,7 +17,7 @@ It exits non-zero on any divergence and prints one line per check. The logic is
 
 ## What is re-derived
 
-1. **Source bytes.** The raw SHA-256 of `corpora/multilateral/g7/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`
+1. **Source bytes.** The raw SHA-256 of `archive/compatibility/g7/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`
    must equal the `document_versions[].sha256` recorded in the snapshots.
 2. **Snapshot content hash.** For each `evidence/<member>.snapshot.json`, the
    stored `snapshot.content_hash` must equal

@@ -3,7 +3,7 @@ jurisdiction: US
 sources:
   - machine_id: a656c34b-cac2-5bde-8d71-4472fb1a00e8
     ref: us/ai-governance/wh-americas-ai-action-plan/official-document#source-version
-    display_ref: "Winning the Race: America's AI Action Plan"
+    display_ref: 'Winning the Race: America''s AI Action Plan'
     aliases: []
     legacy_refs:
       - dv-wh-americas-ai-action-plan
@@ -11,11 +11,11 @@ sources:
     jurisdiction: US
     verification_status: verified
     document_id: wh-americas-ai-action-plan
-    title: "Winning the Race: America's AI Action Plan"
+    title: 'Winning the Race: America''s AI Action Plan'
     uri: https://www.whitehouse.gov/wp-content/uploads/2025/07/Americas-AI-Action-Plan.pdf
     media_type: application/pdf
-    retrieved_at: "2026-07-28T00:00:00Z"
-    issued_at: "2025-07-23T00:00:00Z"
+    retrieved_at: '2026-07-28T00:00:00Z'
+    issued_at: '2025-07-23T00:00:00Z'
     sha256: sha256:91d56ab3ddefe43f395bde31e1c3923fb37f47091275aaf2a0d7da500ff547f4
     publisher: The White House
     source_tier: 1

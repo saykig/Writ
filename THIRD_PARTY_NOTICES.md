@@ -14,9 +14,9 @@ Users must consult each source publisher's current terms.
 
 Known tracked source-document files include:
 
-- `corpora/multilateral/g7/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`, published by the G7
+- `archive/compatibility/g7/2025-ai-sme/sources/g7-2025-ai-sme-chapter.pdf`, published by the G7
   Research Group;
-- `corpora/multilateral/g20/2024-rio/sources/2024-g20-compliance-final-excerpt.pdf` and
+- `archive/compatibility/g20/2024-rio/sources/2024-g20-compliance-final-excerpt.pdf` and
   `2024-g20-compliance-interim-excerpt.pdf`, published by the G20 Research Group.
 
 The EU and US jurisdictional corpora and the archived EU-US pilot also preserve passages or metadata

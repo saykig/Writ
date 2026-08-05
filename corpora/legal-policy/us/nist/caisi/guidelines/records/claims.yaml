@@ -18,22 +18,21 @@ claims:
     claim_record_type: guidance
     jurisdiction: US
     instrument: CAISI_EVALUATION_GUIDELINES
-    source_locator: "voluntary guidelines and draft benchmark-evaluation practices
+    source_locator: 'voluntary guidelines and draft benchmark-evaluation practices
 
-      "
-    interpretation_note:
-      "Both claims concern model evaluation, but neither creates a binding market-wide
+      '
+    interpretation_note: 'Both claims concern model evaluation, but neither creates a binding market-wide
       provider obligation.
 
-      "
+      '
     actor_type: ai_lifecycle_organization
-    actor_term_local: "advanced AI model, system or agent developer or evaluator
+    actor_term_local: 'advanced AI model, system or agent developer or evaluator
 
-      "
+      '
     conduct_type: model_evaluation
-    conduct_term_local: "use voluntary guidelines and best practices for automated AI evaluations
+    conduct_term_local: 'use voluntary guidelines and best practices for automated AI evaluations
 
-      "
+      '
     evaluation_method:
       - automated_evaluation
       - benchmark_evaluation
@@ -49,8 +48,7 @@ claims:
     target_system: advanced_ai_model_system_or_agent
   - machine_id: 774b58d2-8517-5113-a7d0-64f8c17ed277
     ref: us/ai-governance/caisi-guidelines/draft-benchmark-practices#proposed-model-evaluation-guidance
-    display_ref:
-      voluntary guidelines and draft benchmark-evaluation practices — proposed model evaluation
+    display_ref: voluntary guidelines and draft benchmark-evaluation practices — proposed model evaluation
       guidance
     aliases: []
     legacy_refs:
@@ -66,22 +64,21 @@ claims:
     claim_record_type: proposed_guidance
     jurisdiction: US
     instrument: CAISI_DRAFT_BENCHMARK_PRACTICES
-    source_locator: "voluntary guidelines and draft benchmark-evaluation practices
+    source_locator: 'voluntary guidelines and draft benchmark-evaluation practices
 
-      "
-    interpretation_note:
-      "Both claims concern model evaluation, but neither creates a binding market-wide
+      '
+    interpretation_note: 'Both claims concern model evaluation, but neither creates a binding market-wide
       provider obligation.
 
-      "
+      '
     actor_type: ai_lifecycle_organization
-    actor_term_local: "advanced AI model, system or agent developer or evaluator
+    actor_term_local: 'advanced AI model, system or agent developer or evaluator
 
-      "
+      '
     conduct_type: model_evaluation
-    conduct_term_local: "use proposed best practices for automated benchmark evaluations
+    conduct_term_local: 'use proposed best practices for automated benchmark evaluations
 
-      "
+      '
     evaluation_method:
       - automated_evaluation
       - benchmark_evaluation

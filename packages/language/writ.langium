@@ -234,8 +234,10 @@ JudgmentMember:
     | {infer JudgmentCreatedAt} 'created_at' value=DATE ';'
     | {infer JudgmentFamilyContext} 'family_context' value=RecordFamily ';'
     | {infer JudgmentSupersedes} 'supersedes' value=QualifiedName ';'
+    | {infer JudgmentSupersedesIds} 'supersedes_judgment_ids' values=IdentifierList ';'
+    | {infer JudgmentSupersededBy} 'superseded_by_judgment_id' value=QualifiedName ';'
     | {infer RelatedJudgments} 'related_judgment_ids' values=IdentifierList ';';
-JudgmentType returns string: 'passage_selection' | 'record_family_classification' | 'subject_identification' | 'scope_interpretation' | 'topic_classification' | 'legal_status_determination' | 'institutional_role_determination' | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement' | 'adjudication';
+JudgmentType returns string: 'passage_selection' | 'record_family_classification' | 'subject_identification' | 'scope_interpretation' | 'topic_classification' | 'legal_status_determination' | 'institutional_role_determination' | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement' | 'adjudication' | 'review_disposition' | 'record_link_disposition';
 JudgmentStatus returns string: 'proposed' | 'accepted' | 'contested' | 'superseded';
 JudgmentTargetKind returns string: 'record' | 'record_link';
 

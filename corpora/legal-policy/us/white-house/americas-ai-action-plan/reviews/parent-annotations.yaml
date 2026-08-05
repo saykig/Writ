@@ -12,13 +12,12 @@ reviews:
     review_decision: accepted
     original_record_type: policy_context
     instrument: WHITE_HOUSE_AI_POLICY_ACTION_MATERIALS
-    source_locator: "AI Action Plan and later White House policy-action materials
+    source_locator: 'AI Action Plan and later White House policy-action materials
 
-      "
+      '
     claim_machine_ids:
       - 07e3604d-321e-5621-9fde-357ab058412c
-    interpretation_note:
-      "Current policy supports standards, evaluation tools and coordination but does
+    interpretation_note: 'Current policy supports standards, evaluation tools and coordination but does
       not itself impose a binding model-evaluation obligation on private market providers.
 
-      "
+      '

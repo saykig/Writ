@@ -102,18 +102,16 @@ entries:
 excluded_temporary_assignments:
   - temporary_row_id: EU-06
     source_locator: Article 51(1)-(2)
-    reason:
-      "This scope-rule passage was incorrectly assigned the EU-06 identifier and is not EU-06 in
+    reason: 'This scope-rule passage was incorrectly assigned the EU-06 identifier and is not EU-06 in
       the uploaded table.
 
-      "
+      '
   - temporary_row_id: EU-07
     source_locator: Article 52(1)
-    reason:
-      "This notification passage was incorrectly assigned the EU-07 identifier and is not EU-07
+    reason: 'This notification passage was incorrectly assigned the EU-07 identifier and is not EU-07
       in the uploaded table.
 
-      "
+      '
 corrected_numbering:
   - previous_row_id: EU-02
     source_locator: Article 55(1)(a)

@@ -3,8 +3,7 @@ jurisdiction: EU
 sources:
   - machine_id: 80bce319-838e-5518-bab4-6da5ba6c0c2d
     ref: eu/ai-governance/eu-ai-act-2024-1689/official-document#source-version
-    display_ref:
-      Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
+    display_ref: Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
       Intelligence Act)
     aliases: []
     legacy_refs:
@@ -13,13 +12,12 @@ sources:
     jurisdiction: EU
     verification_status: verified
     document_id: eu-ai-act-2024-1689
-    title:
-      Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
+    title: Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence (Artificial
       Intelligence Act)
     uri: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689
     media_type: text/html
-    retrieved_at: "2026-07-28T00:00:00Z"
-    issued_at: "2024-07-12T00:00:00Z"
+    retrieved_at: '2026-07-28T00:00:00Z'
+    issued_at: '2024-07-12T00:00:00Z'
     sha256: sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c
     publisher: Publications Office of the European Union
     source_tier: 1

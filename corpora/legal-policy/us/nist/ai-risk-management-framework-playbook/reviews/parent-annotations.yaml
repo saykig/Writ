@@ -15,8 +15,7 @@ reviews:
     source_locator: overview
     claim_machine_ids:
       - ab0ca2a7-acb3-52f0-8da1-496d1c258a8b
-    interpretation_note:
-      "The Playbook provides voluntary implementation guidance. Its overview does not
+    interpretation_note: 'The Playbook provides voluntary implementation guidance. Its overview does not
       independently require model evaluation.
 
-      "
+      '

@@ -2,7 +2,7 @@ schema_version: 1.0.0
 implemented_native_families:
   - legal_policy
   - institutional
-corpora:
+native_corpora:
   - corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
     family: legal_policy
     jurisdiction: EU
@@ -99,3 +99,26 @@ corpora:
     status: draft
     path: corpora/institutional/us/nist
     manifest: corpora/institutional/us/nist/corpus.yaml
+# Historical one-to-many record of the retired subject-based corpora. This is a
+# migration ledger, not an alias table: a retired ID has several replacements and
+# therefore never resolves to a single active corpus or path.
+retired_corpus_migrations:
+  - retired_corpus_id: writ.corpus.eu.ai-governance
+    old_path: corpora/jurisdictions/eu/ai-governance
+    replacement_corpus_ids:
+      - writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+      - writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+      - writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice
+  - retired_corpus_id: writ.corpus.us.ai-governance
+    old_path: corpora/jurisdictions/us/ai-governance
+    replacement_corpus_ids:
+      - writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0
+      - writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook
+      - writ.corpus.legal-policy.us.nist.generative-ai-profile
+      - writ.corpus.legal-policy.us.nist.caisi.overview
+      - writ.corpus.legal-policy.us.nist.caisi.guidelines
+      - writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+      - writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22
+      - writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01
+      - writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12
+      - writ.corpus.legal-policy.us.white-house.americas-ai-action-plan

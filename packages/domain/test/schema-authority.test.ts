@@ -35,7 +35,7 @@ describe("schema authority", () => {
   });
 
   test("every authoritative schema has a path-derived id and layer-safe references", () => {
-    expect(files).toHaveLength(31);
+    expect(files).toHaveLength(32);
     for (const file of files) {
       const schema = JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
       const path = relative(REPO_ROOT, file).split(sep).join("/");

@@ -150,8 +150,8 @@ async function main(): Promise<void> {
     ],
     protected_trees: {
       archive_pilot: treeDigest("archive/pilots/eu-us-ai-evaluation-v1"),
-      g7: treeDigest("corpora/multilateral/g7/2025-ai-sme"),
-      g20: treeDigest("corpora/multilateral/g20/2024-rio"),
+      g7: treeDigest("archive/compatibility/g7/2025-ai-sme"),
+      g20: treeDigest("archive/compatibility/g20/2024-rio"),
     },
     reviewed_yaml_sha256: hashBytes(
       readFileSync(

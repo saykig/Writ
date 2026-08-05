@@ -11,7 +11,7 @@
     "family",
     "jurisdiction",
     "corpus_version",
-    "record_schema",
+    "record_contract",
     "status",
     "locations",
     "identity_namespace",
@@ -27,7 +27,7 @@
     "family": { "$ref": "#/$defs/family" },
     "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
     "corpus_version": { "$ref": "#/$defs/semanticVersion" },
-    "record_schema": { "$ref": "#/$defs/recordSchema" },
+    "record_contract": { "$ref": "#/$defs/recordContract" },
     "status": { "enum": ["draft", "active", "superseded", "withdrawn"] },
     "locations": { "$ref": "#/$defs/locations" },
     "identity_namespace": { "$ref": "#/$defs/nonEmptyString" },
@@ -41,6 +41,7 @@
     "unresolved_evidence_count": { "type": "integer", "minimum": 0 },
     "instrument_id": { "$ref": "#/$defs/nonEmptyString" },
     "instrument_series_id": { "$ref": "#/$defs/nonEmptyString" },
+    "publication_id": { "$ref": "#/$defs/nonEmptyString" },
     "dataset_collection_id": { "$ref": "#/$defs/nonEmptyString" },
     "root_institution_id": { "$ref": "#/$defs/nonEmptyString" }
   },
@@ -51,6 +52,7 @@
         "oneOf": [
           { "required": ["instrument_id"] },
           { "required": ["instrument_series_id"] },
+          { "required": ["publication_id"] },
           { "required": ["dataset_collection_id"] }
         ],
         "not": { "required": ["root_institution_id"] }
@@ -64,6 +66,7 @@
           "anyOf": [
             { "required": ["instrument_id"] },
             { "required": ["instrument_series_id"] },
+            { "required": ["publication_id"] },
             { "required": ["dataset_collection_id"] }
           ]
         }
@@ -77,14 +80,34 @@
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
     },
-    "recordSchema": {
+    "recordContract": {
+      "description": "The exact contract every record file listed in `locations` is validated against. `kind` states whether that contract is a native Writ family grammar or a preserved compatibility format; a corpus holding an imported payload must declare `compatibility` and name the contract that actually validates its files, never a native grammar it does not satisfy.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "version"],
+      "required": ["kind", "id", "version"],
       "properties": {
-        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["native", "compatibility"] },
+        "id": { "type": "string", "format": "uri", "pattern": "^https://writ\\.example/schemas/" },
         "version": { "$ref": "#/$defs/semanticVersion" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "native" } }, "required": ["kind"] },
+          "then": {
+            "properties": {
+              "id": { "pattern": "^https://writ\\.example/schemas/(?:core|extensions)/" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "compatibility" } }, "required": ["kind"] },
+          "then": {
+            "properties": {
+              "id": { "pattern": "^https://writ\\.example/schemas/compatibility/" }
+            }
+          }
+        }
+      ]
     },
     "pathArray": {
       "type": "array",

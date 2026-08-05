@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-09
     anchor_type: pdf_text
     anchor_phrase: Testing and Evaluation. When evaluating proposals
-    quote:
-      Testing and Evaluation. When evaluating proposals agencies must, to the greatest extent practicable,
+    quote: Testing and Evaluation. When evaluating proposals agencies must, to the greatest extent practicable,
       test proposed solutions to understand the capabilities and limitations of any offered AI system
       or service. As part of this work, agencies should consider whether it is appropriate to create a
       testing environment in agency networks specifically to enable testing ofproposed solutions on government-owned
@@ -34,11 +33,10 @@ passages:
     imported_source_legacy_ref: US-10
     anchor_type: pdf_text
     anchor_phrase: Ongoing Testing and Monitoring
-    quote:
-      "E. Ongoing Testing and Monitoring. Contractual terms must provide the contracting agency the
+    quote: 'E. Ongoing Testing and Monitoring. Contractual terms must provide the contracting agency the
       ability to regularly monitor and evaluate ( e.g., on a quarterly or biannual basis, based on the
       needs of the program) performance, risks, and effectiveness of an AI system or service. To achieve
-      that outcome:"
+      that outcome:'
     anchor_hash: sha256:42e794873e540128c5fa3440f2d6ff4bf456e0bec2ebb5a482cd4262126662f3
     language: en
     page_number: 10

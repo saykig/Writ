@@ -13,8 +13,7 @@ passages:
     imported_source_legacy_ref: US-06
     anchor_type: html_dom
     anchor_phrase: revise or rescind all policies, directives, regulations
-    quote:
-      Calls for departments and agencies to revise or rescind all policies, directives, regulations,
+    quote: Calls for departments and agencies to revise or rescind all policies, directives, regulations,
       orders, and other actions taken under the Biden AI order that are inconsistent with enhancing America’s
       leadership in AI.
     anchor_hash: sha256:18ab1889b5a5a00ef21eb4e912053ad699857e75b0181b6e44dd00d6625ad350

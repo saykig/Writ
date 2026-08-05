@@ -15,8 +15,7 @@ reviews:
     source_locator: December 2025 fact sheet
     claim_machine_ids:
       - 2bb20867-98a9-57bc-b25f-61697ed2f2f2
-    interpretation_note:
-      "The fact sheet describes possible future regulation. It does not create a currently
+    interpretation_note: 'The fact sheet describes possible future regulation. It does not create a currently
       applicable model-evaluation duty.
 
-      "
+      '

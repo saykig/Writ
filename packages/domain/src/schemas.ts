@@ -7,7 +7,11 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { EMBEDDED_COMPATIBILITY_SCHEMA_TEXT, EMBEDDED_SCHEMA_TEXT } from "./schemas.embedded.js";
+import {
+  EMBEDDED_COMPATIBILITY_SCHEMA_TEXT,
+  EMBEDDED_CORPUS_COMPATIBILITY_CONTRACT_TEXT,
+  EMBEDDED_SCHEMA_TEXT,
+} from "./schemas.embedded.js";
 
 /** The canonical set of schema kinds, ordered. */
 export const SCHEMA_KINDS = [
@@ -90,6 +94,23 @@ export const COMPATIBILITY_SCHEMA_FILES: Readonly<Record<CompatibilitySchemaKind
     "record-judgment": "compatibility/record-grammar-v0.1/record-judgment.schema.json",
   });
 
+/**
+ * Preserved corpus payload formats that are not a versioned variant of a native
+ * record kind. A corpus manifest names one of these by `$id` in its
+ * `record_contract` when its files are an imported format rather than a native
+ * family grammar, so validation can resolve exactly the declared contract.
+ */
+export const CORPUS_COMPATIBILITY_CONTRACT_KINDS = ["eu-us-ai-reviewed-document"] as const;
+
+export type CorpusCompatibilityContractKind = (typeof CORPUS_COMPATIBILITY_CONTRACT_KINDS)[number];
+
+export const CORPUS_COMPATIBILITY_CONTRACT_FILES: Readonly<
+  Record<CorpusCompatibilityContractKind, string>
+> = Object.freeze({
+  "eu-us-ai-reviewed-document":
+    "compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json",
+});
+
 /** A JSON Schema document as a plain object. */
 export type JsonSchema = Record<string, unknown>;
 
@@ -120,6 +141,17 @@ export const RAW_COMPATIBILITY_SCHEMAS: Readonly<Record<CompatibilitySchemaKind,
       ]),
     ) as Record<CompatibilitySchemaKind, JsonSchema>,
   );
+
+export const RAW_CORPUS_COMPATIBILITY_CONTRACTS: Readonly<
+  Record<CorpusCompatibilityContractKind, JsonSchema>
+> = Object.freeze(
+  Object.fromEntries(
+    CORPUS_COMPATIBILITY_CONTRACT_KINDS.map((kind) => [
+      kind,
+      Object.freeze(JSON.parse(EMBEDDED_CORPUS_COMPATIBILITY_CONTRACT_TEXT[kind]) as JsonSchema),
+    ]),
+  ) as Record<CorpusCompatibilityContractKind, JsonSchema>,
+);
 
 /** The declared `$id` of each schema. */
 export const SCHEMA_IDS: Readonly<Record<SchemaKind, string>> = Object.freeze(

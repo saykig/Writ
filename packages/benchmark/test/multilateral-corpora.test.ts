@@ -5,12 +5,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
-const g7 = join(root, "corpora/multilateral/g7/2025-ai-sme");
+const g7 = join(root, "archive/compatibility/g7/2025-ai-sme");
 const g7Benchmark = join(
   root,
   "internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction",
 );
-const g20 = join(root, "corpora/multilateral/g20/2024-rio");
+const g20 = join(root, "archive/compatibility/g20/2024-rio");
 
 const json = <T>(...parts: string[]): T => JSON.parse(readFileSync(join(...parts), "utf8")) as T;
 const digest = (path: string): string =>
@@ -185,7 +185,11 @@ describe("Prompt 6 multilateral corpus preservation", () => {
       }[];
     }>(g20, "sources/source-manifest.json");
     for (const source of g20Sources.document_versions) {
-      expect(digest(join(root, source.fixture_path))).toBe(source.excerpt_sha256);
+      // The manifest is archived material and still records the dataset-relative
+      // path from the pre-archive layout. Its bytes are frozen, so the recorded
+      // path is rebased onto the archive root rather than rewritten in place.
+      const fixture = join(g20, source.fixture_path.split("/2024-rio/")[1]!);
+      expect(digest(fixture)).toBe(source.excerpt_sha256);
       const scoresPassage = g20Passages.find(
         (passage) => passage.document_id === source.document_id && passage.id.endsWith(".scores"),
       );

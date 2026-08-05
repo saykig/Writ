@@ -15,8 +15,7 @@ reviews:
     source_locator: abstract
     claim_machine_ids:
       - 5ef88031-4dd5-5dd0-a6fc-b6f1cee08e19
-    interpretation_note:
-      "The Profile directly concerns evaluation, but its voluntary status means it
+    interpretation_note: 'The Profile directly concerns evaluation, but its voluntary status means it
       does not create a binding provider obligation.
 
-      "
+      '

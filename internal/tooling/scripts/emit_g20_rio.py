@@ -2,7 +2,7 @@
 """Emit and validate a generated compatibility projection of the G20 Rio corpus.
 
 The authoritative political records live under
-``corpora/multilateral/g20/2024-rio``. Optional output goes only to
+``archive/compatibility/g20/2024-rio``. Optional output goes only to
 ``internal/infrastructure/generated/g20`` and cannot compete with that corpus as a source of truth.
 """
 

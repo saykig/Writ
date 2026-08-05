@@ -14,7 +14,7 @@ def test_saved_query_references_independent_versioned_corpora() -> None:
     query = load(QUERY_PATH)
     assert query["contract_version"] == "1.0.0"
     catalog = load(ROOT / query["catalog"])
-    by_id = {item["corpus_id"]: item for item in catalog["corpora"]}
+    by_id = {item["corpus_id"]: item for item in catalog["native_corpora"]}
     assert len(query["corpus_ids"]) == 13
     assert set(query["corpus_ids"]) <= set(by_id)
     assert not any("ai-governance" in corpus_id for corpus_id in query["corpus_ids"])
@@ -32,7 +32,7 @@ def test_saved_query_inputs_resolve_once_and_preserve_missing_coverage() -> None
     claims: dict[str, dict] = {}
     unresolved: dict[str, dict] = {}
     catalog = load(ROOT / query["catalog"])
-    by_id = {item["corpus_id"]: item for item in catalog["corpora"]}
+    by_id = {item["corpus_id"]: item for item in catalog["native_corpora"]}
     for corpus_id in query["corpus_ids"]:
         base = ROOT / by_id[corpus_id]["path"]
         for claim in load(base / "records/claims.yaml")["claims"]:

@@ -18,17 +18,17 @@ claims:
     claim_record_type: institutional_program
     jurisdiction: US
     instrument: CAISI_OVERVIEW
-    source_locator: "overview concerning voluntary agreements and unclassified evaluations
+    source_locator: 'overview concerning voluntary agreements and unclassified evaluations
 
-      "
+      '
     actor_type: ai_lifecycle_organization
-    actor_term_local: "private-sector artificial intelligence developer or evaluator
+    actor_term_local: 'private-sector artificial intelligence developer or evaluator
 
-      "
+      '
     conduct_type: evaluation_participation
-    conduct_term_local: "participate in voluntary agreements and unclassified evaluations with CAISI
+    conduct_term_local: 'participate in voluntary agreements and unclassified evaluations with CAISI
 
-      "
+      '
     legal_force: voluntary
     compliance_function: evaluation_collaboration
     adoption_status: adopted
@@ -39,8 +39,7 @@ claims:
     scope:
       - cross_sector
     target_system: artificial_intelligence_model_or_system
-    interpretation_note:
-      "CAISI provides federal evaluation infrastructure, but private participation
+    interpretation_note: 'CAISI provides federal evaluation infrastructure, but private participation
       is voluntary rather than a market-wide legal duty.
 
-      "
+      '

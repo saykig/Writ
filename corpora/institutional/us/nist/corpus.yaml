@@ -4,7 +4,8 @@ title: National Institute of Standards and Technology institutional facts
 family: institutional
 jurisdiction: US
 corpus_version: 0.1.0
-record_schema:
+record_contract:
+  kind: compatibility
   id: https://writ.example/schemas/compatibility/record-grammar-v0.1/institutional-record.schema.json
   version: 0.1.0
 status: draft

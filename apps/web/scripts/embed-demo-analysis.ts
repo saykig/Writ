@@ -67,14 +67,14 @@ const catalog = requireObject(
   normalize(Bun.YAML.parse(readFileSync(join(repoRoot, CATALOG_REL), "utf8"))),
   "catalog",
 );
-if (!Array.isArray(catalog.corpora)) fail("catalog.corpora must be an array");
+if (!Array.isArray(catalog.native_corpora)) fail("catalog.native_corpora must be an array");
 const ACTIVE_CORPORA: Record<"EU" | "US", string[]> = { EU: [], US: [] };
 const CORPUS_RESOLVERS = {
   EU: `${CATALOG_REL}#EU`,
   US: `${CATALOG_REL}#US`,
 } as const;
-for (const rawEntry of catalog.corpora) {
-  const entry = requireObject(rawEntry, "catalog.corpora[]");
+for (const rawEntry of catalog.native_corpora) {
+  const entry = requireObject(rawEntry, "catalog.native_corpora[]");
   if (
     entry.family !== "legal_policy" ||
     (entry.jurisdiction !== "EU" && entry.jurisdiction !== "US")

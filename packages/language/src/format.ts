@@ -643,6 +643,12 @@ function printJudgment(judgment: JudgmentDeclaration): string {
       case "JudgmentSupersedes":
         lines.push(`${INDENT}supersedes ${member.value};`);
         break;
+      case "JudgmentSupersedesIds":
+        lines.push(`${INDENT}supersedes_judgment_ids ${identifiers(member.values.values)};`);
+        break;
+      case "JudgmentSupersededBy":
+        lines.push(`${INDENT}superseded_by_judgment_id ${member.value};`);
+        break;
       case "RelatedJudgments":
         lines.push(`${INDENT}related_judgment_ids ${identifiers(member.values.values)};`);
         break;

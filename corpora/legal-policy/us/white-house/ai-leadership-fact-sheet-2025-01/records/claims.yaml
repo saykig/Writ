@@ -23,11 +23,10 @@ claims:
     actor_term_local: executive department or agency
     indirectly_affected_actor_type: market_provider
     conduct_type: administrative_policy_revision
-    conduct_term_local:
-      "review, revise or rescind agency actions inconsistent with federal artificial-intelligence
+    conduct_term_local: 'review, revise or rescind agency actions inconsistent with federal artificial-intelligence
       leadership policy
 
-      "
+      '
     legal_force: binding
     binding_scope: executive_branch_only
     compliance_function: agency_policy_direction
@@ -38,6 +37,6 @@ claims:
     implementation_body: executive_agencies
     scope:
       - government_policy
-    interpretation_note: "The direction binds executive agencies, not private providers.
+    interpretation_note: 'The direction binds executive agencies, not private providers.
 
-      "
+      '

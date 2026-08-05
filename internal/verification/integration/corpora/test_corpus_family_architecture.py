@@ -10,7 +10,7 @@ from typing import Any
 
 import jsonschema
 import yaml
-from writ_ingest.corpus.eu_us_ai_governance import CORPUS_SPECS
+from writ_ingest.corpus.eu_us_ai_governance import BOUNDARY_KEYS, CORPUS_SPECS
 
 ROOT = Path(__file__).resolve().parents[4]
 CATALOG_PATH = ROOT / "corpora/catalog.yaml"
@@ -48,21 +48,27 @@ def ai_documents(relative: str, key: str) -> list[dict[str, Any]]:
     ]
 
 
+def publication_token(document_id: str) -> str:
+    """The publication identifier derived from a registered source document ID."""
+
+    return document_id.upper().replace("-", "_")
+
+
 def test_catalog_and_manifests_validate_against_core_contracts() -> None:
     catalog_schema = json.loads((ROOT / "schemas/core/corpus-catalog.schema.json").read_text())
     manifest_schema = json.loads((ROOT / "schemas/core/corpus-manifest.schema.json").read_text())
     current = catalog()
     jsonschema.Draft202012Validator(catalog_schema).validate(current)
     assert current["implemented_native_families"] == ["legal_policy", "institutional"]
-    assert len(current["corpora"]) == 16
-    for entry in current["corpora"]:
+    assert len(current["native_corpora"]) == 16
+    for entry in current["native_corpora"]:
         jsonschema.Draft202012Validator(manifest_schema).validate(manifest(entry))
 
 
 def test_native_paths_have_one_family_and_no_subject_based_boundary() -> None:
     current = catalog()
-    ids = [entry["corpus_id"] for entry in current["corpora"]]
-    paths = [entry["path"] for entry in current["corpora"]]
+    ids = [entry["corpus_id"] for entry in current["native_corpora"]]
+    paths = [entry["path"] for entry in current["native_corpora"]]
     assert len(ids) == len(set(ids))
     assert len(paths) == len(set(paths))
     assert RETIRED_IDS.isdisjoint(ids)
@@ -71,7 +77,7 @@ def test_native_paths_have_one_family_and_no_subject_based_boundary() -> None:
         for value in [*ids, *paths]
         for segment in re.split(r"[/.]", value)
     )
-    for entry in current["corpora"]:
+    for entry in current["native_corpora"]:
         assert entry["family"] in {"legal_policy", "institutional"}
         assert entry["path"].startswith(f"corpora/{entry['family'].replace('_', '-')}/")
         assert f"/{entry['jurisdiction'].lower()}/" in f"/{entry['path']}/"
@@ -81,18 +87,197 @@ def test_native_paths_have_one_family_and_no_subject_based_boundary() -> None:
 def test_issuer_namespaces_are_not_corpora_and_legal_leaves_are_instrument_scoped() -> None:
     for relative in NAMESPACE_DIRS:
         assert not (ROOT / relative / "corpus.yaml").exists()
-    for entry in catalog()["corpora"]:
+    for entry in catalog()["native_corpora"]:
         current = manifest(entry)
         if entry["family"] == "legal_policy":
-            assert sum(
-                name in current
-                for name in ("instrument_id", "instrument_series_id", "dataset_collection_id")
-            ) == 1
+            assert sum(name in current for name in BOUNDARY_KEYS) == 1
         else:
             assert current["root_institution_id"]
         assert {"topic", "topics", "field", "query", "collection", "subject_area"}.isdisjoint(
             current
         )
+
+
+def test_manifests_declare_the_contract_their_records_actually_satisfy() -> None:
+    """The manifest names a real contract and says whether it is native or preserved.
+
+    The record files themselves are validated against the declared contract by
+    `packages/language/test/corpus-record-contracts.test.ts`, which can compile the
+    `.writ` corpora as well as read the YAML ones.
+    """
+
+    reviewed_contract = (
+        "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1"
+        "/reviewed-corpus-document.schema.json"
+    )
+    grammar_v01 = "https://writ.example/schemas/compatibility/record-grammar-v0.1"
+    expected = {
+        # The reviewed EU/US payload is a preserved compatibility format.
+        **{
+            spec["corpus_id"]: ("compatibility", reviewed_contract, "1.0.0")
+            for spec in CORPUS_SPECS
+        },
+        "us.constitutional_law": (
+            "compatibility",
+            f"{grammar_v01}/legal-policy-record.schema.json",
+            "0.1.0",
+        ),
+        "us.institutions.nist": (
+            "compatibility",
+            f"{grammar_v01}/institutional-record.schema.json",
+            "0.1.0",
+        ),
+        "eu.institutions.european_commission": (
+            "native",
+            "https://writ.example/schemas/extensions/institutional-record.schema.json",
+            "0.2.0",
+        ),
+    }
+    actual = {}
+    for entry in catalog()["native_corpora"]:
+        contract = manifest(entry)["record_contract"]
+        actual[entry["corpus_id"]] = (contract["kind"], contract["id"], contract["version"])
+        assert "record_schema" not in manifest(entry)
+        relative = contract["id"].removeprefix("https://writ.example/")
+        assert (ROOT / relative).is_file(), f"{entry['corpus_id']} names a missing contract"
+        assert (contract["kind"] == "compatibility") == relative.startswith(
+            "schemas/compatibility/"
+        )
+    assert actual == expected
+
+
+def test_legal_policy_boundaries_describe_what_each_corpus_actually_captures() -> None:
+    """A boundary identifier must be a registered publication or a preserved label.
+
+    A corpus may not name an underlying legal instrument it does not contain. The
+    White House fact sheets do not register Executive Order 14179 or the framework
+    itself, and the signatory-notice corpus does not contain the Code of Practice,
+    so all four declare the publication they actually captured.
+    """
+
+    for entry in catalog()["native_corpora"]:
+        current = manifest(entry)
+        if entry["family"] != "legal_policy":
+            continue
+        declared = [name for name in BOUNDARY_KEYS if name in current]
+        assert len(declared) == 1
+        key, value = declared[0], current[declared[0]]
+        if key == "dataset_collection_id":
+            continue
+
+        base = ROOT / entry["path"]
+        sources = load_yaml(base / "sources/sources.yaml")["sources"]
+        documents = {
+            publication_token(source["document_id"])
+            for source in sources
+            if source["verification_status"] == "verified"
+        }
+        labels = {claim["instrument"] for claim in load_yaml(base / "records/claims.yaml")["claims"]}
+
+        if key == "publication_id":
+            # A publication boundary tracks the registered document, or the
+            # preserved label when the source itself is still unresolved.
+            assert value in documents or (not documents and value in labels), (
+                f"{entry['corpus_id']} declares publication {value}, "
+                f"registered documents are {sorted(documents)}"
+            )
+        else:
+            # An instrument boundary must be an instrument the corpus preserves.
+            assert value in labels or value in documents, (
+                f"{entry['corpus_id']} declares instrument {value}, which is neither a "
+                f"registered document {sorted(documents)} nor a preserved claim label "
+                f"{sorted(labels)}"
+            )
+
+
+def test_corrected_publication_boundaries_are_the_documents_on_file() -> None:
+    corrected = {
+        "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice": (
+            "GPAI_CODE_OF_PRACTICE_SIGNATORY_NOTICE"
+        ),
+        "writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01": (
+            "WH_FACT_SHEET_2025_01_AI_LEADERSHIP"
+        ),
+        "writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12": (
+            "WH_FACT_SHEET_2025_12_NATIONAL_FRAMEWORK"
+        ),
+        "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan": (
+            "WH_AMERICAS_AI_ACTION_PLAN"
+        ),
+        "writ.corpus.legal-policy.us.nist.caisi.overview": "CAISI_OVERVIEW",
+        "writ.corpus.legal-policy.us.nist.caisi.guidelines": "CAISI_GUIDELINES",
+    }
+    by_id = {entry["corpus_id"]: manifest(entry) for entry in catalog()["native_corpora"]}
+    for corpus_id, publication in corrected.items():
+        current = by_id[corpus_id]
+        assert current["publication_id"] == publication
+        assert "instrument_id" not in current
+        assert "instrument_series_id" not in current
+
+    # The specific overclaims this correction removes.
+    declared = {
+        value
+        for current in by_id.values()
+        for key, value in current.items()
+        if key in BOUNDARY_KEYS
+    }
+    assert "GPAI_CODE_OF_PRACTICE" not in declared
+    assert "EXECUTIVE_ORDER_14179" not in declared
+    assert "NATIONAL_AI_POLICY_FRAMEWORK" not in declared
+
+
+def test_active_and_alias_identifiers_resolve_uniquely() -> None:
+    current = catalog()
+    entries = current["native_corpora"]
+    ids = [entry["corpus_id"] for entry in entries]
+    assert len(ids) == len(set(ids))
+
+    aliases: dict[str, str] = {}
+    for entry in entries:
+        for alias in manifest(entry)["migration_aliases"]:
+            assert alias not in ids, f"{alias} is both an alias and an active corpus ID"
+            assert alias not in aliases, (
+                f"{alias} is declared by both {aliases[alias]} and {entry['corpus_id']}"
+            )
+            aliases[alias] = entry["corpus_id"]
+
+    # The retired one-to-many IDs are absent from every leaf alias list.
+    assert RETIRED_IDS.isdisjoint(aliases)
+    assert all(not manifest(entry)["migration_aliases"] for entry in entries[:13])
+
+
+def test_retired_corpora_are_a_migration_ledger_and_never_an_active_alias() -> None:
+    current = catalog()
+    migrations = current["retired_corpus_migrations"]
+    active = {entry["corpus_id"] for entry in current["native_corpora"]}
+    retired = {migration["retired_corpus_id"] for migration in migrations}
+
+    assert retired == RETIRED_IDS
+    assert retired.isdisjoint(active)
+    assert len(migrations) == len(retired)
+
+    covered: set[str] = set()
+    for migration in migrations:
+        replacements = migration["replacement_corpus_ids"]
+        # The mapping is one-to-many, so it cannot function as an ID-to-path alias.
+        assert len(replacements) > 1
+        assert len(replacements) == len(set(replacements))
+        assert set(replacements) <= active
+        assert migration["old_path"].startswith("corpora/jurisdictions/")
+        assert not (ROOT / migration["old_path"]).exists()
+        covered |= set(replacements)
+
+    # Every retired corpus is fully covered: each of the thirteen split corpora
+    # appears in exactly one ledger entry, and every migration ledger entry in the
+    # corpora themselves points back at a recorded retired corpus.
+    assert covered == {spec["corpus_id"] for spec in CORPUS_SPECS}
+    assert len(covered) == 13
+    ledger_old_ids = {
+        entry["old_corpus_id"]
+        for spec in CORPUS_SPECS
+        for entry in load_yaml(ROOT / spec["path"] / "migration-map.yaml")["entries"]
+    }
+    assert ledger_old_ids == RETIRED_IDS
 
 
 def test_explicit_claim_mapping_and_review_totals_are_exact() -> None:
@@ -176,12 +361,15 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     institutional_nist = ROOT / "corpora/institutional/us/nist"
     assert not (legal_nist / "records.writ").exists()
     assert (institutional_nist / "records.writ").exists()
-    assert manifest(next(entry for entry in catalog()["corpora"] if entry["corpus_id"] == "us.constitutional_law"))["family"] == "legal_policy"
-    assert manifest(next(entry for entry in catalog()["corpora"] if entry["corpus_id"] == "us.institutions.nist"))["family"] == "institutional"
+    by_id = {entry["corpus_id"]: entry for entry in catalog()["native_corpora"]}
+    assert manifest(by_id["us.constitutional_law"])["family"] == "legal_policy"
+    assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
     assert nist.count("\nrecord ") == 6
     assert nist.count("review_state draft;") == 6
     assert nist.count('created_by "OpenAI Codex automated draft";') == 6
+    # `accepted` is a judgment status, never a record or record-link review state.
+    assert "review_state accepted" not in nist
 
 
 def test_nist_constitutional_and_protected_bytes_match_inventory() -> None:
@@ -206,6 +394,25 @@ def test_ai_office_records_are_atomic_function_drafts_only() -> None:
 
 
 def test_query_directory_is_not_needed_for_catalog_or_manifest_resolution() -> None:
-    for entry in catalog()["corpora"]:
+    for entry in catalog()["native_corpora"]:
         assert (ROOT / entry["manifest"]).is_file()
         assert not str(entry["manifest"]).startswith("queries/")
+
+
+def test_catalog_lists_only_native_family_governed_corpora() -> None:
+    current = catalog()
+    assert set(current) == {
+        "schema_version",
+        "implemented_native_families",
+        "native_corpora",
+        "retired_corpus_migrations",
+    }
+    for entry in current["native_corpora"]:
+        assert entry["family"] in {"legal_policy", "institutional"}
+        assert entry["path"].startswith("corpora/")
+        assert not entry["path"].startswith("archive/")
+    # The archived compatibility datasets are not resolvable through the catalog.
+    text = CATALOG_PATH.read_text(encoding="utf-8")
+    assert "g7" not in text
+    assert "g20" not in text
+    assert not (ROOT / "corpora/multilateral").exists()
