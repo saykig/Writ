@@ -1,0 +1,105 @@
+language writ "0.2"
+package us.institutions.nist.judgments version "0.2.0";
+
+// Stage A human review of the six automated draft records and the two Core links
+// derived from them. Judgment `status` is the disposition vocabulary
+// (proposed | accepted | contested | superseded); it is separate from the
+// `review_state` of the record or link each judgment targets. `value` records the
+// workflow state the target reached. These are the first human dispositions for
+// every target, so none of them supersedes an earlier judgment.
+
+judgment judgment_nist_identity_stage_a {
+  target record nist_identity;
+  type review_disposition;
+  value "approved";
+  rationale "Stage A review moves this record from draft to approved as an atomic identity fact. The passage names the institution and nothing more: identity is not mandate, so the mandate, function and operational-capacity placeholders were removed rather than carried forward as unknown payloads.";
+  evidence_refs { nist.about.identity };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_organizational_placement_stage_a {
+  target record nist_organizational_placement;
+  type review_disposition;
+  value "approved";
+  rationale "Stage A review moves this record from draft to approved as an atomic placement fact. Placement is not decision authority: the passage situates NIST within the Department of Commerce without establishing the Department's powers over it, so no decision-right payload was added.";
+  evidence_refs { nist.about.identity };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_measurement_science_function_stage_a {
+  target record nist_measurement_science_function;
+  type review_disposition;
+  value "superseded";
+  rationale "Stage A review moves this record from draft to superseded. The cited passage is explicitly labelled a mission statement, so classifying it as a measurement-science function was a misreading. The record is retained as review history rather than deleted, and its replacement is stated by a separate Core supersession link.";
+  evidence_refs { nist.about.mission };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_mission_stage_a {
+  target record nist_mission;
+  type review_disposition;
+  value "approved";
+  rationale "Stage A review approves this new record, created by the review split, as an atomic mission fact. A mission statement is not a statutory mandate: the record reports what NIST states about itself and establishes no legal authority, demonstrated performance or operational capacity.";
+  evidence_refs { nist.about.mission };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_ai_standards_development_function_stage_a {
+  target record nist_ai_standards_development_function;
+  type review_disposition;
+  value "approved";
+  rationale "Stage A review moves this record from draft to approved as an atomic function fact. The passage describes an activity the group leads; a function is not automatically a mission, so it stays classified as a function, and a stated activity is not operational capacity, so no capacity payload was added.";
+  evidence_refs { nist.ai_standards_group.standards };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_ai_technical_guidance_function_stage_a {
+  target record nist_ai_technical_guidance_function;
+  type review_disposition;
+  value "approved";
+  rationale "Stage A review moves this record from draft to approved as an atomic function fact. The passage supports the group's technical-guidance activity but not its formal placement or capacity, so the parent-institution and operational-capacity payloads were removed rather than retained as unknown.";
+  evidence_refs { nist.ai_standards_group.guidance };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_department_of_commerce_relationship_stage_a {
+  target record_link nist_department_of_commerce_relationship;
+  type record_link_disposition;
+  value "approved";
+  rationale "Stage A review moves this object from draft to approved, and from an institutional record to a Core record link. The link does not duplicate the placement fact: it cites nist_organizational_placement as its supporting record, which remains the authoritative assertion, and the inverse direction is derived rather than stored.";
+  evidence_refs { nist.about.identity };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}
+
+judgment judgment_nist_mission_supersession_link_stage_a {
+  target record_link nist_mission_supersedes_nist_measurement_science_function;
+  type record_link_disposition;
+  value "approved";
+  rationale "Stage A review approves this new Core link as approved. It preserves the review history by stating that the approved mission record replaces the earlier misclassified function record, in that direction, without deleting the superseded record or adding a record-level supersession field.";
+  evidence_refs { nist.about.mission };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-04;
+  family_context institutional;
+}

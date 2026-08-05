@@ -1,0 +1,19 @@
+# The approved mission record replaces the earlier misclassified function record.
+# The direction is newer -> older. The superseded record is retained as history
+# rather than deleted, and carries no record-level `superseded_by` field.
+schema_version: 1.0.0
+link_id: nist_mission_supersedes_nist_measurement_science_function
+owning_corpus_id: us.institutions.nist
+source_id: nist_mission
+source_kind: record
+target_id: nist_measurement_science_function
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - nist.about.mission
+uncertainties: []
+provenance:
+  created_by: Claude Code implementation of approved human review
+  created_at: 2026-08-04
+review_state: approved

@@ -48,6 +48,10 @@ def ai_documents(relative: str, key: str) -> list[dict[str, Any]]:
     ]
 
 
+def nist_record_ids(text: str) -> list[str]:
+    return re.findall(r"^record (\S+) :", text, re.MULTILINE)
+
+
 def publication_token(document_id: str) -> str:
     """The publication identifier derived from a registered source document ID."""
 
@@ -122,10 +126,11 @@ def test_manifests_declare_the_contract_their_records_actually_satisfy() -> None
             f"{grammar_v01}/legal-policy-record.schema.json",
             "0.1.0",
         ),
+        # Stage A moved the NIST corpus onto the native atomic contract.
         "us.institutions.nist": (
-            "compatibility",
-            f"{grammar_v01}/institutional-record.schema.json",
-            "0.1.0",
+            "native",
+            "https://writ.example/schemas/extensions/institutional-record.schema.json",
+            "0.2.0",
         ),
         "eu.institutions.european_commission": (
             "native",
@@ -366,16 +371,56 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
     assert nist.count("\nrecord ") == 6
-    assert nist.count("review_state draft;") == 6
-    assert nist.count('created_by "OpenAI Codex automated draft";') == 6
+    # Stage A human review dispositioned all six drafts: five approved, one superseded.
+    assert nist.count("review_state draft;") == 0
+    assert nist.count("review_state approved;") == 5
+    assert nist.count("review_state superseded;") == 1
+    # The five records carried over keep their original automated provenance; only the
+    # new mission record is attributed to the review implementation.
+    assert nist.count('created_by "OpenAI Codex automated draft";') == 5
+    assert nist.count('created_by "Claude Code implementation of approved human review";') == 1
     # `accepted` is a judgment status, never a record or record-link review state.
     assert "review_state accepted" not in nist
 
 
-def test_nist_constitutional_and_protected_bytes_match_inventory() -> None:
+def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_a() -> None:
+    """Stage A rewrote the NIST records by approved review, so their bytes moved.
+
+    What must not move is the identity and evidence layer. The byte freeze recorded in
+    the corpus-family inventory is therefore replaced here by the Stage A preservation
+    check; `packages/language/test/nist-stage-a.test.ts` asserts the same identities
+    against the compiled records.
+    """
+
     before = json.loads(PRE_MIGRATION.read_text(encoding="utf-8"))
-    nist_bytes = (ROOT / "corpora/institutional/us/nist/records.writ").read_bytes()
-    assert hashlib.sha256(nist_bytes).hexdigest() == before["nist"]["sha256"]
+    stage_a = json.loads(
+        (ROOT / "docs/migrations/nist-stage-a/pre-implementation-inventory.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    nist = (ROOT / "corpora/institutional/us/nist/records.writ").read_text(encoding="utf-8")
+
+    # Every record ID and every evidence hash recorded before Stage A is still present.
+    assert {item["record_id"] for item in stage_a["records"]} - {
+        "nist_department_of_commerce_relationship"
+    } <= set(nist_record_ids(nist))
+    for value in before["nist"]["hashes"]:
+        assert value in nist, f"Stage A dropped evidence hash {value}"
+
+    # The relationship record became a Core link rather than being deleted.
+    link = ROOT / (
+        "corpora/institutional/us/nist/relationships/"
+        "nist_department_of_commerce_relationship.yaml"
+    )
+    assert link.is_file()
+    assert load_yaml(link)["link_id"] == "nist_department_of_commerce_relationship"
+
+    # `sources.writ` was not touched at all.
+    sources = (ROOT / "corpora/institutional/us/nist/sources.writ").read_bytes()
+    assert hashlib.sha256(sources).hexdigest() == stage_a["files"]["sources.writ"]["sha256"].removeprefix(
+        "sha256:"
+    )
+
     for item in before["constitutional"]:
         old_prefix = "corpora/us/constitutional-law/"
         relative = item["path"].removeprefix(old_prefix)

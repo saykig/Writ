@@ -240,7 +240,9 @@ export type JudgmentType =
   | "operational_capacity_determination"
   | "direct_or_inferred"
   | "disagreement"
-  | "adjudication";
+  | "adjudication"
+  | "review_disposition"
+  | "record_link_disposition";
 
 export interface LegacyRecordJudgment {
   schema_version: "0.1.0";
@@ -271,7 +273,10 @@ export interface CurrentRecordJudgment {
   status: "proposed" | "accepted" | "contested" | "superseded";
   created_at: string;
   family_context?: RecordFamily;
-  supersedes?: string;
+  /** Older judgments this one replaced. Only a judgment that was accepted can carry it. */
+  supersedes_judgment_ids?: string[];
+  /** The newer judgment that replaced this one. Required when `status` is `superseded`. */
+  superseded_by_judgment_id?: string;
   related_judgment_ids?: string[];
 }
 
@@ -288,7 +293,8 @@ export type RecordLinkRelation =
   | "derives_authority_from"
   | "part_of"
   | "oversees"
-  | "applies_to";
+  | "applies_to"
+  | "supersedes";
 
 export interface RecordLinkPayload {
   link_id: string;
@@ -299,6 +305,12 @@ export interface RecordLinkPayload {
   relation_type: RecordLinkRelation;
   basis: EvidenceBasis;
   evidence_refs: string[];
+  /**
+   * Records that already assert the fact this link rests on, cited instead of
+   * restated. The link is still reviewed on its own; a supporting record's review
+   * approval does not transfer to it.
+   */
+  supporting_record_ids?: string[];
 }
 
 export interface RecordLink extends RecordLinkPayload {
