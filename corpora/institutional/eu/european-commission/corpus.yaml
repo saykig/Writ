@@ -13,17 +13,27 @@ identity_namespace: eu.institutions.european_commission
 migration_aliases: []
 root_institution_id: european_commission
 record_counts:
-  institutional_records: 3
+  institutional_records: 21
+  record_links: 1
+  disposition_judgments: 22
 review_counts:
-  draft_records: 3
+  approved_records: 21
+  approved_record_links: 1
+  accepted_disposition_judgments: 22
 unresolved_evidence_count: 0
 locations:
   sources:
+    - sources.writ
+    - sources/captures/
     - ../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/sources/sources.yaml
   passages:
+    - records.writ
     - ../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/passages/passages.yaml
   records:
     - records.writ
-  relationships: []
-  judgments: []
-  migration: []
+  relationships:
+    - relationships/eu_ai_office_euro_comiss_relationship.yaml
+  judgments:
+    - judgments.writ
+  migration:
+    - migration.yaml

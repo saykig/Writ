@@ -71,13 +71,21 @@ describe("structured record lowering", () => {
     );
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
-    expect(compiled.records).toHaveLength(3);
-    for (const record of compiled.records) {
+    expect(compiled.records).toHaveLength(21);
+    const preservedFunctions = compiled.records.filter((record) =>
+      [
+        "eu_ai_office_technical_documentation_receipt",
+        "eu_ai_office_training_summary_template_function",
+        "eu_ai_office_serious_incident_report_receipt",
+      ].includes(record.record_id),
+    );
+    expect(preservedFunctions).toHaveLength(3);
+    for (const record of preservedFunctions) {
       expect(record).toMatchObject({
         schema_version: "0.2.0",
         family: "institutional",
         institutional_fact_type: "function",
-        review_state: "draft",
+        review_state: "approved",
       });
       expect(record).not.toHaveProperty("mandate");
       expect(record).not.toHaveProperty("operational_capacity");

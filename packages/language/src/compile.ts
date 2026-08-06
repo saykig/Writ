@@ -236,6 +236,26 @@ function lowerInstitutional(
       case "OperationalCapacityProperty":
         result.operational_capacity = {
           status: property.status,
+          capacity_type: property.capacityType,
+          ...(property.capacityComponents
+            ? { capacity_components: [...property.capacityComponents.values] }
+            : {}),
+          ...(property.asOfDate ? { as_of_date: property.asOfDate } : {}),
+          ...(property.quantity
+            ? {
+                quantity: {
+                  value: property.quantity.value,
+                  unit: property.quantity.unit,
+                  qualifier: property.quantity.qualifier,
+                },
+              }
+            : {}),
+          evidence_refs: [...property.evidenceRefs.values],
+        };
+        break;
+      case "LegacyOperationalCapacityProperty":
+        result.operational_capacity = {
+          status: property.status,
           dimensions: [...property.dimensions.values],
           evidence_refs: [...property.evidenceRefs.values],
         };

@@ -485,7 +485,31 @@ function printInstitutionalProperty(property: InstitutionalProperty, indent: str
       return `${indent}functions ${identifiers(property.values.values)};`;
     case "InstitutionalFunctionProperty":
       return `${indent}function ${property.value};`;
-    case "OperationalCapacityProperty":
+    case "OperationalCapacityProperty": {
+      const lines = [
+        `${indent}operational_capacity {`,
+        `${indent}${INDENT}status ${property.status};`,
+        `${indent}${INDENT}capacity_type ${property.capacityType};`,
+      ];
+      if (property.capacityComponents)
+        lines.push(
+          `${indent}${INDENT}capacity_components ${identifiers(property.capacityComponents.values)};`,
+        );
+      if (property.asOfDate) lines.push(`${indent}${INDENT}as_of_date ${property.asOfDate};`);
+      if (property.quantity) {
+        lines.push(
+          `${indent}${INDENT}quantity {`,
+          `${indent}${INDENT}${INDENT}value ${num(property.quantity.value)};`,
+          `${indent}${INDENT}${INDENT}unit ${property.quantity.unit};`,
+          `${indent}${INDENT}${INDENT}qualifier ${property.quantity.qualifier};`,
+          `${indent}${INDENT}}`,
+        );
+      }
+      lines.push(`${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};`);
+      lines.push(`${indent}}`);
+      return lines.join("\n");
+    }
+    case "LegacyOperationalCapacityProperty":
       return `${indent}operational_capacity {\n${indent}${INDENT}status ${property.status};\n${indent}${INDENT}dimensions ${strings(property.dimensions.values)};\n${indent}${INDENT}evidence_refs ${identifiers(property.evidenceRefs.values)};\n${indent}}`;
     case "DecisionRightsProperty":
       return `${indent}decision_rights ${strings(property.values.values)};`;

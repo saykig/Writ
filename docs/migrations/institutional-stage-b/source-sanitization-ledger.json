@@ -1,0 +1,118 @@
+{
+  "ledger_version": "1.0.0",
+  "sanitization_date": "2026-08-05",
+  "reason": "GitHub push protection identified publisher-supplied Mapbox access tokens embedded in official NIST HTML responses. Transport credentials are not evidence and must not be stored in repository history.",
+  "transformation_rule": {
+    "target": "Only the complete publisher-supplied Mapbox token value embedded in each affected HTML capture",
+    "replacement": "[REDACTED_PUBLISHER_MAPBOX_TOKEN]",
+    "deterministic": true,
+    "replacement_count_per_file": 1
+  },
+  "verification": {
+    "all_non_document_hash_record_content_identical": true,
+    "all_evidence_quotations_byte_identical": true,
+    "all_evidence_locators_identical": true,
+    "all_normalized_assertions_identical": true,
+    "all_record_classifications_identical": true,
+    "all_human_judgments_identical": true,
+    "source_urls_and_retrieval_dates_identical": true,
+    "selected_evidence_intersections": 0,
+    "substantive_source_content_unchanged": true
+  },
+  "affected_files": [
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-accreditation.html",
+      "source_url": "https://www.nist.gov/nvlap/accreditation",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:32eb48cd2686976aa589b704a1697edf115498c2c8dedc46601af041915c68ce",
+      "post_sanitization_sha256": "sha256:3e1c7a56c31e74b719b8366d655e0b390948125d73b49f7204a4d0d3bc7e83db",
+      "selected_evidence_passages": ["nist.accreditation.process"],
+      "selected_evidence_passage_hashes": {
+        "nist.accreditation.process": "sha256:664bd8173aae58423acaac0b41b6f33f4b236ac5c90e58f75e9040f9989e1c1f"
+      },
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    },
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-advanced-measurement-laboratory.html",
+      "source_url": "https://www.nist.gov/cnst/about-advanced-measurement-laboratory-aml-complex",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:6c208adb032f5c805e76ab557117fe551fe48887fedbb9740f719fa689a0bcae",
+      "post_sanitization_sha256": "sha256:f928e083da64fc2bf6ae582adbdb2021f62b8b9f0349f80601cecfb6bcb8e101",
+      "selected_evidence_passages": ["nist.aml.features"],
+      "selected_evidence_passage_hashes": {
+        "nist.aml.features": "sha256:ddedb6b29adcf4c3a3e31c2c73d26c43bb1219ac645003b8b8e837c346fcc1f3"
+      },
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    },
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-ai-consortium-expansion-2026-05-29.html",
+      "source_url": "https://www.nist.gov/news-events/news/2026/05/nist-expands-ai-consortiums-scope-calls-new-members",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:f47d75c277dee0e32fc63cf3e255af00f7ddec31e066a13516b121b9c4873615",
+      "post_sanitization_sha256": "sha256:6479ed7c9761fb1b63f4a946d7a740d4157a7bbc2998a577ec4249b564622fca",
+      "selected_evidence_passages": [],
+      "selected_evidence_passage_hashes": {},
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    },
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-ai-consortium.html",
+      "source_url": "https://www.nist.gov/artificial-intelligence/nist-ai-consortium",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:da42227fa85211fe7422db0656c350afc6d5572caf9fe38f97ba3ac1a0451230",
+      "post_sanitization_sha256": "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0",
+      "selected_evidence_passages": [
+        "nist.ai_consortium.partnership",
+        "nist.ai_consortium.contributions",
+        "nist.ai_consortium.organization_count"
+      ],
+      "selected_evidence_passage_hashes": {
+        "nist.ai_consortium.partnership": "sha256:48475fa02e08511ec3f754fd93cb4fee2ddd3d0d5119fcc1a14fb2bfcef52f85",
+        "nist.ai_consortium.contributions": "sha256:40e110c4ebe66ab610c0f08ac4e929393cf1623b2193489b32e99cc520c24e7c",
+        "nist.ai_consortium.organization_count": "sha256:64f3a826db55b7d57e6e923f69f110d75162e710213bcfb81dc527bf2e6a558f"
+      },
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    },
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-ai-research-measurement-standards-division.html",
+      "source_url": "https://www.nist.gov/itl/ai",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:d3772b509006c47245a57639cbcf9bf23af9c5ebbdee120c0b3ec8abaf00a0c4",
+      "post_sanitization_sha256": "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22",
+      "selected_evidence_passages": [
+        "nist.ai_division.capacity",
+        "nist.ai_division.groups",
+        "nist.ai_division.itl_placement"
+      ],
+      "selected_evidence_passage_hashes": {
+        "nist.ai_division.capacity": "sha256:533d8191e5ec0c634811181d8ef4ed4524f9e346b602fa744c543a27e5b2c9ce",
+        "nist.ai_division.groups": "sha256:3c5d0de8ef3ad63178beee6bf9cd278935f65eb2df767e9c4c272fcf969dbb42",
+        "nist.ai_division.itl_placement": "sha256:bef13a92de5ed5212d87455976f8169e7a76a17db196ff50e23c507d81f13e5b"
+      },
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    },
+    {
+      "file": "corpora/institutional/us/nist/sources/captures/nist-laboratories.html",
+      "source_url": "https://www.nist.gov/laboratories",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "pre_sanitization_sha256": "sha256:7ae29232445f976cdf273a2adf052b811929f54cb1b39e91007c359566d75b0f",
+      "post_sanitization_sha256": "sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b",
+      "selected_evidence_passages": ["nist.laboratories.six_labs"],
+      "selected_evidence_passage_hashes": {
+        "nist.laboratories.six_labs": "sha256:8b09ac60a63c3e38eebf65f623b1c52954ba78f83a8e888c41947e96e3ee52ac"
+      },
+      "selected_evidence_intersected_redaction": false,
+      "evidence_quotations_byte_identical": true,
+      "substantive_source_content_unchanged": true
+    }
+  ]
+}

@@ -100,6 +100,7 @@
         "research_body",
         "interagency_body",
         "organizational_unit",
+        "supranational_institution",
         "other",
         "unknown"
       ]
@@ -112,7 +113,11 @@
       "properties": {
         "status": { "$ref": "#/$defs/mandateStatus" },
         "text": { "type": "string", "minLength": 1 },
-        "authority_source_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "authority_source_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
         "evidence_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
       }
     },
@@ -133,27 +138,146 @@
       "properties": {
         "status": { "$ref": "#/$defs/mandateStatus" },
         "text": { "type": "string", "minLength": 1 },
-        "authority_source_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "authority_source_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
         "evidence_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
       }
     },
     "operationalCapacity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "dimensions", "evidence_refs"],
+      "required": ["status", "capacity_type", "evidence_refs"],
       "properties": {
-        "status": { "enum": ["established", "partial", "unknown", "contested"] },
-        "dimensions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "status": {
+          "enum": ["active", "planned", "limited", "degraded", "suspended", "retired", "unknown"]
+        },
+        "capacity_type": {
+          "enum": [
+            "organizational_unit",
+            "laboratory_network",
+            "facility",
+            "program",
+            "technical_capability",
+            "accreditation_system",
+            "partnership_network",
+            "other"
+          ]
+        },
+        "capacity_components": {
+          "type": "array",
+          "items": {
+            "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/identifier"
+          },
+          "uniqueItems": true
+        },
+        "as_of_date": { "type": "string", "format": "date" },
+        "quantity": { "$ref": "#/$defs/capacityQuantity" },
         "evidence_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "dependentRequired": { "quantity": ["as_of_date"] }
+    },
+    "capacityQuantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "qualifier"],
+      "properties": {
+        "value": { "type": "number", "minimum": 0 },
+        "unit": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/identifier"
+        },
+        "qualifier": { "enum": ["exact", "approximate", "minimum", "maximum"] }
       }
     },
-    "nonIdentityPayload": { "anyOf": [{ "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonPlacementPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonRelationshipPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonMissionPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonMandatePayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["function"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonFunctionPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["decision_right"] }, { "required": ["operational_capacity"] }] },
-    "nonDecisionRightPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["operational_capacity"] }] },
-    "nonCapacityPayload": { "anyOf": [{ "required": ["institution_type"] }, { "required": ["parent_institution_id"] }, { "required": ["record_link"] }, { "required": ["mission"] }, { "required": ["mandate"] }, { "required": ["function"] }, { "required": ["decision_right"] }] }
+    "nonIdentityPayload": {
+      "anyOf": [
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonPlacementPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonRelationshipPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonMissionPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonMandatePayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonFunctionPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["decision_right"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonDecisionRightPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["operational_capacity"] }
+      ]
+    },
+    "nonCapacityPayload": {
+      "anyOf": [
+        { "required": ["institution_type"] },
+        { "required": ["parent_institution_id"] },
+        { "required": ["record_link"] },
+        { "required": ["mission"] },
+        { "required": ["mandate"] },
+        { "required": ["function"] },
+        { "required": ["decision_right"] }
+      ]
+    }
   }
 }

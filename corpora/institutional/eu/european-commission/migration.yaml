@@ -1,0 +1,106 @@
+schema_version: 1.0.0
+corpus_id: eu.institutions.european_commission
+stage: approved_institutional_production_review
+base_sha: 14ec512a28949155054dd2e7479337dbfce95f8c
+reviewer: Sara Kim
+contract:
+  kind: native
+  id: https://writ.example/schemas/extensions/institutional-record.schema.json
+  version: 0.2.0
+entries:
+  - previous_object: eu_ai_office_technical_documentation_receipt
+    final_object: eu_ai_office_technical_documentation_receipt
+    treatment: preserved exactly except review_state draft to approved
+  - previous_object: eu_ai_office_training_summary_template_function
+    final_object: eu_ai_office_training_summary_template_function
+    treatment: preserved exactly except review_state draft to approved
+  - previous_object: eu_ai_office_serious_incident_report_receipt
+    final_object: eu_ai_office_serious_incident_report_receipt
+    treatment: preserved exactly except review_state draft to approved
+  - {
+      previous_object: null,
+      final_object: european_commission_identity,
+      treatment: new reviewed addition,
+    }
+  - { previous_object: null, final_object: eu_ai_office_identity, treatment: new reviewed addition }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_placement,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_euro_comiss_relationship,
+      treatment: new reviewed Core link,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_mission,
+      treatment: new reviewed addition,
+    }
+  - { previous_object: null, final_object: eu_ai_office_mission, treatment: new reviewed addition }
+  - {
+      previous_object: null,
+      final_object: european_commission_union_law_mandate,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_gp_ai_enforcement_mandate,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_legislative_proposal_function,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_budget_management_function,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_model_eval_function,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_reasoned_opinion_decision_right,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_cjeu_referral_decision_right,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_gp_ai_fine_decision_right,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_model_eval_decision_right,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: european_commission_jrc_infra_capacity,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_org_capacity,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_model_eval_capacity,
+      treatment: new reviewed addition,
+    }
+  - {
+      previous_object: null,
+      final_object: eu_ai_office_cooperation_capacity,
+      treatment: new reviewed addition,
+    }

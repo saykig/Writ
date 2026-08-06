@@ -24,8 +24,18 @@ import { compileSource } from "../src/index.js";
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const CORPUS = join(ROOT, "corpora/institutional/us/nist");
 
-/** The `sources.writ` digest recorded before Stage A began. */
-const SOURCES_SHA256 = "55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee";
+const INVENTORY = JSON.parse(
+  readFileSync(
+    join(ROOT, "docs/migrations/institutional-stage-b/pre-implementation-inventory.json"),
+    "utf8",
+  ),
+) as {
+  nist_stage_a: {
+    sources_file: { bytes_base64: string; sha256: string };
+    judgments_file: { bytes_base64: string };
+    links: Array<{ path: string; bytes_base64: string }>;
+  };
+};
 
 const AUTOMATED_DRAFT = "OpenAI Codex automated draft";
 const IMPLEMENTATION = "Claude Code implementation of approved human review";
@@ -46,7 +56,18 @@ const manifest = yaml<Manifest>("corpus.yaml");
 const records = compileSource(read("records.writ"), { fileName: "records.writ" });
 const judgmentDocument = compileSource(read("judgments.writ"), { fileName: "judgments.writ" });
 // Every Stage A judgment is a v0.2 disposition, so the union narrows to the current shape.
-const judgments = judgmentDocument.judgments as readonly CurrentRecordJudgment[];
+const allJudgments = judgmentDocument.judgments as readonly CurrentRecordJudgment[];
+const judgments = allJudgments.filter((judgment) => judgment.judgment_id.endsWith("_stage_a"));
+
+const STAGE_A_RECORD_IDS = new Set([
+  "nist_identity",
+  "nist_organizational_placement",
+  "nist_mission",
+  "nist_measurement_science_function",
+  "nist_ai_standards_development_function",
+  "nist_ai_technical_guidance_function",
+]);
+const stageARecords = records.records.filter((target) => STAGE_A_RECORD_IDS.has(target.record_id));
 
 const LINK_FILES = {
   part_of: "relationships/nist_department_of_commerce_relationship.yaml",
@@ -114,15 +135,32 @@ describe("corpus contract and status", () => {
     expect(records.schemaValid).toBe(true);
   });
 
-  test("sources.writ is byte-identical to the pre-implementation version", () => {
-    const bytes = readFileSync(join(CORPUS, "sources.writ"));
-    expect(createHash("sha256").update(bytes).digest("hex")).toBe(SOURCES_SHA256);
+  test("the protected Stage A source bytes remain the exact prefix", () => {
+    const baseline = Buffer.from(INVENTORY.nist_stage_a.sources_file.bytes_base64, "base64");
+    const current = readFileSync(join(CORPUS, "sources.writ"));
+    expect(current.subarray(0, baseline.length)).toEqual(baseline);
+    expect(createHash("sha256").update(baseline).digest("hex")).toBe(
+      INVENTORY.nist_stage_a.sources_file.sha256.replace("sha256:", ""),
+    );
+  });
+
+  test("the eight protected judgment bytes and both relationship files are unchanged", () => {
+    const judgmentBaseline = Buffer.from(
+      INVENTORY.nist_stage_a.judgments_file.bytes_base64,
+      "base64",
+    );
+    expect(
+      readFileSync(join(CORPUS, "judgments.writ")).subarray(0, judgmentBaseline.length),
+    ).toEqual(judgmentBaseline);
+    for (const item of INVENTORY.nist_stage_a.links) {
+      expect(readFileSync(join(ROOT, item.path))).toEqual(Buffer.from(item.bytes_base64, "base64"));
+    }
   });
 
   test("the manifest routes each location category to its own files", () => {
     expect(manifest.locations).toEqual({
-      sources: ["sources.writ"],
-      passages: ["sources.writ"],
+      sources: ["sources.writ", "sources/captures/"],
+      passages: ["sources.writ", "records.writ"],
       records: ["records.writ"],
       relationships: [LINK_FILES.part_of, LINK_FILES.supersedes],
       judgments: ["judgments.writ"],
@@ -313,13 +351,13 @@ describe("Core record links", () => {
 
 describe("Stage A exclusions", () => {
   const factTypes = () =>
-    records.records.map((r) => (r as { institutional_fact_type?: string }).institutional_fact_type);
+    stageARecords.map((r) => (r as { institutional_fact_type?: string }).institutional_fact_type);
 
   test("no Stage A record exists for mandate, decision rights or operational capacity", () => {
     for (const excluded of ["mandate", "decision_right", "operational_capacity"]) {
       expect(factTypes()).not.toContain(excluded);
     }
-    for (const target of records.records) {
+    for (const target of stageARecords) {
       expect(target).not.toHaveProperty("mandate");
       expect(target).not.toHaveProperty("decision_right");
       expect(target).not.toHaveProperty("operational_capacity");
@@ -327,7 +365,7 @@ describe("Stage A exclusions", () => {
   });
 
   test("no AI-group identity or placement record exists", () => {
-    const group = records.records.filter(
+    const group = stageARecords.filter(
       (r) =>
         (r as { institution_id?: string }).institution_id === "nist.ai_standards_guidelines_group",
     );
@@ -352,8 +390,7 @@ describe("evidence preservation", () => {
     const sources = read("sources.writ");
     expect(sources).toContain("source_id nist.about;");
     expect(sources).toContain("source_id nist.ai_standards_group;");
-    expect([...sources.matchAll(/source_id /g)]).toHaveLength(2);
-    const used = new Set(records.records.flatMap((r) => r.evidence.map((e) => e.source_id)));
+    const used = new Set(stageARecords.flatMap((r) => r.evidence.map((e) => e.source_id)));
     expect([...used].sort()).toEqual(["nist.about", "nist.ai_standards_group"]);
   });
 
@@ -384,7 +421,7 @@ describe("evidence preservation", () => {
       ],
     ]);
     const seen = new Set<string>();
-    for (const target of records.records) {
+    for (const target of stageARecords) {
       for (const item of target.evidence) {
         seen.add(item.passage_id);
         expect(expected.has(item.passage_id), `unknown passage ${item.passage_id}`).toBe(true);
@@ -504,24 +541,17 @@ describe("human-review judgments", () => {
 
 describe("final Stage A inventory", () => {
   test("the corpus contains exactly six institutional records", () => {
-    expect(records.records).toHaveLength(6);
-    expect(manifest.record_counts.institutional_records).toBe(6);
-    for (const target of records.records) expect(target.family).toBe("institutional");
+    expect(stageARecords).toHaveLength(6);
+    for (const target of stageARecords) expect(target.family).toBe("institutional");
   });
 
   test("five records are approved and one is superseded", () => {
-    const states = records.records.map((target) => target.review_state);
+    const states = stageARecords.map((target) => target.review_state);
     expect(states.filter((state) => state === "approved")).toHaveLength(5);
     expect(states.filter((state) => state === "superseded")).toHaveLength(1);
     expect(states).not.toContain("draft");
     // `accepted` is a judgment status, never a record review state.
     expect(states).not.toContain("accepted");
-    expect(manifest.review_counts).toMatchObject({
-      approved_records: 5,
-      superseded_records: 1,
-      approved_record_links: 2,
-      accepted_disposition_judgments: 8,
-    });
   });
 
   test("exactly two Core record links are approved", () => {
@@ -533,7 +563,7 @@ describe("final Stage A inventory", () => {
   });
 
   test("no legal-policy NIST publication was moved into the institutional corpus", () => {
-    for (const target of records.records) {
+    for (const target of stageARecords) {
       expect(target.family).not.toBe("legal_policy");
       expect(target).not.toHaveProperty("instrument_type");
       expect(target).not.toHaveProperty("official_citation");
@@ -545,8 +575,9 @@ describe("final Stage A inventory", () => {
     const ledger = yaml<{ entries: { previous_object: string | null; final_object: string }[] }>(
       "migration.yaml",
     );
-    expect(ledger.entries).toHaveLength(8);
-    const previous = ledger.entries.map((entry) => entry.previous_object).filter(Boolean);
+    const stageAEntries = ledger.entries.slice(0, 8);
+    expect(stageAEntries).toHaveLength(8);
+    const previous = stageAEntries.map((entry) => entry.previous_object).filter(Boolean);
     expect(previous.sort()).toEqual([
       "nist_ai_standards_development_function",
       "nist_ai_technical_guidance_function",
@@ -555,7 +586,7 @@ describe("final Stage A inventory", () => {
       "nist_measurement_science_function",
       "nist_organizational_placement",
     ]);
-    const final = ledger.entries.map((entry) => entry.final_object);
+    const final = stageAEntries.map((entry) => entry.final_object);
     expect(final).toContain("nist_mission");
     expect(final).toContain("nist_mission_supersedes_nist_measurement_science_function");
     expect(new Set(final).size).toBe(8);

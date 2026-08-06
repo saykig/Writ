@@ -28,3 +28,129 @@ concept NistAiStandardsGroupSource {
   source_version "retrieved-2026-08-03";
   source_date 2026-08-03;
 }
+
+source us_code_15_usc_272 {
+  uri "https://www.govinfo.gov/content/pkg/USCODE-2024-title15/pdf/USCODE-2024-title15-chap7-sec272.pdf";
+  media_type "application/pdf";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85";
+}
+
+concept UsCode15Usc272Source {
+  source_id us_code.title15_usc_272;
+  source_title "15 U.S.C. § 272, Functions and activities";
+  source_version "2024-edition-current-text-verified-2026-08-05";
+  source_date 2024-01-01;
+}
+
+source ecfr_15_cfr_part_285 {
+  uri "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-15.xml?part=285";
+  media_type "application/xml";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919";
+}
+
+concept Ecfr15CfrPart285Source {
+  source_id ecfr.title15_cfr_part_285;
+  source_title "15 CFR Part 285 — National Voluntary Laboratory Accreditation Program";
+  source_version "effective-2026-08-01";
+  source_date 2026-08-01;
+}
+
+source nist_handbook_150 {
+  uri "https://nvlpubs.nist.gov/nistpubs/hb/2020/NIST.HB.150-2020-upd1.pdf";
+  media_type "application/pdf";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e";
+}
+
+concept NistHandbook150Source {
+  source_id nist.handbook_150;
+  source_title "NIST Handbook 150:2020, NVLAP Procedures and General Requirements";
+  source_version "2020-update-1";
+  source_date 2020-01-01;
+}
+
+source nist_accreditation {
+  uri "https://www.nist.gov/nvlap/accreditation";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:3e1c7a56c31e74b719b8366d655e0b390948125d73b49f7204a4d0d3bc7e83db";
+}
+
+concept NistAccreditationSource {
+  source_id nist.accreditation;
+  source_title "NVLAP accreditation";
+  source_version "retrieved-2026-08-05";
+  source_date 2026-08-05;
+}
+
+source nist_laboratories {
+  uri "https://www.nist.gov/laboratories";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b";
+}
+
+concept NistLaboratoriesSource {
+  source_id nist.laboratories;
+  source_title "NIST Laboratories";
+  source_version "retrieved-2026-08-05";
+  source_date 2026-08-05;
+}
+
+source nist_advanced_measurement_laboratory {
+  uri "https://www.nist.gov/cnst/about-advanced-measurement-laboratory-aml-complex";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:f928e083da64fc2bf6ae582adbdb2021f62b8b9f0349f80601cecfb6bcb8e101";
+}
+
+concept NistAdvancedMeasurementLaboratorySource {
+  source_id nist.advanced_measurement_laboratory;
+  source_title "About the Advanced Measurement Laboratory Complex";
+  source_version "retrieved-2026-08-05";
+  source_date 2026-08-05;
+}
+
+source nist_ai_research_measurement_standards_division {
+  uri "https://www.nist.gov/itl/ai";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22";
+}
+
+concept NistAiResearchMeasurementStandardsDivisionSource {
+  source_id nist.ai_research_measurement_standards_division;
+  source_title "AI Research, Measurement, and Standards Division";
+  source_version "retrieved-2026-08-05";
+  source_date 2026-08-05;
+}
+
+source nist_ai_consortium {
+  uri "https://www.nist.gov/artificial-intelligence/nist-ai-consortium";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0";
+}
+
+concept NistAiConsortiumSource {
+  source_id nist.ai_consortium;
+  source_title "NIST AI Consortium";
+  source_version "retrieved-2026-08-05";
+  source_date 2026-08-05;
+}
+
+source nist_ai_consortium_expansion {
+  uri "https://www.nist.gov/news-events/news/2026/05/nist-expands-ai-consortiums-scope-calls-new-members";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:6479ed7c9761fb1b63f4a946d7a740d4157a7bbc2998a577ec4249b564622fca";
+}
+
+concept NistAiConsortiumExpansionSource {
+  source_id nist.ai_consortium_expansion;
+  source_title "NIST Expands AI Consortium’s Scope, Calls for New Members";
+  source_version "published-2026-05-29";
+  source_date 2026-05-29;
+}

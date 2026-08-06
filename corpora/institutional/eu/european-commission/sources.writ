@@ -1,0 +1,74 @@
+language writ "0.1"
+package eu.institutions.european_commission.sources version "0.1.0";
+
+source eu_teu_article_13 {
+  uri "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012M013";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37";
+}
+concept EuTeuArticle13Source { source_id eu.teu_article_13; source_title "Treaty on European Union, Article 13"; source_version "retrieved-2026-08-05"; source_date 2012-10-26; }
+
+source eu_teu_article_17 {
+  uri "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012M017";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:ee9da1327b780b2b4290b866dedceccad86793d468b36bbcc0fac594e93d2c08";
+}
+concept EuTeuArticle17Source { source_id eu.teu_article_17; source_title "Treaty on European Union, Article 17"; source_version "retrieved-2026-08-05"; source_date 2012-10-26; }
+
+source eu_tfeu_article_258 {
+  uri "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012E258";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:ec05de3ed032bc882a25fb54d4ae239cb68fba85ee88a3d3ceb003762ebaf017";
+}
+concept EuTfeuArticle258Source { source_id eu.tfeu_article_258; source_title "Treaty on the Functioning of the European Union, Article 258"; source_version "retrieved-2026-08-05"; source_date 2012-10-26; }
+
+source eu_commission_decision_c_2024_1459 {
+  uri "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:C_202401459";
+  media_type "application/pdf";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71";
+}
+concept EuCommissionDecisionC20241459Source { source_id eu.commission_decision_c_2024_1459; source_title "Commission Decision C/2024/1459 establishing the European Artificial Intelligence Office"; source_version "official-journal-2024-02-14"; source_date 2024-01-24; }
+
+source eu_european_commission_institution {
+  uri "https://european-union.europa.eu/institutions-law-budget/institutions-and-bodies/search-all-eu-institutions-and-bodies/european-commission_en";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:408360a1e92d48ee1812f81080afa3f55129fc94a4a12c04156e64258d6c1fca";
+}
+concept EuEuropeanCommissionInstitutionSource { source_id eu.european_commission_institution; source_title "European Commission"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
+
+source ec_planning_proposing_law {
+  uri "https://commission.europa.eu/law/law-making-process/planning-and-proposing-law_en";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:6bfc04ef05306f758e2bb02cf9c9819dc6f1d00eb271fdac27ac345e01b733df";
+}
+concept EcPlanningProposingLawSource { source_id ec.planning_proposing_law; source_title "Planning and proposing law"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
+
+source ec_budget_funding {
+  uri "https://commission.europa.eu/strategy-and-policy/eu-budget_en";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:2bd2e3ab0f53136a316476ce0a31963b9147461930bbde5b8bf736632149e64b";
+}
+concept EcBudgetFundingSource { source_id ec.budget_funding; source_title "Budget and funding"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
+
+source ec_european_ai_office {
+  uri "https://digital-strategy.ec.europa.eu/en/policies/ai-office";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:a110ad6a4dacc47bd1a5b63d955374e3ab4fea4323547657e93f5258036fd2eb";
+}
+concept EcEuropeanAiOfficeSource { source_id ec.european_ai_office; source_title "European AI Office"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
+
+source ec_jrc_research_infrastructures {
+  uri "https://joint-research-centre.ec.europa.eu/laboratories-and-facilities/open-access-jrc-research-infrastructures_en";
+  media_type "text/html";
+  retrieved 2026-08-05T00:00:00-04:00;
+  sha256 "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7";
+}
+concept EcJrcResearchInfrastructuresSource { source_id ec.jrc_research_infrastructures; source_title "Open access to JRC research infrastructures"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
