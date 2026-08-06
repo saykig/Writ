@@ -1,0 +1,434 @@
+{
+  "inventory_version": "1.0.0",
+  "generated_for": "institutional-stage-b",
+  "starting_main_sha": "14ec512a28949155054dd2e7479337dbfce95f8c",
+  "branch": "codex/nist-ec-institutional-stage-b",
+  "nist_stage_a": {
+    "records": [
+      {
+        "record_id": "nist_identity",
+        "assertion": {
+          "mode": "defines",
+          "text": "NIST is the National Institute of Standards and Technology."
+        },
+        "review_state": "approved",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-03"
+        }
+      },
+      {
+        "record_id": "nist_organizational_placement",
+        "assertion": {
+          "mode": "states",
+          "text": "NIST is organizationally situated within the U.S. Department of Commerce."
+        },
+        "review_state": "approved",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-03"
+        }
+      },
+      {
+        "record_id": "nist_mission",
+        "assertion": {
+          "mode": "states",
+          "text": "NIST states that its mission is to promote U.S. innovation and industrial competitiveness by advancing measurement science, standards and technology in ways that enhance economic security and quality of life."
+        },
+        "review_state": "approved",
+        "provenance": {
+          "created_by": "Claude Code implementation of approved human review",
+          "created_at": "2026-08-04"
+        }
+      },
+      {
+        "record_id": "nist_measurement_science_function",
+        "assertion": {
+          "mode": "performs",
+          "text": "NIST advances measurement science as part of its source-reported mission."
+        },
+        "review_state": "superseded",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-03"
+        }
+      },
+      {
+        "record_id": "nist_ai_standards_development_function",
+        "assertion": {
+          "mode": "performs",
+          "text": "The NIST AI Standards and Guidelines Group leads NIST's participation in the development of voluntary consensus standards, including international standards, concerning AI."
+        },
+        "review_state": "approved",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-03"
+        }
+      },
+      {
+        "record_id": "nist_ai_technical_guidance_function",
+        "assertion": {
+          "mode": "performs",
+          "text": "The NIST AI Standards and Guidelines Group develops technical resources and guidelines intended to help organizations develop, deploy and use AI."
+        },
+        "review_state": "approved",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-03"
+        }
+      }
+    ],
+    "record_ids": [
+      "nist_identity",
+      "nist_organizational_placement",
+      "nist_mission",
+      "nist_measurement_science_function",
+      "nist_ai_standards_development_function",
+      "nist_ai_technical_guidance_function"
+    ],
+    "links": [
+      {
+        "link_id": "nist_department_of_commerce_relationship",
+        "path": "corpora/institutional/us/nist/relationships/nist_department_of_commerce_relationship.yaml",
+        "size_bytes": 1003,
+        "sha256": "sha256:d3bd6215a9260da604b0a2cb540c6176c14b976d8604e55ab21db42a248352d4",
+        "bytes_base64": "IyBDb252ZXJ0ZWQgZnJvbSB0aGUgdjAuMSBpbnN0aXR1dGlvbmFsIHJlY29yZCBvZiB0aGUgc2FtZSBJRCwgd2hpY2ggZHVwbGljYXRlZCB0aGUKIyBwbGFjZW1lbnQgZmFjdC4gYG5pc3Rfb3JnYW5pemF0aW9uYWxfcGxhY2VtZW50YCByZW1haW5zIHRoZSBhdXRob3JpdGF0aXZlCiMgaW5zdGl0dXRpb25hbCBmYWN0OyB0aGlzIGxpbmsgcHJvdmlkZXMgZ3JhcGggdHJhdmVyc2FsIGFuZCBjaXRlcyB0aGF0IHJlY29yZAojIHJhdGhlciB0aGFuIHJlc3RhdGluZyB0aGUgYXNzZXJ0aW9uLiBSZXZlcnNlIHRyYXZlcnNhbCBpcyBkZXJpdmVkOiBubyBpbnZlcnNlCiMgYGRlcGFydG1lbnRfb2ZfY29tbWVyY2UgaGFzX3BhcnQgbmlzdGAgbGluayBpcyBzdG9yZWQuCnNjaGVtYV92ZXJzaW9uOiAxLjAuMApsaW5rX2lkOiBuaXN0X2RlcGFydG1lbnRfb2ZfY29tbWVyY2VfcmVsYXRpb25zaGlwCm93bmluZ19jb3JwdXNfaWQ6IHVzLmluc3RpdHV0aW9ucy5uaXN0CnNvdXJjZV9pZDogbmlzdApzb3VyY2Vfa2luZDogaW5zdGl0dXRpb24KdGFyZ2V0X2lkOiBkZXBhcnRtZW50X29mX2NvbW1lcmNlCnRhcmdldF9raW5kOiBpbnN0aXR1dGlvbgpyZWxhdGlvbl90eXBlOiBwYXJ0X29mCmJhc2lzOiBkaXJlY3QKZXZpZGVuY2VfcmVmczoKICAtIG5pc3QuYWJvdXQuaWRlbnRpdHkKc3VwcG9ydGluZ19yZWNvcmRfaWRzOgogIC0gbmlzdF9vcmdhbml6YXRpb25hbF9wbGFjZW1lbnQKdW5jZXJ0YWludGllczoKICAtIHR5cGU6IGluY29tcGxldGVfZXZpZGVuY2UKICAgIGRlc2NyaXB0aW9uOgogICAgICBUaGUgcGxhY2VtZW50IGV2aWRlbmNlIGRvZXMgbm90IGVzdGFibGlzaCB0aGUgRGVwYXJ0bWVudCBvZiBDb21tZXJjZSdzIHByZWNpc2UgZGVjaXNpb24KICAgICAgcmlnaHRzIG92ZXIgTklTVC4KcHJvdmVuYW5jZToKICBjcmVhdGVkX2J5OiBPcGVuQUkgQ29kZXggYXV0b21hdGVkIGRyYWZ0CiAgY3JlYXRlZF9hdDogMjAyNi0wOC0wMwpyZXZpZXdfc3RhdGU6IGFwcHJvdmVkCg=="
+      },
+      {
+        "link_id": "nist_mission_supersedes_nist_measurement_science_function",
+        "path": "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
+        "size_bytes": 695,
+        "sha256": "sha256:5a14de5cfded30bf84955b175fb74a4e97f6a86374280ba2e2c0b4a5d096b30a",
+        "bytes_base64": "IyBUaGUgYXBwcm92ZWQgbWlzc2lvbiByZWNvcmQgcmVwbGFjZXMgdGhlIGVhcmxpZXIgbWlzY2xhc3NpZmllZCBmdW5jdGlvbiByZWNvcmQuCiMgVGhlIGRpcmVjdGlvbiBpcyBuZXdlciAtPiBvbGRlci4gVGhlIHN1cGVyc2VkZWQgcmVjb3JkIGlzIHJldGFpbmVkIGFzIGhpc3RvcnkKIyByYXRoZXIgdGhhbiBkZWxldGVkLCBhbmQgY2FycmllcyBubyByZWNvcmQtbGV2ZWwgYHN1cGVyc2VkZWRfYnlgIGZpZWxkLgpzY2hlbWFfdmVyc2lvbjogMS4wLjAKbGlua19pZDogbmlzdF9taXNzaW9uX3N1cGVyc2VkZXNfbmlzdF9tZWFzdXJlbWVudF9zY2llbmNlX2Z1bmN0aW9uCm93bmluZ19jb3JwdXNfaWQ6IHVzLmluc3RpdHV0aW9ucy5uaXN0CnNvdXJjZV9pZDogbmlzdF9taXNzaW9uCnNvdXJjZV9raW5kOiByZWNvcmQKdGFyZ2V0X2lkOiBuaXN0X21lYXN1cmVtZW50X3NjaWVuY2VfZnVuY3Rpb24KdGFyZ2V0X2tpbmQ6IHJlY29yZApyZWxhdGlvbl90eXBlOiBzdXBlcnNlZGVzCmJhc2lzOiBkaXJlY3QKZXZpZGVuY2VfcmVmczoKICAtIG5pc3QuYWJvdXQubWlzc2lvbgp1bmNlcnRhaW50aWVzOiBbXQpwcm92ZW5hbmNlOgogIGNyZWF0ZWRfYnk6IENsYXVkZSBDb2RlIGltcGxlbWVudGF0aW9uIG9mIGFwcHJvdmVkIGh1bWFuIHJldmlldwogIGNyZWF0ZWRfYXQ6IDIwMjYtMDgtMDQKcmV2aWV3X3N0YXRlOiBhcHByb3ZlZAo="
+      }
+    ],
+    "link_ids": [
+      "nist_department_of_commerce_relationship",
+      "nist_mission_supersedes_nist_measurement_science_function"
+    ],
+    "judgments": [
+      {
+        "judgment_id": "judgment_nist_identity_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_identity",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_organizational_placement_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_organizational_placement",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_measurement_science_function_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_measurement_science_function",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_mission_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_mission",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_ai_standards_development_function_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_ai_standards_development_function",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_ai_technical_guidance_function_stage_a",
+        "target_kind": "record",
+        "target_id": "nist_ai_technical_guidance_function",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_department_of_commerce_relationship_stage_a",
+        "target_kind": "record_link",
+        "target_id": "nist_department_of_commerce_relationship",
+        "status": "accepted"
+      },
+      {
+        "judgment_id": "judgment_nist_mission_supersession_link_stage_a",
+        "target_kind": "record_link",
+        "target_id": "nist_mission_supersedes_nist_measurement_science_function",
+        "status": "accepted"
+      }
+    ],
+    "judgment_ids": [
+      "judgment_nist_identity_stage_a",
+      "judgment_nist_organizational_placement_stage_a",
+      "judgment_nist_measurement_science_function_stage_a",
+      "judgment_nist_mission_stage_a",
+      "judgment_nist_ai_standards_development_function_stage_a",
+      "judgment_nist_ai_technical_guidance_function_stage_a",
+      "judgment_nist_department_of_commerce_relationship_stage_a",
+      "judgment_nist_mission_supersession_link_stage_a"
+    ],
+    "judgments_file": {
+      "path": "corpora/institutional/us/nist/judgments.writ",
+      "size_bytes": 5452,
+      "sha256": "sha256:11c4f95b1a628e8c697ca26148c3ac81510db089d5d9337f5b93afb194a72480",
+      "bytes_base64": "bGFuZ3VhZ2Ugd3JpdCAiMC4yIgpwYWNrYWdlIHVzLmluc3RpdHV0aW9ucy5uaXN0Lmp1ZGdtZW50cyB2ZXJzaW9uICIwLjIuMCI7CgovLyBTdGFnZSBBIGh1bWFuIHJldmlldyBvZiB0aGUgc2l4IGF1dG9tYXRlZCBkcmFmdCByZWNvcmRzIGFuZCB0aGUgdHdvIENvcmUgbGlua3MKLy8gZGVyaXZlZCBmcm9tIHRoZW0uIEp1ZGdtZW50IGBzdGF0dXNgIGlzIHRoZSBkaXNwb3NpdGlvbiB2b2NhYnVsYXJ5Ci8vIChwcm9wb3NlZCB8IGFjY2VwdGVkIHwgY29udGVzdGVkIHwgc3VwZXJzZWRlZCk7IGl0IGlzIHNlcGFyYXRlIGZyb20gdGhlCi8vIGByZXZpZXdfc3RhdGVgIG9mIHRoZSByZWNvcmQgb3IgbGluayBlYWNoIGp1ZGdtZW50IHRhcmdldHMuIGB2YWx1ZWAgcmVjb3JkcyB0aGUKLy8gd29ya2Zsb3cgc3RhdGUgdGhlIHRhcmdldCByZWFjaGVkLiBUaGVzZSBhcmUgdGhlIGZpcnN0IGh1bWFuIGRpc3Bvc2l0aW9ucyBmb3IKLy8gZXZlcnkgdGFyZ2V0LCBzbyBub25lIG9mIHRoZW0gc3VwZXJzZWRlcyBhbiBlYXJsaWVyIGp1ZGdtZW50LgoKanVkZ21lbnQganVkZ21lbnRfbmlzdF9pZGVudGl0eV9zdGFnZV9hIHsKICB0YXJnZXQgcmVjb3JkIG5pc3RfaWRlbnRpdHk7CiAgdHlwZSByZXZpZXdfZGlzcG9zaXRpb247CiAgdmFsdWUgImFwcHJvdmVkIjsKICByYXRpb25hbGUgIlN0YWdlIEEgcmV2aWV3IG1vdmVzIHRoaXMgcmVjb3JkIGZyb20gZHJhZnQgdG8gYXBwcm92ZWQgYXMgYW4gYXRvbWljIGlkZW50aXR5IGZhY3QuIFRoZSBwYXNzYWdlIG5hbWVzIHRoZSBpbnN0aXR1dGlvbiBhbmQgbm90aGluZyBtb3JlOiBpZGVudGl0eSBpcyBub3QgbWFuZGF0ZSwgc28gdGhlIG1hbmRhdGUsIGZ1bmN0aW9uIGFuZCBvcGVyYXRpb25hbC1jYXBhY2l0eSBwbGFjZWhvbGRlcnMgd2VyZSByZW1vdmVkIHJhdGhlciB0aGFuIGNhcnJpZWQgZm9yd2FyZCBhcyB1bmtub3duIHBheWxvYWRzLiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWJvdXQuaWRlbnRpdHkgfTsKICByZXZpZXdlciAiU2FyYSBLaW0iOwogIHN0YXR1cyBhY2NlcHRlZDsKICBjcmVhdGVkX2F0IDIwMjYtMDgtMDQ7CiAgZmFtaWx5X2NvbnRleHQgaW5zdGl0dXRpb25hbDsKfQoKanVkZ21lbnQganVkZ21lbnRfbmlzdF9vcmdhbml6YXRpb25hbF9wbGFjZW1lbnRfc3RhZ2VfYSB7CiAgdGFyZ2V0IHJlY29yZCBuaXN0X29yZ2FuaXphdGlvbmFsX3BsYWNlbWVudDsKICB0eXBlIHJldmlld19kaXNwb3NpdGlvbjsKICB2YWx1ZSAiYXBwcm92ZWQiOwogIHJhdGlvbmFsZSAiU3RhZ2UgQSByZXZpZXcgbW92ZXMgdGhpcyByZWNvcmQgZnJvbSBkcmFmdCB0byBhcHByb3ZlZCBhcyBhbiBhdG9taWMgcGxhY2VtZW50IGZhY3QuIFBsYWNlbWVudCBpcyBub3QgZGVjaXNpb24gYXV0aG9yaXR5OiB0aGUgcGFzc2FnZSBzaXR1YXRlcyBOSVNUIHdpdGhpbiB0aGUgRGVwYXJ0bWVudCBvZiBDb21tZXJjZSB3aXRob3V0IGVzdGFibGlzaGluZyB0aGUgRGVwYXJ0bWVudCdzIHBvd2VycyBvdmVyIGl0LCBzbyBubyBkZWNpc2lvbi1yaWdodCBwYXlsb2FkIHdhcyBhZGRlZC4iOwogIGV2aWRlbmNlX3JlZnMgeyBuaXN0LmFib3V0LmlkZW50aXR5IH07CiAgcmV2aWV3ZXIgIlNhcmEgS2ltIjsKICBzdGF0dXMgYWNjZXB0ZWQ7CiAgY3JlYXRlZF9hdCAyMDI2LTA4LTA0OwogIGZhbWlseV9jb250ZXh0IGluc3RpdHV0aW9uYWw7Cn0KCmp1ZGdtZW50IGp1ZGdtZW50X25pc3RfbWVhc3VyZW1lbnRfc2NpZW5jZV9mdW5jdGlvbl9zdGFnZV9hIHsKICB0YXJnZXQgcmVjb3JkIG5pc3RfbWVhc3VyZW1lbnRfc2NpZW5jZV9mdW5jdGlvbjsKICB0eXBlIHJldmlld19kaXNwb3NpdGlvbjsKICB2YWx1ZSAic3VwZXJzZWRlZCI7CiAgcmF0aW9uYWxlICJTdGFnZSBBIHJldmlldyBtb3ZlcyB0aGlzIHJlY29yZCBmcm9tIGRyYWZ0IHRvIHN1cGVyc2VkZWQuIFRoZSBjaXRlZCBwYXNzYWdlIGlzIGV4cGxpY2l0bHkgbGFiZWxsZWQgYSBtaXNzaW9uIHN0YXRlbWVudCwgc28gY2xhc3NpZnlpbmcgaXQgYXMgYSBtZWFzdXJlbWVudC1zY2llbmNlIGZ1bmN0aW9uIHdhcyBhIG1pc3JlYWRpbmcuIFRoZSByZWNvcmQgaXMgcmV0YWluZWQgYXMgcmV2aWV3IGhpc3RvcnkgcmF0aGVyIHRoYW4gZGVsZXRlZCwgYW5kIGl0cyByZXBsYWNlbWVudCBpcyBzdGF0ZWQgYnkgYSBzZXBhcmF0ZSBDb3JlIHN1cGVyc2Vzc2lvbiBsaW5rLiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWJvdXQubWlzc2lvbiB9OwogIHJldmlld2VyICJTYXJhIEtpbSI7CiAgc3RhdHVzIGFjY2VwdGVkOwogIGNyZWF0ZWRfYXQgMjAyNi0wOC0wNDsKICBmYW1pbHlfY29udGV4dCBpbnN0aXR1dGlvbmFsOwp9CgpqdWRnbWVudCBqdWRnbWVudF9uaXN0X21pc3Npb25fc3RhZ2VfYSB7CiAgdGFyZ2V0IHJlY29yZCBuaXN0X21pc3Npb247CiAgdHlwZSByZXZpZXdfZGlzcG9zaXRpb247CiAgdmFsdWUgImFwcHJvdmVkIjsKICByYXRpb25hbGUgIlN0YWdlIEEgcmV2aWV3IGFwcHJvdmVzIHRoaXMgbmV3IHJlY29yZCwgY3JlYXRlZCBieSB0aGUgcmV2aWV3IHNwbGl0LCBhcyBhbiBhdG9taWMgbWlzc2lvbiBmYWN0LiBBIG1pc3Npb24gc3RhdGVtZW50IGlzIG5vdCBhIHN0YXR1dG9yeSBtYW5kYXRlOiB0aGUgcmVjb3JkIHJlcG9ydHMgd2hhdCBOSVNUIHN0YXRlcyBhYm91dCBpdHNlbGYgYW5kIGVzdGFibGlzaGVzIG5vIGxlZ2FsIGF1dGhvcml0eSwgZGVtb25zdHJhdGVkIHBlcmZvcm1hbmNlIG9yIG9wZXJhdGlvbmFsIGNhcGFjaXR5LiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWJvdXQubWlzc2lvbiB9OwogIHJldmlld2VyICJTYXJhIEtpbSI7CiAgc3RhdHVzIGFjY2VwdGVkOwogIGNyZWF0ZWRfYXQgMjAyNi0wOC0wNDsKICBmYW1pbHlfY29udGV4dCBpbnN0aXR1dGlvbmFsOwp9CgpqdWRnbWVudCBqdWRnbWVudF9uaXN0X2FpX3N0YW5kYXJkc19kZXZlbG9wbWVudF9mdW5jdGlvbl9zdGFnZV9hIHsKICB0YXJnZXQgcmVjb3JkIG5pc3RfYWlfc3RhbmRhcmRzX2RldmVsb3BtZW50X2Z1bmN0aW9uOwogIHR5cGUgcmV2aWV3X2Rpc3Bvc2l0aW9uOwogIHZhbHVlICJhcHByb3ZlZCI7CiAgcmF0aW9uYWxlICJTdGFnZSBBIHJldmlldyBtb3ZlcyB0aGlzIHJlY29yZCBmcm9tIGRyYWZ0IHRvIGFwcHJvdmVkIGFzIGFuIGF0b21pYyBmdW5jdGlvbiBmYWN0LiBUaGUgcGFzc2FnZSBkZXNjcmliZXMgYW4gYWN0aXZpdHkgdGhlIGdyb3VwIGxlYWRzOyBhIGZ1bmN0aW9uIGlzIG5vdCBhdXRvbWF0aWNhbGx5IGEgbWlzc2lvbiwgc28gaXQgc3RheXMgY2xhc3NpZmllZCBhcyBhIGZ1bmN0aW9uLCBhbmQgYSBzdGF0ZWQgYWN0aXZpdHkgaXMgbm90IG9wZXJhdGlvbmFsIGNhcGFjaXR5LCBzbyBubyBjYXBhY2l0eSBwYXlsb2FkIHdhcyBhZGRlZC4iOwogIGV2aWRlbmNlX3JlZnMgeyBuaXN0LmFpX3N0YW5kYXJkc19ncm91cC5zdGFuZGFyZHMgfTsKICByZXZpZXdlciAiU2FyYSBLaW0iOwogIHN0YXR1cyBhY2NlcHRlZDsKICBjcmVhdGVkX2F0IDIwMjYtMDgtMDQ7CiAgZmFtaWx5X2NvbnRleHQgaW5zdGl0dXRpb25hbDsKfQoKanVkZ21lbnQganVkZ21lbnRfbmlzdF9haV90ZWNobmljYWxfZ3VpZGFuY2VfZnVuY3Rpb25fc3RhZ2VfYSB7CiAgdGFyZ2V0IHJlY29yZCBuaXN0X2FpX3RlY2huaWNhbF9ndWlkYW5jZV9mdW5jdGlvbjsKICB0eXBlIHJldmlld19kaXNwb3NpdGlvbjsKICB2YWx1ZSAiYXBwcm92ZWQiOwogIHJhdGlvbmFsZSAiU3RhZ2UgQSByZXZpZXcgbW92ZXMgdGhpcyByZWNvcmQgZnJvbSBkcmFmdCB0byBhcHByb3ZlZCBhcyBhbiBhdG9taWMgZnVuY3Rpb24gZmFjdC4gVGhlIHBhc3NhZ2Ugc3VwcG9ydHMgdGhlIGdyb3VwJ3MgdGVjaG5pY2FsLWd1aWRhbmNlIGFjdGl2aXR5IGJ1dCBub3QgaXRzIGZvcm1hbCBwbGFjZW1lbnQgb3IgY2FwYWNpdHksIHNvIHRoZSBwYXJlbnQtaW5zdGl0dXRpb24gYW5kIG9wZXJhdGlvbmFsLWNhcGFjaXR5IHBheWxvYWRzIHdlcmUgcmVtb3ZlZCByYXRoZXIgdGhhbiByZXRhaW5lZCBhcyB1bmtub3duLiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWlfc3RhbmRhcmRzX2dyb3VwLmd1aWRhbmNlIH07CiAgcmV2aWV3ZXIgIlNhcmEgS2ltIjsKICBzdGF0dXMgYWNjZXB0ZWQ7CiAgY3JlYXRlZF9hdCAyMDI2LTA4LTA0OwogIGZhbWlseV9jb250ZXh0IGluc3RpdHV0aW9uYWw7Cn0KCmp1ZGdtZW50IGp1ZGdtZW50X25pc3RfZGVwYXJ0bWVudF9vZl9jb21tZXJjZV9yZWxhdGlvbnNoaXBfc3RhZ2VfYSB7CiAgdGFyZ2V0IHJlY29yZF9saW5rIG5pc3RfZGVwYXJ0bWVudF9vZl9jb21tZXJjZV9yZWxhdGlvbnNoaXA7CiAgdHlwZSByZWNvcmRfbGlua19kaXNwb3NpdGlvbjsKICB2YWx1ZSAiYXBwcm92ZWQiOwogIHJhdGlvbmFsZSAiU3RhZ2UgQSByZXZpZXcgbW92ZXMgdGhpcyBvYmplY3QgZnJvbSBkcmFmdCB0byBhcHByb3ZlZCwgYW5kIGZyb20gYW4gaW5zdGl0dXRpb25hbCByZWNvcmQgdG8gYSBDb3JlIHJlY29yZCBsaW5rLiBUaGUgbGluayBkb2VzIG5vdCBkdXBsaWNhdGUgdGhlIHBsYWNlbWVudCBmYWN0OiBpdCBjaXRlcyBuaXN0X29yZ2FuaXphdGlvbmFsX3BsYWNlbWVudCBhcyBpdHMgc3VwcG9ydGluZyByZWNvcmQsIHdoaWNoIHJlbWFpbnMgdGhlIGF1dGhvcml0YXRpdmUgYXNzZXJ0aW9uLCBhbmQgdGhlIGludmVyc2UgZGlyZWN0aW9uIGlzIGRlcml2ZWQgcmF0aGVyIHRoYW4gc3RvcmVkLiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWJvdXQuaWRlbnRpdHkgfTsKICByZXZpZXdlciAiU2FyYSBLaW0iOwogIHN0YXR1cyBhY2NlcHRlZDsKICBjcmVhdGVkX2F0IDIwMjYtMDgtMDQ7CiAgZmFtaWx5X2NvbnRleHQgaW5zdGl0dXRpb25hbDsKfQoKanVkZ21lbnQganVkZ21lbnRfbmlzdF9taXNzaW9uX3N1cGVyc2Vzc2lvbl9saW5rX3N0YWdlX2EgewogIHRhcmdldCByZWNvcmRfbGluayBuaXN0X21pc3Npb25fc3VwZXJzZWRlc19uaXN0X21lYXN1cmVtZW50X3NjaWVuY2VfZnVuY3Rpb247CiAgdHlwZSByZWNvcmRfbGlua19kaXNwb3NpdGlvbjsKICB2YWx1ZSAiYXBwcm92ZWQiOwogIHJhdGlvbmFsZSAiU3RhZ2UgQSByZXZpZXcgYXBwcm92ZXMgdGhpcyBuZXcgQ29yZSBsaW5rIGFzIGFwcHJvdmVkLiBJdCBwcmVzZXJ2ZXMgdGhlIHJldmlldyBoaXN0b3J5IGJ5IHN0YXRpbmcgdGhhdCB0aGUgYXBwcm92ZWQgbWlzc2lvbiByZWNvcmQgcmVwbGFjZXMgdGhlIGVhcmxpZXIgbWlzY2xhc3NpZmllZCBmdW5jdGlvbiByZWNvcmQsIGluIHRoYXQgZGlyZWN0aW9uLCB3aXRob3V0IGRlbGV0aW5nIHRoZSBzdXBlcnNlZGVkIHJlY29yZCBvciBhZGRpbmcgYSByZWNvcmQtbGV2ZWwgc3VwZXJzZXNzaW9uIGZpZWxkLiI7CiAgZXZpZGVuY2VfcmVmcyB7IG5pc3QuYWJvdXQubWlzc2lvbiB9OwogIHJldmlld2VyICJTYXJhIEtpbSI7CiAgc3RhdHVzIGFjY2VwdGVkOwogIGNyZWF0ZWRfYXQgMjAyNi0wOC0wNDsKICBmYW1pbHlfY29udGV4dCBpbnN0aXR1dGlvbmFsOwp9Cg=="
+    },
+    "sources_file": {
+      "path": "corpora/institutional/us/nist/sources.writ",
+      "size_bytes": 886,
+      "sha256": "sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee",
+      "bytes_base64": "bGFuZ3VhZ2Ugd3JpdCAiMC4xIgpwYWNrYWdlIHVzLmluc3RpdHV0aW9ucy5uaXN0LnNvdXJjZXMgdmVyc2lvbiAiMC4xLjAiOwoKc291cmNlIG5pc3RfYWJvdXQgewogIHVyaSAiaHR0cHM6Ly93d3cubmlzdC5nb3YvYWJvdXQtbmlzdCI7CiAgbWVkaWFfdHlwZSAidGV4dC9odG1sIjsKICByZXRyaWV2ZWQgMjAyNi0wOC0wM1QwMDowMDowMC0wNDowMDsKICBzaGEyNTYgInNoYTI1NjphMWE4NTI4MDIzMmI5ZTQ5ZWVkNGY1ZTI2ZGZjYTg5NGNkNzZlZWZiMDBiYTk2NGNlMDVhNWJmMWUzNjk3MGYyIjsKfQoKY29uY2VwdCBOaXN0QWJvdXRTb3VyY2UgewogIHNvdXJjZV9pZCBuaXN0LmFib3V0OwogIHNvdXJjZV90aXRsZSAiQWJvdXQgTklTVCI7CiAgc291cmNlX3ZlcnNpb24gInVwZGF0ZWQtMjAyMi0wMS0xMSI7CiAgc291cmNlX2RhdGUgMjAyMi0wMS0xMTsKfQoKc291cmNlIG5pc3RfYWlfc3RhbmRhcmRzX2dyb3VwIHsKICB1cmkgImh0dHBzOi8vd3d3Lm5pc3QuZ292L2l0bC9haS9haS1zdGFuZGFyZHMtYW5kLWd1aWRlbGluZXMtZ3JvdXAiOwogIG1lZGlhX3R5cGUgInRleHQvaHRtbCI7CiAgcmV0cmlldmVkIDIwMjYtMDgtMDNUMDA6MDA6MDAtMDQ6MDA7CiAgc2hhMjU2ICJzaGEyNTY6NzcwNjQyY2ZiMzJjNDRiYmJhM2M2NGRhYTIzZTNkODgzYzhmNmE1NDcwMzhhYzExZWJjZGZiOGYyYzYyOWU5NiI7Cn0KCmNvbmNlcHQgTmlzdEFpU3RhbmRhcmRzR3JvdXBTb3VyY2UgewogIHNvdXJjZV9pZCBuaXN0LmFpX3N0YW5kYXJkc19ncm91cDsKICBzb3VyY2VfdGl0bGUgIkFJIFN0YW5kYXJkcyBhbmQgR3VpZGVsaW5lcyBHcm91cCI7CiAgc291cmNlX3ZlcnNpb24gInJldHJpZXZlZC0yMDI2LTA4LTAzIjsKICBzb3VyY2VfZGF0ZSAyMDI2LTA4LTAzOwp9Cg=="
+    },
+    "sources": [
+      {
+        "source_id": "nist.about",
+        "source_version": "updated-2022-01-11",
+        "document_version_id": "nist.about.v2022_01_11",
+        "document_hash": "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2"
+      },
+      {
+        "source_id": "nist.ai_standards_group",
+        "source_version": "retrieved-2026-08-03",
+        "document_version_id": "nist.ai_standards_group.v2026_08_03",
+        "document_hash": "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96"
+      }
+    ],
+    "passages": [
+      {
+        "source_id": "nist.about",
+        "document_version_id": "nist.about.v2022_01_11",
+        "passage_id": "nist.about.identity",
+        "locator": "About NIST, opening paragraph",
+        "quotation": "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce.",
+        "passage_hash": "sha256:4cc104fbe6573c0c72f80cf978e68e9661374d64bd67c855a571edb58ac65277",
+        "document_hash": "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2"
+      },
+      {
+        "source_id": "nist.about",
+        "document_version_id": "nist.about.v2022_01_11",
+        "passage_id": "nist.about.mission",
+        "locator": "About NIST, Mission",
+        "quotation": "To promote U.S. innovation and industrial competitiveness by advancing measurement science, standards, and technology in ways that enhance economic security and improve our quality of life.",
+        "passage_hash": "sha256:b7c73bafbedd9701baee1cadf74dc7668b215f3d6f5d19d6b6d51a179120c219",
+        "document_hash": "sha256:a1a85280232b9e49eed4f5e26dfca894cd76eefb00ba964ce05a5bf1e36970f2"
+      },
+      {
+        "source_id": "nist.ai_standards_group",
+        "document_version_id": "nist.ai_standards_group.v2026_08_03",
+        "passage_id": "nist.ai_standards_group.guidance",
+        "locator": "AI Standards and Guidelines Group, overview paragraph 1",
+        "quotation": "The Artificial Intelligence (AI) Standards and Guidelines Group develops technical resources and guidelines that help organizations to develop, deploy, and use AI with confidence, enabling U.S. industry to position itself at the forefront of technology development and AI governance.",
+        "passage_hash": "sha256:7a9c75b43200b400de56a5c983cc3c13c2127122e33a86ad8169548ef405f903",
+        "document_hash": "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96"
+      },
+      {
+        "source_id": "nist.ai_standards_group",
+        "document_version_id": "nist.ai_standards_group.v2026_08_03",
+        "passage_id": "nist.ai_standards_group.standards",
+        "locator": "AI Standards and Guidelines Group, overview paragraph 2",
+        "quotation": "In addition to developing its own publications, the Group leads NIST's participation in the development of voluntary consensus standards, including international standards, that promote innovation and trustworthiness in systems and organizations that use AI.",
+        "passage_hash": "sha256:ec5b9883154946b69ee3623b9e7394501ced98354288e4167a2eedf4c31609b8",
+        "document_hash": "sha256:770642cfb32c44bbba3c64daa23e3d883c8f6a547038ac11ebcdfb8f2c629e96"
+      }
+    ],
+    "manifest": {
+      "corpus_version": "0.2.0",
+      "status": "draft",
+      "record_contract": {
+        "kind": "native",
+        "id": "https://writ.example/schemas/extensions/institutional-record.schema.json",
+        "version": "0.2.0"
+      },
+      "record_counts": {
+        "institutional_records": 6,
+        "record_links": 2,
+        "disposition_judgments": 8
+      },
+      "review_counts": {
+        "approved_records": 5,
+        "superseded_records": 1,
+        "approved_record_links": 2,
+        "accepted_disposition_judgments": 8
+      },
+      "unresolved_evidence_count": 0
+    },
+    "migration": {
+      "sha256": "sha256:7614a5eaefc427b2df2b4990f142a31802dd17f7b8a34251c2670f5c09756656",
+      "stage": "stage_a_human_review",
+      "base_sha": "d3bb0d4c52d03ebef2d21987db60032c35509be7",
+      "entries": [
+        {
+          "previous_object": "nist_identity",
+          "previous_form": "v0.1 compatibility institutional record",
+          "final_object": "nist_identity",
+          "final_form": "native v0.2 atomic identity record",
+          "final_review_state": "approved",
+          "identity_preserved": true
+        },
+        {
+          "previous_object": "nist_organizational_placement",
+          "previous_form": "v0.1 compatibility institutional record",
+          "final_object": "nist_organizational_placement",
+          "final_form": "native v0.2 atomic placement record",
+          "final_review_state": "approved",
+          "identity_preserved": true
+        },
+        {
+          "previous_object": "nist_department_of_commerce_relationship",
+          "previous_form": "v0.1 institutional record duplicating the placement fact",
+          "final_object": "nist_department_of_commerce_relationship",
+          "final_form": "standalone Core record link, relation_type part_of",
+          "final_review_state": "approved",
+          "identity_preserved": true,
+          "note": "The object became a Core record link rather than being deleted. It cites nist_organizational_placement in supporting_record_ids; that record remains the authoritative institutional fact and the link is not a second assertion of it."
+        },
+        {
+          "previous_object": "nist_measurement_science_function",
+          "previous_form": "v0.1 compatibility function record",
+          "final_object": "nist_measurement_science_function",
+          "final_form": "native v0.2 function record retained as history",
+          "final_review_state": "superseded",
+          "identity_preserved": true,
+          "note": "The cited passage is explicitly a mission statement. The record remains resolvable as superseded review history; it is not deleted and carries no record-level superseded_by field. Its replacement is stated by the Core supersession link."
+        },
+        {
+          "previous_object": null,
+          "previous_form": "none",
+          "final_object": "nist_mission",
+          "final_form": "native v0.2 atomic mission record",
+          "final_review_state": "approved",
+          "identity_preserved": false,
+          "note": "New record produced by the approved human-review split. Its provenance is the implementation of that review, not an original automated draft."
+        },
+        {
+          "previous_object": null,
+          "previous_form": "none",
+          "final_object": "nist_mission_supersedes_nist_measurement_science_function",
+          "final_form": "standalone Core record link, relation_type supersedes",
+          "final_review_state": "approved",
+          "identity_preserved": false,
+          "note": "Directed from the newer approved mission record to the older superseded function record."
+        },
+        {
+          "previous_object": "nist_ai_standards_development_function",
+          "previous_form": "v0.1 compatibility institutional record",
+          "final_object": "nist_ai_standards_development_function",
+          "final_form": "native v0.2 atomic function record",
+          "final_review_state": "approved",
+          "identity_preserved": true
+        },
+        {
+          "previous_object": "nist_ai_technical_guidance_function",
+          "previous_form": "v0.1 compatibility institutional record",
+          "final_object": "nist_ai_technical_guidance_function",
+          "final_form": "native v0.2 atomic function record",
+          "final_review_state": "approved",
+          "identity_preserved": true
+        }
+      ]
+    }
+  },
+  "european_commission_baseline": {
+    "tree": [
+      {
+        "path": "corpora/institutional/eu/european-commission/corpus.yaml",
+        "size_bytes": 871,
+        "sha256": "sha256:9a86ad73f452910af246bacb74ca469db08976112313e1131e8c3edd88a73285"
+      },
+      {
+        "path": "corpora/institutional/eu/european-commission/README.md",
+        "size_bytes": 400,
+        "sha256": "sha256:269393510c51be9beb20a66ddcba45832d90b293770953d62d442555ca231fd9"
+      },
+      {
+        "path": "corpora/institutional/eu/european-commission/records.writ",
+        "size_bytes": 4794,
+        "sha256": "sha256:37d7854bc12b8aa24b6db23eb56577d256c1642c7a3e53729d235fb8b0321847"
+      }
+    ],
+    "manifest": {
+      "schema_version": "1.0.0",
+      "corpus_id": "eu.institutions.european_commission",
+      "title": "European Commission institutional facts",
+      "family": "institutional",
+      "jurisdiction": "EU",
+      "corpus_version": "0.2.0",
+      "record_contract": {
+        "kind": "native",
+        "id": "https://writ.example/schemas/extensions/institutional-record.schema.json",
+        "version": "0.2.0"
+      },
+      "status": "draft",
+      "identity_namespace": "eu.institutions.european_commission",
+      "migration_aliases": [],
+      "root_institution_id": "european_commission",
+      "record_counts": {
+        "institutional_records": 3
+      },
+      "review_counts": {
+        "draft_records": 3
+      },
+      "unresolved_evidence_count": 0,
+      "locations": {
+        "sources": [
+          "../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/sources/sources.yaml"
+        ],
+        "passages": [
+          "../../../legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/passages/passages.yaml"
+        ],
+        "records": [
+          "records.writ"
+        ],
+        "relationships": [],
+        "judgments": [],
+        "migration": []
+      }
+    },
+    "records": [
+      {
+        "record_id": "eu_ai_office_technical_documentation_receipt",
+        "assertion": {
+          "mode": "performs",
+          "text": "Receive general-purpose AI model technical documentation provided upon request."
+        },
+        "review_state": "draft",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-04"
+        },
+        "evidence": "support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_01 locator \"Article 53(1)(a)\" quote \"draw up and keep up-to-date the technical documentation of the model, including its training and testing process and the results of its evaluation, which shall contain, at a minimum, the information set out in Annex XI for the purpose of providing it, upon request, to the AI Office and the national competent authorities;\" passage_hash \"sha256:0101b7b55177edc152a905f7efe578bcf5b25eea55bc506443806fb66ac4c32c\" document_hash \"sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c\" basis direct;",
+        "subjects": "subject eu_ai_office type institution role \"recipient\";",
+        "scope": "jurisdictions { \"European Union\" };\n    institutional_scope { eu_ai_office };\n    temporal_scope {}\n    conditions { \"When the AI Office requests the documentation under Article 53(1)(a).\" };"
+      },
+      {
+        "record_id": "eu_ai_office_training_summary_template_function",
+        "assertion": {
+          "mode": "performs",
+          "text": "Provide the template for public summaries of general-purpose AI model training content."
+        },
+        "review_state": "draft",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-04"
+        },
+        "evidence": "support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_04 locator \"Article 53(1)(d)\" quote \"draw up and make publicly available a sufficiently detailed summary about the content used for training of the general-purpose AI model, according to a template provided by the AI Office.\" passage_hash \"sha256:1632b4fcf65d91903b28959b5c6f4eff1fe04a5fa5488eab936fa42de4baff62\" document_hash \"sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c\" basis direct;",
+        "subjects": "subject eu_ai_office type institution role \"template provider\";",
+        "scope": "jurisdictions { \"European Union\" };\n    institutional_scope { eu_ai_office };\n    temporal_scope {}\n    conditions { \"For summaries required by Article 53(1)(d).\" };"
+      },
+      {
+        "record_id": "eu_ai_office_serious_incident_report_receipt",
+        "assertion": {
+          "mode": "performs",
+          "text": "Receive relevant information about serious incidents and possible corrective measures."
+        },
+        "review_state": "draft",
+        "provenance": {
+          "created_by": "OpenAI Codex automated draft",
+          "created_at": "2026-08-04"
+        },
+        "evidence": "support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_08 locator \"Article 55(1)(c)\" quote \"keep track of, document, and report, without undue delay, to the AI Office and, as appropriate, to national competent authorities, relevant information about serious incidents and possible corrective measures to address them;\" passage_hash \"sha256:1c3afb657c97c87921ea145a445ce67aa7d6eed4d45789bd5054f500a05502b2\" document_hash \"sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c\" basis direct;",
+        "subjects": "subject eu_ai_office type institution role \"report recipient\";",
+        "scope": "jurisdictions { \"European Union\" };\n    institutional_scope { eu_ai_office };\n    temporal_scope {}\n    conditions { \"For reporting under Article 55(1)(c).\" };"
+      }
+    ]
+  }
+}
