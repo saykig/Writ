@@ -58,7 +58,40 @@ describe("homepage corpus catalog projection", () => {
     const institutions = CORPUS_CATALOG.filter(({ family }) => family === "institutional");
     expect(institutions).toHaveLength(2);
     expect(institutions.every(({ status }) => status === "draft")).toBe(true);
-    expect(field).toContain('corpus.status === "draft"');
+    expect(field).toContain('status === "draft"');
+
+    const commission = institutions.find(({ corpusId }) =>
+      corpusId.includes("european_commission"),
+    );
+    const nist = institutions.find(({ corpusId }) => corpusId === "us.institutions.nist");
+    expect(commission?.mappedCount).toBe(3);
+    expect(nist?.mappedCount).toBe(6);
+    expect(commission?.mappedCountKind).toBe("institutional_records");
+    expect(nist?.mappedCountKind).toBe("institutional_records");
+  });
+
+  test("embeds exact canonical source only for featured corpus inspection", () => {
+    const featured = CORPUS_CATALOG.filter(({ rawFiles }) => rawFiles);
+    expect(featured).toHaveLength(9);
+
+    for (const corpus of featured) {
+      expect(corpus.rawFiles).toHaveLength(2);
+      for (const file of corpus.rawFiles ?? []) {
+        expect(file.content).toBe(readFileSync(resolve(REPO_ROOT, file.path), "utf8"));
+      }
+    }
+
+    const institutionalFiles = featured
+      .filter(({ family }) => family === "institutional")
+      .flatMap(({ rawFiles }) => rawFiles ?? []);
+    expect(
+      institutionalFiles.some(
+        ({ name, language }) => name === "records.writ" && language === "writ",
+      ),
+    ).toBe(true);
+    expect(
+      featured.some(({ rawFiles }) => rawFiles?.some(({ name }) => name === "claims.yaml")),
+    ).toBe(true);
   });
 
   test("is generated deterministically from the catalog and referenced manifests", () => {
@@ -67,6 +100,8 @@ describe("homepage corpus catalog projection", () => {
 
     expect(generator).toContain("Bun.YAML.parse");
     expect(generator).toContain("entry.manifest");
+    expect(generator).toContain("record_counts");
+    expect(generator).toContain('readFileSync(join(repoRoot, primaryRecordPath), "utf8")');
     expect(generator).toContain(
       'for (const key of ["corpus_id", "family", "jurisdiction", "status"]',
     );

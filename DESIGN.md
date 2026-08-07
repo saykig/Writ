@@ -7,8 +7,9 @@ OWN-WORLD: Near-black fields, white and grey type, restrained blue action, hairl
 radii, and a precise dotted globe.
 STORY: Understand Writ, inspect source-grounded knowledge, ask a bounded question, and follow any
 derived result back to its inputs.
-FIRST VIEWPORT: Navigation above a two-column hero—single-line proposition left, interactive globe
-right, actions directly below the explanation; the columns never overlap.
+FIRST VIEWPORT: An inset navigation slab floats above a dense full-field Pixel environment and a
+viewport-commanding `Write in Writ.▌`; that title reconstructs into the two-column hero rather than
+revealing a page that was already visible behind it.
 FORM: Supplied mockup and motion references, directly approved by the user; a restrained research
 interface whose homepage alone uses authored resolution motion.
 -->
@@ -29,11 +30,20 @@ interface whose homepage alone uses authored resolution motion.
 ## Layout and interaction
 
 - Content uses a shared 76rem maximum width and a 4px-derived spacing rhythm.
-- The homepage has a restrained authored motion language based on resolution. Characters preserve
-  their identity while their Pixel construction resolves into Geist Sans; node points and
-  hairlines represent provenance, corpus structure, and relationships. This expressive motion is
-  limited to the homepage. Lab, Query, Build, and other research surfaces remain quiet, dense, and
-  instrument-like.
+- The homepage has a restrained authored state machine based on resolution. A dense encoded field
+  precedes the interface; characters preserve their identity while Pixel constructions resolve
+  diffusely across the phrase, then the same title spatially reconstructs into the final hero.
+  Copy, controls, and the real globe form only during that reconstruction. This expressive motion
+  is limited to the homepage. Lab, Query, Build, and other research surfaces remain quiet, dense,
+  and instrument-like.
+- The homepage corpus field is one tall, sticky typographic canvas. Equal anchor boxes hold EU, US,
+  EC, and NIST while curated nodes and hairlines leave from multiple real glyph points. Bright cells
+  inside a glyph mean relative mapped density based on current Writ records within that family;
+  they never represent progress, completeness, or a cross-family comparison. Brighter interactive
+  nodes represent individual real corpora.
+- Selecting a corpus node isolates it without navigating. `View raw code?` opens a full-height,
+  tool-first read-only workspace containing exact embedded canonical files and structured catalog
+  inspection; Writ and YAML remain visibly and semantically distinct.
 - The homepage globe remains an authored interactive moment. Automatic rotation pauses offscreen,
   during manual interaction, and under reduced motion; homepage reveal masks never replace or
   interfere with the real globe.

@@ -383,7 +383,7 @@ describe("frontend architecture", () => {
     expect(navItems).toContain("https://github.com/saykig/Writ");
   });
 
-  test("the homepage motion has explicit reduced-motion and scroll-reveal paths", () => {
+  test("the homepage motion has explicit reconstruction, scroll-progress and reduced-motion paths", () => {
     const home = read("app/page.tsx");
     const intro = read("components/home/home-intro.tsx");
     const network = read("components/home/corpus-network.tsx");
@@ -392,10 +392,18 @@ describe("frontend architecture", () => {
     expect(home).toContain("<HomepageHero");
     expect(home).toContain("<CorpusNetwork");
     expect(home).not.toContain("<Reveal");
-    expect(intro).toContain("introComplete");
-    expect(network).toContain("IntersectionObserver");
+    expect(intro).toContain('"reconstructing"');
+    expect(intro).toContain("getBoundingClientRect");
+    expect(intro).toContain("introTitle.animate");
+    expect(network).toContain("requestAnimationFrame");
+    expect(network).toContain("--corpus-progress");
+    expect(network).not.toContain("IntersectionObserver");
+    expect(network).not.toContain("/lab?jurisdiction=");
+    expect(network).toContain("View raw code?");
+    expect(network).toContain("not a completeness estimate");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(styles).toContain(".home-character-final,");
-    expect(styles).toContain(".corpus-field-line");
+    expect(styles).toContain(".home-prehero");
+    expect(styles).toContain(".corpus-scroll-stage");
+    expect(styles).toContain(".raw-workspace");
   });
 });

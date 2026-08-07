@@ -10,7 +10,7 @@
  * randomness. Retired migration entries are deliberately excluded.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 type Mapping = Record<string, unknown>;
@@ -32,7 +32,22 @@ interface CorpusManifest extends Mapping {
   status: CatalogEntry["status"];
   instrument_id?: string;
   root_institution_id?: string;
+  record_counts: Mapping;
+  locations: Mapping;
+  unresolved_evidence_count: number;
 }
+
+const FEATURED_CORPUS_IDS = new Set([
+  "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
+  "writ.corpus.legal-policy.eu.european-commission.gpai-guidelines",
+  "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
+  "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0",
+  "writ.corpus.legal-policy.us.nist.generative-ai-profile",
+  "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21",
+  "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan",
+  "eu.institutions.european_commission",
+  "us.institutions.nist",
+]);
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..");
@@ -51,6 +66,13 @@ function text(value: unknown, label: string): string {
     throw new TypeError(`${label} must be a non-empty string`);
   }
   return value;
+}
+
+function nonNegativeInteger(value: unknown, label: string): number {
+  if (!Number.isInteger(value) || Number(value) < 0) {
+    throw new TypeError(`${label} must be a non-negative integer`);
+  }
+  return Number(value);
 }
 
 function catalogEntry(value: unknown, index: number): CatalogEntry {
@@ -89,6 +111,12 @@ function manifest(value: unknown, path: string): CorpusManifest {
     ...(item.root_institution_id
       ? { root_institution_id: text(item.root_institution_id, `${path}.root_institution_id`) }
       : {}),
+    record_counts: object(item.record_counts, `${path}.record_counts`),
+    locations: object(item.locations, `${path}.locations`),
+    unresolved_evidence_count: nonNegativeInteger(
+      item.unresolved_evidence_count,
+      `${path}.unresolved_evidence_count`,
+    ),
   };
 }
 
@@ -121,16 +149,48 @@ if (!Array.isArray(catalog.native_corpora)) {
 
 const projection = catalog.native_corpora.map((value, index) => {
   const entry = catalogEntry(value, index);
-  const record = manifest(
-    Bun.YAML.parse(readFileSync(join(repoRoot, entry.manifest), "utf8")),
-    entry.manifest,
-  );
+  const manifestText = readFileSync(join(repoRoot, entry.manifest), "utf8");
+  const record = manifest(Bun.YAML.parse(manifestText), entry.manifest);
 
   for (const key of ["corpus_id", "family", "jurisdiction", "status"] as const) {
     if (entry[key] !== record[key]) {
       throw new Error(`${entry.manifest}: ${key} disagrees with ${catalogPath}`);
     }
   }
+
+  const mappedCountKind = record.family === "legal_policy" ? "claims" : "institutional_records";
+  const mappedCountValue = record.record_counts[mappedCountKind];
+  const mappedCount =
+    mappedCountValue === undefined && record.family === "legal_policy"
+      ? 0
+      : nonNegativeInteger(mappedCountValue, `${entry.manifest}.record_counts.${mappedCountKind}`);
+  const sources = record.locations.sources;
+  const records = record.locations.records;
+  if (!Array.isArray(sources) || !Array.isArray(records) || records.length === 0) {
+    throw new TypeError(`${entry.manifest}.locations must list sources and records`);
+  }
+
+  const rawFiles = FEATURED_CORPUS_IDS.has(entry.corpus_id)
+    ? (() => {
+        const primaryRecord = text(records.at(-1), `${entry.manifest}.locations.records[-1]`);
+        const primaryRecordPath = join(entry.path, primaryRecord);
+        const extension = extname(primaryRecord).slice(1);
+        return [
+          {
+            name: "corpus.yaml",
+            language: "yaml" as const,
+            path: entry.manifest,
+            content: manifestText,
+          },
+          {
+            name: basename(primaryRecord),
+            language: extension === "writ" ? ("writ" as const) : ("yaml" as const),
+            path: primaryRecordPath,
+            content: readFileSync(join(repoRoot, primaryRecordPath), "utf8"),
+          },
+        ];
+      })()
+    : undefined;
 
   return {
     corpusId: entry.corpus_id,
@@ -141,6 +201,11 @@ const projection = catalog.native_corpora.map((value, index) => {
     issuer: issuerLabel(entry, record),
     identity: record.instrument_id ?? record.root_institution_id ?? entry.corpus_id,
     path: entry.path,
+    mappedCount,
+    mappedCountKind,
+    sourceFileCount: sources.length,
+    unresolvedEvidenceCount: record.unresolved_evidence_count,
+    ...(rawFiles ? { rawFiles } : {}),
   };
 });
 
@@ -159,6 +224,18 @@ export interface CatalogCorpusSummary {
   readonly issuer: string;
   readonly identity: string;
   readonly path: string;
+  readonly mappedCount: number;
+  readonly mappedCountKind: "claims" | "institutional_records";
+  readonly sourceFileCount: number;
+  readonly unresolvedEvidenceCount: number;
+  readonly rawFiles?: readonly CatalogRawFile[];
+}
+
+export interface CatalogRawFile {
+  readonly name: string;
+  readonly language: "yaml" | "writ";
+  readonly path: string;
+  readonly content: string;
 }
 
 export const CORPUS_CATALOG_SOURCE = ${JSON.stringify(catalogPath)};
