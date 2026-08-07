@@ -34,7 +34,7 @@ describe("frontend architecture", () => {
   });
 
   test("the homepage hero offers the three destinations", () => {
-    const home = read("app/page.tsx");
+    const home = `${read("app/page.tsx")}\n${read("components/home/home-intro.tsx")}`;
 
     expect(home).toContain("Write in Writ.");
     expect(home).toContain(
@@ -159,7 +159,7 @@ describe("frontend architecture", () => {
   });
 
   test("the globe maps corpus coverage without navigating on selection", () => {
-    const home = read("app/page.tsx");
+    const home = `${read("app/page.tsx")}\n${read("components/home/home-intro.tsx")}`;
     const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
@@ -383,13 +383,19 @@ describe("frontend architecture", () => {
     expect(navItems).toContain("https://github.com/saykig/Writ");
   });
 
-  test("every landing-page section uses the reduced-motion-safe scroll reveal", () => {
+  test("the homepage motion has explicit reduced-motion and scroll-reveal paths", () => {
     const home = read("app/page.tsx");
-    const reveal = read("components/site/reveal.tsx");
-    // The homepage is the hero alone.
-    expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
-    expect(reveal).toContain("IntersectionObserver");
-    expect(reveal).toContain("prefers-reduced-motion: reduce");
-    expect(reveal).toContain('status === "in"');
+    const intro = read("components/home/home-intro.tsx");
+    const network = read("components/home/corpus-network.tsx");
+    const styles = read("app/globals.css");
+
+    expect(home).toContain("<HomepageHero");
+    expect(home).toContain("<CorpusNetwork");
+    expect(home).not.toContain("<Reveal");
+    expect(intro).toContain("introComplete");
+    expect(network).toContain("IntersectionObserver");
+    expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(styles).toContain(".home-character-final,");
+    expect(styles).toContain(".corpus-field-line");
   });
 });
