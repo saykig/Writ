@@ -27,9 +27,21 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://writewrit.vercel.app"),
   title: "Writ · source-grounded political knowledge",
   description:
     "Writ is a structured knowledge system and domain-specific language for political science and global affairs. It keeps claims, evidence, uncertainty, provenance, and derived results traceable across corpora.",
+  openGraph: {
+    title: "Writ",
+    description: "A domain-specific language for global affairs",
+    images: ["/writ-social-preview.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Writ",
+    description: "A domain-specific language for global affairs",
+    images: ["/writ-social-preview.png"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
