@@ -396,7 +396,10 @@ describe("frontend architecture", () => {
     expect(intro).toContain("getBoundingClientRect");
     expect(intro).toContain("introTitle.animate");
     expect(network).toContain("requestAnimationFrame");
+    expect(network).toContain("ResizeObserver");
+    expect(network).toContain("document.fonts.ready");
     expect(network).toContain("--corpus-progress");
+    expect(network).not.toContain("--glyph-characters");
     expect(network).not.toContain("IntersectionObserver");
     expect(network).not.toContain("/lab?jurisdiction=");
     expect(network).toContain("View raw code?");
@@ -404,6 +407,8 @@ describe("frontend architecture", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain(".home-prehero");
     expect(styles).toContain(".corpus-scroll-stage");
+    expect(styles).toContain("width: clamp(32rem, 54vw, 50rem)");
+    expect(styles).not.toContain('.corpus-canvas-group[data-glyph="NIST"] .corpus-glyph-base');
     expect(styles).toContain(".raw-workspace");
   });
 });

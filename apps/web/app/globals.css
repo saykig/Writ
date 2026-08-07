@@ -629,17 +629,10 @@
 }
 
 .corpus-canvas-family {
+  pointer-events: none;
   position: absolute;
   inset: 0;
   transition: opacity 220ms ease;
-}
-
-.corpus-canvas-family--legal {
-  transform: translate3d(0, calc(var(--corpus-progress) * -12svh), 0);
-}
-
-.corpus-canvas-family--institutional {
-  transform: translate3d(0, calc(49svh - var(--corpus-progress) * 49svh), 0);
 }
 
 .corpus-canvas-family-label {
@@ -651,64 +644,95 @@
 }
 
 .corpus-canvas-family--legal .corpus-canvas-family-label {
-  top: 12.5%;
-  left: 4%;
-  opacity: clamp(0, calc(var(--corpus-progress) * 16), 1);
+  top: 11%;
+  left: max(2rem, calc(50% - clamp(16rem, 27vw, 25rem)));
+  opacity: min(
+    clamp(0, calc(var(--corpus-progress) * 16), 1),
+    clamp(0, calc((0.56 - var(--corpus-progress)) * 8), 1)
+  );
 }
 
 .corpus-canvas-family--institutional .corpus-canvas-family-label {
-  top: 12.5%;
-  right: 29%;
-  opacity: clamp(0, calc((var(--corpus-progress) - 0.37) * 12), 1);
+  top: 11%;
+  left: max(2rem, calc(50% - clamp(16rem, 27vw, 25rem)));
+  opacity: clamp(0, calc((var(--corpus-progress) - 0.5) * 12), 1);
 }
 
 .corpus-canvas-group {
+  --stack-offset: 0svh;
+  --group-visibility: 1;
   position: absolute;
-  width: clamp(18rem, 31vw, 31rem);
-  height: clamp(12rem, 27svh, 16rem);
+  top: 50%;
+  left: 50%;
+  width: clamp(32rem, 54vw, 50rem);
+  height: clamp(26rem, 58svh, 34rem);
+  opacity: var(--group-visibility);
+  transform: translate(-50%, calc(-50% + var(--stack-offset) - var(--corpus-progress) * 78svh));
   transition:
     opacity 260ms ease,
     filter 260ms ease;
 }
 
 .corpus-canvas-group[data-glyph="EU"] {
-  top: 16%;
-  left: 7%;
+  --stack-offset: 0svh;
+  --group-visibility: clamp(0.06, calc((0.34 - var(--corpus-progress)) * 6), 1);
 }
 .corpus-canvas-group[data-glyph="US"] {
-  top: 58%;
-  left: 13%;
+  --stack-offset: 26svh;
+  --group-visibility: min(
+    clamp(0.06, calc((var(--corpus-progress) - 0.05) * 5.5), 1),
+    clamp(0.06, calc((0.62 - var(--corpus-progress)) * 5.5), 1)
+  );
 }
 .corpus-canvas-group[data-glyph="EC"] {
-  top: 21%;
-  right: 7%;
+  --stack-offset: 52svh;
+  --group-visibility: min(
+    clamp(0.06, calc((var(--corpus-progress) - 0.38) * 5.5), 1),
+    clamp(0.06, calc((0.94 - var(--corpus-progress)) * 5.5), 1)
+  );
 }
 .corpus-canvas-group[data-glyph="NIST"] {
-  top: 60%;
-  right: 12%;
+  --stack-offset: 78svh;
+  --group-visibility: clamp(0.06, calc((var(--corpus-progress) - 0.67) * 5.5), 1);
 }
 
 .corpus-glyph-box {
-  --glyph-characters: 2;
-  container-type: size;
   position: relative;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
+.corpus-glyph-visual {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--fitted-width);
+  height: var(--fitted-height);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease;
+}
+
+.corpus-glyph-box[data-fitted="true"] .corpus-glyph-visual {
+  opacity: 1;
+}
+
 .corpus-glyph-base {
   position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
+  top: 0;
+  left: 0;
+  display: block;
+  width: max-content;
   font-family: var(--font-geist-pixel-grid), var(--font-mono), monospace;
-  font-size: min(67cqh, calc(88cqw / var(--glyph-characters)));
+  font-size: 32rem;
   font-weight: 400;
   line-height: 0.82;
   letter-spacing: -0.04em;
   white-space: nowrap;
   opacity: clamp(0, calc((var(--corpus-progress) - var(--group-start)) * 14), 1);
+  transform: scale(var(--glyph-scale));
+  transform-origin: top left;
 }
 
 .corpus-glyph-base {
@@ -734,8 +758,8 @@
   position: absolute;
   top: var(--density-y);
   left: var(--density-x);
-  width: 5px;
-  height: 5px;
+  width: clamp(6px, 0.48vw, 8px);
+  height: clamp(6px, 0.48vw, 8px);
   background: rgb(255 255 255 / 92%);
   box-shadow: 0 0 5px rgb(255 255 255 / 24%);
   transform: translate(-50%, -50%);
@@ -825,8 +849,8 @@
 }
 
 .corpus-node span {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: rgb(255 255 255 / 95%);
   box-shadow:
@@ -869,12 +893,41 @@
 }
 
 .corpus-node-label strong {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 520;
 }
 .corpus-node-label small {
   color: rgb(255 255 255 / 43%);
   font-size: 0.61rem;
+}
+
+@media (min-width: 901px) {
+  .corpus-canvas-group {
+    pointer-events: none;
+  }
+  .corpus-canvas-group .corpus-node {
+    pointer-events: none;
+  }
+  .corpus-sticky-canvas[data-active-glyph="EU"] .corpus-canvas-group[data-glyph="EU"],
+  .corpus-sticky-canvas[data-active-glyph="US"] .corpus-canvas-group[data-glyph="US"],
+  .corpus-sticky-canvas[data-active-glyph="EC"] .corpus-canvas-group[data-glyph="EC"],
+  .corpus-sticky-canvas[data-active-glyph="NIST"] .corpus-canvas-group[data-glyph="NIST"] {
+    pointer-events: auto;
+  }
+  .corpus-sticky-canvas[data-active-glyph="EU"] .corpus-canvas-family--legal,
+  .corpus-sticky-canvas[data-active-glyph="US"] .corpus-canvas-family--legal,
+  .corpus-sticky-canvas[data-active-glyph="EC"] .corpus-canvas-family--institutional,
+  .corpus-sticky-canvas[data-active-glyph="NIST"] .corpus-canvas-family--institutional {
+    pointer-events: auto;
+  }
+  .corpus-sticky-canvas[data-active-glyph="EU"] .corpus-canvas-group[data-glyph="EU"] .corpus-node,
+  .corpus-sticky-canvas[data-active-glyph="US"] .corpus-canvas-group[data-glyph="US"] .corpus-node,
+  .corpus-sticky-canvas[data-active-glyph="EC"] .corpus-canvas-group[data-glyph="EC"] .corpus-node,
+  .corpus-sticky-canvas[data-active-glyph="NIST"]
+    .corpus-canvas-group[data-glyph="NIST"]
+    .corpus-node {
+    pointer-events: auto;
+  }
 }
 
 .corpus-scroll-stage[data-focused="true"] .corpus-canvas-group[data-relevant="false"] {
@@ -1156,6 +1209,7 @@
     inset: auto;
     opacity: 1;
     transform: none;
+    pointer-events: auto;
   }
   .corpus-canvas-family--institutional {
     margin-top: 7rem;
@@ -1171,6 +1225,9 @@
     width: min(68vw, 20rem);
     height: 13rem;
     margin: 0 auto 9rem;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
   }
   .corpus-node-label {
     left: var(--label-x-mobile);
@@ -1292,6 +1349,7 @@
     inset: auto;
     opacity: 1 !important;
     transform: none !important;
+    pointer-events: auto;
   }
   .corpus-canvas-family--institutional {
     margin-top: 6rem;
@@ -1307,6 +1365,9 @@
     width: min(68vw, 24rem);
     height: 14rem;
     margin: 0 auto 9rem;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
   }
   .corpus-canvas-ambient {
     animation: none !important;

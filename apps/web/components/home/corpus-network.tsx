@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { ArrowRight, X } from "lucide-react";
 
@@ -57,10 +57,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
           "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
         shortTitle: "AI Act",
         geometry: {
-          x: 27,
-          y: 21,
+          x: 34,
+          y: 8,
           labelX: 12,
-          labelY: 2,
+          labelY: -2,
           mobileLabelX: 35,
           direction: "diagonal",
           align: "end",
@@ -70,10 +70,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "writ.corpus.legal-policy.eu.european-commission.gpai-guidelines",
         shortTitle: "GPAI Guidelines",
         geometry: {
-          x: 76,
-          y: 34,
-          labelX: 106,
-          labelY: 23,
+          x: 97,
+          y: 33,
+          labelX: 115,
+          labelY: 20,
           mobileLabelX: 75,
           direction: "right",
         },
@@ -83,10 +83,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
           "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
         shortTitle: "Code of Practice notice",
         geometry: {
-          x: 63,
-          y: 76,
-          labelX: 91,
-          labelY: 91,
+          x: 70,
+          y: 90,
+          labelX: 98,
+          labelY: 103,
           mobileLabelX: 70,
           direction: "diagonal",
         },
@@ -102,10 +102,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0",
         shortTitle: "NIST RMF",
         geometry: {
-          x: 31,
-          y: 17,
-          labelX: 4,
-          labelY: -6,
+          x: 5,
+          y: 26,
+          labelX: -7,
+          labelY: 10,
           mobileLabelX: 35,
           direction: "above",
           align: "end",
@@ -115,10 +115,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "writ.corpus.legal-policy.us.nist.generative-ai-profile",
         shortTitle: "GenAI Profile",
         geometry: {
-          x: 77,
-          y: 30,
-          labelX: 108,
-          labelY: 13,
+          x: 94,
+          y: 24,
+          labelX: 112,
+          labelY: 10,
           mobileLabelX: 75,
           direction: "diagonal",
         },
@@ -127,10 +127,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21",
         shortTitle: "OMB M-25-21",
         geometry: {
-          x: 20,
-          y: 69,
-          labelX: 12,
-          labelY: 85,
+          x: 18,
+          y: 90,
+          labelX: 4,
+          labelY: 104,
           mobileLabelX: 35,
           direction: "diagonal",
           align: "end",
@@ -140,10 +140,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan",
         shortTitle: "AI Action Plan",
         geometry: {
-          x: 72,
-          y: 78,
-          labelX: 104,
-          labelY: 74,
+          x: 90,
+          y: 82,
+          labelX: 108,
+          labelY: 88,
           mobileLabelX: 75,
           direction: "right",
         },
@@ -158,7 +158,14 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
       {
         corpusId: "eu.institutions.european_commission",
         shortTitle: "European Commission",
-        geometry: { x: 73, y: 37, labelX: 93, labelY: 19, direction: "diagonal", align: "end" },
+        geometry: {
+          x: 92,
+          y: 22,
+          labelX: 108,
+          labelY: 10,
+          mobileLabelX: 75,
+          direction: "diagonal",
+        },
       },
     ],
   },
@@ -171,10 +178,10 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
         corpusId: "us.institutions.nist",
         shortTitle: "NIST",
         geometry: {
-          x: 29,
-          y: 67,
-          labelX: -3,
-          labelY: 83,
+          x: 17,
+          y: 58,
+          labelX: -5,
+          labelY: 78,
           mobileLabelX: 35,
           direction: "diagonal",
           align: "end",
@@ -186,84 +193,84 @@ const FEATURED_GROUPS: readonly FeaturedGroup[] = [
 
 const DENSITY_POSITIONS: Record<GlyphName, readonly [number, number][]> = {
   EU: [
-    [29, 29],
-    [29, 42],
-    [29, 55],
-    [29, 68],
-    [38, 29],
-    [38, 49],
-    [38, 68],
-    [52, 30],
-    [52, 55],
-    [57, 69],
-    [65, 72],
-    [73, 69],
-    [78, 55],
-    [78, 30],
-    [45, 49],
-    [71, 43],
-    [62, 72],
-    [78, 43],
+    [6, 18],
+    [58, 18],
+    [6, 47],
+    [97, 58],
+    [25, 8],
+    [88, 88],
+    [34, 47],
+    [58, 68],
+    [6, 70],
+    [97, 58],
+    [18, 8],
+    [88, 88],
+    [6, 88],
+    [58, 40],
+    [20, 93],
+    [97, 72],
+    [36, 93],
+    [62, 88],
   ],
   US: [
-    [29, 28],
-    [29, 44],
-    [29, 60],
-    [35, 71],
-    [45, 73],
-    [52, 62],
-    [52, 29],
-    [62, 27],
-    [72, 31],
-    [73, 45],
-    [62, 50],
-    [54, 55],
-    [62, 70],
-    [73, 67],
-    [77, 55],
-    [40, 70],
-    [53, 29],
-    [68, 50],
+    [5, 18],
+    [62, 9],
+    [43, 30],
+    [94, 42],
+    [5, 55],
+    [69, 48],
+    [36, 88],
+    [76, 92],
+    [43, 58],
+    [78, 9],
+    [5, 74],
+    [58, 32],
+    [36, 88],
+    [84, 48],
+    [13, 88],
+    [60, 68],
+    [43, 72],
+    [76, 92],
   ],
   EC: [
-    [29, 29],
-    [29, 43],
-    [29, 57],
-    [29, 70],
-    [39, 29],
-    [39, 50],
-    [39, 70],
-    [56, 31],
-    [50, 43],
-    [50, 58],
-    [57, 70],
-    [68, 72],
-    [76, 66],
-    [79, 54],
-    [79, 38],
-    [72, 29],
-    [61, 28],
-    [47, 50],
+    [6, 18],
+    [63, 14],
+    [6, 47],
+    [80, 8],
+    [25, 8],
+    [58, 50],
+    [6, 70],
+    [65, 88],
+    [34, 47],
+    [80, 8],
+    [6, 88],
+    [58, 35],
+    [18, 8],
+    [82, 92],
+    [36, 93],
+    [96, 75],
+    [58, 68],
+    [96, 38],
   ],
   NIST: [
-    [18, 34],
-    [18, 50],
-    [18, 66],
-    [25, 42],
-    [31, 55],
-    [36, 66],
-    [36, 35],
-    [45, 34],
-    [45, 50],
-    [45, 66],
-    [54, 34],
-    [61, 34],
-    [61, 50],
-    [54, 66],
-    [70, 34],
-    [78, 34],
-    [74, 50],
-    [74, 66],
+    [4, 24],
+    [32, 20],
+    [50, 10],
+    [88, 10],
+    [15, 45],
+    [32, 65],
+    [63, 48],
+    [88, 52],
+    [4, 62],
+    [25, 70],
+    [47, 31],
+    [76, 10],
+    [4, 82],
+    [32, 82],
+    [56, 88],
+    [88, 72],
+    [65, 68],
+    [88, 88],
   ],
 };
 
@@ -273,6 +280,62 @@ const GLYPH_REVEAL_START: Record<GlyphName, number> = {
   EC: 0.45,
   NIST: 0.62,
 };
+
+const GLYPH_SEQUENCE: readonly GlyphName[] = ["EU", "US", "EC", "NIST"];
+
+interface GlyphFit {
+  height: number;
+  scale: number;
+  width: number;
+}
+
+function useFittedGlyph() {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const [fit, setFit] = useState<GlyphFit>({ height: 0, scale: 1, width: 0 });
+
+  useLayoutEffect(() => {
+    const box = boxRef.current;
+    const word = wordRef.current;
+    if (!box || !word) return;
+
+    let cancelled = false;
+    const measure = () => {
+      const naturalWidth = word.offsetWidth;
+      const naturalHeight = word.offsetHeight;
+      if (!naturalWidth || !naturalHeight || !box.clientWidth || !box.clientHeight) return;
+
+      const scale = Math.min(
+        (box.clientWidth * 0.9) / naturalWidth,
+        (box.clientHeight * 0.9) / naturalHeight,
+      );
+      const next = {
+        height: naturalHeight * scale,
+        scale,
+        width: naturalWidth * scale,
+      };
+      if (cancelled) return;
+      setFit((current) =>
+        Math.abs(current.width - next.width) < 0.5 && Math.abs(current.height - next.height) < 0.5
+          ? current
+          : next,
+      );
+    };
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    observer.observe(word);
+    void document.fonts.ready.then(measure);
+    measure();
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, []);
+
+  return { boxRef, fit, wordRef };
+}
 
 function resolveCorpus(corpusId: string): CatalogCorpusSummary {
   const corpus = CATALOG_BY_ID.get(corpusId);
@@ -304,6 +367,7 @@ function CorpusGlyph({
   selectedCorpusId: string | null;
   onSelect: (corpusId: string) => void;
 }) {
+  const { boxRef, fit, wordRef } = useFittedGlyph();
   const mappedCount = groupMappedCount(group);
   const familyMaximum = Math.max(
     ...FEATURED_GROUPS.filter(({ family }) => family === group.family).map(groupMappedCount),
@@ -323,21 +387,91 @@ function CorpusGlyph({
       style={{ "--group-start": GLYPH_REVEAL_START[group.glyph] } as MotionStyle}
       aria-label={`${group.glyph}: ${mappedCount} ${group.family === "legal_policy" ? "mapped claims" : "institutional records"}. Relative mapped density based on current Writ records; not a completeness estimate.`}
     >
-      <div
-        className="corpus-glyph-box"
-        style={{ "--glyph-characters": group.glyph.length } as MotionStyle}
-      >
-        <span className="corpus-glyph-base" aria-hidden>
-          {group.glyph}
-        </span>
-        <span className="corpus-density-cells" aria-hidden>
-          {DENSITY_POSITIONS[group.glyph].slice(0, litCells).map(([x, y], index) => (
-            <i
-              key={`${x}-${y}-${index}`}
-              style={{ "--density-x": `${x}%`, "--density-y": `${y}%` } as MotionStyle}
-            />
-          ))}
-        </span>
+      <div ref={boxRef} className="corpus-glyph-box" data-fitted={fit.width > 0 ? "true" : "false"}>
+        <div
+          className="corpus-glyph-visual"
+          style={
+            {
+              "--fitted-height": `${fit.height}px`,
+              "--fitted-width": `${fit.width}px`,
+            } as MotionStyle
+          }
+        >
+          <span
+            ref={wordRef}
+            className="corpus-glyph-base"
+            aria-hidden
+            style={{ "--glyph-scale": fit.scale } as MotionStyle}
+          >
+            {group.glyph}
+          </span>
+          <span className="corpus-density-cells" aria-hidden>
+            {DENSITY_POSITIONS[group.glyph].slice(0, litCells).map(([x, y], index) => (
+              <i
+                key={`${x}-${y}-${index}`}
+                style={{ "--density-x": `${x}%`, "--density-y": `${y}%` } as MotionStyle}
+              />
+            ))}
+          </span>
+
+          <svg className="corpus-node-lines" viewBox="0 0 100 100" aria-hidden>
+            {group.records.map(({ corpusId, geometry }) => (
+              <line
+                key={corpusId}
+                x1={geometry.x}
+                y1={geometry.y}
+                x2={geometry.labelX}
+                y2={geometry.labelY}
+                style={
+                  {
+                    "--line-x2": `${geometry.labelX}%`,
+                    "--line-x2-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
+                  } as MotionStyle
+                }
+                data-selected={selectedCorpusId === corpusId ? "true" : "false"}
+              />
+            ))}
+          </svg>
+
+          {group.records.map(({ corpusId, shortTitle, geometry }) => {
+            const corpus = resolveCorpus(corpusId);
+            const selected = selectedCorpusId === corpusId;
+            const nodeStyle = {
+              "--node-x": `${geometry.x}%`,
+              "--node-y": `${geometry.y}%`,
+              "--label-x": `${geometry.labelX}%`,
+              "--label-y": `${geometry.labelY}%`,
+              "--label-x-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
+            } as MotionStyle;
+            return (
+              <div
+                className="corpus-node-annotation"
+                data-direction={geometry.direction}
+                data-selected={selected ? "true" : "false"}
+                key={corpusId}
+                style={nodeStyle}
+              >
+                <button
+                  type="button"
+                  className="corpus-node"
+                  aria-label={`Focus ${shortTitle} corpus`}
+                  aria-pressed={selected}
+                  onClick={() => onSelect(corpusId)}
+                >
+                  <span />
+                </button>
+                <span
+                  className="corpus-node-label"
+                  data-align={geometry.align ?? "start"}
+                  aria-hidden
+                >
+                  <strong>{shortTitle}</strong>
+                  <small>{corpus.issuer}</small>
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
         <span className="corpus-glyph-jurisdiction" aria-hidden>
           {group.jurisdiction}
@@ -347,64 +481,6 @@ function CorpusGlyph({
           {mappedCount}{" "}
           {group.family === "legal_policy" ? "mapped claims" : "institutional records"}
         </span>
-
-        <svg className="corpus-node-lines" viewBox="0 0 100 100" aria-hidden>
-          {group.records.map(({ corpusId, geometry }) => (
-            <line
-              key={corpusId}
-              x1={geometry.x}
-              y1={geometry.y}
-              x2={geometry.labelX}
-              y2={geometry.labelY}
-              style={
-                {
-                  "--line-x2": `${geometry.labelX}%`,
-                  "--line-x2-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
-                } as MotionStyle
-              }
-              data-selected={selectedCorpusId === corpusId ? "true" : "false"}
-            />
-          ))}
-        </svg>
-
-        {group.records.map(({ corpusId, shortTitle, geometry }) => {
-          const corpus = resolveCorpus(corpusId);
-          const selected = selectedCorpusId === corpusId;
-          const nodeStyle = {
-            "--node-x": `${geometry.x}%`,
-            "--node-y": `${geometry.y}%`,
-            "--label-x": `${geometry.labelX}%`,
-            "--label-y": `${geometry.labelY}%`,
-            "--label-x-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
-          } as MotionStyle;
-          return (
-            <div
-              className="corpus-node-annotation"
-              data-direction={geometry.direction}
-              data-selected={selected ? "true" : "false"}
-              key={corpusId}
-              style={nodeStyle}
-            >
-              <button
-                type="button"
-                className="corpus-node"
-                aria-label={`Focus ${shortTitle} corpus`}
-                aria-pressed={selected}
-                onClick={() => onSelect(corpusId)}
-              >
-                <span />
-              </button>
-              <span
-                className="corpus-node-label"
-                data-align={geometry.align ?? "start"}
-                aria-hidden
-              >
-                <strong>{shortTitle}</strong>
-                <small>{corpus.issuer}</small>
-              </span>
-            </div>
-          );
-        })}
       </div>
     </article>
   );
@@ -603,12 +679,14 @@ export function CorpusNetwork() {
       frame = 0;
       if (reducedMotion.matches || compactLayout.matches) {
         canvas.style.removeProperty("--corpus-progress");
+        delete canvas.dataset.activeGlyph;
         return;
       }
       const rect = section.getBoundingClientRect();
       const distance = Math.max(1, rect.height - window.innerHeight);
       const progress = Math.min(1, Math.max(0, -rect.top / distance));
       canvas.style.setProperty("--corpus-progress", progress.toFixed(4));
+      canvas.dataset.activeGlyph = GLYPH_SEQUENCE[Math.round(progress * 3)] ?? "NIST";
     };
     const schedule = () => {
       if (!frame) frame = window.requestAnimationFrame(update);

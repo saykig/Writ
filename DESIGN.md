@@ -41,6 +41,9 @@ interface whose homepage alone uses authored resolution motion.
   inside a glyph mean relative mapped density based on current Writ records within that family;
   they never represent progress, completeness, or a cross-family comparison. Brighter interactive
   nodes represent individual real corpora.
+- Every desktop corpus row shares one centered responsive box. The rendered Geist Pixel word is
+  measured and proportionally fitted to 90% of that box, so EU, US, EC, and the complete NIST
+  wordmark occupy the same visual width without per-word font sizes or aspect-ratio distortion.
 - Selecting a corpus node isolates it without navigating. `View raw code?` opens a full-height,
   tool-first read-only workspace containing exact embedded canonical files and structured catalog
   inspection; Writ and YAML remain visibly and semantically distinct.
