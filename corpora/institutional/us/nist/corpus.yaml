@@ -8,29 +8,31 @@ record_contract:
   kind: native
   id: https://writ.example/schemas/extensions/institutional-record.schema.json
   version: 0.2.0
-# Record approval does not publish or activate the corpus. Stage B research into
-# mandate, decision rights, operational capacity and AI-group placement is
-# outstanding, so the corpus itself remains draft.
+# Stage A approval and Stage B draft status do not publish or activate the corpus.
 status: draft
 identity_namespace: us.institutions.nist
 migration_aliases:
   - corpora/us/institutions/nist
 root_institution_id: nist
 record_counts:
-  institutional_records: 6
+  institutional_records: 15
   record_links: 2
-  disposition_judgments: 8
+  disposition_judgments: 17
 review_counts:
   approved_records: 5
   superseded_records: 1
+  draft_records: 9
   approved_record_links: 2
   accepted_disposition_judgments: 8
+  proposed_disposition_judgments: 9
 unresolved_evidence_count: 0
 locations:
   sources:
     - sources.writ
+    - sources/captures/
   passages:
     - sources.writ
+    - records.writ
   records:
     - records.writ
   relationships:

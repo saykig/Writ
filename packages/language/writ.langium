@@ -161,6 +161,7 @@ InstitutionalProperty:
     | {infer FunctionsProperty} 'functions' values=FunctionList ';'
     | {infer InstitutionalFunctionProperty} 'function' value=QualifiedName ';'
     | OperationalCapacityProperty
+    | LegacyOperationalCapacityProperty
     | {infer DecisionRightsProperty} 'decision_rights' values=StringList ';'
     | DecisionRightProperty
     | {infer ParentInstitutionProperty} 'parent_institution_id' value=QualifiedName ';'
@@ -170,7 +171,7 @@ InstitutionalProperty:
     | InstitutionalRelationshipsProperty
     | ApplicablePeriodProperty;
 
-InstitutionType returns string: 'government_department' | 'federal_agency' | 'independent_agency' | 'advisory_body' | 'regulator' | 'standards_body' | 'research_body' | 'interagency_body' | 'organizational_unit' | 'other' | 'unknown';
+InstitutionType returns string: 'government_department' | 'federal_agency' | 'independent_agency' | 'advisory_body' | 'regulator' | 'standards_body' | 'research_body' | 'interagency_body' | 'organizational_unit' | 'supranational_institution' | 'other' | 'unknown';
 InstitutionalFactType returns string: 'identity' | 'placement' | 'relationship' | 'mission' | 'mandate' | 'function' | 'decision_right' | 'operational_capacity';
 InstitutionalRecordLinkProperty:
     'record_link' '{'
@@ -203,10 +204,28 @@ MissionProperty:
 OperationalCapacityProperty:
     'operational_capacity' '{'
         'status' status=CapacityStatus ';'
+        'capacity_type' capacityType=CapacityType ';'
+        ('capacity_components' capacityComponents=IdentifierList ';')?
+        ('as_of_date' asOfDate=DATE ';')?
+        ('quantity' quantity=CapacityQuantity)?
+        'evidence_refs' evidenceRefs=IdentifierList ';'
+    '}';
+CapacityStatus returns string: 'active' | 'planned' | 'limited' | 'degraded' | 'suspended' | 'retired' | 'unknown';
+CapacityType returns string: 'organizational_unit' | 'laboratory_network' | 'facility' | 'program' | 'technical_capability' | 'accreditation_system' | 'partnership_network' | 'other';
+CapacityQuantity:
+    '{'
+        'value' value=NUMBER ';'
+        'unit' unit=QualifiedName ';'
+        'qualifier' qualifier=CapacityQuantityQualifier ';'
+    '}';
+CapacityQuantityQualifier returns string: 'exact' | 'approximate' | 'minimum' | 'maximum';
+LegacyOperationalCapacityProperty:
+    'operational_capacity' '{'
+        'status' status=LegacyCapacityStatus ';'
         'dimensions' dimensions=StringList ';'
         'evidence_refs' evidenceRefs=IdentifierList ';'
     '}';
-CapacityStatus returns string: 'established' | 'partial' | 'unknown' | 'contested';
+LegacyCapacityStatus returns string: 'established' | 'partial' | 'unknown' | 'contested';
 DecisionRightProperty:
     'decision_right' '{'
         'status' status=MandateStatus ';'
@@ -559,12 +578,17 @@ NamePart returns string:
     | 'contractual' | 'oversight' | 'self_executing' | 'none_specified'
     | 'government_department' | 'federal_agency' | 'independent_agency' | 'advisory_body'
     | 'regulator' | 'standards_body' | 'research_body' | 'interagency_body'
-    | 'organizational_unit' | 'standards_development' | 'measurement_science'
+    | 'organizational_unit' | 'supranational_institution' | 'standards_development' | 'measurement_science'
     | 'technical_guidance' | 'research' | 'evaluation' | 'coordination'
     | 'grant_administration' | 'procurement_support' | 'established' | 'partial'
     | 'institution_id' | 'institution_type' | 'mandate' | 'mission' | 'authority_sources'
     | 'authority_source_ids' | 'source_ids'
-    | 'functions' | 'operational_capacity' | 'status' | 'dimensions' | 'evidence_refs'
+    | 'functions' | 'operational_capacity' | 'status' | 'capacity_type'
+    | 'capacity_components' | 'as_of_date' | 'quantity' | 'unit' | 'qualifier'
+    | 'active' | 'planned' | 'limited' | 'degraded' | 'suspended' | 'retired'
+    | 'laboratory_network' | 'facility' | 'program' | 'technical_capability'
+    | 'accreditation_system' | 'partnership_network' | 'exact' | 'approximate'
+    | 'minimum' | 'maximum' | 'dimensions' | 'evidence_refs'
     | 'decision_rights' | 'parent_institution_id' | 'subunit_ids'
     | 'oversight_relationships' | 'institutional_relationships' | 'relation'
     | 'applicable_period' | 'from' | 'until' | 'part_of' | 'oversees' | 'supports'

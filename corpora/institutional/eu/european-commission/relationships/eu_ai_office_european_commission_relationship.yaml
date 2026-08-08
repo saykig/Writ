@@ -1,0 +1,27 @@
+# The placement record is the authoritative direct assertion: AI Office is part of
+# DG CONNECT. This Core link provides inherited traversal from the Office to the
+# Commission root through that placement chain; no inverse is stored.
+schema_version: 1.0.0
+link_id: eu_ai_office_european_commission_relationship
+owning_corpus_id: eu.institutions.european_commission
+source_id: eu_ai_office
+source_kind: organizational_unit
+target_id: european_commission
+target_kind: supranational_institution
+relation_type: part_of
+basis: inherited
+evidence_refs:
+  - eu.commission_decision_c_2024_1459.article_1
+supporting_record_ids:
+  - eu_ai_office_placement
+uncertainties:
+  - type: incomplete_evidence
+    description:
+      The selected passage directly places the AI Office in DG CONNECT. This root-level link to the
+      European Commission is inherited through that administrative placement; it does not establish
+      independent legal personality, mandate, decision rights or the Commission's degree of control
+      over each Office activity.
+provenance:
+  created_by: OpenAI Codex automated proposal
+  created_at: 2026-08-05
+review_state: draft

@@ -40,7 +40,9 @@ export type WritKeywordNames =
   | "["
   | "]"
   | "accepted"
+  | "accreditation_system"
   | "action_identity"
+  | "active"
   | "adjudication"
   | "administered_by"
   | "administrative"
@@ -60,6 +62,8 @@ export type WritKeywordNames =
   | "applicable_period"
   | "applies_to"
   | "approved"
+  | "approximate"
+  | "as_of_date"
   | "assert"
   | "assertion"
   | "assigns"
@@ -74,6 +78,8 @@ export type WritKeywordNames =
   | "between"
   | "binding"
   | "by"
+  | "capacity_components"
+  | "capacity_type"
   | "chapter"
   | "cite"
   | "classify"
@@ -103,6 +109,7 @@ export type WritKeywordNames =
   | "decision_right"
   | "decision_rights"
   | "defines"
+  | "degraded"
   | "derive"
   | "derives_authority_from"
   | "diagnostic"
@@ -129,6 +136,7 @@ export type WritKeywordNames =
   | "evidence"
   | "evidence_policy"
   | "evidence_refs"
+  | "exact"
   | "except"
   | "exceptions"
   | "exclusive"
@@ -137,6 +145,7 @@ export type WritKeywordNames =
   | "exists"
   | "expect"
   | "explicit_rules_only"
+  | "facility"
   | "fact_type"
   | "false"
   | "family_context"
@@ -189,21 +198,25 @@ export type WritKeywordNames =
   | "jurisdictions"
   | "kind"
   | "label"
+  | "laboratory_network"
   | "language"
   | "last_amended_year"
   | "legal_policy"
   | "legal_status_determination"
   | "let"
+  | "limited"
   | "lines"
   | "link_id"
   | "locator"
   | "mandate"
   | "market_wide"
   | "max"
+  | "maximum"
   | "measure"
   | "measurement_science"
   | "media_type"
   | "min"
+  | "minimum"
   | "mission"
   | "monotonic"
   | "multi_label"
@@ -239,17 +252,20 @@ export type WritKeywordNames =
   | "part_of"
   | "partial"
   | "partner_class"
+  | "partnership_network"
   | "passage"
   | "passage_hash"
   | "passage_selection"
   | "performs"
   | "permits"
   | "placement"
+  | "planned"
   | "predicate"
   | "priority"
   | "procurement"
   | "procurement_support"
   | "profile"
+  | "program"
   | "prohibits"
   | "propagate"
   | "propagate_uncertainty"
@@ -257,6 +273,8 @@ export type WritKeywordNames =
   | "provenance"
   | "provider_specific"
   | "provision_identifier"
+  | "qualifier"
+  | "quantity"
   | "quote"
   | "ratio"
   | "rationale"
@@ -277,6 +295,7 @@ export type WritKeywordNames =
   | "research_body"
   | "responsible_authorities"
   | "result"
+  | "retired"
   | "retrieved"
   | "review_disposition"
   | "review_required"
@@ -322,7 +341,10 @@ export type WritKeywordNames =
   | "supersedes_judgment_ids"
   | "support"
   | "supports"
+  | "supranational_institution"
+  | "suspended"
   | "target"
+  | "technical_capability"
   | "technical_guidance"
   | "temporal_scope"
   | "territorial"
@@ -335,6 +357,7 @@ export type WritKeywordNames =
   | "true"
   | "type"
   | "uncertainty"
+  | "unit"
   | "unknown"
   | "unknown_policy"
   | "unresolved"
@@ -667,10 +690,67 @@ export function isCallExpression(item: unknown): item is CallExpression {
   return reflection.isInstance(item, CallExpression.$type);
 }
 
-export type CapacityStatus = "contested" | "established" | "partial" | "unknown";
+export interface CapacityQuantity extends langium.AstNode {
+  readonly $container: OperationalCapacityProperty;
+  readonly $type: "CapacityQuantity";
+  qualifier: CapacityQuantityQualifier;
+  unit: QualifiedName;
+  value: number;
+}
+
+export const CapacityQuantity = {
+  $type: "CapacityQuantity",
+  qualifier: "qualifier",
+  unit: "unit",
+  value: "value",
+} as const;
+
+export function isCapacityQuantity(item: unknown): item is CapacityQuantity {
+  return reflection.isInstance(item, CapacityQuantity.$type);
+}
+
+export type CapacityQuantityQualifier = "approximate" | "exact" | "maximum" | "minimum";
+
+export function isCapacityQuantityQualifier(item: unknown): item is CapacityQuantityQualifier {
+  return item === "exact" || item === "approximate" || item === "minimum" || item === "maximum";
+}
+
+export type CapacityStatus =
+  "active" | "degraded" | "limited" | "planned" | "retired" | "suspended" | "unknown";
 
 export function isCapacityStatus(item: unknown): item is CapacityStatus {
-  return item === "established" || item === "partial" || item === "unknown" || item === "contested";
+  return (
+    item === "active" ||
+    item === "planned" ||
+    item === "limited" ||
+    item === "degraded" ||
+    item === "suspended" ||
+    item === "retired" ||
+    item === "unknown"
+  );
+}
+
+export type CapacityType =
+  | "accreditation_system"
+  | "facility"
+  | "laboratory_network"
+  | "organizational_unit"
+  | "other"
+  | "partnership_network"
+  | "program"
+  | "technical_capability";
+
+export function isCapacityType(item: unknown): item is CapacityType {
+  return (
+    item === "organizational_unit" ||
+    item === "laboratory_network" ||
+    item === "facility" ||
+    item === "program" ||
+    item === "technical_capability" ||
+    item === "accreditation_system" ||
+    item === "partnership_network" ||
+    item === "other"
+  );
 }
 
 export type CitationAnchor =
@@ -1302,6 +1382,7 @@ export interface IdentifierList extends langium.AstNode {
     | InstitutionalRecordLinkProperty
     | JudgmentEvidenceRefs
     | JudgmentSupersedesIds
+    | LegacyOperationalCapacityProperty
     | MandateProperty
     | MissionProperty
     | OperationalCapacityProperty
@@ -1457,6 +1538,7 @@ export type InstitutionalProperty =
   | InstitutionalJurisdictionsProperty
   | InstitutionalRecordLinkProperty
   | InstitutionalRelationshipsProperty
+  | LegacyOperationalCapacityProperty
   | MandateProperty
   | MissionProperty
   | OperationalCapacityProperty
@@ -1611,6 +1693,7 @@ export type InstitutionType =
   | "regulator"
   | "research_body"
   | "standards_body"
+  | "supranational_institution"
   | "unknown";
 
 export function isInstitutionType(item: unknown): item is InstitutionType {
@@ -1624,6 +1707,7 @@ export function isInstitutionType(item: unknown): item is InstitutionType {
     item === "research_body" ||
     item === "interagency_body" ||
     item === "organizational_unit" ||
+    item === "supranational_institution" ||
     item === "other" ||
     item === "unknown"
   );
@@ -2029,6 +2113,33 @@ export function isJurisdictionsProperty(item: unknown): item is JurisdictionsPro
   return reflection.isInstance(item, JurisdictionsProperty.$type);
 }
 
+export type LegacyCapacityStatus = "contested" | "established" | "partial" | "unknown";
+
+export function isLegacyCapacityStatus(item: unknown): item is LegacyCapacityStatus {
+  return item === "established" || item === "partial" || item === "unknown" || item === "contested";
+}
+
+export interface LegacyOperationalCapacityProperty extends langium.AstNode {
+  readonly $container: InstitutionalExtension;
+  readonly $type: "LegacyOperationalCapacityProperty";
+  dimensions: StringList;
+  evidenceRefs: IdentifierList;
+  status: LegacyCapacityStatus;
+}
+
+export const LegacyOperationalCapacityProperty = {
+  $type: "LegacyOperationalCapacityProperty",
+  dimensions: "dimensions",
+  evidenceRefs: "evidenceRefs",
+  status: "status",
+} as const;
+
+export function isLegacyOperationalCapacityProperty(
+  item: unknown,
+): item is LegacyOperationalCapacityProperty {
+  return reflection.isInstance(item, LegacyOperationalCapacityProperty.$type);
+}
+
 export type LegalForce = "binding" | "nonbinding" | "proposed" | "unknown" | "voluntary";
 
 export function isLegalForce(item: unknown): item is LegalForce {
@@ -2214,6 +2325,8 @@ export function isModel(item: unknown): item is Model {
 
 export type NamePart =
   | "accepted"
+  | "accreditation_system"
+  | "active"
   | "adjudication"
   | "administered_by"
   | "administrative"
@@ -2227,6 +2340,8 @@ export type NamePart =
   | "applicable_period"
   | "applies_to"
   | "approved"
+  | "approximate"
+  | "as_of_date"
   | "assertion"
   | "assigns"
   | "assigns_function_to"
@@ -2235,6 +2350,8 @@ export type NamePart =
   | "authorizes"
   | "basis"
   | "binding"
+  | "capacity_components"
+  | "capacity_type"
   | "chapter"
   | "code"
   | "compliance_pathway"
@@ -2254,6 +2371,7 @@ export type NamePart =
   | "decision_right"
   | "decision_rights"
   | "defines"
+  | "degraded"
   | "derives_authority_from"
   | "dimensions"
   | "direct"
@@ -2272,8 +2390,10 @@ export type NamePart =
   | "evaluation"
   | "evidence"
   | "evidence_refs"
+  | "exact"
   | "exceptions"
   | "executive_order"
+  | "facility"
   | "fact_type"
   | "family_context"
   | "federal"
@@ -2313,14 +2433,18 @@ export type NamePart =
   | "jurisdictions"
   | "kind"
   | "label"
+  | "laboratory_network"
   | "last_amended_year"
   | "legal_policy"
   | "legal_status_determination"
+  | "limited"
   | "link_id"
   | "locator"
   | "mandate"
   | "market_wide"
+  | "maximum"
   | "measurement_science"
+  | "minimum"
   | "mission"
   | "nonbinding"
   | "none_specified"
@@ -2339,19 +2463,24 @@ export type NamePart =
   | "parent_instrument_id"
   | "part_of"
   | "partial"
+  | "partnership_network"
   | "passage"
   | "passage_hash"
   | "passage_selection"
   | "performs"
   | "permits"
   | "placement"
+  | "planned"
   | "procurement"
   | "procurement_support"
+  | "program"
   | "prohibits"
   | "proposed"
   | "provenance"
   | "provider_specific"
   | "provision_identifier"
+  | "qualifier"
+  | "quantity"
   | "quote"
   | "rationale"
   | "record"
@@ -2369,6 +2498,7 @@ export type NamePart =
   | "research"
   | "research_body"
   | "responsible_authorities"
+  | "retired"
   | "review_state"
   | "reviewed"
   | "reviewer"
@@ -2397,7 +2527,10 @@ export type NamePart =
   | "superseded"
   | "support"
   | "supports"
+  | "supranational_institution"
+  | "suspended"
   | "target"
+  | "technical_capability"
   | "technical_guidance"
   | "temporal_scope"
   | "territorial"
@@ -2406,6 +2539,7 @@ export type NamePart =
   | "topics"
   | "type"
   | "uncertainty"
+  | "unit"
   | "unknown"
   | "until"
   | "value"
@@ -2542,6 +2676,7 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "research_body" ||
     item === "interagency_body" ||
     item === "organizational_unit" ||
+    item === "supranational_institution" ||
     item === "standards_development" ||
     item === "measurement_science" ||
     item === "technical_guidance" ||
@@ -2562,6 +2697,28 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "functions" ||
     item === "operational_capacity" ||
     item === "status" ||
+    item === "capacity_type" ||
+    item === "capacity_components" ||
+    item === "as_of_date" ||
+    item === "quantity" ||
+    item === "unit" ||
+    item === "qualifier" ||
+    item === "active" ||
+    item === "planned" ||
+    item === "limited" ||
+    item === "degraded" ||
+    item === "suspended" ||
+    item === "retired" ||
+    item === "laboratory_network" ||
+    item === "facility" ||
+    item === "program" ||
+    item === "technical_capability" ||
+    item === "accreditation_system" ||
+    item === "partnership_network" ||
+    item === "exact" ||
+    item === "approximate" ||
+    item === "minimum" ||
+    item === "maximum" ||
     item === "dimensions" ||
     item === "evidence_refs" ||
     item === "decision_rights" ||
@@ -2672,15 +2829,21 @@ export function isOfficialCitationProperty(item: unknown): item is OfficialCitat
 export interface OperationalCapacityProperty extends langium.AstNode {
   readonly $container: InstitutionalExtension;
   readonly $type: "OperationalCapacityProperty";
-  dimensions: StringList;
+  asOfDate?: string;
+  capacityComponents?: IdentifierList;
+  capacityType: CapacityType;
   evidenceRefs: IdentifierList;
+  quantity?: CapacityQuantity;
   status: CapacityStatus;
 }
 
 export const OperationalCapacityProperty = {
   $type: "OperationalCapacityProperty",
-  dimensions: "dimensions",
+  asOfDate: "asOfDate",
+  capacityComponents: "capacityComponents",
+  capacityType: "capacityType",
   evidenceRefs: "evidenceRefs",
+  quantity: "quantity",
   status: "status",
 } as const;
 
@@ -4090,6 +4253,7 @@ export type WritAstType = {
   BinaryExpression: BinaryExpression;
   BooleanLiteral: BooleanLiteral;
   CallExpression: CallExpression;
+  CapacityQuantity: CapacityQuantity;
   CitationAnchor: CitationAnchor;
   Classification: Classification;
   ClassificationRule: ClassificationRule;
@@ -4153,6 +4317,7 @@ export type WritAstType = {
   JudgmentValue: JudgmentValue;
   JurisdictionLevelProperty: JurisdictionLevelProperty;
   JurisdictionsProperty: JurisdictionsProperty;
+  LegacyOperationalCapacityProperty: LegacyOperationalCapacityProperty;
   LegalPolicyExtension: LegalPolicyExtension;
   LegalPolicyProperty: LegalPolicyProperty;
   LinesAnchor: LinesAnchor;
@@ -4381,6 +4546,21 @@ export class WritAstReflection extends langium.AbstractAstReflection {
         },
       },
       superTypes: [Expression.$type],
+    },
+    CapacityQuantity: {
+      name: CapacityQuantity.$type,
+      properties: {
+        qualifier: {
+          name: CapacityQuantity.qualifier,
+        },
+        unit: {
+          name: CapacityQuantity.unit,
+        },
+        value: {
+          name: CapacityQuantity.value,
+        },
+      },
+      superTypes: [],
     },
     CitationAnchor: {
       name: CitationAnchor.$type,
@@ -5063,6 +5243,21 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       },
       superTypes: [LegalPolicyProperty.$type],
     },
+    LegacyOperationalCapacityProperty: {
+      name: LegacyOperationalCapacityProperty.$type,
+      properties: {
+        dimensions: {
+          name: LegacyOperationalCapacityProperty.dimensions,
+        },
+        evidenceRefs: {
+          name: LegacyOperationalCapacityProperty.evidenceRefs,
+        },
+        status: {
+          name: LegacyOperationalCapacityProperty.status,
+        },
+      },
+      superTypes: [InstitutionalProperty.$type],
+    },
     LegalPolicyExtension: {
       name: LegalPolicyExtension.$type,
       properties: {
@@ -5219,11 +5414,23 @@ export class WritAstReflection extends langium.AbstractAstReflection {
     OperationalCapacityProperty: {
       name: OperationalCapacityProperty.$type,
       properties: {
-        dimensions: {
-          name: OperationalCapacityProperty.dimensions,
+        asOfDate: {
+          name: OperationalCapacityProperty.asOfDate,
+          optional: true,
+        },
+        capacityComponents: {
+          name: OperationalCapacityProperty.capacityComponents,
+          optional: true,
+        },
+        capacityType: {
+          name: OperationalCapacityProperty.capacityType,
         },
         evidenceRefs: {
           name: OperationalCapacityProperty.evidenceRefs,
+        },
+        quantity: {
+          name: OperationalCapacityProperty.quantity,
+          optional: true,
         },
         status: {
           name: OperationalCapacityProperty.status,

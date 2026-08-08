@@ -70,7 +70,7 @@ SourceMetadata  = "source_metadata", "{",
                   "row_hash", String, ";", "}" ;
 InstitutionalExtension = "institutional", "{",
                   { Property | InstitutionalFactType | InstitutionalRecordLink |
-                    Mandate | Mission | DecisionRight }, "}" ;
+                    Mandate | Mission | DecisionRight | OperationalCapacity }, "}" ;
 InstitutionalFactType = "fact_type", ( "identity" | "placement" | "relationship" |
                   "mission" | "mandate" | "function" | "decision_right" |
                   "operational_capacity" ), ";" ;
@@ -94,6 +94,20 @@ DecisionRight   = "decision_right", "{",
                   [ "text", String, ";" ],
                   [ "authority_source_ids", IdentifierList, ";" ],
                   [ "evidence_refs", IdentifierList, ";" ], "}" ;
+OperationalCapacity = "operational_capacity", "{",
+                  "status", CapacityStatus, ";",
+                  "capacity_type", CapacityType, ";",
+                  [ "capacity_components", IdentifierList, ";" ],
+                  [ "as_of_date", Date, ";" ],
+                  [ "quantity", "{", "value", Number, ";",
+                    "unit", QName, ";", "qualifier", QuantityQualifier, ";", "}" ],
+                  "evidence_refs", IdentifierList, ";", "}" ;
+CapacityStatus  = "active" | "planned" | "limited" | "degraded" |
+                  "suspended" | "retired" | "unknown" ;
+CapacityType    = "organizational_unit" | "laboratory_network" | "facility" |
+                  "program" | "technical_capability" | "accreditation_system" |
+                  "partnership_network" | "other" ;
+QuantityQualifier = "exact" | "approximate" | "minimum" | "maximum" ;
 
 Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
 JudgmentMember  = JudgmentTarget | Property ;

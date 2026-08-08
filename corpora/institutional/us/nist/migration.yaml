@@ -14,6 +14,11 @@ final_contract:
   kind: native
   id: https://writ.example/schemas/extensions/institutional-record.schema.json
   version: 0.2.0
+stage_b_review:
+  status: pending_human_review
+  proposer: OpenAI Codex automated proposal
+  decision_matrix: docs/migrations/institutional-stage-b/review-queue.yaml
+  note: No complete human approval artifact was found for the Stage B records.
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -72,6 +77,69 @@ entries:
     final_form: native v0.2 atomic function record
     final_review_state: approved
     identity_preserved: true
+  - previous_object: null
+    previous_form: none
+    final_object: nist_national_measurement_standards_mandate
+    final_form: native v0.2 atomic mandate proposal grounded in current official OLRC text
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_nvlap_lab_decision_right
+    final_form: native v0.2 atomic decision-right record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_standards_group_identity
+    final_form: native v0.2 atomic identity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_standards_group_placement
+    final_form: native v0.2 atomic placement record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal with the directly evidenced AI division as parent.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_laboratory_network_capacity
+    final_form: native v0.2 atomic operational-capacity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal; uncited laboratory names were removed.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_aml_facility_capacity
+    final_form: native v0.2 atomic operational-capacity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_nvlap_accreditation_capacity
+    final_form: native v0.2 atomic operational-capacity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal distinct from the NVLAP decision right; unsupported continuing assessment was removed.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_measurement_capacity
+    final_form: native v0.2 atomic operational-capacity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal held by NIST and implemented through the scoped AI division, classified as organizational-unit capacity; unsupported technical machinery and guidance were removed.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_consortium_capacity
+    final_form: native v0.2 atomic operational-capacity record
+    final_review_state: draft
+    identity_preserved: false
+    note: New automated Stage B proposal; unsupported CRADA, task-group, prototype-evaluation and technology-transfer mechanisms were removed, and external resources remain external.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:
@@ -92,8 +160,46 @@ preserved_evidence:
       passage_hash: sha256:ec5b9883154946b69ee3623b9e7394501ced98354288e4167a2eedf4c31609b8
     - passage_id: nist.ai_standards_group.guidance
       passage_hash: sha256:7a9c75b43200b400de56a5c983cc3c13c2127122e33a86ad8169548ef405f903
-outstanding_stage_b:
-  - mandate
-  - decision_right
-  - operational_capacity
-  - ai_standards_guidelines_group identity and placement
+source_sanitization:
+  ledger: docs/migrations/institutional-stage-b/source-sanitization-ledger.json
+  transformation: Replace only each publisher-supplied Mapbox token value with
+    [REDACTED_PUBLISHER_MAPBOX_TOKEN].
+  retrieval_identity_preserved: true
+  selected_evidence_intersections: 0
+  evidence_quotations_byte_identical: true
+  document_hash_migrations:
+    - file: sources/captures/nist-accreditation.html
+      previous_document_hash: sha256:32eb48cd2686976aa589b704a1697edf115498c2c8dedc46601af041915c68ce
+      stored_document_hash: sha256:3e1c7a56c31e74b719b8366d655e0b390948125d73b49f7204a4d0d3bc7e83db
+    - file: sources/captures/nist-advanced-measurement-laboratory.html
+      previous_document_hash: sha256:6c208adb032f5c805e76ab557117fe551fe48887fedbb9740f719fa689a0bcae
+      stored_document_hash: sha256:f928e083da64fc2bf6ae582adbdb2021f62b8b9f0349f80601cecfb6bcb8e101
+    - file: sources/captures/nist-ai-consortium-expansion-2026-05-29.html
+      previous_document_hash: sha256:f47d75c277dee0e32fc63cf3e255af00f7ddec31e066a13516b121b9c4873615
+      stored_document_hash: sha256:6479ed7c9761fb1b63f4a946d7a740d4157a7bbc2998a577ec4249b564622fca
+    - file: sources/captures/nist-ai-consortium.html
+      previous_document_hash: sha256:da42227fa85211fe7422db0656c350afc6d5572caf9fe38f97ba3ac1a0451230
+      stored_document_hash: sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0
+    - file: sources/captures/nist-ai-research-measurement-standards-division.html
+      previous_document_hash: sha256:d3772b509006c47245a57639cbcf9bf23af9c5ebbdee120c0b3ec8abaf00a0c4
+      stored_document_hash: sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22
+    - file: sources/captures/nist-laboratories.html
+      previous_document_hash: sha256:7ae29232445f976cdf273a2adf052b811929f54cb1b39e91007c359566d75b0f
+      stored_document_hash: sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b
+current_statutory_capture:
+  source_id: us_code.title15_usc_272
+  canonical_source_url: https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272
+  retrieval_transport_url: https://uscode-house-gov.translate.goog/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272&_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en
+  retrieval_transport_note: Direct origin access timed out from the capture environment. The
+    Google Translate pass-through detected English and preserved the selected statutory passage
+    exactly; the stored HTML retains both the canonical OLRC source URL and transport metadata.
+  retrieved_at: 2026-08-08T00:36:14-04:00
+  laws_in_effect_through: 2026-08-07
+  capture_path: sources/captures/us-code-15-usc-272-current.html
+  previous_capture_path: sources/captures/us-code-15-usc-272.pdf
+  previous_document_hash: sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85
+  stored_document_hash: sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d
+  passage_id: us_code.title15_usc_272.b_2
+  passage_hash: sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019
+  selected_passage_byte_identical_to_previous_capture: true
+stage_b_status: pending_human_review

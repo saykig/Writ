@@ -1,0 +1,181 @@
+schema_version: 1.0.0
+queue_id: institutional-stage-b-review-queue-v1
+title: Institutional Stage B human decision queue
+created_at: 2026-08-07
+created_by: OpenAI Codex automated proposal
+status: pending_human_review
+human_approval_artifact_found: false
+reviewer_identity_required: true
+decision_rule:
+  description: >-
+    A human reviewer must inspect the exact target assertion, institutional fact payload, selected
+    evidence passages, uncertainties and proposed disposition before recording an approval,
+    rejection or requested revision. Validation alone is not approval.
+  required_fields:
+    - assertion
+    - institutional_fact_type
+    - evidence_passages
+    - uncertainties
+    - disposition
+  allowed_human_decisions:
+    - approve
+    - reject
+    - revise
+  current_human_decision: null
+schema_queues:
+  identity:
+    - decision_id: stage-b.nist.nist-ai-standards-group-identity
+      target_id: nist_ai_standards_group_identity
+      judgment_id: judgment_nist_ai_standards_group_identity_stage_b
+      evidence_passages: [nist.ai_division.groups]
+    - decision_id: stage-b.ec.european-commission-identity
+      target_id: european_commission_identity
+      judgment_id: judgment_european_commission_identity_review
+      evidence_passages: [eu.teu_article_13.commission]
+    - decision_id: stage-b.ec.eu-ai-office-identity
+      target_id: eu_ai_office_identity
+      judgment_id: judgment_eu_ai_office_identity_review
+      evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+  placement:
+    - decision_id: stage-b.nist.nist-ai-standards-group-placement
+      target_id: nist_ai_standards_group_placement
+      judgment_id: judgment_nist_ai_standards_group_placement_stage_b
+      evidence_passages: [nist.ai_division.itl_placement, nist.ai_division.groups]
+    - decision_id: stage-b.ec.eu-ai-office-placement
+      target_id: eu_ai_office_placement
+      judgment_id: judgment_eu_ai_office_placement_review
+      evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+  relationship:
+    - decision_id: stage-b.ec.eu-ai-office-european-commission-relationship
+      target_kind: record_link
+      target_id: eu_ai_office_european_commission_relationship
+      judgment_id: judgment_eu_ai_office_european_commission_relationship_review
+      evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+      proposed_basis: inherited
+      placement_chain: [eu_ai_office, european_commission.dg_connect, european_commission]
+  mission:
+    - decision_id: stage-b.ec.european-commission-mission
+      target_id: european_commission_mission
+      judgment_id: judgment_european_commission_mission_review
+      evidence_passages: [eu.european_commission_institution.role]
+    - decision_id: stage-b.ec.eu-ai-office-mission
+      target_id: eu_ai_office_mission
+      judgment_id: judgment_eu_ai_office_mission_review
+      evidence_passages: [ec.european_ai_office.mission]
+  mandate:
+    - decision_id: stage-b.nist.national-measurement-standards-mandate
+      target_id: nist_national_measurement_standards_mandate
+      judgment_id: judgment_nist_national_measurement_standards_mandate_stage_b
+      evidence_passages: [us_code.title15_usc_272.b_2]
+      source_currency: current_official_olrc_through_2026_08_07
+    - decision_id: stage-b.ec.european-commission-union-law-mandate
+      target_id: european_commission_union_law_mandate
+      judgment_id: judgment_european_commission_union_law_mandate_review
+      evidence_passages: [eu.teu_article_17.paragraph_1]
+    - decision_id: stage-b.ec.eu-ai-office-gpai-enforcement-mandate
+      target_id: eu_ai_office_gp_ai_enforcement_mandate
+      judgment_id: judgment_eu_ai_office_gp_ai_enforcement_mandate_review
+      evidence_passages: [passage_eu_ai_act_art_88_1]
+  function:
+    - decision_id: stage-b.ec.technical-documentation-receipt
+      target_id: eu_ai_office_technical_documentation_receipt
+      judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
+      evidence_passages: [passage_eu_01]
+    - decision_id: stage-b.ec.training-summary-template
+      target_id: eu_ai_office_training_summary_template_function
+      judgment_id: judgment_eu_ai_office_training_summary_template_function_review
+      evidence_passages: [passage_eu_04]
+    - decision_id: stage-b.ec.serious-incident-report-receipt
+      target_id: eu_ai_office_serious_incident_report_receipt
+      judgment_id: judgment_eu_ai_office_serious_incident_report_receipt_review
+      evidence_passages: [passage_eu_08]
+    - decision_id: stage-b.ec.legislative-proposal-function
+      target_id: european_commission_legislative_proposal_function
+      judgment_id: judgment_european_commission_legislative_proposal_function_review
+      evidence_passages: [ec.planning_proposing_law.right_of_initiative]
+    - decision_id: stage-b.ec.budget-management-function
+      target_id: european_commission_budget_management_function
+      judgment_id: judgment_european_commission_budget_management_function_review
+      evidence_passages: [ec.budget_funding.commission_role]
+    - decision_id: stage-b.ec.model-evaluation-function
+      target_id: eu_ai_office_model_eval_function
+      judgment_id: judgment_eu_ai_office_model_eval_function_review
+      evidence_passages: [eu.commission_decision_c_2024_1459.article_3_1_a]
+    - decision_id: stage-b.ec.reasoned-opinion-function
+      target_id: european_commission_reasoned_opinion_function
+      judgment_id: judgment_european_commission_reasoned_opinion_function_review
+      evidence_passages: [eu.tfeu_article_258.reasoned_opinion]
+      classification_rationale: >-
+        Automated proposal: classify as a function because Article 258 uses mandatory "shall"
+        after the stated conditions hold; do not collapse it into the separate discretionary CJEU
+        referral decision right. A human classification reason has not yet been recorded.
+  decision_right:
+    - decision_id: stage-b.nist.nvlap-lab-decision-right
+      target_id: nist_nvlap_lab_decision_right
+      judgment_id: judgment_nist_nvlap_lab_decision_right_stage_b
+      evidence_passages:
+        - ecfr.title15_cfr_part_285.section_285_9_a
+        - nist.handbook_150.competence
+        - nist.handbook_150.accreditation_decision
+    - decision_id: stage-b.ec.cjeu-referral-decision-right
+      target_id: european_commission_cjeu_referral_decision_right
+      judgment_id: judgment_european_commission_cjeu_referral_decision_right_review
+      evidence_passages: [eu.tfeu_article_258.cjeu_referral]
+    - decision_id: stage-b.ec.gpai-fine-decision-right
+      target_id: european_commission_gp_ai_fine_decision_right
+      judgment_id: judgment_european_commission_gp_ai_fine_decision_right_review
+      evidence_passages: [passage_eu_ai_act_art_101_1]
+    - decision_id: stage-b.ec.model-evaluation-decision-right
+      target_id: eu_ai_office_model_eval_decision_right
+      judgment_id: judgment_eu_ai_office_model_eval_decision_right_review
+      evidence_passages: [passage_eu_ai_act_art_92_1]
+  operational_capacity:
+    - decision_id: stage-b.nist.laboratory-network-capacity
+      target_id: nist_laboratory_network_capacity
+      judgment_id: judgment_nist_laboratory_network_capacity_stage_b
+      evidence_passages: [nist.laboratories.six_labs]
+    - decision_id: stage-b.nist.aml-facility-capacity
+      target_id: nist_aml_facility_capacity
+      judgment_id: judgment_nist_aml_facility_capacity_stage_b
+      evidence_passages: [nist.aml.features]
+    - decision_id: stage-b.nist.nvlap-accreditation-capacity
+      target_id: nist_nvlap_accreditation_capacity
+      judgment_id: judgment_nist_nvlap_accreditation_capacity_stage_b
+      evidence_passages: [ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process]
+    - decision_id: stage-b.nist.ai-measurement-capacity
+      target_id: nist_ai_measurement_capacity
+      judgment_id: judgment_nist_ai_measurement_capacity_stage_b
+      evidence_passages: [nist.ai_division.capacity, nist.ai_division.groups]
+      proposed_holder: nist
+      implementing_unit_in_scope: nist.ai_research_measurement_standards_division
+    - decision_id: stage-b.nist.ai-consortium-capacity
+      target_id: nist_ai_consortium_capacity
+      judgment_id: judgment_nist_ai_consortium_capacity_stage_b
+      evidence_passages:
+        - nist.ai_consortium.partnership
+        - nist.ai_consortium.contributions
+        - nist.ai_consortium.organization_count
+    - decision_id: stage-b.ec.jrc-infrastructure-capacity
+      target_id: european_commission_jrc_infra_capacity
+      judgment_id: judgment_european_commission_jrc_infra_capacity_review
+      evidence_passages: [ec.jrc_research_infrastructures.inventory]
+    - decision_id: stage-b.ec.ai-office-organizational-capacity
+      target_id: eu_ai_office_org_capacity
+      judgment_id: judgment_eu_ai_office_org_capacity_review
+      evidence_passages: [ec.european_ai_office.structure]
+    - decision_id: stage-b.ec.ai-office-cooperation-capacity
+      target_id: eu_ai_office_cooperation_capacity
+      judgment_id: judgment_eu_ai_office_cooperation_capacity_review
+      evidence_passages: [ec.european_ai_office.cooperation_platforms, eu.commission_decision_c_2024_1459.article_2_3]
+omitted_candidates:
+  - decision_id: stage-b.ec.ai-office-model-evaluation-capacity
+    target_id: eu_ai_office_model_eval_capacity
+    fact_type: operational_capacity
+    status: omitted_pending_stronger_evidence
+    evidence_passages:
+      - ec.european_ai_office.evaluation_expertise
+      - eu.commission_decision_c_2024_1459.article_3_1_a
+    reason: >-
+      The passages establish an assigned function, a source-reported expertise claim and separately
+      documented legal authority, but not concrete organizational or technical machinery. The
+      function and decision-right records remain active drafts.

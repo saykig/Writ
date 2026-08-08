@@ -185,13 +185,13 @@ describe("every catalogued manifest declares the contract its record files satis
     }
     expect(covered.size).toBe(16);
     // Nine generated files across each of the thirteen reviewed corpora, plus the
-    // two standalone NIST Core links.
-    expect(yamlDocuments).toBe(117 + 2);
-    expect(linkDocuments).toBe(2);
-    // Three constitutional drafts, six NIST drafts, three Commission function drafts.
-    expect(writRecords).toBe(12);
-    // The eight NIST Stage A disposition judgments.
-    expect(writJudgments).toBe(8);
+    // two standalone NIST Core links and the Commission AI Office Core link.
+    expect(yamlDocuments).toBe(117 + 3);
+    expect(linkDocuments).toBe(3);
+    // Three constitutional drafts, fifteen NIST records, and twenty Commission records.
+    expect(writRecords).toBe(38);
+    // Seventeen NIST and twenty-one Commission disposition judgments.
+    expect(writJudgments).toBe(38);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -267,7 +267,7 @@ describe("every catalogued manifest declares the contract its record files satis
       fileName: judgmentsPath,
     });
     expect(compiled.records).toHaveLength(0);
-    expect(compiled.judgments).toHaveLength(8);
+    expect(compiled.judgments).toHaveLength(17);
     expect(checkFile(judgmentsPath, RECORD_JUDGMENT)).toEqual([]);
     for (const judgment of compiled.judgments) {
       expect(validateContract(declared, judgment).valid).toBe(false);

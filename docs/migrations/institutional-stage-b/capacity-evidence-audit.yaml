@@ -1,0 +1,80 @@
+schema_version: 1.0.0
+audit_id: institutional-stage-b-capacity-evidence-audit-v1
+created_at: 2026-08-07
+rule: Every populated operational-capacity value must map to a cited passage and an exact fragment of that passage.
+date_and_quantity_treatment: >-
+  No active Stage B capacity payload retains as_of_date or quantity. The captures establish the
+  reported counts, but their selected quotations do not state a calendar date. Counts remain in
+  assertions and evidence rather than being paired with an inferred as-of date.
+records:
+  nist_laboratory_network_capacity:
+    status: { value: active, passage: nist.laboratories.six_labs, exact_fragment: "research happens in six labs" }
+    capacity_type: { value: laboratory_network, passage: nist.laboratories.six_labs, exact_fragment: "six labs (listed below) and user facilities" }
+    capacity_components:
+      six_laboratories: { passage: nist.laboratories.six_labs, exact_fragment: "six labs" }
+      user_facilities: { passage: nist.laboratories.six_labs, exact_fragment: "user facilities" }
+  nist_aml_facility_capacity:
+    status: { value: active, passage: nist.aml.features, exact_fragment: "The complex offers laboratories" }
+    capacity_type: { value: facility, passage: nist.aml.features, exact_fragment: "Advanced Measurement Laboratory Complex" }
+    capacity_components:
+      electromagnetic_shielding: { passage: nist.aml.features, exact_fragment: "electromagnetic shielding" }
+      vibration_isolation: { passage: nist.aml.features, exact_fragment: "vibration isolation" }
+      temperature_control: { passage: nist.aml.features, exact_fragment: "control of temperature" }
+      humidity_control: { passage: nist.aml.features, exact_fragment: "humidity" }
+      air_quality_control: { passage: nist.aml.features, exact_fragment: "air quality" }
+      underground_metrology_wings: { passage: nist.aml.features, exact_fragment: "Two metrology wings (buildings 218 and 219) are located underground" }
+      physical_science_wings: { passage: nist.aml.features, exact_fragment: "two physical sciences wings" }
+      cleanroom_wing: { passage: nist.aml.features, exact_fragment: "a cleanroom wing" }
+  nist_nvlap_accreditation_capacity:
+    status: { value: active, passage: nist.accreditation.process, exact_fragment: "Accreditation is granted following successful completion of a process" }
+    capacity_type: { value: accreditation_system, passage: nist.accreditation.process, exact_fragment: "Accreditation requirements are established" }
+    capacity_components:
+      application_submission: { passage: nist.accreditation.process, exact_fragment: "submission of an application" }
+      on_site_assessment: { passage: nist.accreditation.process, exact_fragment: "an on-site assessment" }
+      nonconformity_resolution: { passage: nist.accreditation.process, exact_fragment: "resolution of any nonconformities" }
+      proficiency_testing: { passage: nist.accreditation.process, exact_fragment: "participation in proficiency testing" }
+      technical_evaluation: { passage: nist.accreditation.process, exact_fragment: "technical evaluation" }
+      certificate_and_scope_issuance: { passage: ecfr.title15_cfr_part_285.section_285_9_d, exact_fragment: "Certificate of Accreditation and a Scope of Accreditation" }
+  nist_ai_measurement_capacity:
+    status: { value: active, passage: nist.ai_division.groups, exact_fragment: "Division’s efforts are carried out" }
+    capacity_type: { value: organizational_unit, passage: nist.ai_division.groups, exact_fragment: "AI Research, Measurement, and Standards Division" }
+    capacity_components:
+      ai_measurement_science: { passage: nist.ai_division.capacity, exact_fragment: "measurement science related to AI" }
+      testing_and_evaluation: { passage: nist.ai_division.capacity, exact_fragment: "testing and evaluation" }
+      standards: { passage: nist.ai_division.capacity, exact_fragment: "and standards" }
+      ai_standards_and_guidelines_group: { passage: nist.ai_division.groups, exact_fragment: "AI Standards and Guidelines Group" }
+      applied_ai_research_group: { passage: nist.ai_division.groups, exact_fragment: "Applied AI Research Group" }
+  nist_ai_consortium_capacity:
+    status: { value: active, passage: nist.ai_consortium.organization_count, exact_fragment: "The Consortium brings together" }
+    capacity_type: { value: partnership_network, passage: nist.ai_consortium.partnership, exact_fragment: "research partnership" }
+    capacity_components:
+      research_partnership: { passage: nist.ai_consortium.partnership, exact_fragment: "research partnership" }
+      external_expertise: { passage: nist.ai_consortium.contributions, exact_fragment: "expertise" }
+      external_products: { passage: nist.ai_consortium.contributions, exact_fragment: "products" }
+      external_data: { passage: nist.ai_consortium.contributions, exact_fragment: "data" }
+      external_models: { passage: nist.ai_consortium.contributions, exact_fragment: "models" }
+      ai_measurement_guidelines_and_standards: { passage: nist.ai_consortium.partnership, exact_fragment: "guidelines and standards for AI measurement" }
+  european_commission_jrc_infra_capacity:
+    status: { value: active, passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "The JRC maintains" }
+    capacity_type: { value: laboratory_network, passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "physical research infrastructures" }
+    capacity_components:
+      nuclear_and_radiological_research: { passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "nuclear and radiological" }
+      chemistry: { passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "chemistry" }
+      biosciences_and_life_sciences: { passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "biosciences/life sciences" }
+      physical_sciences: { passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "physical sciences" }
+      information_and_communication_technology: { passage: ec.jrc_research_infrastructures.inventory, exact_fragment: "ICT" }
+  eu_ai_office_org_capacity:
+    status: { value: active, passage: ec.european_ai_office.structure, exact_fragment: "The AI Office employs" }
+    capacity_type: { value: organizational_unit, passage: ec.european_ai_office.structure, exact_fragment: "It has 6 units and 2 advisers" }
+    capacity_components:
+      six_units: { passage: ec.european_ai_office.structure, exact_fragment: "6 units" }
+      two_advisers: { passage: ec.european_ai_office.structure, exact_fragment: "2 advisers" }
+  eu_ai_office_cooperation_capacity:
+    status: { value: active, passage: ec.european_ai_office.cooperation_platforms, exact_fragment: "The AI Office collaborates" }
+    capacity_type: { value: partnership_network, passage: ec.european_ai_office.cooperation_platforms, exact_fragment: "through dedicated platforms" }
+    capacity_components:
+      commission_department_collaboration: { passage: eu.commission_decision_c_2024_1459.article_2_3, exact_fragment: "collaborate with relevant Directorates-General and services of the Commission" }
+      union_body_cooperation: { passage: eu.commission_decision_c_2024_1459.article_2_3, exact_fragment: "cooperate with all relevant bodies, offices and agencies of the Union" }
+      member_state_authority_cooperation: { passage: eu.commission_decision_c_2024_1459.article_2_3, exact_fragment: "cooperate with authorities and bodies of the Member States" }
+      dedicated_expert_and_stakeholder_platforms: { passage: ec.european_ai_office.cooperation_platforms, exact_fragment: "wider expert community through dedicated platforms" }
+      scientific_experts_and_ai_developers: { passage: eu.commission_decision_c_2024_1459.article_2_3, exact_fragment: "experts from the scientific community and AI developers" }
