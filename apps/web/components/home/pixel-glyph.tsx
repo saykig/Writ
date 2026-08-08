@@ -181,6 +181,7 @@ function PixelCell({
   cell,
   index,
   interactiveCellIds,
+  isHovered,
   isSelected,
   mappedCellIds,
   origin,
@@ -191,6 +192,7 @@ function PixelCell({
   cell: GlyphCell;
   index: number;
   interactiveCellIds: ReadonlySet<string>;
+  isHovered: boolean;
   isSelected: boolean;
   mappedCellIds: ReadonlySet<string>;
   origin: PixelCellPoint;
@@ -208,23 +210,27 @@ function PixelCell({
   const isMapped = mappedCellIds.has(cell.id);
   const state = isSelected
     ? "selected"
-    : selectionActive
-      ? "dim"
-      : isInteractive
-        ? "interactive"
-        : isMapped
-          ? "mapped"
-          : "resolved";
+    : isHovered
+      ? "hovered"
+      : selectionActive
+        ? "dim"
+        : isInteractive
+          ? "interactive"
+          : isMapped
+            ? "mapped"
+            : "resolved";
   const fill =
     state === "selected"
       ? "rgb(255 255 255)"
-      : state === "interactive"
-        ? "rgb(255 255 255 / 0.96)"
-        : state === "mapped"
-          ? "rgb(255 255 255 / 0.78)"
-          : state === "dim"
-            ? "rgb(255 255 255 / 0.11)"
-            : "rgb(255 255 255 / 0.28)";
+      : state === "hovered"
+        ? "rgb(255 255 255)"
+        : state === "interactive"
+          ? "rgb(255 255 255 / 0.96)"
+          : state === "mapped"
+            ? "rgb(255 255 255 / 0.78)"
+            : state === "dim"
+              ? "rgb(255 255 255 / 0.11)"
+              : "rgb(255 255 255 / 0.28)";
 
   return (
     <motion.rect
@@ -237,7 +243,11 @@ function PixelCell({
       rx={index % 5 === 0 ? 0.7 : 0}
       animate={{
         fill,
-        filter: isSelected ? "drop-shadow(0 0 3px rgb(255 255 255 / 0.72))" : "none",
+        filter: isSelected
+          ? "drop-shadow(0 0 3px rgb(255 255 255 / 0.72))"
+          : isHovered
+            ? "url(#pixel-corpus-cell-halo)"
+            : "none",
       }}
       style={{ opacity, scaleX, scaleY, transformBox: "fill-box", transformOrigin: "center" }}
       transition={{ duration: 0.18, ease: "easeOut" }}
@@ -248,6 +258,7 @@ function PixelCell({
 /** A glyph rendered only from stable, addressable cells in one SVG coordinate system. */
 export function PixelGlyph({
   definition,
+  hoveredCellId,
   interactiveCellIds,
   mappedCellIds,
   origin,
@@ -257,6 +268,7 @@ export function PixelGlyph({
   selectedCellId,
 }: {
   definition: PixelGlyphDefinition;
+  hoveredCellId: string | null;
   interactiveCellIds: ReadonlySet<string>;
   mappedCellIds: ReadonlySet<string>;
   origin: PixelCellPoint;
@@ -273,12 +285,37 @@ export function PixelGlyph({
           cell={cell}
           index={index}
           interactiveCellIds={interactiveCellIds}
+          isHovered={cell.id === hoveredCellId}
           isSelected={cell.id === selectedCellId}
           mappedCellIds={mappedCellIds}
           origin={origin}
           progress={progress}
           revealRange={revealRange}
           selectionActive={selectionActive}
+        />
+      ))}
+    </g>
+  );
+}
+
+/** A non-interactive silhouette that reuses the exact approved glyph-cell geometry. */
+export function PixelGlyphSilhouette({
+  definition,
+  origin,
+}: {
+  definition: PixelGlyphDefinition;
+  origin: PixelCellPoint;
+}) {
+  return (
+    <g aria-hidden="true">
+      {definition.cells.map((cell, index) => (
+        <rect
+          key={cell.id}
+          x={origin.x + cell.column * PIXEL_CELL_STEP}
+          y={origin.y + cell.row * PIXEL_CELL_STEP}
+          width={PIXEL_CELL_SIZE}
+          height={PIXEL_CELL_SIZE}
+          rx={index % 5 === 0 ? 0.7 : 0}
         />
       ))}
     </g>

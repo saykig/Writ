@@ -44,7 +44,9 @@ describe("frontend architecture", () => {
     expect(home).toContain('href="/start-here"');
     expect(home).toContain("home-motion-resolving-link-code");
     expect(home).toContain("home-motion-resolving-link-final");
-    expect(home).toContain("statementWasUnresolvedRef.current");
+    expect(home).toContain("howItWorksActiveRef.current");
+    expect(home).toContain("const shouldBeActive = latest >= 0.84");
+    expect(home).toContain("setHowItWorksActive(shouldBeActive)");
     expect(home).toContain("latest >= 0.84");
     expect(home).not.toContain('href="/query"');
     expect(home).not.toContain('href="/build"');
@@ -426,6 +428,7 @@ describe("frontend architecture", () => {
     expect(network).toContain('cellId: "U-07-15"');
     expect(network).not.toContain("corpus-prototype-family");
     expect(glyph).toContain("export function PixelGlyph");
+    expect(glyph).toContain("export function PixelGlyphSilhouette");
     expect(glyph).toContain("data-cell-id");
     expect(glyph).toContain("interactiveCellIds.has(cell.id)");
     for (const letter of ["E", "U", "S", "C", "N", "I", "T"]) {
@@ -446,6 +449,11 @@ describe("frontend architecture", () => {
     expect(styles).toContain("width: clamp(36rem, 62vw, 55rem)");
     expect(network).toContain("createPortal(");
     expect(styles).toContain(".pixel-corpus-hit-target");
+    expect(styles).toContain(".pixel-corpus-silhouette-glow");
+    expect(network).toContain("Click a lit block to explore the corpus.");
+    expect(network).toContain("pixel-corpus-cell-halo");
+    expect(network).toContain("onPointerEnter");
+    expect(glyph).toContain('state === "hovered"');
     expect(styles).toContain("background: transparent");
     expect(styles).toContain(".raw-workspace");
   });

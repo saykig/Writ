@@ -214,7 +214,7 @@ function ResolvingHowItWorksLink({
 export function HomepageHero() {
   const globeRef = useRef<HTMLDivElement>(null);
   const statementRef = useRef<HTMLDivElement>(null);
-  const statementWasUnresolvedRef = useRef(false);
+  const howItWorksActiveRef = useRef(false);
   const [howItWorksActive, setHowItWorksActive] = useState(false);
   const reduceMotion = useReducedMotion() ?? false;
   const globeInView = useInView(globeRef, { margin: "-8% 0px -8% 0px" });
@@ -237,13 +237,13 @@ export function HomepageHero() {
   const smoothStatementProgress = useSpring(statementProgress, HOME_SCROLL_SPRING);
 
   useMotionValueEvent(smoothStatementProgress, "change", (latest) => {
-    if (latest < 0.82) {
-      statementWasUnresolvedRef.current = true;
-    }
+    if (reduceMotion) return;
 
-    if (!reduceMotion && statementWasUnresolvedRef.current && !howItWorksActive && latest >= 0.84) {
-      setHowItWorksActive(true);
-    }
+    const shouldBeActive = latest >= 0.84;
+    if (shouldBeActive === howItWorksActiveRef.current) return;
+
+    howItWorksActiveRef.current = shouldBeActive;
+    setHowItWorksActive(shouldBeActive);
   });
 
   return (
