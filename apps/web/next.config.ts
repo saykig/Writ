@@ -9,8 +9,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/playground", destination: "/lab", permanent: true },
-      // The demo became Query: the same reviewed records, asked rather than shown.
-      { source: "/demo", destination: "/query", permanent: true },
+      { source: "/query", destination: "/corpus", permanent: true },
+      { source: "/demo", destination: "/corpus", permanent: true },
     ];
   },
   // The @writ/* workspace packages ship raw NodeNext TypeScript source

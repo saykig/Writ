@@ -11,7 +11,7 @@ describe("Start Here system walkthrough", () => {
     const startHere = nav.indexOf('label: "Start Here"');
 
     expect(startHere).toBeGreaterThan(-1);
-    for (const label of ["Query", "Build", "Lab"]) {
+    for (const label of ["Corpus", "Build", "Lab"]) {
       expect(startHere).toBeLessThan(nav.indexOf(`label: "${label}"`));
     }
     expect(nav).not.toContain('label: "How it works"');
