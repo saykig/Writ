@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
   "matrix_id": "institutional-stage-b-interoperability-v1",
-  "assessment_date": "2026-08-07",
-  "assessment_status": "structural_pass_semantic_review_pending",
+  "assessment_date": "2026-08-08",
+  "assessment_status": "structural_pass_bounded_semantic_review_complete",
   "shared_schema": "https://writ.example/schemas/extensions/institutional-record.schema.json",
   "interpretation": {
     "structural_interoperability": "Schema validation establishes that both corpora use the same record shapes and controlled vocabularies.",
-    "semantic_interoperability": "Human-reviewed mappings are required to establish that evidence is mapped to those shapes with equivalent meaning. The mappings in this matrix are automated proposals pending human review.",
+    "semantic_interoperability": "Sara Kim completed human review of the evidence-to-schema mappings on 2026-08-08. The result establishes bounded semantic interoperability for these reviewed records without claiming full institutional equivalence.",
     "full_interoperability_claimed": false
   },
   "atomic_schemas": [
@@ -62,7 +62,7 @@
       "equivalent_concepts": ["source-reported institutional purpose"],
       "analogous_only": ["explicit NIST mission label", "Commission role summarized as mission-like purpose"],
       "differences_to_preserve": ["label strength", "federal agency versus supranational institution"],
-      "uncertainty": "The Commission mapping is proposed because its source says role rather than mission.",
+      "uncertainty": "Human review approved the Commission mapping while preserving that its source says role rather than mission.",
       "schema_passed_without_revision": true,
       "schema_limitations": ["Mission classification can require a review judgment when publisher terminology differs."]
     },
@@ -98,20 +98,20 @@
       "fact_type": "decision_right",
       "shared_schema_definition": "Records a legally or procedurally authorized institutional decision, including its conditions and authority source.",
       "nist_example": "nist_nvlap_lab_decision_right",
-      "commission_example": "european_commission_cjeu_referral_decision_right",
+      "commission_example": "european_commission_cjeu_refer_decision_right",
       "source_authority_types": ["Code of Federal Regulations and NIST handbook", "Treaty on the Functioning of the European Union"],
       "mapping_rationale": "Each example gives the institution discretion to make a scoped procedural decision.",
       "equivalent_concepts": ["conditional institutional discretion", "authority-linked decision"],
       "analogous_only": ["laboratory accreditation determination", "court referral"],
       "differences_to_preserve": ["administrative accreditation context", "EU infringement procedure", "different consequences and subjects"],
-      "uncertainty": "The Article 258 reasoned-opinion duty is excluded from this comparison and proposed as a function because its modality is mandatory once conditions hold.",
+      "uncertainty": "Human review approved the Article 258 reasoned-opinion duty as a function because its modality is mandatory once conditions hold; it remains excluded from the decision-right comparison.",
       "schema_passed_without_revision": true,
-      "schema_limitations": ["Review is required to distinguish mandatory procedural duties from discretionary decision rights."]
+      "schema_limitations": ["Human review is required to distinguish mandatory procedural duties from discretionary decision rights; that review is complete for these records."]
     },
     {
       "fact_type": "operational_capacity",
       "shared_schema_definition": "Records directly evidenced organizational, physical, programmatic or network machinery with explicit status, type, evidence and optional components, date and quantity.",
-      "nist_example": "nist_nvlap_accreditation_capacity",
+      "nist_example": "nist_nvlap_accred_capacity",
       "commission_example": "european_commission_jrc_infra_capacity",
       "source_authority_types": ["official accreditation regulation and program page", "official JRC infrastructure page"],
       "mapping_rationale": "Both examples identify concrete maintained machinery, while components remain institution-specific and passage-supported.",

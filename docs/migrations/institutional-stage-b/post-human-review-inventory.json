@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "inventory_id": "institutional-stage-b-post-human-review-2026-08-08",
+  "review_artifact": "docs/migrations/institutional-stage-b/human-review.yaml",
+  "queue_id": "institutional-stage-b-review-queue-v1",
+  "reviewer": "Sara Kim",
+  "review_date": "2026-08-08",
+  "nist": {
+    "institutional_records": 15,
+    "approved_records": 14,
+    "superseded_records": 1,
+    "record_links": 2,
+    "approved_record_links": 2,
+    "disposition_judgments": 17,
+    "accepted_disposition_judgments": 17,
+    "stage_b_approved_target_ids": [
+      "nist_national_measurement_standards_mandate",
+      "nist_nvlap_lab_decision_right",
+      "nist_ai_standards_group_identity",
+      "nist_ai_standards_group_placement",
+      "nist_lab_network_capacity",
+      "nist_aml_facility_capacity",
+      "nist_nvlap_accred_capacity",
+      "nist_ai_measurement_capacity",
+      "nist_ai_consortium_capacity"
+    ]
+  },
+  "european_commission": {
+    "institutional_records": 20,
+    "approved_records": 20,
+    "record_links": 1,
+    "approved_record_links": 1,
+    "disposition_judgments": 21,
+    "accepted_disposition_judgments": 21,
+    "approved_target_ids": [
+      "eu_ai_office_technical_documentation_receipt",
+      "eu_ai_office_training_sum_temp_function",
+      "eu_ai_office_serious_incident_report_receipt",
+      "european_commission_identity",
+      "eu_ai_office_identity",
+      "eu_ai_office_placement",
+      "eu_ai_office_european_commission_relationship",
+      "european_commission_mission",
+      "eu_ai_office_mission",
+      "european_commission_union_law_mandate",
+      "eu_ai_office_gp_ai_enforcement_mandate",
+      "european_commission_legislative_proposal_function",
+      "european_commission_budget_mgmt_function",
+      "eu_ai_office_model_eval_function",
+      "european_commission_reasoned_op_function",
+      "european_commission_cjeu_refer_decision_right",
+      "european_commission_gp_ai_fine_decision_right",
+      "eu_ai_office_model_eval_decision_right",
+      "european_commission_jrc_infra_capacity",
+      "eu_ai_office_org_capacity",
+      "eu_ai_office_cooperation_capacity"
+    ]
+  },
+  "review_totals": {
+    "active_targets_reviewed": 30,
+    "active_targets_approved": 30,
+    "approved_omissions": 1,
+    "proposed_disposition_judgments": 0
+  },
+  "approved_omission": "eu_ai_office_model_eval_capacity",
+  "nist_olrc_document_hash": "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d",
+  "nist_olrc_passage_hash": "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019"
+}

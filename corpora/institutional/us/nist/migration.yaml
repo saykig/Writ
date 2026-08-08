@@ -15,10 +15,19 @@ final_contract:
   id: https://writ.example/schemas/extensions/institutional-record.schema.json
   version: 0.2.0
 stage_b_review:
-  status: pending_human_review
+  status: completed_human_review
   proposer: OpenAI Codex automated proposal
   decision_matrix: docs/migrations/institutional-stage-b/review-queue.yaml
-  note: No complete human approval artifact was found for the Stage B records.
+  human_review_artifact: docs/migrations/institutional-stage-b/human-review.yaml
+  reviewer: Sara Kim
+  reviewed_at: 2026-08-08
+  decisions: 9 approved active NIST Stage B targets
+  note: The automated proposal history is retained in the decision matrix and this ledger.
+  approved_id_renames:
+    - previous_draft_id: nist_laboratory_network_capacity
+      approved_id: nist_lab_network_capacity
+    - previous_draft_id: nist_nvlap_accreditation_capacity
+      approved_id: nist_nvlap_accred_capacity
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -80,66 +89,66 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_national_measurement_standards_mandate
-    final_form: native v0.2 atomic mandate proposal grounded in current official OLRC text
-    final_review_state: draft
+    final_form: native v0.2 atomic mandate record grounded in current official OLRC text
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
+    note: Automated Stage B proposal subsequently approved by human review; not migrated from a Stage A placeholder.
   - previous_object: null
     previous_form: none
     final_object: nist_nvlap_lab_decision_right
     final_form: native v0.2 atomic decision-right record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
+    note: Automated Stage B proposal subsequently approved by human review; not migrated from a Stage A placeholder.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_identity
     final_form: native v0.2 atomic identity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal.
+    note: Automated Stage B proposal subsequently approved by human review.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_placement
     final_form: native v0.2 atomic placement record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal with the directly evidenced AI division as parent.
+    note: Automated Stage B proposal subsequently approved by human review with the directly evidenced AI division as parent.
   - previous_object: null
     previous_form: none
-    final_object: nist_laboratory_network_capacity
+    final_object: nist_lab_network_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal; uncited laboratory names were removed.
+    note: Automated Stage B proposal subsequently approved by human review; uncited laboratory names were removed.
   - previous_object: null
     previous_form: none
     final_object: nist_aml_facility_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal.
+    note: Automated Stage B proposal subsequently approved by human review.
   - previous_object: null
     previous_form: none
-    final_object: nist_nvlap_accreditation_capacity
+    final_object: nist_nvlap_accred_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal distinct from the NVLAP decision right; unsupported continuing assessment was removed.
+    note: Automated Stage B proposal subsequently approved by human review distinct from the NVLAP decision right; unsupported continuing assessment was removed.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_measurement_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal held by NIST and implemented through the scoped AI division, classified as organizational-unit capacity; unsupported technical machinery and guidance were removed.
+    note: Automated Stage B proposal subsequently approved by human review held by NIST and implemented through the scoped AI division, classified as organizational-unit capacity; unsupported technical machinery and guidance were removed.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_consortium_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: draft
+    final_review_state: approved
     identity_preserved: false
-    note: New automated Stage B proposal; unsupported CRADA, task-group, prototype-evaluation and technology-transfer mechanisms were removed, and external resources remain external.
+    note: Automated Stage B proposal subsequently approved by human review; unsupported CRADA, task-group, prototype-evaluation and technology-transfer mechanisms were removed, and external resources remain external.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:
@@ -202,4 +211,16 @@ current_statutory_capture:
   passage_id: us_code.title15_usc_272.b_2
   passage_hash: sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019
   selected_passage_byte_identical_to_previous_capture: true
-stage_b_status: pending_human_review
+  human_review_verification:
+    direct_origin_retry_result: connection_timeout
+    retry_date: 2026-08-08
+    fresh_transport_replay_hash: sha256:cf8b3aa74d23c153099686f9299c91cf55af3757ea364342527755eba7c2bdb4
+    canonical_url_metadata_matched: true
+    laws_in_effect_date_matched: true
+    substantive_olrc_content_byte_identical: true
+    selected_passage_byte_identical: true
+    volatile_differences_only:
+      - jsf_session_id
+      - javax_faces_view_state
+      - google_transport_configuration
+stage_b_status: completed_human_review

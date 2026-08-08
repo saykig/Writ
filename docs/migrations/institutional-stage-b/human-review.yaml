@@ -1,0 +1,322 @@
+schema_version: 1.0.0
+review_id: institutional-stage-b-human-review-2026-08-08
+reviewer: Sara Kim
+review_type: human
+review_date: 2026-08-08
+queue_id: institutional-stage-b-review-queue-v1
+queue_path: docs/migrations/institutional-stage-b/review-queue.yaml
+status: complete
+summary:
+  active_targets_reviewed: 30
+  active_targets_approved: 30
+  omitted_candidates_reviewed: 1
+  omitted_candidates_approved_for_omission: 1
+review_protocol:
+  description: >-
+    For every decision below, the reviewer inspected the queue target's existing assertion,
+    institutional fact payload (or Core record-link payload), selected evidence passages,
+    uncertainties and proposed disposition. Approval applies to that complete reviewed bundle,
+    including the revisions recorded here; schema validation alone was not treated as approval.
+  required_material:
+    - assertion
+    - institutional_fact_payload_or_record_link_payload
+    - evidence_passages
+    - uncertainties
+    - proposed_disposition
+proposal_history:
+  proposer: OpenAI Codex automated proposal
+  proposed_at: 2026-08-05
+  proposed_target_review_state: draft
+  proposed_judgment_status: proposed
+  preserved_in:
+    - docs/migrations/institutional-stage-b/review-queue.yaml
+    - corpora/institutional/us/nist/migration.yaml
+    - corpora/institutional/eu/european-commission/migration.yaml
+  note: >-
+    The automated proposal phase preceded this review. The accepted judgments identify Sara Kim as
+    reviewer; no human decision is attributed to Codex.
+approved_revisions:
+  id_renames:
+    - previous_draft_id: eu_ai_office_training_summary_template_function
+      approved_id: eu_ai_office_training_sum_temp_function
+    - previous_draft_id: european_commission_budget_management_function
+      approved_id: european_commission_budget_mgmt_function
+    - previous_draft_id: european_commission_reasoned_opinion_function
+      approved_id: european_commission_reasoned_op_function
+    - previous_draft_id: european_commission_cjeu_referral_decision_right
+      approved_id: european_commission_cjeu_refer_decision_right
+    - previous_draft_id: nist_laboratory_network_capacity
+      approved_id: nist_lab_network_capacity
+    - previous_draft_id: nist_nvlap_accreditation_capacity
+      approved_id: nist_nvlap_accred_capacity
+  nist_ai_measurement_capacity:
+    institution_id: nist
+    institutional_scope_includes: nist.ai_research_measurement_standards_division
+    capacity_type: organizational_unit
+    capacity_components:
+      - ai_measurement_science
+      - testing_and_evaluation
+      - standards
+      - ai_standards_and_guidelines_group
+      - applied_ai_research_group
+  classifications_and_relationships:
+    reasoned_opinion_record: european_commission_reasoned_op_function
+    reasoned_opinion_fact_type: function
+    cjeu_referral_record: european_commission_cjeu_refer_decision_right
+    cjeu_referral_fact_type: decision_right
+    nist_ai_standards_group_immediate_parent: nist.ai_research_measurement_standards_division
+    ai_office_immediate_parent: european_commission.dg_connect
+    inherited_root_relationship: eu_ai_office_european_commission_relationship
+    preserved_model_evaluation_function: eu_ai_office_model_eval_function
+    preserved_model_evaluation_decision_right: eu_ai_office_model_eval_decision_right
+  approved_omission:
+    target_id: eu_ai_office_model_eval_capacity
+    human_decision: approve_omission
+    rationale: >-
+      Current evidence supports a model-evaluation function and decision right but does not
+      independently establish concrete operational machinery sufficient for an
+      operational-capacity record.
+olrc_source_verification:
+  canonical_url: https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272
+  direct_retrieval_attempted_at: 2026-08-08
+  direct_retrieval_result: connection_timeout
+  retained_transport: google_translate_pass_through
+  publisher: Office of the Law Revision Counsel, U.S. House of Representatives
+  laws_in_effect_through: 2026-08-07
+  stored_capture_sha256: sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d
+  fresh_transport_replay_sha256: sha256:cf8b3aa74d23c153099686f9299c91cf55af3757ea364342527755eba7c2bdb4
+  selected_passage_id: us_code.title15_usc_272.b_2
+  selected_passage_sha256: sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019
+  verification:
+    canonical_url_metadata_matched: true
+    laws_in_effect_date_matched: true
+    selected_passage_byte_identical: true
+    substantive_olrc_content_byte_identical: true
+    volatile_differences_only:
+      - jsf_session_id
+      - javax_faces_view_state
+      - google_transport_configuration
+decisions:
+  - decision_id: stage-b.nist.nist-ai-standards-group-identity
+    target_kind: record
+    target_id: nist_ai_standards_group_identity
+    judgment_id: judgment_nist_ai_standards_group_identity_stage_b
+    evidence_passages: [nist.ai_division.groups]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.european-commission-identity
+    target_kind: record
+    target_id: european_commission_identity
+    judgment_id: judgment_european_commission_identity_review
+    evidence_passages: [eu.teu_article_13.commission]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.eu-ai-office-identity
+    target_kind: record
+    target_id: eu_ai_office_identity
+    judgment_id: judgment_eu_ai_office_identity_review
+    evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.nist-ai-standards-group-placement
+    target_kind: record
+    target_id: nist_ai_standards_group_placement
+    judgment_id: judgment_nist_ai_standards_group_placement_stage_b
+    evidence_passages: [nist.ai_division.itl_placement, nist.ai_division.groups]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.eu-ai-office-placement
+    target_kind: record
+    target_id: eu_ai_office_placement
+    judgment_id: judgment_eu_ai_office_placement_review
+    evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.eu-ai-office-european-commission-relationship
+    target_kind: record_link
+    target_id: eu_ai_office_european_commission_relationship
+    judgment_id: judgment_eu_ai_office_european_commission_relationship_review
+    evidence_passages: [eu.commission_decision_c_2024_1459.article_1]
+    reviewed_components: [supporting_assertion, record_link_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.european-commission-mission
+    target_kind: record
+    target_id: european_commission_mission
+    judgment_id: judgment_european_commission_mission_review
+    evidence_passages: [eu.european_commission_institution.role]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.eu-ai-office-mission
+    target_kind: record
+    target_id: eu_ai_office_mission
+    judgment_id: judgment_eu_ai_office_mission_review
+    evidence_passages: [ec.european_ai_office.mission]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.national-measurement-standards-mandate
+    target_kind: record
+    target_id: nist_national_measurement_standards_mandate
+    judgment_id: judgment_nist_national_measurement_standards_mandate_stage_b
+    evidence_passages: [us_code.title15_usc_272.b_2]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.european-commission-union-law-mandate
+    target_kind: record
+    target_id: european_commission_union_law_mandate
+    judgment_id: judgment_european_commission_union_law_mandate_review
+    evidence_passages: [eu.teu_article_17.paragraph_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.eu-ai-office-gpai-enforcement-mandate
+    target_kind: record
+    target_id: eu_ai_office_gp_ai_enforcement_mandate
+    judgment_id: judgment_eu_ai_office_gp_ai_enforcement_mandate_review
+    evidence_passages: [passage_eu_ai_act_art_88_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.technical-documentation-receipt
+    target_kind: record
+    target_id: eu_ai_office_technical_documentation_receipt
+    judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
+    evidence_passages: [passage_eu_01]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.training-summary-template
+    target_kind: record
+    target_id: eu_ai_office_training_sum_temp_function
+    judgment_id: judgment_eu_ai_office_training_sum_temp_function_review
+    evidence_passages: [passage_eu_04]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.serious-incident-report-receipt
+    target_kind: record
+    target_id: eu_ai_office_serious_incident_report_receipt
+    judgment_id: judgment_eu_ai_office_serious_incident_report_receipt_review
+    evidence_passages: [passage_eu_08]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.legislative-proposal-function
+    target_kind: record
+    target_id: european_commission_legislative_proposal_function
+    judgment_id: judgment_european_commission_legislative_proposal_function_review
+    evidence_passages: [ec.planning_proposing_law.right_of_initiative]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.budget-management-function
+    target_kind: record
+    target_id: european_commission_budget_mgmt_function
+    judgment_id: judgment_european_commission_budget_mgmt_function_review
+    evidence_passages: [ec.budget_funding.commission_role]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.model-evaluation-function
+    target_kind: record
+    target_id: eu_ai_office_model_eval_function
+    judgment_id: judgment_eu_ai_office_model_eval_function_review
+    evidence_passages: [eu.commission_decision_c_2024_1459.article_3_1_a]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.reasoned-opinion-function
+    target_kind: record
+    target_id: european_commission_reasoned_op_function
+    judgment_id: judgment_european_commission_reasoned_op_function_review
+    evidence_passages: [eu.tfeu_article_258.reasoned_opinion]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.nvlap-lab-decision-right
+    target_kind: record
+    target_id: nist_nvlap_lab_decision_right
+    judgment_id: judgment_nist_nvlap_lab_decision_right_stage_b
+    evidence_passages: [ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence, nist.handbook_150.accreditation_decision]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.cjeu-referral-decision-right
+    target_kind: record
+    target_id: european_commission_cjeu_refer_decision_right
+    judgment_id: judgment_european_commission_cjeu_refer_decision_right_review
+    evidence_passages: [eu.tfeu_article_258.cjeu_referral]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.gpai-fine-decision-right
+    target_kind: record
+    target_id: european_commission_gp_ai_fine_decision_right
+    judgment_id: judgment_european_commission_gp_ai_fine_decision_right_review
+    evidence_passages: [passage_eu_ai_act_art_101_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.model-evaluation-decision-right
+    target_kind: record
+    target_id: eu_ai_office_model_eval_decision_right
+    judgment_id: judgment_eu_ai_office_model_eval_decision_right_review
+    evidence_passages: [passage_eu_ai_act_art_92_1]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.laboratory-network-capacity
+    target_kind: record
+    target_id: nist_lab_network_capacity
+    judgment_id: judgment_nist_lab_network_capacity_stage_b
+    evidence_passages: [nist.laboratories.six_labs]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.aml-facility-capacity
+    target_kind: record
+    target_id: nist_aml_facility_capacity
+    judgment_id: judgment_nist_aml_facility_capacity_stage_b
+    evidence_passages: [nist.aml.features]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.nvlap-accreditation-capacity
+    target_kind: record
+    target_id: nist_nvlap_accred_capacity
+    judgment_id: judgment_nist_nvlap_accred_capacity_stage_b
+    evidence_passages: [ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.ai-measurement-capacity
+    target_kind: record
+    target_id: nist_ai_measurement_capacity
+    judgment_id: judgment_nist_ai_measurement_capacity_stage_b
+    evidence_passages: [nist.ai_division.capacity, nist.ai_division.groups]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.nist.ai-consortium-capacity
+    target_kind: record
+    target_id: nist_ai_consortium_capacity
+    judgment_id: judgment_nist_ai_consortium_capacity_stage_b
+    evidence_passages: [nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.jrc-infrastructure-capacity
+    target_kind: record
+    target_id: european_commission_jrc_infra_capacity
+    judgment_id: judgment_european_commission_jrc_infra_capacity_review
+    evidence_passages: [ec.jrc_research_infrastructures.inventory]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.ai-office-organizational-capacity
+    target_kind: record
+    target_id: eu_ai_office_org_capacity
+    judgment_id: judgment_eu_ai_office_org_capacity_review
+    evidence_passages: [ec.european_ai_office.structure]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+  - decision_id: stage-b.ec.ai-office-cooperation-capacity
+    target_kind: record
+    target_id: eu_ai_office_cooperation_capacity
+    judgment_id: judgment_eu_ai_office_cooperation_capacity_review
+    evidence_passages: [ec.european_ai_office.cooperation_platforms, eu.commission_decision_c_2024_1459.article_2_3]
+    reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+    human_decision: approve
+omission_decision:
+  decision_id: stage-b.ec.ai-office-model-evaluation-capacity
+  target_id: eu_ai_office_model_eval_capacity
+  fact_type: operational_capacity
+  evidence_passages:
+    - ec.european_ai_office.evaluation_expertise
+    - eu.commission_decision_c_2024_1459.article_3_1_a
+  reviewed_components: [candidate_assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]
+  human_decision: approve_omission
+  rationale: >-
+    Current evidence supports a model-evaluation function and decision right but does not
+    independently establish concrete operational machinery sufficient for an
+    operational-capacity record.

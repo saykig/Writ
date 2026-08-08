@@ -3,9 +3,22 @@ queue_id: institutional-stage-b-review-queue-v1
 title: Institutional Stage B human decision queue
 created_at: 2026-08-07
 created_by: OpenAI Codex automated proposal
-status: pending_human_review
-human_approval_artifact_found: false
-reviewer_identity_required: true
+status: completed_human_review
+human_approval_artifact_found: true
+human_review_artifact: docs/migrations/institutional-stage-b/human-review.yaml
+reviewer_identity_required: false
+proposal_phase:
+  proposer: OpenAI Codex automated proposal
+  proposed_at: 2026-08-05
+  disposition: draft
+  judgment_status: proposed
+human_review:
+  reviewer: Sara Kim
+  review_type: human
+  reviewed_at: 2026-08-08
+  active_targets_reviewed: 30
+  active_targets_approved: 30
+  omissions_approved: 1
 decision_rule:
   description: >-
     A human reviewer must inspect the exact target assertion, institutional fact payload, selected
@@ -21,7 +34,7 @@ decision_rule:
     - approve
     - reject
     - revise
-  current_human_decision: null
+  current_human_decision: approve_all_with_recorded_revisions
 schema_queues:
   identity:
     - decision_id: stage-b.nist.nist-ai-standards-group-identity
@@ -82,8 +95,8 @@ schema_queues:
       judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
       evidence_passages: [passage_eu_01]
     - decision_id: stage-b.ec.training-summary-template
-      target_id: eu_ai_office_training_summary_template_function
-      judgment_id: judgment_eu_ai_office_training_summary_template_function_review
+      target_id: eu_ai_office_training_sum_temp_function
+      judgment_id: judgment_eu_ai_office_training_sum_temp_function_review
       evidence_passages: [passage_eu_04]
     - decision_id: stage-b.ec.serious-incident-report-receipt
       target_id: eu_ai_office_serious_incident_report_receipt
@@ -94,21 +107,21 @@ schema_queues:
       judgment_id: judgment_european_commission_legislative_proposal_function_review
       evidence_passages: [ec.planning_proposing_law.right_of_initiative]
     - decision_id: stage-b.ec.budget-management-function
-      target_id: european_commission_budget_management_function
-      judgment_id: judgment_european_commission_budget_management_function_review
+      target_id: european_commission_budget_mgmt_function
+      judgment_id: judgment_european_commission_budget_mgmt_function_review
       evidence_passages: [ec.budget_funding.commission_role]
     - decision_id: stage-b.ec.model-evaluation-function
       target_id: eu_ai_office_model_eval_function
       judgment_id: judgment_eu_ai_office_model_eval_function_review
       evidence_passages: [eu.commission_decision_c_2024_1459.article_3_1_a]
     - decision_id: stage-b.ec.reasoned-opinion-function
-      target_id: european_commission_reasoned_opinion_function
-      judgment_id: judgment_european_commission_reasoned_opinion_function_review
+      target_id: european_commission_reasoned_op_function
+      judgment_id: judgment_european_commission_reasoned_op_function_review
       evidence_passages: [eu.tfeu_article_258.reasoned_opinion]
       classification_rationale: >-
-        Automated proposal: classify as a function because Article 258 uses mandatory "shall"
-        after the stated conditions hold; do not collapse it into the separate discretionary CJEU
-        referral decision right. A human classification reason has not yet been recorded.
+        Human review approves the automated classification as a function because Article 258 uses
+        mandatory "shall" after the stated conditions hold; do not collapse it into the separate
+        discretionary CJEU referral decision right.
   decision_right:
     - decision_id: stage-b.nist.nvlap-lab-decision-right
       target_id: nist_nvlap_lab_decision_right
@@ -118,8 +131,8 @@ schema_queues:
         - nist.handbook_150.competence
         - nist.handbook_150.accreditation_decision
     - decision_id: stage-b.ec.cjeu-referral-decision-right
-      target_id: european_commission_cjeu_referral_decision_right
-      judgment_id: judgment_european_commission_cjeu_referral_decision_right_review
+      target_id: european_commission_cjeu_refer_decision_right
+      judgment_id: judgment_european_commission_cjeu_refer_decision_right_review
       evidence_passages: [eu.tfeu_article_258.cjeu_referral]
     - decision_id: stage-b.ec.gpai-fine-decision-right
       target_id: european_commission_gp_ai_fine_decision_right
@@ -131,16 +144,16 @@ schema_queues:
       evidence_passages: [passage_eu_ai_act_art_92_1]
   operational_capacity:
     - decision_id: stage-b.nist.laboratory-network-capacity
-      target_id: nist_laboratory_network_capacity
-      judgment_id: judgment_nist_laboratory_network_capacity_stage_b
+      target_id: nist_lab_network_capacity
+      judgment_id: judgment_nist_lab_network_capacity_stage_b
       evidence_passages: [nist.laboratories.six_labs]
     - decision_id: stage-b.nist.aml-facility-capacity
       target_id: nist_aml_facility_capacity
       judgment_id: judgment_nist_aml_facility_capacity_stage_b
       evidence_passages: [nist.aml.features]
     - decision_id: stage-b.nist.nvlap-accreditation-capacity
-      target_id: nist_nvlap_accreditation_capacity
-      judgment_id: judgment_nist_nvlap_accreditation_capacity_stage_b
+      target_id: nist_nvlap_accred_capacity
+      judgment_id: judgment_nist_nvlap_accred_capacity_stage_b
       evidence_passages: [ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process]
     - decision_id: stage-b.nist.ai-measurement-capacity
       target_id: nist_ai_measurement_capacity
@@ -171,11 +184,14 @@ omitted_candidates:
   - decision_id: stage-b.ec.ai-office-model-evaluation-capacity
     target_id: eu_ai_office_model_eval_capacity
     fact_type: operational_capacity
-    status: omitted_pending_stronger_evidence
+    status: omission_approved
+    human_decision: approve_omission
+    reviewer: Sara Kim
+    reviewed_at: 2026-08-08
     evidence_passages:
       - ec.european_ai_office.evaluation_expertise
       - eu.commission_decision_c_2024_1459.article_3_1_a
     reason: >-
       The passages establish an assigned function, a source-reported expertise claim and separately
       documented legal authority, but not concrete organizational or technical machinery. The
-      function and decision-right records remain active drafts.
+      function and decision-right records remain active and approved.

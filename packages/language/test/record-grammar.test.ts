@@ -75,7 +75,7 @@ describe("structured record lowering", () => {
     const preservedFunctions = compiled.records.filter((record) =>
       [
         "eu_ai_office_technical_documentation_receipt",
-        "eu_ai_office_training_summary_template_function",
+        "eu_ai_office_training_sum_temp_function",
         "eu_ai_office_serious_incident_report_receipt",
       ].includes(record.record_id),
     );
@@ -85,7 +85,7 @@ describe("structured record lowering", () => {
         schema_version: "0.2.0",
         family: "institutional",
         institutional_fact_type: "function",
-        review_state: "draft",
+        review_state: "approved",
       });
       expect(record).not.toHaveProperty("mandate");
       expect(record).not.toHaveProperty("operational_capacity");

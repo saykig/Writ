@@ -186,7 +186,7 @@ record nist_national_measurement_standards_mandate : institutional {
   }
   uncertainty { item unknown "This record establishes the responsibility in the stored current OLRC text containing laws in effect on August 7, 2026. It does not establish currency after that date or general regulatory authority over industry, private standards bodies or every use of measurement standards."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist;
     fact_type mandate;
@@ -209,7 +209,7 @@ record nist_nvlap_lab_decision_right : institutional {
   }
   uncertainty { item unknown "This decision right is limited to laboratory accreditation through NVLAP. It does not establish general regulatory authority, authority over every laboratory, product certification or authority to make unrelated NIST guidance legally binding."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist;
     fact_type decision_right;
@@ -230,7 +230,7 @@ record nist_ai_standards_group_identity : institutional {
   }
   uncertainty { item unknown "The group’s identity does not establish a separate legal personality, legal mandate, independent decision authority or operational capacity."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional { institution_id nist.ai_standards_guidelines_group; fact_type identity; institution_type organizational_unit; }
 }
 
@@ -248,11 +248,11 @@ record nist_ai_standards_group_placement : institutional {
   }
   uncertainty { item unknown "The organizational chain establishes placement within NIST. It does not establish independent mandate, decision authority or operational capacity for the group."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional { institution_id nist.ai_standards_guidelines_group; fact_type placement; parent_institution_id nist.ai_research_measurement_standards_division; }
 }
 
-record nist_laboratory_network_capacity : institutional {
+record nist_lab_network_capacity : institutional {
   corpus us.institutions.nist;
   version "0.2.0";
   title "NIST laboratory-network capacity";
@@ -265,7 +265,7 @@ record nist_laboratory_network_capacity : institutional {
   }
   uncertainty { item unknown "This establishes NIST’s current laboratory structure. It does not establish equal legal status, staffing, funding, utilization, performance or operational condition across all components."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type laboratory_network; capacity_components { six_laboratories, user_facilities }; evidence_refs { nist.laboratories.six_labs }; }
@@ -285,14 +285,14 @@ record nist_aml_facility_capacity : institutional {
   }
   uncertainty { item unknown "The record establishes the facility’s physical design and intended technical capabilities. It does not establish current utilization, equipment uptime, maintenance condition or full operational availability."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type facility; capacity_components { electromagnetic_shielding, vibration_isolation, temperature_control, humidity_control, air_quality_control, underground_metrology_wings, physical_science_wings, cleanroom_wing }; evidence_refs { nist.aml.features }; }
   }
 }
 
-record nist_nvlap_accreditation_capacity : institutional {
+record nist_nvlap_accred_capacity : institutional {
   corpus us.institutions.nist;
   version "0.2.0";
   title "NVLAP accreditation-system capacity";
@@ -306,7 +306,7 @@ record nist_nvlap_accreditation_capacity : institutional {
   }
   uncertainty { item unknown "This establishes NIST’s operational machinery for laboratory accreditation. It does not duplicate the accreditation decision right, certify products, guarantee laboratory results or establish that NIST itself holds an ISO/IEC 17025 certification."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type accreditation_system; capacity_components { application_submission, on_site_assessment, nonconformity_resolution, proficiency_testing, technical_evaluation, certificate_and_scope_issuance }; evidence_refs { ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process }; }
@@ -327,7 +327,7 @@ record nist_ai_measurement_capacity : institutional {
   }
   uncertainty { item unknown "This establishes a dedicated organizational unit and its stated work. It does not independently establish technical machinery, technical-guidance work, a particular number of staff, computing resources, evaluation throughput, model access or legally conclusive authority."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type organizational_unit; capacity_components { ai_measurement_science, testing_and_evaluation, standards, ai_standards_and_guidelines_group, applied_ai_research_group }; evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; }
@@ -349,7 +349,7 @@ record nist_ai_consortium_capacity : institutional {
   }
   uncertainty { item unknown "Consortium members remain external organizations. Their personnel, data, models and facilities are not resources owned or directly controlled by NIST, and membership does not constitute NIST endorsement."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type partnership_network; capacity_components { research_partnership, external_expertise, external_products, external_data, external_models, ai_measurement_guidelines_and_standards }; evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; }

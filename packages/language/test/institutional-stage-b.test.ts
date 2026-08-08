@@ -72,7 +72,9 @@ interface CapacityEvidenceAudit {
 
 interface ReviewQueue {
   queue_id: string;
+  status: string;
   human_approval_artifact_found: boolean;
+  human_review_artifact: string;
   schema_queues: Record<
     string,
     Array<{
@@ -84,7 +86,46 @@ interface ReviewQueue {
       implementing_unit_in_scope?: string;
     }>
   >;
-  omitted_candidates: Array<{ target_id: string; status: string }>;
+  omitted_candidates: Array<{ target_id: string; status: string; human_decision: string }>;
+}
+
+interface HumanReview {
+  reviewer: string;
+  review_type: string;
+  review_date: string;
+  queue_id: string;
+  status: string;
+  summary: {
+    active_targets_reviewed: number;
+    active_targets_approved: number;
+    omitted_candidates_approved_for_omission: number;
+  };
+  approved_revisions: {
+    id_renames: Array<{ previous_draft_id: string; approved_id: string }>;
+    nist_ai_measurement_capacity: {
+      institution_id: string;
+      institutional_scope_includes: string;
+      capacity_type: string;
+      capacity_components: string[];
+    };
+  };
+  decisions: Array<{
+    target_id: string;
+    judgment_id: string;
+    evidence_passages: string[];
+    reviewed_components: string[];
+    human_decision: string;
+  }>;
+  omission_decision: { target_id: string; human_decision: string };
+  olrc_source_verification: {
+    direct_retrieval_result: string;
+    stored_capture_sha256: string;
+    selected_passage_sha256: string;
+    verification: {
+      substantive_olrc_content_byte_identical: boolean;
+      selected_passage_byte_identical: boolean;
+    };
+  };
 }
 
 interface SanitizationLedger {
@@ -117,17 +158,29 @@ const NIST_STAGE_B_IDS = [
   "nist_nvlap_lab_decision_right",
   "nist_ai_standards_group_identity",
   "nist_ai_standards_group_placement",
-  "nist_laboratory_network_capacity",
+  "nist_lab_network_capacity",
   "nist_aml_facility_capacity",
-  "nist_nvlap_accreditation_capacity",
+  "nist_nvlap_accred_capacity",
   "nist_ai_measurement_capacity",
   "nist_ai_consortium_capacity",
 ] as const;
 const COMMISSION_BASELINE_IDS = [
   "eu_ai_office_technical_documentation_receipt",
-  "eu_ai_office_training_summary_template_function",
+  "eu_ai_office_training_sum_temp_function",
   "eu_ai_office_serious_incident_report_receipt",
 ] as const;
+const APPROVED_TARGET_RENAMES = new Map<string, string>([
+  ["eu_ai_office_training_summary_template_function", "eu_ai_office_training_sum_temp_function"],
+  ["european_commission_budget_management_function", "european_commission_budget_mgmt_function"],
+  ["european_commission_reasoned_opinion_function", "european_commission_reasoned_op_function"],
+  [
+    "european_commission_cjeu_referral_decision_right",
+    "european_commission_cjeu_refer_decision_right",
+  ],
+  ["nist_laboratory_network_capacity", "nist_lab_network_capacity"],
+  ["nist_nvlap_accreditation_capacity", "nist_nvlap_accred_capacity"],
+]);
+const SUPERSEDED_DRAFT_TARGET_IDS = [...APPROVED_TARGET_RENAMES.keys()];
 const EXCLUDED = [
   "nist_workforce_capacity",
   "nist_budget_capacity",
@@ -188,32 +241,34 @@ describe("Stage B production inventories", () => {
       disposition_judgments: 17,
     });
     expect(manifest(NIST).review_counts).toEqual({
-      approved_records: 5,
+      approved_records: 14,
       superseded_records: 1,
-      draft_records: 9,
+      draft_records: 0,
       approved_record_links: 2,
-      accepted_disposition_judgments: 8,
-      proposed_disposition_judgments: 9,
+      accepted_disposition_judgments: 17,
+      proposed_disposition_judgments: 0,
     });
   });
 
-  test("Commission preserves three baseline drafts and adds exactly 17 active proposals", () => {
+  test("Commission preserves three baseline records and has 20 human-approved records", () => {
     expect(commission.records).toHaveLength(20);
-    for (const id of COMMISSION_BASELINE_IDS) expect(record(id).review_state).toBe("draft");
+    for (const id of COMMISSION_BASELINE_IDS) expect(record(id).review_state).toBe("approved");
     const baselineIds = new Set<string>(COMMISSION_BASELINE_IDS);
     expect(commission.records.filter((item) => !baselineIds.has(item.record_id))).toHaveLength(17);
     expect(new Set(commission.records.map((item) => item.record_id)).size).toBe(20);
-    expect(commission.records.every((item) => item.review_state === "draft")).toBe(true);
+    expect(commission.records.every((item) => item.review_state === "approved")).toBe(true);
     expect(manifest(EC).record_counts).toEqual({
       institutional_records: 20,
       record_links: 1,
       disposition_judgments: 21,
     });
     expect(manifest(EC).review_counts).toEqual({
-      draft_records: 20,
-      draft_record_links: 1,
-      accepted_disposition_judgments: 0,
-      proposed_disposition_judgments: 21,
+      approved_records: 20,
+      draft_records: 0,
+      approved_record_links: 1,
+      draft_record_links: 0,
+      accepted_disposition_judgments: 21,
+      proposed_disposition_judgments: 0,
     });
   });
 
@@ -237,10 +292,10 @@ describe("atomic institutional distinctions", () => {
     ["european_commission_union_law_mandate", "mandate"],
     ["eu_ai_office_gp_ai_enforcement_mandate", "mandate"],
     ["european_commission_legislative_proposal_function", "function"],
-    ["european_commission_budget_management_function", "function"],
+    ["european_commission_budget_mgmt_function", "function"],
     ["eu_ai_office_model_eval_function", "function"],
-    ["european_commission_reasoned_opinion_function", "function"],
-    ["european_commission_cjeu_referral_decision_right", "decision_right"],
+    ["european_commission_reasoned_op_function", "function"],
+    ["european_commission_cjeu_refer_decision_right", "decision_right"],
     ["european_commission_gp_ai_fine_decision_right", "decision_right"],
     ["eu_ai_office_model_eval_decision_right", "decision_right"],
   ]);
@@ -320,8 +375,8 @@ describe("atomic institutional distinctions", () => {
     ]);
   });
 
-  test("Article 258 mandatory modality is preserved as a proposed function", () => {
-    const target = record("european_commission_reasoned_opinion_function");
+  test("Article 258 mandatory modality is preserved as a human-approved function", () => {
+    const target = record("european_commission_reasoned_op_function");
     expect(target.institutional_fact_type).toBe("function");
     expect(target.assertion.text).toContain("requires the Commission to deliver");
     expect(target.evidence[0]?.quote).toContain("it shall deliver a reasoned opinion");
@@ -330,8 +385,8 @@ describe("atomic institutional distinctions", () => {
   test("the NVLAP determination and program machinery remain separate", () => {
     expect(record("nist_nvlap_lab_decision_right").decision_right).toBeDefined();
     expect(record("nist_nvlap_lab_decision_right").operational_capacity).toBeUndefined();
-    expect(record("nist_nvlap_accreditation_capacity").operational_capacity).toBeDefined();
-    expect(record("nist_nvlap_accreditation_capacity").decision_right).toBeUndefined();
+    expect(record("nist_nvlap_accred_capacity").operational_capacity).toBeDefined();
+    expect(record("nist_nvlap_accred_capacity").decision_right).toBeUndefined();
   });
 
   test("all excluded records and intermediate profiles are absent", () => {
@@ -374,27 +429,27 @@ describe("operational-capacity contract", () => {
     const identity = structuredClone(record("european_commission_identity"));
     identity.institution_type = "unknown_new_type";
     expect(validate("institutional-record", identity).valid).toBe(false);
-    const base = structuredClone(capacityRecord("nist_laboratory_network_capacity"));
+    const base = structuredClone(capacityRecord("nist_lab_network_capacity"));
     (base.operational_capacity as unknown as Record<string, unknown>).capacity_type =
       "unknown_capacity";
     expect(validate("institutional-record", base).valid).toBe(false);
-    const status = structuredClone(capacityRecord("nist_laboratory_network_capacity"));
+    const status = structuredClone(capacityRecord("nist_lab_network_capacity"));
     (status.operational_capacity as unknown as Record<string, unknown>).status = "established";
     expect(validate("institutional-record", status).valid).toBe(false);
-    const duplicate = structuredClone(capacityRecord("nist_laboratory_network_capacity"));
+    const duplicate = structuredClone(capacityRecord("nist_lab_network_capacity"));
     duplicate.operational_capacity.capacity_components = [
       "engineering_laboratory",
       "engineering_laboratory",
     ];
     expect(validate("institutional-record", duplicate).valid).toBe(false);
-    const quantity = structuredClone(capacityRecord("nist_laboratory_network_capacity"));
+    const quantity = structuredClone(capacityRecord("nist_lab_network_capacity"));
     quantity.operational_capacity.quantity = {
       value: 6,
       unit: "laboratory_components",
       qualifier: "exact",
     };
     expect(validate("institutional-record", quantity).valid).toBe(false);
-    const qualifier = structuredClone(capacityRecord("nist_laboratory_network_capacity"));
+    const qualifier = structuredClone(capacityRecord("nist_lab_network_capacity"));
     qualifier.operational_capacity.as_of_date = "2026-08-05";
     qualifier.operational_capacity.quantity = {
       value: 6,
@@ -456,7 +511,7 @@ describe("operational-capacity contract", () => {
   });
 
   test("different institutional forms retain distinct components and ownership boundaries", () => {
-    const nistLabs = capacityRecord("nist_laboratory_network_capacity").operational_capacity;
+    const nistLabs = capacityRecord("nist_lab_network_capacity").operational_capacity;
     const jrc = capacityRecord("european_commission_jrc_infra_capacity").operational_capacity;
     expect(nistLabs.capacity_type).toBe(jrc.capacity_type);
     expect(nistLabs.capacity_components).not.toEqual(jrc.capacity_components);
@@ -482,7 +537,7 @@ describe("operational-capacity contract", () => {
 });
 
 describe("review preservation, judgments, links, and migrations", () => {
-  test("the three Commission baseline drafts retain their original content and review state", () => {
+  test("the three Commission baseline records retain content and provenance across approval", () => {
     const inventory = JSON.parse(
       readFileSync(
         join(ROOT, "docs/migrations/institutional-stage-b/pre-implementation-inventory.json"),
@@ -490,10 +545,11 @@ describe("review preservation, judgments, links, and migrations", () => {
       ),
     );
     for (const prior of inventory.european_commission_baseline.records) {
-      const current = record(prior.record_id);
+      const current = record(APPROVED_TARGET_RENAMES.get(prior.record_id) ?? prior.record_id);
       expect(current.assertion).toEqual(prior.assertion);
       expect(current.provenance).toEqual(prior.provenance);
-      expect(current.review_state).toBe("draft");
+      expect(prior.review_state).toBe("draft");
+      expect(current.review_state).toBe("approved");
       const source = read(EC, "records.writ");
       expect(source).toContain(prior.evidence);
       expect(source).toContain(prior.subjects);
@@ -501,7 +557,7 @@ describe("review preservation, judgments, links, and migrations", () => {
     }
   });
 
-  test("only Stage A judgments are accepted; every active Stage B judgment is proposed", () => {
+  test("all Stage B judgments are accepted human decisions", () => {
     expect(nistJudgments).toHaveLength(17);
     expect(commissionJudgments).toHaveLength(21);
     const commissionLink = yaml<RecordLink>(
@@ -526,9 +582,10 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(stageA.every((item) => item.status === "accepted")).toBe(true);
     expect(stageA.every((item) => item.reviewer === "Sara Kim")).toBe(true);
     expect(stageB).toHaveLength(30);
-    expect(stageB.every((item) => item.status === "proposed")).toBe(true);
-    expect(stageB.every((item) => item.value === "draft")).toBe(true);
-    expect(stageB.every((item) => item.reviewer === "OpenAI Codex automated proposal")).toBe(true);
+    expect(stageB.every((item) => item.status === "accepted")).toBe(true);
+    expect(stageB.every((item) => item.value === "approved")).toBe(true);
+    expect(stageB.every((item) => item.reviewer === "Sara Kim")).toBe(true);
+    expect(stageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
     expect(validateJudgmentSupersession(nistJudgments).valid).toBe(true);
     expect(validateJudgmentSupersession(commissionJudgments).valid).toBe(true);
     expect(nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b"))).toHaveLength(9);
@@ -553,7 +610,7 @@ describe("review preservation, judgments, links, and migrations", () => {
       relation_type: "part_of",
       basis: "inherited",
       supporting_record_ids: ["eu_ai_office_placement"],
-      review_state: "draft",
+      review_state: "approved",
     });
     const source = read(EC, "relationships/eu_ai_office_european_commission_relationship.yaml");
     expect(source).not.toContain("has_part");
@@ -574,13 +631,17 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(new Set(ecMigration.entries.map((item) => item.final_object)).size).toBe(22);
   });
 
-  test("the stable human-review queue covers every active Stage B proposal", () => {
+  test("the completed queue and durable artifact cover every Stage B human decision", () => {
     const queue = yaml<ReviewQueue>(
       ROOT,
       "docs/migrations/institutional-stage-b/review-queue.yaml",
     );
     expect(queue.queue_id).toBe("institutional-stage-b-review-queue-v1");
-    expect(queue.human_approval_artifact_found).toBe(false);
+    expect(queue.status).toBe("completed_human_review");
+    expect(queue.human_approval_artifact_found).toBe(true);
+    expect(queue.human_review_artifact).toBe(
+      "docs/migrations/institutional-stage-b/human-review.yaml",
+    );
     const items = Object.values(queue.schema_queues).flat();
     expect(items).toHaveLength(30);
     expect(new Set(items.map((item) => item.judgment_id))).toEqual(
@@ -600,7 +661,94 @@ describe("review preservation, judgments, links, and migrations", () => {
       queue.omitted_candidates.find(
         (item) => item.target_id === "eu_ai_office_model_eval_capacity",
       ),
-    ).toMatchObject({ status: "omitted_pending_stronger_evidence" });
+    ).toMatchObject({ status: "omission_approved", human_decision: "approve_omission" });
+
+    const review = yaml<HumanReview>(
+      ROOT,
+      "docs/migrations/institutional-stage-b/human-review.yaml",
+    );
+    expect(review).toMatchObject({
+      reviewer: "Sara Kim",
+      review_type: "human",
+      review_date: "2026-08-08",
+      queue_id: "institutional-stage-b-review-queue-v1",
+      status: "complete",
+      summary: {
+        active_targets_reviewed: 30,
+        active_targets_approved: 30,
+        omitted_candidates_approved_for_omission: 1,
+      },
+    });
+    expect(review.decisions).toHaveLength(30);
+    expect(new Set(review.decisions.map((item) => item.target_id))).toEqual(
+      new Set(items.map((item) => item.target_id)),
+    );
+    expect(review.decisions.every((item) => item.human_decision === "approve")).toBe(true);
+    expect(
+      review.decisions.every(
+        (item) =>
+          item.reviewed_components.includes("evidence_passages") &&
+          item.reviewed_components.includes("uncertainties") &&
+          item.reviewed_components.includes("proposed_disposition"),
+      ),
+    ).toBe(true);
+    expect(review.omission_decision).toMatchObject({
+      target_id: "eu_ai_office_model_eval_capacity",
+      human_decision: "approve_omission",
+    });
+    expect(review.approved_revisions.nist_ai_measurement_capacity).toMatchObject({
+      institution_id: "nist",
+      institutional_scope_includes: "nist.ai_research_measurement_standards_division",
+      capacity_type: "organizational_unit",
+    });
+    expect(review.olrc_source_verification).toMatchObject({
+      direct_retrieval_result: "connection_timeout",
+      stored_capture_sha256:
+        "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d",
+      selected_passage_sha256:
+        "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019",
+      verification: {
+        substantive_olrc_content_byte_identical: true,
+        selected_passage_byte_identical: true,
+      },
+    });
+
+    const postReviewInventory = JSON.parse(
+      readFileSync(
+        join(ROOT, "docs/migrations/institutional-stage-b/post-human-review-inventory.json"),
+        "utf8",
+      ),
+    );
+    expect(postReviewInventory.nist.stage_b_approved_target_ids).toEqual(NIST_STAGE_B_IDS);
+    expect(new Set(postReviewInventory.european_commission.approved_target_ids)).toEqual(
+      new Set(commissionJudgments.map((item) => item.target_id)),
+    );
+    expect(postReviewInventory.review_totals).toEqual({
+      active_targets_reviewed: 30,
+      active_targets_approved: 30,
+      approved_omissions: 1,
+      proposed_disposition_judgments: 0,
+    });
+  });
+
+  test("superseded draft IDs cannot remain active Stage B targets", () => {
+    const activeTargets = new Set([
+      ...NIST_STAGE_B_IDS,
+      ...commissionJudgments.map((item) => item.target_id),
+    ]);
+    const queue = yaml<ReviewQueue>(
+      ROOT,
+      "docs/migrations/institutional-stage-b/review-queue.yaml",
+    );
+    const queueTargets = new Set(
+      Object.values(queue.schema_queues)
+        .flat()
+        .map((item) => item.target_id),
+    );
+    for (const oldId of SUPERSEDED_DRAFT_TARGET_IDS) {
+      expect(activeTargets.has(oldId), oldId).toBe(false);
+      expect(queueTargets.has(oldId), oldId).toBe(false);
+    }
   });
 
   test("machine-readable interoperability matrix covers all atomic schemas conservatively", () => {
@@ -610,7 +758,7 @@ describe("review preservation, judgments, links, and migrations", () => {
         "utf8",
       ),
     );
-    expect(matrix.assessment_status).toBe("structural_pass_semantic_review_pending");
+    expect(matrix.assessment_status).toBe("structural_pass_bounded_semantic_review_complete");
     expect(matrix.interpretation.full_interoperability_claimed).toBe(false);
     expect(matrix.atomic_schemas.map((item: { fact_type: string }) => item.fact_type)).toEqual([
       "identity",

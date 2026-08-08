@@ -6,25 +6,22 @@ The machine-readable pre-edit inventory is `pre-implementation-inventory.json`.
 
 ## Correction outcome and human-review provenance
 
-No complete Stage B human-approval matrix or record-by-record approval artifact exists in the
-repository, Git history, PR conversation or review threads. The earlier branch state incorrectly
-attributed 31 accepted dispositions to Sara Kim. The correction applies the automated-proposal
-path:
+The automated proposal phase remains inspectable in `review-queue.yaml`, ID
+`institutional-stage-b-review-queue-v1`, and both corpus migration ledgers. Sara Kim subsequently
+completed human review on 2026-08-08. The authoritative durable decision artifact is
+`human-review.yaml`:
 
-- the eight NIST Stage A judgments remain accepted by Sara Kim and are unchanged;
-- the nine NIST Stage B records are `draft`, with nine `proposed` dispositions by
-  `OpenAI Codex automated proposal`;
-- the three pre-existing Commission functions remain `draft`;
-- the Commission corpus contains 20 active draft records and one draft link, with 21 proposed
-  dispositions by the automated proposer;
-- the AI Office model-evaluation capacity candidate is omitted pending stronger evidence, so there
-  are 30 active Stage B proposed judgments rather than 31 accepted judgments.
+- the eight NIST Stage A judgments remain accepted by Sara Kim and are byte-preserved;
+- all nine active NIST Stage B targets are approved with accepted human dispositions;
+- all 20 Commission records and its one active Core link are approved with accepted human
+  dispositions;
+- all 30 decisions record review of the target assertion, fact or link payload, selected evidence
+  passages, uncertainties and proposed disposition;
+- omission of `eu_ai_office_model_eval_capacity` is explicitly approved because current evidence
+  does not independently establish concrete operational machinery.
 
-The stable pending-review artifact is `review-queue.yaml`, ID
-`institutional-stage-b-review-queue-v1`. It groups every active proposal by atomic schema and gives
-the exact target, proposed judgment and selected passage IDs. It also records the omitted capacity
-candidate. A human must review each target’s assertion, fact payload, evidence, uncertainties and
-disposition before any proposal can become accepted.
+The accepted judgments identify Sara Kim as reviewer. Codex remains identified only as the author
+of the earlier automated proposals; no human approval is attributed to automation.
 
 ## Preservation results
 
@@ -36,7 +33,7 @@ the exact accepted human dispositions, and the first eight migration entries are
 
 The three Commission baseline records retain their IDs, assertions, fact payloads, subjects, scope,
 conditions, evidence IDs, locators, quotations, passage hashes, document hashes, creation
-provenance and original `draft` state. The shared AI Act source and passage registries remain
+provenance; their workflow states now reflect the completed human approval. The shared AI Act source and passage registries remain
 byte-identical, with SHA-256 values
 `cff778809423fbaf6e428565a7bc56df1dca583c3de91c1fdce2a09c8cf2aa72` and
 `a4493f8821a66184708fcb6003a8293693a2061d38763b7f0e8b779db4c2608f`.
@@ -56,6 +53,12 @@ retrieved through a Google Translate pass-through that detected English; the cap
 canonical OLRC URL and transport metadata. This transport fact is recorded in `migration.yaml`
 rather than hidden.
 
+Direct OLRC retrieval was retried during human-review application and again timed out. A fresh
+pass-through replay was then compared with the stored capture. The canonical URL metadata,
+laws-in-effect date, selected passage and substantive OLRC content are byte-identical; differences
+are limited to volatile JSF session/ViewState and Google transport-configuration values. The
+publisher remains the Office of the Law Revision Counsel, not the transport provider.
+
 The stored § 272 document hash is
 `sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d`.
 The exact § 272(b)(2) quotation is byte-identical to the prior annual-edition quotation, so its
@@ -73,34 +76,34 @@ hash ledger, zero selected-evidence intersections and byte-identical evidence qu
 stored post-sanitization hashes remain the authoritative document hashes. No credential is stored
 or approved through secret scanning.
 
-## Corrected NIST proposals
+## Human-approved NIST Stage B records
 
 NIST still has exactly nine Stage B additions:
 
 | Record | Fact type | Workflow result |
 | --- | --- | --- |
-| `nist_national_measurement_standards_mandate` | mandate | draft proposal; current OLRC scope explicit through 2026-08-07 |
-| `nist_nvlap_lab_decision_right` | decision right | draft proposal |
-| `nist_ai_standards_group_identity` | identity | draft proposal |
-| `nist_ai_standards_group_placement` | placement | draft proposal; immediate parent corrected |
-| `nist_laboratory_network_capacity` | operational capacity / laboratory network | draft proposal; components narrowed |
-| `nist_aml_facility_capacity` | operational capacity / facility | draft proposal |
-| `nist_nvlap_accreditation_capacity` | operational capacity / accreditation system | draft proposal; components narrowed |
-| `nist_ai_measurement_capacity` | operational capacity / organizational unit | draft proposal; type and components narrowed |
-| `nist_ai_consortium_capacity` | operational capacity / partnership network | draft proposal; mechanisms narrowed |
+| `nist_national_measurement_standards_mandate` | mandate | approved; current OLRC scope explicit through 2026-08-07 |
+| `nist_nvlap_lab_decision_right` | decision right | approved |
+| `nist_ai_standards_group_identity` | identity | approved |
+| `nist_ai_standards_group_placement` | placement | approved; immediate parent preserved |
+| `nist_lab_network_capacity` | operational capacity / laboratory network | approved; components narrowed |
+| `nist_aml_facility_capacity` | operational capacity / facility | approved |
+| `nist_nvlap_accred_capacity` | operational capacity / accreditation system | approved; components narrowed |
+| `nist_ai_measurement_capacity` | operational capacity / organizational unit | approved; NIST holder and scoped implementing division preserved |
+| `nist_ai_consortium_capacity` | operational capacity / partnership network | approved; mechanisms narrowed |
 
 The AI Standards and Guidelines Group placement now uses the directly evidenced parent
 `nist.ai_research_measurement_standards_division`; NIST remains the root institution in scope.
 
-## Corrected Commission proposals
+## Human-approved Commission Stage B records and link
 
-The Commission corpus now contains 20 active draft records: the three preserved baseline functions
-and 17 new proposals. The reasoned-opinion record is now
-`european_commission_reasoned_opinion_function`. It preserves Article 258’s conditional mandatory
+The Commission corpus contains 20 approved records: the three preserved baseline functions and 17
+records introduced through the automated proposal phase. The reasoned-opinion record is
+`european_commission_reasoned_op_function`. It preserves Article 258’s conditional mandatory
 modality: once the Commission considers that a Member State failed to fulfil a Treaty obligation
 and has allowed observations, Article 258 requires delivery of a reasoned opinion. The automated
-proposal classifies that duty as a function, distinct from the discretionary CJEU-referral decision
-right. No human classification rationale exists yet; the queue requires one before approval.
+proposal classified that duty as a function, distinct from the discretionary CJEU-referral
+decision right, and human review approved that classification.
 
 The AI Office placement now uses the directly evidenced parent `european_commission.dg_connect`.
 The root traversal link is renamed to
@@ -109,9 +112,24 @@ direct placement record. No typo alias is preserved because the previous ID was 
 draft with no external consumer. No inverse link is stored.
 
 The separate AI Office model-evaluation function and Article 92 decision-right records remain.
-`eu_ai_office_model_eval_capacity` is omitted because its passages establish assigned work, legal
-authority and a publisher claim of expertise, but not concrete organizational or technical
-machinery.
+`eu_ai_office_model_eval_capacity` remains absent under an explicit `approve_omission` decision:
+its passages establish assigned work, legal authority and a publisher claim of expertise, but not
+concrete organizational or technical machinery.
+
+## Approved ID revisions
+
+Human review approved six identifier revisions. All active references, judgments, audits,
+inventories, generated projections and tests use the approved IDs; the previous draft IDs remain
+only in explicit migration history:
+
+| Previous draft ID | Approved ID |
+| --- | --- |
+| `eu_ai_office_training_summary_template_function` | `eu_ai_office_training_sum_temp_function` |
+| `european_commission_budget_management_function` | `european_commission_budget_mgmt_function` |
+| `european_commission_reasoned_opinion_function` | `european_commission_reasoned_op_function` |
+| `european_commission_cjeu_referral_decision_right` | `european_commission_cjeu_refer_decision_right` |
+| `nist_laboratory_network_capacity` | `nist_lab_network_capacity` |
+| `nist_nvlap_accreditation_capacity` | `nist_nvlap_accred_capacity` |
 
 ## Capacity evidence correction
 
@@ -125,13 +143,13 @@ Changes made solely for evidence precision:
 
 | Record | Removed or changed | Directly supported retained values |
 | --- | --- | --- |
-| `nist_laboratory_network_capacity` | Removed six uncited laboratory names; removed normalized quantity/date | `six_laboratories`, `user_facilities` |
-| `nist_nvlap_accreditation_capacity` | Removed unsupported `continuing_assessment`; renamed `application_processing` to quoted `application_submission` | application submission, on-site assessment, nonconformity resolution, proficiency testing, technical evaluation, certificate/scope issuance |
+| `nist_lab_network_capacity` | Removed six uncited laboratory names; removed normalized quantity/date | `six_laboratories`, `user_facilities` |
+| `nist_nvlap_accred_capacity` | Removed unsupported `continuing_assessment`; renamed `application_processing` to quoted `application_submission` | application submission, on-site assessment, nonconformity resolution, proficiency testing, technical evaluation, certificate/scope issuance |
 | `nist_ai_measurement_capacity` | Changed type from `technical_capability` to `organizational_unit`; removed `technical_guidance` and unsupported machinery inference; NIST is the holder and the AI division remains in scope as the implementing unit | AI measurement science, testing/evaluation, standards, and the two named groups |
 | `nist_ai_consortium_capacity` | Removed CRADA, task-group, prototype-evaluation and technology-transfer mechanisms; removed normalized quantity/date | research partnership, external expertise/products/data/models, AI-measurement guidelines and standards |
 | `eu_ai_office_org_capacity` | Removed uncited unit/adviser names and normalized quantity/date | six generic units and two generic advisers; the assertion preserves the quoted staff threshold |
 | `eu_ai_office_cooperation_capacity` | Removed unsupported international-cooperation component and split platform overclaims | Commission services, Union bodies, Member State authorities, dedicated expert/stakeholder platforms, scientific experts and AI developers |
-| `eu_ai_office_model_eval_capacity` | Removed active record and proposed judgment pending stronger evidence | separate function and decision right remain |
+| `eu_ai_office_model_eval_capacity` | Human review approved omission because current evidence does not establish concrete operational machinery | approved function and decision-right records remain |
 | `european_commission_jrc_infra_capacity` | Removed normalized quantity/date only | all five quoted infrastructure fields remain |
 
 The AML facility components were already directly supported and remain unchanged.
@@ -148,9 +166,9 @@ limitations.
 The result is deliberately bounded:
 
 - shared compilation and schema validation establish **structural interoperability**;
-- reviewed evidence-to-schema mappings establish **semantic interoperability**;
-- the current mappings are automated proposals pending human review, so full semantic
-  interoperability is not claimed.
+- the completed human review establishes reviewed evidence-to-schema mappings and bounded
+  **semantic interoperability** for these records;
+- full institutional equivalence is not claimed beyond the documented mappings and limitations.
 
 Federal, supranational and organizational-unit identities remain distinct. Direct and inherited
 relationships remain distinct. Accreditation machinery, physical infrastructure, organizational
@@ -161,8 +179,8 @@ capacity envelope.
 
 | Corpus | Records | Record links | Accepted judgments | Proposed judgments | Record workflow |
 | --- | ---: | ---: | ---: | ---: | --- |
-| NIST | 15 | 2 | 8 Stage A | 9 Stage B | 5 approved, 1 superseded, 9 draft |
-| European Commission | 20 | 1 | 0 | 21 | 20 draft records, 1 draft link |
+| NIST | 15 | 2 | 17 | 0 | 14 approved, 1 superseded; 2 approved links |
+| European Commission | 20 | 1 | 21 | 0 | 20 approved records, 1 approved link |
 
 Both corpus manifests remain `status: draft`.
 
