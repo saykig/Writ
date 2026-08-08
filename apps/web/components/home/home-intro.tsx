@@ -237,7 +237,7 @@ export function HomepageHero() {
               size="sm"
               className="home-motion-action"
               nativeButton={false}
-              render={<Link href="/lab">See how Writ works</Link>}
+              render={<Link href="/start-here">See how Writ works</Link>}
             />
           </motion.div>
         </div>

@@ -47,7 +47,7 @@ describe("homepage corpus catalog projection", () => {
     );
   });
 
-  test("keeps the globe model separate and gates institutional rows behind prototype approval", () => {
+  test("keeps the globe model separate and uses the explicit nine-corpus presentation subset", () => {
     const field = read("components/home/corpus-network.tsx");
     const globe = read("lib/corpus-coverage.ts");
 
@@ -58,9 +58,29 @@ describe("homepage corpus catalog projection", () => {
     const institutions = CORPUS_CATALOG.filter(({ family }) => family === "institutional");
     expect(institutions).toHaveLength(2);
     expect(institutions.every(({ status }) => status === "draft")).toBe(true);
-    expect(field).not.toContain("us.institutions.nist");
-    expect(field).not.toContain("eu.institutions.european_commission");
-    expect(field).toContain("AI_ACT_ID");
+    const featuredIds = [
+      "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
+      "writ.corpus.legal-policy.eu.european-commission.gpai-guidelines",
+      "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
+      "eu.institutions.european_commission",
+      "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0",
+      "writ.corpus.legal-policy.us.nist.generative-ai-profile",
+      "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21",
+      "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan",
+      "us.institutions.nist",
+    ];
+    const excludedIds = [
+      "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-playbook",
+      "writ.corpus.legal-policy.us.nist.caisi.overview",
+      "writ.corpus.legal-policy.us.nist.caisi.guidelines",
+      "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-22",
+      "writ.corpus.legal-policy.us.white-house.ai-leadership-fact-sheet-2025-01",
+      "writ.corpus.legal-policy.us.white-house.national-ai-policy-framework-fact-sheet-2025-12",
+      "us.constitutional_law",
+    ];
+    expect(featuredIds).toHaveLength(9);
+    for (const corpusId of featuredIds) expect(field).toContain(corpusId);
+    for (const corpusId of excludedIds) expect(field).not.toContain(corpusId);
 
     const commission = institutions.find(({ corpusId }) =>
       corpusId.includes("european_commission"),

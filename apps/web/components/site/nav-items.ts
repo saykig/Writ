@@ -20,13 +20,10 @@ export const PRIMARY_NAV: readonly NavItem[] = [
 ];
 
 /**
- * The footer also carries How it works. It is a reading rather than a place to
- * work, so it stays out of the primary nav without becoming unreachable.
+ * Start Here now carries the complete explanation, so the footer mirrors the
+ * same four destinations without introducing a competing reading route.
  */
-export const FOOTER_NAV: readonly NavItem[] = [
-  ...PRIMARY_NAV,
-  { href: "/how-it-works", label: "How it works", hint: "The language, engine, and evidence" },
-];
+export const FOOTER_NAV: readonly NavItem[] = [...PRIMARY_NAV];
 
 export interface ExampleItem {
   readonly id: "reviewed" | "any-actor" | "broad-conduct" | "incomplete";

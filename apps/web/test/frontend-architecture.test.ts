@@ -7,11 +7,9 @@ const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
 
 describe("frontend architecture", () => {
   test("the working surfaces lead with the work, not with a hero", () => {
-    // Writ Lab opens on the readings chooser and How it works on its own
-    // index; neither carries a page header above the thing it is for.
-    // The Lab and How it works lead with the thing they are for. The Builder is
-    // a stepper and legitimately carries a heading of its own.
-    for (const path of ["app/lab/page.tsx", "app/how-it-works/page.tsx"]) {
+    // Writ Lab opens on the readings chooser and Start Here on its evidence
+    // story; neither carries a generic page header above the thing it is for.
+    for (const path of ["app/lab/page.tsx", "app/start-here/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
     // Query is three columns with the questions always in view, and no
@@ -45,7 +43,7 @@ describe("frontend architecture", () => {
     expect(home).toContain(">See how Writ works</Link>");
     expect(home).toContain('href="/query"');
     expect(home).toContain('href="/build"');
-    expect(home).toContain('href="/lab"');
+    expect(home).toContain('href="/start-here"');
 
     // The retired actions are gone rather than reworded.
     expect(home).not.toContain("See a worked answer");
@@ -65,16 +63,16 @@ describe("frontend architecture", () => {
     expect(config).toContain("permanent: true");
   });
 
-  test("the nav leads with Start Here and preserves the three working destinations", () => {
+  test("the nav leads with Start Here and preserves the working destinations", () => {
     const navItems = read("components/site/nav-items.ts");
 
-    // Start Here answers what the product is before the three working routes.
+    // Start Here answers what the product is before the working routes.
     expect(navItems).toContain('label: "Start Here"');
     expect(navItems).toContain('href: "/start-here"');
     expect(navItems).toContain('label: "Query"');
     expect(navItems).toContain('label: "Build"');
     expect(navItems).toContain('label: "Lab"');
-    expect(navItems).toContain('label: "How it works"');
+    expect(navItems).not.toContain('label: "How it works"');
     expect(read("components/site/site-footer.tsx")).toContain("FOOTER_NAV");
     for (const removed of ["Demo", "Writ Lab", "Benchmark", "Methodologies", "Receipts"]) {
       expect(navItems).not.toContain(`label: "${removed}"`);
@@ -404,11 +402,14 @@ describe("frontend architecture", () => {
     expect(network).toContain("useTransform");
     expect(network).toContain("pathLength");
     expect(network).toContain("glyphCellPoint");
-    expect(network).toContain("INTERACTIVE_CELL_ID");
-    expect(network).not.toContain("NIST");
-    expect(network).not.toContain('glyph: "US"');
+    expect(network).toContain("FEATURED_CORPORA");
+    expect(network).toContain('label: "AI Act"');
+    expect(network).toContain('label: "NIST"');
+    expect(network).toContain('cellId: "U-07-15"');
+    expect(network).not.toContain("corpus-prototype-family");
     expect(glyph).toContain("export function PixelGlyph");
     expect(glyph).toContain("data-cell-id");
+    expect(glyph).toContain("interactiveCellIds.has(cell.id)");
     for (const letter of ["E", "U", "S", "C", "N", "I", "T"]) {
       expect(glyph).toContain(`export const ${letter}_GLYPH`);
     }
@@ -422,8 +423,10 @@ describe("frontend architecture", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain(".home-motion-title");
     expect(styles).toContain(".corpus-prototype-stage");
-    expect(styles).toContain("width: clamp(32rem, 54vw, 50rem)");
+    expect(styles).toContain("width: clamp(36rem, 62vw, 55rem)");
+    expect(network).toContain("createPortal(");
     expect(styles).toContain(".pixel-corpus-hit-target");
+    expect(styles).toContain("background: transparent");
     expect(styles).toContain(".raw-workspace");
   });
 });
