@@ -37,7 +37,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider
+          attribute="class"
+          forcedTheme="dark"
+          defaultTheme="dark"
+          enableSystem={false}
+        >
           <SiteNav />
           <div className="flex-1">{children}</div>
           <SiteFooter />

@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { CommandMenu } from "@/components/site/command-menu";
-import { ThemeToggle } from "@/components/site/theme-toggle";
 import { GITHUB_URL, PRIMARY_NAV } from "@/components/site/nav-items";
 
 function GitHubMark({ className }: { className?: string }) {
@@ -31,16 +30,11 @@ function isActive(pathname: string, href: string): boolean {
 export function SiteNav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const homepage = pathname === "/";
 
   return (
     <header
       data-site-chrome
-      data-homepage={homepage ? "true" : "false"}
-      className={cn(
-        "site-nav sticky top-0 z-40 border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/90",
-        homepage && "site-nav--home",
-      )}
+      className="site-nav sticky top-0 z-40 border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/90"
     >
       <div className="mx-auto flex h-[4.5rem] max-w-[76rem] items-center gap-5 px-5 sm:px-6">
         {/* Wordmark */}
@@ -72,8 +66,6 @@ export function SiteNav() {
 
         {/* Right cluster */}
         <div className="ml-auto flex items-center gap-1">
-          <ThemeToggle />
-
           <Button
             variant="ghost"
             size="icon-sm"

@@ -139,6 +139,17 @@ describe("frontend architecture", () => {
     expect(nav).not.toContain("Explore the G7 example");
   });
 
+  test("the current navigation treatment is shared by every route", () => {
+    const nav = read("components/site/site-nav.tsx");
+    const styles = read("app/globals.css");
+
+    expect(nav).toContain('className="site-nav sticky');
+    expect(nav).not.toContain("site-nav--home");
+    expect(nav).not.toContain("data-homepage");
+    expect(styles).toContain(".site-nav {");
+    expect(styles).not.toContain(".site-nav.site-nav--home");
+  });
+
   test("the globe loads only local geometry and never intercepts wheel events", () => {
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
     const dots = JSON.parse(read("public/data/ne_110m_land_dots.json")) as unknown[];
@@ -369,10 +380,14 @@ describe("frontend architecture", () => {
     expect(receipt).toContain("memberLabel(evaluatedMember ?? member)");
   });
 
-  test("dark is the explicit default and system switching is disabled", () => {
+  test("dark is the only available interface theme", () => {
     const layout = read("app/layout.tsx");
+    const nav = read("components/site/site-nav.tsx");
     expect(layout).toContain('defaultTheme="dark"');
+    expect(layout).toContain('forcedTheme="dark"');
     expect(layout).toContain("enableSystem={false}");
+    expect(nav).not.toContain("ThemeToggle");
+    expect(existsSync(resolve(WEB_ROOT, "components/site/theme-toggle.tsx"))).toBe(false);
   });
 
   test("the footer omits retired metadata and links to the Writ repository", () => {
@@ -404,11 +419,16 @@ describe("frontend architecture", () => {
     expect(network).toContain("useTransform");
     expect(network).toContain("pathLength");
     expect(network).toContain("glyphCellPoint");
-    expect(network).toContain("INTERACTIVE_CELL_ID");
-    expect(network).not.toContain("NIST");
-    expect(network).not.toContain('glyph: "US"');
+    expect(network).toContain("FEATURED_CORPORA");
+    expect(network).toContain("createPortal(");
+    expect(network).toContain("document.body");
+    expect(network).toContain('label: "AI Act"');
+    expect(network).toContain('label: "NIST"');
+    expect(network).toContain('cellId: "U-07-15"');
+    expect(network).not.toContain("corpus-prototype-family");
     expect(glyph).toContain("export function PixelGlyph");
     expect(glyph).toContain("data-cell-id");
+    expect(glyph).toContain("interactiveCellIds.has(cell.id)");
     for (const letter of ["E", "U", "S", "C", "N", "I", "T"]) {
       expect(glyph).toContain(`export const ${letter}_GLYPH`);
     }
@@ -422,8 +442,33 @@ describe("frontend architecture", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain(".home-motion-title");
     expect(styles).toContain(".corpus-prototype-stage");
-    expect(styles).toContain("width: clamp(32rem, 54vw, 50rem)");
+    expect(styles).toContain("width: clamp(38rem, 68vw, 60rem)");
     expect(styles).toContain(".pixel-corpus-hit-target");
+    expect(styles).toContain("background: transparent");
     expect(styles).toContain(".raw-workspace");
+  });
+
+  test("the raw corpus workspace clears the shared nav and colors source syntax", () => {
+    const editor = read("components/home/raw-source-editor.tsx");
+    const styles = read("app/globals.css");
+
+    expect(styles).toContain("inset: 5.5rem 0 0");
+    expect(styles).toContain(".raw-workspace-editor .monaco-editor-background");
+    expect(styles).toContain("background-color: #1a1b22 !important");
+    expect(editor).toContain('const RAW_SOURCE_THEME_DARK = "writ-source-sumi"');
+    expect(editor).toContain('const RAW_YAML_LANGUAGE_ID = "writ-yaml"');
+    expect(editor).toContain("setMonarchTokensProvider(RAW_YAML_LANGUAGE_ID");
+    expect(editor).toContain("onMount={handleMount}");
+    expect(editor).toContain("setModelLanguage(model, RAW_YAML_LANGUAGE_ID)");
+    for (const token of [
+      'token: "comment.yaml"',
+      'token: "type.yaml"',
+      'token: "keyword.yaml"',
+      'token: "string.yaml"',
+      'token: "number.yaml"',
+      'token: "operators.yaml"',
+    ]) {
+      expect(editor).toContain(token);
+    }
   });
 });

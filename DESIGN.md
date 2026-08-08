@@ -36,14 +36,13 @@ interface whose homepage alone uses authored resolution motion.
   expressive motion is limited to the homepage. Lab, Query, Build, and other research surfaces
   remain quiet, dense, and instrument-like.
 - The homepage corpus field is one tall, sticky typographic canvas built from explicit, addressable
-  glyph cells. The same cell coordinates render each letter, select mapped-density illumination,
-  define interactive cells, and originate SVG annotation hairlines. Bright cells mean relative
-  mapped density based on current Writ records within that family; they never represent progress,
+  glyph cells. EU and US each resolve as a complete row, and nine curated nodes connect the current
+  legal-policy and institutional corpus identities to exact cells. Bright cells mean relative
+  mapped density based on current Writ records within each family; they never represent progress,
   completeness, or a cross-family comparison.
-- The current approval gate implements only `E → EU`: one mapped cell, one interactive AI Act cell,
-  and one exact-origin annotation. US, EC, and NIST are deliberately withheld until this primitive
-  is approved. Later rows reuse the same cell primitive and share one centered outer word width;
-  NIST fits as a complete word without horizontal distortion or a per-word font-size exception.
+- Node labels and hit targets share the same cell coordinates, so every annotation points to the
+  corpus it opens. The curated homepage subset remains a presentation of the canonical generated
+  catalog rather than a second corpus registry.
 - Selecting a corpus node isolates it without navigating. `View raw code?` opens a full-height,
   tool-first read-only workspace containing exact embedded canonical files and structured catalog
   inspection; Writ and YAML remain visibly and semantically distinct.

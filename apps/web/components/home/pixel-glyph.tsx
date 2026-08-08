@@ -180,7 +180,7 @@ export function glyphCellPoint(
 function PixelCell({
   cell,
   index,
-  interactiveCellId,
+  interactiveCellIds,
   isSelected,
   mappedCellIds,
   origin,
@@ -190,7 +190,7 @@ function PixelCell({
 }: {
   cell: GlyphCell;
   index: number;
-  interactiveCellId?: string;
+  interactiveCellIds: ReadonlySet<string>;
   isSelected: boolean;
   mappedCellIds: ReadonlySet<string>;
   origin: PixelCellPoint;
@@ -204,7 +204,7 @@ function PixelCell({
   const opacity = useTransform(progress, [start, end], [0.035, 1]);
   const scaleX = useTransform(progress, [start, end], [index % 3 === 0 ? 0.18 : 0.52, 1]);
   const scaleY = useTransform(progress, [start, end], [index % 4 === 0 ? 0.32 : 0.72, 1]);
-  const isInteractive = cell.id === interactiveCellId;
+  const isInteractive = interactiveCellIds.has(cell.id);
   const isMapped = mappedCellIds.has(cell.id);
   const state = isSelected
     ? "selected"
@@ -248,19 +248,21 @@ function PixelCell({
 /** A glyph rendered only from stable, addressable cells in one SVG coordinate system. */
 export function PixelGlyph({
   definition,
-  interactiveCellId,
+  interactiveCellIds,
   mappedCellIds,
   origin,
   progress,
   revealRange,
+  selectionActive,
   selectedCellId,
 }: {
   definition: PixelGlyphDefinition;
-  interactiveCellId?: string;
+  interactiveCellIds: ReadonlySet<string>;
   mappedCellIds: ReadonlySet<string>;
   origin: PixelCellPoint;
   progress: MotionValue<number>;
   revealRange: readonly [number, number];
+  selectionActive: boolean;
   selectedCellId: string | null;
 }) {
   return (
@@ -270,13 +272,13 @@ export function PixelGlyph({
           key={cell.id}
           cell={cell}
           index={index}
-          interactiveCellId={interactiveCellId}
+          interactiveCellIds={interactiveCellIds}
           isSelected={cell.id === selectedCellId}
           mappedCellIds={mappedCellIds}
           origin={origin}
           progress={progress}
           revealRange={revealRange}
-          selectionActive={selectedCellId !== null}
+          selectionActive={selectionActive}
         />
       ))}
     </g>
