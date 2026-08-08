@@ -53,10 +53,11 @@ Reverse traversal is derived from the one stored direction. Inverse duplicate li
 
 ## Initial bounded implementation
 
-The first implementation contains only four directly evidenced `assigns_function_to` links: three
-AI Act claims targeting `eu_ai_office`, and one policy-action claim targeting `nist`. These examples
-prove cross-family storage, endpoint resolution, evidence traceability, and independent review without
-attempting broad relationship population.
+The first implementation contains only three directly evidenced `assigns_function_to` links from AI
+Act claims to `eu_ai_office`. These examples prove cross-family storage, endpoint resolution, evidence
+traceability, and independent review without attempting broad relationship population. The America’s
+AI Action Plan recommendation involving NIST remains unresolved because a recommended policy action
+does not by itself establish the stronger assignment relation.
 
 Publisher metadata is not automatically issuer evidence. Broad classes such as “covered agencies” do
 not establish application to NIST without a complete, time-qualified membership chain. Authority links

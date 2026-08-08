@@ -368,7 +368,7 @@ tasks:
     scope:
       - Resolve institutional endpoints only through one approved identity record.
       - Store cross-family links with the institutional corpus that owns the canonical endpoint.
-      - Add three directly evidenced EU AI Office assignments and one directly evidenced NIST assignment.
+      - Add three directly evidenced EU AI Office assignments.
       - Keep every new link draft and every new record-link disposition proposed pending human review.
       - Preserve unresolved mappings in a non-authoritative queue outside active corpus manifests.
     exclusions:
@@ -376,7 +376,7 @@ tasks:
       - Publisher-to-issuer inference, new institutional identities, source recovery, or provision creation.
       - Active derives-authority, implementation, enforcement, or applicability links.
     acceptance:
-      - The four draft links and four proposed judgments validate independently.
+      - The three draft links and three proposed judgments validate independently.
       - NIST, the European Commission, and the EU AI Office each resolve to one approved identity record.
       - Unresolved candidates remain outside active manifests and never use unresolved as an evidence basis.
       - Protected records, evidence, hashes, and accepted judgments remain byte-identical.

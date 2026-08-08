@@ -5,7 +5,6 @@ active_link_ids:
   - eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office
   - eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office
   - eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office
-  - americas_ai_action_plan_assigns_function_to_nist
 mappings:
   - mapping_id: eu-ai-act-art-53-1-a-ai-office-function
     legal_policy_record_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
@@ -46,10 +45,11 @@ mappings:
     proposed_relation: assigns_function_to
     target_institutional_id: nist
     evidence_refs: [f6e37323-f678-5515-92bf-475776e887b9]
-    mapping_status: active_candidate
-    proposed_basis: direct
-    confidence: high
-    uncertainty: Recommended policy action; no completed implementation, performance, or operational execution finding.
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: medium
+    policy_direction_interpretation: The passage recommends publishing guidelines and resources through NIST at the Department of Commerce.
+    uncertainty: A recommended policy action does not establish the stronger assigns_function_to relation, completed implementation, performance, or operational execution by NIST.
     human_review_required: true
 
   - mapping_id: nist-ai-rmf-issued-by
@@ -152,7 +152,8 @@ mappings:
     uncertainty: The selected passage states a provider duty and does not identify the implementing institution.
     human_review_required: true
   - mapping_id: commission-enforces-ai-act
-    legal_policy_record_id: 80bce319-838e-5518-bab4-6da5ba6c0c2d
+    legal_policy_record_id: null
+    source_document_id: 80bce319-838e-5518-bab4-6da5ba6c0c2d
     legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
     proposed_relation: enforced_by
     target_institutional_id: european_commission
@@ -160,7 +161,7 @@ mappings:
     mapping_status: unresolved
     proposed_basis: null
     confidence: low
-    uncertainty: Article 101 proves bounded GPAI enforcement; a whole-instrument link would overstate its scope.
+    uncertainty: Article 101 supports bounded GPAI enforcement, but a provision-level legal-policy record is required; the whole source document cannot be the enforced_by source endpoint.
     human_review_required: true
   - mapping_id: commission-fine-right-authority
     legal_policy_record_id: null

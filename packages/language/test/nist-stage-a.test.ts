@@ -159,23 +159,11 @@ describe("corpus contract and status", () => {
 
   test("the manifest routes each location category to its own files", () => {
     expect(manifest.locations).toEqual({
-      sources: [
-        "sources.writ",
-        "sources/captures/",
-        "../../../legal-policy/us/white-house/americas-ai-action-plan/sources/sources.yaml",
-      ],
-      passages: [
-        "sources.writ",
-        "records.writ",
-        "../../../legal-policy/us/white-house/americas-ai-action-plan/passages/passages.yaml",
-      ],
+      sources: ["sources.writ", "sources/captures/"],
+      passages: ["sources.writ", "records.writ"],
       records: ["records.writ"],
-      relationships: [
-        LINK_FILES.part_of,
-        LINK_FILES.supersedes,
-        "relationships/cross-family/americas_ai_action_plan_assigns_function_to_nist.yaml",
-      ],
-      judgments: ["judgments.writ", "cross-family-judgments.writ"],
+      relationships: [LINK_FILES.part_of, LINK_FILES.supersedes],
+      judgments: ["judgments.writ"],
       migration: ["migration.yaml"],
     });
   });

@@ -363,14 +363,14 @@ export const CORPUS_CATALOG: readonly CatalogCorpusSummary[] = Object.freeze([
     "path": "corpora/institutional/us/nist",
     "mappedCount": 15,
     "mappedCountKind": "institutional_records",
-    "sourceFileCount": 3,
+    "sourceFileCount": 2,
     "unresolvedEvidenceCount": 0,
     "rawFiles": [
       {
         "name": "corpus.yaml",
         "language": "yaml",
         "path": "corpora/institutional/us/nist/corpus.yaml",
-        "content": "schema_version: 1.0.0\ncorpus_id: us.institutions.nist\ntitle: National Institute of Standards and Technology institutional facts\nfamily: institutional\njurisdiction: US\ncorpus_version: 0.2.0\nrecord_contract:\n  kind: native\n  id: https://writ.example/schemas/extensions/institutional-record.schema.json\n  version: 0.2.0\n# Record-level human approval does not by itself publish or activate the corpus.\nstatus: draft\nidentity_namespace: us.institutions.nist\nmigration_aliases:\n  - corpora/us/institutions/nist\nroot_institution_id: nist\nrecord_counts:\n  institutional_records: 15\n  record_links: 3\n  disposition_judgments: 18\nreview_counts:\n  approved_records: 14\n  superseded_records: 1\n  draft_records: 0\n  approved_record_links: 2\n  draft_record_links: 1\n  accepted_disposition_judgments: 17\n  proposed_disposition_judgments: 1\nunresolved_evidence_count: 0\nlocations:\n  sources:\n    - sources.writ\n    - sources/captures/\n    - ../../../legal-policy/us/white-house/americas-ai-action-plan/sources/sources.yaml\n  passages:\n    - sources.writ\n    - records.writ\n    - ../../../legal-policy/us/white-house/americas-ai-action-plan/passages/passages.yaml\n  records:\n    - records.writ\n  relationships:\n    - relationships/nist_department_of_commerce_relationship.yaml\n    - relationships/nist_mission_supersedes_nist_measurement_science_function.yaml\n    - relationships/cross-family/americas_ai_action_plan_assigns_function_to_nist.yaml\n  judgments:\n    - judgments.writ\n    - cross-family-judgments.writ\n  migration:\n    - migration.yaml\n"
+        "content": "schema_version: 1.0.0\ncorpus_id: us.institutions.nist\ntitle: National Institute of Standards and Technology institutional facts\nfamily: institutional\njurisdiction: US\ncorpus_version: 0.2.0\nrecord_contract:\n  kind: native\n  id: https://writ.example/schemas/extensions/institutional-record.schema.json\n  version: 0.2.0\n# Record-level human approval does not by itself publish or activate the corpus.\nstatus: draft\nidentity_namespace: us.institutions.nist\nmigration_aliases:\n  - corpora/us/institutions/nist\nroot_institution_id: nist\nrecord_counts:\n  institutional_records: 15\n  record_links: 2\n  disposition_judgments: 17\nreview_counts:\n  approved_records: 14\n  superseded_records: 1\n  draft_records: 0\n  approved_record_links: 2\n  accepted_disposition_judgments: 17\n  proposed_disposition_judgments: 0\nunresolved_evidence_count: 0\nlocations:\n  sources:\n    - sources.writ\n    - sources/captures/\n  passages:\n    - sources.writ\n    - records.writ\n  records:\n    - records.writ\n  relationships:\n    - relationships/nist_department_of_commerce_relationship.yaml\n    - relationships/nist_mission_supersedes_nist_measurement_science_function.yaml\n  judgments:\n    - judgments.writ\n  migration:\n    - migration.yaml\n"
       },
       {
         "name": "records.writ",

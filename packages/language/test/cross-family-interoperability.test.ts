@@ -16,20 +16,14 @@ const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const EC = join(ROOT, "corpora/institutional/eu/european-commission");
 const NIST = join(ROOT, "corpora/institutional/us/nist");
 
-const linkPaths = [
-  join(EC, "relationships/cross-family/eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office.yaml"),
-  join(EC, "relationships/cross-family/eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office.yaml"),
-  join(EC, "relationships/cross-family/eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office.yaml"),
-  join(NIST, "relationships/cross-family/americas_ai_action_plan_assigns_function_to_nist.yaml"),
-] as const;
-
 const yaml = <T>(path: string): T => Bun.YAML.parse(readFileSync(path, "utf8")) as T;
-const links = linkPaths.map((path) => yaml<RecordLink>(path));
 const catalog = yaml<{
   native_corpora: Array<{ corpus_id: string; family: "legal_policy" | "institutional" }>;
 }>(join(ROOT, "corpora/catalog.yaml"));
-const manifests = [EC, NIST].map((root) =>
-  yaml<{
+const corpusRoots = [EC, NIST] as const;
+const manifestEntries = corpusRoots.map((root) => ({
+  root,
+  manifest: yaml<{
     corpus_id: string;
     family: "legal_policy" | "institutional";
     root_institution_id: string;
@@ -37,8 +31,14 @@ const manifests = [EC, NIST].map((root) =>
     review_counts: Record<string, number>;
     locations: Record<string, string[]>;
   }>(join(root, "corpus.yaml")),
+}));
+const manifests = manifestEntries.map(({ manifest }) => manifest);
+const links = manifestEntries.flatMap(({ root, manifest }) =>
+  manifest.locations.relationships
+    .filter((path) => path.startsWith("relationships/cross-family/"))
+    .map((path) => yaml<RecordLink>(join(root, path))),
 );
-const records = [EC, NIST].flatMap(
+const records = corpusRoots.flatMap(
   (root) =>
     compileSource(readFileSync(join(root, "records.writ"), "utf8"), {
       fileName: join(root, "records.writ"),
@@ -54,11 +54,15 @@ interface ProposedRecordLinkJudgment {
   status: string;
 }
 
-const proposedJudgments = [EC, NIST].flatMap(
-  (root) =>
-    compileSource(readFileSync(join(root, "cross-family-judgments.writ"), "utf8"), {
-      fileName: join(root, "cross-family-judgments.writ"),
-    }).judgments,
+const proposedJudgments = manifestEntries.flatMap(({ root, manifest }) =>
+  manifest.locations.judgments
+    .filter((path) => path === "cross-family-judgments.writ")
+    .flatMap(
+      (path) =>
+        compileSource(readFileSync(join(root, path), "utf8"), {
+          fileName: join(root, path),
+        }).judgments,
+    ),
 ) as ProposedRecordLinkJudgment[];
 
 const resolutionInput = {
@@ -146,9 +150,9 @@ describe("approved institutional endpoint resolution", () => {
   });
 });
 
-describe("the four-link cross-family pilot", () => {
+describe("the three-link cross-family pilot", () => {
   test("uses only the approved endpoint kinds and Core semantics", () => {
-    expect(links).toHaveLength(4);
+    expect(links).toHaveLength(3);
     for (const link of links) {
       expect(validate("record-link", link).valid).toBe(true);
       expect(link).toMatchObject({
@@ -165,23 +169,18 @@ describe("the four-link cross-family pilot", () => {
   });
 
   test("resolves every legal-policy claim and evidence passage", () => {
-    const claimDocuments = [
+    const claimDocuments = yaml<{ claims: Array<{ machine_id: string }> }>(
       join(
         ROOT,
         "corpora/legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/records/claims.yaml",
       ),
-      join(ROOT, "corpora/legal-policy/us/white-house/americas-ai-action-plan/records/claims.yaml"),
-    ].flatMap((path) => yaml<{ claims: Array<{ machine_id: string }> }>(path).claims);
-    const passageDocuments = [
+    ).claims;
+    const passageDocuments = yaml<{ passages: Array<{ machine_id: string }> }>(
       join(
         ROOT,
         "corpora/legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/passages/passages.yaml",
       ),
-      join(
-        ROOT,
-        "corpora/legal-policy/us/white-house/americas-ai-action-plan/passages/passages.yaml",
-      ),
-    ].flatMap((path) => yaml<{ passages: Array<{ machine_id: string }> }>(path).passages);
+    ).passages;
     const claimIds = new Set(claimDocuments.map((item) => item.machine_id));
     const passageIds = new Set(passageDocuments.map((item) => item.machine_id));
     for (const link of links) {
@@ -191,7 +190,7 @@ describe("the four-link cross-family pilot", () => {
   });
 
   test("has one proposed disposition per draft link and no human attribution", () => {
-    expect(proposedJudgments).toHaveLength(4);
+    expect(proposedJudgments).toHaveLength(3);
     expect(new Set(proposedJudgments.map((item) => item.target_id))).toEqual(
       new Set(links.map((link) => link.link_id)),
     );
@@ -217,7 +216,7 @@ describe("the four-link cross-family pilot", () => {
       target_id: link.source_id,
       derived_from_link_id: link.link_id,
     }));
-    expect(reverseTraversal).toHaveLength(4);
+    expect(reverseTraversal).toHaveLength(3);
     expect(new Set(reverseTraversal.map((item) => item.derived_from_link_id))).toEqual(
       new Set(links.map((link) => link.link_id)),
     );
@@ -232,6 +231,9 @@ describe("mapping queue and preservation gates", () => {
       proposed_basis: "direct" | "inherited" | "inferred" | null;
       basis?: string;
       mapping_id: string;
+      legal_policy_record_id: string | null;
+      proposed_relation: string;
+      target_institutional_id: string;
     }>;
   }>(join(ROOT, "docs/migrations/cross-family-interoperability/mapping-queue.yaml"));
 
@@ -239,7 +241,7 @@ describe("mapping queue and preservation gates", () => {
     expect(new Set(queue.active_link_ids)).toEqual(new Set(links.map((link) => link.link_id)));
     expect(
       queue.mappings.filter((item) => item.mapping_status === "active_candidate"),
-    ).toHaveLength(4);
+    ).toHaveLength(3);
     expect(queue.mappings.some((item) => item.mapping_status === "unresolved")).toBe(true);
     for (const mapping of queue.mappings) {
       expect(mapping).not.toHaveProperty("basis");
@@ -247,10 +249,27 @@ describe("mapping queue and preservation gates", () => {
     }
   });
 
-  test("keeps every unresolved mapping outside active corpus manifests", () => {
-    const activeFiles = manifests.flatMap((manifest) => Object.values(manifest.locations).flat());
+  test("loads the manifest relationships and keeps unresolved mappings queue-only", () => {
+    const activeIds = new Set(links.map((link) => link.link_id));
+    expect(activeIds).toEqual(new Set(queue.active_link_ids));
+    expect(activeIds).toEqual(
+      new Set([
+        "eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office",
+        "eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office",
+        "eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office",
+      ]),
+    );
+
+    const activeSignatures = new Set(
+      links.map((link) => `${link.source_id}\0${link.relation_type}\0${link.target_id}`),
+    );
     for (const mapping of queue.mappings.filter((item) => item.mapping_status === "unresolved")) {
-      expect(activeFiles.some((file) => file.includes(mapping.mapping_id))).toBe(false);
+      expect(activeIds.has(mapping.mapping_id)).toBe(false);
+      expect(
+        activeSignatures.has(
+          `${mapping.legal_policy_record_id}\0${mapping.proposed_relation}\0${mapping.target_institutional_id}`,
+        ),
+      ).toBe(false);
     }
   });
 
@@ -273,16 +292,15 @@ describe("mapping queue and preservation gates", () => {
     });
     expect(nist.record_counts).toMatchObject({
       institutional_records: 15,
-      record_links: 3,
-      disposition_judgments: 18,
+      record_links: 2,
+      disposition_judgments: 17,
     });
     expect(nist.review_counts).toMatchObject({
       approved_records: 14,
       superseded_records: 1,
       approved_record_links: 2,
-      draft_record_links: 1,
       accepted_disposition_judgments: 17,
-      proposed_disposition_judgments: 1,
+      proposed_disposition_judgments: 0,
     });
   });
 

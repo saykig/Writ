@@ -237,17 +237,16 @@ describe("Stage B production inventories", () => {
     expect(new Set(NIST_STAGE_B_IDS).size).toBe(9);
     expect(manifest(NIST).record_counts).toEqual({
       institutional_records: 15,
-      record_links: 3,
-      disposition_judgments: 18,
+      record_links: 2,
+      disposition_judgments: 17,
     });
     expect(manifest(NIST).review_counts).toEqual({
       approved_records: 14,
       superseded_records: 1,
       draft_records: 0,
       approved_record_links: 2,
-      draft_record_links: 1,
       accepted_disposition_judgments: 17,
-      proposed_disposition_judgments: 1,
+      proposed_disposition_judgments: 0,
     });
   });
 
