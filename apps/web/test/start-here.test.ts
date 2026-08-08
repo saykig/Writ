@@ -69,6 +69,36 @@ describe("Start Here system walkthrough", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
   });
 
+  test("presents the technical foundations as a plain, single-open disclosure list", () => {
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+    const styles = read("app/globals.css");
+    const knowledgeModel = story.indexOf('title: "Knowledge model"');
+    const writLanguage = story.indexOf('title: ".writ"');
+
+    expect(knowledgeModel).toBeGreaterThan(-1);
+    expect(knowledgeModel).toBeLessThan(writLanguage);
+    for (const topic of [
+      "Knowledge model",
+      "Evidence and provenance",
+      "Corpus families",
+      ".writ",
+      "Schemas",
+      "Parser and compiler",
+      "Fingerprints",
+      "Conformance",
+    ]) {
+      expect(story).toContain(topic);
+    }
+    expect(story).toContain("Technical foundations");
+    expect(story).toContain("The parts underneath Writ, if you want to see how it actually works.");
+    expect(story).toContain("setOpenFoundation");
+    expect(story).toContain("aria-expanded={isOpen}");
+    expect(story).toContain("nist_organizational_placement : institutional");
+    expect(styles).toContain(".hiw-foundation-panel");
+    expect(story).not.toContain("Technical details");
+    expect(styles).not.toContain(".hiw-technical-grid");
+  });
+
   test("does not restore the retired product model or unfinished Stage B data", () => {
     const page = read("app/start-here/page.tsx");
     const story = read("components/how-it-works/how-it-works-story.tsx");
