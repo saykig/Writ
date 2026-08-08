@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+link_id: eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office
+owning_corpus_id: eu.institutions.european_commission
+source_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+source_kind: legal_policy_claim
+target_id: eu_ai_office
+target_kind: organizational_unit
+relation_type: assigns_function_to
+basis: direct
+evidence_refs:
+  - d17b89de-0b30-547e-84a2-65c5740105ae
+supporting_record_ids:
+  - eu_ai_office_serious_incident_report_receipt
+uncertainties:
+  - type: incomplete_evidence
+    description: >-
+      The passage directly supports the AI Office's function of receiving the specified serious-incident
+      information. It does not establish adjudicative authority, general enforcement responsibility,
+      operational capacity, or completed performance.
+provenance:
+  created_by: OpenAI Codex automated proposal
+  created_at: 2026-08-08
+review_state: approved

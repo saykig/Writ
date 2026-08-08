@@ -359,5 +359,33 @@ tasks:
       - apps/web/app/how-it-works/page.tsx
       - apps/web/components/how-it-works
       - apps/web/test/start-here.test.ts
+
+  - id: CROSS-FAMILY-INTEROPERABILITY-001
+    title: Establish reviewed legal-policy to institutional record links
+    status: complete
+    dependencies:
+      - CORPUS-FAMILY-FOUNDATION-002
+    scope:
+      - Resolve institutional endpoints only through one approved identity record.
+      - Store cross-family links with the institutional corpus that owns the canonical endpoint.
+      - Add three directly evidenced EU AI Office assignments.
+      - Preserve automated proposals as superseded history and record the completed human decisions independently.
+      - Preserve unresolved mappings in a non-authoritative queue outside active corpus manifests.
+    exclusions:
+      - Changes to schemas, legal-policy corpus content, or institutional record semantics beyond the approved identifier migration.
+      - Publisher-to-issuer inference, new institutional identities, source recovery, or provision creation.
+      - Active derives-authority, implementation, enforcement, or applicability links.
+    acceptance:
+      - The three approved links, three accepted human judgments, and three superseded proposals validate independently.
+      - NIST, the European Commission, and the EU AI Office each resolve to one approved identity record.
+      - Unresolved candidates remain outside active manifests and never use unresolved as an evidence basis.
+      - Protected records, evidence, hashes, and accepted judgments remain byte-identical.
+      - The approved identifier revision resolves active references to eu_ai_office_tech_doc_receipt while retaining migration history.
+      - Formatting, linting, type checking, tests, conformance, build, and pack validation pass.
+    outputs:
+      - adr/0019-cross-family-interoperability.md
+      - docs/migrations/cross-family-interoperability
+      - packages/domain/src/institution-resolution.ts
+      - packages/language/test/cross-family-interoperability.test.ts
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

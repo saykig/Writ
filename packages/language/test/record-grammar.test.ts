@@ -74,7 +74,7 @@ describe("structured record lowering", () => {
     expect(compiled.records).toHaveLength(20);
     const preservedFunctions = compiled.records.filter((record) =>
       [
-        "eu_ai_office_technical_documentation_receipt",
+        "eu_ai_office_tech_doc_receipt",
         "eu_ai_office_training_sum_temp_function",
         "eu_ai_office_serious_incident_report_receipt",
       ].includes(record.record_id),

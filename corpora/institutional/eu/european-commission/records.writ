@@ -1,7 +1,7 @@
 language writ "0.2"
 package eu.institutions.european_commission.records version "0.2.0";
 
-record eu_ai_office_technical_documentation_receipt : institutional {
+record eu_ai_office_tech_doc_receipt : institutional {
   corpus eu.institutions.european_commission;
   version "0.2.0";
   title "AI Office receives requested GPAI technical documentation";

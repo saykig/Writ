@@ -6,6 +6,12 @@ review_date: 2026-08-08
 queue_id: institutional-stage-b-review-queue-v1
 queue_path: docs/migrations/institutional-stage-b/review-queue.yaml
 status: complete
+post_review_id_revisions:
+  - previous_approved_id: eu_ai_office_technical_documentation_receipt
+    active_id: eu_ai_office_tech_doc_receipt
+    approved_by: Sara Kim
+    approved_at: 2026-08-08
+    review_artifact: docs/migrations/cross-family-interoperability/human-review.yaml
 summary:
   active_targets_reviewed: 30
   active_targets_approved: 30

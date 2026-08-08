@@ -165,11 +165,14 @@ const NIST_STAGE_B_IDS = [
   "nist_ai_consortium_capacity",
 ] as const;
 const COMMISSION_BASELINE_IDS = [
-  "eu_ai_office_technical_documentation_receipt",
+  "eu_ai_office_tech_doc_receipt",
   "eu_ai_office_training_sum_temp_function",
   "eu_ai_office_serious_incident_report_receipt",
 ] as const;
-const APPROVED_TARGET_RENAMES = new Map<string, string>([
+const POST_REVIEW_TARGET_RENAMES = new Map<string, string>([
+  ["eu_ai_office_technical_documentation_receipt", "eu_ai_office_tech_doc_receipt"],
+]);
+const STAGE_B_APPROVED_TARGET_RENAMES = new Map<string, string>([
   ["eu_ai_office_training_summary_template_function", "eu_ai_office_training_sum_temp_function"],
   ["european_commission_budget_management_function", "european_commission_budget_mgmt_function"],
   ["european_commission_reasoned_opinion_function", "european_commission_reasoned_op_function"],
@@ -180,7 +183,11 @@ const APPROVED_TARGET_RENAMES = new Map<string, string>([
   ["nist_laboratory_network_capacity", "nist_lab_network_capacity"],
   ["nist_nvlap_accreditation_capacity", "nist_nvlap_accred_capacity"],
 ]);
-const SUPERSEDED_DRAFT_TARGET_IDS = [...APPROVED_TARGET_RENAMES.keys()];
+const APPROVED_TARGET_RENAMES = new Map<string, string>([
+  ...POST_REVIEW_TARGET_RENAMES,
+  ...STAGE_B_APPROVED_TARGET_RENAMES,
+]);
+const SUPERSEDED_DRAFT_TARGET_IDS = [...STAGE_B_APPROVED_TARGET_RENAMES.keys()];
 const EXCLUDED = [
   "nist_workforce_capacity",
   "nist_budget_capacity",
@@ -259,16 +266,17 @@ describe("Stage B production inventories", () => {
     expect(commission.records.every((item) => item.review_state === "approved")).toBe(true);
     expect(manifest(EC).record_counts).toEqual({
       institutional_records: 20,
-      record_links: 1,
-      disposition_judgments: 21,
+      record_links: 4,
+      disposition_judgments: 27,
     });
     expect(manifest(EC).review_counts).toEqual({
       approved_records: 20,
       draft_records: 0,
-      approved_record_links: 1,
+      approved_record_links: 4,
       draft_record_links: 0,
-      accepted_disposition_judgments: 21,
+      accepted_disposition_judgments: 24,
       proposed_disposition_judgments: 0,
+      superseded_disposition_judgments: 3,
     });
   });
 
@@ -647,7 +655,11 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(new Set(items.map((item) => item.judgment_id))).toEqual(
       new Set([...nistJudgments.slice(8), ...commissionJudgments].map((item) => item.judgment_id)),
     );
-    expect(new Set(items.map((item) => item.target_id))).toEqual(
+    expect(
+      new Set(
+        items.map((item) => POST_REVIEW_TARGET_RENAMES.get(item.target_id) ?? item.target_id),
+      ),
+    ).toEqual(
       new Set([...nistJudgments.slice(8), ...commissionJudgments].map((item) => item.target_id)),
     );
     expect(
@@ -720,8 +732,15 @@ describe("review preservation, judgments, links, and migrations", () => {
       ),
     );
     expect(postReviewInventory.nist.stage_b_approved_target_ids).toEqual(NIST_STAGE_B_IDS);
+    const commissionJudgmentIds = new Set(
+      commissionJudgments.map((judgment) => judgment.judgment_id),
+    );
     expect(new Set(postReviewInventory.european_commission.approved_target_ids)).toEqual(
-      new Set(commissionJudgments.map((item) => item.target_id)),
+      new Set(
+        review.decisions
+          .filter((item) => commissionJudgmentIds.has(item.judgment_id))
+          .map((item) => item.target_id),
+      ),
     );
     expect(postReviewInventory.review_totals).toEqual({
       active_targets_reviewed: 30,
@@ -749,6 +768,59 @@ describe("review preservation, judgments, links, and migrations", () => {
       expect(activeTargets.has(oldId), oldId).toBe(false);
       expect(queueTargets.has(oldId), oldId).toBe(false);
     }
+  });
+
+  test("preserves the Stage B identifier in snapshots but excludes it from active objects", () => {
+    const historicalId = "eu_ai_office_technical_documentation_receipt";
+    const activeId = "eu_ai_office_tech_doc_receipt";
+    const queue = yaml<ReviewQueue>(
+      ROOT,
+      "docs/migrations/institutional-stage-b/review-queue.yaml",
+    );
+    const review = yaml<HumanReview>(
+      ROOT,
+      "docs/migrations/institutional-stage-b/human-review.yaml",
+    );
+    const inventory = JSON.parse(
+      readFileSync(
+        join(ROOT, "docs/migrations/institutional-stage-b/post-human-review-inventory.json"),
+        "utf8",
+      ),
+    );
+    const queueTargets = Object.values(queue.schema_queues)
+      .flat()
+      .map((item) => item.target_id);
+    const reviewTargets = review.decisions.map((item) => item.target_id);
+    const inventoryTargets = inventory.european_commission.approved_target_ids as string[];
+
+    expect(queueTargets).toContain(historicalId);
+    expect(reviewTargets).toContain(historicalId);
+    expect(inventoryTargets).toContain(historicalId);
+    expect(queueTargets).not.toContain(activeId);
+    expect(reviewTargets).not.toContain(activeId);
+    expect(inventoryTargets).not.toContain(activeId);
+
+    expect(byId.has(historicalId)).toBe(false);
+    expect(byId.has(activeId)).toBe(true);
+    expect(commissionJudgments.some((judgment) => judgment.target_id === historicalId)).toBe(false);
+    expect(commissionJudgments.some((judgment) => judgment.target_id === activeId)).toBe(true);
+
+    const migration = yaml<{
+      post_review_id_renames: Array<{
+        previous_approved_id: string;
+        active_id: string;
+        approved_by: string;
+        approved_at: string;
+        review_artifact: string;
+      }>;
+    }>(EC, "migration.yaml");
+    expect(migration.post_review_id_renames).toContainEqual({
+      previous_approved_id: historicalId,
+      active_id: activeId,
+      approved_by: "Sara Kim",
+      approved_at: "2026-08-08",
+      review_artifact: "docs/migrations/cross-family-interoperability/human-review.yaml",
+    });
   });
 
   test("machine-readable interoperability matrix covers all atomic schemas conservatively", () => {
