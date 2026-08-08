@@ -402,11 +402,14 @@ describe("frontend architecture", () => {
     expect(network).toContain("useTransform");
     expect(network).toContain("pathLength");
     expect(network).toContain("glyphCellPoint");
-    expect(network).toContain("INTERACTIVE_CELL_ID");
-    expect(network).not.toContain("NIST");
-    expect(network).not.toContain('glyph: "US"');
+    expect(network).toContain("FEATURED_CORPORA");
+    expect(network).toContain('label: "AI Act"');
+    expect(network).toContain('label: "NIST"');
+    expect(network).toContain('cellId: "U-07-15"');
+    expect(network).not.toContain("corpus-prototype-family");
     expect(glyph).toContain("export function PixelGlyph");
     expect(glyph).toContain("data-cell-id");
+    expect(glyph).toContain("interactiveCellIds.has(cell.id)");
     for (const letter of ["E", "U", "S", "C", "N", "I", "T"]) {
       expect(glyph).toContain(`export const ${letter}_GLYPH`);
     }
@@ -420,8 +423,9 @@ describe("frontend architecture", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain(".home-motion-title");
     expect(styles).toContain(".corpus-prototype-stage");
-    expect(styles).toContain("width: clamp(32rem, 54vw, 50rem)");
+    expect(styles).toContain("width: clamp(38rem, 68vw, 60rem)");
     expect(styles).toContain(".pixel-corpus-hit-target");
+    expect(styles).toContain("background: transparent");
     expect(styles).toContain(".raw-workspace");
   });
 });
