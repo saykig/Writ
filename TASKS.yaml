@@ -335,5 +335,29 @@ tasks:
       - apps/web/components/start-here/start-here-walkthrough.tsx
       - apps/web/test/start-here.test.ts
 
+  - id: START-HERE-SYSTEM-STORY-002
+    title: Embed the current How it works model in Start Here
+    status: done
+    dependencies:
+      - START-HERE-ONBOARDING-001
+    scope:
+      - Replace the repeated-card walkthrough with one explicit seven-state scroll model.
+      - Keep one reviewed NIST Stage A evidence object continuous through human review and result provenance.
+      - Preserve a complete mobile and reduced-motion reading.
+      - Redirect the legacy How it works route into Start Here.
+    exclusions:
+      - Corpus, schema, DSL, source, passage, record or judgment changes.
+      - Stage B data, retired benchmark framing or a new animation dependency.
+      - Deployment, publication or pull-request changes.
+    acceptance:
+      - Source, Passage, Record, Review, Corpus, Query and Result are explicit and reachable.
+      - The active stage rail, provenance focus and source continuity are keyboard accessible.
+      - Desktop, tablet, mobile and reduced-motion presentations are readable without horizontal overflow.
+      - Frontend tests, type checking, linting and the production build pass.
+    outputs:
+      - apps/web/app/start-here/page.tsx
+      - apps/web/app/how-it-works/page.tsx
+      - apps/web/components/how-it-works
+      - apps/web/test/start-here.test.ts
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

@@ -308,7 +308,7 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
     };
   }, []);
 
-  return (
+  return createPortal(
     <div
       className="raw-workspace"
       role="dialog"
@@ -401,7 +401,8 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

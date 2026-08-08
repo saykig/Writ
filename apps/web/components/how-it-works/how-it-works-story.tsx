@@ -1,0 +1,337 @@
+"use client";
+
+import { useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import { useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+
+import { Button } from "@/components/ui/button";
+import { WritSystemCanvas } from "@/components/how-it-works/writ-system-canvas";
+import { STORY_STAGES, type StoryStage } from "@/components/how-it-works/story-types";
+
+interface StoryStageDefinition {
+  readonly id: StoryStage;
+  readonly label: string;
+  readonly title: string;
+  readonly body: readonly string[];
+  readonly aside?: string;
+}
+
+const PIPELINE = ["SOURCE", "PASSAGE", "RECORD", "REVIEW", "CORPUS", "QUERY", "RESULT"];
+
+const STAGES: readonly StoryStageDefinition[] = [
+  {
+    id: "source",
+    label: "Source",
+    title: "Start with the source.",
+    body: [
+      "A source may be a law, regulation, official webpage, institutional document or another piece of reviewed research material.",
+      "Writ stores the document version and its content fingerprint before it makes any claim about what the document means.",
+    ],
+    aside: "Writ starts from something that already exists.",
+  },
+  {
+    id: "passage",
+    label: "Passage",
+    title: "Keep the exact words.",
+    body: [
+      "Writ does not treat an entire document as one claim. It preserves the exact quotation, its location, the document version, and fingerprints for both the passage and document.",
+      "This lets another person see exactly which words support the record.",
+    ],
+  },
+  {
+    id: "record",
+    label: "Record",
+    title: "One record, one supported fact.",
+    body: [
+      "The selected passage becomes an atomic record: here, one placement fact stating where NIST sits organizationally.",
+      "Identity, placement and mission may concern the same institution, but they are not the same kind of claim.",
+    ],
+    aside: "mission ≠ mandate · function ≠ capacity · placement ≠ authority",
+  },
+  {
+    id: "review",
+    label: "Review",
+    title: "Models may propose. People decide.",
+    body: [
+      "A model can identify a passage or propose a structured record. That does not make the proposal an accepted fact.",
+      "A person may approve, revise or reject it. The decision is stored separately from the evidence and from the record’s creation history.",
+    ],
+    aside: "An accepted judgment and an approved record are related, but distinct, states.",
+  },
+  {
+    id: "corpus",
+    label: "Corpus",
+    title: "Records live in families.",
+    body: [
+      "The approved placement record joins the NIST institutional corpus. Institutional records describe institutions; legal-policy records describe laws, rules, policies and governing instruments.",
+      "The two families can refer to each other without becoming the same thing. Missing evidence remains not established—not silently false.",
+    ],
+  },
+  {
+    id: "query",
+    label: "Query",
+    title: "Then ask the corpus a question.",
+    body: [
+      "A query asks a reproducible question over records that already exist. It does not create a new source or turn the question into the corpus’s identity.",
+      "Relevant reviewed records become active; unrelated records stay quiet and intact.",
+    ],
+  },
+  {
+    id: "result",
+    label: "Result",
+    title: "The answer still points back.",
+    body: [
+      "The result is readable on its own, but Writ keeps the chain beneath it: record, human judgment, passage, document version and original source.",
+      "If stored content changes, its fingerprint changes. Review and supersession history remain visible rather than being rewritten away.",
+    ],
+    aside: "Nothing should lose where it came from.",
+  },
+];
+
+function StageNarrative({
+  stage,
+  index,
+  active,
+}: {
+  stage: StoryStageDefinition;
+  index: number;
+  active: boolean;
+}) {
+  return (
+    <section
+      className="hiw-story-step"
+      data-active={active ? "true" : "false"}
+      aria-labelledby={`hiw-${stage.id}-title`}
+    >
+      <div className="hiw-story-step-copy">
+        <p className="hiw-story-step-index">
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          {stage.label}
+        </p>
+        <h2 id={`hiw-${stage.id}-title`}>{stage.title}</h2>
+        {stage.body.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+        {stage.aside ? <p className="hiw-story-aside">{stage.aside}</p> : null}
+      </div>
+      <div className="hiw-mobile-canvas" aria-hidden="true">
+        <WritSystemCanvas activeStage={stage.id} compact />
+      </div>
+    </section>
+  );
+}
+
+function TechnicalDetails() {
+  return (
+    <details className="hiw-technical">
+      <summary>
+        <span>
+          <strong>Technical details</strong>
+          <small>Inspect the machinery beneath the story</small>
+        </span>
+        <span aria-hidden>+</span>
+      </summary>
+      <div className="hiw-technical-grid">
+        <div>
+          <h3>.writ</h3>
+          <p>The typed language records structured assertions, evidence, scope and provenance.</p>
+        </div>
+        <div>
+          <h3>JSON Schemas</h3>
+          <p>Current schemas govern the shared record base and each implemented corpus family.</p>
+        </div>
+        <div>
+          <h3>Parser and compiler</h3>
+          <p>
+            Deterministic tooling checks language structure without network access or model
+            inference.
+          </p>
+        </div>
+        <div>
+          <h3>Fingerprints</h3>
+          <p>
+            A hash is a fingerprint of stored content. If the content changes, so does the
+            fingerprint.
+          </p>
+        </div>
+        <div>
+          <h3>Conformance</h3>
+          <p>
+            Fixtures and stable diagnostics make schema and language behavior reviewable across
+            versions.
+          </p>
+        </div>
+      </div>
+    </details>
+  );
+}
+
+export function HowItWorksStory() {
+  const storyRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion() ?? false;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { scrollYProgress } = useScroll({
+    target: storyRef,
+    offset: ["start center", "end center"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (reduceMotion) return;
+    const next = Math.min(STORY_STAGES.length - 1, Math.floor(latest * STORY_STAGES.length));
+    setActiveIndex((current) => (current === next ? current : next));
+  });
+
+  const activeStage = STORY_STAGES[activeIndex];
+
+  return (
+    <main className="hiw-page">
+      <header className="hiw-opening">
+        <div className="hiw-opening-copy">
+          <p className="hiw-kicker">Start Here · How it works</p>
+          <h1>Writ keeps the source, the claim, the review and the answer connected.</h1>
+          <p>
+            Writ breaks research material into small, reviewable records. Those records are
+            organized into corpora and can be queried without losing the evidence they came from.
+          </p>
+        </div>
+
+        <ol className="hiw-opening-pipeline" aria-label="Writ knowledge pipeline">
+          {PIPELINE.map((item, index) => (
+            <li key={item}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{item}</strong>
+              {index < PIPELINE.length - 1 ? <ArrowDown aria-hidden /> : null}
+            </li>
+          ))}
+        </ol>
+      </header>
+
+      <div ref={storyRef} className="hiw-story">
+        <nav className="hiw-stage-rail" aria-label="How Writ works stages">
+          <ol>
+            {STAGES.map((stage, index) => (
+              <li key={stage.id} data-active={index === activeIndex ? "true" : "false"}>
+                <a
+                  href={`#hiw-${stage.id}-title`}
+                  aria-current={index === activeIndex ? "step" : undefined}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {stage.label}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div className="hiw-narrative">
+          {STAGES.map((stage, index) => (
+            <StageNarrative
+              key={stage.id}
+              stage={stage}
+              index={index}
+              active={index === activeIndex}
+            />
+          ))}
+        </div>
+
+        <div className="hiw-desktop-canvas">
+          <WritSystemCanvas activeStage={activeStage} />
+        </div>
+      </div>
+
+      <section className="hiw-families" aria-labelledby="hiw-families-title">
+        <div className="hiw-section-intro">
+          <p className="hiw-kicker">Shared grammar, distinct meaning</p>
+          <h2 id="hiw-families-title">
+            The same grammar, without pretending the institutions are the same.
+          </h2>
+          <p>
+            Shared record types make evidence structurally comparable. The evidence still determines
+            what each institution means within that language.
+          </p>
+        </div>
+        <div className="hiw-alignment" aria-label="Schematic institutional record comparison">
+          <div className="hiw-alignment-head">
+            <span>NIST</span>
+            <small>federal_agency</small>
+          </div>
+          <div className="hiw-alignment-guide" aria-hidden />
+          <div className="hiw-alignment-slots">
+            {[
+              ["identity", "established"],
+              ["placement", "established"],
+              ["mission", "established"],
+            ].map(([label, status]) => (
+              <div key={label}>
+                <span>{label}</span>
+                <small>{status}</small>
+              </div>
+            ))}
+          </div>
+          <div className="hiw-alignment-not-equal">
+            same schema <strong>≠</strong> same authority
+          </div>
+          <div className="hiw-alignment-slots" data-generic="true">
+            {[
+              ["identity", "shared slot"],
+              ["placement", "shared slot"],
+              ["mission", "shared slot"],
+            ].map(([label, status]) => (
+              <div key={label}>
+                <span>{label}</span>
+                <small>{status}</small>
+              </div>
+            ))}
+          </div>
+          <div className="hiw-alignment-head hiw-alignment-head--end">
+            <span>European institution</span>
+            <small>institution type remains distinct</small>
+          </div>
+        </div>
+      </section>
+
+      <section className="hiw-refusals" aria-labelledby="hiw-refusals-title">
+        <div className="hiw-section-intro">
+          <p className="hiw-kicker">Boundaries the system preserves</p>
+          <h2 id="hiw-refusals-title">What Writ refuses to hide.</h2>
+        </div>
+        <ol>
+          {[
+            ["Missing evidence", "is not automatically false."],
+            ["A mission statement", "is not automatically a legal mandate."],
+            ["A model proposal", "is not automatically a reviewed fact."],
+            ["A shared schema", "does not make two institutions equivalent."],
+          ].map(([subject, boundary], index) => (
+            <li key={subject}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <p>
+                <strong>{subject}</strong> {boundary}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="hiw-details-and-close">
+        <TechnicalDetails />
+        <div className="hiw-close">
+          <p>Ready to inspect a real record?</p>
+          <div>
+            <Button
+              nativeButton={false}
+              render={
+                <Link href="/lab">
+                  Explore in Writ Lab <ArrowRight aria-hidden data-icon="inline-end" />
+                </Link>
+              }
+            />
+            <Link className="hiw-secondary-link" href="/">
+              Return home
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
