@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { ArrowRight, X } from "lucide-react";
 import type { MotionValue } from "motion/react";
@@ -195,17 +196,6 @@ function glyphOrigin(jurisdiction: FeaturedJurisdiction, glyph: FeaturedGlyph): 
   return origin;
 }
 
-function interactiveCells(
-  jurisdiction: FeaturedJurisdiction,
-  glyph: FeaturedGlyph,
-): ReadonlySet<string> {
-  return new Set(
-    FEATURED_CORPORA.filter(
-      (node) => node.jurisdiction === jurisdiction && node.glyph === glyph,
-    ).map(({ cellId }) => cellId),
-  );
-}
-
 function selectedCell(
   selected: ResolvedFeaturedCorpusNode | null,
   jurisdiction: FeaturedJurisdiction,
@@ -318,7 +308,7 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
     };
   }, []);
 
-  return (
+  return createPortal(
     <div
       className="raw-workspace"
       role="dialog"
@@ -411,7 +401,8 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

@@ -1,0 +1,92 @@
+import { describe, expect, test } from "bun:test";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const WEB_ROOT = resolve(import.meta.dir, "..");
+const read = (path: string) => readFileSync(resolve(WEB_ROOT, path), "utf8");
+
+describe("Start Here system walkthrough", () => {
+  test("is the first primary destination and owns the full explanation", () => {
+    const nav = read("components/site/nav-items.ts");
+    const startHere = nav.indexOf('label: "Start Here"');
+
+    expect(startHere).toBeGreaterThan(-1);
+    for (const label of ["Query", "Build", "Lab"]) {
+      expect(startHere).toBeLessThan(nav.indexOf(`label: "${label}"`));
+    }
+    expect(nav).not.toContain('label: "How it works"');
+    expect(read("app/how-it-works/page.tsx")).toContain('redirect("/start-here")');
+  });
+
+  test("renders the explicit seven-state model", () => {
+    expect(existsSync(resolve(WEB_ROOT, "app/start-here/page.tsx"))).toBe(true);
+    const story = read("components/how-it-works/story-types.ts");
+
+    for (const stage of ["source", "passage", "record", "review", "corpus", "query", "result"]) {
+      expect(story).toContain(`"${stage}"`);
+    }
+  });
+
+  test("carries the reviewed NIST Stage A example through one persistent canvas", () => {
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+    const canvas = read("components/how-it-works/writ-system-canvas.tsx");
+    const implementation = `${story}\n${canvas}`;
+
+    expect(story).toContain("<WritSystemCanvas activeStage={activeStage}");
+    expect(canvas).toContain("National Institute of Standards and Technology");
+    expect(canvas).toContain("U.S. Department of Commerce");
+    expect(canvas).toContain("PROPOSED RECORD");
+    expect(canvas).toContain("HUMAN REVIEW");
+    expect(canvas).toContain("judgment accepted");
+    expect(canvas).toContain("NIST institutional corpus");
+    expect(canvas).toContain("Where is NIST organizationally situated?");
+    expect(implementation).toContain("legal_policy");
+    expect(implementation).toContain("institutional");
+  });
+
+  test("explains atomicity, provenance, proposal boundaries, and missing evidence", () => {
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+
+    expect(story).toContain("One record, one supported fact.");
+    expect(story).toContain("Models may propose. People decide.");
+    expect(story).toContain("Nothing should lose where it came from.");
+    expect(story).toContain("Missing evidence");
+    expect(story).toContain("is not automatically false.");
+    expect(story).toContain('href="/lab"');
+  });
+
+  test("provides scroll state, provenance focus, mobile and reduced-motion paths", () => {
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+    const canvas = read("components/how-it-works/writ-system-canvas.tsx");
+    const styles = read("app/globals.css");
+
+    expect(story).toContain("useScroll");
+    expect(story).toContain("useMotionValueEvent");
+    expect(story).toContain('aria-current={index === activeIndex ? "step"');
+    expect(canvas).toContain("onPointerEnter");
+    expect(canvas).toContain("onFocus");
+    expect(styles).toContain(".hiw-mobile-canvas");
+    expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
+  });
+
+  test("does not restore the retired product model or unfinished Stage B data", () => {
+    const page = read("app/start-here/page.tsx");
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+    const canvas = read("components/how-it-works/writ-system-canvas.tsx");
+    const implementation = `${page}\n${story}\n${canvas}`;
+
+    for (const forbidden of [
+      "2025 G7 AI-for-SMEs",
+      "G20 Rio",
+      "Gap Matrix",
+      "canonical IR",
+      "bearer token",
+      "methodology_bundle_hash",
+      "nist_mandate",
+      "operational_capacity",
+      "european_commission",
+    ]) {
+      expect(implementation).not.toContain(forbidden);
+    }
+  });
+});

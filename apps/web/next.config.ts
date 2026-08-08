@@ -57,13 +57,6 @@ const nextConfig: NextConfig = {
       "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
       "../../packages/domain/schemas/**",
     ],
-    "/how-it-works": [
-      "../../internal/verification/fixtures/compatibility/g7-ai-sme/**",
-      "../../archive/compatibility/g7/2025-ai-sme/**",
-      "../../internal/verification/benchmarks/evaluator/g7-2025-ai-sme-score-reproduction/**",
-      "../../packages/domain/schemas/**",
-      "../../internal/verification/conformance/**",
-    ],
   },
   // The @writ/* packages are NodeNext TS source: relative imports carry a
   // `.js` extension that must resolve to the `.ts` file. Webpack's extensionAlias
