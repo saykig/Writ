@@ -65,11 +65,12 @@ describe("frontend architecture", () => {
     expect(config).toContain("permanent: true");
   });
 
-  test("the nav names exactly the three destinations", () => {
+  test("the nav leads with Start Here and preserves the three working destinations", () => {
     const navItems = read("components/site/nav-items.ts");
 
-    // Query, Build, Lab; the homepage is reached from the wordmark and How it
-    // works from the footer, which is a reading rather than a place to work.
+    // Start Here answers what the product is before the three working routes.
+    expect(navItems).toContain('label: "Start Here"');
+    expect(navItems).toContain('href: "/start-here"');
     expect(navItems).toContain('label: "Query"');
     expect(navItems).toContain('label: "Build"');
     expect(navItems).toContain('label: "Lab"');
@@ -84,6 +85,7 @@ describe("frontend architecture", () => {
 
     for (const page of [
       "app/page.tsx",
+      "app/start-here/page.tsx",
       "app/query/page.tsx",
       "app/build/page.tsx",
       "app/how-it-works/page.tsx",

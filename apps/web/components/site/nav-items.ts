@@ -9,10 +9,11 @@ export interface NavItem {
 }
 
 /**
- * Three destinations for three intentions: get an answer, make a record,
- * understand how a passage becomes one. The homepage carries the rest.
+ * Four destinations in the order a first-time reader needs them: understand
+ * the system, get an answer, make a record, then inspect the mechanism.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
+  { href: "/start-here", label: "Start Here", hint: "Follow one source to a traced answer" },
   { href: "/query", label: "Query", hint: "Ask across the reviewed corpora" },
   { href: "/build", label: "Build", hint: "Turn a source passage into a record" },
   { href: "/lab", label: "Lab", hint: "See how one passage becomes one record" },
