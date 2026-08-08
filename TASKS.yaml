@@ -359,6 +359,5 @@ tasks:
       - apps/web/app/how-it-works/page.tsx
       - apps/web/components/how-it-works
       - apps/web/test/start-here.test.ts
-
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

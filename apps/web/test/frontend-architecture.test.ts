@@ -66,6 +66,7 @@ describe("frontend architecture", () => {
   test("the nav leads with Start Here and preserves the working destinations", () => {
     const navItems = read("components/site/nav-items.ts");
 
+    // Start Here answers what the product is before the working routes.
     expect(navItems).toContain('label: "Start Here"');
     expect(navItems).toContain('href: "/start-here"');
     expect(navItems).toContain('label: "Query"');
