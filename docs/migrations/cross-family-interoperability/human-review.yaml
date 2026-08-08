@@ -1,0 +1,62 @@
+schema_version: 1.0.0
+review_id: cross-family-interoperability-human-review-v1
+reviewer: Sara Kim
+review_type: human
+review_date: 2026-08-08
+status: complete
+proposal_history:
+  proposer: OpenAI Codex automated proposal
+  proposed_link_review_state: draft
+  proposed_judgment_status: proposed
+  preserved_as: superseded_judgments
+approved_id_revision:
+  previous_approved_id: eu_ai_office_technical_documentation_receipt
+  active_id: eu_ai_office_tech_doc_receipt
+  decision: approve
+  scope: identifier_only
+  substantive_content_changed: false
+decisions:
+  - link_id: eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office
+    decision: approve
+    relation: assigns_function_to
+    basis: direct
+    reviewer: Sara Kim
+    review_date: 2026-08-08
+    prior_review_state: draft
+    final_review_state: approved
+    proposal_judgment_id: judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_proposal
+    accepted_judgment_id: judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_human_review
+    evidence_refs: [passage-eu-01]
+    bounded_interpretation: The AI Office has the request-and-receipt role for the specified technical documentation only.
+    prohibited_inferences: [general implementation authority, enforcement authority, operational capacity, performance]
+  - link_id: eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office
+    decision: approve
+    relation: assigns_function_to
+    basis: direct
+    reviewer: Sara Kim
+    review_date: 2026-08-08
+    prior_review_state: draft
+    final_review_state: approved
+    proposal_judgment_id: judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_proposal
+    accepted_judgment_id: judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_human_review
+    evidence_refs: [passage-eu-04]
+    bounded_interpretation: The AI Office provides the training-content-summary template only.
+    prohibited_inferences: [broader implementation, enforcement, capacity]
+  - link_id: eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office
+    decision: approve
+    relation: assigns_function_to
+    basis: direct
+    reviewer: Sara Kim
+    review_date: 2026-08-08
+    prior_review_state: draft
+    final_review_state: approved
+    proposal_judgment_id: judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_proposal
+    accepted_judgment_id: judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_human_review
+    evidence_refs: [passage-eu-08]
+    bounded_interpretation: The AI Office receives serious-incident information and possible corrective-measure information.
+    prohibited_inferences: [adjudicative authority, general enforcement responsibility, capacity, performance]
+unresolved_mappings:
+  queue: docs/migrations/cross-family-interoperability/mapping-queue.yaml
+  count: 14
+  disposition: queue_only
+  human_reviewed_as_active: false

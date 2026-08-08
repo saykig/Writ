@@ -165,11 +165,12 @@ const NIST_STAGE_B_IDS = [
   "nist_ai_consortium_capacity",
 ] as const;
 const COMMISSION_BASELINE_IDS = [
-  "eu_ai_office_technical_documentation_receipt",
+  "eu_ai_office_tech_doc_receipt",
   "eu_ai_office_training_sum_temp_function",
   "eu_ai_office_serious_incident_report_receipt",
 ] as const;
 const APPROVED_TARGET_RENAMES = new Map<string, string>([
+  ["eu_ai_office_technical_documentation_receipt", "eu_ai_office_tech_doc_receipt"],
   ["eu_ai_office_training_summary_template_function", "eu_ai_office_training_sum_temp_function"],
   ["european_commission_budget_management_function", "european_commission_budget_mgmt_function"],
   ["european_commission_reasoned_opinion_function", "european_commission_reasoned_op_function"],
@@ -260,15 +261,16 @@ describe("Stage B production inventories", () => {
     expect(manifest(EC).record_counts).toEqual({
       institutional_records: 20,
       record_links: 4,
-      disposition_judgments: 24,
+      disposition_judgments: 27,
     });
     expect(manifest(EC).review_counts).toEqual({
       approved_records: 20,
       draft_records: 0,
-      approved_record_links: 1,
-      draft_record_links: 3,
-      accepted_disposition_judgments: 21,
-      proposed_disposition_judgments: 3,
+      approved_record_links: 4,
+      draft_record_links: 0,
+      accepted_disposition_judgments: 24,
+      proposed_disposition_judgments: 0,
+      superseded_disposition_judgments: 3,
     });
   });
 

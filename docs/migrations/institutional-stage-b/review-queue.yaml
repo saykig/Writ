@@ -91,7 +91,8 @@ schema_queues:
       evidence_passages: [passage_eu_ai_act_art_88_1]
   function:
     - decision_id: stage-b.ec.technical-documentation-receipt
-      target_id: eu_ai_office_technical_documentation_receipt
+      target_id: eu_ai_office_tech_doc_receipt
+      proposal_target_id: eu_ai_office_technical_documentation_receipt
       judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
       evidence_passages: [passage_eu_01]
     - decision_id: stage-b.ec.training-summary-template

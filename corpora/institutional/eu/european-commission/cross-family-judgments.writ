@@ -1,8 +1,8 @@
 language writ "0.2"
 package eu.institutions.european_commission.cross_family_judgments version "0.2.0";
 
-// Automated proposals only. Approval of the underlying legal-policy and institutional
-// records does not approve these independently reviewable cross-family links.
+// The automated proposals are retained as superseded review history. The separately
+// attributed accepted judgments record Sara Kim's subsequent human decisions.
 
 judgment judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_proposal {
   target record_link eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office;
@@ -11,9 +11,10 @@ judgment judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_proposal
   rationale "Automated proposal for the directly evidenced request-and-receipt function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
   evidence_refs { passage-eu-01 };
   reviewer "OpenAI Codex automated proposal";
-  status proposed;
+  status superseded;
   created_at 2026-08-08;
   family_context institutional;
+  superseded_by_judgment_id judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_human_review;
 }
 
 judgment judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_proposal {
@@ -23,9 +24,10 @@ judgment judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_proposal
   rationale "Automated proposal for the directly evidenced training-content-summary template function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
   evidence_refs { passage-eu-04 };
   reviewer "OpenAI Codex automated proposal";
-  status proposed;
+  status superseded;
   created_at 2026-08-08;
   family_context institutional;
+  superseded_by_judgment_id judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_human_review;
 }
 
 judgment judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_proposal {
@@ -35,7 +37,47 @@ judgment judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_proposal
   rationale "Automated proposal for the directly evidenced serious-incident report-receipt function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
   evidence_refs { passage-eu-08 };
   reviewer "OpenAI Codex automated proposal";
-  status proposed;
+  status superseded;
   created_at 2026-08-08;
   family_context institutional;
+  superseded_by_judgment_id judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_human_review;
+}
+
+judgment judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_human_review {
+  target record_link eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directly evidenced AI Office request-and-receipt role for specified technical documentation only. It does not establish general implementation authority, enforcement authority, operational capacity or performance.";
+  evidence_refs { passage-eu-01 };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-08;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_proposal };
+}
+
+judgment judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_human_review {
+  target record_link eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directly evidenced AI Office function of providing the training-content-summary template only. It does not establish broader implementation, enforcement or capacity.";
+  evidence_refs { passage-eu-04 };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-08;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_proposal };
+}
+
+judgment judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_human_review {
+  target record_link eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directly evidenced AI Office role of receiving serious-incident information and possible corrective-measure information. It does not establish adjudicative authority, general enforcement responsibility, capacity or performance.";
+  evidence_refs { passage-eu-08 };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-08;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_proposal };
 }

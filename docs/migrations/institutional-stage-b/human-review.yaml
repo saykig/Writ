@@ -6,6 +6,12 @@ review_date: 2026-08-08
 queue_id: institutional-stage-b-review-queue-v1
 queue_path: docs/migrations/institutional-stage-b/review-queue.yaml
 status: complete
+post_review_id_revisions:
+  - previous_approved_id: eu_ai_office_technical_documentation_receipt
+    active_id: eu_ai_office_tech_doc_receipt
+    approved_by: Sara Kim
+    approved_at: 2026-08-08
+    review_artifact: docs/migrations/cross-family-interoperability/human-review.yaml
 summary:
   active_targets_reviewed: 30
   active_targets_approved: 30
@@ -176,7 +182,7 @@ decisions:
     human_decision: approve
   - decision_id: stage-b.ec.technical-documentation-receipt
     target_kind: record
-    target_id: eu_ai_office_technical_documentation_receipt
+    target_id: eu_ai_office_tech_doc_receipt
     judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
     evidence_passages: [passage_eu_01]
     reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]

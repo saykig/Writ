@@ -25,10 +25,16 @@ approved_id_renames:
     approved_id: european_commission_reasoned_op_function
   - previous_draft_id: european_commission_cjeu_referral_decision_right
     approved_id: european_commission_cjeu_refer_decision_right
+post_review_id_renames:
+  - previous_approved_id: eu_ai_office_technical_documentation_receipt
+    active_id: eu_ai_office_tech_doc_receipt
+    approved_by: Sara Kim
+    approved_at: 2026-08-08
+    review_artifact: docs/migrations/cross-family-interoperability/human-review.yaml
 entries:
   - previous_object: eu_ai_office_technical_documentation_receipt
-    final_object: eu_ai_office_technical_documentation_receipt
-    treatment: preserved automated draft approved by human review
+    final_object: eu_ai_office_tech_doc_receipt
+    treatment: identifier-only post-review migration approved by human review; substantive record content is unchanged
   - previous_object: eu_ai_office_training_summary_template_function
     final_object: eu_ai_office_training_sum_temp_function
     treatment: preserved automated draft approved by human review

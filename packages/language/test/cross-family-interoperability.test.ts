@@ -7,7 +7,9 @@ import {
   InstitutionResolutionError,
   resolveApprovedInstitutionEndpoint,
   validate,
+  validateJudgmentSupersession,
   type AtomicInstitutionalRecord,
+  type CurrentRecordJudgment,
   type RecordLink,
 } from "@writ/domain";
 import { compileSource } from "../src/index.js";
@@ -45,16 +47,7 @@ const records = corpusRoots.flatMap(
     }).records,
 ) as AtomicInstitutionalRecord[];
 
-interface ProposedRecordLinkJudgment {
-  target_id: string;
-  target_kind: string;
-  judgment_type: string;
-  value: unknown;
-  reviewer: string;
-  status: string;
-}
-
-const proposedJudgments = manifestEntries.flatMap(({ root, manifest }) =>
+const crossFamilyJudgments = manifestEntries.flatMap(({ root, manifest }) =>
   (manifest.locations.judgments ?? [])
     .filter((path) => path === "cross-family-judgments.writ")
     .flatMap(
@@ -63,7 +56,7 @@ const proposedJudgments = manifestEntries.flatMap(({ root, manifest }) =>
           fileName: join(root, path),
         }).judgments,
     ),
-) as ProposedRecordLinkJudgment[];
+) as CurrentRecordJudgment[];
 
 const resolutionInput = {
   native_corpora: catalog.native_corpora,
@@ -91,6 +84,12 @@ function treeHash(paths: readonly string[]): string {
 
 function fileHash(path: string): string {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+function normalizedFileHash(path: string, activeId: string, historicalId: string): string {
+  return createHash("sha256")
+    .update(readFileSync(path, "utf8").replaceAll(activeId, historicalId))
+    .digest("hex");
 }
 
 describe("approved institutional endpoint resolution", () => {
@@ -159,7 +158,7 @@ describe("the three-link cross-family pilot", () => {
         source_kind: "legal_policy_claim",
         relation_type: "assigns_function_to",
         basis: "direct",
-        review_state: "draft",
+        review_state: "approved",
       });
       expect(["institution", "organizational_unit"]).toContain(link.target_kind);
       expect(
@@ -189,21 +188,42 @@ describe("the three-link cross-family pilot", () => {
     }
   });
 
-  test("has one proposed disposition per draft link and no human attribution", () => {
-    expect(proposedJudgments).toHaveLength(3);
-    expect(new Set(proposedJudgments.map((item) => item.target_id))).toEqual(
+  test("preserves each automated proposal and records a separate accepted human disposition", () => {
+    const supersededProposals = crossFamilyJudgments.filter(
+      (judgment) => judgment.status === "superseded",
+    );
+    const acceptedJudgments = crossFamilyJudgments.filter(
+      (judgment) => judgment.status === "accepted",
+    );
+    expect(crossFamilyJudgments).toHaveLength(6);
+    expect(supersededProposals).toHaveLength(3);
+    expect(acceptedJudgments).toHaveLength(3);
+    expect(validateJudgmentSupersession(crossFamilyJudgments)).toEqual({ valid: true, issues: [] });
+    expect(new Set(acceptedJudgments.map((item) => item.target_id))).toEqual(
       new Set(links.map((link) => link.link_id)),
     );
-    for (const judgment of proposedJudgments) {
+    for (const judgment of supersededProposals) {
       expect(validate("record-judgment", judgment).valid).toBe(true);
       expect(judgment).toMatchObject({
         target_kind: "record_link",
         judgment_type: "record_link_disposition",
         value: "draft",
         reviewer: "OpenAI Codex automated proposal",
-        status: "proposed",
+        status: "superseded",
       });
       expect(judgment.reviewer).not.toBe("Sara Kim");
+      expect(judgment.superseded_by_judgment_id).toBeTruthy();
+    }
+    for (const judgment of acceptedJudgments) {
+      expect(validate("record-judgment", judgment).valid).toBe(true);
+      expect(judgment).toMatchObject({
+        target_kind: "record_link",
+        judgment_type: "record_link_disposition",
+        value: "approved",
+        reviewer: "Sara Kim",
+        status: "accepted",
+      });
+      expect(judgment.supersedes_judgment_ids).toHaveLength(1);
     }
   });
 
@@ -225,32 +245,88 @@ describe("the three-link cross-family pilot", () => {
 
 describe("mapping queue and preservation gates", () => {
   const queue = yaml<{
+    status: string;
+    human_review_artifact: string;
     active_link_ids: string[];
     mappings: Array<{
-      mapping_status: "active_candidate" | "unresolved";
+      mapping_status: "active_approved" | "unresolved";
       proposed_basis: "direct" | "inherited" | "inferred" | null;
       basis?: string;
       mapping_id: string;
       legal_policy_record_id: string | null;
       proposed_relation: string;
       target_institutional_id: string;
+      human_review_required: boolean;
     }>;
   }>(join(ROOT, "docs/migrations/cross-family-interoperability/mapping-queue.yaml"));
+  const humanReview = yaml<{
+    reviewer: string;
+    review_type: string;
+    review_date: string;
+    status: string;
+    approved_id_revision: {
+      previous_approved_id: string;
+      active_id: string;
+      substantive_content_changed: boolean;
+    };
+    decisions: Array<{
+      link_id: string;
+      decision: string;
+      relation: string;
+      basis: string;
+      reviewer: string;
+      accepted_judgment_id: string;
+    }>;
+    unresolved_mappings: { count: number; disposition: string };
+  }>(join(ROOT, "docs/migrations/cross-family-interoperability/human-review.yaml"));
 
   test("keeps mapping status separate from proposed evidence basis", () => {
     expect(new Set(queue.active_link_ids)).toEqual(new Set(links.map((link) => link.link_id)));
-    expect(
-      queue.mappings.filter((item) => item.mapping_status === "active_candidate"),
-    ).toHaveLength(3);
+    expect(queue.mappings.filter((item) => item.mapping_status === "active_approved")).toHaveLength(
+      3,
+    );
     expect(queue.mappings.some((item) => item.mapping_status === "unresolved")).toBe(true);
     for (const mapping of queue.mappings) {
       expect(mapping).not.toHaveProperty("basis");
       expect(mapping.proposed_basis).not.toBe("unresolved");
     }
+    expect(
+      queue.mappings
+        .filter((item) => item.mapping_status === "active_approved")
+        .every((item) => item.human_review_required === false),
+    ).toBe(true);
+  });
+
+  test("records the completed human review separately from the automated proposal", () => {
+    expect(queue.status).toBe("human_review_complete");
+    expect(humanReview).toMatchObject({
+      reviewer: "Sara Kim",
+      review_type: "human",
+      review_date: "2026-08-08",
+      status: "complete",
+      approved_id_revision: {
+        previous_approved_id: "eu_ai_office_technical_documentation_receipt",
+        active_id: "eu_ai_office_tech_doc_receipt",
+        substantive_content_changed: false,
+      },
+      unresolved_mappings: { count: 14, disposition: "queue_only" },
+    });
+    expect(humanReview.decisions).toHaveLength(3);
+    expect(new Set(humanReview.decisions.map((decision) => decision.link_id))).toEqual(
+      new Set(links.map((link) => link.link_id)),
+    );
+    for (const decision of humanReview.decisions)
+      expect(decision).toMatchObject({
+        decision: "approve",
+        relation: "assigns_function_to",
+        basis: "direct",
+        reviewer: "Sara Kim",
+      });
   });
 
   test("loads the manifest relationships and keeps unresolved mappings queue-only", () => {
     const activeIds = new Set(links.map((link) => link.link_id));
+    expect(queue.mappings.filter((item) => item.mapping_status === "unresolved")).toHaveLength(14);
     expect(activeIds).toEqual(new Set(queue.active_link_ids));
     expect(activeIds).toEqual(
       new Set([
@@ -273,7 +349,7 @@ describe("mapping queue and preservation gates", () => {
     }
   });
 
-  test("changes only draft-link and proposed-judgment counts", () => {
+  test("records the approved-link, accepted-judgment and superseded-history counts", () => {
     const commission = manifests.find(
       (manifest) => manifest.corpus_id === "eu.institutions.european_commission",
     )!;
@@ -281,14 +357,15 @@ describe("mapping queue and preservation gates", () => {
     expect(commission.record_counts).toMatchObject({
       institutional_records: 20,
       record_links: 4,
-      disposition_judgments: 24,
+      disposition_judgments: 27,
     });
     expect(commission.review_counts).toMatchObject({
       approved_records: 20,
-      approved_record_links: 1,
-      draft_record_links: 3,
-      accepted_disposition_judgments: 21,
-      proposed_disposition_judgments: 3,
+      approved_record_links: 4,
+      draft_record_links: 0,
+      accepted_disposition_judgments: 24,
+      proposed_disposition_judgments: 0,
+      superseded_disposition_judgments: 3,
     });
     expect(nist.record_counts).toMatchObject({
       institutional_records: 15,
@@ -316,11 +393,30 @@ describe("mapping queue and preservation gates", () => {
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
       "1d661df564dbb640b8d83a11ec3f50fc24cb10b692ae3f28d3bcc19a94f0b4c1",
     );
-    expect(fileHash(join(EC, "records.writ"))).toBe(
-      "8d139e2d50b6c9237fe05132a09edde189fe3134a956c95da57b806b4289dc3d",
+    expect(
+      normalizedFileHash(
+        join(EC, "records.writ"),
+        "eu_ai_office_tech_doc_receipt",
+        "eu_ai_office_technical_documentation_receipt",
+      ),
+    ).toBe("8d139e2d50b6c9237fe05132a09edde189fe3134a956c95da57b806b4289dc3d");
+    expect(
+      normalizedFileHash(
+        join(EC, "judgments.writ"),
+        "eu_ai_office_tech_doc_receipt",
+        "eu_ai_office_technical_documentation_receipt",
+      ),
+    ).toBe("e23481a97107b66d8a6c981270815b3fc560c6b4c158a64fbf611272c96fed1e");
+  });
+
+  test("keeps the pre-migration identifier out of active records and supporting references", () => {
+    const historicalId = "eu_ai_office_technical_documentation_receipt";
+    expect(records.some((record) => record.record_id === historicalId)).toBe(false);
+    expect(links.some((link) => (link.supporting_record_ids ?? []).includes(historicalId))).toBe(
+      false,
     );
-    expect(fileHash(join(EC, "judgments.writ"))).toBe(
-      "e23481a97107b66d8a6c981270815b3fc560c6b4c158a64fbf611272c96fed1e",
+    expect(records.some((record) => record.record_id === "eu_ai_office_tech_doc_receipt")).toBe(
+      true,
     );
   });
 });

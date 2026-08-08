@@ -46,18 +46,26 @@ not an evidence basis. An inherited link must identify the records supporting ev
 Unresolved mappings remain in a review queue outside active corpus manifests.
 
 Every link has its own review state and disposition judgment. Approval of either endpoint or a
-supporting record never transfers to the link. Automated proposals remain draft links with proposed
-judgments until subsequent human review.
+supporting record never transfers to the link. Automated proposals begin as draft links with proposed
+judgments; a subsequent human decision may approve the link and supersede, but never erase, its
+proposal judgment.
 
 Reverse traversal is derived from the one stored direction. Inverse duplicate links are prohibited.
 
 ## Initial bounded implementation
 
-The first implementation contains only three directly evidenced `assigns_function_to` links from AI
-Act claims to `eu_ai_office`. These examples prove cross-family storage, endpoint resolution, evidence
-traceability, and independent review without attempting broad relationship population. The America’s
+The first implementation contains only three directly evidenced, human-approved
+`assigns_function_to` links from AI Act claims to `eu_ai_office`. Sara Kim completed the independent
+review on 2026-08-08; the decisions and preserved automated proposal history are recorded in
+`docs/migrations/cross-family-interoperability/human-review.yaml`. These examples prove cross-family
+storage, endpoint resolution, evidence traceability, and independent review without attempting broad
+relationship population. The America’s
 AI Action Plan recommendation involving NIST remains unresolved because a recommended policy action
 does not by itself establish the stronger assignment relation.
+
+That human review also approved an identifier-only migration from
+`eu_ai_office_technical_documentation_receipt` to `eu_ai_office_tech_doc_receipt`. The migration
+changes no assertion, evidence, classification, scope, uncertainty, review decision or provenance.
 
 Publisher metadata is not automatically issuer evidence. Broad classes such as “covered agencies” do
 not establish application to NIST without a complete, time-qualified membership chain. Authority links

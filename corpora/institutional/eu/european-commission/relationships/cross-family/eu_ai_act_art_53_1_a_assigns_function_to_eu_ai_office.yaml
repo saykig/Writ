@@ -10,7 +10,7 @@ basis: direct
 evidence_refs:
   - 32dfed45-b1d4-523c-a426-224fea22a6d3
 supporting_record_ids:
-  - eu_ai_office_technical_documentation_receipt
+  - eu_ai_office_tech_doc_receipt
 uncertainties:
   - type: incomplete_evidence
     description: >-
@@ -20,4 +20,4 @@ uncertainties:
 provenance:
   created_by: OpenAI Codex automated proposal
   created_at: 2026-08-08
-review_state: draft
+review_state: approved

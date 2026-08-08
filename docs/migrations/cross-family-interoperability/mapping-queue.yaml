@@ -1,6 +1,7 @@
 schema_version: 1.0.0
 queue_id: cross-family-interoperability-mapping-queue-v1
-status: awaiting_human_review
+status: human_review_complete
+human_review_artifact: docs/migrations/cross-family-interoperability/human-review.yaml
 active_link_ids:
   - eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office
   - eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office
@@ -12,33 +13,36 @@ mappings:
     proposed_relation: assigns_function_to
     target_institutional_id: eu_ai_office
     evidence_refs: [32dfed45-b1d4-523c-a426-224fea22a6d3]
-    mapping_status: active_candidate
+    mapping_status: active_approved
+    human_review_status: approved
     proposed_basis: direct
     confidence: high
     uncertainty: Request and receipt only; no general implementation, enforcement, capacity, or performance finding.
-    human_review_required: true
+    human_review_required: false
   - mapping_id: eu-ai-act-art-53-1-d-ai-office-function
     legal_policy_record_id: 456bd51b-75bf-5313-8863-bd6ba767e625
     legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
     proposed_relation: assigns_function_to
     target_institutional_id: eu_ai_office
     evidence_refs: [f334f6ec-fe5c-5bdb-ac74-0c71cef77a18]
-    mapping_status: active_candidate
+    mapping_status: active_approved
+    human_review_status: approved
     proposed_basis: direct
     confidence: high
     uncertainty: Template provision only; no general implementation, enforcement, capacity, or performance finding.
-    human_review_required: true
+    human_review_required: false
   - mapping_id: eu-ai-act-art-55-1-c-ai-office-function
     legal_policy_record_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
     legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
     proposed_relation: assigns_function_to
     target_institutional_id: eu_ai_office
     evidence_refs: [d17b89de-0b30-547e-84a2-65c5740105ae]
-    mapping_status: active_candidate
+    mapping_status: active_approved
+    human_review_status: approved
     proposed_basis: direct
     confidence: high
     uncertainty: Report receipt only; no adjudicative authority, general enforcement, capacity, or performance finding.
-    human_review_required: true
+    human_review_required: false
   - mapping_id: ai-action-plan-nist-function
     legal_policy_record_id: 07e3604d-321e-5621-9fde-357ab058412c
     legal_policy_corpus_id: writ.corpus.legal-policy.us.white-house.americas-ai-action-plan
