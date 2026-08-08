@@ -1758,20 +1758,27 @@
   padding: 0;
   border: 0;
   background: none;
-  color: rgb(255 255 255 / 84%);
+  color: rgb(255 255 255 / 94%);
   font-family: var(--font-geist-sans), var(--font-sans), sans-serif;
   font-size: clamp(1.35rem, 2.15vw, 2rem);
   font-weight: 540;
   line-height: 1.08;
   letter-spacing: -0.025em;
   text-decoration: none;
-  transition: color 160ms ease;
+  text-shadow: 0 0 0.7em rgb(255 255 255 / 8%);
+  transition:
+    color 160ms ease,
+    text-shadow 180ms ease;
 }
 
 .home-motion-resolving-link:hover,
 .home-motion-resolving-link:active {
   color: rgb(255 255 255 / 100%);
   text-decoration: none;
+  text-shadow:
+    0 0 0.22em rgb(255 255 255 / 68%),
+    0 0 0.72em rgb(255 255 255 / 34%),
+    0 0 1.35em rgb(255 255 255 / 14%);
 }
 
 .home-motion-resolving-link-characters {
@@ -2201,6 +2208,11 @@
   vector-effect: non-scaling-stroke;
 }
 
+.pixel-corpus-silhouette-glow {
+  fill: white;
+  pointer-events: none;
+}
+
 .pixel-corpus-hairline {
   fill: none;
   stroke: rgb(255 255 255 / 64%);
@@ -2246,7 +2258,7 @@
   outline-offset: -13px;
 }
 
-.pixel-corpus-density-note {
+.pixel-corpus-instruction {
   position: absolute;
   right: 1.8%;
   bottom: -1rem;
@@ -2257,7 +2269,7 @@
   letter-spacing: 0.025em;
 }
 
-.corpus-prototype-stage[data-focused="true"] .pixel-corpus-density-note {
+.corpus-prototype-stage[data-focused="true"] .pixel-corpus-instruction {
   opacity: 0 !important;
 }
 
@@ -2343,7 +2355,7 @@
     font-size: 8px;
   }
 
-  .pixel-corpus-density-note {
+  .pixel-corpus-instruction {
     right: 4%;
     bottom: -1.75rem;
     max-width: 13rem;

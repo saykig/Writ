@@ -17,6 +17,7 @@ import {
 import {
   E_GLYPH,
   PixelGlyph,
+  PixelGlyphSilhouette,
   S_GLYPH,
   U_GLYPH,
   glyphCellPoint,
@@ -204,14 +205,12 @@ function glyphOrigin(jurisdiction: FeaturedJurisdiction, glyph: FeaturedGlyph): 
   return origin;
 }
 
-function selectedCell(
-  selected: ResolvedFeaturedCorpusNode | null,
+function nodeCell(
+  node: ResolvedFeaturedCorpusNode | null,
   jurisdiction: FeaturedJurisdiction,
   glyph: FeaturedGlyph,
 ): string | null {
-  return selected?.jurisdiction === jurisdiction && selected.glyph === glyph
-    ? selected.cellId
-    : null;
+  return node?.jurisdiction === jurisdiction && node.glyph === glyph ? node.cellId : null;
 }
 
 function CorpusAnnotation({
@@ -417,6 +416,7 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
 export function CorpusNetwork() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedCorpusId, setSelectedCorpusId] = useState<string | null>(null);
+  const [hoveredCorpusId, setHoveredCorpusId] = useState<string | null>(null);
   const [rawOpen, setRawOpen] = useState(false);
   const reduceMotion = useReducedMotion() ?? false;
   const reducedProgress = useMotionValue(1);
@@ -433,7 +433,8 @@ export function CorpusNetwork() {
     [0, 0.51, 0.52],
     ["none", "none", "auto"],
   );
-  const densityOpacity = useTransform(progress, [0.44, 0.56], [0, 1]);
+  const instructionOpacity = useTransform(progress, [0.44, 0.56], [0, 1]);
+  const silhouetteOpacity = useTransform(progress, [0.2, 0.38], [0, 1]);
   const featuredNodes = useMemo<readonly ResolvedFeaturedCorpusNode[]>(
     () =>
       FEATURED_CORPORA.map((node) => ({
@@ -448,6 +449,7 @@ export function CorpusNetwork() {
     [],
   );
   const selectedNode = featuredNodes.find(({ corpusId }) => corpusId === selectedCorpusId) ?? null;
+  const hoveredNode = featuredNodes.find(({ corpusId }) => corpusId === hoveredCorpusId) ?? null;
   const selectionActive = selectedNode !== null;
   const euInteractiveCellIds = useMemo(
     () =>
@@ -525,47 +527,123 @@ export function CorpusNetwork() {
             role="img"
             aria-label="EU above US, constructed from explicit Pixel cells with nine corpus annotations"
           >
+            <defs>
+              <filter
+                id="pixel-corpus-ambient-glow"
+                x="-30%"
+                y="-30%"
+                width="160%"
+                height="160%"
+                colorInterpolationFilters="sRGB"
+              >
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="nearGlow" />
+                <feColorMatrix
+                  in="nearGlow"
+                  type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.14 0"
+                  result="nearGlowFaded"
+                />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4.6" result="farGlow" />
+                <feColorMatrix
+                  in="farGlow"
+                  type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.055 0"
+                  result="farGlowFaded"
+                />
+                <feMerge>
+                  <feMergeNode in="farGlowFaded" />
+                  <feMergeNode in="nearGlowFaded" />
+                </feMerge>
+              </filter>
+              <filter
+                id="pixel-corpus-cell-halo"
+                x="-220%"
+                y="-220%"
+                width="540%"
+                height="540%"
+                colorInterpolationFilters="sRGB"
+              >
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.15" result="cellNearGlow" />
+                <feColorMatrix
+                  in="cellNearGlow"
+                  type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.72 0"
+                  result="cellNearGlowFaded"
+                />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" result="cellFarGlow" />
+                <feColorMatrix
+                  in="cellFarGlow"
+                  type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.26 0"
+                  result="cellFarGlowFaded"
+                />
+                <feMerge>
+                  <feMergeNode in="cellFarGlowFaded" />
+                  <feMergeNode in="cellNearGlowFaded" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <motion.g
+              className="pixel-corpus-silhouette-glow"
+              style={{ opacity: silhouetteOpacity }}
+              filter="url(#pixel-corpus-ambient-glow)"
+              aria-hidden="true"
+            >
+              <motion.g style={{ x: eShift }}>
+                <PixelGlyphSilhouette definition={E_GLYPH} origin={glyphOrigin("EU", "E")} />
+              </motion.g>
+              <PixelGlyphSilhouette definition={U_GLYPH} origin={glyphOrigin("EU", "U")} />
+              <PixelGlyphSilhouette definition={U_GLYPH} origin={glyphOrigin("US", "U")} />
+              <PixelGlyphSilhouette definition={S_GLYPH} origin={glyphOrigin("US", "S")} />
+            </motion.g>
+
             <motion.g style={{ x: eShift }}>
               <PixelGlyph
                 definition={E_GLYPH}
+                hoveredCellId={nodeCell(hoveredNode, "EU", "E")}
                 interactiveCellIds={euInteractiveCellIds}
                 mappedCellIds={euMappedCellIds}
                 origin={glyphOrigin("EU", "E")}
                 progress={progress}
                 revealRange={[0, 0.16]}
                 selectionActive={selectionActive}
-                selectedCellId={selectedCell(selectedNode, "EU", "E")}
+                selectedCellId={nodeCell(selectedNode, "EU", "E")}
               />
             </motion.g>
             <PixelGlyph
               definition={U_GLYPH}
+              hoveredCellId={nodeCell(hoveredNode, "EU", "U")}
               interactiveCellIds={euInteractiveCellIds}
               mappedCellIds={euMappedCellIds}
               origin={glyphOrigin("EU", "U")}
               progress={progress}
               revealRange={[0.06, 0.22]}
               selectionActive={selectionActive}
-              selectedCellId={selectedCell(selectedNode, "EU", "U")}
+              selectedCellId={nodeCell(selectedNode, "EU", "U")}
             />
             <PixelGlyph
               definition={U_GLYPH}
+              hoveredCellId={nodeCell(hoveredNode, "US", "U")}
               interactiveCellIds={usInteractiveCellIds}
               mappedCellIds={usMappedCellIds}
               origin={glyphOrigin("US", "U")}
               progress={progress}
               revealRange={[0.12, 0.28]}
               selectionActive={selectionActive}
-              selectedCellId={selectedCell(selectedNode, "US", "U")}
+              selectedCellId={nodeCell(selectedNode, "US", "U")}
             />
             <PixelGlyph
               definition={S_GLYPH}
+              hoveredCellId={nodeCell(hoveredNode, "US", "S")}
               interactiveCellIds={usInteractiveCellIds}
               mappedCellIds={usMappedCellIds}
               origin={glyphOrigin("US", "S")}
               progress={progress}
               revealRange={[0.18, 0.34]}
               selectionActive={selectionActive}
-              selectedCellId={selectedCell(selectedNode, "US", "S")}
+              selectedCellId={nodeCell(selectedNode, "US", "S")}
             />
 
             {featuredNodes.map((node, index) => (
@@ -597,6 +675,11 @@ export function CorpusNetwork() {
                 aria-controls={selected ? "corpus-node-detail" : undefined}
                 aria-label={`Show ${node.label} corpus details`}
                 aria-pressed={selected}
+                onPointerEnter={() => setHoveredCorpusId(node.corpusId)}
+                onPointerLeave={() => setHoveredCorpusId(null)}
+                onPointerCancel={() => setHoveredCorpusId(null)}
+                onFocus={() => setHoveredCorpusId(node.corpusId)}
+                onBlur={() => setHoveredCorpusId(null)}
                 onClick={() => {
                   setRawOpen(false);
                   setSelectedCorpusId((current) =>
@@ -607,8 +690,8 @@ export function CorpusNetwork() {
             );
           })}
 
-          <motion.p className="pixel-corpus-density-note" style={{ opacity: densityOpacity }}>
-            mapped cells signal record density, never completeness
+          <motion.p className="pixel-corpus-instruction" style={{ opacity: instructionOpacity }}>
+            Click a lit block to explore the corpus.
           </motion.p>
         </div>
 
