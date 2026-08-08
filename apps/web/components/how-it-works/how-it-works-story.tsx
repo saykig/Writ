@@ -17,6 +17,23 @@ interface StoryStageDefinition {
   readonly aside?: string;
 }
 
+type FoundationId =
+  | "knowledge-model"
+  | "evidence-provenance"
+  | "corpus-families"
+  | "writ-language"
+  | "schemas"
+  | "parser-compiler"
+  | "fingerprints"
+  | "conformance";
+
+interface FoundationTopic {
+  readonly id: FoundationId;
+  readonly title: string;
+  readonly summary: string;
+  readonly detail: readonly string[];
+}
+
 const PIPELINE = ["SOURCE", "PASSAGE", "RECORD", "REVIEW", "CORPUS", "QUERY", "RESULT"];
 
 const STAGES: readonly StoryStageDefinition[] = [
@@ -89,6 +106,81 @@ const STAGES: readonly StoryStageDefinition[] = [
   },
 ];
 
+const FOUNDATION_TOPICS: readonly FoundationTopic[] = [
+  {
+    id: "knowledge-model",
+    title: "Knowledge model",
+    summary: "What Writ stores, and how sources, records, corpora and results connect.",
+    detail: [
+      "Writ does not treat a document, a claim and an institution as the same thing. It gives each one a place in the system and keeps the relationships between them explicit.",
+      "Institutional records also keep identity, placement, mission, mandate, function, decision rights and operational capacity as separate fact types. Evidence for one does not establish the others.",
+    ],
+  },
+  {
+    id: "evidence-provenance",
+    title: "Evidence and provenance",
+    summary: "How records stay connected to the exact words and sources that support them.",
+    detail: [
+      "Every record should still be able to answer: what exact words support this, where did they come from, and what version of the source was reviewed?",
+      "A record’s evidence reference stores the passage, its location, the document version and fingerprints for both the passage and document.",
+    ],
+  },
+  {
+    id: "corpus-families",
+    title: "Corpus families",
+    summary: "Why institutional records and legal-policy records are kept separate.",
+    detail: [
+      "Different kinds of things need different kinds of records. The families share a small record base, then add fields suited to what they describe.",
+      "They can refer to each other without becoming the same thing.",
+    ],
+  },
+  {
+    id: "writ-language",
+    title: ".writ",
+    summary: "The typed language used to express records, evidence, scope and queries.",
+    detail: [
+      ".writ is the typed language Writ uses to express structured records and queries.",
+      "This excerpt comes from the current NIST institutional corpus. The record name and family are part of the language itself.",
+    ],
+  },
+  {
+    id: "schemas",
+    title: "Schemas",
+    summary: "The rules that determine what a valid Writ record can contain.",
+    detail: [
+      "Schemas define what fields a record is allowed or required to have.",
+      "Every record shares fields for identity, evidence, uncertainty, provenance and review state. Each corpus family can then require fields that make sense for its own material.",
+    ],
+  },
+  {
+    id: "parser-compiler",
+    title: "Parser and compiler",
+    summary: "How Writ checks the language before it runs a query.",
+    detail: [
+      "Before Writ runs a query, it can check whether the language is structurally valid. The parser reads the syntax; the compiler turns valid declarations into normalized records and analysis objects.",
+      "This check is deterministic. It does not require a model, a database or network access to decide whether the syntax is valid.",
+    ],
+  },
+  {
+    id: "fingerprints",
+    title: "Fingerprints",
+    summary: "How Writ can tell when stored source material has changed.",
+    detail: [
+      "A fingerprint is a hash of stored content. If the content changes, the fingerprint changes too.",
+      "That gives Writ a way to notice that the evidence being reviewed is no longer byte-for-byte the same evidence.",
+    ],
+  },
+  {
+    id: "conformance",
+    title: "Conformance",
+    summary: "How fixtures and tests keep the language behaving consistently across versions.",
+    detail: [
+      "Conformance tests make sure the same valid input keeps producing the same expected behavior as Writ changes.",
+      "The fixtures exercise parsing, canonicalization, diagnostics, quantities, time, truth values and proof behavior. Mutation tests check that the suite notices when an expected result is changed.",
+    ],
+  },
+];
+
 function StageNarrative({
   stage,
   index,
@@ -122,48 +214,148 @@ function StageNarrative({
   );
 }
 
-function TechnicalDetails() {
-  return (
-    <details className="hiw-technical">
-      <summary>
-        <span>
-          <strong>Technical details</strong>
-          <small>Inspect the machinery beneath the story</small>
-        </span>
-        <span aria-hidden>+</span>
-      </summary>
-      <div className="hiw-technical-grid">
+function FoundationExtra({ id }: { id: FoundationId }) {
+  if (id === "knowledge-model") {
+    return (
+      <div className="hiw-foundation-flows" aria-label="Knowledge model relationships">
         <div>
-          <h3>.writ</h3>
-          <p>The typed language records structured assertions, evidence, scope and provenance.</p>
+          {["Source", "Passage", "Record", "Corpus", "Query", "Result"].map(
+            (item, index, items) => (
+              <span key={item}>
+                <strong>{item}</strong>
+                {index < items.length - 1 ? <i aria-hidden>→</i> : null}
+              </span>
+            ),
+          )}
         </div>
         <div>
-          <h3>JSON Schemas</h3>
-          <p>Current schemas govern the shared record base and each implemented corpus family.</p>
-        </div>
-        <div>
-          <h3>Parser and compiler</h3>
-          <p>
-            Deterministic tooling checks language structure without network access or model
-            inference.
-          </p>
-        </div>
-        <div>
-          <h3>Fingerprints</h3>
-          <p>
-            A hash is a fingerprint of stored content. If the content changes, so does the
-            fingerprint.
-          </p>
-        </div>
-        <div>
-          <h3>Conformance</h3>
-          <p>
-            Fixtures and stable diagnostics make schema and language behavior reviewable across
-            versions.
-          </p>
+          {[
+            "Institution",
+            "identity",
+            "placement",
+            "mission",
+            "mandate",
+            "function",
+            "capacity",
+          ].map((item, index, items) => (
+            <span key={item}>
+              <strong>{item}</strong>
+              {index < items.length - 1 ? <i aria-hidden>→</i> : null}
+            </span>
+          ))}
         </div>
       </div>
-    </details>
+    );
+  }
+
+  if (id === "evidence-provenance") {
+    return (
+      <div className="hiw-foundation-flow" aria-label="Evidence trace">
+        {["record", "passage", "document version", "source"].map((item, index, items) => (
+          <span key={item}>
+            <strong>{item}</strong>
+            {index < items.length - 1 ? <i aria-hidden>→</i> : null}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  if (id === "corpus-families") {
+    return (
+      <dl className="hiw-foundation-definitions">
+        <div>
+          <dt>institutional</dt>
+          <dd>describes institutions</dd>
+        </div>
+        <div>
+          <dt>legal_policy</dt>
+          <dd>describes laws, policies, rules and governing instruments</dd>
+        </div>
+      </dl>
+    );
+  }
+
+  if (id === "writ-language") {
+    return (
+      <pre className="hiw-foundation-code" aria-label="Excerpt from the NIST records.writ file">
+        <code>{`record nist_organizational_placement : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST organizational placement";`}</code>
+      </pre>
+    );
+  }
+
+  return null;
+}
+
+function TechnicalFoundations() {
+  const [openFoundation, setOpenFoundation] = useState<FoundationId | null>(null);
+
+  return (
+    <section className="hiw-technical" aria-labelledby="hiw-technical-title">
+      <header>
+        <h2 id="hiw-technical-title">Technical foundations</h2>
+        <p>The parts underneath Writ, if you want to see how it actually works.</p>
+      </header>
+
+      <div className="hiw-foundation-list">
+        {FOUNDATION_TOPICS.map((topic) => {
+          const isOpen = openFoundation === topic.id;
+          const titleId = `hiw-foundation-${topic.id}-title`;
+          const panelId = `hiw-foundation-${topic.id}-panel`;
+
+          return (
+            <article
+              key={topic.id}
+              className="hiw-foundation"
+              data-open={isOpen ? "true" : "false"}
+            >
+              <button
+                type="button"
+                className="hiw-foundation-trigger"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                onClick={() =>
+                  setOpenFoundation((current) => (current === topic.id ? null : topic.id))
+                }
+              >
+                <strong id={titleId}>{topic.title}</strong>
+                <span>{topic.summary}</span>
+                <ArrowRight aria-hidden />
+              </button>
+
+              <div
+                id={panelId}
+                className="hiw-foundation-panel"
+                role="region"
+                aria-labelledby={titleId}
+                aria-hidden={!isOpen}
+                data-open={isOpen ? "true" : "false"}
+              >
+                <div>
+                  <div className="hiw-foundation-body">
+                    {topic.detail.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                    <FoundationExtra id={topic.id} />
+                    <button
+                      type="button"
+                      className="hiw-foundation-close"
+                      tabIndex={isOpen ? 0 : -1}
+                      onClick={() => setOpenFoundation(null)}
+                    >
+                      Close <span aria-hidden>↑</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -314,7 +506,7 @@ export function HowItWorksStory() {
       </section>
 
       <section className="hiw-details-and-close">
-        <TechnicalDetails />
+        <TechnicalFoundations />
         <div className="hiw-close">
           <p>Ready to inspect a real record?</p>
           <div>
