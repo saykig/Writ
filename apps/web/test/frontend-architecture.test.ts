@@ -12,15 +12,14 @@ describe("frontend architecture", () => {
     for (const path of ["app/lab/page.tsx", "app/start-here/page.tsx"]) {
       expect(read(path)).not.toContain("PageHeader");
     }
-    // Query is three columns with the questions always in view, and no
-    // free-text box: an answer is assembled from reviewed records, not searched for.
-    const workspace = read("components/query/query-workspace.tsx");
-    expect(workspace).toContain("Policy questions");
-    expect(workspace).toContain("lg:grid-cols-[14rem_minmax(0,1fr)_21rem]");
-    expect(workspace).not.toContain("<input");
-    expect(workspace).not.toContain("<textarea");
-    // The record column is opened on demand and closable, not a permanent third.
-    expect(workspace).toContain("openRecord ?");
+    // Corpus is a grouped reading index, not a generated-answer or preset-question surface.
+    const browser = read("components/corpus/corpus-browser.tsx");
+    expect(browser).toContain("CorpusGroupList");
+    expect(browser).toContain("Search records…");
+    expect(browser).toContain("Record inspector");
+    expect(browser).not.toContain("Policy questions");
+    expect(browser).not.toContain("Important distinctions");
+    expect(browser).not.toContain("Corpus and query versions");
   });
 
   test("the Lab is the tool, with no page header above it", () => {
@@ -64,7 +63,8 @@ describe("frontend architecture", () => {
     expect(config).toContain('source: "/playground"');
     expect(config).toContain('destination: "/lab"');
     expect(config).toContain('source: "/demo"');
-    expect(config).toContain('destination: "/query"');
+    expect(config).toContain('source: "/query"');
+    expect(config).toContain('destination: "/corpus"');
     expect(config).toContain("permanent: true");
   });
 
@@ -74,7 +74,8 @@ describe("frontend architecture", () => {
     // Start Here answers what the product is before the working routes.
     expect(navItems).toContain('label: "Start Here"');
     expect(navItems).toContain('href: "/start-here"');
-    expect(navItems).toContain('label: "Query"');
+    expect(navItems).toContain('label: "Corpus"');
+    expect(navItems).toContain('href: "/corpus"');
     expect(navItems).toContain('label: "Build"');
     expect(navItems).toContain('label: "Lab"');
     expect(navItems).not.toContain('label: "How it works"');
@@ -89,7 +90,7 @@ describe("frontend architecture", () => {
     for (const page of [
       "app/page.tsx",
       "app/start-here/page.tsx",
-      "app/query/page.tsx",
+      "app/corpus/page.tsx",
       "app/build/page.tsx",
       "app/how-it-works/page.tsx",
       "app/lab/page.tsx",
@@ -103,6 +104,7 @@ describe("frontend architecture", () => {
       "app/demo-analysis",
       "app/playground",
       "app/demo",
+      "app/query/page.tsx",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
     }

@@ -118,15 +118,15 @@ describe("homepage corpus catalog projection", () => {
 
   test("is generated deterministically from the catalog and referenced manifests", () => {
     const generator = read("scripts/embed-corpus-catalog.ts");
+    const reader = read("scripts/lib/read-native-corpora.ts");
     const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
 
-    expect(generator).toContain("Bun.YAML.parse");
+    expect(generator).toContain("readNativeCorpora");
+    expect(reader).toContain("Bun.YAML.parse");
     expect(generator).toContain("entry.manifest");
     expect(generator).toContain("record_counts");
     expect(generator).toContain('readFileSync(join(repoRoot, primaryRecordPath), "utf8")');
-    expect(generator).toContain(
-      'for (const key of ["corpus_id", "family", "jurisdiction", "status"]',
-    );
+    expect(reader).toContain('for (const key of ["corpus_id", "family", "jurisdiction", "status"]');
     expect(pkg.scripts.embed).toContain("embed-corpus-catalog.ts");
     expect(pkg.scripts.build).toContain("embed-corpus-catalog.ts");
   });
