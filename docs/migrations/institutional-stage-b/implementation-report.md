@@ -157,6 +157,10 @@ capacity envelope.
 
 Both corpus manifests remain `status: draft`.
 
+After incorporating current `origin/main`, the deterministic web corpus-catalog projection was
+regenerated from these corrected manifests. This synchronizes displayed record counts only; it
+does not change interface behavior or corpus semantics.
+
 ## Validation
 
 The correction is checked by:
