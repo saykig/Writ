@@ -411,12 +411,18 @@ describe("mapping queue and preservation gates", () => {
 
   test("keeps the pre-migration identifier out of active records and supporting references", () => {
     const historicalId = "eu_ai_office_technical_documentation_receipt";
+    const activeId = "eu_ai_office_tech_doc_receipt";
     expect(records.some((record) => record.record_id === historicalId)).toBe(false);
     expect(links.some((link) => (link.supporting_record_ids ?? []).includes(historicalId))).toBe(
       false,
     );
-    expect(records.some((record) => record.record_id === "eu_ai_office_tech_doc_receipt")).toBe(
-      true,
+    expect(records.some((record) => record.record_id === activeId)).toBe(true);
+
+    const generatedCatalog = readFileSync(
+      join(ROOT, "apps/web/lib/corpus-catalog-data.ts"),
+      "utf8",
     );
+    expect(generatedCatalog).not.toContain(`record ${historicalId} : institutional`);
+    expect(generatedCatalog).toContain(`record ${activeId} : institutional`);
   });
 });

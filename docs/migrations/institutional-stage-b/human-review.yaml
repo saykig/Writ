@@ -182,7 +182,7 @@ decisions:
     human_decision: approve
   - decision_id: stage-b.ec.technical-documentation-receipt
     target_kind: record
-    target_id: eu_ai_office_tech_doc_receipt
+    target_id: eu_ai_office_technical_documentation_receipt
     judgment_id: judgment_eu_ai_office_technical_documentation_receipt_review
     evidence_passages: [passage_eu_01]
     reviewed_components: [assertion, institutional_fact_payload, evidence_passages, uncertainties, proposed_disposition]

@@ -33,7 +33,7 @@
     "disposition_judgments": 21,
     "accepted_disposition_judgments": 21,
     "approved_target_ids": [
-      "eu_ai_office_tech_doc_receipt",
+      "eu_ai_office_technical_documentation_receipt",
       "eu_ai_office_training_sum_temp_function",
       "eu_ai_office_serious_incident_report_receipt",
       "european_commission_identity",
