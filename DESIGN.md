@@ -7,16 +7,19 @@ OWN-WORLD: Near-black fields, white and grey type, restrained blue action, hairl
 radii, and a precise dotted globe.
 STORY: Understand Writ, inspect source-grounded knowledge, ask a bounded question, and follow any
 derived result back to its inputs.
-FIRST VIEWPORT: Navigation above a two-column hero—single-line proposition left, interactive globe
-right, actions directly below the explanation; the columns never overlap.
-FORM: Supplied mockup, directly approved by the user; restrained research interface with one
-authored canvas interaction.
+FIRST VIEWPORT: An inset navigation slab floats above a dense full-field Pixel environment and a
+viewport-commanding `Write in Writ.▌`; that title resolves in place while the supporting interface
+forms around it.
+FORM: Supplied mockup and motion references, directly approved by the user; a restrained research
+interface whose homepage alone uses authored resolution motion.
 -->
 
 ## Visual system
 
 - Dark mode is the default. Light mode is an explicit alternate, not a system-derived default.
 - Geist carries display and body roles; Geist Mono is limited to code, identifiers, and hashes.
+  Geist Pixel is an expressive homepage state: pixel constructions mean unresolved, encoded, or
+  being structured; ordinary Geist Sans means resolved, readable, and reviewable.
 - Surfaces use near-black cool neutrals, restrained blue for action and focus, and semantic
   green/red/unknown colors for evaluation state.
 - Borders establish hierarchy. Shadows are exceptional; cards and controls use 10–12px radii.
@@ -27,8 +30,26 @@ authored canvas interaction.
 ## Layout and interaction
 
 - Content uses a shared 76rem maximum width and a 4px-derived spacing rhythm.
-- The homepage globe is the single authored motion moment. Automatic rotation pauses offscreen,
-  during manual interaction, and under reduced motion.
+- The homepage has a restrained authored state machine based on resolution. A dense encoded field
+  persists through the full homepage. `Write in Writ.▌` resolves without moving or shrinking; the
+  caret leaves, then copy, controls, and the real globe form around that stable title. This
+  expressive motion is limited to the homepage. Lab, Query, Build, and other research surfaces
+  remain quiet, dense, and instrument-like.
+- The homepage corpus field is one tall, sticky typographic canvas built from explicit, addressable
+  glyph cells. The same cell coordinates render each letter, select mapped-density illumination,
+  define interactive cells, and originate SVG annotation hairlines. Bright cells mean relative
+  mapped density based on current Writ records within that family; they never represent progress,
+  completeness, or a cross-family comparison.
+- The current approval gate implements only `E → EU`: one mapped cell, one interactive AI Act cell,
+  and one exact-origin annotation. US, EC, and NIST are deliberately withheld until this primitive
+  is approved. Later rows reuse the same cell primitive and share one centered outer word width;
+  NIST fits as a complete word without horizontal distortion or a per-word font-size exception.
+- Selecting a corpus node isolates it without navigating. `View raw code?` opens a full-height,
+  tool-first read-only workspace containing exact embedded canonical files and structured catalog
+  inspection; Writ and YAML remain visibly and semantically distinct.
+- The homepage globe remains an authored interactive moment. Automatic rotation pauses offscreen,
+  during manual interaction, and under reduced motion; homepage reveal masks never replace or
+  interfere with the real globe.
 - Mobile layouts recompose into a single column with 44px touch targets and page-safe vertical
   scrolling.
 - Visualizations and memos are views. Their design must preserve links to the underlying records and

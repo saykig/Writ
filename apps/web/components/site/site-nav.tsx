@@ -31,11 +31,16 @@ function isActive(pathname: string, href: string): boolean {
 export function SiteNav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const homepage = pathname === "/";
 
   return (
     <header
       data-site-chrome
-      className="sticky top-0 z-40 border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/90"
+      data-homepage={homepage ? "true" : "false"}
+      className={cn(
+        "site-nav sticky top-0 z-40 border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/90",
+        homepage && "site-nav--home",
+      )}
     >
       <div className="mx-auto flex h-[4.5rem] max-w-[76rem] items-center gap-5 px-5 sm:px-6">
         {/* Wordmark */}
