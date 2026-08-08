@@ -314,5 +314,26 @@ tasks:
       - archive/compatibility
       - docs/migrations/corpus-family-foundation/g7-g20-archive-path-map.md
 
+  - id: START-HERE-ONBOARDING-001
+    title: Add the Start Here onboarding walkthrough
+    status: done
+    dependencies:
+      - CORPUS-FAMILY-FOUNDATION-002
+    scope:
+      - Add Start Here as the first primary navigation destination.
+      - Explain the source-to-answer path with the reviewed NIST placement example.
+      - Link the completed walkthrough directly to Writ Lab.
+    exclusions:
+      - Changes to corpora, schemas, protocols, language packages, or reviewed records.
+      - Local installation instructions, frontend redesign, or Stage B dependencies.
+    acceptance:
+      - A first-time reader can follow Source, Passage, Record, Corpus, Question, and Answer with trace.
+      - The walkthrough remains readable on mobile and without motion.
+      - Navigation, accessibility, frontend tests, type checking, and the production build pass.
+    outputs:
+      - apps/web/app/start-here/page.tsx
+      - apps/web/components/start-here/start-here-walkthrough.tsx
+      - apps/web/test/start-here.test.ts
+
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml
