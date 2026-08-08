@@ -25,8 +25,10 @@ Workforce, budget, AI-budget, degraded-facility, generic operating-status, AI-gr
 Director decision-right proposals were intentionally not added. Their absence is not a false value.
 External consortium resources remain external and are never represented as NIST-owned resources.
 
-The stored U.S. Code capture is strictly the 2024 edition; it is not represented as durable proof
-of statutory currency on the later retrieval date. The complete Stage A and Stage B history is in
-`migration.yaml`; accepted Stage A decisions and proposed Stage B dispositions are in
-`judgments.writ`. The two existing Core links remain the only NIST relationship links, and inverse
-links are derived rather than stored.
+The stored U.S. Code capture is the current official OLRC preliminary text containing laws in
+effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are unchanged from the
+prior annual-edition capture; the current captured-document hash and retrieval transport are
+recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml`;
+accepted Stage A decisions and proposed Stage B dispositions are in `judgments.writ`. The two
+existing Core links remain the only NIST relationship links, and inverse links are derived rather
+than stored.

@@ -75,7 +75,14 @@ interface ReviewQueue {
   human_approval_artifact_found: boolean;
   schema_queues: Record<
     string,
-    Array<{ target_id: string; judgment_id: string; evidence_passages: string[] }>
+    Array<{
+      target_id: string;
+      judgment_id: string;
+      evidence_passages: string[];
+      source_currency?: string;
+      proposed_holder?: string;
+      implementing_unit_in_scope?: string;
+    }>
   >;
   omitted_candidates: Array<{ target_id: string; status: string }>;
 }
@@ -295,6 +302,22 @@ describe("atomic institutional distinctions", () => {
     expect(record("eu_ai_office_placement").parent_institution_id).toBe(
       "european_commission.dg_connect",
     );
+  });
+
+  test("NIST holds AI measurement capacity implemented through the scoped division", () => {
+    const target = record("nist_ai_measurement_capacity");
+    expect(target.institution_id).toBe("nist");
+    expect(target.scope.institutional_scope).toContain(
+      "nist.ai_research_measurement_standards_division",
+    );
+    expect(target.operational_capacity?.capacity_type).toBe("organizational_unit");
+    expect(target.operational_capacity?.capacity_components).toEqual([
+      "ai_measurement_science",
+      "testing_and_evaluation",
+      "standards",
+      "ai_standards_and_guidelines_group",
+      "applied_ai_research_group",
+    ]);
   });
 
   test("Article 258 mandatory modality is preserved as a proposed function", () => {
@@ -567,6 +590,13 @@ describe("review preservation, judgments, links, and migrations", () => {
       new Set([...nistJudgments.slice(8), ...commissionJudgments].map((item) => item.target_id)),
     );
     expect(
+      items.find((item) => item.target_id === "nist_national_measurement_standards_mandate"),
+    ).toMatchObject({ source_currency: "current_official_olrc_through_2026_08_07" });
+    expect(items.find((item) => item.target_id === "nist_ai_measurement_capacity")).toMatchObject({
+      proposed_holder: "nist",
+      implementing_unit_in_scope: "nist.ai_research_measurement_standards_division",
+    });
+    expect(
       queue.omitted_candidates.find(
         (item) => item.target_id === "eu_ai_office_model_eval_capacity",
       ),
@@ -610,9 +640,9 @@ describe("review preservation, judgments, links, and migrations", () => {
 
 describe("source and repository boundaries", () => {
   const captures: Record<string, string> = {
-    "sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85": join(
+    "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d": join(
       NIST,
-      "sources/captures/us-code-15-usc-272.pdf",
+      "sources/captures/us-code-15-usc-272-current.html",
     ),
     "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919": join(
       NIST,
@@ -768,14 +798,20 @@ describe("source and repository boundaries", () => {
     );
   });
 
-  test("the stored statutory mandate is explicitly limited to the 2024 edition", () => {
+  test("the stored statutory mandate uses the current official OLRC capture", () => {
     const target = record("nist_national_measurement_standards_mandate");
-    expect(target.assertion.text).toContain("2024 edition");
+    const capture = read(NIST, "sources/captures/us-code-15-usc-272-current.html");
+    expect(target.assertion.text).toContain("laws in effect on August 7, 2026");
     expect(target.uncertainties[0]?.description).toContain(
-      "does not prove statutory currency after that edition",
+      "does not establish currency after that date",
     );
-    expect(target.evidence[0]?.document_version_id).toBe("us_code.title15_usc_272.v2024");
-    expect(read(NIST, "sources.writ")).toContain('source_version "2024-edition"');
+    expect(target.evidence[0]?.document_version_id).toBe("us_code.title15_usc_272.v2026_08_07");
+    expect(target.evidence[0]?.passage_hash).toBe(
+      "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019",
+    );
+    expect(capture).toContain("Text contains those laws in effect on August 7, 2026");
+    expect(capture).toContain(target.evidence[0]!.quote);
+    expect(read(NIST, "sources.writ")).toContain('source_version "current-through-2026-08-07"');
   });
 
   test("unpublished typo-bearing identifiers have no remaining tracked reference", () => {

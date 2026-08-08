@@ -67,7 +67,7 @@ schema_queues:
       target_id: nist_national_measurement_standards_mandate
       judgment_id: judgment_nist_national_measurement_standards_mandate_stage_b
       evidence_passages: [us_code.title15_usc_272.b_2]
-      source_currency: stored_2024_edition_only
+      source_currency: current_official_olrc_through_2026_08_07
     - decision_id: stage-b.ec.european-commission-union-law-mandate
       target_id: european_commission_union_law_mandate
       judgment_id: judgment_european_commission_union_law_mandate_review
@@ -146,6 +146,8 @@ schema_queues:
       target_id: nist_ai_measurement_capacity
       judgment_id: judgment_nist_ai_measurement_capacity_stage_b
       evidence_passages: [nist.ai_division.capacity, nist.ai_division.groups]
+      proposed_holder: nist
+      implementing_unit_in_scope: nist.ai_research_measurement_standards_division
     - decision_id: stage-b.nist.ai-consortium-capacity
       target_id: nist_ai_consortium_capacity
       judgment_id: judgment_nist_ai_consortium_capacity_stage_b

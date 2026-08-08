@@ -41,22 +41,31 @@ byte-identical, with SHA-256 values
 `cff778809423fbaf6e428565a7bc56df1dca583c3de91c1fdce2a09c8cf2aa72` and
 `a4493f8821a66184708fcb6003a8293693a2061d38763b7f0e8b779db4c2608f`.
 
-No accepted legal-policy record, source capture, source URL, retrieval timestamp, quoted evidence
-passage, passage locator, passage hash, source-document hash, archive artifact or frontend behavior
-was changed by the correction.
+No accepted legal-policy record, quoted evidence passage, passage locator, passage hash or archive
+artifact was changed by the correction. The § 272 capture, source URL, retrieval timestamp and
+source-document hash were deliberately replaced as described below. Unrelated social-preview
+metadata and its image were removed from this PR; the generated corpus-catalog projection remains.
 
 ## Official sources and statutory currency
 
 All Stage B captures remain in their corpus-local `sources/captures/` directories with their
-complete stored-document hashes. The NIST sources are the 2024-edition GovInfo section PDF, 15 CFR
-Part 285, NIST Handbook 150, and the official NIST accreditation, laboratories, AML, AI division
-and AI Consortium pages. Commission sources are TEU Articles 13 and 17, TFEU Article 258,
-Commission Decision C/2024/1459, and official Commission, AI Office and JRC pages.
+complete stored-document hashes. The former 2024-edition GovInfo § 272 PDF was replaced by a
+captured current official OLRC page whose own header states that it contains laws in effect on
+August 7, 2026. Direct origin access timed out from the capture environment, so the stored HTML was
+retrieved through a Google Translate pass-through that detected English; the capture retains the
+canonical OLRC URL and transport metadata. This transport fact is recorded in `migration.yaml`
+rather than hidden.
 
-The stored statutory capture is now identified strictly as the **2024 edition** of 15 U.S.C.
-§ 272. The mandate assertion, scope, uncertainty and source version do not claim that retrieval on
-2026-08-05 proves later statutory currency. The earlier report’s unrecorded “current OLRC text was
-checked” statement was removed; no unstored check is treated as durable provenance.
+The stored § 272 document hash is
+`sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d`.
+The exact § 272(b)(2) quotation is byte-identical to the prior annual-edition quotation, so its
+recalculated passage hash remains
+`sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019`.
+The assertion, scope and uncertainty claim currency only through the date stated by the stored
+OLRC capture. Other NIST sources remain 15 CFR Part 285, NIST Handbook 150, and the official NIST
+accreditation, laboratories, AML, AI division and AI Consortium pages. Commission sources remain
+TEU Articles 13 and 17, TFEU Article 258, Commission Decision C/2024/1459, and official
+Commission, AI Office and JRC pages.
 
 The deterministic Mapbox-token sanitization remains unchanged. Six NIST HTML captures retain the
 fixed `[REDACTED_PUBLISHER_MAPBOX_TOKEN]` replacement, original URLs and retrieval dates, pre/post
@@ -70,7 +79,7 @@ NIST still has exactly nine Stage B additions:
 
 | Record | Fact type | Workflow result |
 | --- | --- | --- |
-| `nist_national_measurement_standards_mandate` | mandate | draft proposal; 2024-edition scope explicit |
+| `nist_national_measurement_standards_mandate` | mandate | draft proposal; current OLRC scope explicit through 2026-08-07 |
 | `nist_nvlap_lab_decision_right` | decision right | draft proposal |
 | `nist_ai_standards_group_identity` | identity | draft proposal |
 | `nist_ai_standards_group_placement` | placement | draft proposal; immediate parent corrected |
@@ -118,7 +127,7 @@ Changes made solely for evidence precision:
 | --- | --- | --- |
 | `nist_laboratory_network_capacity` | Removed six uncited laboratory names; removed normalized quantity/date | `six_laboratories`, `user_facilities` |
 | `nist_nvlap_accreditation_capacity` | Removed unsupported `continuing_assessment`; renamed `application_processing` to quoted `application_submission` | application submission, on-site assessment, nonconformity resolution, proficiency testing, technical evaluation, certificate/scope issuance |
-| `nist_ai_measurement_capacity` | Changed type from `technical_capability` to `organizational_unit`; removed `technical_guidance` and unsupported machinery inference | AI measurement science, testing/evaluation, standards, and the two named groups |
+| `nist_ai_measurement_capacity` | Changed type from `technical_capability` to `organizational_unit`; removed `technical_guidance` and unsupported machinery inference; NIST is the holder and the AI division remains in scope as the implementing unit | AI measurement science, testing/evaluation, standards, and the two named groups |
 | `nist_ai_consortium_capacity` | Removed CRADA, task-group, prototype-evaluation and technology-transfer mechanisms; removed normalized quantity/date | research partnership, external expertise/products/data/models, AI-measurement guidelines and standards |
 | `eu_ai_office_org_capacity` | Removed uncited unit/adviser names and normalized quantity/date | six generic units and two generic advisers; the assertion preserves the quoted staff threshold |
 | `eu_ai_office_cooperation_capacity` | Removed unsupported international-cooperation component and split platform overclaims | Commission services, Union bodies, Member State authorities, dedicated expert/stakeholder platforms, scientific experts and AI developers |

@@ -30,17 +30,17 @@ concept NistAiStandardsGroupSource {
 }
 
 source us_code_15_usc_272 {
-  uri "https://www.govinfo.gov/content/pkg/USCODE-2024-title15/pdf/USCODE-2024-title15-chap7-sec272.pdf";
-  media_type "application/pdf";
-  retrieved 2026-08-05T00:00:00-04:00;
-  sha256 "sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85";
+  uri "https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272";
+  media_type "text/html";
+  retrieved 2026-08-08T00:36:14-04:00;
+  sha256 "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d";
 }
 
 concept UsCode15Usc272Source {
   source_id us_code.title15_usc_272;
   source_title "15 U.S.C. § 272, Functions and activities";
-  source_version "2024-edition";
-  source_date 2024-01-01;
+  source_version "current-through-2026-08-07";
+  source_date 2026-08-07;
 }
 
 source ecfr_15_cfr_part_285 {

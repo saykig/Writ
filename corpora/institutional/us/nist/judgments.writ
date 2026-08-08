@@ -106,7 +106,7 @@ judgment judgment_nist_mission_supersession_link_stage_a {
 
 judgment judgment_nist_national_measurement_standards_mandate_stage_b {
   target record nist_national_measurement_standards_mandate; type review_disposition; value "draft";
-  rationale "Automated Stage B proposal maps the narrow responsibility in the stored 2024 edition of 15 U.S.C. § 272(b)(2) as a mandate. The capture does not prove later statutory currency, and a measurement-standards mandate is not general regulatory authority over industry or private standards bodies. Human approval remains pending.";
+  rationale "Automated Stage B proposal maps the narrow responsibility in the current official OLRC text of 15 U.S.C. § 272(b)(2), containing laws in effect on August 7, 2026, as a mandate. The capture does not prove currency after that date, and a measurement-standards mandate is not general regulatory authority over industry or private standards bodies. Human approval remains pending.";
   evidence_refs { us_code.title15_usc_272.b_2 }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 

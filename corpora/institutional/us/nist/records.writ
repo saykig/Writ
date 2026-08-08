@@ -178,13 +178,13 @@ record nist_national_measurement_standards_mandate : institutional {
   version "0.2.0";
   title "NIST national-measurement-standards mandate";
   subjects { subject nist type institution role "responsible institution"; };
-  assertion assigns "The 2024 edition of 15 U.S.C. § 272(b)(2) assigns NIST responsibility to develop, maintain and retain custody of the national standards of measurement and to provide the means and methods for making measurements consistent with those standards.";
+  assertion assigns "The current official OLRC text of 15 U.S.C. § 272(b)(2), containing laws in effect on August 7, 2026, assigns NIST responsibility to develop, maintain and retain custody of the national standards of measurement and to provide the means and methods for making measurements consistent with those standards.";
   topics { measurement_science };
-  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Responsibility as codified in the stored 2024 edition of 15 U.S.C. § 272(b)(2)" }; }
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Responsibility as codified in the stored current OLRC text of 15 U.S.C. § 272(b)(2), containing laws in effect on August 7, 2026" }; }
   evidence {
-    support us_code.title15_usc_272 document_version us_code.title15_usc_272.v2024 passage us_code.title15_usc_272.b_2 locator "15 U.S.C. § 272(b)(2)" quote "to develop, maintain, and retain custody of the national standards of measurement, and provide the means and methods for making measurements consistent with those standards;" passage_hash "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019" document_hash "sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85" basis direct;
+    support us_code.title15_usc_272 document_version us_code.title15_usc_272.v2026_08_07 passage us_code.title15_usc_272.b_2 locator "15 U.S.C. § 272(b)(2)" quote "to develop, maintain, and retain custody of the national standards of measurement, and provide the means and methods for making measurements consistent with those standards;" passage_hash "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019" document_hash "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d" basis direct;
   }
-  uncertainty { item unknown "This record establishes the responsibility as codified in the stored 2024 edition. The capture does not prove statutory currency after that edition and does not establish general regulatory authority over industry, private standards bodies or every use of measurement standards."; }
+  uncertainty { item unknown "This record establishes the responsibility in the stored current OLRC text containing laws in effect on August 7, 2026. It does not establish currency after that date or general regulatory authority over industry, private standards bodies or every use of measurement standards."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
   review_state draft;
   institutional {
@@ -329,7 +329,7 @@ record nist_ai_measurement_capacity : institutional {
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
   review_state draft;
   institutional {
-    institution_id nist.ai_research_measurement_standards_division; fact_type operational_capacity;
+    institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type organizational_unit; capacity_components { ai_measurement_science, testing_and_evaluation, standards, ai_standards_and_guidelines_group, applied_ai_research_group }; evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; }
   }
 }
