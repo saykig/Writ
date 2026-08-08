@@ -1,0 +1,41 @@
+language writ "0.2"
+package eu.institutions.european_commission.cross_family_judgments version "0.2.0";
+
+// Automated proposals only. Approval of the underlying legal-policy and institutional
+// records does not approve these independently reviewable cross-family links.
+
+judgment judgment_eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office_proposal {
+  target record_link eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "draft";
+  rationale "Automated proposal for the directly evidenced request-and-receipt function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
+  evidence_refs { passage-eu-01 };
+  reviewer "OpenAI Codex automated proposal";
+  status proposed;
+  created_at 2026-08-08;
+  family_context institutional;
+}
+
+judgment judgment_eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office_proposal {
+  target record_link eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "draft";
+  rationale "Automated proposal for the directly evidenced training-content-summary template function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
+  evidence_refs { passage-eu-04 };
+  reviewer "OpenAI Codex automated proposal";
+  status proposed;
+  created_at 2026-08-08;
+  family_context institutional;
+}
+
+judgment judgment_eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office_proposal {
+  target record_link eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office;
+  type record_link_disposition;
+  value "draft";
+  rationale "Automated proposal for the directly evidenced serious-incident report-receipt function. The relationship remains draft until a human independently reviews its endpoints, direction, evidence and uncertainty.";
+  evidence_refs { passage-eu-08 };
+  reviewer "OpenAI Codex automated proposal";
+  status proposed;
+  created_at 2026-08-08;
+  family_context institutional;
+}

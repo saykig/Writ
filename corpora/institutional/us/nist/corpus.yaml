@@ -16,29 +16,34 @@ migration_aliases:
 root_institution_id: nist
 record_counts:
   institutional_records: 15
-  record_links: 2
-  disposition_judgments: 17
+  record_links: 3
+  disposition_judgments: 18
 review_counts:
   approved_records: 14
   superseded_records: 1
   draft_records: 0
   approved_record_links: 2
+  draft_record_links: 1
   accepted_disposition_judgments: 17
-  proposed_disposition_judgments: 0
+  proposed_disposition_judgments: 1
 unresolved_evidence_count: 0
 locations:
   sources:
     - sources.writ
     - sources/captures/
+    - ../../../legal-policy/us/white-house/americas-ai-action-plan/sources/sources.yaml
   passages:
     - sources.writ
     - records.writ
+    - ../../../legal-policy/us/white-house/americas-ai-action-plan/passages/passages.yaml
   records:
     - records.writ
   relationships:
     - relationships/nist_department_of_commerce_relationship.yaml
     - relationships/nist_mission_supersedes_nist_measurement_science_function.yaml
+    - relationships/cross-family/americas_ai_action_plan_assigns_function_to_nist.yaml
   judgments:
     - judgments.writ
+    - cross-family-judgments.writ
   migration:
     - migration.yaml

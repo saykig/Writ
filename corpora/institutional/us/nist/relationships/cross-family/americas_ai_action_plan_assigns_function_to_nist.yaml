@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+link_id: americas_ai_action_plan_assigns_function_to_nist
+owning_corpus_id: us.institutions.nist
+source_id: 07e3604d-321e-5621-9fde-357ab058412c
+source_kind: legal_policy_claim
+target_id: nist
+target_kind: institution
+relation_type: assigns_function_to
+basis: direct
+evidence_refs:
+  - f6e37323-f678-5515-92bf-475776e887b9
+uncertainties:
+  - type: incomplete_evidence
+    description: >-
+      The passage establishes a recommended policy action to publish guidelines and resources through
+      NIST at the Department of Commerce. It does not establish completed implementation, performance,
+      operational execution, or that every described activity has occurred.
+provenance:
+  created_by: OpenAI Codex automated proposal
+  created_at: 2026-08-08
+review_state: draft

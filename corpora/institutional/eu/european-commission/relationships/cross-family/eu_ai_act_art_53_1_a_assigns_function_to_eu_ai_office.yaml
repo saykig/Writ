@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+link_id: eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office
+owning_corpus_id: eu.institutions.european_commission
+source_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+source_kind: legal_policy_claim
+target_id: eu_ai_office
+target_kind: organizational_unit
+relation_type: assigns_function_to
+basis: direct
+evidence_refs:
+  - 32dfed45-b1d4-523c-a426-224fea22a6d3
+supporting_record_ids:
+  - eu_ai_office_technical_documentation_receipt
+uncertainties:
+  - type: incomplete_evidence
+    description: >-
+      The passage directly supports the AI Office's request-and-receipt function for the specified
+      technical documentation. It does not establish a general implementation mandate, enforcement
+      power, operational capacity, or completed performance.
+provenance:
+  created_by: OpenAI Codex automated proposal
+  created_at: 2026-08-08
+review_state: draft

@@ -185,13 +185,13 @@ describe("every catalogued manifest declares the contract its record files satis
     }
     expect(covered.size).toBe(16);
     // Nine generated files across each of the thirteen reviewed corpora, plus the
-    // two standalone NIST Core links and the Commission AI Office Core link.
-    expect(yamlDocuments).toBe(117 + 3);
-    expect(linkDocuments).toBe(3);
+    // three approved institutional Core links and four draft cross-family links.
+    expect(yamlDocuments).toBe(117 + 7);
+    expect(linkDocuments).toBe(7);
     // Three constitutional drafts, fifteen NIST records, and twenty Commission records.
     expect(writRecords).toBe(38);
-    // Seventeen NIST and twenty-one Commission disposition judgments.
-    expect(writJudgments).toBe(38);
+    // Existing accepted judgments plus four proposed cross-family dispositions.
+    expect(writJudgments).toBe(42);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -243,8 +243,10 @@ describe("every catalogued manifest declares the contract its record files satis
       routedFiles(nist.entry, manifest).map((r) => [relative(ROOT, r.file), r.contract]),
     );
     expect([...routed.keys()].sort()).toEqual([
+      "corpora/institutional/us/nist/cross-family-judgments.writ",
       "corpora/institutional/us/nist/judgments.writ",
       "corpora/institutional/us/nist/records.writ",
+      "corpora/institutional/us/nist/relationships/cross-family/americas_ai_action_plan_assigns_function_to_nist.yaml",
       "corpora/institutional/us/nist/relationships/nist_department_of_commerce_relationship.yaml",
       "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
     ]);

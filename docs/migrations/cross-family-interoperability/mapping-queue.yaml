@@ -1,0 +1,217 @@
+schema_version: 1.0.0
+queue_id: cross-family-interoperability-mapping-queue-v1
+status: awaiting_human_review
+active_link_ids:
+  - eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office
+  - eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office
+  - eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office
+  - americas_ai_action_plan_assigns_function_to_nist
+mappings:
+  - mapping_id: eu-ai-act-art-53-1-a-ai-office-function
+    legal_policy_record_id: 5bf2c350-8a6a-5d44-b73b-d9d9225ecc14
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: assigns_function_to
+    target_institutional_id: eu_ai_office
+    evidence_refs: [32dfed45-b1d4-523c-a426-224fea22a6d3]
+    mapping_status: active_candidate
+    proposed_basis: direct
+    confidence: high
+    uncertainty: Request and receipt only; no general implementation, enforcement, capacity, or performance finding.
+    human_review_required: true
+  - mapping_id: eu-ai-act-art-53-1-d-ai-office-function
+    legal_policy_record_id: 456bd51b-75bf-5313-8863-bd6ba767e625
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: assigns_function_to
+    target_institutional_id: eu_ai_office
+    evidence_refs: [f334f6ec-fe5c-5bdb-ac74-0c71cef77a18]
+    mapping_status: active_candidate
+    proposed_basis: direct
+    confidence: high
+    uncertainty: Template provision only; no general implementation, enforcement, capacity, or performance finding.
+    human_review_required: true
+  - mapping_id: eu-ai-act-art-55-1-c-ai-office-function
+    legal_policy_record_id: 1d2cfbeb-0e28-5b55-9a75-747e3cdc3efc
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: assigns_function_to
+    target_institutional_id: eu_ai_office
+    evidence_refs: [d17b89de-0b30-547e-84a2-65c5740105ae]
+    mapping_status: active_candidate
+    proposed_basis: direct
+    confidence: high
+    uncertainty: Report receipt only; no adjudicative authority, general enforcement, capacity, or performance finding.
+    human_review_required: true
+  - mapping_id: ai-action-plan-nist-function
+    legal_policy_record_id: 07e3604d-321e-5621-9fde-357ab058412c
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.white-house.americas-ai-action-plan
+    proposed_relation: assigns_function_to
+    target_institutional_id: nist
+    evidence_refs: [f6e37323-f678-5515-92bf-475776e887b9]
+    mapping_status: active_candidate
+    proposed_basis: direct
+    confidence: high
+    uncertainty: Recommended policy action; no completed implementation, performance, or operational execution finding.
+    human_review_required: true
+
+  - mapping_id: nist-ai-rmf-issued-by
+    legal_policy_record_id: da200131-c90f-5cc1-ad94-f05082f992c5
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0
+    proposed_relation: issued_by
+    target_institutional_id: nist
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: Publisher metadata is not automatically direct evidence of the institutional issuer.
+    human_review_required: true
+  - mapping_id: nist-generative-ai-profile-issued-by
+    legal_policy_record_id: 75af4748-ab29-5fb4-8ada-606f11f5a359
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.nist.generative-ai-profile
+    proposed_relation: issued_by
+    target_institutional_id: nist
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: Publisher metadata is not automatically direct evidence of the institutional issuer.
+    human_review_required: true
+  - mapping_id: caisi-overview-issued-by
+    legal_policy_record_id: 17f29687-68cd-5442-bc7c-792936c66976
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.nist.caisi.overview
+    proposed_relation: issued_by
+    target_institutional_id: nist
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: NIST hosting or publishing does not establish that NIST is the issuer of the underlying CAISI action.
+    human_review_required: true
+  - mapping_id: caisi-guidelines-issued-by
+    legal_policy_record_id: b31d1ebb-697b-5310-a51e-1018d1bc48ce
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.nist.caisi.guidelines
+    proposed_relation: issued_by
+    target_institutional_id: nist
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: NIST hosting or publishing does not establish that NIST is the issuer of the underlying CAISI document.
+    human_review_required: true
+  - mapping_id: commission-gpai-guidelines-issued-by
+    legal_policy_record_id: 5243cf6c-cc84-5a5e-b928-db1211a07a26
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-guidelines
+    proposed_relation: issued_by
+    target_institutional_id: european_commission
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: The authoritative source is unresolved; path, filename, label, and corpus ownership are not issuer evidence.
+    human_review_required: true
+  - mapping_id: ai-office-signatory-notice-issued-by
+    legal_policy_record_id: cc6f9844-f11c-506b-837e-39a604c9e1ef
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice
+    proposed_relation: issued_by
+    target_institutional_id: eu_ai_office
+    evidence_refs: []
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: The authoritative source is unresolved; path, filename, label, and corpus ownership are not issuer evidence.
+    human_review_required: true
+  - mapping_id: ai-office-implements-art-55-1-a
+    legal_policy_record_id: d4dfd16f-33bb-5956-b313-fde572c8d808
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: implemented_by
+    target_institutional_id: eu_ai_office
+    evidence_refs: [467fbe4a-c95c-5d4b-98cc-f079836b4a84]
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: The selected passage states a provider duty and does not identify the implementing institution.
+    human_review_required: true
+  - mapping_id: ai-office-implements-art-55-1-b
+    legal_policy_record_id: 7bfe5a89-7fa4-5b3b-9537-d90474b988e6
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: implemented_by
+    target_institutional_id: eu_ai_office
+    evidence_refs: [81841968-dfb5-5f49-9f0d-42e0ce012bf0]
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: The selected passage states a provider duty and does not identify the implementing institution.
+    human_review_required: true
+  - mapping_id: ai-office-implements-art-55-1-d
+    legal_policy_record_id: 493e990c-81ae-55d5-8279-cf56812b1959
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: implemented_by
+    target_institutional_id: eu_ai_office
+    evidence_refs: [84b6cf62-3bf7-51a5-a0bf-6594f1d68a10]
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: The selected passage states a provider duty and does not identify the implementing institution.
+    human_review_required: true
+  - mapping_id: commission-enforces-ai-act
+    legal_policy_record_id: 80bce319-838e-5518-bab4-6da5ba6c0c2d
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    proposed_relation: enforced_by
+    target_institutional_id: european_commission
+    evidence_refs: [passage_eu_ai_act_art_101_1]
+    mapping_status: unresolved
+    proposed_basis: null
+    confidence: low
+    uncertainty: Article 101 proves bounded GPAI enforcement; a whole-instrument link would overstate its scope.
+    human_review_required: true
+  - mapping_id: commission-fine-right-authority
+    legal_policy_record_id: null
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    institutional_record_id: european_commission_gp_ai_fine_decision_right
+    proposed_relation: derives_authority_from
+    target_institutional_id: european_commission
+    evidence_refs: [passage_eu_ai_act_art_101_1]
+    mapping_status: unresolved
+    proposed_basis: direct
+    confidence: high
+    uncertainty: A specific Article 101 legal-policy provision record must exist before it can be the target endpoint.
+    human_review_required: true
+  - mapping_id: ai-office-evaluation-right-authority
+    legal_policy_record_id: null
+    legal_policy_corpus_id: writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689
+    institutional_record_id: eu_ai_office_model_eval_decision_right
+    proposed_relation: derives_authority_from
+    target_institutional_id: eu_ai_office
+    evidence_refs: [passage_eu_ai_act_art_92_1]
+    mapping_status: unresolved
+    proposed_basis: direct
+    confidence: high
+    uncertainty: A specific Article 92 legal-policy provision record must exist before it can be the target endpoint.
+    human_review_required: true
+  - mapping_id: omb-m-25-21-applies-to-nist
+    legal_policy_record_id: 467f6f01-4abb-5e64-92ec-0ddb691feddd
+    legal_policy_corpus_id: writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21
+    proposed_relation: applies_to
+    target_institutional_id: nist
+    evidence_refs: [5f0a429a-91fe-5d95-a521-47ca2e1e7e29]
+    mapping_status: unresolved
+    proposed_basis: inherited
+    confidence: low
+    uncertainty: A complete, time-qualified covered-agency definition, exclusions, NIST status, and class-membership chain is absent.
+    human_review_required: true
+future_dependencies:
+  - id: create-ai-act-article-92-provision-record
+    reason: Required before the AI Office evaluation decision right can derive authority from a provision endpoint.
+  - id: create-ai-act-article-101-provision-record
+    reason: Required before the Commission GPAI fine decision right can derive authority from a provision endpoint.
+  - id: recover-gpai-authoritative-sources
+    reason: Required before resolving the Commission guideline and AI Office signatory-notice issuers.
+  - id: establish-omb-covered-agency-chain
+    reason: Required before evaluating whether OMB M-25-21 applies to NIST.
+  - id: review-future-institution-identities
+    candidates:
+      - Office of Management and Budget
+      - European Parliament
+      - Council of the European Union
+      - Center for AI Standards and Innovation
+    exclusions:
+      - Do not conflate White House, White House Office, Executive Office of the President, and President.
+      - Do not model national competent authorities as one institution.

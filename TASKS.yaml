@@ -359,5 +359,32 @@ tasks:
       - apps/web/app/how-it-works/page.tsx
       - apps/web/components/how-it-works
       - apps/web/test/start-here.test.ts
+
+  - id: CROSS-FAMILY-INTEROPERABILITY-001
+    title: Establish draft legal-policy to institutional record links
+    status: review
+    dependencies:
+      - CORPUS-FAMILY-FOUNDATION-002
+    scope:
+      - Resolve institutional endpoints only through one approved identity record.
+      - Store cross-family links with the institutional corpus that owns the canonical endpoint.
+      - Add three directly evidenced EU AI Office assignments and one directly evidenced NIST assignment.
+      - Keep every new link draft and every new record-link disposition proposed pending human review.
+      - Preserve unresolved mappings in a non-authoritative queue outside active corpus manifests.
+    exclusions:
+      - Changes to schemas, legal-policy corpus content, institutional records, or accepted judgments.
+      - Publisher-to-issuer inference, new institutional identities, source recovery, or provision creation.
+      - Active derives-authority, implementation, enforcement, or applicability links.
+    acceptance:
+      - The four draft links and four proposed judgments validate independently.
+      - NIST, the European Commission, and the EU AI Office each resolve to one approved identity record.
+      - Unresolved candidates remain outside active manifests and never use unresolved as an evidence basis.
+      - Protected records, evidence, hashes, and accepted judgments remain byte-identical.
+      - Formatting, linting, type checking, tests, conformance, build, and pack validation pass.
+    outputs:
+      - adr/0019-cross-family-interoperability.md
+      - docs/migrations/cross-family-interoperability
+      - packages/domain/src/institution-resolution.ts
+      - packages/language/test/cross-family-interoperability.test.ts
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml
