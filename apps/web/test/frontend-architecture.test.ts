@@ -31,27 +31,30 @@ describe("frontend architecture", () => {
     expect(lab).not.toContain("eyebrow=");
   });
 
-  test("the homepage hero offers the three destinations", () => {
+  test("the homepage hero offers one resolving Start Here link", () => {
     const home = `${read("app/page.tsx")}\n${read("components/home/home-intro.tsx")}`;
 
     expect(home).toContain("Write in Writ.");
     expect(home).toContain(
       "Writ turns complex political and institutional information into structured,",
     );
-    expect(home).toContain("Ask a question");
-    expect(home).toContain(">Build a corpus</Link>");
-    expect(home).toContain(">See how Writ works</Link>");
-    expect(home).toContain('href="/query"');
-    expect(home).toContain('href="/build"');
+    expect(home).not.toContain("Ask a question");
+    expect(home).not.toContain("Build a corpus");
+    expect(home).toContain('const HOW_WRIT_WORKS = "See how Writ works"');
     expect(home).toContain('href="/start-here"');
+    expect(home).toContain("home-motion-resolving-link-code");
+    expect(home).toContain("home-motion-resolving-link-final");
+    expect(home).toContain("statementWasUnresolvedRef.current");
+    expect(home).toContain("latest >= 0.84");
+    expect(home).not.toContain('href="/query"');
+    expect(home).not.toContain('href="/build"');
 
     // The retired actions are gone rather than reworded.
     expect(home).not.toContain("See a worked answer");
     expect(home).not.toContain(">Try Writ</Link>");
     expect(home).not.toContain("Try the Writ Lab");
-    // One primary action, not three.
-    expect(home).toContain('variant="outline"');
-    expect(home).toContain('variant="ghost"');
+    expect(home).not.toContain('variant="outline"');
+    expect(home).not.toContain('variant="ghost"');
   });
 
   test("the retired routes redirect permanently to their replacements", () => {
@@ -406,9 +409,14 @@ describe("frontend architecture", () => {
     expect(home).toContain("<HomepageField");
     expect(home).not.toContain("<Reveal");
     expect(intro).toContain('from "motion/react"');
+    expect(intro).toContain("useSpring");
+    expect(intro).toContain("smoothGlobeProgress");
+    expect(intro).toContain("smoothStatementProgress");
     expect(intro).not.toContain("getBoundingClientRect");
     expect(intro).not.toContain("introTitle.animate");
     expect(network).toContain("useScroll");
+    expect(network).toContain("useSpring");
+    expect(network).toContain("smoothProgress");
     expect(network).toContain("useTransform");
     expect(network).toContain("pathLength");
     expect(network).toContain("glyphCellPoint");
@@ -425,6 +433,8 @@ describe("frontend architecture", () => {
     }
     expect(glyph).toContain("GeistPixel-Square.woff2");
     expect(field).toContain("useScroll");
+    expect(field).toContain("useSpring");
+    expect(field).toContain("smoothScrollProgress");
     expect(field).toContain("useTransform");
     expect(network).not.toContain("IntersectionObserver");
     expect(network).not.toContain("/lab?jurisdiction=");

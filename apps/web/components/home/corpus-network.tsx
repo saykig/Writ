@@ -5,7 +5,14 @@ import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { ArrowRight, X } from "lucide-react";
 import type { MotionValue } from "motion/react";
-import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 
 import {
   E_GLYPH,
@@ -17,6 +24,7 @@ import {
   type PixelCellPoint,
   type PixelGlyphDefinition,
 } from "@/components/home/pixel-glyph";
+import { HOME_SCROLL_SPRING } from "@/components/home/scroll-motion";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import {
   CORPUS_CATALOG,
@@ -416,7 +424,8 @@ export function CorpusNetwork() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const progress = reduceMotion ? reducedProgress : scrollYProgress;
+  const smoothProgress = useSpring(scrollYProgress, HOME_SCROLL_SPRING);
+  const progress = reduceMotion ? reducedProgress : smoothProgress;
   const eShift = useTransform(progress, [0, 0.1, 0.22], [68, 68, 0]);
   const interactiveOpacity = useTransform(progress, [0.42, 0.52], [0, 1]);
   const interactivePointerEvents = useTransform(

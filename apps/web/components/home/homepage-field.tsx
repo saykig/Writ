@@ -3,7 +3,9 @@
 import type { CSSProperties } from "react";
 import type { MotionValue } from "motion/react";
 import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
+
+import { HOME_SCROLL_SPRING } from "@/components/home/scroll-motion";
 
 const FIELD_SYMBOLS = Array.from(
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-/<>[]{}#@%&=·—",
@@ -73,12 +75,14 @@ type SwarmStyle = CSSProperties & { "--emission-strength": MotionValue<number> }
 export function HomepageField() {
   const [corpusReached, setCorpusReached] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
+  const smoothScrollY = useSpring(scrollY, HOME_SCROLL_SPRING);
+  const smoothScrollProgress = useSpring(scrollYProgress, HOME_SCROLL_SPRING);
   const opacity = useTransform(
-    scrollYProgress,
+    smoothScrollProgress,
     [0, 0.19, 0.38, 0.58, 0.7, 0.78, 0.8],
     [0.82, 0.72, 0.54, 0.36, 0.2, 0.05, 0],
   );
-  const emissionStrength = useTransform(scrollY, [0, 300, 1600, 3200], [1, 0.72, 0.48, 0.3]);
+  const emissionStrength = useTransform(smoothScrollY, [0, 300, 1600, 3200], [1, 0.72, 0.48, 0.3]);
 
   useEffect(() => {
     const corpusStage = document.querySelector(".corpus-prototype-stage");

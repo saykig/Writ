@@ -2,13 +2,20 @@
 
 import type { CSSProperties } from "react";
 import type { MotionValue } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 
 import { CorpusCoverageGlobe } from "@/components/pilot/corpus-coverage-globe";
-import { Button } from "@/components/ui/button";
+import { HOME_SCROLL_SPRING } from "@/components/home/scroll-motion";
 import { CORPUS_COVERAGE } from "@/lib/corpus-coverage";
 
 const HEADLINE = "Write in Writ.";
@@ -21,6 +28,8 @@ const STATEMENT_LINES = [
   "Ask questions, build a corpus, and trace every",
   "conclusion back to its source.",
 ] as const;
+const HOW_WRIT_WORKS = "See how Writ works";
+const MACHINE_SYMBOLS = ["0", "1", "_", "+", "-", "/", "=", "{", "}", "R", "W"] as const;
 const FRAGMENT_SYMBOLS = ["01", "+", "−", "{", "}", "R", "/", "<", ">", "W", "=", "[]"];
 
 const GLOBE_FRAGMENTS = Array.from({ length: 42 }, (_, index) => {
@@ -50,6 +59,17 @@ type GlobeFragmentStyle = CSSProperties & {
   "--fragment-duration": string;
   "--fragment-x": string;
   "--fragment-y": string;
+};
+
+type MachineCharacterStyle = CSSProperties & {
+  "--machine-code-a": string;
+  "--machine-code-b": string;
+  "--machine-code-c": string;
+  "--machine-final": string;
+  "--machine-resolve-delay": string;
+  "--machine-resolve-duration": string;
+  "--machine-fragment-x": string;
+  "--machine-fragment-y": string;
 };
 
 function StatementLine({
@@ -126,19 +146,87 @@ function ResolvingTitle({ reduceMotion }: { reduceMotion: boolean }) {
   );
 }
 
+function ResolvingHowItWorksLink({
+  active,
+  reduceMotion,
+}: {
+  active: boolean;
+  reduceMotion: boolean;
+}) {
+  return (
+    <Link
+      href="/start-here"
+      className="home-motion-resolving-link"
+      data-active={active ? "true" : "false"}
+      data-reduced-motion={reduceMotion ? "true" : undefined}
+      aria-label={HOW_WRIT_WORKS}
+    >
+      <span className="home-motion-resolving-link-characters" aria-hidden>
+        {Array.from(HOW_WRIT_WORKS).map((character, index) => {
+          const printable = character === " " ? "\u00a0" : character;
+          const duration = 1.18 + ((index * 7) % 5) * 0.09;
+          const delay = ((index * 11) % 7) * 0.035;
+          const fragmentVisible = character !== " " && index % 4 === 1;
+
+          return (
+            <span
+              className={`home-motion-resolving-link-character home-motion-resolving-link-character--${index % 5}`}
+              key={`${character}-${index}`}
+              style={
+                {
+                  "--machine-code-a": JSON.stringify(
+                    MACHINE_SYMBOLS[(index * 3) % MACHINE_SYMBOLS.length],
+                  ),
+                  "--machine-code-b": JSON.stringify(
+                    MACHINE_SYMBOLS[(index * 5 + 1) % MACHINE_SYMBOLS.length],
+                  ),
+                  "--machine-code-c": JSON.stringify(
+                    MACHINE_SYMBOLS[(index * 7 + 4) % MACHINE_SYMBOLS.length],
+                  ),
+                  "--machine-final": JSON.stringify(printable),
+                  "--machine-resolve-delay": `${delay.toFixed(3)}s`,
+                  "--machine-resolve-duration": `${duration.toFixed(3)}s`,
+                  "--machine-fragment-x": `${index % 2 === 0 ? -4 : 4}px`,
+                  "--machine-fragment-y": `${index % 3 === 0 ? -3 : 3}px`,
+                } as MachineCharacterStyle
+              }
+            >
+              <span className="home-motion-resolving-link-measure">{printable}</span>
+              {character === " " ? null : (
+                <>
+                  <span className="home-motion-resolving-link-code" />
+                  {fragmentVisible ? (
+                    <span className="home-motion-resolving-link-fragment">
+                      {MACHINE_SYMBOLS[(index * 2 + 3) % MACHINE_SYMBOLS.length]}
+                    </span>
+                  ) : null}
+                </>
+              )}
+              <span className="home-motion-resolving-link-final">{printable}</span>
+            </span>
+          );
+        })}
+      </span>
+    </Link>
+  );
+}
+
 export function HomepageHero() {
   const globeRef = useRef<HTMLDivElement>(null);
   const statementRef = useRef<HTMLDivElement>(null);
+  const statementWasUnresolvedRef = useRef(false);
+  const [howItWorksActive, setHowItWorksActive] = useState(false);
   const reduceMotion = useReducedMotion() ?? false;
   const globeInView = useInView(globeRef, { margin: "-8% 0px -8% 0px" });
   const { scrollYProgress: globeProgress } = useScroll({
     target: globeRef,
     offset: ["start 94%", "center 48%"],
   });
-  const globeOpacity = useTransform(globeProgress, [0, 0.1, 0.48], [0, 0.38, 1]);
-  const globeY = useTransform(globeProgress, [0, 0.44, 1], [80, 0, -18]);
+  const smoothGlobeProgress = useSpring(globeProgress, HOME_SCROLL_SPRING);
+  const globeOpacity = useTransform(smoothGlobeProgress, [0, 0.1, 0.48], [0, 0.38, 1]);
+  const globeY = useTransform(smoothGlobeProgress, [0, 0.44, 1], [80, 0, -18]);
   const globeFilter = useTransform(
-    globeProgress,
+    smoothGlobeProgress,
     [0, 0.46, 0.84],
     ["blur(5px)", "blur(1px)", "blur(0px)"],
   );
@@ -146,8 +234,17 @@ export function HomepageHero() {
     target: statementRef,
     offset: ["start 100%", "end 100%"],
   });
-  const actionsOpacity = useTransform(statementProgress, [0.84, 0.92, 1], [0, 0.55, 1]);
-  const actionsY = useTransform(statementProgress, [0.84, 1], [14, 0]);
+  const smoothStatementProgress = useSpring(statementProgress, HOME_SCROLL_SPRING);
+
+  useMotionValueEvent(smoothStatementProgress, "change", (latest) => {
+    if (latest < 0.82) {
+      statementWasUnresolvedRef.current = true;
+    }
+
+    if (!reduceMotion && statementWasUnresolvedRef.current && !howItWorksActive && latest >= 0.84) {
+      setHowItWorksActive(true);
+    }
+  });
 
   return (
     <section className="home-motion-hero" aria-labelledby="home-title">
@@ -201,7 +298,7 @@ export function HomepageHero() {
                 <StatementLine
                   key={line}
                   index={index}
-                  progress={statementProgress}
+                  progress={smoothStatementProgress}
                   reduceMotion={reduceMotion}
                 >
                   {line}
@@ -212,33 +309,15 @@ export function HomepageHero() {
 
           <motion.div
             className="home-motion-actions"
-            style={reduceMotion ? undefined : { opacity: actionsOpacity, y: actionsY }}
+            initial={false}
+            animate={
+              reduceMotion || howItWorksActive
+                ? { opacity: 1, transform: "translateY(0px)" }
+                : { opacity: 0, transform: "translateY(10px)" }
+            }
+            transition={{ duration: 0.16, ease: "easeOut" }}
           >
-            <Button
-              size="sm"
-              className="home-motion-action home-motion-action--primary"
-              nativeButton={false}
-              render={
-                <Link href="/query">
-                  Ask a question
-                  <ArrowRight />
-                </Link>
-              }
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              className="home-motion-action"
-              nativeButton={false}
-              render={<Link href="/build">Build a corpus</Link>}
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              className="home-motion-action"
-              nativeButton={false}
-              render={<Link href="/start-here">See how Writ works</Link>}
-            />
+            <ResolvingHowItWorksLink active={howItWorksActive} reduceMotion={reduceMotion} />
           </motion.div>
         </div>
       </div>

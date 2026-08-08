@@ -1642,6 +1642,7 @@
   min-width: 0;
   margin-inline: auto;
   container-type: inline-size;
+  will-change: transform, opacity, filter;
 }
 
 .home-motion-globe-object {
@@ -1745,38 +1746,194 @@
 }
 
 .home-motion-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
   align-self: start;
-  justify-content: center;
-  gap: 0.55rem;
+  width: min(100%, 88rem);
   margin: 0;
+  margin-inline: auto;
 }
 
-.home-motion-action {
-  border-color: rgb(255 255 255 / 12%) !important;
-  background: rgb(12 14 17 / 42%) !important;
-  color: rgb(255 255 255 / 84%) !important;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 18%);
-  -webkit-backdrop-filter: blur(18px) saturate(0.68);
-  backdrop-filter: blur(18px) saturate(0.68);
+.home-motion-resolving-link {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgb(255 255 255 / 84%);
+  font-family: var(--font-geist-sans), var(--font-sans), sans-serif;
+  font-size: clamp(1.35rem, 2.15vw, 2rem);
+  font-weight: 540;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  transition: color 160ms ease;
 }
 
-.home-motion-action:hover {
-  border-color: rgb(255 255 255 / 18%) !important;
-  background: rgb(24 27 32 / 56%) !important;
-  color: white !important;
+.home-motion-resolving-link:hover,
+.home-motion-resolving-link:active {
+  color: rgb(255 255 255 / 100%);
+  text-decoration: none;
 }
 
-.home-motion-action--primary {
-  border-color: rgb(137 151 170 / 15%) !important;
-  background: rgb(34 42 53 / 72%) !important;
-  color: rgb(246 249 255 / 96%) !important;
+.home-motion-resolving-link-characters {
+  display: inline-flex;
+  white-space: nowrap;
 }
 
-.home-motion-action--primary:hover {
-  border-color: rgb(151 165 184 / 20%) !important;
-  background: rgb(43 52 64 / 82%) !important;
+.home-motion-resolving-link-character {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.home-motion-resolving-link-measure {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.home-motion-resolving-link-code,
+.home-motion-resolving-link-final,
+.home-motion-resolving-link-fragment {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.home-motion-resolving-link-code {
+  font-family: var(--font-geist-pixel-square), var(--font-geist-mono), monospace;
+  opacity: 1;
+}
+
+.home-motion-resolving-link-code::before {
+  content: var(--machine-code-a);
+}
+
+.home-motion-resolving-link-character--1 .home-motion-resolving-link-code {
+  font-family: var(--font-geist-pixel-grid), var(--font-geist-mono), monospace;
+}
+
+.home-motion-resolving-link-character--2 .home-motion-resolving-link-code {
+  font-family: var(--font-geist-pixel-circle), var(--font-geist-mono), monospace;
+}
+
+.home-motion-resolving-link-character--3 .home-motion-resolving-link-code {
+  font-family: var(--font-geist-pixel-triangle), var(--font-geist-mono), monospace;
+}
+
+.home-motion-resolving-link-character--4 .home-motion-resolving-link-code {
+  font-family: var(--font-geist-pixel-line), var(--font-geist-mono), monospace;
+}
+
+.home-motion-resolving-link-final {
+  font-family: var(--font-geist-sans), var(--font-sans), sans-serif;
+  opacity: 0;
+}
+
+.home-motion-resolving-link-fragment {
+  color: rgb(255 255 255 / 52%);
+  font-family: var(--font-geist-pixel-line), var(--font-geist-mono), monospace;
+  font-size: 0.4em;
+  opacity: 0;
+}
+
+.home-motion-resolving-link[data-active="true"] .home-motion-resolving-link-code::before {
+  animation: home-motion-link-code-resolve var(--machine-resolve-duration) steps(1, end)
+    var(--machine-resolve-delay) forwards;
+}
+
+.home-motion-resolving-link[data-active="true"] .home-motion-resolving-link-code {
+  animation: home-motion-link-pixel-resolve var(--machine-resolve-duration) ease-out
+    var(--machine-resolve-delay) forwards;
+}
+
+.home-motion-resolving-link[data-active="true"] .home-motion-resolving-link-final {
+  animation: home-motion-link-sans-resolve var(--machine-resolve-duration) ease-out
+    var(--machine-resolve-delay) forwards;
+}
+
+.home-motion-resolving-link[data-active="true"] .home-motion-resolving-link-fragment {
+  animation: home-motion-link-fragment-resolve var(--machine-resolve-duration) ease-out
+    var(--machine-resolve-delay) forwards;
+}
+
+.home-motion-resolving-link[data-reduced-motion="true"] .home-motion-resolving-link-code,
+.home-motion-resolving-link[data-reduced-motion="true"] .home-motion-resolving-link-fragment {
+  display: none;
+}
+
+.home-motion-resolving-link[data-reduced-motion="true"] .home-motion-resolving-link-final {
+  opacity: 1;
+}
+
+@keyframes home-motion-link-code-resolve {
+  0%,
+  16% {
+    content: var(--machine-code-a);
+  }
+  17%,
+  34% {
+    content: var(--machine-code-b);
+  }
+  35%,
+  51% {
+    content: var(--machine-code-c);
+  }
+  52%,
+  68% {
+    content: var(--machine-code-b);
+  }
+  69%,
+  100% {
+    content: var(--machine-final);
+  }
+}
+
+@keyframes home-motion-link-pixel-resolve {
+  0%,
+  62% {
+    opacity: 1;
+    filter: blur(0.15px);
+  }
+  82%,
+  100% {
+    opacity: 0;
+    filter: blur(0);
+  }
+}
+
+@keyframes home-motion-link-sans-resolve {
+  0%,
+  64% {
+    opacity: 0;
+    filter: blur(0.7px);
+  }
+  84% {
+    opacity: 0.82;
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes home-motion-link-fragment-resolve {
+  0%,
+  26% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  38% {
+    opacity: 0.48;
+  }
+  72% {
+    opacity: 0.28;
+    transform: translate(var(--machine-fragment-x), var(--machine-fragment-y));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--machine-fragment-x), var(--machine-fragment-y));
+  }
 }
 
 @keyframes home-motion-field-breathe {
