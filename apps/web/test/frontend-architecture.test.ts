@@ -34,7 +34,7 @@ describe("frontend architecture", () => {
   });
 
   test("the homepage hero offers the three destinations", () => {
-    const home = read("app/page.tsx");
+    const home = `${read("app/page.tsx")}\n${read("components/home/home-intro.tsx")}`;
 
     expect(home).toContain("Write in Writ.");
     expect(home).toContain(
@@ -159,7 +159,7 @@ describe("frontend architecture", () => {
   });
 
   test("the globe maps corpus coverage without navigating on selection", () => {
-    const home = read("app/page.tsx");
+    const home = `${read("app/page.tsx")}\n${read("components/home/home-intro.tsx")}`;
     const selector = read("components/pilot/corpus-coverage-globe.tsx");
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
 
@@ -383,13 +383,45 @@ describe("frontend architecture", () => {
     expect(navItems).toContain("https://github.com/saykig/Writ");
   });
 
-  test("every landing-page section uses the reduced-motion-safe scroll reveal", () => {
+  test("the homepage motion has explicit reconstruction, scroll-progress and reduced-motion paths", () => {
     const home = read("app/page.tsx");
-    const reveal = read("components/site/reveal.tsx");
-    // The homepage is the hero alone.
-    expect(home.match(/<Reveal(?:\s|>)/g)?.length).toBe(1);
-    expect(reveal).toContain("IntersectionObserver");
-    expect(reveal).toContain("prefers-reduced-motion: reduce");
-    expect(reveal).toContain('status === "in"');
+    const intro = read("components/home/home-intro.tsx");
+    const network = read("components/home/corpus-network.tsx");
+    const glyph = read("components/home/pixel-glyph.tsx");
+    const field = read("components/home/homepage-field.tsx");
+    const styles = read("app/globals.css");
+
+    expect(home).toContain("<HomepageHero");
+    expect(home).toContain("<CorpusNetwork");
+    expect(home).toContain("<HomepageField");
+    expect(home).not.toContain("<Reveal");
+    expect(intro).toContain('from "motion/react"');
+    expect(intro).not.toContain("getBoundingClientRect");
+    expect(intro).not.toContain("introTitle.animate");
+    expect(network).toContain("useScroll");
+    expect(network).toContain("useTransform");
+    expect(network).toContain("pathLength");
+    expect(network).toContain("glyphCellPoint");
+    expect(network).toContain("INTERACTIVE_CELL_ID");
+    expect(network).not.toContain("NIST");
+    expect(network).not.toContain('glyph: "US"');
+    expect(glyph).toContain("export function PixelGlyph");
+    expect(glyph).toContain("data-cell-id");
+    for (const letter of ["E", "U", "S", "C", "N", "I", "T"]) {
+      expect(glyph).toContain(`export const ${letter}_GLYPH`);
+    }
+    expect(glyph).toContain("GeistPixel-Square.woff2");
+    expect(field).toContain("useScroll");
+    expect(field).toContain("useTransform");
+    expect(network).not.toContain("IntersectionObserver");
+    expect(network).not.toContain("/lab?jurisdiction=");
+    expect(network).toContain("View raw code?");
+    expect(network).toContain("not a completeness estimate");
+    expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(styles).toContain(".home-motion-title");
+    expect(styles).toContain(".corpus-prototype-stage");
+    expect(styles).toContain("width: clamp(32rem, 54vw, 50rem)");
+    expect(styles).toContain(".pixel-corpus-hit-target");
+    expect(styles).toContain(".raw-workspace");
   });
 });
