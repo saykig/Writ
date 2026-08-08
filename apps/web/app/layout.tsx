@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
+import { Source_Serif_4 } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import {
   GeistPixelCircle,
   GeistPixelGrid,
@@ -7,23 +8,12 @@ import {
   GeistPixelSquare,
   GeistPixelTriangle,
 } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
-
-const sans = Geist({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const mono = Geist_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 // A text serif, used only by the Demo's memos. A policy memo is a document
 // rather than an interface, and it should read like one.
@@ -43,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${mono.variable} ${serif.variable} ${GeistPixelSquare.variable} ${GeistPixelGrid.variable} ${GeistPixelCircle.variable} ${GeistPixelTriangle.variable} ${GeistPixelLine.variable} h-full`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable} ${GeistPixelSquare.variable} ${GeistPixelGrid.variable} ${GeistPixelCircle.variable} ${GeistPixelTriangle.variable} ${GeistPixelLine.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">

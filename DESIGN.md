@@ -8,8 +8,8 @@ radii, and a precise dotted globe.
 STORY: Understand Writ, inspect source-grounded knowledge, ask a bounded question, and follow any
 derived result back to its inputs.
 FIRST VIEWPORT: An inset navigation slab floats above a dense full-field Pixel environment and a
-viewport-commanding `Write in Writ.▌`; that title reconstructs into the two-column hero rather than
-revealing a page that was already visible behind it.
+viewport-commanding `Write in Writ.▌`; that title resolves in place while the supporting interface
+forms around it.
 FORM: Supplied mockup and motion references, directly approved by the user; a restrained research
 interface whose homepage alone uses authored resolution motion.
 -->
@@ -31,19 +31,19 @@ interface whose homepage alone uses authored resolution motion.
 
 - Content uses a shared 76rem maximum width and a 4px-derived spacing rhythm.
 - The homepage has a restrained authored state machine based on resolution. A dense encoded field
-  precedes the interface; characters preserve their identity while Pixel constructions resolve
-  diffusely across the phrase, then the same title spatially reconstructs into the final hero.
-  Copy, controls, and the real globe form only during that reconstruction. This expressive motion
-  is limited to the homepage. Lab, Query, Build, and other research surfaces remain quiet, dense,
-  and instrument-like.
-- The homepage corpus field is one tall, sticky typographic canvas. Equal anchor boxes hold EU, US,
-  EC, and NIST while curated nodes and hairlines leave from multiple real glyph points. Bright cells
-  inside a glyph mean relative mapped density based on current Writ records within that family;
-  they never represent progress, completeness, or a cross-family comparison. Brighter interactive
-  nodes represent individual real corpora.
-- Every desktop corpus row shares one centered responsive box. The rendered Geist Pixel word is
-  measured and proportionally fitted to 90% of that box, so EU, US, EC, and the complete NIST
-  wordmark occupy the same visual width without per-word font sizes or aspect-ratio distortion.
+  persists through the full homepage. `Write in Writ.▌` resolves without moving or shrinking; the
+  caret leaves, then copy, controls, and the real globe form around that stable title. This
+  expressive motion is limited to the homepage. Lab, Query, Build, and other research surfaces
+  remain quiet, dense, and instrument-like.
+- The homepage corpus field is one tall, sticky typographic canvas built from explicit, addressable
+  glyph cells. The same cell coordinates render each letter, select mapped-density illumination,
+  define interactive cells, and originate SVG annotation hairlines. Bright cells mean relative
+  mapped density based on current Writ records within that family; they never represent progress,
+  completeness, or a cross-family comparison.
+- The current approval gate implements only `E → EU`: one mapped cell, one interactive AI Act cell,
+  and one exact-origin annotation. US, EC, and NIST are deliberately withheld until this primitive
+  is approved. Later rows reuse the same cell primitive and share one centered outer word width;
+  NIST fits as a complete word without horizontal distortion or a per-word font-size exception.
 - Selecting a corpus node isolates it without navigating. `View raw code?` opens a full-height,
   tool-first read-only workspace containing exact embedded canonical files and structured catalog
   inspection; Writ and YAML remain visibly and semantically distinct.

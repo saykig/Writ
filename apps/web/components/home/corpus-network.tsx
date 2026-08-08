@@ -1,10 +1,17 @@
 "use client";
 
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { ArrowRight, X } from "lucide-react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
 
+import {
+  E_GLYPH,
+  PixelGlyph,
+  U_GLYPH,
+  glyphCellPoint,
+  type GlyphCell,
+} from "@/components/home/pixel-glyph";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import {
   CORPUS_CATALOG,
@@ -18,324 +25,15 @@ const RawSourceEditor = dynamic(() => import("./raw-source-editor"), {
   loading: () => <span className="raw-workspace-loading">Loading canonical source…</span>,
 });
 
-type MotionStyle = CSSProperties & Record<string, string | number | undefined>;
-type GlyphName = "EU" | "US" | "EC" | "NIST";
-
-interface NodeGeometry {
-  x: number;
-  y: number;
-  labelX: number;
-  labelY: number;
-  mobileLabelX?: number;
-  direction: "above" | "below" | "left" | "right" | "diagonal";
-  align?: "start" | "end";
-}
-
-interface FeaturedRecord {
-  corpusId: string;
-  shortTitle: string;
-  geometry: NodeGeometry;
-}
-
-interface FeaturedGroup {
-  family: "legal_policy" | "institutional";
-  glyph: GlyphName;
-  jurisdiction: "EU" | "US";
-  records: readonly FeaturedRecord[];
-}
+const AI_ACT_ID =
+  "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689";
+const INTERACTIVE_CELL_ID = "U-07-15";
+const E_ORIGIN = { x: 14, y: 18 } as const;
+const U_ORIGIN = { x: 130, y: 18 } as const;
+const VIEWBOX = { height: 170, width: 270 } as const;
+const ANNOTATION_END = { x: 280, y: 57 } as const;
 
 const CATALOG_BY_ID = new Map(CORPUS_CATALOG.map((corpus) => [corpus.corpusId, corpus]));
-
-const FEATURED_GROUPS: readonly FeaturedGroup[] = [
-  {
-    family: "legal_policy",
-    glyph: "EU",
-    jurisdiction: "EU",
-    records: [
-      {
-        corpusId:
-          "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
-        shortTitle: "AI Act",
-        geometry: {
-          x: 34,
-          y: 8,
-          labelX: 12,
-          labelY: -2,
-          mobileLabelX: 35,
-          direction: "diagonal",
-          align: "end",
-        },
-      },
-      {
-        corpusId: "writ.corpus.legal-policy.eu.european-commission.gpai-guidelines",
-        shortTitle: "GPAI Guidelines",
-        geometry: {
-          x: 97,
-          y: 33,
-          labelX: 115,
-          labelY: 20,
-          mobileLabelX: 75,
-          direction: "right",
-        },
-      },
-      {
-        corpusId:
-          "writ.corpus.legal-policy.eu.european-commission.gpai-code-of-practice-signatory-notice",
-        shortTitle: "Code of Practice notice",
-        geometry: {
-          x: 70,
-          y: 90,
-          labelX: 98,
-          labelY: 103,
-          mobileLabelX: 70,
-          direction: "diagonal",
-        },
-      },
-    ],
-  },
-  {
-    family: "legal_policy",
-    glyph: "US",
-    jurisdiction: "US",
-    records: [
-      {
-        corpusId: "writ.corpus.legal-policy.us.nist.ai-risk-management-framework-1-0",
-        shortTitle: "NIST RMF",
-        geometry: {
-          x: 5,
-          y: 26,
-          labelX: -7,
-          labelY: 10,
-          mobileLabelX: 35,
-          direction: "above",
-          align: "end",
-        },
-      },
-      {
-        corpusId: "writ.corpus.legal-policy.us.nist.generative-ai-profile",
-        shortTitle: "GenAI Profile",
-        geometry: {
-          x: 94,
-          y: 24,
-          labelX: 112,
-          labelY: 10,
-          mobileLabelX: 75,
-          direction: "diagonal",
-        },
-      },
-      {
-        corpusId: "writ.corpus.legal-policy.us.office-of-management-and-budget.m-25-21",
-        shortTitle: "OMB M-25-21",
-        geometry: {
-          x: 18,
-          y: 90,
-          labelX: 4,
-          labelY: 104,
-          mobileLabelX: 35,
-          direction: "diagonal",
-          align: "end",
-        },
-      },
-      {
-        corpusId: "writ.corpus.legal-policy.us.white-house.americas-ai-action-plan",
-        shortTitle: "AI Action Plan",
-        geometry: {
-          x: 90,
-          y: 82,
-          labelX: 108,
-          labelY: 88,
-          mobileLabelX: 75,
-          direction: "right",
-        },
-      },
-    ],
-  },
-  {
-    family: "institutional",
-    glyph: "EC",
-    jurisdiction: "EU",
-    records: [
-      {
-        corpusId: "eu.institutions.european_commission",
-        shortTitle: "European Commission",
-        geometry: {
-          x: 92,
-          y: 22,
-          labelX: 108,
-          labelY: 10,
-          mobileLabelX: 75,
-          direction: "diagonal",
-        },
-      },
-    ],
-  },
-  {
-    family: "institutional",
-    glyph: "NIST",
-    jurisdiction: "US",
-    records: [
-      {
-        corpusId: "us.institutions.nist",
-        shortTitle: "NIST",
-        geometry: {
-          x: 17,
-          y: 58,
-          labelX: -5,
-          labelY: 78,
-          mobileLabelX: 35,
-          direction: "diagonal",
-          align: "end",
-        },
-      },
-    ],
-  },
-];
-
-const DENSITY_POSITIONS: Record<GlyphName, readonly [number, number][]> = {
-  EU: [
-    [6, 18],
-    [58, 18],
-    [6, 47],
-    [97, 58],
-    [25, 8],
-    [88, 88],
-    [34, 47],
-    [58, 68],
-    [6, 70],
-    [97, 58],
-    [18, 8],
-    [88, 88],
-    [6, 88],
-    [58, 40],
-    [20, 93],
-    [97, 72],
-    [36, 93],
-    [62, 88],
-  ],
-  US: [
-    [5, 18],
-    [62, 9],
-    [43, 30],
-    [94, 42],
-    [5, 55],
-    [69, 48],
-    [36, 88],
-    [76, 92],
-    [43, 58],
-    [78, 9],
-    [5, 74],
-    [58, 32],
-    [36, 88],
-    [84, 48],
-    [13, 88],
-    [60, 68],
-    [43, 72],
-    [76, 92],
-  ],
-  EC: [
-    [6, 18],
-    [63, 14],
-    [6, 47],
-    [80, 8],
-    [25, 8],
-    [58, 50],
-    [6, 70],
-    [65, 88],
-    [34, 47],
-    [80, 8],
-    [6, 88],
-    [58, 35],
-    [18, 8],
-    [82, 92],
-    [36, 93],
-    [96, 75],
-    [58, 68],
-    [96, 38],
-  ],
-  NIST: [
-    [4, 24],
-    [32, 20],
-    [50, 10],
-    [88, 10],
-    [15, 45],
-    [32, 65],
-    [63, 48],
-    [88, 52],
-    [4, 62],
-    [25, 70],
-    [47, 31],
-    [76, 10],
-    [4, 82],
-    [32, 82],
-    [56, 88],
-    [88, 72],
-    [65, 68],
-    [88, 88],
-  ],
-};
-
-const GLYPH_REVEAL_START: Record<GlyphName, number> = {
-  EU: 0.04,
-  US: 0.18,
-  EC: 0.45,
-  NIST: 0.62,
-};
-
-const GLYPH_SEQUENCE: readonly GlyphName[] = ["EU", "US", "EC", "NIST"];
-
-interface GlyphFit {
-  height: number;
-  scale: number;
-  width: number;
-}
-
-function useFittedGlyph() {
-  const boxRef = useRef<HTMLDivElement>(null);
-  const wordRef = useRef<HTMLSpanElement>(null);
-  const [fit, setFit] = useState<GlyphFit>({ height: 0, scale: 1, width: 0 });
-
-  useLayoutEffect(() => {
-    const box = boxRef.current;
-    const word = wordRef.current;
-    if (!box || !word) return;
-
-    let cancelled = false;
-    const measure = () => {
-      const naturalWidth = word.offsetWidth;
-      const naturalHeight = word.offsetHeight;
-      if (!naturalWidth || !naturalHeight || !box.clientWidth || !box.clientHeight) return;
-
-      const scale = Math.min(
-        (box.clientWidth * 0.9) / naturalWidth,
-        (box.clientHeight * 0.9) / naturalHeight,
-      );
-      const next = {
-        height: naturalHeight * scale,
-        scale,
-        width: naturalWidth * scale,
-      };
-      if (cancelled) return;
-      setFit((current) =>
-        Math.abs(current.width - next.width) < 0.5 && Math.abs(current.height - next.height) < 0.5
-          ? current
-          : next,
-      );
-    };
-
-    const observer = new ResizeObserver(measure);
-    observer.observe(box);
-    observer.observe(word);
-    void document.fonts.ready.then(measure);
-    measure();
-
-    return () => {
-      cancelled = true;
-      observer.disconnect();
-    };
-  }, []);
-
-  return { boxRef, fit, wordRef };
-}
 
 function resolveCorpus(corpusId: string): CatalogCorpusSummary {
   const corpus = CATALOG_BY_ID.get(corpusId);
@@ -343,157 +41,32 @@ function resolveCorpus(corpusId: string): CatalogCorpusSummary {
   return corpus;
 }
 
-function groupMappedCount(group: FeaturedGroup): number {
-  if (group.family === "institutional") {
-    return resolveCorpus(group.records[0]!.corpusId).mappedCount;
+function stableCellScore(cell: GlyphCell, seed: number): number {
+  let hash = 2166136261 ^ seed;
+  for (let index = 0; index < cell.id.length; index += 1) {
+    hash ^= cell.id.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
   }
-  return CORPUS_CATALOG.filter(
-    (corpus) => corpus.family === group.family && corpus.jurisdiction === group.jurisdiction,
-  ).reduce((total, corpus) => total + corpus.mappedCount, 0);
+  return hash >>> 0;
 }
 
-function densityCellCount(count: number, familyMaximum: number): number {
-  const tempered = familyMaximum > 0 ? Math.log1p(count) / Math.log1p(familyMaximum) : 0;
-  const occupancy = 0.12 + tempered * 0.33;
-  return Math.max(4, Math.round(DENSITY_POSITIONS.EU.length * occupancy));
-}
-
-function CorpusGlyph({
-  group,
-  selectedCorpusId,
-  onSelect,
-}: {
-  group: FeaturedGroup;
-  selectedCorpusId: string | null;
-  onSelect: (corpusId: string) => void;
-}) {
-  const { boxRef, fit, wordRef } = useFittedGlyph();
-  const mappedCount = groupMappedCount(group);
-  const familyMaximum = Math.max(
-    ...FEATURED_GROUPS.filter(({ family }) => family === group.family).map(groupMappedCount),
+/** Density is a deterministic choice among real cells, never a completion percentage. */
+function selectMappedCells(mappedCount: number): ReadonlySet<string> {
+  const candidates = [...E_GLYPH.cells, ...U_GLYPH.cells].filter(
+    ({ id }) => id !== INTERACTIVE_CELL_ID,
   );
-  const litCells = densityCellCount(mappedCount, familyMaximum);
-  const isDraft = group.records.every(({ corpusId }) => resolveCorpus(corpusId).status === "draft");
-  const relevant = selectedCorpusId
-    ? group.records.some(({ corpusId }) => corpusId === selectedCorpusId)
-    : true;
-
-  return (
-    <article
-      className="corpus-canvas-group"
-      data-glyph={group.glyph}
-      data-relevant={relevant ? "true" : "false"}
-      data-status={isDraft ? "draft" : "active"}
-      style={{ "--group-start": GLYPH_REVEAL_START[group.glyph] } as MotionStyle}
-      aria-label={`${group.glyph}: ${mappedCount} ${group.family === "legal_policy" ? "mapped claims" : "institutional records"}. Relative mapped density based on current Writ records; not a completeness estimate.`}
-    >
-      <div ref={boxRef} className="corpus-glyph-box" data-fitted={fit.width > 0 ? "true" : "false"}>
-        <div
-          className="corpus-glyph-visual"
-          style={
-            {
-              "--fitted-height": `${fit.height}px`,
-              "--fitted-width": `${fit.width}px`,
-            } as MotionStyle
-          }
-        >
-          <span
-            ref={wordRef}
-            className="corpus-glyph-base"
-            aria-hidden
-            style={{ "--glyph-scale": fit.scale } as MotionStyle}
-          >
-            {group.glyph}
-          </span>
-          <span className="corpus-density-cells" aria-hidden>
-            {DENSITY_POSITIONS[group.glyph].slice(0, litCells).map(([x, y], index) => (
-              <i
-                key={`${x}-${y}-${index}`}
-                style={{ "--density-x": `${x}%`, "--density-y": `${y}%` } as MotionStyle}
-              />
-            ))}
-          </span>
-
-          <svg className="corpus-node-lines" viewBox="0 0 100 100" aria-hidden>
-            {group.records.map(({ corpusId, geometry }) => (
-              <line
-                key={corpusId}
-                x1={geometry.x}
-                y1={geometry.y}
-                x2={geometry.labelX}
-                y2={geometry.labelY}
-                style={
-                  {
-                    "--line-x2": `${geometry.labelX}%`,
-                    "--line-x2-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
-                  } as MotionStyle
-                }
-                data-selected={selectedCorpusId === corpusId ? "true" : "false"}
-              />
-            ))}
-          </svg>
-
-          {group.records.map(({ corpusId, shortTitle, geometry }) => {
-            const corpus = resolveCorpus(corpusId);
-            const selected = selectedCorpusId === corpusId;
-            const nodeStyle = {
-              "--node-x": `${geometry.x}%`,
-              "--node-y": `${geometry.y}%`,
-              "--label-x": `${geometry.labelX}%`,
-              "--label-y": `${geometry.labelY}%`,
-              "--label-x-mobile": `${geometry.mobileLabelX ?? geometry.labelX}%`,
-            } as MotionStyle;
-            return (
-              <div
-                className="corpus-node-annotation"
-                data-direction={geometry.direction}
-                data-selected={selected ? "true" : "false"}
-                key={corpusId}
-                style={nodeStyle}
-              >
-                <button
-                  type="button"
-                  className="corpus-node"
-                  aria-label={`Focus ${shortTitle} corpus`}
-                  aria-pressed={selected}
-                  onClick={() => onSelect(corpusId)}
-                >
-                  <span />
-                </button>
-                <span
-                  className="corpus-node-label"
-                  data-align={geometry.align ?? "start"}
-                  aria-hidden
-                >
-                  <strong>{shortTitle}</strong>
-                  <small>{corpus.issuer}</small>
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        <span className="corpus-glyph-jurisdiction" aria-hidden>
-          {group.jurisdiction}
-        </span>
-        {isDraft ? <span className="corpus-glyph-draft">draft</span> : null}
-        <span className="corpus-glyph-count">
-          {mappedCount}{" "}
-          {group.family === "legal_policy" ? "mapped claims" : "institutional records"}
-        </span>
-      </div>
-    </article>
+  candidates.sort(
+    (left, right) => stableCellScore(left, mappedCount) - stableCellScore(right, mappedCount),
   );
+  return new Set(candidates.slice(0, 1).map(({ id }) => id));
 }
 
 function NodeCallout({
   corpus,
-  shortTitle,
   onClose,
   onViewRaw,
 }: {
   corpus: CatalogCorpusSummary;
-  shortTitle: string;
   onClose: () => void;
   onViewRaw: () => void;
 }) {
@@ -507,10 +80,8 @@ function NodeCallout({
       >
         <X aria-hidden />
       </button>
-      <p className="corpus-callout-title">{shortTitle}</p>
-      {shortTitle === corpus.title ? null : (
-        <p className="corpus-callout-canonical">{corpus.title}</p>
-      )}
+      <p className="corpus-callout-title">AI Act</p>
+      <p className="corpus-callout-canonical">{corpus.title}</p>
       <dl>
         <div>
           <dt>issuer</dt>
@@ -648,147 +219,142 @@ function RawWorkspace({ corpus, onClose }: { corpus: CatalogCorpusSummary; onClo
 
 export function CorpusNetwork() {
   const sectionRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const [selectedCorpusId, setSelectedCorpusId] = useState<string | null>(null);
-  const [rawCorpusId, setRawCorpusId] = useState<string | null>(null);
-  const selectedCorpus = selectedCorpusId ? resolveCorpus(selectedCorpusId) : null;
-  const rawCorpus = rawCorpusId ? resolveCorpus(rawCorpusId) : null;
-  const selectedPresentation = selectedCorpusId
-    ? FEATURED_GROUPS.flatMap(({ records }) => records).find(
-        ({ corpusId }) => corpusId === selectedCorpusId,
-      )
-    : null;
-
-  const grouped = useMemo(
-    () => ({
-      legal: FEATURED_GROUPS.filter(({ family }) => family === "legal_policy"),
-      institutional: FEATURED_GROUPS.filter(({ family }) => family === "institutional"),
-    }),
-    [],
-  );
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const canvas = canvasRef.current;
-    if (!section || !canvas) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const compactLayout = window.matchMedia("(max-width: 900px)");
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      if (reducedMotion.matches || compactLayout.matches) {
-        canvas.style.removeProperty("--corpus-progress");
-        delete canvas.dataset.activeGlyph;
-        return;
-      }
-      const rect = section.getBoundingClientRect();
-      const distance = Math.max(1, rect.height - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, -rect.top / distance));
-      canvas.style.setProperty("--corpus-progress", progress.toFixed(4));
-      canvas.dataset.activeGlyph = GLYPH_SEQUENCE[Math.round(progress * 3)] ?? "NIST";
-    };
-    const schedule = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    reducedMotion.addEventListener("change", schedule);
-    compactLayout.addEventListener("change", schedule);
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      reducedMotion.removeEventListener("change", schedule);
-      compactLayout.removeEventListener("change", schedule);
-    };
-  }, []);
+  const [selected, setSelected] = useState(false);
+  const [rawOpen, setRawOpen] = useState(false);
+  const reduceMotion = useReducedMotion() ?? false;
+  const reducedProgress = useMotionValue(1);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const progress = reduceMotion ? reducedProgress : scrollYProgress;
+  const familyOpacity = useTransform(progress, [0, 0.08], [0, 1]);
+  const eShift = useTransform(progress, [0, 0.16, 0.38], [68, 68, 0]);
+  const interactiveOpacity = useTransform(progress, [0.56, 0.7], [0, 1]);
+  const interactivePointerEvents = useTransform(progress, [0, 0.69, 0.7], ["none", "none", "auto"]);
+  const densityOpacity = useTransform(progress, [0.48, 0.64], [0, 1]);
+  const corpus = resolveCorpus(AI_ACT_ID);
+  const mappedCellIds = useMemo(() => selectMappedCells(corpus.mappedCount), [corpus.mappedCount]);
+  const node = glyphCellPoint(U_GLYPH, INTERACTIVE_CELL_ID, U_ORIGIN);
 
   useEffect(() => {
-    if (!selectedCorpusId && !rawCorpusId) return;
+    if (!selected && !rawOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      if (rawCorpusId) setRawCorpusId(null);
-      else setSelectedCorpusId(null);
+      if (rawOpen) setRawOpen(false);
+      else setSelected(false);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [rawCorpusId, selectedCorpusId]);
+  }, [rawOpen, selected]);
 
   useEffect(() => {
-    if (!rawCorpusId) return;
+    if (!rawOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [rawCorpusId]);
-
-  const handleCanvasPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
-    const target = event.target as HTMLElement;
-    if (target.closest(".corpus-node, .corpus-node-callout")) return;
-    setSelectedCorpusId(null);
-  };
+  }, [rawOpen]);
 
   return (
     <section
       ref={sectionRef}
-      className="corpus-scroll-stage"
-      data-focused={selectedCorpusId ? "true" : "false"}
+      className="corpus-prototype-stage"
+      data-focused={selected ? "true" : "false"}
       aria-labelledby="corpus-field-title"
-      onPointerDown={handleCanvasPointerDown}
     >
       <h2 id="corpus-field-title" className="sr-only">
-        Native Writ corpus families
+        Legal-policy corpus glyph prototype
       </h2>
       <p className="sr-only">
-        Relative mapped density is based on current Writ records within each family; it is not a
-        completeness estimate.
+        Relative mapped density uses current Writ records and is not a completeness estimate.
       </p>
 
-      <div ref={canvasRef} className="corpus-sticky-canvas">
-        <div className="corpus-canvas-ambient" aria-hidden />
-        <div className="corpus-canvas-family corpus-canvas-family--legal">
-          <p className="corpus-canvas-family-label">legal_policy</p>
-          {grouped.legal.map((group) => (
-            <CorpusGlyph
-              key={group.glyph}
-              group={group}
-              selectedCorpusId={selectedCorpusId}
-              onSelect={setSelectedCorpusId}
+      <div className="corpus-prototype-sticky">
+        <motion.p className="corpus-prototype-family" style={{ opacity: familyOpacity }}>
+          legal_policy
+        </motion.p>
+
+        <div className="pixel-corpus-figure">
+          <svg
+            className="pixel-corpus-svg"
+            viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`}
+            role="img"
+            aria-label="E resolves into EU from explicit Pixel cells"
+          >
+            <motion.g style={{ x: eShift }}>
+              <PixelGlyph
+                definition={E_GLYPH}
+                mappedCellIds={mappedCellIds}
+                origin={E_ORIGIN}
+                progress={progress}
+                revealRange={[0, 0.32]}
+                selectedCellId={selected ? INTERACTIVE_CELL_ID : null}
+              />
+            </motion.g>
+            <PixelGlyph
+              definition={U_GLYPH}
+              interactiveCellId={INTERACTIVE_CELL_ID}
+              mappedCellIds={mappedCellIds}
+              origin={U_ORIGIN}
+              progress={progress}
+              revealRange={[0.24, 0.62]}
+              selectedCellId={selected ? INTERACTIVE_CELL_ID : null}
             />
-          ))}
-        </div>
-        <div className="corpus-canvas-family corpus-canvas-family--institutional">
-          <p className="corpus-canvas-family-label">institutional</p>
-          {grouped.institutional.map((group) => (
-            <CorpusGlyph
-              key={group.glyph}
-              group={group}
-              selectedCorpusId={selectedCorpusId}
-              onSelect={setSelectedCorpusId}
+
+            <motion.path
+              className="pixel-corpus-hairline"
+              d={`M ${node.x} ${node.y} L ${ANNOTATION_END.x} ${ANNOTATION_END.y}`}
+              initial={false}
+              animate={{ opacity: selected ? 1 : 0, pathLength: selected ? 1 : 0 }}
+              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
             />
-          ))}
+            <motion.text
+              className="pixel-corpus-annotation"
+              x={ANNOTATION_END.x - 2}
+              y={ANNOTATION_END.y - 2}
+              textAnchor="end"
+              initial={false}
+              animate={{ opacity: selected ? 1 : 0 }}
+              transition={{ delay: selected ? 0.22 : 0, duration: 0.24, ease: "easeOut" }}
+            >
+              <tspan className="pixel-corpus-annotation-title">AI Act</tspan>
+              <tspan x={ANNOTATION_END.x - 2} dy="9" className="pixel-corpus-annotation-issuer">
+                European Union
+              </tspan>
+            </motion.text>
+          </svg>
+
+          <motion.button
+            type="button"
+            className="pixel-corpus-hit-target"
+            style={{
+              left: `${(node.x / VIEWBOX.width) * 100}%`,
+              opacity: interactiveOpacity,
+              pointerEvents: interactivePointerEvents,
+              top: `${(node.y / VIEWBOX.height) * 100}%`,
+            }}
+            aria-label="Focus AI Act corpus"
+            aria-pressed={selected}
+            onClick={() => setSelected((current) => !current)}
+          />
+
+          <motion.p className="pixel-corpus-density-note" style={{ opacity: densityOpacity }}>
+            mapped cells signal record density, never completeness
+          </motion.p>
         </div>
 
-        {selectedCorpus ? (
+        {selected ? (
           <NodeCallout
-            corpus={selectedCorpus}
-            shortTitle={selectedPresentation?.shortTitle ?? selectedCorpus.title}
-            onClose={() => setSelectedCorpusId(null)}
-            onViewRaw={() => setRawCorpusId(selectedCorpus.corpusId)}
+            corpus={corpus}
+            onClose={() => setSelected(false)}
+            onViewRaw={() => setRawOpen(true)}
           />
         ) : null}
       </div>
 
-      {rawCorpus ? (
-        <RawWorkspace
-          key={rawCorpus.corpusId}
-          corpus={rawCorpus}
-          onClose={() => setRawCorpusId(null)}
-        />
-      ) : null}
+      {rawOpen ? <RawWorkspace corpus={corpus} onClose={() => setRawOpen(false)} /> : null}
     </section>
   );
 }

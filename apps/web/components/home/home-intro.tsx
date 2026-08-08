@@ -1,199 +1,245 @@
 "use client";
 
-import type { CSSProperties, RefObject } from "react";
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import type { MotionValue } from "motion/react";
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 import { CorpusCoverageGlobe } from "@/components/pilot/corpus-coverage-globe";
 import { Button } from "@/components/ui/button";
 import { CORPUS_COVERAGE } from "@/lib/corpus-coverage";
 
 const HEADLINE = "Write in Writ.";
-const SETTLE_DELAYS = [
-  980, 1440, 1120, 1580, 1260, 1510, 1060, 1360, 1180, 1490, 1020, 1320, 1550, 1680,
-];
-const FIELD_SYMBOLS = ["0", "1", "●", "■", "▲", "—", "+", "·"] as const;
+const STATEMENT =
+  "Writ turns complex political and institutional information into structured, reviewable knowledge. Ask questions, build a corpus, and trace every conclusion back to its source.";
+const STATEMENT_LINES = [
+  "Writ turns complex political and",
+  "institutional information into structured,",
+  "reviewable knowledge.",
+  "Ask questions, build a corpus, and trace every",
+  "conclusion back to its source.",
+] as const;
+const FRAGMENT_SYMBOLS = ["01", "+", "−", "{", "}", "R", "/", "<", ">", "W", "=", "[]"];
 
-const ENCODED_FIELD = Array.from({ length: 864 }, (_, index) => {
-  const column = index % 36;
-  const row = Math.floor(index / 36);
+const GLOBE_FRAGMENTS = Array.from({ length: 42 }, (_, index) => {
+  const angle = (((index * 137.5 + 11) % 360) * Math.PI) / 180;
+  const radius = 43 + ((index * 7) % 6) * 1.55;
+  const drift = 7 + ((index * 11) % 8) * 1.35;
+
   return {
-    symbol: FIELD_SYMBOLS[(index * 5 + row * 3) % FIELD_SYMBOLS.length],
-    x: 0.6 + column * 2.78 + ((row * 7 + index) % 5) * 0.12,
-    y: 0.8 + row * 4.2 + ((column * 11 + index) % 4) * 0.16,
-    opacity: 0.13 + ((index * 13 + row) % 25) / 100,
-    pulseDelay: (index % 17) * 43,
+    id: `globe-fragment-${index}`,
+    symbol: FRAGMENT_SYMBOLS[(index * 5) % FRAGMENT_SYMBOLS.length],
+    left: `${(50 + Math.cos(angle) * radius).toFixed(4)}%`,
+    top: `${(50 + Math.sin(angle) * radius).toFixed(4)}%`,
+    x: `${(Math.cos(angle) * drift).toFixed(4)}cqw`,
+    y: `${(Math.sin(angle) * drift).toFixed(4)}cqw`,
+    duration: `${(4.8 + ((index * 13) % 29) / 10).toFixed(1)}s`,
+    delay: `${(-((index * 17) % 43) / 10).toFixed(1)}s`,
   };
 });
 
-type IntroPhase = "encoded" | "resolved" | "reconstructing" | "complete";
-type MotionStyle = CSSProperties & Record<string, string | number | undefined>;
+type CharacterStyle = CSSProperties & {
+  "--type-end": string;
+  "--type-start": string;
+};
 
-function EncodedField() {
+type GlobeFragmentStyle = CSSProperties & {
+  "--fragment-delay": string;
+  "--fragment-duration": string;
+  "--fragment-x": string;
+  "--fragment-y": string;
+};
+
+function StatementLine({
+  children,
+  index,
+  progress,
+  reduceMotion,
+}: {
+  children: string;
+  index: number;
+  progress: MotionValue<number>;
+  reduceMotion: boolean;
+}) {
+  const start = 0.08 + index * 0.135;
+  const end = start + 0.22;
+  const clipPath = useTransform(progress, [start, end], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
+  const opacity = useTransform(progress, [start, start + 0.055, end], [0, 0.68, 1]);
+  const cursorLeft = useTransform(progress, [start, end], ["0%", "calc(100% + 0.08em)"]);
+  const cursorOpacity = useTransform(
+    progress,
+    [start - 0.02, start, start + 0.025, end - 0.02, end + 0.035],
+    [0, 1, 1, 1, 0],
+  );
+
   return (
-    <div className="home-encoded-field" aria-hidden>
-      {ENCODED_FIELD.map((mark, index) => (
-        <span
-          key={`${mark.symbol}-${index}`}
-          data-shape={mark.symbol}
-          style={
-            {
-              "--field-x": `${mark.x}%`,
-              "--field-y": `${mark.y}%`,
-              "--field-opacity": mark.opacity,
-              "--field-delay": `${mark.pulseDelay}ms`,
-            } as MotionStyle
-          }
-        >
-          {mark.symbol}
-        </span>
-      ))}
-    </div>
+    <motion.span
+      className="home-motion-statement-line"
+      style={reduceMotion ? undefined : { clipPath, opacity }}
+    >
+      {children}
+      <motion.span
+        className="home-motion-statement-caret"
+        style={reduceMotion ? { display: "none" } : { left: cursorLeft, opacity: cursorOpacity }}
+        aria-hidden
+      />
+    </motion.span>
   );
 }
 
-function IntroTitle({ titleRef }: { titleRef: RefObject<HTMLDivElement | null> }) {
+function ResolvingTitle({ reduceMotion }: { reduceMotion: boolean }) {
   return (
-    <div ref={titleRef} className="home-intro-title" aria-hidden>
-      <span className="home-intro-title-characters">
-        {Array.from(HEADLINE).map((character, index) => (
-          <span
-            className="home-intro-character"
-            key={`${character}-${index}`}
-            style={{ "--settle-delay": `${SETTLE_DELAYS[index] ?? 1500}ms` } as MotionStyle}
-          >
-            <span className="home-intro-character-measure">
-              {character === " " ? "\u00a0" : character}
+    <h1
+      id="home-title"
+      className="home-motion-title"
+      data-reduced-motion={reduceMotion ? "true" : undefined}
+      aria-label={HEADLINE}
+    >
+      <span className="home-motion-title-characters" aria-hidden>
+        {Array.from(HEADLINE).map((character, index) => {
+          const printable = character === " " ? "\u00a0" : character;
+
+          return (
+            <span
+              className="home-motion-character"
+              key={`${character}-${index}`}
+              style={
+                {
+                  "--type-start": `${30 + index * 3.5}svh`,
+                  "--type-end": `${34 + index * 3.5}svh`,
+                } as CharacterStyle
+              }
+            >
+              <span className="home-motion-character-measure">{printable}</span>
+              {character === " " ? null : (
+                <span className="home-motion-character-pixel">{character}</span>
+              )}
+              <span className="home-motion-character-final">{printable}</span>
             </span>
-            {character === " " ? null : (
-              <span className="home-intro-character-pixel">{character}</span>
-            )}
-            <span className="home-intro-character-final">
-              {character === " " ? "\u00a0" : character}
-            </span>
-          </span>
-        ))}
+          );
+        })}
       </span>
-      <span className="home-intro-caret">▌</span>
-      <span className="home-intro-fragments" aria-hidden />
-    </div>
+      <span className="home-motion-caret" aria-hidden />
+    </h1>
   );
 }
 
 export function HomepageHero() {
-  const [phase, setPhase] = useState<IntroPhase>("encoded");
-  const introTitleRef = useRef<HTMLDivElement>(null);
-  const finalTitleRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const frame = window.requestAnimationFrame(() => setPhase("complete"));
-      return () => window.cancelAnimationFrame(frame);
-    }
-
-    const resolved = window.setTimeout(() => setPhase("resolved"), 2150);
-    const reconstructing = window.setTimeout(() => setPhase("reconstructing"), 3150);
-    const complete = window.setTimeout(() => setPhase("complete"), 4480);
-    return () => {
-      window.clearTimeout(resolved);
-      window.clearTimeout(reconstructing);
-      window.clearTimeout(complete);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (phase !== "reconstructing") return;
-    const introTitle = introTitleRef.current;
-    const finalTitle = finalTitleRef.current;
-    if (!introTitle || !finalTitle) return;
-
-    const from = introTitle.getBoundingClientRect();
-    const to = finalTitle.getBoundingClientRect();
-    const translateX = to.left - from.left;
-    const translateY = to.top - from.top;
-    const scale = Math.min(to.width / from.width, to.height / from.height);
-
-    const animation = introTitle.animate(
-      [
-        { transform: "translate3d(0, 0, 0) scale(1)", filter: "blur(0)", opacity: 1 },
-        {
-          offset: 0.38,
-          transform: `translate3d(${translateX * 0.32}px, ${translateY * 0.28}px, 0) scale(${0.82 + scale * 0.18})`,
-          filter: "blur(0.7px)",
-          opacity: 0.92,
-        },
-        {
-          offset: 0.72,
-          transform: `translate3d(${translateX * 0.78}px, ${translateY * 0.8}px, 0) scale(${scale * 1.08})`,
-          filter: "blur(1.4px)",
-          opacity: 0.64,
-        },
-        {
-          transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
-          filter: "blur(0)",
-          opacity: 0,
-        },
-      ],
-      { duration: 1180, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "forwards" },
-    );
-
-    return () => animation.cancel();
-  }, [phase]);
+  const globeRef = useRef<HTMLDivElement>(null);
+  const statementRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion() ?? false;
+  const globeInView = useInView(globeRef, { margin: "-8% 0px -8% 0px" });
+  const { scrollYProgress: globeProgress } = useScroll({
+    target: globeRef,
+    offset: ["start 94%", "center 48%"],
+  });
+  const globeOpacity = useTransform(globeProgress, [0, 0.1, 0.48], [0, 0.38, 1]);
+  const globeY = useTransform(globeProgress, [0, 0.44, 1], [80, 0, -18]);
+  const globeFilter = useTransform(
+    globeProgress,
+    [0, 0.46, 0.84],
+    ["blur(5px)", "blur(1px)", "blur(0px)"],
+  );
+  const { scrollYProgress: statementProgress } = useScroll({
+    target: statementRef,
+    offset: ["start 100%", "end 100%"],
+  });
+  const actionsOpacity = useTransform(statementProgress, [0.84, 0.92, 1], [0, 0.55, 1]);
+  const actionsY = useTransform(statementProgress, [0.84, 1], [14, 0]);
 
   return (
-    <section className="home-intro" data-intro-phase={phase} aria-labelledby="home-title">
-      {phase === "complete" ? null : (
-        <div className="home-prehero" aria-hidden>
-          <EncodedField />
-          <IntroTitle titleRef={introTitleRef} />
+    <section className="home-motion-hero" aria-labelledby="home-title">
+      <div className="home-motion-title-scroll">
+        <div className="home-motion-title-stage">
+          <ResolvingTitle reduceMotion={reduceMotion} />
         </div>
-      )}
+      </div>
 
-      <div className="home-final-interface">
-        <div className="home-final-grid">
-          <div className="home-final-copy">
-            <h1 ref={finalTitleRef} id="home-title" className="home-final-title">
-              {HEADLINE}
-            </h1>
-            <p className="home-final-description">
-              Writ turns complex political and institutional information into structured, reviewable
-              knowledge. Ask questions, build a corpus, and trace every conclusion back to its
-              source.
-            </p>
-            <div className="home-final-actions">
-              <Button
-                size="lg"
-                className="text-[0.78rem] sm:text-[0.82rem]"
-                nativeButton={false}
-                render={
-                  <Link href="/query">
-                    Ask a question
-                    <ArrowRight />
-                  </Link>
-                }
-              />
-              <Button
-                variant="outline"
-                size="lg"
-                nativeButton={false}
-                render={<Link href="/build">Build a corpus</Link>}
-              />
-              <Button
-                variant="ghost"
-                size="lg"
-                nativeButton={false}
-                render={<Link href="/lab">See how Writ works</Link>}
-              />
+      <div ref={globeRef} className="home-motion-globe-stage" aria-label="Current corpus coverage">
+        <div className="home-motion-globe-sticky">
+          <motion.div
+            className="home-motion-globe"
+            style={
+              reduceMotion ? undefined : { opacity: globeOpacity, y: globeY, filter: globeFilter }
+            }
+          >
+            <div
+              className="home-motion-globe-fragments"
+              data-active={globeInView && !reduceMotion ? "true" : "false"}
+              aria-hidden
+            >
+              {GLOBE_FRAGMENTS.map((fragment) => (
+                <span
+                  key={fragment.id}
+                  style={
+                    {
+                      left: fragment.left,
+                      top: fragment.top,
+                      "--fragment-x": fragment.x,
+                      "--fragment-y": fragment.y,
+                      "--fragment-duration": fragment.duration,
+                      "--fragment-delay": fragment.delay,
+                    } as GlobeFragmentStyle
+                  }
+                >
+                  {fragment.symbol}
+                </span>
+              ))}
             </div>
+            <CorpusCoverageGlobe coverage={CORPUS_COVERAGE} className="home-motion-globe-object" />
+          </motion.div>
+        </div>
+      </div>
+
+      <div ref={statementRef} className="home-motion-statement-stage">
+        <div className="home-motion-statement-sticky">
+          <div className="home-motion-copy">
+            <h2 className="home-motion-description" aria-label={STATEMENT}>
+              {STATEMENT_LINES.map((line, index) => (
+                <StatementLine
+                  key={line}
+                  index={index}
+                  progress={statementProgress}
+                  reduceMotion={reduceMotion}
+                >
+                  {line}
+                </StatementLine>
+              ))}
+            </h2>
           </div>
 
-          <div className="home-final-globe">
-            <CorpusCoverageGlobe coverage={CORPUS_COVERAGE} />
-            {phase === "reconstructing" ? (
-              <div className="home-globe-reconstruction" aria-hidden />
-            ) : null}
-          </div>
+          <motion.div
+            className="home-motion-actions"
+            style={reduceMotion ? undefined : { opacity: actionsOpacity, y: actionsY }}
+          >
+            <Button
+              size="sm"
+              className="home-motion-action home-motion-action--primary"
+              nativeButton={false}
+              render={
+                <Link href="/query">
+                  Ask a question
+                  <ArrowRight />
+                </Link>
+              }
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              className="home-motion-action"
+              nativeButton={false}
+              render={<Link href="/build">Build a corpus</Link>}
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="home-motion-action"
+              nativeButton={false}
+              render={<Link href="/lab">See how Writ works</Link>}
+            />
+          </motion.div>
         </div>
       </div>
     </section>

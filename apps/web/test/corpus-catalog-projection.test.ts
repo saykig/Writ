@@ -47,7 +47,7 @@ describe("homepage corpus catalog projection", () => {
     );
   });
 
-  test("keeps the globe model separate and presents draft institutions truthfully", () => {
+  test("keeps the globe model separate and gates institutional rows behind prototype approval", () => {
     const field = read("components/home/corpus-network.tsx");
     const globe = read("lib/corpus-coverage.ts");
 
@@ -58,7 +58,9 @@ describe("homepage corpus catalog projection", () => {
     const institutions = CORPUS_CATALOG.filter(({ family }) => family === "institutional");
     expect(institutions).toHaveLength(2);
     expect(institutions.every(({ status }) => status === "draft")).toBe(true);
-    expect(field).toContain('status === "draft"');
+    expect(field).not.toContain("us.institutions.nist");
+    expect(field).not.toContain("eu.institutions.european_commission");
+    expect(field).toContain("AI_ACT_ID");
 
     const commission = institutions.find(({ corpusId }) =>
       corpusId.includes("european_commission"),
