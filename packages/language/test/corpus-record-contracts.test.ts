@@ -188,10 +188,10 @@ describe("every catalogued manifest declares the contract its record files satis
     // two standalone NIST Core links and the Commission AI Office Core link.
     expect(yamlDocuments).toBe(117 + 3);
     expect(linkDocuments).toBe(3);
-    // Three constitutional drafts, fifteen NIST records, and twenty-one Commission records.
-    expect(writRecords).toBe(39);
-    // Seventeen NIST and twenty-two Commission disposition judgments.
-    expect(writJudgments).toBe(39);
+    // Three constitutional drafts, fifteen NIST records, and twenty Commission records.
+    expect(writRecords).toBe(38);
+    // Seventeen NIST and twenty-one Commission disposition judgments.
+    expect(writJudgments).toBe(38);
   });
 
   for (const { entry, manifest } of corpora) {

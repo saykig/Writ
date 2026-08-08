@@ -105,55 +105,55 @@ judgment judgment_nist_mission_supersession_link_stage_a {
 }
 
 judgment judgment_nist_national_measurement_standards_mandate_stage_b {
-  target record nist_national_measurement_standards_mandate; type review_disposition; value "approved";
-  rationale "Stage B review approves the narrow statutory responsibility in 15 U.S.C. § 272(b)(2). A measurement-standards mandate is not general regulatory authority over industry or private standards bodies.";
-  evidence_refs { us_code.title15_usc_272.b_2 }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_national_measurement_standards_mandate; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the narrow responsibility in the stored 2024 edition of 15 U.S.C. § 272(b)(2) as a mandate. The capture does not prove later statutory currency, and a measurement-standards mandate is not general regulatory authority over industry or private standards bodies. Human approval remains pending.";
+  evidence_refs { us_code.title15_usc_272.b_2 }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_nvlap_lab_decision_right_stage_b {
-  target record nist_nvlap_lab_decision_right; type review_disposition; value "approved";
-  rationale "Stage B review approves the accreditation determination as a decision right scoped to NVLAP. It is not general regulatory authority, product certification or power to make unrelated guidance binding.";
-  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence, nist.handbook_150.accreditation_decision }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_nvlap_lab_decision_right; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the accreditation determination as a decision right scoped to NVLAP. It is not general regulatory authority, product certification or power to make unrelated guidance binding. Human approval remains pending.";
+  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence, nist.handbook_150.accreditation_decision }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_ai_standards_group_identity_stage_b {
-  target record nist_ai_standards_group_identity; type review_disposition; value "approved";
-  rationale "Stage B review approves the named group as an organizational-unit identity. Identity is not a separate legal personality, mandate, independent decision right or operational capacity.";
-  evidence_refs { nist.ai_division.groups }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_ai_standards_group_identity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the named group as an organizational-unit identity. Identity is not a separate legal personality, mandate, independent decision right or operational capacity. Human approval remains pending.";
+  evidence_refs { nist.ai_division.groups }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_ai_standards_group_placement_stage_b {
-  target record nist_ai_standards_group_placement; type review_disposition; value "approved";
-  rationale "Stage B review approves the documented organizational chain while retaining NIST as the stable parent. Placement is not independent authority, mandate or capacity.";
-  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_ai_standards_group_placement; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the group directly to the AI Research, Measurement, and Standards Division, the parent established by the selected passages. Placement is not independent authority, mandate or capacity. Human approval remains pending.";
+  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_laboratory_network_capacity_stage_b {
-  target record nist_laboratory_network_capacity; type review_disposition; value "approved";
-  rationale "Stage B review approves the six-component laboratory structure as active capacity. Laboratory structure is not proof of equal legal status, resources, utilization, condition or performance.";
-  evidence_refs { nist.laboratories.six_labs }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_laboratory_network_capacity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the directly quoted six-laboratory structure and user facilities as active network capacity without naming uncited laboratories. Structure is not proof of equal legal status, resources, utilization, condition or performance. Human approval remains pending.";
+  evidence_refs { nist.laboratories.six_labs }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_aml_facility_capacity_stage_b {
-  target record nist_aml_facility_capacity; type review_disposition; value "approved";
-  rationale "Stage B review approves the directly documented facility design as capacity. Physical design and intended technical capability do not establish current utilization, maintenance or uptime.";
-  evidence_refs { nist.aml.features }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_aml_facility_capacity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the directly documented facility design as capacity. Physical design and intended technical capability do not establish current utilization, maintenance or uptime. Human approval remains pending.";
+  evidence_refs { nist.aml.features }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_nvlap_accreditation_capacity_stage_b {
-  target record nist_nvlap_accreditation_capacity; type review_disposition; value "approved";
-  rationale "Stage B review approves the maintained accreditation-program machinery as operational capacity. The machinery is distinct from the accreditation decision right and does not certify products or guarantee laboratory results.";
-  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_nvlap_accreditation_capacity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps only the directly quoted accreditation-process machinery as capacity; continuing assessment is omitted as unsupported. The machinery is distinct from the accreditation decision right and does not certify products or guarantee laboratory results. Human approval remains pending.";
+  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_ai_measurement_capacity_stage_b {
-  target record nist_ai_measurement_capacity; type review_disposition; value "approved";
-  rationale "Stage B review approves the dedicated division and technical work as AI measurement capacity. The evidence does not quantify staff, compute, throughput, model access or conclusive legal authority.";
-  evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_ai_measurement_capacity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps the dedicated division as organizational-unit capacity and retains only work and groups named in the selected passages. It does not infer technical machinery, guidance, staff, compute, throughput, model access or conclusive legal authority. Human approval remains pending.";
+  evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }
 
 judgment judgment_nist_ai_consortium_capacity_stage_b {
-  target record nist_ai_consortium_capacity; type review_disposition; value "approved";
-  rationale "Stage B review approves the structured research partnership as network capacity. External member personnel, data, models and facilities remain external and are not counted as NIST-owned resources.";
-  evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; reviewer "Sara Kim"; status accepted; created_at 2026-08-05; family_context institutional;
+  target record nist_ai_consortium_capacity; type review_disposition; value "draft";
+  rationale "Automated Stage B proposal maps only the partnership, contribution types, AI-measurement work and organization count stated in the selected passages. CRADA, task-group, prototype-evaluation and technology-transfer mechanisms are omitted as unsupported. External resources remain external. Human approval remains pending.";
+  evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; reviewer "OpenAI Codex automated proposal"; status proposed; created_at 2026-08-05; family_context institutional;
 }

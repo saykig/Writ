@@ -14,6 +14,11 @@ final_contract:
   kind: native
   id: https://writ.example/schemas/extensions/institutional-record.schema.json
   version: 0.2.0
+stage_b_review:
+  status: pending_human_review
+  proposer: OpenAI Codex automated proposal
+  decision_matrix: docs/migrations/institutional-stage-b/review-queue.yaml
+  note: No complete human approval artifact was found for the Stage B records.
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -75,66 +80,66 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_national_measurement_standards_mandate
-    final_form: native v0.2 atomic mandate record
-    final_review_state: approved
+    final_form: native v0.2 atomic mandate proposal limited to the stored 2024 U.S. Code edition
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition; not migrated from a Stage A placeholder.
+    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
   - previous_object: null
     previous_form: none
     final_object: nist_nvlap_lab_decision_right
     final_form: native v0.2 atomic decision-right record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition; not migrated from a Stage A placeholder.
+    note: New automated Stage B proposal; not migrated from a Stage A placeholder.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_identity
     final_form: native v0.2 atomic identity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition.
+    note: New automated Stage B proposal.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_placement
     final_form: native v0.2 atomic placement record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition.
+    note: New automated Stage B proposal with the directly evidenced AI division as parent.
   - previous_object: null
     previous_form: none
     final_object: nist_laboratory_network_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition.
+    note: New automated Stage B proposal; uncited laboratory names were removed.
   - previous_object: null
     previous_form: none
     final_object: nist_aml_facility_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition.
+    note: New automated Stage B proposal.
   - previous_object: null
     previous_form: none
     final_object: nist_nvlap_accreditation_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition distinct from the NVLAP decision right.
+    note: New automated Stage B proposal distinct from the NVLAP decision right; unsupported continuing assessment was removed.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_measurement_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition.
+    note: New automated Stage B proposal classified as organizational-unit capacity; unsupported technical machinery and guidance were removed.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_consortium_capacity
     final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_review_state: draft
     identity_preserved: false
-    note: New reviewed Stage B addition; external consortium resources remain external.
+    note: New automated Stage B proposal; unsupported CRADA, task-group, prototype-evaluation and technology-transfer mechanisms were removed, and external resources remain external.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:
@@ -181,4 +186,4 @@ source_sanitization:
     - file: sources/captures/nist-laboratories.html
       previous_document_hash: sha256:7ae29232445f976cdf273a2adf052b811929f54cb1b39e91007c359566d75b0f
       stored_document_hash: sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b
-stage_b_status: complete
+stage_b_status: pending_human_review

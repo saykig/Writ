@@ -39,7 +39,7 @@ source us_code_15_usc_272 {
 concept UsCode15Usc272Source {
   source_id us_code.title15_usc_272;
   source_title "15 U.S.C. § 272, Functions and activities";
-  source_version "2024-edition-current-text-verified-2026-08-05";
+  source_version "2024-edition";
   source_date 2024-01-01;
 }
 

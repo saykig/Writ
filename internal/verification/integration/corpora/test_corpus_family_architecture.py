@@ -372,14 +372,14 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
     assert nist.count("\nrecord ") == 15
-    # Stage A human review dispositioned its six drafts and Stage B added nine approved records.
-    assert nist.count("review_state draft;") == 0
-    assert nist.count("review_state approved;") == 14
+    # Stage A human review dispositioned its six drafts; Stage B remains nine proposals.
+    assert nist.count("review_state draft;") == 9
+    assert nist.count("review_state approved;") == 5
     assert nist.count("review_state superseded;") == 1
     # The Stage A provenance remains intact and Stage B implementation provenance is separate.
     assert nist.count('created_by "OpenAI Codex automated draft";') == 5
     assert nist.count('created_by "Claude Code implementation of approved human review";') == 1
-    assert nist.count('created_by "OpenAI Codex implementation of approved Stage B review";') == 9
+    assert nist.count('created_by "OpenAI Codex automated proposal";') == 9
     # `accepted` is a judgment status, never a record or record-link review state.
     assert "review_state accepted" not in nist
 
@@ -433,13 +433,14 @@ def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_
         assert hashlib.sha256(current.read_bytes()).hexdigest() == item["sha256"]
 
 
-def test_ai_office_records_are_reviewed_atomic_production_facts() -> None:
+def test_ai_office_records_are_atomic_draft_proposals() -> None:
     text = (ROOT / "corpora/institutional/eu/european-commission/records.writ").read_text()
-    assert text.count("\nrecord ") == 21
-    assert text.count("fact_type function;") == 6
-    assert text.count("review_state approved;") == 21
+    assert text.count("\nrecord ") == 20
+    assert text.count("fact_type function;") == 7
+    assert text.count("review_state draft;") == 20
     assert text.count("fact_type mandate;") == 2
-    assert text.count("fact_type operational_capacity;") == 4
+    assert text.count("fact_type decision_right;") == 3
+    assert text.count("fact_type operational_capacity;") == 3
     assert text.count("fact_type mission;") == 2
 
 

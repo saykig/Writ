@@ -13,13 +13,14 @@ identity_namespace: eu.institutions.european_commission
 migration_aliases: []
 root_institution_id: european_commission
 record_counts:
-  institutional_records: 21
+  institutional_records: 20
   record_links: 1
-  disposition_judgments: 22
+  disposition_judgments: 21
 review_counts:
-  approved_records: 21
-  approved_record_links: 1
-  accepted_disposition_judgments: 22
+  draft_records: 20
+  draft_record_links: 1
+  accepted_disposition_judgments: 0
+  proposed_disposition_judgments: 21
 unresolved_evidence_count: 0
 locations:
   sources:
@@ -32,7 +33,7 @@ locations:
   records:
     - records.writ
   relationships:
-    - relationships/eu_ai_office_euro_comiss_relationship.yaml
+    - relationships/eu_ai_office_european_commission_relationship.yaml
   judgments:
     - judgments.writ
   migration:
