@@ -19,7 +19,7 @@ record eu_ai_office_technical_documentation_receipt : institutional {
   }
   uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id eu_ai_office;
     fact_type function;
@@ -27,7 +27,7 @@ record eu_ai_office_technical_documentation_receipt : institutional {
   }
 }
 
-record eu_ai_office_training_summary_template_function : institutional {
+record eu_ai_office_training_sum_temp_function : institutional {
   corpus eu.institutions.european_commission;
   version "0.2.0";
   title "AI Office provides the GPAI training-content summary template";
@@ -45,7 +45,7 @@ record eu_ai_office_training_summary_template_function : institutional {
   }
   uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id eu_ai_office;
     fact_type function;
@@ -71,10 +71,200 @@ record eu_ai_office_serious_incident_report_receipt : institutional {
   }
   uncertainty { item incomplete_evidence "This assigned function does not establish the AI Office's mandate or operational capacity."; }
   provenance { created_by "OpenAI Codex automated draft"; created_at 2026-08-04; }
-  review_state draft;
+  review_state approved;
   institutional {
     institution_id eu_ai_office;
     fact_type function;
     function serious_incident_report_receipt;
   }
+}
+
+record european_commission_identity : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission identity";
+  subjects { subject european_commission type institution role "subject"; };
+  assertion defines "The European Commission is an institution of the European Union.";
+  topics {}; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
+  evidence { support eu.teu_article_13 document_version eu.teu_article_13.v2026_08_05 passage eu.teu_article_13.commission locator "Treaty on European Union, Article 13(1), institutional list" quote "the European Commission (hereinafter referred to as ‘the Commission’)," passage_hash "sha256:06c3a4bad78e46f84fc98d9b521a77c29e1db9ed415689902a8b2595ad13a382" document_hash "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37" basis direct; }
+  uncertainty { item unknown "This establishes the Commission’s institutional identity. It does not by itself establish its mission, mandate, functions, decision rights, organizational composition or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type identity; institution_type supranational_institution; }
+}
+
+record eu_ai_office_identity : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office identity";
+  subjects { subject eu_ai_office type organizational_unit role "subject"; };
+  assertion defines "The European Artificial Intelligence Office is an established organizational office.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office }; temporal_scope {} conditions {}; }
+  evidence { support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_1 locator "Commission Decision C/2024/1459, Article 1" quote "The European Artificial Intelligence Office (the ‘Office’) is established. The Office shall be part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology (the ‘Directorate-General’)." passage_hash "sha256:ed16a848f122f4f373cbf90e05fdf13e358dbf7bed9b4c6bc4c6d5befdbd4d54" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct; }
+  uncertainty { item unknown "This establishes the Office’s existence and organizational character. It does not by itself establish placement, mission, mandate, decision rights, functions or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type identity; institution_type organizational_unit; }
+}
+
+record eu_ai_office_placement : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office placement";
+  subjects { subject eu_ai_office type organizational_unit role "subunit"; };
+  assertion states "The European AI Office is situated within the European Commission’s Directorate-General for Communications Networks, Content and Technology.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission, european_commission.dg_connect }; temporal_scope {} conditions {}; }
+  evidence { support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_1 locator "Commission Decision C/2024/1459, Article 1" quote "The European Artificial Intelligence Office (the ‘Office’) is established. The Office shall be part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology (the ‘Directorate-General’)." passage_hash "sha256:ed16a848f122f4f373cbf90e05fdf13e358dbf7bed9b4c6bc4c6d5befdbd4d54" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct; }
+  uncertainty { item unknown "This establishes the Office’s administrative placement. It does not establish independence, legal personality, mandate, decision rights, functions or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type placement; parent_institution_id european_commission.dg_connect; }
+}
+
+record european_commission_mission : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission source-reported mission";
+  subjects { subject european_commission type institution role "subject"; };
+  assertion states "The European Commission promotes the general interest of the European Union through proposing and enforcing legislation and implementing Union policies and the budget.";
+  topics {}; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
+  evidence { support eu.european_commission_institution document_version eu.european_commission_institution.v2026_08_05 passage eu.european_commission_institution.role locator "European Commission, Role" quote "Role: promotes the general interest of the EU by proposing and enforcing legislation as well as by implementing policies and the EU budget" passage_hash "sha256:60be5585187cd9df8099970f4b1fde4174ed5026c88930808381292b7a9c113a" document_hash "sha256:408360a1e92d48ee1812f81080afa3f55129fc94a4a12c04156e64258d6c1fca" basis direct; }
+  uncertainty { item ambiguous "The source labels this as the Commission’s role rather than formally as a mission statement. The record captures its stated institutional purpose and does not replace the separate treaty mandate or function records."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type mission; mission { text "Promote the general interest of the European Union through proposing and enforcing legislation and implementing Union policies and the budget."; source_ids { eu.european_commission_institution }; evidence_refs { eu.european_commission_institution.role }; } }
+}
+
+record eu_ai_office_mission : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office source-reported mission";
+  subjects { subject eu_ai_office type organizational_unit role "subject"; };
+  assertion states "The European AI Office supports the development and adoption of trustworthy artificial intelligence while protecting people against AI-related risks.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office }; temporal_scope {} conditions {}; }
+  evidence { support ec.european_ai_office document_version ec.european_ai_office.v2026_08_05 passage ec.european_ai_office.mission locator "European AI Office, opening summary" quote "The European AI Office supports the development and adoption of trustworthy Artificial Intelligence (AI) solutions, while protecting people against risks." passage_hash "sha256:f5ef6b5d2fb10e1536535f587bae6cf1bad5b95f298276cc32d6980aa8c15e95" document_hash "sha256:a110ad6a4dacc47bd1a5b63d955374e3ab4fea4323547657e93f5258036fd2eb" basis direct; }
+  uncertainty { item unknown "This is the Office’s source-reported mission. It does not independently establish its legal mandate, specific functions, decision rights, enforcement powers or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type mission; mission { text "Support the development and adoption of trustworthy artificial intelligence while protecting people against AI-related risks."; source_ids { ec.european_ai_office }; evidence_refs { ec.european_ai_office.mission }; } }
+}
+
+record european_commission_union_law_mandate : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission Union-law mandate";
+  subjects { subject european_commission type institution role "responsible institution"; };
+  assertion assigns "The Treaties assign the European Commission responsibility to ensure the application of the Treaties and measures adopted under them and to oversee the application of Union law.";
+  topics { union_law }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions { "Treaty on European Union, Article 17(1)" }; }
+  evidence { support eu.teu_article_17 document_version eu.teu_article_17.v2026_08_05 passage eu.teu_article_17.paragraph_1 locator "Treaty on European Union, Article 17(1)" quote "The Commission shall promote the general interest of the Union and take appropriate initiatives to that end. It shall ensure the application of the Treaties, and of measures adopted by the institutions pursuant to them. It shall oversee the application of Union law under the control of the Court of Justice of the European Union." passage_hash "sha256:531c238ed5486957122bc46cacc48cd9c1ddb55ba2977b4468b8135bff6d4bd6" document_hash "sha256:ee9da1327b780b2b4290b866dedceccad86793d468b36bbcc0fac594e93d2c08" basis direct; }
+  uncertainty { item unknown "This establishes the Commission’s general treaty mandate concerning Union law. It does not by itself establish a particular enforcement procedure, sanction or power to refer a Member State to the Court of Justice."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type mandate; mandate { status established; text "Ensure application of the Treaties and measures adopted under them and oversee application of Union law."; authority_source_ids { eu.teu_article_17 }; evidence_refs { eu.teu_article_17.paragraph_1 }; } }
+}
+
+record eu_ai_office_gp_ai_enforcement_mandate : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office GPAI-enforcement mandate";
+  subjects { subject eu_ai_office type organizational_unit role "implementing office"; };
+  assertion assigns "Union law assigns the European AI Office responsibility for implementing the Commission’s supervision and enforcement tasks concerning providers of general-purpose AI models under Chapter V of the AI Act.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission }; temporal_scope {} conditions { "AI Act Chapter V supervision and enforcement" }; }
+  evidence { support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_ai_act_art_88_1 locator "Regulation (EU) 2024/1689, Article 88(1)" quote "The Commission shall have exclusive powers to supervise and enforce Chapter V, taking into account the procedural guarantees under Article 94. The Commission shall entrust the implementation of these tasks to the AI Office, without prejudice to the powers of organisation of the Commission and the division of competences between Member States and the Union based on the Treaties." passage_hash "sha256:2dd98837f63e348517aad1b7413956d8b856601152817fa3cc711917cf955989" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct; }
+  uncertainty { item unknown "The mandate concerns implementation of the Commission’s supervision and enforcement tasks. It does not transfer the Commission’s exclusive legal powers to the AI Office or establish every specific decision the Office may make."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type mandate; mandate { status established; text "Implement the Commission’s supervision and enforcement tasks concerning providers of general-purpose AI models under AI Act Chapter V."; authority_source_ids { eu_ai_act_2024_1689, eu.commission_decision_c_2024_1459 }; evidence_refs { passage_eu_ai_act_art_88_1 }; } }
+}
+
+record european_commission_legislative_proposal_function : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission legislative-proposal function";
+  subjects { subject european_commission type institution role "proposer"; };
+  assertion performs "The European Commission plans, prepares and proposes new European Union legislation.";
+  topics { union_law }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
+  evidence { support ec.planning_proposing_law document_version ec.planning_proposing_law.v2026_08_05 passage ec.planning_proposing_law.right_of_initiative locator "Planning and proposing law, opening paragraph" quote "The European Commission is responsible for planning, preparing and proposing new European legislation. This is called the 'right of initiative'." passage_hash "sha256:599392e485334510e022ca03a7a802c403713c1eab281647d97f330742205bbb" document_hash "sha256:6bfc04ef05306f758e2bb02cf9c9819dc6f1d00eb271fdac27ac345e01b733df" basis direct; }
+  uncertainty { item unknown "This establishes a law-proposal function. It does not by itself establish the full treaty mandate, adoption of legislation or unilateral legislative power."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type function; function legislative_proposal; }
+}
+
+record european_commission_budget_mgmt_function : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission budget-management function";
+  subjects { subject european_commission type institution role "budget manager"; };
+  assertion performs "The European Commission proposes and implements the European Union budget and manages Union funding programmes.";
+  topics { public_budget }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
+  evidence { support ec.budget_funding document_version ec.budget_funding.v2026_08_05 passage ec.budget_funding.commission_role locator "Budget and funding, European Commission role" quote "The European Commission proposes and implements the EU budget and manages EU funding programmes." passage_hash "sha256:6946b7ffd406e085ccfea2edaf6a320a59ec744f2f80e5a8355feb48e7418811" document_hash "sha256:2bd2e3ab0f53136a316476ce0a31963b9147461930bbde5b8bf736632149e64b" basis direct; }
+  uncertainty { item unknown "This establishes budget-management activities. It does not establish a decision right over every budgetary act or prove the operational resources available to every Commission service."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type function; function budget_management; }
+}
+
+record eu_ai_office_model_eval_function : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office model-evaluation function";
+  subjects { subject eu_ai_office type organizational_unit role "tool developer"; };
+  assertion performs "The European AI Office develops tools, methodologies and benchmarks for evaluating the capabilities of general-purpose AI models.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office }; temporal_scope {} conditions { "General-purpose AI model evaluation" }; }
+  evidence { support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_3_1_a locator "Commission Decision C/2024/1459, Article 3(1)(a)" quote "developing tools, methodologies and benchmarks for evaluating capabilities of general-purpose AI models, in particular for very large general purpose AI models with systemic risks;" passage_hash "sha256:c92b6270767a629a42c11697370830c6f44379b505be4b3935b4ee0207116c52" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct; }
+  uncertainty { item unknown "This establishes an assigned evaluation-related activity. It does not independently establish legal power to conduct a particular evaluation, sufficient technical resources or successful performance."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type function; function model_evaluation_tools; }
+}
+
+record european_commission_reasoned_op_function : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission reasoned-opinion function";
+  subjects { subject european_commission type institution role "responsible institution"; };
+  assertion performs "Where the Commission considers that a Member State has failed to fulfil a Treaty obligation, and after allowing the State to submit observations, Article 258 requires the Commission to deliver a reasoned opinion.";
+  topics { union_law, infringement_procedure }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions { "The Commission considers that a Member State has failed to fulfil a Treaty obligation, after allowing the State to submit observations" }; }
+  evidence { support eu.tfeu_article_258 document_version eu.tfeu_article_258.v2026_08_05 passage eu.tfeu_article_258.reasoned_opinion locator "Treaty on the Functioning of the European Union, Article 258, first paragraph" quote "If the Commission considers that a Member State has failed to fulfil an obligation under the Treaties, it shall deliver a reasoned opinion on the matter after giving the State concerned the opportunity to submit its observations." passage_hash "sha256:8f8bf95c1d23c2ff2f3569acaa7c3477b6a2baa19199d1acc81da5c09c590386" document_hash "sha256:ec05de3ed032bc882a25fb54d4ae239cb68fba85ee88a3d3ceb003762ebaf017" basis direct; }
+  uncertainty { item unknown "This human-approved function classification preserves the mandatory procedural wording once the stated conditions hold. It remains distinct from the Commission’s separate discretionary right to refer noncompliance to the Court of Justice. Human review approved european_commission_reasoned_op_function as a function in docs/migrations/institutional-stage-b/human-review.yaml."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type function; function treaty_reasoned_opinion_delivery; }
+}
+
+record european_commission_cjeu_refer_decision_right : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission CJEU-referral decision right";
+  subjects { subject european_commission type institution role "referring institution"; };
+  assertion authorizes "Where a Member State does not comply with the Commission’s reasoned opinion within the prescribed period, the Commission may bring the matter before the Court of Justice of the European Union.";
+  topics { union_law, infringement_procedure }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions { "Member State noncompliance with the reasoned opinion within the prescribed period" }; }
+  evidence { support eu.tfeu_article_258 document_version eu.tfeu_article_258.v2026_08_05 passage eu.tfeu_article_258.cjeu_referral locator "Treaty on the Functioning of the European Union, Article 258, second paragraph" quote "If the State concerned does not comply with the opinion within the period laid down by the Commission, the latter may bring the matter before the Court of Justice of the European Union." passage_hash "sha256:510c97d209759b32cdf28eef169cfecdd75a1efd2054b29b05b057434c620e75" document_hash "sha256:ec05de3ed032bc882a25fb54d4ae239cb68fba85ee88a3d3ceb003762ebaf017" basis direct; }
+  uncertainty { item unknown "This establishes the Commission’s power to initiate the Court stage of the specified infringement procedure. It does not establish the outcome of the case or a general power to adjudicate Treaty violations."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type decision_right; decision_right { status established; text "Bring a matter before the Court of Justice where the Member State does not comply with the reasoned opinion within the prescribed period."; authority_source_ids { eu.tfeu_article_258 }; evidence_refs { eu.tfeu_article_258.cjeu_referral }; } }
+}
+
+record european_commission_gp_ai_fine_decision_right : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission GPAI-fine decision right";
+  subjects { subject european_commission type institution role "fine-imposing institution"; };
+  assertion authorizes "The European Commission may impose fines on providers of general-purpose AI models for specified intentional or negligent infringements of the AI Act.";
+  topics { artificial_intelligence, enforcement }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions { "Grounds, procedures and maximum amounts specified in Article 101 of the AI Act" }; }
+  evidence { support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_ai_act_art_101_1 locator "Regulation (EU) 2024/1689, Article 101(1)" quote "The Commission may impose on providers of general-purpose AI models fines not exceeding 3 % of their annual total worldwide turnover in the preceding financial year or EUR 15 000 000, whichever is higher., when the Commission finds that the provider intentionally or negligently: (a) infringed the relevant provisions of this Regulation; (b) failed to comply with a request for a document or for information pursuant to Article 91, or supplied incorrect, incomplete or misleading information; (c) failed to comply with a measure requested under Article 93; (d) failed to make available to the Commission access to the general-purpose AI model or general-purpose AI model with systemic risk with a view to conducting an evaluation pursuant to Article 92." passage_hash "sha256:2f45f18cffc18e9af1e26d4c38a074ed876eadd4282eac00de5dc53168b330c1" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct; }
+  uncertainty { item unknown "This power is limited by the grounds, procedures and maximum amounts specified in the AI Act. It does not establish a general Commission power to fine any institution or person for any AI-related conduct."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type decision_right; decision_right { status established; text "Impose fines on GPAI model providers for the specified intentional or negligent Article 101 infringements."; authority_source_ids { eu_ai_act_2024_1689 }; evidence_refs { passage_eu_ai_act_art_101_1 }; } }
+}
+
+record eu_ai_office_model_eval_decision_right : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office model-evaluation decision right";
+  subjects { subject eu_ai_office type organizational_unit role "evaluation decision maker"; };
+  assertion authorizes "After consulting the European Artificial Intelligence Board, the European AI Office may conduct evaluations of a general-purpose AI model to assess compliance or investigate systemic risks under the conditions specified in the AI Act.";
+  topics { artificial_intelligence, model_evaluation }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office }; temporal_scope {} conditions { "After consulting the Board and under Article 92(1) conditions" }; }
+  evidence { support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_ai_act_art_92_1 locator "Regulation (EU) 2024/1689, Article 92(1)" quote "The AI Office, after consulting the Board, may conduct evaluations of the general-purpose AI model concerned: (a) to assess compliance of the provider with obligations under this Regulation, where the information gathered pursuant to Article 91 is insufficient; or (b) to investigate systemic risks at Union level of general-purpose AI models with systemic risk, in particular following a qualified alert from the scientific panel in accordance with Article 90(1), point (a)." passage_hash "sha256:0076c63c049a5c8e15ae46018ffa7b6a5ae549e7147e13d1910db8fe2fce14d1" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct; }
+  uncertainty { item unknown "This establishes the Office’s power to conduct evaluations. Requests for model access, binding measures and fines remain powers assigned separately by Union law and are not inferred from this record."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type decision_right; decision_right { status established; text "Conduct GPAI model evaluations after consulting the Board under the conditions in AI Act Article 92(1)."; authority_source_ids { eu_ai_act_2024_1689 }; evidence_refs { passage_eu_ai_act_art_92_1 }; } }
+}
+
+record european_commission_jrc_infra_capacity : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission JRC infrastructure capacity";
+  subjects { subject european_commission type institution role "infrastructure maintainer"; };
+  assertion observes "Through the Joint Research Centre, the European Commission maintains physical research infrastructures across nuclear and radiological research, chemistry, biosciences, physical sciences and information technology.";
+  topics { research_infrastructure }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission, european_commission.joint_research_centre }; temporal_scope {} conditions { "JRC infrastructure available for opening access to external users as retrieved on 2026-08-05" }; }
+  evidence { support ec.jrc_research_infrastructures document_version ec.jrc_research_infrastructures.v2026_08_05 passage ec.jrc_research_infrastructures.inventory locator "Open access to JRC research infrastructures, opening paragraph" quote "The JRC maintains 39 physical research infrastructures suitable for opening access to external users in the nuclear and radiological (Euratom Laboratories) fields, chemistry, biosciences/life sciences, physical sciences and ICT. They are located at our sites in Ispra (Italy), Geel (Belgium), Karlsruhe (Germany) and Petten (The Netherlands). These infrastructures (i.e. laboratories) are fit for experimental work generating data for users’ analyses." passage_hash "sha256:fabc372f9903395ae652330c34cc58330bdc9c2295f19394336252494d733522" document_hash "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7" basis direct; }
+  uncertainty { item unknown "This establishes maintained scientific infrastructure. It does not establish equal staffing, funding, utilization, performance or operational condition across every facility."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id european_commission; fact_type operational_capacity; operational_capacity { status active; capacity_type laboratory_network; capacity_components { nuclear_and_radiological_research, chemistry, biosciences_and_life_sciences, physical_sciences, information_and_communication_technology }; evidence_refs { ec.jrc_research_infrastructures.inventory }; } }
+}
+
+record eu_ai_office_org_capacity : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office organizational capacity";
+  subjects { subject eu_ai_office type organizational_unit role "capacity holder"; };
+  assertion observes "The European AI Office employs more than 125 staff and has six units and two advisers.";
+  topics { artificial_intelligence, organizational_structure }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office }; temporal_scope {} conditions { "Current structure as retrieved on 2026-08-05" }; }
+  evidence { support ec.european_ai_office document_version ec.european_ai_office.v2026_08_05 passage ec.european_ai_office.structure locator "European AI Office, The Structure of the AI Office" quote "The AI Office employs more than 125 staff, including technology specialists, administrative assistants, lawyers, policy specialists, and economists. It has 6 units and 2 advisers, reflecting its mandate:" passage_hash "sha256:da0b260472c06e3d3214077dce0bf2a0fbf0a858666ceb016b0a7ae87b6c476b" document_hash "sha256:a110ad6a4dacc47bd1a5b63d955374e3ab4fea4323547657e93f5258036fd2eb" basis direct; }
+  uncertainty { item unknown "This establishes the reported staff threshold and generic unit-and-adviser structure. The selected quotation does not name the six units or two advisers and does not establish that every assigned task is fully resourced or successfully performed."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type operational_capacity; operational_capacity { status active; capacity_type organizational_unit; capacity_components { six_units, two_advisers }; evidence_refs { ec.european_ai_office.structure }; } }
+}
+
+record eu_ai_office_cooperation_capacity : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office cooperation capacity";
+  subjects { subject eu_ai_office type organizational_unit role "network coordinator"; };
+  assertion observes "The European AI Office maintains structured cooperation with Commission departments, Union bodies, Member State authorities, scientific experts, AI developers and other stakeholders.";
+  topics { artificial_intelligence, institutional_cooperation }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission }; temporal_scope {} conditions {}; }
+  evidence {
+    support ec.european_ai_office document_version ec.european_ai_office.v2026_08_05 passage ec.european_ai_office.cooperation_platforms locator "European AI Office, Cooperation with institutions, experts and stakeholders" quote "The AI Office collaborates with Member States and the wider expert community through dedicated platforms:" passage_hash "sha256:22502e0d7c84f8b336e555a02ecde308802073548df9bd512f45e8d1cea107ef" document_hash "sha256:a110ad6a4dacc47bd1a5b63d955374e3ab4fea4323547657e93f5258036fd2eb" basis direct;
+    support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_2_3 locator "Commission Decision C/2024/1459, Article 2(3)" quote "In the performance of the tasks referred to in paragraphs 1 and 2 of this Article, the Office shall: (a) work together with stakeholders, in particular experts from the scientific community and AI developers, pursuant to Article 4; (b) collaborate with relevant Directorates-General and services of the Commission pursuant to Article 5; (c) cooperate with all relevant bodies, offices and agencies of the Union, including the European High Performance Computing Joint Undertaking (EuroHPC JU), pursuant to Article 6; (d) cooperate with authorities and bodies of the Member States on behalf of the Commission." passage_hash "sha256:a12c08bc572bfbc6061201e83f170549da691563d0f8fbacfde2fb98d26294a7" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct;
+  }
+  uncertainty { item unknown "These are administrative, regulatory and stakeholder-coordination mechanisms. Participant personnel, expertise and infrastructure are not resources owned or directly controlled by the AI Office."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type operational_capacity; operational_capacity { status active; capacity_type partnership_network; capacity_components { commission_department_collaboration, union_body_cooperation, member_state_authority_cooperation, dedicated_expert_and_stakeholder_platforms, scientific_experts_and_ai_developers }; evidence_refs { ec.european_ai_office.cooperation_platforms, eu.commission_decision_c_2024_1459.article_2_3 }; } }
 }

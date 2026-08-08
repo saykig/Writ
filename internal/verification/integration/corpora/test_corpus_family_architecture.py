@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import re
@@ -370,15 +371,16 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert manifest(by_id["us.constitutional_law"])["family"] == "legal_policy"
     assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
-    assert nist.count("\nrecord ") == 6
-    # Stage A human review dispositioned all six drafts: five approved, one superseded.
+    assert nist.count("\nrecord ") == 15
+    # Stage A dispositioned its six drafts, and the completed Stage B human review
+    # approved the nine later proposals without changing the superseded Stage A record.
     assert nist.count("review_state draft;") == 0
-    assert nist.count("review_state approved;") == 5
+    assert nist.count("review_state approved;") == 14
     assert nist.count("review_state superseded;") == 1
-    # The five records carried over keep their original automated provenance; only the
-    # new mission record is attributed to the review implementation.
+    # The Stage A provenance remains intact and Stage B implementation provenance is separate.
     assert nist.count('created_by "OpenAI Codex automated draft";') == 5
     assert nist.count('created_by "Claude Code implementation of approved human review";') == 1
+    assert nist.count('created_by "OpenAI Codex automated proposal";') == 9
     # `accepted` is a judgment status, never a record or record-link review state.
     assert "review_state accepted" not in nist
 
@@ -415,11 +417,15 @@ def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_
     assert link.is_file()
     assert load_yaml(link)["link_id"] == "nist_department_of_commerce_relationship"
 
-    # `sources.writ` was not touched at all.
-    sources = (ROOT / "corpora/institutional/us/nist/sources.writ").read_bytes()
-    assert hashlib.sha256(sources).hexdigest() == stage_a["files"]["sources.writ"]["sha256"].removeprefix(
-        "sha256:"
+    # Stage B appends official sources while preserving the complete Stage A file as a prefix.
+    stage_b = json.loads(
+        (ROOT / "docs/migrations/institutional-stage-b/pre-implementation-inventory.json").read_text(
+            encoding="utf-8"
+        )
     )
+    sources = (ROOT / "corpora/institutional/us/nist/sources.writ").read_bytes()
+    preserved = base64.b64decode(stage_b["nist_stage_a"]["sources_file"]["bytes_base64"])
+    assert sources.startswith(preserved)
 
     for item in before["constitutional"]:
         old_prefix = "corpora/us/constitutional-law/"
@@ -428,14 +434,16 @@ def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_
         assert hashlib.sha256(current.read_bytes()).hexdigest() == item["sha256"]
 
 
-def test_ai_office_records_are_atomic_function_drafts_only() -> None:
+def test_ai_office_records_are_atomic_approved_records() -> None:
     text = (ROOT / "corpora/institutional/eu/european-commission/records.writ").read_text()
-    assert text.count("\nrecord ") == 3
-    assert text.count("fact_type function;") == 3
-    assert text.count("review_state draft;") == 3
-    assert "fact_type mandate" not in text
-    assert "operational_capacity {" not in text
-    assert "mission {" not in text
+    assert text.count("\nrecord ") == 20
+    assert text.count("fact_type function;") == 7
+    assert text.count("review_state draft;") == 0
+    assert text.count("review_state approved;") == 20
+    assert text.count("fact_type mandate;") == 2
+    assert text.count("fact_type decision_right;") == 3
+    assert text.count("fact_type operational_capacity;") == 3
+    assert text.count("fact_type mission;") == 2
 
 
 def test_query_directory_is_not_needed_for_catalog_or_manifest_resolution() -> None:

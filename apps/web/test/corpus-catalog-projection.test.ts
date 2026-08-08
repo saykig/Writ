@@ -86,8 +86,8 @@ describe("homepage corpus catalog projection", () => {
       corpusId.includes("european_commission"),
     );
     const nist = institutions.find(({ corpusId }) => corpusId === "us.institutions.nist");
-    expect(commission?.mappedCount).toBe(3);
-    expect(nist?.mappedCount).toBe(6);
+    expect(commission?.mappedCount).toBe(20);
+    expect(nist?.mappedCount).toBe(15);
     expect(commission?.mappedCountKind).toBe("institutional_records");
     expect(nist?.mappedCountKind).toBe("institutional_records");
   });

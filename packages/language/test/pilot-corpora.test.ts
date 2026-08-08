@@ -41,13 +41,23 @@ describe("Stage 1 pilot corpora", () => {
     const path = join(ROOT, "corpora/institutional/us/nist/records.writ");
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
-    expect(compiled.records).toHaveLength(6);
+    expect(compiled.records).toHaveLength(15);
     // Stage A human review dispositioned these six records and moved them onto the
     // native atomic contract, so the v0.1 draft state and its placeholder mandate and
     // capacity payloads are gone. What this test still guards is the evidence layer:
     // the exact quotations below must survive every review. The dispositions
     // themselves are asserted in `nist-stage-a.test.ts`.
-    for (const record of compiled.records) {
+    const stageAIds = new Set([
+      "nist_identity",
+      "nist_organizational_placement",
+      "nist_mission",
+      "nist_measurement_science_function",
+      "nist_ai_standards_development_function",
+      "nist_ai_technical_guidance_function",
+    ]);
+    const stageA = compiled.records.filter((record) => stageAIds.has(record.record_id));
+    expect(stageA).toHaveLength(6);
+    for (const record of stageA) {
       expect(record.family).toBe("institutional");
       expect(["approved", "superseded"]).toContain(record.review_state);
       expect(record.evidence.length).toBeGreaterThan(0);
@@ -56,24 +66,18 @@ describe("Stage 1 pilot corpora", () => {
       expect(record).not.toHaveProperty("operational_capacity");
     }
     expect(
-      compiled.records.filter(
-        (record) => record.provenance.created_by === "OpenAI Codex automated draft",
-      ),
+      stageA.filter((record) => record.provenance.created_by === "OpenAI Codex automated draft"),
     ).toHaveLength(5);
-    const ai = compiled.records.filter((record) =>
-      record.topics.includes("artificial_intelligence"),
-    );
+    const ai = stageA.filter((record) => record.topics.includes("artificial_intelligence"));
     expect(ai).toHaveLength(2);
     expect(
-      compiled.records.filter((record) => "mission" in record && record.mission !== undefined),
+      stageA.filter((record) => "mission" in record && record.mission !== undefined),
     ).toHaveLength(1);
     expect(
       ai.every((record) => record.assertion.text.includes("AI") || record.title.includes("AI")),
     ).toBe(true);
     expect(
-      new Set(
-        compiled.records.flatMap((record) => record.evidence.map((evidence) => evidence.quote)),
-      ),
+      new Set(stageA.flatMap((record) => record.evidence.map((evidence) => evidence.quote))),
     ).toEqual(
       new Set([
         "The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce.",

@@ -100,6 +100,7 @@
         "research_body",
         "interagency_body",
         "organizational_unit",
+        "supranational_institution",
         "other",
         "unknown"
       ]
@@ -148,11 +149,46 @@
     "operationalCapacity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "dimensions", "evidence_refs"],
+      "required": ["status", "capacity_type", "evidence_refs"],
       "properties": {
-        "status": { "enum": ["established", "partial", "unknown", "contested"] },
-        "dimensions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "status": {
+          "enum": ["active", "planned", "limited", "degraded", "suspended", "retired", "unknown"]
+        },
+        "capacity_type": {
+          "enum": [
+            "organizational_unit",
+            "laboratory_network",
+            "facility",
+            "program",
+            "technical_capability",
+            "accreditation_system",
+            "partnership_network",
+            "other"
+          ]
+        },
+        "capacity_components": {
+          "type": "array",
+          "items": {
+            "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/identifier"
+          },
+          "uniqueItems": true
+        },
+        "as_of_date": { "type": "string", "format": "date" },
+        "quantity": { "$ref": "#/$defs/capacityQuantity" },
         "evidence_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "dependentRequired": { "quantity": ["as_of_date"] }
+    },
+    "capacityQuantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "qualifier"],
+      "properties": {
+        "value": { "type": "number", "minimum": 0 },
+        "unit": {
+          "$ref": "https://writ.example/schemas/core/record.schema.json#/$defs/identifier"
+        },
+        "qualifier": { "enum": ["exact", "approximate", "minimum", "maximum"] }
       }
     },
     "nonIdentityPayload": {

@@ -172,3 +172,186 @@ record nist_ai_technical_guidance_function : institutional {
     function technical_guidance;
   }
 }
+
+record nist_national_measurement_standards_mandate : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST national-measurement-standards mandate";
+  subjects { subject nist type institution role "responsible institution"; };
+  assertion assigns "The current official OLRC text of 15 U.S.C. § 272(b)(2), containing laws in effect on August 7, 2026, assigns NIST responsibility to develop, maintain and retain custody of the national standards of measurement and to provide the means and methods for making measurements consistent with those standards.";
+  topics { measurement_science };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Responsibility as codified in the stored current OLRC text of 15 U.S.C. § 272(b)(2), containing laws in effect on August 7, 2026" }; }
+  evidence {
+    support us_code.title15_usc_272 document_version us_code.title15_usc_272.v2026_08_07 passage us_code.title15_usc_272.b_2 locator "15 U.S.C. § 272(b)(2)" quote "to develop, maintain, and retain custody of the national standards of measurement, and provide the means and methods for making measurements consistent with those standards;" passage_hash "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019" document_hash "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d" basis direct;
+  }
+  uncertainty { item unknown "This record establishes the responsibility in the stored current OLRC text containing laws in effect on August 7, 2026. It does not establish currency after that date or general regulatory authority over industry, private standards bodies or every use of measurement standards."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist;
+    fact_type mandate;
+    mandate { status established; text "Develop, maintain and retain custody of national measurement standards and provide consistent measurement means and methods."; authority_source_ids { us_code.title15_usc_272 }; evidence_refs { us_code.title15_usc_272.b_2 }; }
+  }
+}
+
+record nist_nvlap_lab_decision_right : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NVLAP laboratory-accreditation decision right";
+  subjects { subject nist type institution role "accreditation decision maker"; };
+  assertion authorizes "NIST, through the National Voluntary Laboratory Accreditation Program, determines whether a testing or calibration laboratory has demonstrated the competence required for accreditation within a specified scope.";
+  topics { laboratory_accreditation };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Laboratory accreditation through NVLAP within a specified scope" }; }
+  evidence {
+    support ecfr.title15_cfr_part_285 document_version ecfr.title15_cfr_part_285.v2026_08_01 passage ecfr.title15_cfr_part_285.section_285_9_a locator "15 CFR § 285.9(a)" quote "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation." passage_hash "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7" document_hash "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919" basis direct;
+    support nist.handbook_150 document_version nist.handbook_150.v2020_update_1 passage nist.handbook_150.competence locator "NIST Handbook 150:2020, clause 1.3.5" quote "NVLAP accreditation is based on the evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled." passage_hash "sha256:f6263b3ae31de22e2ba0f486d2092bb154179287ad0a38001a0cf8e3ef054700" document_hash "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e" basis direct;
+    support nist.handbook_150 document_version nist.handbook_150.v2020_update_1 passage nist.handbook_150.accreditation_decision locator "NIST Handbook 150:2020, clause 3.5.3" quote "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory." passage_hash "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1" document_hash "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e" basis direct;
+  }
+  uncertainty { item unknown "This decision right is limited to laboratory accreditation through NVLAP. It does not establish general regulatory authority, authority over every laboratory, product certification or authority to make unrelated NIST guidance legally binding."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist;
+    fact_type decision_right;
+    decision_right { status established; text "Determine whether a laboratory has demonstrated competence for NVLAP accreditation within a specified scope."; authority_source_ids { ecfr.title15_cfr_part_285, nist.handbook_150 }; evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence, nist.handbook_150.accreditation_decision }; }
+  }
+}
+
+record nist_ai_standards_group_identity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST AI Standards and Guidelines Group identity";
+  subjects { subject nist.ai_standards_guidelines_group type organizational_unit role "subject"; };
+  assertion defines "The AI Standards and Guidelines Group is a named organizational group within NIST.";
+  topics { artificial_intelligence };
+  scope { jurisdictions { "United States" }; institutional_scope { nist.ai_standards_guidelines_group, nist }; temporal_scope {} conditions {}; }
+  evidence {
+    support nist.ai_research_measurement_standards_division document_version nist.ai_research_measurement_standards_division.v2026_08_05 passage nist.ai_division.groups locator "AI Research, Measurement, and Standards Division, organizational description" quote "The AI Research, Measurement, and Standards Division’s efforts are carried out by the AI Standards and Guidelines Group and the Applied AI Research Group." passage_hash "sha256:3c5d0de8ef3ad63178beee6bf9cd278935f65eb2df767e9c4c272fcf969dbb42" document_hash "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22" basis direct;
+  }
+  uncertainty { item unknown "The group’s identity does not establish a separate legal personality, legal mandate, independent decision authority or operational capacity."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional { institution_id nist.ai_standards_guidelines_group; fact_type identity; institution_type organizational_unit; }
+}
+
+record nist_ai_standards_group_placement : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST AI Standards and Guidelines Group placement";
+  subjects { subject nist.ai_standards_guidelines_group type organizational_unit role "subunit"; };
+  assertion states "The AI Standards and Guidelines Group operates within the AI Research, Measurement, and Standards Division of NIST’s Information Technology Laboratory.";
+  topics { artificial_intelligence };
+  scope { jurisdictions { "United States" }; institutional_scope { nist.ai_standards_guidelines_group, nist.ai_research_measurement_standards_division, nist.information_technology_laboratory, nist }; temporal_scope {} conditions {}; }
+  evidence {
+    support nist.ai_research_measurement_standards_division document_version nist.ai_research_measurement_standards_division.v2026_08_05 passage nist.ai_division.itl_placement locator "AI Research, Measurement, and Standards Division, opening description" quote "The AI Research, Measurement, and Standards Division is one of six technical divisions in the Information Technology Laboratory (ITL). The Division leads and coordinates the ITL AI Program." passage_hash "sha256:bef13a92de5ed5212d87455976f8169e7a76a17db196ff50e23c507d81f13e5b" document_hash "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22" basis direct;
+    support nist.ai_research_measurement_standards_division document_version nist.ai_research_measurement_standards_division.v2026_08_05 passage nist.ai_division.groups locator "AI Research, Measurement, and Standards Division, organizational description" quote "The AI Research, Measurement, and Standards Division’s efforts are carried out by the AI Standards and Guidelines Group and the Applied AI Research Group." passage_hash "sha256:3c5d0de8ef3ad63178beee6bf9cd278935f65eb2df767e9c4c272fcf969dbb42" document_hash "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22" basis direct;
+  }
+  uncertainty { item unknown "The organizational chain establishes placement within NIST. It does not establish independent mandate, decision authority or operational capacity for the group."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional { institution_id nist.ai_standards_guidelines_group; fact_type placement; parent_institution_id nist.ai_research_measurement_standards_division; }
+}
+
+record nist_lab_network_capacity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST laboratory-network capacity";
+  subjects { subject nist type institution role "operator"; };
+  assertion observes "NIST conducts its principal research through six laboratory components and associated user facilities.";
+  topics { measurement_science, research_infrastructure };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Current laboratory structure as retrieved on 2026-08-05" }; }
+  evidence {
+    support nist.laboratories document_version nist.laboratories.v2026_08_05 passage nist.laboratories.six_labs locator "NIST Laboratories, opening paragraph" quote "Researchers at NIST—including five Nobel Prize winners—have been at the forefront of science in the nation’s premier measurement institute for more than 120 years. Their groundbreaking research happens in six labs (listed below) and user facilities." passage_hash "sha256:8b09ac60a63c3e38eebf65f623b1c52954ba78f83a8e888c41947e96e3ee52ac" document_hash "sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b" basis direct;
+  }
+  uncertainty { item unknown "This establishes NIST’s current laboratory structure. It does not establish equal legal status, staffing, funding, utilization, performance or operational condition across all components."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type laboratory_network; capacity_components { six_laboratories, user_facilities }; evidence_refs { nist.laboratories.six_labs }; }
+  }
+}
+
+record nist_aml_facility_capacity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "Advanced Measurement Laboratory facility capacity";
+  subjects { subject nist type institution role "facility operator"; };
+  assertion observes "NIST maintains the Advanced Measurement Laboratory complex with specialized environmental controls, underground metrology laboratories, physical-science laboratories and cleanroom infrastructure for high-precision measurement work.";
+  topics { measurement_science, research_infrastructure };
+  scope { jurisdictions { "United States" }; institutional_scope { nist, nist.advanced_measurement_laboratory }; temporal_scope {} conditions {}; }
+  evidence {
+    support nist.advanced_measurement_laboratory document_version nist.advanced_measurement_laboratory.v2026_08_05 passage nist.aml.features locator "About the Advanced Measurement Laboratory Complex, facility description" quote "The CNST is located within the NIST Advanced Measurement Laboratory Complex, one of the largest and most technologically advanced research facilities in the world. The complex offers laboratories with electromagnetic shielding, vibration isolation, and superior environmental control of temperature, humidity, and air quality. These laboratories allow NIST to provide the sophisticated measurements and standards needed by U.S. industry and the scientific community for key 21st century technologies such as nanotechnology, semiconductors, biotechnology, advanced materials, quantum computing, and advanced manufacturing. The $235 million, 49,843 square meter (536,507 square foot) Advanced Measurement Laboratory (AML) Complex features five separate wings, each with one scientific instrumentation level. Two metrology wings (buildings 218 and 219) are located underground, two physical sciences wings (buildings 216/CNST and 217) and a cleanroom wing (building 215/NanoFab) are located above ground." passage_hash "sha256:ddedb6b29adcf4c3a3e31c2c73d26c43bb1219ac645003b8b8e837c346fcc1f3" document_hash "sha256:f928e083da64fc2bf6ae582adbdb2021f62b8b9f0349f80601cecfb6bcb8e101" basis direct;
+  }
+  uncertainty { item unknown "The record establishes the facility’s physical design and intended technical capabilities. It does not establish current utilization, equipment uptime, maintenance condition or full operational availability."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type facility; capacity_components { electromagnetic_shielding, vibration_isolation, temperature_control, humidity_control, air_quality_control, underground_metrology_wings, physical_science_wings, cleanroom_wing }; evidence_refs { nist.aml.features }; }
+  }
+}
+
+record nist_nvlap_accred_capacity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NVLAP accreditation-system capacity";
+  subjects { subject nist type institution role "program operator"; };
+  assertion observes "NIST maintains an operational laboratory-accreditation system that processes applications, assesses laboratory competence, addresses nonconformities, uses proficiency testing and technical evaluation, and issues accreditation certificates and scopes.";
+  topics { laboratory_accreditation };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "National Voluntary Laboratory Accreditation Program" }; }
+  evidence {
+    support ecfr.title15_cfr_part_285 document_version ecfr.title15_cfr_part_285.v2026_08_01 passage ecfr.title15_cfr_part_285.section_285_9_d locator "15 CFR § 285.9(d)" quote "When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation," passage_hash "sha256:0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e" document_hash "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919" basis direct;
+    support nist.accreditation document_version nist.accreditation.v2026_08_05 passage nist.accreditation.process locator "NVLAP accreditation, Accreditation process" quote "Accreditation requirements are established in accordance with the U.S. Code of Federal Regulations (CFR, Title 15, Part 285), National Voluntary Laboratory Accreditation Program, and encompass the requirements of ISO/IEC 17025. Accreditation is granted following successful completion of a process which includes submission of an application and payment of fees by the laboratory, an on-site assessment, resolution of any nonconformities identified during the on-site assessment, participation in proficiency testing, and technical evaluation. The accreditation is formalized through issuance of a Certificate of Accreditation and Scope of Accreditation and publicized by announcement in various government and private media." passage_hash "sha256:664bd8173aae58423acaac0b41b6f33f4b236ac5c90e58f75e9040f9989e1c1f" document_hash "sha256:3e1c7a56c31e74b719b8366d655e0b390948125d73b49f7204a4d0d3bc7e83db" basis direct;
+  }
+  uncertainty { item unknown "This establishes NIST’s operational machinery for laboratory accreditation. It does not duplicate the accreditation decision right, certify products, guarantee laboratory results or establish that NIST itself holds an ISO/IEC 17025 certification."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type accreditation_system; capacity_components { application_submission, on_site_assessment, nonconformity_resolution, proficiency_testing, technical_evaluation, certificate_and_scope_issuance }; evidence_refs { ecfr.title15_cfr_part_285.section_285_9_d, nist.accreditation.process }; }
+  }
+}
+
+record nist_ai_measurement_capacity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST AI measurement capacity";
+  subjects { subject nist type institution role "capacity holder"; };
+  assertion observes "NIST maintains a dedicated AI Research, Measurement, and Standards Division whose stated work covers AI measurement science, testing and evaluation, and standards through two named groups.";
+  topics { artificial_intelligence, measurement_science };
+  scope { jurisdictions { "United States" }; institutional_scope { nist, nist.information_technology_laboratory, nist.ai_research_measurement_standards_division }; temporal_scope {} conditions {}; }
+  evidence {
+    support nist.ai_research_measurement_standards_division document_version nist.ai_research_measurement_standards_division.v2026_08_05 passage nist.ai_division.capacity locator "AI Research, Measurement, and Standards Division, overview" quote "The AI Research, Measurement, and Standards Division strengthens trust in AI, accelerates its adoption, and expands U.S. AI preeminence by advancing the vital measurement science related to AI, testing and evaluation, and standards. The Division’s efforts reflect the most recent developments in AI as well as anticipated technological and commercialization progress." passage_hash "sha256:533d8191e5ec0c634811181d8ef4ed4524f9e346b602fa744c543a27e5b2c9ce" document_hash "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22" basis direct;
+    support nist.ai_research_measurement_standards_division document_version nist.ai_research_measurement_standards_division.v2026_08_05 passage nist.ai_division.groups locator "AI Research, Measurement, and Standards Division, organizational description" quote "The AI Research, Measurement, and Standards Division’s efforts are carried out by the AI Standards and Guidelines Group and the Applied AI Research Group." passage_hash "sha256:3c5d0de8ef3ad63178beee6bf9cd278935f65eb2df767e9c4c272fcf969dbb42" document_hash "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22" basis direct;
+  }
+  uncertainty { item unknown "This establishes a dedicated organizational unit and its stated work. It does not independently establish technical machinery, technical-guidance work, a particular number of staff, computing resources, evaluation throughput, model access or legally conclusive authority."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type organizational_unit; capacity_components { ai_measurement_science, testing_and_evaluation, standards, ai_standards_and_guidelines_group, applied_ai_research_group }; evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; }
+  }
+}
+
+record nist_ai_consortium_capacity : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST AI Consortium partnership capacity";
+  subjects { subject nist type institution role "consortium organizer"; };
+  assertion observes "NIST maintains an AI research partnership through which external organizations may contribute expertise, products, data or models to work on AI measurement guidelines and standards.";
+  topics { artificial_intelligence, research_partnerships };
+  scope { jurisdictions { "United States" }; institutional_scope { nist, nist.ai_consortium }; temporal_scope {} conditions { "Participation is open to organizations able to make the stated contributions" }; }
+  evidence {
+    support nist.ai_consortium document_version nist.ai_consortium.v2026_08_05 passage nist.ai_consortium.partnership locator "NIST AI Consortium, overview" quote "Building upon its long track record of working with the private and public sectors to develop reliable and practical measurement and standards-oriented solutions, NIST has partnered with organizations from industry, academia, and civil society to form a research partnership that supports the development of science-based empirically-backed guidelines and standards for AI measurement that lays the foundation for global AI metrology." passage_hash "sha256:48475fa02e08511ec3f754fd93cb4fee2ddd3d0d5119fcc1a14fb2bfcef52f85" document_hash "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0" basis direct;
+    support nist.ai_consortium document_version nist.ai_consortium.v2026_08_05 passage nist.ai_consortium.contributions locator "NIST AI Consortium, membership eligibility" quote "Participation in the consortium is open to all interested organizations that can contribute their expertise, products, data, and/or models to the activities of the consortium." passage_hash "sha256:40e110c4ebe66ab610c0f08ac4e929393cf1623b2193489b32e99cc520c24e7c" document_hash "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0" basis direct;
+    support nist.ai_consortium document_version nist.ai_consortium.v2026_08_05 passage nist.ai_consortium.organization_count locator "NIST AI Consortium, current membership statement" quote "The Consortium brings together more than 280 organizations to develop science-based and empirically backed guidelines and standards for AI measurement." passage_hash "sha256:64f3a826db55b7d57e6e923f69f110d75162e710213bcfb81dc527bf2e6a558f" document_hash "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0" basis direct;
+  }
+  uncertainty { item unknown "Consortium members remain external organizations. Their personnel, data, models and facilities are not resources owned or directly controlled by NIST, and membership does not constitute NIST endorsement."; }
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type partnership_network; capacity_components { research_partnership, external_expertise, external_products, external_data, external_models, ai_measurement_guidelines_and_standards }; evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; }
+  }
+}

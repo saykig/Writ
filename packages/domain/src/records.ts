@@ -184,6 +184,30 @@ export interface LegacyInstitutionalRecord extends WritRecord {
   applicable_period?: { from?: string; until?: string };
 }
 
+export interface InstitutionalOperationalCapacity {
+  status: "active" | "planned" | "limited" | "degraded" | "suspended" | "retired" | "unknown";
+  capacity_type:
+    | "organizational_unit"
+    | "laboratory_network"
+    | "facility"
+    | "program"
+    | "technical_capability"
+    | "accreditation_system"
+    | "partnership_network"
+    | "other";
+  capacity_components?: string[];
+  as_of_date?: string;
+  quantity?: {
+    value: number;
+    unit: string;
+    qualifier: "exact" | "approximate" | "minimum" | "maximum";
+  };
+  evidence_refs: string[];
+}
+
+export type InstitutionalType =
+  LegacyInstitutionalRecord["institution_type"] | "supranational_institution";
+
 export type InstitutionalFactType =
   | "identity"
   | "placement"
@@ -199,21 +223,21 @@ interface AtomicInstitutionalBase extends WritRecord {
   family: "institutional";
   institution_id: string;
   institutional_fact_type: InstitutionalFactType;
-  institution_type?: LegacyInstitutionalRecord["institution_type"];
+  institution_type?: InstitutionalType;
   parent_institution_id?: string;
   record_link?: RecordLinkPayload;
   mission?: InstitutionalMission;
   mandate?: InstitutionalMandate;
   function?: string;
   decision_right?: InstitutionalMandate;
-  operational_capacity?: LegacyInstitutionalRecord["operational_capacity"];
+  operational_capacity?: InstitutionalOperationalCapacity;
 }
 
 export type AtomicInstitutionalRecord = AtomicInstitutionalBase &
   (
     | {
         institutional_fact_type: "identity";
-        institution_type: LegacyInstitutionalRecord["institution_type"];
+        institution_type: InstitutionalType;
       }
     | { institutional_fact_type: "placement"; parent_institution_id: string }
     | { institutional_fact_type: "relationship"; record_link: RecordLinkPayload }
@@ -223,7 +247,7 @@ export type AtomicInstitutionalRecord = AtomicInstitutionalBase &
     | { institutional_fact_type: "decision_right"; decision_right: InstitutionalMandate }
     | {
         institutional_fact_type: "operational_capacity";
-        operational_capacity: LegacyInstitutionalRecord["operational_capacity"];
+        operational_capacity: InstitutionalOperationalCapacity;
       }
   );
 

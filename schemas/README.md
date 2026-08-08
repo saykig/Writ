@@ -30,6 +30,11 @@ Family-specific fields are never required globally. A legal record may require l
 empirical record may require study design, and an analysis result may require a methodology and
 trace; those requirements belong to their family or layer, not the shared core.
 
+The native institutional v0.2 operational-capacity branch is finalized by ADR 0018. It represents
+one atomic capacity with controlled status and capacity type, stable component identifiers, optional
+time-qualified quantity, and evidence references. The prior `dimensions` payload remains available
+only through the frozen v0.1 compatibility contract and parser path.
+
 ## Current core schemas
 
 | Schema                               | Classification | Responsibility                                                                                                                                               |
