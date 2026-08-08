@@ -69,6 +69,16 @@
         "typescript": "^5",
       },
     },
+    "internal/verification/writ": {
+      "name": "@writ/pre-merge-verifier",
+      "version": "0.1.0",
+      "dependencies": {
+        "@writ/domain": "workspace:*",
+        "@writ/language": "workspace:*",
+        "ajv": "^8.20.0",
+        "ajv-formats": "^3.0.1",
+      },
+    },
     "packages/analyzer": {
       "name": "@writ/analyzer",
       "version": "0.1.0",
@@ -622,6 +632,8 @@
     "@writ/evaluator": ["@writ/evaluator@workspace:packages/evaluator"],
 
     "@writ/language": ["@writ/language@workspace:packages/language"],
+
+    "@writ/pre-merge-verifier": ["@writ/pre-merge-verifier@workspace:internal/verification/writ"],
 
     "@writ/provenance": ["@writ/provenance@workspace:packages/provenance"],
 
