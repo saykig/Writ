@@ -34,7 +34,7 @@ const manifestEntries = corpusRoots.map((root) => ({
 }));
 const manifests = manifestEntries.map(({ manifest }) => manifest);
 const links = manifestEntries.flatMap(({ root, manifest }) =>
-  manifest.locations.relationships
+  (manifest.locations.relationships ?? [])
     .filter((path) => path.startsWith("relationships/cross-family/"))
     .map((path) => yaml<RecordLink>(join(root, path))),
 );
@@ -55,7 +55,7 @@ interface ProposedRecordLinkJudgment {
 }
 
 const proposedJudgments = manifestEntries.flatMap(({ root, manifest }) =>
-  manifest.locations.judgments
+  (manifest.locations.judgments ?? [])
     .filter((path) => path === "cross-family-judgments.writ")
     .flatMap(
       (path) =>
