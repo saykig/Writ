@@ -67,6 +67,32 @@ If you are contributing code:
 
 The semantic packages for the domain model, evaluator, analyzer and provenance must remain usable without a network connection or database.
 
+## Run Writ locally
+
+### Requirements
+
+- Git
+- Bun 1.3+
+
+### 1. Clone Writ
+
+git clone https://github.com/saykig/Writ.git
+cd Writ
+
+### 2. Install dependencies
+
+bun install
+
+### 3. Start the web interface
+
+bun run web
+
+Then open http://localhost:3000.
+
+### Full development environment
+
+bun run dev
+
 ## Which files are authoritative
 
 Use this order when documents disagree:
@@ -92,37 +118,6 @@ Material under `archive/` is historical and non-authoritative. Material under `i
 - Treat visualizations and memos as views, not source records.
 - Supersede accepted records instead of silently rewriting them.
 - Do not fabricate missing evidence or infer certainty from absent information.
-
-## Technical setup
-
-Writ uses [Bun](https://bun.sh) as its package manager, runtime and test runner. Bun runs the TypeScript source directly, while TypeScript compilation is used as a validation gate.
-
-```bash
-bun install
-bun run typecheck
-bun run lint
-bun run format
-bun run test
-bun run conformance
-bun run build
-```
-
-The evidence ledger uses PostgreSQL and MinIO through Docker Compose:
-
-```bash
-bun run db:up
-bun run db:down
-```
-
-Detailed ownership, retention and path rules are documented in the [repository structure guide](docs/current/repository-structure.md).
-
-## Evidence warning
-
-`internal/infrastructure/config/source_registry.yml` contains possible connectors and research leads. Its presence in the registry does not mean that a source is verified or ready for operational use.
-
-The `verification_status` field determines whether a source is ready. Contributors must not treat a registry entry as production-ready without checking that status.
-
-`internal/infrastructure/generated/source-registry.json` is a generated compatibility projection of the registry. It is not an independent source of authority.
 
 ## License
 
