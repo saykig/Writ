@@ -74,7 +74,7 @@ export function SiteNav() {
 
         {/* Right cluster */}
         <div className="ml-auto flex items-center gap-1">
-          <ThemeToggle />
+          {!homepage && <ThemeToggle />}
 
           <Button
             variant="ghost"

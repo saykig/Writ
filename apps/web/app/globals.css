@@ -220,8 +220,8 @@
   }
 }
 
-/* Homepage state machine: encoded field → resolved title → reconstructed interface. */
-.site-nav.site-nav--home {
+/* Shared site chrome, preserving the homepage's approved inset glass treatment. */
+.site-nav {
   --foreground: oklch(0.975 0.004 255);
   --muted-foreground: oklch(0.72 0.015 255);
   --primary: oklch(0.58 0.035 255);
@@ -1256,7 +1256,7 @@
 }
 
 @media (max-width: 600px) {
-  .site-nav.site-nav--home {
+  .site-nav {
     top: 10px;
     margin: 10px 10px 0;
     border-radius: 9px;

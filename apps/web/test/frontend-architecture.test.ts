@@ -137,6 +137,16 @@ describe("frontend architecture", () => {
     expect(nav).not.toContain("Explore the G7 example");
   });
 
+  test("the shared nav keeps the homepage chrome while hiding its theme toggle", () => {
+    const nav = read("components/site/site-nav.tsx");
+    const styles = read("app/globals.css");
+
+    expect(nav).toContain("{!homepage && <ThemeToggle />}");
+    expect(styles).toContain(".site-nav {");
+    expect(styles).not.toContain(".site-nav.site-nav--home {");
+    expect(styles).toContain("backdrop-filter: blur(24px) saturate(0.42)");
+  });
+
   test("the globe loads only local geometry and never intercepts wheel events", () => {
     const globe = read("components/ui/wireframe-dotted-globe.tsx");
     const dots = JSON.parse(read("public/data/ne_110m_land_dots.json")) as unknown[];
