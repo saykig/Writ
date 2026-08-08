@@ -2398,9 +2398,7 @@
 .hiw-source-object footer,
 .hiw-passage-object > span,
 .hiw-record-object header,
-.hiw-review-object header,
-.hiw-query-object > span,
-.hiw-result-object > span {
+.hiw-review-object header {
   color: var(--muted-foreground);
   font-size: 0.68rem;
   font-weight: 600;
@@ -2485,7 +2483,7 @@
   display: grid;
   grid-template-columns: 8.5rem minmax(20rem, 28rem) minmax(29rem, 1fr);
   gap: clamp(1.5rem, 3vw, 3.25rem);
-  padding-block: 8rem 12rem;
+  padding-block: 7rem;
 }
 
 .hiw-stage-rail {
@@ -2570,15 +2568,9 @@
   min-width: 0;
 }
 
-.hiw-narrative::after {
-  display: block;
-  height: 12rem;
-  content: "";
-}
-
 .hiw-story-step {
   display: grid;
-  min-height: 88svh;
+  min-height: 82svh;
   scroll-margin-top: 5rem;
   align-content: center;
   padding-block: 6rem;
@@ -2678,10 +2670,7 @@
 .hiw-passage-object,
 .hiw-record-object,
 .hiw-review-object,
-.hiw-corpus-object,
-.hiw-query-object,
-.hiw-result-object,
-.hiw-trace-object {
+.hiw-corpus-object {
   position: absolute;
   will-change: transform, opacity;
 }
@@ -3051,118 +3040,6 @@
   box-shadow: 0 0 0 4px var(--accent-wash);
 }
 
-.hiw-query-object {
-  z-index: 6;
-  top: 7%;
-  right: 10%;
-  left: 10%;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.8rem 0.9rem;
-  border: 1px solid color-mix(in oklab, var(--primary) 42%, var(--border));
-  background: var(--card);
-  box-shadow: 0 16px 34px rgb(0 0 0 / 22%);
-}
-
-.hiw-query-object p {
-  font-size: clamp(0.65rem, 1vw, 0.82rem);
-}
-
-.hiw-query-object i {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 0 4px var(--accent-wash);
-}
-
-.hiw-result-object {
-  z-index: 7;
-  top: 9%;
-  left: 8%;
-  width: 58%;
-  padding: 1.1rem;
-  border: 1px solid color-mix(in oklab, var(--primary) 52%, var(--border));
-  background: var(--card);
-  box-shadow: 0 22px 48px rgb(0 0 0 / 24%);
-}
-
-.hiw-result-object p {
-  margin-top: 0.65rem;
-  font-size: clamp(0.88rem, 1.5vw, 1.15rem);
-  font-weight: 580;
-  line-height: 1.45;
-}
-
-.hiw-result-object small {
-  display: block;
-  margin-top: 0.75rem;
-  color: var(--muted-foreground);
-  font-size: 0.55rem;
-}
-
-.hiw-trace-object {
-  z-index: 8;
-  top: 35%;
-  right: 5%;
-  display: grid;
-  width: 30%;
-}
-
-.hiw-trace-object button,
-.hiw-trace-object > span {
-  position: relative;
-  display: grid;
-  min-height: 2.75rem;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  border: 0;
-  background: transparent;
-  color: var(--muted-foreground);
-  font-size: 0.62rem;
-  text-align: left;
-  transition: color 160ms ease;
-}
-
-.hiw-trace-object button {
-  cursor: pointer;
-}
-
-.hiw-trace-object button:hover,
-.hiw-trace-object button:focus-visible {
-  color: var(--foreground);
-}
-
-.hiw-trace-object i {
-  position: absolute;
-  top: 2rem;
-  right: 0.22rem;
-  width: 1px;
-  height: 1.45rem;
-  background: var(--border);
-}
-
-.hiw-trace-object button::after,
-.hiw-trace-object > span::after {
-  width: 0.5rem;
-  height: 0.5rem;
-  border: 1px solid var(--primary);
-  border-radius: 50%;
-  background: var(--background);
-  content: "";
-}
-
-.hiw-canvas[data-trace="source"] [data-trace-object="source"],
-.hiw-canvas[data-trace="passage"] [data-trace-object="passage"],
-.hiw-canvas[data-trace="record"] [data-trace-object="record"],
-.hiw-canvas[data-trace="review"] [data-trace-object="review"],
-.hiw-canvas[data-trace="result"] [data-trace-object="result"] {
-  outline: 1px solid var(--primary);
-  outline-offset: 3px;
-}
-
 .hiw-canvas-caption {
   position: absolute;
   right: 1.2rem;
@@ -3171,12 +3048,6 @@
   color: var(--muted-foreground);
   font-size: 0.52rem;
   text-align: center;
-}
-
-.hiw-canvas--compact[data-stage="result"] .hiw-corpus-object,
-.hiw-canvas--compact[data-stage="result"] .hiw-query-object,
-.hiw-canvas--compact[data-stage="result"] .hiw-record-object {
-  display: none;
 }
 
 .hiw-families,
@@ -3618,7 +3489,7 @@
 
   .hiw-opening-pipeline {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     border-block: 1px solid var(--border);
   }
 
@@ -3788,16 +3659,6 @@
     inset-inline: 4%;
   }
 
-  .hiw-result-object {
-    left: 5%;
-    width: 62%;
-  }
-
-  .hiw-trace-object {
-    right: 3%;
-    width: 31%;
-  }
-
   .hiw-families,
   .hiw-refusals {
     padding-block: 6rem;
@@ -3905,10 +3766,7 @@
   .hiw-passage-object,
   .hiw-record-object,
   .hiw-review-object,
-  .hiw-corpus-object,
-  .hiw-query-object,
-  .hiw-result-object,
-  .hiw-trace-object {
+  .hiw-corpus-object {
     transition: none !important;
   }
 

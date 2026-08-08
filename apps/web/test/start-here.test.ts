@@ -18,13 +18,15 @@ describe("Start Here system walkthrough", () => {
     expect(read("app/how-it-works/page.tsx")).toContain('redirect("/start-here")');
   });
 
-  test("renders the explicit seven-state model", () => {
+  test("renders the explicit five-state ingestion model", () => {
     expect(existsSync(resolve(WEB_ROOT, "app/start-here/page.tsx"))).toBe(true);
     const story = read("components/how-it-works/story-types.ts");
 
-    for (const stage of ["source", "passage", "record", "review", "corpus", "query", "result"]) {
+    for (const stage of ["source", "passage", "record", "review", "corpus"]) {
       expect(story).toContain(`"${stage}"`);
     }
+    expect(story).not.toContain('"query"');
+    expect(story).not.toContain('"result"');
   });
 
   test("carries the reviewed NIST Stage A example through one persistent canvas", () => {
@@ -39,7 +41,8 @@ describe("Start Here system walkthrough", () => {
     expect(canvas).toContain("HUMAN REVIEW");
     expect(canvas).toContain("judgment accepted");
     expect(canvas).toContain("NIST institutional corpus");
-    expect(canvas).toContain("Where is NIST organizationally situated?");
+    expect(canvas).not.toContain("hiw-query-object");
+    expect(canvas).not.toContain("hiw-result-object");
     expect(implementation).toContain("legal_policy");
     expect(implementation).toContain("institutional");
   });
@@ -49,13 +52,15 @@ describe("Start Here system walkthrough", () => {
 
     expect(story).toContain("One record, one supported fact.");
     expect(story).toContain("Models may propose. People decide.");
-    expect(story).toContain("Nothing should lose where it came from.");
+    expect(story).toContain(
+      "Once a corpus exists, it can be searched, compared or queried without losing the evidence underneath it.",
+    );
     expect(story).toContain("Missing evidence");
     expect(story).toContain("is not automatically false.");
     expect(story).toContain('href="/lab"');
   });
 
-  test("provides scroll state, provenance focus, mobile and reduced-motion paths", () => {
+  test("provides five-stage scroll state, mobile and reduced-motion paths", () => {
     const story = read("components/how-it-works/how-it-works-story.tsx");
     const canvas = read("components/how-it-works/writ-system-canvas.tsx");
     const styles = read("app/globals.css");
@@ -63,8 +68,9 @@ describe("Start Here system walkthrough", () => {
     expect(story).toContain("useScroll");
     expect(story).toContain("useMotionValueEvent");
     expect(story).toContain('aria-current={index === activeIndex ? "step"');
-    expect(canvas).toContain("onPointerEnter");
-    expect(canvas).toContain("onFocus");
+    expect(canvas).toContain("/ 05");
+    expect(styles).toContain("min-height: 82svh");
+    expect(styles).not.toContain("height: 12rem");
     expect(styles).toContain(".hiw-mobile-canvas");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
   });

@@ -34,7 +34,7 @@ interface FoundationTopic {
   readonly detail: readonly string[];
 }
 
-const PIPELINE = ["SOURCE", "PASSAGE", "RECORD", "REVIEW", "CORPUS", "QUERY", "RESULT"];
+const PIPELINE = ["SOURCE", "PASSAGE", "RECORD", "REVIEW", "CORPUS"];
 
 const STAGES: readonly StoryStageDefinition[] = [
   {
@@ -83,26 +83,8 @@ const STAGES: readonly StoryStageDefinition[] = [
     body: [
       "The approved placement record joins the NIST institutional corpus. Institutional records describe institutions; legal-policy records describe laws, rules, policies and governing instruments.",
       "The two families can refer to each other without becoming the same thing. Missing evidence remains not established—not silently false.",
+      "Once a corpus exists, it can be searched, compared or queried without losing the evidence underneath it.",
     ],
-  },
-  {
-    id: "query",
-    label: "Query",
-    title: "Then ask the corpus a question.",
-    body: [
-      "A query asks a reproducible question over records that already exist. It does not create a new source or turn the question into the corpus’s identity.",
-      "Relevant reviewed records become active; unrelated records stay quiet and intact.",
-    ],
-  },
-  {
-    id: "result",
-    label: "Result",
-    title: "The answer still points back.",
-    body: [
-      "The result is readable on its own, but Writ keeps the chain beneath it: record, human judgment, passage, document version and original source.",
-      "If stored content changes, its fingerprint changes. Review and supersession history remain visible rather than being rewritten away.",
-    ],
-    aside: "Nothing should lose where it came from.",
   },
 ];
 
@@ -381,10 +363,13 @@ export function HowItWorksStory() {
       <header className="hiw-opening">
         <div className="hiw-opening-copy">
           <p className="hiw-kicker">Start Here · How it works</p>
-          <h1>Writ keeps the source, the claim, the review and the answer connected.</h1>
+          <h1>
+            Writ turns source material into structured, reviewable records without losing where they
+            came from.
+          </h1>
           <p>
-            Writ breaks research material into small, reviewable records. Those records are
-            organized into corpora and can be queried without losing the evidence they came from.
+            Writ preserves the exact passage, structures what it supports, records human review and
+            places accepted records into a corpus with their provenance intact.
           </p>
         </div>
 
