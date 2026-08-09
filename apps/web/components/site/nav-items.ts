@@ -9,19 +9,18 @@ export interface NavItem {
 }
 
 /**
- * Four destinations in the order a first-time reader needs them: understand
- * the system, browse its reviewed records, make a record, then inspect the mechanism.
+ * Three destinations in the order a first-time reader needs them: understand
+ * the system, browse its reviewed records, then inspect the mechanism.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
   { href: "/start-here", label: "Start Here", hint: "Follow one source to a traced answer" },
   { href: "/corpus" as Route, label: "Corpus", hint: "Browse reviewed records and evidence" },
-  { href: "/build", label: "Build", hint: "Turn a source passage into a record" },
   { href: "/lab", label: "Lab", hint: "See how one passage becomes one record" },
 ];
 
 /**
  * Start Here now carries the complete explanation, so the footer mirrors the
- * same four destinations without introducing a competing reading route.
+ * same three destinations without introducing a competing reading route.
  */
 export const FOOTER_NAV: readonly NavItem[] = [...PRIMARY_NAV];
 

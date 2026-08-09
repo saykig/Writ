@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       { source: "/playground", destination: "/lab", permanent: true },
       { source: "/query", destination: "/corpus", permanent: true },
       { source: "/demo", destination: "/corpus", permanent: true },
+      { source: "/build", destination: "/corpus", permanent: true },
     ];
   },
   // The @writ/* workspace packages ship raw NodeNext TypeScript source

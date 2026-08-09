@@ -11,9 +11,10 @@ describe("Start Here system walkthrough", () => {
     const startHere = nav.indexOf('label: "Start Here"');
 
     expect(startHere).toBeGreaterThan(-1);
-    for (const label of ["Corpus", "Build", "Lab"]) {
+    for (const label of ["Corpus", "Lab"]) {
       expect(startHere).toBeLessThan(nav.indexOf(`label: "${label}"`));
     }
+    expect(nav).not.toContain('label: "Build"');
     expect(nav).not.toContain('label: "How it works"');
     expect(read("app/how-it-works/page.tsx")).toContain('redirect("/start-here")');
   });
@@ -103,6 +104,39 @@ describe("Start Here system walkthrough", () => {
     expect(styles).toContain(".hiw-foundation-panel");
     expect(story).not.toContain("Technical details");
     expect(styles).not.toContain(".hiw-technical-grid");
+  });
+
+  test("places accurate online and local onboarding directly after the five-stage story", () => {
+    const story = read("components/how-it-works/how-it-works-story.tsx");
+    const readme = read("../../README.md");
+    const onboarding = story.lastIndexOf("<HowToUseWrit />");
+    const families = story.indexOf('className="hiw-families"');
+    const technicalFoundations = story.lastIndexOf("<TechnicalFoundations />");
+    const localCommands = [
+      "git clone https://github.com/saykig/Writ.git",
+      "cd Writ",
+      "bun install",
+      "bun run web",
+    ];
+
+    expect(story).toContain("How do I use Writ?");
+    expect(story).toContain("Use online");
+    expect(story).toContain("Run locally");
+    expect(story).toContain('href="/lab"');
+    expect(story).toContain('href="https://github.com/saykig/Writ"');
+    expect(story).toContain('target="_blank"');
+    expect(story).toContain("http://localhost:4317");
+    expect(story).toContain("Docker is not required to run the web interface.");
+    expect(story).not.toContain("Ready to inspect a real record?");
+    expect(onboarding).toBeGreaterThan(story.indexOf('className="hiw-desktop-canvas"'));
+    expect(onboarding).toBeLessThan(families);
+    expect(onboarding).toBeLessThan(technicalFoundations);
+
+    for (const command of localCommands) {
+      expect(story).toContain(command);
+      expect(readme).toContain(command);
+    }
+    expect(readme).toContain("http://localhost:4317");
   });
 
   test("does not restore the retired product model or unfinished Stage B data", () => {

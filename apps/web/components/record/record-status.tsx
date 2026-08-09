@@ -5,9 +5,6 @@
  * than a pass. `unknown` takes the reserved colour because it is a judgment;
  * `not recorded` stays muted because an unfilled field is not a failed test, and
  * colouring it red would push a reviewer to fill it in with a guess.
- *
- * Shared with the Builder, where most states are `not recorded` on a fresh draft
- * — which is the lesson, not an error.
  */
 
 import type { CheckState, RecordCheck } from "@/lib/record-checks";

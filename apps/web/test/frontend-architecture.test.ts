@@ -64,6 +64,7 @@ describe("frontend architecture", () => {
     expect(config).toContain('destination: "/lab"');
     expect(config).toContain('source: "/demo"');
     expect(config).toContain('source: "/query"');
+    expect(config).toContain('source: "/build"');
     expect(config).toContain('destination: "/corpus"');
     expect(config).toContain("permanent: true");
   });
@@ -76,8 +77,9 @@ describe("frontend architecture", () => {
     expect(navItems).toContain('href: "/start-here"');
     expect(navItems).toContain('label: "Corpus"');
     expect(navItems).toContain('href: "/corpus"');
-    expect(navItems).toContain('label: "Build"');
     expect(navItems).toContain('label: "Lab"');
+    expect(navItems).not.toContain('label: "Build"');
+    expect(navItems).not.toContain('href: "/build"');
     expect(navItems).not.toContain('label: "How it works"');
     expect(read("components/site/site-footer.tsx")).toContain("FOOTER_NAV");
     for (const removed of ["Demo", "Writ Lab", "Benchmark", "Methodologies", "Receipts"]) {
@@ -91,7 +93,6 @@ describe("frontend architecture", () => {
       "app/page.tsx",
       "app/start-here/page.tsx",
       "app/corpus/page.tsx",
-      "app/build/page.tsx",
       "app/how-it-works/page.tsx",
       "app/lab/page.tsx",
     ]) {
@@ -105,6 +106,11 @@ describe("frontend architecture", () => {
       "app/playground",
       "app/demo",
       "app/query/page.tsx",
+      "app/build",
+      "components/build",
+      "lib/build-draft.ts",
+      "lib/build-vocabulary.ts",
+      "test/build-draft.test.ts",
     ]) {
       expect(existsSync(resolve(WEB_ROOT, gone))).toBe(false);
     }
@@ -347,33 +353,6 @@ describe("frontend architecture", () => {
       expect(inspector).not.toContain(retired);
       expect(read("components/lab/record-explanation.tsx")).not.toContain(retired);
       expect(read("lib/lab-explanation.ts")).not.toContain(retired);
-    }
-  });
-
-  test("Build offers no publishing, contribution or local workflow", () => {
-    // Comments are stripped: these files say in prose that they do none of
-    // this, and that sentence must not read as an occurrence of it.
-    const withoutComments = (path: string) =>
-      read(path)
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/^\s*\/\/.*$/gm, "");
-    const validate = withoutComments("components/build/steps/validate.tsx");
-    const builder = withoutComments("components/build/builder.tsx");
-
-    expect(validate).toContain("Save draft");
-    expect(validate).toContain("Continue reviewing");
-    expect(validate).toContain("View structured record");
-    for (const forbidden of [
-      "Publish",
-      "Submit contribution",
-      "pull request",
-      "Open pull request",
-      "Sync repository",
-      "Export locally",
-      "Download",
-    ]) {
-      expect(validate).not.toContain(forbidden);
-      expect(builder).not.toContain(forbidden);
     }
   });
 
