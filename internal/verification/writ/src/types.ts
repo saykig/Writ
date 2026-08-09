@@ -31,7 +31,7 @@ export interface WritVerificationResult {
 
 export interface CatalogEntry {
   corpus_id: string;
-  family: "legal_policy" | "institutional";
+  family: string;
   jurisdiction: string;
   status: string;
   path: string;
@@ -58,7 +58,7 @@ export interface CorpusManifest {
   schema_version: string;
   corpus_id: string;
   title: string;
-  family: "legal_policy" | "institutional";
+  family: string;
   jurisdiction: string;
   corpus_version: string;
   record_contract: RecordContract;
@@ -125,6 +125,9 @@ export interface CrossFamilyHumanReview {
   reviewer: string;
   status: "complete";
   proposal_proposer: string;
+  proposed_link_review_state: "draft";
+  proposed_judgment_status: "proposed";
+  proposal_preserved_as: "superseded_judgments";
   approved_id_revision: {
     previous_id: string;
     active_id: string;

@@ -1,8 +1,4 @@
-import {
-  InstitutionResolutionError,
-  resolveApprovedInstitutionEndpoint,
-  type RecordLink,
-} from "@writ/domain";
+import { InstitutionResolutionError } from "@writ/domain";
 
 import {
   gateResult,
@@ -10,59 +6,12 @@ import {
   type RepositorySnapshot,
   type VerificationGateResult,
 } from "../types.js";
-
-export const ADR_0019_ENDPOINTS = Object.freeze({
-  issued_by: {
-    source: ["publication", "source_document", "instrument"],
-    target: ["institution", "organizational_unit"],
-  },
-  assigns_function_to: {
-    source: ["legal_policy_claim", "legal_policy_provision"],
-    target: ["institution", "organizational_unit"],
-  },
-  implemented_by: {
-    source: ["legal_policy_claim", "legal_policy_provision"],
-    target: ["institution", "organizational_unit"],
-  },
-  enforced_by: {
-    source: ["legal_policy_claim", "legal_policy_provision"],
-    target: ["institution", "organizational_unit"],
-  },
-  applies_to: {
-    source: ["legal_policy_claim", "legal_policy_provision"],
-    target: ["institution", "organizational_unit"],
-  },
-  derives_authority_from: {
-    source: ["institutional_mandate", "institutional_decision_right", "institutional_function"],
-    target: ["legal_policy_provision"],
-  },
-} as const);
-
-export type Adr0019Relation = keyof typeof ADR_0019_ENDPOINTS;
-
-export function isAdr0019Relation(relation: string): relation is Adr0019Relation {
-  return Object.hasOwn(ADR_0019_ENDPOINTS, relation);
-}
-
-export function activeLinks(
-  snapshot: RepositorySnapshot,
-): Array<{ value: RecordLink; file: string; corpus_id: string }> {
-  return snapshot.links.filter(
-    ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
-  );
-}
-
-function resolutionInput(snapshot: RepositorySnapshot) {
-  return {
-    native_corpora: snapshot.catalogEntries,
-    manifests: snapshot.manifests.map(({ value }) => value),
-    records: snapshot.institutionalRecords.map(({ value }) => value),
-  };
-}
-
-export function resolveInstitution(snapshot: RepositorySnapshot, institutionId: string) {
-  return resolveApprovedInstitutionEndpoint(institutionId, resolutionInput(snapshot));
-}
+import {
+  ADR_0019_ENDPOINTS,
+  activeLinks,
+  isAdr0019Relation,
+  resolveInstitution,
+} from "../rules/adr-0019.js";
 
 export function verifyOntology(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];

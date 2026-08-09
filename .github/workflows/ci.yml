@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  writ-semantic-verification:
-    name: Writ semantic verification
+  writ-verification:
+    name: Writ verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
           bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
       - run: python -m pip install -e "apps/ingest[dev]"
-      - name: Writ semantic verification
+      - name: Writ verification
         run: bun run verify:writ
 
   typescript:

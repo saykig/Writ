@@ -1,7 +1,7 @@
 import { InstitutionResolutionError } from "@writ/domain";
 
 import { findObjects } from "../repository.js";
-import { activeLinks, isAdr0019Relation, resolveInstitution } from "./ontology.js";
+import { activeLinks, isAdr0019Relation, resolveInstitution } from "../rules/adr-0019.js";
 import {
   gateResult,
   issue,
@@ -231,6 +231,20 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
           loaded,
         );
         if (targetIssue) issues.push(targetIssue);
+        const institutionalSources = endpointMatches(snapshot, link.source_id, link.source_kind);
+        if (
+          institutionalSources.length === 1 &&
+          institutionalSources[0]!.corpus_id !== link.owning_corpus_id
+        ) {
+          issues.push(
+            issue(
+              "interoperability",
+              "INTEROP_OWNER_MISMATCH",
+              `Institution-owned ADR 0019 link is stored by ${link.owning_corpus_id}, but canonical institutional source ${link.source_id} is owned by ${institutionalSources[0]!.corpus_id}.`,
+              { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
+            ),
+          );
+        }
       }
       if (link.basis === "inherited" && !link.supporting_record_ids?.length) {
         issues.push(
@@ -395,6 +409,15 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             { object_id: id, file: queue.file },
           ),
         );
+      } else if (matches[0]!.value.review_state !== "approved") {
+        issues.push(
+          issue(
+            "interoperability",
+            "INTEROP_ACTIVE_SET_MISMATCH",
+            `Queue-declared active link ${id} has review_state ${matches[0]!.value.review_state}, not approved.`,
+            { object_id: id, file: queue.file },
+          ),
+        );
       }
     }
     for (const mapping of queue.mappings) {
@@ -429,6 +452,18 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             "interoperability",
             "INTEROP_REFERENCE_AMBIGUOUS",
             `Active queue mapping ${mapping.mapping_id} resolves to ${active.length} links.`,
+            { object_id: mapping.mapping_id, file: queue.file },
+          ),
+        );
+      } else if (
+        mapping.mapping_status === "active_approved" &&
+        active[0]!.value.review_state !== "approved"
+      ) {
+        issues.push(
+          issue(
+            "interoperability",
+            "INTEROP_ACTIVE_SET_MISMATCH",
+            `Active approved queue mapping ${mapping.mapping_id} resolves to link ${active[0]!.value.link_id} with review_state ${active[0]!.value.review_state}.`,
             { object_id: mapping.mapping_id, file: queue.file },
           ),
         );

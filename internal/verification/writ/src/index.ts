@@ -1,4 +1,9 @@
 export * from "./authority.js";
+export * from "./adapters/current-record-contracts.js";
+export * from "./core/adapter-registry.js";
+export * from "./core/engine.js";
+export * from "./core/output.js";
+export * from "./core/workspace.js";
 export * from "./invariants.js";
 export * from "./repository.js";
 export * from "./types.js";
@@ -7,3 +12,4 @@ export * from "./gates/integrity.js";
 export * from "./gates/interoperability.js";
 export * from "./gates/ontology.js";
 export * from "./gates/provenance.js";
+export * from "./rules/adr-0019.js";

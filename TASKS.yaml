@@ -388,8 +388,8 @@ tasks:
       - packages/domain/src/institution-resolution.ts
       - packages/language/test/cross-family-interoperability.test.ts
 
-  - id: PRE-MERGE-VERIFICATION-001
-    title: Add the authority-traced semantic pre-merge verifier
+  - id: WRIT-VERIFICATION-HARNESS-001
+    title: Add the deterministic, authority-traced Writ Verification Harness
     status: done
     dependencies:
       - CROSS-FAMILY-INTEROPERABILITY-001
@@ -397,7 +397,7 @@ tasks:
       - Add deterministic read-only ontology, interoperability, provenance and integrity gates.
       - Trace every blocking invariant to an authoritative schema, accepted ADR, canonical contract or mechanical requirement.
       - Reuse native/Core loaders and existing compatibility validation without creating a shadow ontology.
-      - Add independent root commands and a dedicated draft-PR CI gate.
+      - Add independent root commands and a dedicated CI verification job.
     exclusions:
       - Changes to corpus content, schemas, protocols, reviewed evidence or interface behavior.
       - Dynamic ADR interpretation, inferred SemVer support or verifier-owned domain vocabularies.
@@ -408,8 +408,8 @@ tasks:
       - No change under corpora, schemas or protocols appears against the approved base.
     outputs:
       - internal/verification/writ
-      - adr/0020-deterministic-pre-merge-verification.md
-      - docs/verification/pre-merge-verifier.md
+      - adr/0020-deterministic-writ-verification.md
+      - docs/verification/verification-harness.md
       - .github/workflows/ci.yml
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

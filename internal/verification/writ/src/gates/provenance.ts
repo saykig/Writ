@@ -1,7 +1,7 @@
 import { validateJudgmentSupersession } from "@writ/domain";
 
 import { findObjects } from "../repository.js";
-import { activeLinks, isAdr0019Relation } from "./ontology.js";
+import { activeLinks, isAdr0019Relation } from "../rules/adr-0019.js";
 import {
   gateResult,
   issue,
@@ -189,6 +189,9 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       const acceptedJudgments = snapshot.judgments.filter(
         ({ value }) => value.judgment_id === decision.accepted_judgment_id,
       );
+      const proposalJudgments = snapshot.judgments.filter(
+        ({ value }) => value.judgment_id === decision.proposal_judgment_id,
+      );
       if (reviewedLinks.length !== 1) {
         issues.push(
           issue(
@@ -213,10 +216,28 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           ),
         );
       }
-      if (reviewedLinks.length !== 1 || acceptedJudgments.length !== 1) continue;
+      if (proposalJudgments.length !== 1) {
+        issues.push(
+          issue(
+            "provenance",
+            proposalJudgments.length > 1
+              ? "PROVENANCE_REFERENCE_AMBIGUOUS"
+              : "PROVENANCE_DISPOSITION_MISSING",
+            `Human-review decision ${review.review_id} resolves ${proposalJudgments.length} judgments named ${decision.proposal_judgment_id}.`,
+            { object_id: decision.link_id, file: review.file },
+          ),
+        );
+      }
+      if (
+        reviewedLinks.length !== 1 ||
+        acceptedJudgments.length !== 1 ||
+        proposalJudgments.length !== 1
+      )
+        continue;
 
       const reviewedLink = reviewedLinks[0]!.value;
       const accepted = acceptedJudgments[0]!.value;
+      const proposal = proposalJudgments[0]!.value;
       const judgmentMatchesDecision =
         decision.decision === "approve" &&
         accepted.target_kind === "record_link" &&
@@ -232,6 +253,29 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
             "provenance",
             "PROVENANCE_DISPOSITION_MISSING",
             `Named judgment ${decision.accepted_judgment_id} does not implement the exact human-review decision for ${decision.link_id}.`,
+            {
+              corpus_id: reviewedLink.owning_corpus_id,
+              object_id: decision.link_id,
+              file: review.file,
+            },
+          ),
+        );
+      }
+      const proposalMatchesDecision =
+        proposal.target_kind === "record_link" &&
+        proposal.target_id === decision.link_id &&
+        proposal.judgment_type === "record_link_disposition" &&
+        proposal.value === review.proposed_link_review_state &&
+        proposal.status === "superseded" &&
+        proposal.reviewer === review.proposal_proposer &&
+        proposal.superseded_by_judgment_id === decision.accepted_judgment_id &&
+        (accepted.supersedes_judgment_ids ?? []).includes(decision.proposal_judgment_id);
+      if (!proposalMatchesDecision) {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_DISPOSITION_MISSING",
+            `Named proposal ${decision.proposal_judgment_id} does not preserve and reciprocally bind the exact proposed disposition superseded by ${decision.accepted_judgment_id}.`,
             {
               corpus_id: reviewedLink.owning_corpus_id,
               object_id: decision.link_id,
@@ -262,24 +306,6 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
   );
   const activeJudgments = snapshot.judgments.filter(({ value }) => value.status !== "superseded");
-  const activeRecordReferences = new Set<string>([
-    ...activeRecords.flatMap(({ value }) => [
-      ...("parent_instrument_id" in value && typeof value.parent_instrument_id === "string"
-        ? [value.parent_instrument_id]
-        : []),
-      ...("related_provision_ids" in value && Array.isArray(value.related_provision_ids)
-        ? value.related_provision_ids.filter((id): id is string => typeof id === "string")
-        : []),
-    ]),
-    ...links.flatMap(({ value }) => [
-      ...(isRecordEndpoint(value.source_kind) ? [value.source_id] : []),
-      ...(isRecordEndpoint(value.target_kind) ? [value.target_id] : []),
-      ...(value.supporting_record_ids ?? []),
-    ]),
-    ...activeJudgments.flatMap(({ value }) =>
-      value.target_kind === "record" ? [value.target_id] : [],
-    ),
-  ]);
   for (const migration of snapshot.migrations) {
     const activeTargets = activeRecords.filter(
       ({ value, corpus_id }) =>
@@ -299,7 +325,29 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       ({ value, corpus_id }) =>
         corpus_id === migration.corpus_id && value.record_id === migration.previous_id,
     );
-    if (previousRecordActive || activeRecordReferences.has(migration.previous_id)) {
+    const applicableActiveReferences = new Set<string>([
+      ...activeRecords
+        .filter(({ corpus_id }) => corpus_id === migration.corpus_id)
+        .flatMap(({ value }) => [
+          ...("parent_instrument_id" in value && typeof value.parent_instrument_id === "string"
+            ? [value.parent_instrument_id]
+            : []),
+          ...("related_provision_ids" in value && Array.isArray(value.related_provision_ids)
+            ? value.related_provision_ids.filter((id): id is string => typeof id === "string")
+            : []),
+        ]),
+      ...links
+        .filter(({ value }) => value.owning_corpus_id === migration.corpus_id)
+        .flatMap(({ value }) => [
+          ...(isRecordEndpoint(value.source_kind) ? [value.source_id] : []),
+          ...(isRecordEndpoint(value.target_kind) ? [value.target_id] : []),
+          ...(value.supporting_record_ids ?? []),
+        ]),
+      ...activeJudgments
+        .filter(({ corpus_id }) => corpus_id === migration.corpus_id)
+        .flatMap(({ value }) => (value.target_kind === "record" ? [value.target_id] : [])),
+    ]);
+    if (previousRecordActive || applicableActiveReferences.has(migration.previous_id)) {
       issues.push(
         issue(
           "provenance",

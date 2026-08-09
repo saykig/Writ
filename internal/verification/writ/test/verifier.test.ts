@@ -14,20 +14,27 @@ import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } fro
 
 import {
   INVARIANTS,
+  ExactContractAdapterRegistry,
   checkManifestChecksum,
   classifyRecordContract,
   findObjects,
+  gateResult,
   loadAuthorityIndex,
   loadRepository,
   parseCrossFamilyHumanReviewDocument,
   parseInstitutionalMigrationDocument,
   parseMappingQueueFile,
   repositoryRoot,
+  renderVerificationJson,
+  renderVerificationText,
+  runVerification,
+  verificationWorkspace,
   verifyIntegrity,
   verifyInteroperability,
   verifyOntology,
   verifyProvenance,
   verifySnapshot,
+  verifyWorkspace,
   type RepositorySnapshot,
 } from "../src/index.js";
 
@@ -97,7 +104,7 @@ describe("authority isolation", () => {
     }
   });
 
-  test("every blocking invariant resolves to its declared authority without owning vocabulary", () => {
+  test("every fail-closed invariant resolves to its declared authority without owning vocabulary", () => {
     const authority = loadAuthorityIndex(ROOT);
     expect(INVARIANTS.length).toBeGreaterThan(20);
     for (const invariant of INVARIANTS) {
@@ -119,7 +126,7 @@ describe("authority isolation", () => {
         expect(invariant.authority.source).toBe("adr/0019-cross-family-interoperability.md");
         expect(readFileSync(source, "utf8")).toContain("**Status:** Accepted");
       } else if (invariant.authority.kind === "meta") {
-        expect(invariant.authority.source).toBe("adr/0020-deterministic-pre-merge-verification.md");
+        expect(invariant.authority.source).toBe("adr/0020-deterministic-writ-verification.md");
         expect(readFileSync(source, "utf8")).toContain("**Status:** Accepted");
       } else if (invariant.authority.kind === "core_contract") {
         expect(invariant.authority.source).toBe("packages/domain/src/judgments.ts");
@@ -297,8 +304,73 @@ describe("workflow adapter versions", () => {
   });
 });
 
+describe("family-agnostic harness kernel", () => {
+  test("runs an in-memory synthetic adapter family without changing kernel code", () => {
+    // This synthetic family demonstrates adapter extensibility only. It is not a Writ authority.
+    const adapters = new ExactContractAdapterRegistry<
+      { family: string; payload: string },
+      { family: string; objects: Array<{ id: string; kind: string; value: string }> }
+    >([
+      {
+        contractId: "https://synthetic.invalid/contracts/example",
+        declaredVersion: "7",
+        adapt: (input) => ({
+          family: input.family,
+          objects: [{ id: "synthetic-1", kind: "synthetic-kind", value: input.payload }],
+        }),
+      },
+    ]);
+    const adapter = adapters.resolve("https://synthetic.invalid/contracts/example", "7")!;
+    const target = adapter.adapt({
+      family: "synthetic_adapter_family_not_authority",
+      payload: "bounded fixture",
+    });
+    const passing = () => gateResult("ontology", []);
+    const result = runVerification(target, "ontology", {
+      order: ["ontology", "interoperability", "provenance", "integrity"],
+      runners: {
+        ontology: passing,
+        interoperability: () => gateResult("interoperability", []),
+        provenance: () => gateResult("provenance", []),
+        integrity: () => gateResult("integrity", []),
+      },
+      loadIssues: () => [],
+    });
+
+    expect(target.family).toBe("synthetic_adapter_family_not_authority");
+    expect(target.objects).toEqual([
+      { id: "synthetic-1", kind: "synthetic-kind", value: "bounded fixture" },
+    ]);
+    expect(result.passed).toBe(true);
+  });
+
+  test("resolves adapters only by exact contract ID and declared version", () => {
+    const adapters = new ExactContractAdapterRegistry([
+      { contractId: "synthetic", declaredVersion: "1.0.0", adapt: (value) => value },
+    ]);
+    expect(adapters.resolve("synthetic", "1.0.0")).toBeDefined();
+    expect(adapters.resolve("synthetic", "1.0.1")).toBeUndefined();
+    expect(adapters.resolve("synthetic", "2.0.0")).toBeUndefined();
+  });
+
+  test("documents the harness as an instrument with human acceptance authority", () => {
+    const adr = readFileSync(join(ROOT, "adr/0020-deterministic-writ-verification.md"), "utf8");
+    const guide = readFileSync(join(ROOT, "docs/verification/verification-harness.md"), "utf8");
+    expect(adr).toContain(
+      "It does not decide whether that representation should become part of Writ",
+    );
+    expect(adr).toContain("The human question is:");
+    expect(guide).toContain("Human review determines acceptance");
+    expect(guide).not.toContain("PASS authorizes");
+  });
+});
+
 describe("current repository", () => {
-  test("passes all semantic gates without external drift commands", () => {
+  test("uses the current checkout as the default verification workspace", () => {
+    expect(verificationWorkspace().root).toBe(ROOT);
+  });
+
+  test("passes all verification dimensions without external drift commands", () => {
     const result = verifySnapshot(baseline, "all", { runExternalChecks: false });
     expect(result.passed).toBe(true);
     expect(result.gates.every((gate) => gate.passed)).toBe(true);
@@ -324,6 +396,77 @@ describe("current repository", () => {
     const reversed = loadRepository(root).snapshot;
     expect(reversed.loadIssues).toEqual([]);
     expect(crossFamilyResolution(reversed)).toEqual(crossFamilyResolution(baseline));
+  });
+
+  test("verifies an alternate workspace root without mutating it", () => {
+    const root = mkdtempSync(join(tmpdir(), "writ-alternate-root-"));
+    symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
+    symlinkSync(join(ROOT, "docs"), join(root, "docs"));
+    mkdirSync(join(root, "corpora"));
+    for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+      }
+    }
+    const catalogFile = join(root, "corpora", "catalog.yaml");
+    writeFileSync(catalogFile, readFileSync(join(ROOT, "corpora", "catalog.yaml")));
+    const before = readFileSync(catalogFile);
+
+    const result = verifyWorkspace(verificationWorkspace(root), "ontology", {
+      runExternalChecks: false,
+    });
+    const cli = Bun.spawnSync(
+      [
+        process.execPath,
+        join(ROOT, "internal/verification/writ/src/cli.ts"),
+        "ontology",
+        "--root",
+        root,
+        "--format",
+        "json",
+      ],
+      { cwd: ROOT, stdout: "pipe", stderr: "pipe" },
+    );
+
+    expect(result.passed).toBe(true);
+    expect(cli.exitCode, cli.stderr.toString()).toBe(0);
+    expect(JSON.parse(cli.stdout.toString()).status).toBe("PASS");
+    expect(readFileSync(catalogFile)).toEqual(before);
+    expect(readdirSync(root).sort()).toEqual(["corpora", "docs", "schemas"]);
+  });
+
+  test("renders deterministic machine and human instrument output", () => {
+    const result = verifySnapshot(baseline, "all", { runExternalChecks: false });
+    const first = renderVerificationJson(result);
+    const second = renderVerificationJson(result);
+    expect(first).toBe(second);
+    expect(first).not.toContain(ROOT);
+    expect(Object.keys(JSON.parse(first))).toEqual(["status", "gates", "issues", "summary"]);
+
+    const text = renderVerificationText(result);
+    expect(text).toStartWith("WRIT VERIFICATION\n");
+    expect(text).toContain("VERIFICATION RESULT: PASS");
+    expect(text).toContain("Human review determines acceptance.");
+    expect(text).not.toContain("MERGE GATE");
+  });
+
+  test("keeps deterministic issue ordering and authority context in JSON", () => {
+    const snapshot = clone();
+    const link = crossFamilyLink(snapshot);
+    link.value.source_id = "missing_source_for_json";
+    link.value.evidence_refs = ["missing_evidence_for_json"];
+    const result = verifySnapshot(snapshot, "interoperability", { runExternalChecks: false });
+    const output = renderVerificationJson(result);
+    const parsed = JSON.parse(output) as {
+      issues: Array<{ code: string; authority?: { source: string } }>;
+    };
+    expect(parsed.issues.map(({ code }) => code)).toEqual(
+      [...parsed.issues.map(({ code }) => code)].sort(),
+    );
+    expect(parsed.issues.every(({ authority }) => typeof authority?.source === "string")).toBe(
+      true,
+    );
+    expect(renderVerificationJson(result)).toBe(output);
   });
 });
 
@@ -575,6 +718,36 @@ describe("interoperability negative fixtures", () => {
     )!;
     activeMapping.mapping_status = "unresolved";
     expect(codes(verifyInteroperability(missingMapping))).toContain("INTEROP_ACTIVE_SET_MISMATCH");
+
+    const draftLink = clone();
+    const declaredId = draftLink.queues[0]!.active_link_ids[0]!;
+    draftLink.links.find(({ value }) => value.link_id === declaredId)!.value.review_state = "draft";
+    expect(codes(verifyInteroperability(draftLink))).toContain("INTEROP_ACTIVE_SET_MISMATCH");
+  });
+
+  test("requires derives_authority_from ownership to follow its institutional source", () => {
+    const snapshot = clone();
+    const template = crossFamilyLink(snapshot);
+    const nistFunction = snapshot.institutionalRecords.find(
+      ({ value, corpus_id }) =>
+        corpus_id === "us.institutions.nist" &&
+        value.institutional_fact_type === "function" &&
+        value.review_state !== "superseded" &&
+        value.review_state !== "withdrawn",
+    )!;
+    const provision = snapshot.records.find(({ value }) => value.family === "legal_policy")!;
+    const value: RecordLink = {
+      ...template.value,
+      link_id: "synthetic_wrong_owner_derives_authority",
+      relation_type: "derives_authority_from",
+      source_id: nistFunction.value.record_id,
+      source_kind: "institutional_function",
+      target_id: provision.value.record_id,
+      target_kind: "legal_policy_provision",
+    };
+    delete value.supporting_record_ids;
+    snapshot.links.push({ ...template, value });
+    expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_OWNER_MISMATCH");
   });
 
   test("reports ambiguity only when a scoped reference resolves more than once", () => {
@@ -651,6 +824,31 @@ describe("provenance negative fixtures", () => {
       ({ value }) => value.judgment_id === reviewerDecision.accepted_judgment_id,
     )!.value.reviewer = "Different Reviewer";
     expect(codes(verifyProvenance(wrongReviewer))).toContain("PROVENANCE_DISPOSITION_MISSING");
+  });
+
+  test("binds the exact proposal value, status, attribution and reciprocal supersession", () => {
+    const wrongValue = clone();
+    const decision = wrongValue.humanReviews[0]!.decisions[0]!;
+    wrongValue.judgments.find(
+      ({ value }) => value.judgment_id === decision.proposal_judgment_id,
+    )!.value.value = "approved";
+    expect(codes(verifyProvenance(wrongValue))).toContain("PROVENANCE_DISPOSITION_MISSING");
+
+    const wrongStatus = clone();
+    const statusDecision = wrongStatus.humanReviews[0]!.decisions[0]!;
+    const statusProposal = wrongStatus.judgments.find(
+      ({ value }) => value.judgment_id === statusDecision.proposal_judgment_id,
+    )!;
+    statusProposal.value.status = "proposed";
+    delete statusProposal.value.superseded_by_judgment_id;
+    expect(codes(verifyProvenance(wrongStatus))).toContain("PROVENANCE_DISPOSITION_MISSING");
+
+    const oneWay = clone();
+    const oneWayDecision = oneWay.humanReviews[0]!.decisions[0]!;
+    oneWay.judgments.find(
+      ({ value }) => value.judgment_id === oneWayDecision.accepted_judgment_id,
+    )!.value.supersedes_judgment_ids = [];
+    expect(codes(verifyProvenance(oneWay))).toContain("PROVENANCE_DISPOSITION_MISSING");
   });
 
   test("rejects multiple current accepted ADR 0019 dispositions", () => {
@@ -764,6 +962,27 @@ describe("provenance negative fixtures", () => {
     )!;
     identity.value.institution_id = migration.previous_id;
     snapshot.records[0]!.value.subjects[0]!.subject_id = migration.previous_id;
+    expect(codes(verifyProvenance(snapshot))).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+  });
+
+  test("permits the same record ID in an unrelated corpus namespace", () => {
+    const snapshot = clone();
+    const migration = snapshot.migrations.find(
+      (item) => item.previous_id === "eu_ai_office_technical_documentation_receipt",
+    )!;
+    const current = snapshot.records.find(
+      ({ value, corpus_id }) =>
+        corpus_id === migration.corpus_id && value.record_id === migration.active_id,
+    )!;
+    snapshot.records.push({
+      ...current,
+      corpus_id: "synthetic.unrelated",
+      value: {
+        ...current.value,
+        corpus_id: "synthetic.unrelated",
+        record_id: migration.previous_id,
+      } as typeof current.value,
+    });
     expect(codes(verifyProvenance(snapshot))).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
   });
 

@@ -26,7 +26,7 @@ const adr19 = (section: string): InvariantAuthority => ({
 });
 const meta = (section: string): InvariantAuthority => ({
   kind: "meta",
-  source: "adr/0020-deterministic-pre-merge-verification.md",
+  source: "adr/0020-deterministic-writ-verification.md",
   section,
 });
 

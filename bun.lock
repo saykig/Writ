@@ -72,7 +72,7 @@
       },
     },
     "internal/verification/writ": {
-      "name": "@writ/pre-merge-verifier",
+      "name": "@writ/verification-harness",
       "version": "0.1.0",
       "dependencies": {
         "@writ/domain": "workspace:*",
@@ -635,9 +635,9 @@
 
     "@writ/language": ["@writ/language@workspace:packages/language"],
 
-    "@writ/pre-merge-verifier": ["@writ/pre-merge-verifier@workspace:internal/verification/writ"],
-
     "@writ/provenance": ["@writ/provenance@workspace:packages/provenance"],
+
+    "@writ/verification-harness": ["@writ/verification-harness@workspace:internal/verification/writ"],
 
     "@writ/web": ["@writ/web@workspace:apps/web"],
 

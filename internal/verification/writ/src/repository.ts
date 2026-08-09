@@ -10,6 +10,12 @@ import { compileSource } from "@writ/language";
 
 import { loadAuthorityIndex, renderSchemaErrors, type AuthorityIndex } from "./authority.js";
 import {
+  CURRENT_RECORD_ADAPTERS,
+  INSTITUTIONAL_RECORD_SCHEMA,
+  REVIEWED_DOCUMENT_SCHEMA,
+  classifyRecordContract,
+} from "./adapters/current-record-contracts.js";
+import {
   issue,
   type CatalogEntry,
   type CorpusCatalog,
@@ -31,33 +37,6 @@ const CATALOG_SCHEMA = "https://writ.example/schemas/core/corpus-catalog.schema.
 const MANIFEST_SCHEMA = "https://writ.example/schemas/core/corpus-manifest.schema.json";
 const RECORD_LINK_SCHEMA = "https://writ.example/schemas/core/record-link.schema.json";
 const RECORD_JUDGMENT_SCHEMA = "https://writ.example/schemas/analysis/record-judgment.schema.json";
-const INSTITUTIONAL_RECORD_SCHEMA =
-  "https://writ.example/schemas/extensions/institutional-record.schema.json";
-const REVIEWED_DOCUMENT_SCHEMA =
-  "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json";
-
-const adapterKey = (id: string, version: string): string => `${id}::${version}`;
-const SUPPORTED_RECORD_ADAPTERS = new Set([
-  adapterKey(INSTITUTIONAL_RECORD_SCHEMA, "0.2.0"),
-  adapterKey("https://writ.example/schemas/extensions/legal-policy-record.schema.json", "0.2.0"),
-  adapterKey(
-    "https://writ.example/schemas/compatibility/record-grammar-v0.1/legal-policy-record.schema.json",
-    "0.1.0",
-  ),
-  adapterKey(REVIEWED_DOCUMENT_SCHEMA, "1.0.0"),
-]);
-
-export type ContractSupport = "invalid" | "supported" | "unsupported";
-
-export function classifyRecordContract(
-  authority: AuthorityIndex,
-  id: string,
-  exactVersion: string,
-): ContractSupport {
-  if (!authority.schemas.has(id)) return "invalid";
-  return SUPPORTED_RECORD_ADAPTERS.has(adapterKey(id, exactVersion)) ? "supported" : "unsupported";
-}
-
 const CATEGORIES: readonly ManifestCategory[] = [
   "sources",
   "passages",
@@ -327,6 +306,9 @@ export function parseCrossFamilyHumanReviewDocument(
     value.status !== "complete" ||
     !proposalHistory ||
     !nonEmpty(proposalHistory.proposer) ||
+    proposalHistory.proposed_link_review_state !== "draft" ||
+    proposalHistory.proposed_judgment_status !== "proposed" ||
+    proposalHistory.preserved_as !== "superseded_judgments" ||
     !revision ||
     !nonEmpty(revision.previous_approved_id) ||
     !nonEmpty(revision.active_id) ||
@@ -383,6 +365,9 @@ export function parseCrossFamilyHumanReviewDocument(
       reviewer: value.reviewer,
       status: "complete",
       proposal_proposer: proposalHistory.proposer,
+      proposed_link_review_state: "draft",
+      proposed_judgment_status: "proposed",
+      proposal_preserved_as: "superseded_judgments",
       approved_id_revision: {
         previous_id: revision.previous_approved_id,
         active_id: revision.active_id,
@@ -655,7 +640,6 @@ export function loadRepository(root: string): LoadRepositoryResult {
       );
       continue;
     }
-
     for (const category of CATEGORIES) {
       for (const location of manifest.locations[category] ?? []) {
         for (const absolute of expandLocation(root, entry, category, location, loadIssues)) {
@@ -668,11 +652,11 @@ export function loadRepository(root: string): LoadRepositoryResult {
             manifests.find((candidate) => candidate.value.corpus_id === ownerCorpus) ??
             loadedManifest;
           const governingContract = governingManifest.value.record_contract;
-          if (
-            classifyRecordContract(authority, governingContract.id, governingContract.version) !==
-            "supported"
-          )
-            continue;
+          const governingAdapter = CURRENT_RECORD_ADAPTERS.resolve(
+            governingContract.id,
+            governingContract.version,
+          );
+          if (!governingAdapter) continue;
           const routeKey = `${realpathSync(absolute)}\0${category}`;
           if (routed.has(routeKey)) continue;
           routed.add(routeKey);
@@ -696,6 +680,10 @@ export function loadRepository(root: string): LoadRepositoryResult {
             }
             if (category === "records") {
               for (const record of compiled.records) {
+                const adapted = governingAdapter.adapt({
+                  family: record.family,
+                  value: record,
+                });
                 loadIssues.push(
                   ...validateDocument(
                     authority,
@@ -709,7 +697,11 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 );
                 const loaded = { value: record, file: label, corpus_id: ownerCorpus };
                 records.push(loaded);
-                if (record.family === "institutional" && record.schema_version === "0.2.0")
+                if (
+                  adapted.adapterKind === "compiled_native" &&
+                  governingContract.id === INSTITUTIONAL_RECORD_SCHEMA &&
+                  record.schema_version === "0.2.0"
+                )
                   institutionalRecords.push(loaded as Loaded<AtomicInstitutionalRecord>);
                 const recordObject = indexed(
                   record as unknown as Record<string, unknown>,
@@ -797,6 +789,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
           documents.push({ value, file: label, corpus_id: ownerCorpus, category });
 
           if (governingContract.id === REVIEWED_DOCUMENT_SCHEMA) {
+            governingAdapter.adapt({ family: governingManifest.value.family, value });
             loadIssues.push(
               ...validateDocument(
                 authority,
