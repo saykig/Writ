@@ -1,7 +1,6 @@
 import {
   InstitutionResolutionError,
   resolveApprovedInstitutionEndpoint,
-  type AtomicInstitutionalRecord,
   type RecordLink,
 } from "@writ/domain";
 
@@ -143,29 +142,6 @@ export function verifyOntology(snapshot: RepositorySnapshot): VerificationGateRe
               ),
             );
           } else throw error;
-        }
-      }
-    }
-
-    if (link.value.relation_type === "part_of" && link.value.supporting_record_ids) {
-      for (const supportingId of link.value.supporting_record_ids) {
-        const placement = snapshot.institutionalRecords.find(
-          ({ value }) =>
-            value.record_id === supportingId && value.institutional_fact_type === "placement",
-        )?.value as AtomicInstitutionalRecord | undefined;
-        if (placement && placement.institution_id !== link.value.source_id) {
-          issues.push(
-            issue(
-              "ontology",
-              "ONTOLOGY_PLACEMENT_SUPPORT_INCOMPATIBLE",
-              `Placement ${supportingId} describes ${placement.institution_id}, not traversal source ${link.value.source_id}.`,
-              {
-                corpus_id: link.value.owning_corpus_id,
-                object_id: link.value.link_id,
-                file: link.file,
-              },
-            ),
-          );
         }
       }
     }

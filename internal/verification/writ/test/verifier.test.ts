@@ -19,6 +19,7 @@ import {
   findObjects,
   loadAuthorityIndex,
   loadRepository,
+  parseCrossFamilyHumanReviewDocument,
   parseInstitutionalMigrationDocument,
   parseMappingQueueFile,
   repositoryRoot,
@@ -125,6 +126,36 @@ describe("authority isolation", () => {
         expect(invariant.authority.version).toBe("0.2.0");
       }
     }
+    expect(
+      INVARIANTS.some(({ authority }) => authority.source.includes("internal-repository-support")),
+    ).toBe(false);
+    expect(INVARIANTS.some(({ code }) => code === "ONTOLOGY_PLACEMENT_SUPPORT_INCOMPATIBLE")).toBe(
+      false,
+    );
+    expect(INVARIANTS.some(({ code }) => code === "INTEROP_SUPPORT_ENDPOINT_MISMATCH")).toBe(false);
+    expect(
+      INVARIANTS.filter(
+        ({ authority }) => authority.source === "adr/0019-cross-family-interoperability.md",
+      )
+        .map(({ code }) => code)
+        .sort(),
+    ).toEqual(
+      [
+        "INTEROP_ENDPOINT_KIND_MISMATCH",
+        "INTEROP_INHERITED_SUPPORT_MISSING",
+        "INTEROP_INVERSE_DUPLICATE",
+        "INTEROP_OWNER_MISMATCH",
+        "INTEROP_UNRESOLVED_ACTIVE",
+        "ONTOLOGY_IDENTITY_AMBIGUOUS",
+        "ONTOLOGY_IDENTITY_NOT_FOUND",
+        "ONTOLOGY_INVALID_SOURCE_KIND",
+        "ONTOLOGY_INVALID_TARGET_KIND",
+        "PROVENANCE_AUTOMATION_ATTRIBUTION",
+        "PROVENANCE_DISPOSITION_AMBIGUOUS",
+        "PROVENANCE_DISPOSITION_MISSING",
+        "PROVENANCE_DRAFT_HUMAN_MISMATCH",
+      ].sort(),
+    );
   });
 
   test("distinguishes invalid identities from unsupported exact versions", () => {
@@ -174,6 +205,59 @@ describe("workflow adapter versions", () => {
     expect(codes({ issues: parseMappingQueueFile(future, root).issues })).not.toContain(
       "INTEROP_QUEUE_INVALID",
     );
+  });
+
+  test("rejects unknown v1 queue statuses without substring classification", () => {
+    const root = mkdtempSync(join(tmpdir(), "writ-queue-status-"));
+    const queue = {
+      schema_version: "1.0.0",
+      queue_id: "synthetic-queue",
+      status: "human_review_complete",
+      human_review_artifact: "docs/migrations/synthetic/human-review.yaml",
+      active_link_ids: [],
+      mappings: [
+        {
+          mapping_id: "synthetic-mapping",
+          legal_policy_record_id: "synthetic-record",
+          proposed_relation: "assigns_function_to",
+          target_institutional_id: "synthetic-institution",
+          mapping_status: "inactive",
+        },
+      ],
+    };
+    const file = join(root, "mapping-queue.yaml");
+    writeFileSync(file, Bun.YAML.stringify(queue, null, 2));
+    expect(codes({ issues: parseMappingQueueFile(file, root).issues })).toContain(
+      "INTEROP_QUEUE_INVALID",
+    );
+    queue.mappings[0]!.mapping_status = "reactivated";
+    writeFileSync(file, Bun.YAML.stringify(queue, null, 2));
+    expect(codes({ issues: parseMappingQueueFile(file, root).issues })).toContain(
+      "INTEROP_QUEUE_INVALID",
+    );
+    const wrongType = structuredClone(queue) as unknown as {
+      mappings: Array<{ mapping_status: unknown }>;
+    };
+    wrongType.mappings[0]!.mapping_status = ["active_approved"];
+    writeFileSync(file, Bun.YAML.stringify(wrongType, null, 2));
+    expect(codes({ issues: parseMappingQueueFile(file, root).issues })).toContain(
+      "INTEROP_QUEUE_INVALID",
+    );
+  });
+
+  test("fails closed on malformed and unsupported cross-family review adapters", () => {
+    const malformed = parseCrossFamilyHumanReviewDocument(
+      { schema_version: "1.0.0", review_id: "incomplete" },
+      "human-review.yaml",
+    );
+    expect(codes({ issues: malformed.issues })).toContain("PROVENANCE_HUMAN_REVIEW_INVALID");
+
+    const future = parseCrossFamilyHumanReviewDocument(
+      { schema_version: "2.0.0" },
+      "human-review.yaml",
+    );
+    expect(codes({ issues: future.issues })).toContain("VERIFIER_UNSUPPORTED_CONTRACT");
+    expect(codes({ issues: future.issues })).not.toContain("PROVENANCE_HUMAN_REVIEW_INVALID");
   });
 
   test("fails closed on malformed supported institutional migrations", () => {
@@ -276,12 +360,15 @@ describe("ontology negative fixtures", () => {
     expect(codes(verifyOntology(target))).toContain("ONTOLOGY_INVALID_TARGET_KIND");
   });
 
-  test("does not require every direct part_of link to carry placement support", () => {
+  test("does not impose placement-support semantics on part_of", () => {
     const snapshot = clone();
     const partOf = snapshot.links.find(
       ({ value }) => value.relation_type === "part_of" && value.basis === "direct",
     )!;
-    delete partOf.value.supporting_record_ids;
+    const nonPlacement = snapshot.institutionalRecords.find(
+      ({ value }) => value.institutional_fact_type === "function",
+    )!;
+    partOf.value.supporting_record_ids = [nonPlacement.value.record_id];
     expect(codes(verifyOntology(snapshot))).not.toContain(
       "ONTOLOGY_PLACEMENT_SUPPORT_INCOMPATIBLE",
     );
@@ -298,6 +385,66 @@ describe("interoperability negative fixtures", () => {
     const link = crossFamilyLink(missingSupport);
     link.value.supporting_record_ids = ["missing_support"];
     expect(codes(verifyInteroperability(missingSupport))).toContain("INTEROP_SUPPORT_NOT_FOUND");
+  });
+
+  test("requires actual endpoint objects to match the declared ADR 0019 kind", () => {
+    const claimMismatch = clone();
+    const link = crossFamilyLink(claimMismatch);
+    claimMismatch.objects = claimMismatch.objects.filter(
+      (item) => !(item.id === link.value.source_id && item.kind === "legal_policy_claim"),
+    );
+    claimMismatch.objects.push({
+      id: link.value.source_id,
+      kind: "record",
+      value: {},
+      file: "synthetic/generic-record.yaml",
+      corpus_id: "synthetic",
+      aliases: [],
+    });
+    const claimCodes = codes(verifyInteroperability(claimMismatch));
+    expect(claimCodes).toContain("INTEROP_ENDPOINT_KIND_MISMATCH");
+    expect(claimCodes).not.toContain("INTEROP_SOURCE_NOT_FOUND");
+
+    const institutionMismatch = clone();
+    crossFamilyLink(institutionMismatch).value.target_kind = "institution";
+    expect(codes(verifyInteroperability(institutionMismatch))).toContain(
+      "INTEROP_ENDPOINT_KIND_MISMATCH",
+    );
+  });
+
+  test("requires inherited support only for ADR 0019 relations", () => {
+    const inherited = clone();
+    const inheritedLink = crossFamilyLink(inherited);
+    inheritedLink.value.basis = "inherited";
+    delete inheritedLink.value.supporting_record_ids;
+    expect(codes(verifyInteroperability(inherited))).toContain("INTEROP_INHERITED_SUPPORT_MISSING");
+
+    const supportedInherited = clone();
+    crossFamilyLink(supportedInherited).value.basis = "inherited";
+    expect(codes(verifyInteroperability(supportedInherited))).not.toContain(
+      "INTEROP_INHERITED_SUPPORT_MISSING",
+    );
+
+    const direct = clone();
+    delete crossFamilyLink(direct).value.supporting_record_ids;
+    expect(codes(verifyInteroperability(direct))).not.toContain(
+      "INTEROP_INHERITED_SUPPORT_MISSING",
+    );
+
+    const nonAdr = clone();
+    const partOf = nonAdr.links.find(({ value }) => value.relation_type === "part_of")!;
+    partOf.value.basis = "inherited";
+    delete partOf.value.supporting_record_ids;
+    expect(codes(verifyInteroperability(nonAdr))).not.toContain(
+      "INTEROP_INHERITED_SUPPORT_MISSING",
+    );
+  });
+
+  test("retains ordinary part_of endpoint existence checks", () => {
+    const snapshot = clone();
+    const partOf = snapshot.links.find(({ value }) => value.relation_type === "part_of")!;
+    partOf.value.source_id = "missing_institutional_symbol";
+    expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_SOURCE_NOT_FOUND");
   });
 
   test("rejects an unresolved queue candidate activated as a Core link", () => {
@@ -336,10 +483,14 @@ describe("interoperability negative fixtures", () => {
     const snapshot = clone();
     const template = crossFamilyLink(snapshot);
     const identityTemplate = snapshot.institutionalRecords.find(
-      ({ value }) => value.institutional_fact_type === "identity",
+      ({ value }) =>
+        value.institutional_fact_type === "identity" &&
+        value.corpus_id === template.value.owning_corpus_id,
     )!;
     const functionTemplate = snapshot.institutionalRecords.find(
-      ({ value }) => value.institutional_fact_type === "function",
+      ({ value }) =>
+        value.institutional_fact_type === "function" &&
+        value.corpus_id === template.value.owning_corpus_id,
     )!;
     const identity = {
       ...identityTemplate.value,
@@ -364,9 +515,12 @@ describe("interoperability negative fixtures", () => {
         aliases: [],
       });
     }
+    const provision = snapshot.records.find(({ value }) => value.family === "legal_policy")!;
     const forward: RecordLink = {
       ...template.value,
       link_id: "synthetic_distinct_forward",
+      source_id: provision.value.record_id,
+      source_kind: "legal_policy_provision",
       target_id: "synthetic_dual",
       target_kind: "institution",
     };
@@ -375,7 +529,7 @@ describe("interoperability negative fixtures", () => {
       link_id: "synthetic_distinct_reverse",
       source_id: "synthetic_dual",
       source_kind: "institutional_function",
-      target_id: template.value.source_id,
+      target_id: provision.value.record_id,
       target_kind: "legal_policy_provision",
       relation_type: "derives_authority_from",
     };
@@ -385,15 +539,42 @@ describe("interoperability negative fixtures", () => {
 
     expect(codes(verifyOntology(snapshot))).not.toContain("ONTOLOGY_INVALID_SOURCE_KIND");
     expect(codes(verifyOntology(snapshot))).not.toContain("ONTOLOGY_INVALID_TARGET_KIND");
-    expect(codes(verifyInteroperability(snapshot))).not.toContain("INTEROP_INVERSE_DUPLICATE");
+    const interopCodes = codes(verifyInteroperability(snapshot));
+    expect(interopCodes).not.toContain("INTEROP_INVERSE_DUPLICATE");
+    expect(interopCodes).not.toContain("INTEROP_ENDPOINT_KIND_MISMATCH");
+    expect(interopCodes).not.toContain("INTEROP_SOURCE_NOT_FOUND");
+    expect(interopCodes).not.toContain("INTEROP_TARGET_NOT_FOUND");
   });
 
   test("permits active links created outside a historical queue", () => {
     const outsideQueue = clone();
-    outsideQueue.queues = [];
+    const partOf = outsideQueue.links.find(({ value }) => value.relation_type === "part_of")!;
+    outsideQueue.links.push({
+      ...partOf,
+      value: { ...partOf.value, link_id: "synthetic_outside_queue" },
+    });
     expect(codes(verifyInteroperability(outsideQueue))).not.toContain(
       "INTEROP_ACTIVE_SET_MISMATCH",
     );
+  });
+
+  test("requires queue-local active mapping and active_link_id agreement", () => {
+    const missingDeclaration = clone();
+    missingDeclaration.queues[0]!.active_link_ids.pop();
+    expect(codes(verifyInteroperability(missingDeclaration))).toContain(
+      "INTEROP_ACTIVE_SET_MISMATCH",
+    );
+
+    const missingMapping = clone();
+    const activeId = missingMapping.queues[0]!.active_link_ids[0]!;
+    const activeLink = missingMapping.links.find(({ value }) => value.link_id === activeId)!;
+    const activeMapping = missingMapping.queues[0]!.mappings.find(
+      (mapping) =>
+        mapping.mapping_status === "active_approved" &&
+        mapping.legal_policy_record_id === activeLink.value.source_id,
+    )!;
+    activeMapping.mapping_status = "unresolved";
+    expect(codes(verifyInteroperability(missingMapping))).toContain("INTEROP_ACTIVE_SET_MISMATCH");
   });
 
   test("reports ambiguity only when a scoped reference resolves more than once", () => {
@@ -453,6 +634,36 @@ describe("provenance negative fixtures", () => {
     )!;
     disposition.value.judgment_type = "review_disposition";
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_MISSING");
+  });
+
+  test("binds approval to the exact accepted judgment named by human review", () => {
+    const snapshot = clone();
+    const decision = snapshot.humanReviews[0]!.decisions[0]!;
+    const named = snapshot.judgments.find(
+      ({ value }) => value.judgment_id === decision.accepted_judgment_id,
+    )!;
+    named.value.judgment_id = "arbitrary_matching_accepted_disposition";
+    expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_MISSING");
+
+    const wrongReviewer = clone();
+    const reviewerDecision = wrongReviewer.humanReviews[0]!.decisions[0]!;
+    wrongReviewer.judgments.find(
+      ({ value }) => value.judgment_id === reviewerDecision.accepted_judgment_id,
+    )!.value.reviewer = "Different Reviewer";
+    expect(codes(verifyProvenance(wrongReviewer))).toContain("PROVENANCE_DISPOSITION_MISSING");
+  });
+
+  test("rejects multiple current accepted ADR 0019 dispositions", () => {
+    const snapshot = clone();
+    const decision = snapshot.humanReviews[0]!.decisions[0]!;
+    const accepted = snapshot.judgments.find(
+      ({ value }) => value.judgment_id === decision.accepted_judgment_id,
+    )!;
+    snapshot.judgments.push({
+      ...accepted,
+      value: { ...accepted.value, judgment_id: "synthetic_second_accepted_disposition" },
+    });
+    expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_AMBIGUOUS");
   });
 
   test("uses explicit proposal metadata for automation attribution", () => {
@@ -541,6 +752,28 @@ describe("provenance negative fixtures", () => {
     const result = verifyProvenance(historical);
     expect(codes(result)).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
     expect(codes(result)).not.toContain("PROVENANCE_JUDGMENT_TARGET_NOT_FOUND");
+  });
+
+  test("keeps record-ID migrations separate from institution and subject namespaces", () => {
+    const snapshot = clone();
+    const migration = snapshot.migrations.find(
+      (item) => item.previous_id === "eu_ai_office_technical_documentation_receipt",
+    )!;
+    const identity = snapshot.institutionalRecords.find(
+      ({ value }) => value.institutional_fact_type === "identity",
+    )!;
+    identity.value.institution_id = migration.previous_id;
+    snapshot.records[0]!.value.subjects[0]!.subject_id = migration.previous_id;
+    expect(codes(verifyProvenance(snapshot))).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+  });
+
+  test("validates migration history through structured review metadata", () => {
+    const snapshot = clone();
+    const review = snapshot.humanReviews[0]!;
+    review.approved_id_revision.previous_id = "unrelated_previous_id";
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
+    );
   });
 
   test("reports ambiguous judgment references without imposing global uniqueness", () => {

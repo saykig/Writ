@@ -1,5 +1,3 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
 import { validateJudgmentSupersession } from "@writ/domain";
 
 import { findObjects } from "../repository.js";
@@ -11,34 +9,25 @@ import {
   type VerificationGateResult,
 } from "../types.js";
 
-function object(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
-}
-
-function filesUnder(directory: string): string[] {
-  return readdirSync(directory)
-    .flatMap((name) => {
-      const child = join(directory, name);
-      return statSync(child).isDirectory() ? filesUnder(child) : [child];
-    })
-    .sort();
-}
-
-function proposalJudgmentReviewers(root: string): Map<string, string> {
+function proposalJudgmentReviewers(snapshot: RepositorySnapshot): Map<string, string> {
   const proposalReviewers = new Map<string, string>();
-  const directory = join(root, "docs", "migrations");
-  for (const file of filesUnder(directory).filter((path) => path.endsWith("/human-review.yaml"))) {
-    const value = Bun.YAML.parse(readFileSync(file, "utf8")) as unknown;
-    if (!object(value)) continue;
-    const proposer = object(value.proposal_history) ? value.proposal_history.proposer : undefined;
-    if (typeof proposer !== "string" || !Array.isArray(value.decisions)) continue;
-    for (const decision of value.decisions) {
-      if (object(decision) && typeof decision.proposal_judgment_id === "string") {
-        proposalReviewers.set(decision.proposal_judgment_id, proposer);
-      }
+  for (const review of snapshot.humanReviews) {
+    for (const decision of review.decisions) {
+      proposalReviewers.set(decision.proposal_judgment_id, review.proposal_proposer);
     }
   }
   return proposalReviewers;
+}
+
+function isRecordEndpoint(kind: string): boolean {
+  return [
+    "record",
+    "legal_policy_claim",
+    "legal_policy_provision",
+    "institutional_mandate",
+    "institutional_decision_right",
+    "institutional_function",
+  ].includes(kind);
 }
 
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
@@ -128,24 +117,21 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     );
   }
 
-  for (const loaded of links) {
-    if (
-      isAdr0019Relation(loaded.value.relation_type) &&
-      loaded.value.review_state === "approved" &&
-      !snapshot.judgments.some(
-        ({ value }) =>
-          value.target_kind === "record_link" &&
-          value.target_id === loaded.value.link_id &&
-          value.judgment_type === "record_link_disposition" &&
-          value.status === "accepted" &&
-          value.value === loaded.value.review_state,
-      )
-    ) {
+  const adrLinks = links.filter(({ value }) => isAdr0019Relation(value.relation_type));
+  for (const loaded of adrLinks) {
+    const acceptedDispositions = snapshot.judgments.filter(
+      ({ value }) =>
+        value.target_kind === "record_link" &&
+        value.target_id === loaded.value.link_id &&
+        value.judgment_type === "record_link_disposition" &&
+        value.status === "accepted",
+    );
+    if (acceptedDispositions.length > 1) {
       issues.push(
         issue(
           "provenance",
-          "PROVENANCE_DISPOSITION_MISSING",
-          `Approved link ${loaded.value.link_id} has no accepted disposition.`,
+          "PROVENANCE_DISPOSITION_AMBIGUOUS",
+          `ADR 0019 link ${loaded.value.link_id} has ${acceptedDispositions.length} current accepted dispositions.`,
           {
             corpus_id: loaded.value.owning_corpus_id,
             object_id: loaded.value.link_id,
@@ -155,12 +141,29 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       );
     }
     if (
-      isAdr0019Relation(loaded.value.relation_type) &&
+      loaded.value.review_state === "approved" &&
+      !acceptedDispositions.some(({ value }) => value.value === loaded.value.review_state)
+    ) {
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_DISPOSITION_MISSING",
+          `Approved ADR 0019 link ${loaded.value.link_id} has no matching accepted disposition.`,
+          {
+            corpus_id: loaded.value.owning_corpus_id,
+            object_id: loaded.value.link_id,
+            file: loaded.file,
+          },
+        ),
+      );
+    }
+    if (
       loaded.value.review_state === "draft" &&
       snapshot.judgments.some(
         ({ value }) =>
           value.target_kind === "record_link" &&
           value.target_id === loaded.value.link_id &&
+          value.judgment_type === "record_link_disposition" &&
           value.status === "accepted" &&
           value.value === "approved",
       )
@@ -180,7 +183,67 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
   }
 
-  const proposalReviewers = proposalJudgmentReviewers(snapshot.root);
+  for (const review of snapshot.humanReviews) {
+    for (const decision of review.decisions) {
+      const reviewedLinks = adrLinks.filter(({ value }) => value.link_id === decision.link_id);
+      const acceptedJudgments = snapshot.judgments.filter(
+        ({ value }) => value.judgment_id === decision.accepted_judgment_id,
+      );
+      if (reviewedLinks.length !== 1) {
+        issues.push(
+          issue(
+            "provenance",
+            reviewedLinks.length > 1
+              ? "PROVENANCE_REFERENCE_AMBIGUOUS"
+              : "PROVENANCE_DISPOSITION_MISSING",
+            `Human-review decision ${review.review_id} resolves ${reviewedLinks.length} active ADR 0019 links for ${decision.link_id}.`,
+            { object_id: decision.link_id, file: review.file },
+          ),
+        );
+      }
+      if (acceptedJudgments.length !== 1) {
+        issues.push(
+          issue(
+            "provenance",
+            acceptedJudgments.length > 1
+              ? "PROVENANCE_REFERENCE_AMBIGUOUS"
+              : "PROVENANCE_DISPOSITION_MISSING",
+            `Human-review decision ${review.review_id} resolves ${acceptedJudgments.length} judgments named ${decision.accepted_judgment_id}.`,
+            { object_id: decision.link_id, file: review.file },
+          ),
+        );
+      }
+      if (reviewedLinks.length !== 1 || acceptedJudgments.length !== 1) continue;
+
+      const reviewedLink = reviewedLinks[0]!.value;
+      const accepted = acceptedJudgments[0]!.value;
+      const judgmentMatchesDecision =
+        decision.decision === "approve" &&
+        accepted.target_kind === "record_link" &&
+        accepted.target_id === decision.link_id &&
+        accepted.judgment_type === "record_link_disposition" &&
+        accepted.status === "accepted" &&
+        accepted.value === decision.final_review_state &&
+        accepted.reviewer === decision.reviewer &&
+        reviewedLink.review_state === decision.final_review_state;
+      if (!judgmentMatchesDecision) {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_DISPOSITION_MISSING",
+            `Named judgment ${decision.accepted_judgment_id} does not implement the exact human-review decision for ${decision.link_id}.`,
+            {
+              corpus_id: reviewedLink.owning_corpus_id,
+              object_id: decision.link_id,
+              file: review.file,
+            },
+          ),
+        );
+      }
+    }
+  }
+
+  const proposalReviewers = proposalJudgmentReviewers(snapshot);
   for (const loaded of snapshot.judgments) {
     const expectedReviewer = proposalReviewers.get(loaded.value.judgment_id);
     if (expectedReviewer && loaded.value.reviewer !== expectedReviewer) {
@@ -199,18 +262,8 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
   );
   const activeJudgments = snapshot.judgments.filter(({ value }) => value.status !== "superseded");
-  const activeReferences = new Set<string>([
+  const activeRecordReferences = new Set<string>([
     ...activeRecords.flatMap(({ value }) => [
-      value.record_id,
-      ...value.subjects.map((subject) => subject.subject_id),
-      ...(value.family === "institutional" && "institution_id" in value
-        ? [
-            value.institution_id as string,
-            ...("parent_institution_id" in value && typeof value.parent_institution_id === "string"
-              ? [value.parent_institution_id]
-              : []),
-          ]
-        : []),
       ...("parent_instrument_id" in value && typeof value.parent_instrument_id === "string"
         ? [value.parent_instrument_id]
         : []),
@@ -219,25 +272,34 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
         : []),
     ]),
     ...links.flatMap(({ value }) => [
-      value.link_id,
-      value.source_id,
-      value.target_id,
+      ...(isRecordEndpoint(value.source_kind) ? [value.source_id] : []),
+      ...(isRecordEndpoint(value.target_kind) ? [value.target_id] : []),
       ...(value.supporting_record_ids ?? []),
     ]),
-    ...activeJudgments.flatMap(({ value }) => [value.target_id]),
+    ...activeJudgments.flatMap(({ value }) =>
+      value.target_kind === "record" ? [value.target_id] : [],
+    ),
   ]);
   for (const migration of snapshot.migrations) {
-    if (!activeReferences.has(migration.active_id)) {
+    const activeTargets = activeRecords.filter(
+      ({ value, corpus_id }) =>
+        corpus_id === migration.corpus_id && value.record_id === migration.active_id,
+    );
+    if (activeTargets.length !== 1) {
       issues.push(
         issue(
           "provenance",
           "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
-          `Migration active ID ${migration.active_id} does not resolve.`,
+          `Migration active record ID ${migration.active_id} resolves ${activeTargets.length} times in ${migration.corpus_id}.`,
           { corpus_id: migration.corpus_id, object_id: migration.active_id, file: migration.file },
         ),
       );
     }
-    if (activeReferences.has(migration.previous_id)) {
+    const previousRecordActive = activeRecords.some(
+      ({ value, corpus_id }) =>
+        corpus_id === migration.corpus_id && value.record_id === migration.previous_id,
+    );
+    if (previousRecordActive || activeRecordReferences.has(migration.previous_id)) {
       issues.push(
         issue(
           "provenance",
@@ -252,36 +314,28 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       );
     }
     if (migration.review_artifact) {
-      const reviewFile = join(snapshot.root, migration.review_artifact);
-      if (!existsSync(reviewFile)) {
+      const reviews = snapshot.humanReviews.filter(
+        (review) => review.file === migration.review_artifact,
+      );
+      const matchingReviews = reviews.filter(
+        (review) =>
+          review.approved_id_revision.previous_id === migration.previous_id &&
+          review.approved_id_revision.active_id === migration.active_id &&
+          review.approved_id_revision.decision === "approve",
+      );
+      if (reviews.length !== 1 || matchingReviews.length !== 1) {
         issues.push(
           issue(
             "provenance",
             "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
-            `Migration review artifact does not exist: ${migration.review_artifact}`,
+            `Structured migration review does not uniquely approve ${migration.previous_id} -> ${migration.active_id}.`,
             {
               corpus_id: migration.corpus_id,
               object_id: migration.active_id,
-              file: migration.file,
+              file: migration.review_artifact,
             },
           ),
         );
-      } else {
-        const history = readFileSync(reviewFile, "utf8");
-        if (!history.includes(migration.previous_id) || !history.includes(migration.active_id)) {
-          issues.push(
-            issue(
-              "provenance",
-              "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
-              `Migration review artifact does not connect ${migration.previous_id} to ${migration.active_id}.`,
-              {
-                corpus_id: migration.corpus_id,
-                object_id: migration.active_id,
-                file: relative(snapshot.root, reviewFile),
-              },
-            ),
-          );
-        }
       }
     }
   }

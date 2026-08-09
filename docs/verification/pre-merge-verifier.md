@@ -31,6 +31,17 @@ separate engineering gates.
 - **Integrity** verifies catalogues, manifests, routed files, scoped counts, generated drift, the source
   registry and the repository's complete tracked-file checksum manifest.
 
+## V1 native-source boundary
+
+For compiled native records, V1 reconstructs resolvable evidence-passage and source-reference objects
+from each record's compiled evidence envelope. Those reconstructed source references are not treated
+as independently loaded publication, source-document or instrument objects, and therefore cannot
+satisfy an ADR 0019 endpoint that declares one of those specific kinds. V1 does not independently
+parse every source declaration in every `.writ` file. Existing pack validation, source-registry checks
+and repository tests remain responsible for those declarations and stored-source integrity. Expanding
+that boundary requires a bounded adapter backed by an existing contract, not a verifier-owned source
+ontology.
+
 ## Authority and versions
 
 The verifier indexes `$id` values from the authoritative `schemas/` tree. Core, extension, analysis

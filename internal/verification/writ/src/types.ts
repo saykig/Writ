@@ -94,7 +94,7 @@ export interface IndexedObject {
 
 export interface MappingQueueEntry {
   mapping_id: string;
-  mapping_status: string;
+  mapping_status: "active_approved" | "unresolved";
   legal_policy_record_id: string | null;
   proposed_relation: string;
   target_institutional_id: string;
@@ -103,9 +103,34 @@ export interface MappingQueueEntry {
 export interface MappingQueue {
   schema_version: "1.0.0";
   queue_id: string;
-  status: string;
+  status: "human_review_complete";
+  human_review_artifact: string;
   active_link_ids: string[];
   mappings: MappingQueueEntry[];
+  file: string;
+}
+
+export interface CrossFamilyReviewDecision {
+  link_id: string;
+  decision: "approve";
+  final_review_state: "approved";
+  reviewer: string;
+  proposal_judgment_id: string;
+  accepted_judgment_id: string;
+}
+
+export interface CrossFamilyHumanReview {
+  schema_version: "1.0.0";
+  review_id: string;
+  reviewer: string;
+  status: "complete";
+  proposal_proposer: string;
+  approved_id_revision: {
+    previous_id: string;
+    active_id: string;
+    decision: "approve";
+  };
+  decisions: CrossFamilyReviewDecision[];
   file: string;
 }
 
@@ -129,6 +154,7 @@ export interface RepositorySnapshot {
   documents: LoadedDocument[];
   objects: IndexedObject[];
   queues: MappingQueue[];
+  humanReviews: CrossFamilyHumanReview[];
   migrations: MigrationRename[];
   loadIssues: VerificationIssue[];
 }

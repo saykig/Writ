@@ -24,11 +24,6 @@ const adr19 = (section: string): InvariantAuthority => ({
   source: "adr/0019-cross-family-interoperability.md",
   section,
 });
-const mechanical = (section: string): InvariantAuthority => ({
-  kind: "mechanical",
-  source: "docs/migrations/internal-repository-support.md",
-  section,
-});
 const meta = (section: string): InvariantAuthority => ({
   kind: "meta",
   source: "adr/0020-deterministic-pre-merge-verification.md",
@@ -49,7 +44,7 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "ONTOLOGY_FAMILY_MISMATCH",
     gate: "ontology",
-    authority: schema("schemas/core/corpus-manifest.schema.json", "1.0.0", "family"),
+    authority: meta("Scoped catalog and manifest reconciliation"),
   },
   {
     code: "ONTOLOGY_IDENTITY_NOT_FOUND",
@@ -72,34 +67,29 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: adr19("Relation endpoint contract"),
   },
   {
-    code: "ONTOLOGY_PLACEMENT_SUPPORT_INCOMPATIBLE",
-    gate: "ontology",
-    authority: adr19("Fact/link distinction"),
-  },
-  {
     code: "INTEROP_SOURCE_NOT_FOUND",
     gate: "interoperability",
-    authority: adr19("Relation endpoint contract"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEROP_TARGET_NOT_FOUND",
     gate: "interoperability",
-    authority: adr19("Canonical institutional identity"),
+    authority: meta("Mechanical reference resolution"),
+  },
+  {
+    code: "INTEROP_ENDPOINT_KIND_MISMATCH",
+    gate: "interoperability",
+    authority: adr19("Relation endpoint contract"),
   },
   {
     code: "INTEROP_REFERENCE_AMBIGUOUS",
     gate: "interoperability",
-    authority: mechanical("Declared reference resolution"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEROP_SUPPORT_NOT_FOUND",
     gate: "interoperability",
     authority: schema("schemas/core/record-link.schema.json", "1.0.0", "supporting_record_ids"),
-  },
-  {
-    code: "INTEROP_SUPPORT_ENDPOINT_MISMATCH",
-    gate: "interoperability",
-    authority: adr19("Inherited supporting records"),
   },
   {
     code: "INTEROP_EVIDENCE_NOT_FOUND",
@@ -109,7 +99,7 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "INTEROP_OWNER_NOT_FOUND",
     gate: "interoperability",
-    authority: schema("schemas/core/record-link.schema.json", "1.0.0", "owning_corpus_id"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEROP_OWNER_MISMATCH",
@@ -127,22 +117,32 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: adr19("Unresolved mappings"),
   },
   {
+    code: "INTEROP_INHERITED_SUPPORT_MISSING",
+    gate: "interoperability",
+    authority: adr19("Inherited supporting records"),
+  },
+  {
     code: "INTEROP_ACTIVE_SET_MISMATCH",
     gate: "interoperability",
-    authority: adr19("Reviewed mapping workflow"),
+    authority: meta("Exact workflow adapter support"),
   },
   {
     code: "INTEROP_QUEUE_INVALID",
     gate: "interoperability",
-    authority: adr19("Unresolved mappings"),
+    authority: meta("Exact workflow adapter support"),
   },
   {
     code: "PROVENANCE_EVIDENCE_NOT_FOUND",
     gate: "provenance",
-    authority: schema("schemas/core/record.schema.json", "0.2.0", "evidence"),
+    authority: schema("schemas/analysis/record-judgment.schema.json", "0.2.0", "evidence_refs"),
   },
   {
     code: "PROVENANCE_DISPOSITION_MISSING",
+    gate: "provenance",
+    authority: adr19("Independent link review"),
+  },
+  {
+    code: "PROVENANCE_DISPOSITION_AMBIGUOUS",
     gate: "provenance",
     authority: adr19("Independent link review"),
   },
@@ -164,7 +164,7 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "PROVENANCE_REFERENCE_AMBIGUOUS",
     gate: "provenance",
-    authority: mechanical("Declared reference resolution"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "PROVENANCE_SUPERSESSION_INVALID",
@@ -179,15 +179,20 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "PROVENANCE_ACTIVE_LEGACY_ID",
     gate: "provenance",
-    authority: adr19("Approved identifier migration"),
+    authority: meta("Exact workflow adapter and mechanical reference consistency"),
   },
   {
     code: "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
     gate: "provenance",
-    authority: adr19("Approved identifier migration"),
+    authority: meta("Exact workflow adapter and mechanical reference consistency"),
   },
   {
     code: "PROVENANCE_MIGRATION_INVALID",
+    gate: "provenance",
+    authority: meta("Exact workflow adapter support"),
+  },
+  {
+    code: "PROVENANCE_HUMAN_REVIEW_INVALID",
     gate: "provenance",
     authority: meta("Exact workflow adapter support"),
   },
@@ -209,42 +214,42 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "INTEGRITY_ROUTED_FILE_MISSING",
     gate: "integrity",
-    authority: schema("schemas/core/corpus-manifest.schema.json", "1.0.0", "locations"),
+    authority: meta("Mechanical path resolution"),
   },
   {
     code: "INTEGRITY_COUNT_MISMATCH",
     gate: "integrity",
-    authority: schema("schemas/core/corpus-manifest.schema.json", "1.0.0", "record_counts"),
+    authority: meta("Scoped count reconciliation"),
   },
   {
     code: "INTEGRITY_REVIEW_COUNT_MISMATCH",
     gate: "integrity",
-    authority: schema("schemas/core/corpus-manifest.schema.json", "1.0.0", "review_counts"),
+    authority: meta("Scoped count reconciliation"),
   },
   {
     code: "INTEGRITY_DANGLING_REFERENCE",
     gate: "integrity",
-    authority: mechanical("Declared reference resolution"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEGRITY_CATALOG_PROJECTION_DRIFT",
     gate: "integrity",
-    authority: mechanical("Generated material"),
+    authority: meta("Generated projection drift"),
   },
   {
     code: "INTEGRITY_SOURCE_REGISTRY_DRIFT",
     gate: "integrity",
-    authority: mechanical("Generated material"),
+    authority: meta("Generated projection drift"),
   },
   {
     code: "INTEGRITY_CHECKSUM_MISMATCH",
     gate: "integrity",
-    authority: mechanical("Complete tracked-tree checksum"),
+    authority: meta("Checksum integrity"),
   },
   {
     code: "INTEGRITY_CHECKSUM_INVENTORY_MISMATCH",
     gate: "integrity",
-    authority: mechanical("Complete tracked-tree checksum"),
+    authority: meta("Checksum inventory integrity"),
   },
 ] as const;
 

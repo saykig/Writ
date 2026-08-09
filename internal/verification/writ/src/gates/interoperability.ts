@@ -5,12 +5,134 @@ import { activeLinks, isAdr0019Relation, resolveInstitution } from "./ontology.j
 import {
   gateResult,
   issue,
+  type IndexedObject,
   type RepositorySnapshot,
   type VerificationGateResult,
 } from "../types.js";
 
 function linkSignature(source: string | null, relation: string, target: string): string {
   return `${source ?? "<unresolved>"}\0${relation}\0${target}`;
+}
+
+interface EndpointMatch {
+  id: string;
+  kind: string;
+  corpus_id: string;
+  file: string;
+}
+
+function indexedMatches(
+  snapshot: RepositorySnapshot,
+  id: string,
+  kinds: readonly string[],
+): EndpointMatch[] {
+  return findObjects(snapshot, id, kinds).map(({ id: objectId, kind, corpus_id, file }) => ({
+    id: objectId,
+    kind,
+    corpus_id,
+    file,
+  }));
+}
+
+function endpointMatches(
+  snapshot: RepositorySnapshot,
+  id: string,
+  declaredKind: string,
+): EndpointMatch[] {
+  if (declaredKind === "legal_policy_provision") {
+    return snapshot.records
+      .filter(
+        ({ value }) =>
+          value.record_id === id &&
+          value.family === "legal_policy" &&
+          value.review_state !== "superseded" &&
+          value.review_state !== "withdrawn",
+      )
+      .map(({ value, file, corpus_id }) => ({
+        id: value.record_id,
+        kind: declaredKind,
+        corpus_id,
+        file,
+      }));
+  }
+
+  const institutionalFactKinds: Record<string, string> = {
+    institutional_mandate: "mandate",
+    institutional_decision_right: "decision_right",
+    institutional_function: "function",
+  };
+  const factType = institutionalFactKinds[declaredKind];
+  if (factType) {
+    return snapshot.institutionalRecords
+      .filter(
+        ({ value }) =>
+          value.record_id === id &&
+          value.institutional_fact_type === factType &&
+          value.review_state !== "superseded" &&
+          value.review_state !== "withdrawn",
+      )
+      .map(({ value, file, corpus_id }) => ({
+        id: value.record_id,
+        kind: declaredKind,
+        corpus_id,
+        file,
+      }));
+  }
+
+  return indexedMatches(snapshot, id, [declaredKind]);
+}
+
+function hasObjectWithId(snapshot: RepositorySnapshot, id: string): boolean {
+  return (
+    findObjects(snapshot, id).length > 0 ||
+    snapshot.records.some(({ value }) => value.record_id === id)
+  );
+}
+
+function endpointResolutionIssue(
+  snapshot: RepositorySnapshot,
+  id: string,
+  declaredKind: string,
+  side: "source" | "target",
+  link: (typeof snapshot.links)[number],
+) {
+  const matches = endpointMatches(snapshot, id, declaredKind);
+  if (matches.length === 0) {
+    const kindMismatch = hasObjectWithId(snapshot, id);
+    return issue(
+      "interoperability",
+      kindMismatch
+        ? "INTEROP_ENDPOINT_KIND_MISMATCH"
+        : side === "source"
+          ? "INTEROP_SOURCE_NOT_FOUND"
+          : "INTEROP_TARGET_NOT_FOUND",
+      kindMismatch
+        ? `${side} endpoint ${id} resolves, but not as declared kind ${declaredKind}.`
+        : `${side} endpoint ${id} does not resolve as declared kind ${declaredKind}.`,
+      {
+        corpus_id: link.value.owning_corpus_id,
+        object_id: link.value.link_id,
+        file: link.file,
+      },
+    );
+  }
+  if (matches.length > 1) {
+    return issue(
+      "interoperability",
+      "INTEROP_REFERENCE_AMBIGUOUS",
+      `${side} endpoint ${id} resolves to ${matches.length} ${declaredKind} objects.`,
+      {
+        corpus_id: link.value.owning_corpus_id,
+        object_id: link.value.link_id,
+        file: link.file,
+      },
+    );
+  }
+  return undefined;
+}
+
+function supportingRecordMatches(snapshot: RepositorySnapshot, id: string): IndexedObject[] {
+  return findObjects(snapshot, id, ["record", "legal_policy_claim"]);
 }
 
 export function verifyInteroperability(snapshot: RepositorySnapshot): VerificationGateResult {
@@ -44,39 +166,40 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
     }
 
     if (isAdr0019Relation(link.relation_type)) {
-      const sourceKinds =
-        link.relation_type === "derives_authority_from"
-          ? ["record"]
-          : ["legal_policy_claim", "source", "publication", "instrument", "record"];
-      const sourceMatches = findObjects(snapshot, link.source_id, sourceKinds);
-      if (sourceMatches.length === 0) {
-        issues.push(
-          issue(
-            "interoperability",
-            "INTEROP_SOURCE_NOT_FOUND",
-            `Source endpoint ${link.source_id} does not resolve.`,
-            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-          ),
-        );
-      } else if (sourceMatches.length > 1) {
-        issues.push(
-          issue(
-            "interoperability",
-            "INTEROP_REFERENCE_AMBIGUOUS",
-            `Source endpoint ${link.source_id} resolves to ${sourceMatches.length} objects.`,
-            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-          ),
-        );
-      }
+      const sourceIssue = endpointResolutionIssue(
+        snapshot,
+        link.source_id,
+        link.source_kind,
+        "source",
+        loaded,
+      );
+      if (sourceIssue) issues.push(sourceIssue);
       if (link.relation_type !== "derives_authority_from") {
         try {
           const target = resolveInstitution(snapshot, link.target_id);
+          const identity = snapshot.institutionalRecords.find(
+            ({ value }) => value.record_id === target.identity_record_id,
+          );
+          const actualTargetKind =
+            identity?.value.institution_type === "organizational_unit"
+              ? "organizational_unit"
+              : "institution";
+          if (actualTargetKind !== link.target_kind) {
+            issues.push(
+              issue(
+                "interoperability",
+                "INTEROP_ENDPOINT_KIND_MISMATCH",
+                `Target endpoint ${link.target_id} resolves as ${actualTargetKind}, not declared kind ${link.target_kind}.`,
+                { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
+              ),
+            );
+          }
           if (target.corpus_id !== link.owning_corpus_id) {
             issues.push(
               issue(
                 "interoperability",
                 "INTEROP_OWNER_MISMATCH",
-                `Institutional endpoint ${link.target_id} is owned by ${target.corpus_id}, not ${link.owning_corpus_id}.`,
+                `Institution-owned ADR 0019 link is stored by ${link.owning_corpus_id}, but canonical endpoint ${link.target_id} is owned by ${target.corpus_id}.`,
                 { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
               ),
             );
@@ -100,29 +223,24 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
           } else throw error;
         }
       } else {
-        const targetMatches = findObjects(snapshot, link.target_id, [
-          "legal_policy_claim",
-          "record",
-        ]);
-        if (targetMatches.length === 0) {
-          issues.push(
-            issue(
-              "interoperability",
-              "INTEROP_TARGET_NOT_FOUND",
-              `Target provision ${link.target_id} does not resolve.`,
-              { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-            ),
-          );
-        } else if (targetMatches.length > 1) {
-          issues.push(
-            issue(
-              "interoperability",
-              "INTEROP_REFERENCE_AMBIGUOUS",
-              `Target provision ${link.target_id} resolves to ${targetMatches.length} objects.`,
-              { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-            ),
-          );
-        }
+        const targetIssue = endpointResolutionIssue(
+          snapshot,
+          link.target_id,
+          link.target_kind,
+          "target",
+          loaded,
+        );
+        if (targetIssue) issues.push(targetIssue);
+      }
+      if (link.basis === "inherited" && !link.supporting_record_ids?.length) {
+        issues.push(
+          issue(
+            "interoperability",
+            "INTEROP_INHERITED_SUPPORT_MISSING",
+            `Inherited ADR 0019 link ${link.link_id} does not declare supporting records.`,
+            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
+          ),
+        );
       }
     } else if (link.relation_type === "supersedes") {
       for (const [side, id] of [
@@ -196,7 +314,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
       }
     }
     for (const supportingId of link.supporting_record_ids ?? []) {
-      const supporting = findObjects(snapshot, supportingId, ["record"]);
+      const supporting = supportingRecordMatches(snapshot, supportingId);
       if (supporting.length === 0) {
         issues.push(
           issue(
@@ -212,15 +330,6 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             "interoperability",
             "INTEROP_REFERENCE_AMBIGUOUS",
             `Supporting record ${supportingId} resolves to ${supporting.length} objects.`,
-            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-          ),
-        );
-      } else if (supporting.every((item) => item.corpus_id !== link.owning_corpus_id)) {
-        issues.push(
-          issue(
-            "interoperability",
-            "INTEROP_SUPPORT_ENDPOINT_MISMATCH",
-            `Supporting record ${supportingId} is not owned by ${link.owning_corpus_id}.`,
             { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
           ),
         );
@@ -265,6 +374,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
     signatures.set(signature, matches);
   }
   for (const queue of snapshot.queues) {
+    const activeQueueMappings = new Set<string>();
     for (const id of queue.active_link_ids) {
       const matches = linksById.get(id) ?? [];
       if (matches.length === 0) {
@@ -304,7 +414,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
           ),
         );
       }
-      if (mapping.mapping_status.includes("active") && active.length === 0) {
+      if (mapping.mapping_status === "active_approved" && active.length === 0) {
         issues.push(
           issue(
             "interoperability",
@@ -313,7 +423,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             { object_id: mapping.mapping_id, file: queue.file },
           ),
         );
-      } else if (mapping.mapping_status.includes("active") && active.length > 1) {
+      } else if (mapping.mapping_status === "active_approved" && active.length > 1) {
         issues.push(
           issue(
             "interoperability",
@@ -322,7 +432,23 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             { object_id: mapping.mapping_id, file: queue.file },
           ),
         );
+      } else if (mapping.mapping_status === "active_approved") {
+        activeQueueMappings.add(active[0]!.value.link_id);
       }
+    }
+    const declaredActive = new Set(queue.active_link_ids);
+    if (
+      declaredActive.size !== activeQueueMappings.size ||
+      [...declaredActive].some((id) => !activeQueueMappings.has(id))
+    ) {
+      issues.push(
+        issue(
+          "interoperability",
+          "INTEROP_ACTIVE_SET_MISMATCH",
+          `Queue ${queue.queue_id} active_link_ids do not equal its resolved active_approved mappings.`,
+          { object_id: queue.queue_id, file: queue.file },
+        ),
+      );
     }
   }
 
