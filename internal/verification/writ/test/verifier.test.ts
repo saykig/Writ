@@ -1,15 +1,25 @@
 import { describe, expect, test } from "bun:test";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AtomicInstitutionalRecord, RecordLink } from "@writ/domain";
+import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } from "@writ/domain";
 
 import {
   INVARIANTS,
   checkManifestChecksum,
   classifyRecordContract,
+  findObjects,
   loadAuthorityIndex,
   loadRepository,
+  parseInstitutionalMigrationDocument,
   parseMappingQueueFile,
   repositoryRoot,
   verifyIntegrity,
@@ -35,6 +45,46 @@ function crossFamilyLink(snapshot: RepositorySnapshot) {
   return snapshot.links.find(({ value }) => value.relation_type === "assigns_function_to")!;
 }
 
+function declaredSchemaVersions(value: unknown, key = ""): string[] {
+  if (Array.isArray(value)) return value.flatMap((item) => declaredSchemaVersions(item, key));
+  if (value === null || typeof value !== "object") return [];
+  const result: string[] = [];
+  for (const [childKey, child] of Object.entries(value)) {
+    if ((key === "properties" && childKey === "schema_version") || childKey === "schemaVersion") {
+      if (
+        child !== null &&
+        typeof child === "object" &&
+        "const" in child &&
+        typeof child.const === "string"
+      )
+        result.push(child.const);
+    }
+    result.push(...declaredSchemaVersions(child, childKey));
+  }
+  return result;
+}
+
+function crossFamilyResolution(snapshot: RepositorySnapshot) {
+  return snapshot.links
+    .filter(({ value }) => value.relation_type === "assigns_function_to")
+    .map(({ value }) => ({
+      link_id: value.link_id,
+      source: findObjects(snapshot, value.source_id).map(({ id, kind, corpus_id }) => ({
+        id,
+        kind,
+        corpus_id,
+      })),
+      evidence: value.evidence_refs.flatMap((id) =>
+        findObjects(snapshot, id, ["passage"]).map(({ kind, corpus_id }) => ({
+          id,
+          kind,
+          corpus_id,
+        })),
+      ),
+    }))
+    .sort((left, right) => left.link_id.localeCompare(right.link_id));
+}
+
 describe("authority isolation", () => {
   test("discovers normative schema identities only from schemas/", () => {
     const authority = loadAuthorityIndex(ROOT);
@@ -46,14 +96,34 @@ describe("authority isolation", () => {
     }
   });
 
-  test("every blocking invariant has authority metadata without a vocabulary payload", () => {
+  test("every blocking invariant resolves to its declared authority without owning vocabulary", () => {
+    const authority = loadAuthorityIndex(ROOT);
     expect(INVARIANTS.length).toBeGreaterThan(20);
     for (const invariant of INVARIANTS) {
       expect(invariant.code).toMatch(/^[A-Z0-9_]+$/);
-      expect(invariant.authority.source.length).toBeGreaterThan(0);
+      const source = join(ROOT, invariant.authority.source);
+      expect(existsSync(source), `${invariant.code}: ${invariant.authority.source}`).toBe(true);
       expect(invariant.authority.section.length).toBeGreaterThan(0);
       expect(invariant).not.toHaveProperty("allowed_values");
       expect(invariant).not.toHaveProperty("vocabulary");
+      if (invariant.authority.kind === "schema") {
+        const schema = [...authority.schemas.values()].find(
+          (candidate) => candidate.file === invariant.authority.source,
+        );
+        expect(schema, invariant.code).toBeDefined();
+        expect(schema?.id).toBe(`https://writ.example/${invariant.authority.source}`);
+        expect(invariant.authority.version).toBeDefined();
+        expect(declaredSchemaVersions(schema?.document)).toContain(invariant.authority.version!);
+      } else if (invariant.authority.kind === "adr") {
+        expect(invariant.authority.source).toBe("adr/0019-cross-family-interoperability.md");
+        expect(readFileSync(source, "utf8")).toContain("**Status:** Accepted");
+      } else if (invariant.authority.kind === "meta") {
+        expect(invariant.authority.source).toBe("adr/0020-deterministic-pre-merge-verification.md");
+        expect(readFileSync(source, "utf8")).toContain("**Status:** Accepted");
+      } else if (invariant.authority.kind === "core_contract") {
+        expect(invariant.authority.source).toBe("packages/domain/src/judgments.ts");
+        expect(invariant.authority.version).toBe("0.2.0");
+      }
     }
   });
 
@@ -105,6 +175,42 @@ describe("workflow adapter versions", () => {
       "INTEROP_QUEUE_INVALID",
     );
   });
+
+  test("fails closed on malformed supported institutional migrations", () => {
+    const malformed = parseInstitutionalMigrationDocument(
+      {
+        schema_version: "1.0.0",
+        approved_id_renames: [{ previous_draft_id: "old" }],
+      },
+      "migration.yaml",
+      "test.institution",
+    );
+    expect(codes({ issues: malformed.issues })).toContain("PROVENANCE_MIGRATION_INVALID");
+    expect(malformed.renames).toEqual([]);
+
+    const supported = parseInstitutionalMigrationDocument(
+      {
+        schema_version: "1.0.0",
+        stage_b_review: {
+          approved_id_renames: [{ previous_draft_id: "old", approved_id: "active" }],
+        },
+      },
+      "migration.yaml",
+      "test.institution",
+    );
+    expect(supported.issues).toEqual([]);
+    expect(
+      supported.renames.map(({ previous_id, active_id }) => ({ previous_id, active_id })),
+    ).toEqual([{ previous_id: "old", active_id: "active" }]);
+
+    const future = parseInstitutionalMigrationDocument(
+      { schema_version: "2.0.0" },
+      "migration.yaml",
+      "test.institution",
+    );
+    expect(codes({ issues: future.issues })).toContain("VERIFIER_UNSUPPORTED_CONTRACT");
+    expect(codes({ issues: future.issues })).not.toContain("PROVENANCE_MIGRATION_INVALID");
+  });
 });
 
 describe("current repository", () => {
@@ -112,6 +218,28 @@ describe("current repository", () => {
     const result = verifySnapshot(baseline, "all", { runExternalChecks: false });
     expect(result.passed).toBe(true);
     expect(result.gates.every((gate) => gate.passed)).toBe(true);
+  });
+
+  test("loads externally routed evidence identically when catalog order is reversed", () => {
+    const root = mkdtempSync(join(tmpdir(), "writ-reversed-catalog-"));
+    symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
+    symlinkSync(join(ROOT, "docs"), join(root, "docs"));
+    mkdirSync(join(root, "corpora"));
+    for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+      }
+    }
+    const reversedCatalog = structuredClone(baseline.catalog);
+    reversedCatalog.native_corpora.reverse();
+    writeFileSync(
+      join(root, "corpora", "catalog.yaml"),
+      Bun.YAML.stringify(reversedCatalog, null, 2),
+    );
+
+    const reversed = loadRepository(root).snapshot;
+    expect(reversed.loadIssues).toEqual([]);
+    expect(crossFamilyResolution(reversed)).toEqual(crossFamilyResolution(baseline));
   });
 });
 
@@ -189,7 +317,7 @@ describe("interoperability negative fixtures", () => {
     expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_UNRESOLVED_ACTIVE");
   });
 
-  test("rejects stored inverse links but permits active links outside a historical queue", () => {
+  test("rejects an exact reverse duplicate of the same ADR 0019 relation", () => {
     const inverse = clone();
     const template = crossFamilyLink(inverse);
     inverse.links.push({
@@ -202,53 +330,229 @@ describe("interoperability negative fixtures", () => {
       },
     });
     expect(codes(verifyInteroperability(inverse))).toContain("INTEROP_INVERSE_DUPLICATE");
+  });
 
+  test("permits reversed endpoints when the two ADR 0019 relations are semantically distinct", () => {
+    const snapshot = clone();
+    const template = crossFamilyLink(snapshot);
+    const identityTemplate = snapshot.institutionalRecords.find(
+      ({ value }) => value.institutional_fact_type === "identity",
+    )!;
+    const functionTemplate = snapshot.institutionalRecords.find(
+      ({ value }) => value.institutional_fact_type === "function",
+    )!;
+    const identity = {
+      ...identityTemplate.value,
+      record_id: "synthetic_dual_identity",
+      institution_id: "synthetic_dual",
+    } as AtomicInstitutionalRecord;
+    const institutionFunction = {
+      ...functionTemplate.value,
+      record_id: "synthetic_dual",
+      institution_id: "synthetic_dual",
+    } as AtomicInstitutionalRecord;
+    for (const value of [identity, institutionFunction]) {
+      const loaded = { ...identityTemplate, value };
+      snapshot.records.push(loaded);
+      snapshot.institutionalRecords.push(loaded);
+      snapshot.objects.push({
+        id: value.record_id,
+        kind: "record",
+        value: value as unknown as Record<string, unknown>,
+        file: `synthetic/${value.record_id}.writ`,
+        corpus_id: loaded.corpus_id,
+        aliases: [],
+      });
+    }
+    const forward: RecordLink = {
+      ...template.value,
+      link_id: "synthetic_distinct_forward",
+      target_id: "synthetic_dual",
+      target_kind: "institution",
+    };
+    const reverse: RecordLink = {
+      ...template.value,
+      link_id: "synthetic_distinct_reverse",
+      source_id: "synthetic_dual",
+      source_kind: "institutional_function",
+      target_id: template.value.source_id,
+      target_kind: "legal_policy_provision",
+      relation_type: "derives_authority_from",
+    };
+    delete forward.supporting_record_ids;
+    delete reverse.supporting_record_ids;
+    snapshot.links.push({ ...template, value: forward }, { ...template, value: reverse });
+
+    expect(codes(verifyOntology(snapshot))).not.toContain("ONTOLOGY_INVALID_SOURCE_KIND");
+    expect(codes(verifyOntology(snapshot))).not.toContain("ONTOLOGY_INVALID_TARGET_KIND");
+    expect(codes(verifyInteroperability(snapshot))).not.toContain("INTEROP_INVERSE_DUPLICATE");
+  });
+
+  test("permits active links created outside a historical queue", () => {
     const outsideQueue = clone();
     outsideQueue.queues = [];
     expect(codes(verifyInteroperability(outsideQueue))).not.toContain(
       "INTEROP_ACTIVE_SET_MISMATCH",
     );
   });
+
+  test("reports ambiguity only when a scoped reference resolves more than once", () => {
+    const ambiguous = clone();
+    const link = crossFamilyLink(ambiguous);
+    const source = findObjects(ambiguous, link.value.source_id)[0]!;
+    ambiguous.objects.push({ ...source, file: "synthetic/duplicate-source.yaml" });
+    expect(codes(verifyInteroperability(ambiguous))).toContain("INTEROP_REFERENCE_AMBIGUOUS");
+
+    const unreferenced = clone();
+    unreferenced.objects.push(
+      {
+        id: "unused_duplicate",
+        kind: "record",
+        value: {},
+        file: "synthetic/unused-a.yaml",
+        corpus_id: "synthetic",
+        aliases: [],
+      },
+      {
+        id: "unused_duplicate",
+        kind: "record",
+        value: {},
+        file: "synthetic/unused-b.yaml",
+        corpus_id: "synthetic",
+        aliases: [],
+      },
+    );
+    expect(codes(verifyInteroperability(unreferenced))).not.toContain(
+      "INTEROP_REFERENCE_AMBIGUOUS",
+    );
+  });
 });
 
 describe("provenance negative fixtures", () => {
-  test("rejects an approved link without an accepted disposition", () => {
+  test("requires dispositions only for ADR 0019 links", () => {
     const snapshot = clone();
     const target = crossFamilyLink(snapshot).value.link_id;
     snapshot.judgments = snapshot.judgments.filter(
       ({ value }) => !(value.target_id === target && value.status === "accepted"),
     );
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_MISSING");
+
+    const nonAdr = clone();
+    const partOf = nonAdr.links.find(({ value }) => value.relation_type === "part_of")!;
+    nonAdr.judgments = nonAdr.judgments.filter(
+      ({ value }) => !(value.target_id === partOf.value.link_id && value.status === "accepted"),
+    );
+    expect(codes(verifyProvenance(nonAdr))).not.toContain("PROVENANCE_DISPOSITION_MISSING");
   });
 
-  test("rejects human attribution on preserved automated proposal history", () => {
+  test("does not accept an unrelated accepted judgment as a link disposition", () => {
+    const snapshot = clone();
+    const target = crossFamilyLink(snapshot).value.link_id;
+    const disposition = snapshot.judgments.find(
+      ({ value }) => value.target_id === target && value.status === "accepted",
+    )!;
+    disposition.value.judgment_type = "review_disposition";
+    expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_MISSING");
+  });
+
+  test("uses explicit proposal metadata for automation attribution", () => {
     const snapshot = clone();
     const proposal = snapshot.judgments.find(({ value }) =>
       value.judgment_id.endsWith("_proposal"),
     )!;
     proposal.value.reviewer = "Sara Kim";
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_AUTOMATION_ATTRIBUTION");
+
+    const humanHistory = clone();
+    const current = humanHistory.judgments.find(
+      ({ value }) =>
+        value.target_kind === "record" &&
+        value.status === "accepted" &&
+        (value.supersedes_judgment_ids?.length ?? 0) === 0,
+    )!;
+    const priorValue: CurrentRecordJudgment = {
+      ...current.value,
+      judgment_id: "synthetic_prior_human_judgment",
+      reviewer: current.value.reviewer,
+      status: "superseded",
+      superseded_by_judgment_id: current.value.judgment_id,
+    };
+    delete priorValue.supersedes_judgment_ids;
+    current.value.supersedes_judgment_ids = [priorValue.judgment_id];
+    humanHistory.judgments.push({ ...current, value: priorValue });
+    const result = verifyProvenance(humanHistory);
+    expect(codes(result)).not.toContain("PROVENANCE_AUTOMATION_ATTRIBUTION");
+    expect(codes(result)).not.toContain("PROVENANCE_SUPERSESSION_INVALID");
   });
 
-  test("rejects broken supersession and active previous IDs", () => {
+  test("rejects broken supersession", () => {
     const broken = clone();
     const accepted = broken.judgments.find(
       ({ value }) => (value.supersedes_judgment_ids?.length ?? 0) > 0,
     )!;
     accepted.value.supersedes_judgment_ids = ["missing_proposal"];
     expect(codes(verifyProvenance(broken))).toContain("PROVENANCE_SUPERSESSION_INVALID");
+  });
 
-    const migrated = clone();
-    const migration = migrated.migrations.find(
+  test("rejects legacy IDs on active surfaces but permits historical preservation", () => {
+    const active = clone();
+    const migration = active.migrations.find(
       (item) => item.previous_id === "eu_ai_office_technical_documentation_receipt",
     )!;
-    const template = migrated.records.find(({ value }) => value.record_id === migration.active_id)!;
-    migrated.records.push({
-      ...template,
-      value: { ...template.value, record_id: migration.previous_id },
+    crossFamilyLink(active).value.supporting_record_ids = [migration.previous_id];
+    expect(codes(verifyProvenance(active))).toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+
+    const historical = clone();
+    const activeRecord = historical.records.find(
+      ({ value }) => value.record_id === migration.active_id,
+    )!;
+    historical.records.push({
+      ...activeRecord,
+      value: {
+        ...activeRecord.value,
+        record_id: migration.previous_id,
+        review_state: "superseded",
+      },
     });
-    expect(codes(verifyProvenance(migrated))).toContain("PROVENANCE_ACTIVE_LEGACY_ID");
-    expect(codes(verifyProvenance(clone()))).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+    const linkTemplate = crossFamilyLink(historical);
+    historical.links.push({
+      ...linkTemplate,
+      value: {
+        ...linkTemplate.value,
+        link_id: "synthetic_historical_link",
+        source_id: migration.previous_id,
+        supporting_record_ids: [migration.previous_id],
+        review_state: "superseded",
+      },
+    });
+    const current = historical.judgments.find(
+      ({ value }) => value.target_kind === "record" && value.target_id === migration.active_id,
+    )!;
+    const historicalJudgment: CurrentRecordJudgment = {
+      ...current.value,
+      judgment_id: "synthetic_historical_judgment",
+      target_id: migration.previous_id,
+      status: "superseded",
+      superseded_by_judgment_id: current.value.judgment_id,
+    };
+    delete historicalJudgment.supersedes_judgment_ids;
+    current.value.supersedes_judgment_ids = [historicalJudgment.judgment_id];
+    historical.judgments.push({ ...current, value: historicalJudgment });
+    const result = verifyProvenance(historical);
+    expect(codes(result)).not.toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+    expect(codes(result)).not.toContain("PROVENANCE_JUDGMENT_TARGET_NOT_FOUND");
+  });
+
+  test("reports ambiguous judgment references without imposing global uniqueness", () => {
+    const snapshot = clone();
+    const judgment = snapshot.judgments.find(
+      ({ value }) => value.target_kind === "record" && value.status === "accepted",
+    )!;
+    const target = snapshot.records.find(
+      ({ value }) => value.record_id === judgment.value.target_id,
+    )!;
+    snapshot.records.push({ ...target, file: "synthetic/duplicate-target.writ" });
+    expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_REFERENCE_AMBIGUOUS");
   });
 });
 

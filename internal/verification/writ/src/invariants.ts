@@ -87,6 +87,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: adr19("Canonical institutional identity"),
   },
   {
+    code: "INTEROP_REFERENCE_AMBIGUOUS",
+    gate: "interoperability",
+    authority: mechanical("Declared reference resolution"),
+  },
+  {
     code: "INTEROP_SUPPORT_NOT_FOUND",
     gate: "interoperability",
     authority: schema("schemas/core/record-link.schema.json", "1.0.0", "supporting_record_ids"),
@@ -157,6 +162,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: schema("schemas/analysis/record-judgment.schema.json", "0.2.0", "target_id"),
   },
   {
+    code: "PROVENANCE_REFERENCE_AMBIGUOUS",
+    gate: "provenance",
+    authority: mechanical("Declared reference resolution"),
+  },
+  {
     code: "PROVENANCE_SUPERSESSION_INVALID",
     gate: "provenance",
     authority: {
@@ -175,6 +185,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     code: "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
     gate: "provenance",
     authority: adr19("Approved identifier migration"),
+  },
+  {
+    code: "PROVENANCE_MIGRATION_INVALID",
+    gate: "provenance",
+    authority: meta("Exact workflow adapter support"),
   },
   {
     code: "INTEGRITY_CATALOG_INVALID",

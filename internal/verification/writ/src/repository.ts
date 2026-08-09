@@ -29,12 +29,14 @@ const CATALOG_SCHEMA = "https://writ.example/schemas/core/corpus-catalog.schema.
 const MANIFEST_SCHEMA = "https://writ.example/schemas/core/corpus-manifest.schema.json";
 const RECORD_LINK_SCHEMA = "https://writ.example/schemas/core/record-link.schema.json";
 const RECORD_JUDGMENT_SCHEMA = "https://writ.example/schemas/analysis/record-judgment.schema.json";
+const INSTITUTIONAL_RECORD_SCHEMA =
+  "https://writ.example/schemas/extensions/institutional-record.schema.json";
 const REVIEWED_DOCUMENT_SCHEMA =
   "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json";
 
 const adapterKey = (id: string, version: string): string => `${id}::${version}`;
 const SUPPORTED_RECORD_ADAPTERS = new Set([
-  adapterKey("https://writ.example/schemas/extensions/institutional-record.schema.json", "0.2.0"),
+  adapterKey(INSTITUTIONAL_RECORD_SCHEMA, "0.2.0"),
   adapterKey("https://writ.example/schemas/extensions/legal-policy-record.schema.json", "0.2.0"),
   adapterKey(
     "https://writ.example/schemas/compatibility/record-grammar-v0.1/legal-policy-record.schema.json",
@@ -296,48 +298,102 @@ function discoverQueues(root: string): { queues: MappingQueue[]; issues: Verific
   return { queues, issues };
 }
 
-function migrationRenames(
+export function parseInstitutionalMigrationDocument(
   value: Record<string, unknown>,
   file: string,
   corpusId: string,
-): MigrationRename[] {
-  const result: MigrationRename[] = [];
-  for (const candidate of Array.isArray(value.post_review_id_renames)
-    ? value.post_review_id_renames
-    : []) {
-    if (
-      !object(candidate) ||
-      typeof candidate.previous_approved_id !== "string" ||
-      typeof candidate.active_id !== "string"
-    )
-      continue;
-    result.push({
-      previous_id: candidate.previous_approved_id,
-      active_id: candidate.active_id,
-      ...(typeof candidate.review_artifact === "string"
-        ? { review_artifact: candidate.review_artifact }
-        : {}),
-      file,
-      corpus_id: corpusId,
-    });
+): { renames: MigrationRename[]; issues: VerificationIssue[] } {
+  const renames: MigrationRename[] = [];
+  const issues: VerificationIssue[] = [];
+  const invalid = (message: string): void => {
+    issues.push(
+      issue("provenance", "PROVENANCE_MIGRATION_INVALID", message, {
+        corpus_id: corpusId,
+        file,
+      }),
+    );
+  };
+  if (typeof value.schema_version !== "string") {
+    invalid("Native institutional migration must declare schema_version.");
+    return { renames, issues };
   }
-  for (const candidate of Array.isArray(value.approved_id_renames)
-    ? value.approved_id_renames
-    : []) {
-    if (
-      !object(candidate) ||
-      typeof candidate.previous_draft_id !== "string" ||
-      typeof candidate.approved_id !== "string"
-    )
-      continue;
-    result.push({
-      previous_id: candidate.previous_draft_id,
-      active_id: candidate.approved_id,
-      file,
-      corpus_id: corpusId,
-    });
+  if (value.schema_version !== "1.0.0") {
+    issues.push(
+      issue(
+        "integrity",
+        "VERIFIER_UNSUPPORTED_CONTRACT",
+        `I recognize the native institutional migration workflow identity, but I do not have verified support for declared version ${value.schema_version}.`,
+        { corpus_id: corpusId, file },
+      ),
+    );
+    return { renames, issues };
   }
-  return result;
+
+  const parseApprovedRenames = (container: Record<string, unknown>, field: string): void => {
+    if (!("approved_id_renames" in container)) return;
+    if (!Array.isArray(container.approved_id_renames)) {
+      invalid(`${field}.approved_id_renames must be an array.`);
+      return;
+    }
+    for (const [index, candidate] of container.approved_id_renames.entries()) {
+      if (
+        !object(candidate) ||
+        typeof candidate.previous_draft_id !== "string" ||
+        candidate.previous_draft_id.length === 0 ||
+        typeof candidate.approved_id !== "string" ||
+        candidate.approved_id.length === 0
+      ) {
+        invalid(
+          `${field}.approved_id_renames[${index}] must declare non-empty previous_draft_id and approved_id.`,
+        );
+        continue;
+      }
+      renames.push({
+        previous_id: candidate.previous_draft_id,
+        active_id: candidate.approved_id,
+        file,
+        corpus_id: corpusId,
+      });
+    }
+  };
+
+  parseApprovedRenames(value, "migration");
+  if ("stage_b_review" in value) {
+    if (!object(value.stage_b_review)) invalid("stage_b_review must be an object when present.");
+    else parseApprovedRenames(value.stage_b_review, "stage_b_review");
+  }
+
+  if ("post_review_id_renames" in value) {
+    if (!Array.isArray(value.post_review_id_renames)) {
+      invalid("post_review_id_renames must be an array.");
+    } else {
+      for (const [index, candidate] of value.post_review_id_renames.entries()) {
+        if (
+          !object(candidate) ||
+          typeof candidate.previous_approved_id !== "string" ||
+          candidate.previous_approved_id.length === 0 ||
+          typeof candidate.active_id !== "string" ||
+          candidate.active_id.length === 0 ||
+          (candidate.review_artifact !== undefined && typeof candidate.review_artifact !== "string")
+        ) {
+          invalid(
+            `post_review_id_renames[${index}] must declare non-empty previous_approved_id and active_id, with a string review_artifact when present.`,
+          );
+          continue;
+        }
+        renames.push({
+          previous_id: candidate.previous_approved_id,
+          active_id: candidate.active_id,
+          ...(typeof candidate.review_artifact === "string"
+            ? { review_artifact: candidate.review_artifact }
+            : {}),
+          file,
+          corpus_id: corpusId,
+        });
+      }
+    }
+  }
+  return { renames, issues };
 }
 
 export interface LoadRepositoryResult {
@@ -442,11 +498,21 @@ export function loadRepository(root: string): LoadRepositoryResult {
         for (const absolute of expandLocation(root, entry, category, location, loadIssues)) {
           const label = relative(root, absolute);
           // A physical compatibility document may be listed by its owning corpus and
-          // by an institutional consumer. Load it once per category under its real owner.
+          // by an institutional consumer. Its canonical owner controls parsing and
+          // validation regardless of which route is encountered first.
+          const ownerCorpus = ownerForFile(root, entries, absolute) ?? manifest.corpus_id;
+          const governingManifest =
+            manifests.find((candidate) => candidate.value.corpus_id === ownerCorpus) ??
+            loadedManifest;
+          const governingContract = governingManifest.value.record_contract;
+          if (
+            classifyRecordContract(authority, governingContract.id, governingContract.version) !==
+            "supported"
+          )
+            continue;
           const routeKey = `${realpathSync(absolute)}\0${category}`;
           if (routed.has(routeKey)) continue;
           routed.add(routeKey);
-          const ownerCorpus = ownerForFile(root, entries, absolute) ?? manifest.corpus_id;
 
           if (absolute.endsWith(".writ")) {
             if (category !== "records" && category !== "judgments") continue;
@@ -460,7 +526,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
                   "integrity",
                   "INTEGRITY_CONTRACT_INVALID",
                   `Writ compilation failed: ${errors.map((item) => item.message).join("; ")}`,
-                  { corpus_id: manifest.corpus_id, file: label },
+                  { corpus_id: ownerCorpus, file: label },
                 ),
               );
               continue;
@@ -470,15 +536,15 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 loadIssues.push(
                   ...validateDocument(
                     authority,
-                    contract.id,
+                    governingContract.id,
                     record,
                     "INTEGRITY_CONTRACT_INVALID",
                     absolute,
                     root,
-                    manifest.corpus_id,
+                    ownerCorpus,
                   ),
                 );
-                const loaded = { value: record, file: label, corpus_id: manifest.corpus_id };
+                const loaded = { value: record, file: label, corpus_id: ownerCorpus };
                 records.push(loaded);
                 if (record.family === "institutional" && record.schema_version === "0.2.0")
                   institutionalRecords.push(loaded as Loaded<AtomicInstitutionalRecord>);
@@ -486,7 +552,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
                   record as unknown as Record<string, unknown>,
                   "record",
                   label,
-                  manifest.corpus_id,
+                  ownerCorpus,
                 );
                 if (recordObject) addObject(recordObject);
                 for (const evidence of record.evidence) {
@@ -495,7 +561,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     kind: "passage",
                     value: evidence as unknown as Record<string, unknown>,
                     file: label,
-                    corpus_id: manifest.corpus_id,
+                    corpus_id: ownerCorpus,
                     aliases: [],
                   });
                   addObject({
@@ -503,7 +569,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     kind: "source",
                     value: evidence as unknown as Record<string, unknown>,
                     file: label,
-                    corpus_id: manifest.corpus_id,
+                    corpus_id: ownerCorpus,
                     aliases: [evidence.document_version_id],
                   });
                 }
@@ -518,19 +584,19 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     "INTEGRITY_CONTRACT_INVALID",
                     absolute,
                     root,
-                    manifest.corpus_id,
+                    ownerCorpus,
                   ),
                 );
                 judgments.push({
                   value: judgment as CurrentRecordJudgment,
                   file: label,
-                  corpus_id: manifest.corpus_id,
+                  corpus_id: ownerCorpus,
                 });
                 const judgmentObject = indexed(
                   judgment as unknown as Record<string, unknown>,
                   "judgment",
                   label,
-                  manifest.corpus_id,
+                  ownerCorpus,
                 );
                 if (judgmentObject) addObject(judgmentObject);
               }
@@ -547,7 +613,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 "integrity",
                 "INTEGRITY_CONTRACT_INVALID",
                 `Cannot parse structured manifest location: ${String(error)}`,
-                { corpus_id: manifest.corpus_id, file: label },
+                { corpus_id: ownerCorpus, file: label },
               ),
             );
             continue;
@@ -558,18 +624,18 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 "integrity",
                 "INTEGRITY_CONTRACT_INVALID",
                 "Structured manifest location must contain an object.",
-                { corpus_id: manifest.corpus_id, file: label },
+                { corpus_id: ownerCorpus, file: label },
               ),
             );
             continue;
           }
           documents.push({ value, file: label, corpus_id: ownerCorpus, category });
 
-          if (contract.id === REVIEWED_DOCUMENT_SCHEMA) {
+          if (governingContract.id === REVIEWED_DOCUMENT_SCHEMA) {
             loadIssues.push(
               ...validateDocument(
                 authority,
-                contract.id,
+                governingContract.id,
                 value,
                 "INTEGRITY_CONTRACT_INVALID",
                 absolute,
@@ -609,34 +675,30 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 "INTEGRITY_CONTRACT_INVALID",
                 absolute,
                 root,
-                manifest.corpus_id,
+                ownerCorpus,
               ),
             );
             links.push({
               value: value as unknown as RecordLink,
               file: label,
-              corpus_id: manifest.corpus_id,
+              corpus_id: ownerCorpus,
             });
             const linkObject = indexed(
               { ...value, record_id: value.link_id },
               "record_link",
               label,
-              manifest.corpus_id,
+              ownerCorpus,
             );
             if (linkObject) addObject(linkObject);
-          } else if (category === "migration") {
-            if (typeof value.schema_version === "string" && value.schema_version !== "1.0.0") {
-              loadIssues.push(
-                issue(
-                  "integrity",
-                  "VERIFIER_UNSUPPORTED_CONTRACT",
-                  `I recognize the migration workflow identity, but I do not have verified support for declared version ${value.schema_version}.`,
-                  { corpus_id: manifest.corpus_id, file: label },
-                ),
-              );
-            } else {
-              migrations.push(...migrationRenames(value, label, manifest.corpus_id));
-            }
+          } else if (
+            category === "migration" &&
+            governingContract.kind === "native" &&
+            governingContract.id === INSTITUTIONAL_RECORD_SCHEMA &&
+            governingContract.version === "0.2.0"
+          ) {
+            const parsed = parseInstitutionalMigrationDocument(value, label, ownerCorpus);
+            migrations.push(...parsed.renames);
+            loadIssues.push(...parsed.issues);
           }
         }
       }

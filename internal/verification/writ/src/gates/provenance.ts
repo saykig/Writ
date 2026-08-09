@@ -3,7 +3,7 @@ import { join, relative } from "node:path";
 import { validateJudgmentSupersession } from "@writ/domain";
 
 import { findObjects } from "../repository.js";
-import { activeLinks } from "./ontology.js";
+import { activeLinks, isAdr0019Relation } from "./ontology.js";
 import {
   gateResult,
   issue,
@@ -24,37 +24,40 @@ function filesUnder(directory: string): string[] {
     .sort();
 }
 
-function reviewActors(root: string): { humans: Set<string>; automation: Set<string> } {
-  const humans = new Set<string>();
-  const automation = new Set<string>();
+function proposalJudgmentReviewers(root: string): Map<string, string> {
+  const proposalReviewers = new Map<string, string>();
   const directory = join(root, "docs", "migrations");
   for (const file of filesUnder(directory).filter((path) => path.endsWith("/human-review.yaml"))) {
     const value = Bun.YAML.parse(readFileSync(file, "utf8")) as unknown;
     if (!object(value)) continue;
-    if (value.review_type === "human" && typeof value.reviewer === "string")
-      humans.add(value.reviewer);
-    if (object(value.proposal_history) && typeof value.proposal_history.proposer === "string") {
-      automation.add(value.proposal_history.proposer);
+    const proposer = object(value.proposal_history) ? value.proposal_history.proposer : undefined;
+    if (typeof proposer !== "string" || !Array.isArray(value.decisions)) continue;
+    for (const decision of value.decisions) {
+      if (object(decision) && typeof decision.proposal_judgment_id === "string") {
+        proposalReviewers.set(decision.proposal_judgment_id, proposer);
+      }
     }
   }
-  return { humans, automation };
+  return proposalReviewers;
 }
 
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
   const links = activeLinks(snapshot);
-  const linkIds = new Set(snapshot.links.map(({ value }) => value.link_id));
-  const recordIds = new Set(snapshot.records.map(({ value }) => value.record_id));
   const judgmentIds = new Set(snapshot.judgments.map(({ value }) => value.judgment_id));
-  const acceptedByTarget = new Map<string, number>();
+  const historicalMigrationIds = new Set(
+    snapshot.migrations.map((migration) => migration.previous_id),
+  );
 
   for (const loaded of snapshot.judgments) {
     const judgment = loaded.value;
-    const targetExists =
+    const targetMatches =
       judgment.target_kind === "record_link"
-        ? linkIds.has(judgment.target_id)
-        : recordIds.has(judgment.target_id);
-    if (!targetExists) {
+        ? snapshot.links.filter(({ value }) => value.link_id === judgment.target_id)
+        : snapshot.records.filter(({ value }) => value.record_id === judgment.target_id);
+    const historicalMigratedTarget =
+      judgment.status === "superseded" && historicalMigrationIds.has(judgment.target_id);
+    if (targetMatches.length === 0 && !historicalMigratedTarget) {
       issues.push(
         issue(
           "provenance",
@@ -63,17 +66,33 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
         ),
       );
-    }
-    if (judgment.status === "accepted") {
-      acceptedByTarget.set(judgment.target_id, (acceptedByTarget.get(judgment.target_id) ?? 0) + 1);
+    } else if (targetMatches.length > 1) {
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_REFERENCE_AMBIGUOUS",
+          `Judgment target ${judgment.target_id} resolves to ${targetMatches.length} objects.`,
+          { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
+        ),
+      );
     }
     for (const evidenceId of judgment.evidence_refs) {
-      if (findObjects(snapshot, evidenceId, ["passage"]).length === 0) {
+      const evidenceMatches = findObjects(snapshot, evidenceId, ["passage"]);
+      if (evidenceMatches.length === 0) {
         issues.push(
           issue(
             "provenance",
             "PROVENANCE_EVIDENCE_NOT_FOUND",
             `Judgment evidence ${evidenceId} does not resolve.`,
+            { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
+          ),
+        );
+      } else if (evidenceMatches.length > 1) {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_REFERENCE_AMBIGUOUS",
+            `Judgment evidence ${evidenceId} resolves to ${evidenceMatches.length} passages.`,
             { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
           ),
         );
@@ -111,8 +130,16 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
 
   for (const loaded of links) {
     if (
+      isAdr0019Relation(loaded.value.relation_type) &&
       loaded.value.review_state === "approved" &&
-      (acceptedByTarget.get(loaded.value.link_id) ?? 0) === 0
+      !snapshot.judgments.some(
+        ({ value }) =>
+          value.target_kind === "record_link" &&
+          value.target_id === loaded.value.link_id &&
+          value.judgment_type === "record_link_disposition" &&
+          value.status === "accepted" &&
+          value.value === loaded.value.review_state,
+      )
     ) {
       issues.push(
         issue(
@@ -128,6 +155,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       );
     }
     if (
+      isAdr0019Relation(loaded.value.relation_type) &&
       loaded.value.review_state === "draft" &&
       snapshot.judgments.some(
         ({ value }) =>
@@ -152,36 +180,51 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
   }
 
-  const actors = reviewActors(snapshot.root);
-  const supersededProposalIds = new Set(
-    snapshot.judgments.flatMap(({ value }) => value.supersedes_judgment_ids ?? []),
-  );
+  const proposalReviewers = proposalJudgmentReviewers(snapshot.root);
   for (const loaded of snapshot.judgments) {
-    if (
-      supersededProposalIds.has(loaded.value.judgment_id) &&
-      actors.humans.has(loaded.value.reviewer) &&
-      !actors.automation.has(loaded.value.reviewer)
-    ) {
+    const expectedReviewer = proposalReviewers.get(loaded.value.judgment_id);
+    if (expectedReviewer && loaded.value.reviewer !== expectedReviewer) {
       issues.push(
         issue(
           "provenance",
           "PROVENANCE_AUTOMATION_ATTRIBUTION",
-          `Automated proposal history ${loaded.value.judgment_id} is attributed to known human reviewer ${loaded.value.reviewer}.`,
+          `Declared proposal judgment ${loaded.value.judgment_id} is attributed to ${loaded.value.reviewer}, not its recorded proposer ${expectedReviewer}.`,
           { corpus_id: loaded.corpus_id, object_id: loaded.value.judgment_id, file: loaded.file },
         ),
       );
     }
   }
 
+  const activeRecords = snapshot.records.filter(
+    ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
+  );
+  const activeJudgments = snapshot.judgments.filter(({ value }) => value.status !== "superseded");
   const activeReferences = new Set<string>([
-    ...snapshot.records.map(({ value }) => value.record_id),
-    ...snapshot.links.flatMap(({ value }) => [
+    ...activeRecords.flatMap(({ value }) => [
+      value.record_id,
+      ...value.subjects.map((subject) => subject.subject_id),
+      ...(value.family === "institutional" && "institution_id" in value
+        ? [
+            value.institution_id as string,
+            ...("parent_institution_id" in value && typeof value.parent_institution_id === "string"
+              ? [value.parent_institution_id]
+              : []),
+          ]
+        : []),
+      ...("parent_instrument_id" in value && typeof value.parent_instrument_id === "string"
+        ? [value.parent_instrument_id]
+        : []),
+      ...("related_provision_ids" in value && Array.isArray(value.related_provision_ids)
+        ? value.related_provision_ids.filter((id): id is string => typeof id === "string")
+        : []),
+    ]),
+    ...links.flatMap(({ value }) => [
       value.link_id,
       value.source_id,
       value.target_id,
       ...(value.supporting_record_ids ?? []),
     ]),
-    ...snapshot.judgments.flatMap(({ value }) => [value.target_id]),
+    ...activeJudgments.flatMap(({ value }) => [value.target_id]),
   ]);
   for (const migration of snapshot.migrations) {
     if (!activeReferences.has(migration.active_id)) {
