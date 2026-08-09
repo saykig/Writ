@@ -7,8 +7,8 @@ describe("wireframe dotted globe", () => {
     const style = markerLeaderStyle([-40, -15]);
 
     expect(style).toEqual({
-      width: "42.7200px",
-      transform: "rotate(0.35877rad)",
+      width: "32.7200px",
+      transform: "rotate(0.35877rad) translateX(10.0000px)",
     });
     expect(markerLeaderStyle([-40, -15])).toEqual(style);
   });
