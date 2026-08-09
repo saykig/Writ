@@ -265,6 +265,17 @@ describe("frontend architecture", () => {
     expect(globe).toContain("keyboardActive");
   });
 
+  test("corpus filters use the shared shadcn select treatment", () => {
+    const browser = read("components/corpus/corpus-browser.tsx");
+
+    expect(browser).toContain('from "@/components/ui/select"');
+    expect(browser).toContain("<SelectTrigger");
+    expect(browser).toContain("<SelectContent");
+    expect(browser).toContain('className="w-max min-w-(--anchor-width)"');
+    expect(browser).not.toContain("<select");
+    expect(browser).not.toContain("<option");
+  });
+
   test("the Lab runs the pilot readings against the traced snapshots", () => {
     const toolchain = read("lib/toolchain.ts");
     const evaluate = read("app/api/evaluate/route.ts");

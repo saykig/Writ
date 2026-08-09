@@ -10,6 +10,13 @@
 import * as React from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import {
   EMPTY_CORPUS_FILTERS,
@@ -44,21 +51,25 @@ function CompactSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex min-w-0 items-center gap-2 text-[0.76rem] text-muted-foreground">
+    <div className="flex min-w-0 items-center gap-2 text-[0.76rem] text-muted-foreground">
       <span className="shrink-0">{label}</span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="h-9 min-w-0 rounded-lg border border-input bg-background px-2.5 text-[0.78rem] text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
-      >
-        <option value="any">Any</option>
-        {values.map((option) => (
-          <option key={option} value={option}>
-            {humanizeCorpusValue(option)}
-          </option>
-        ))}
-      </select>
-    </label>
+      <Select value={value} onValueChange={(nextValue) => onChange(String(nextValue))}>
+        <SelectTrigger
+          className="h-9 min-w-28 bg-background px-2.5 text-[0.78rem] text-foreground"
+          aria-label={label}
+        >
+          <SelectValue>{value === "any" ? "Any" : humanizeCorpusValue(value)}</SelectValue>
+        </SelectTrigger>
+        <SelectContent align="start" className="w-max min-w-(--anchor-width)">
+          <SelectItem value="any">Any</SelectItem>
+          {values.map((option) => (
+            <SelectItem key={option} value={option}>
+              {humanizeCorpusValue(option)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
@@ -406,20 +417,29 @@ export function CorpusBrowser({
             ))}
           </div>
 
-          <label className="flex items-center gap-2 text-[0.76rem] text-muted-foreground">
-            Family
-            <select
+          <div className="flex items-center gap-2 text-[0.76rem] text-muted-foreground">
+            <span>Family</span>
+            <Select
               value={filters.family}
-              onChange={(event) =>
-                updateFamily(event.target.value as CorpusBrowserFilters["family"])
+              onValueChange={(value) =>
+                updateFamily(String(value) as CorpusBrowserFilters["family"])
               }
-              className="h-10 rounded-lg border border-input bg-background px-2.5 text-[0.78rem] text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
             >
-              <option value="all">All</option>
-              <option value="legal_policy">Legal policy</option>
-              <option value="institutional">Institutional</option>
-            </select>
-          </label>
+              <SelectTrigger
+                className="h-10 min-w-28 bg-background px-2.5 text-[0.78rem] text-foreground"
+                aria-label="Family"
+              >
+                <SelectValue>
+                  {filters.family === "all" ? "All" : humanizeCorpusValue(filters.family)}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent align="start">
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="legal_policy">Legal policy</SelectItem>
+                <SelectItem value="institutional">Institutional</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           <button
             type="button"
