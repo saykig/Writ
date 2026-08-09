@@ -1,8 +1,8 @@
 /**
  * The document's own words, and where they came from.
  *
- * Shared by the Lab, the Query evidence drawer and the Builder, so a passage
- * reads the same wherever it is met. Three states, and the third is the reason
+ * Shared by record-reading surfaces so a passage reads the same wherever it is
+ * met. Three states, and the third is the reason
  * this is a component rather than a blockquote:
  *
  *   - direct — the passage was recorded against this record;

@@ -18,8 +18,8 @@
  *   - `not_recorded` — nothing was recorded. Not a failure, and never coloured
  *     like one.
  *
- * The input is structural rather than a finished view, so the Builder can run
- * this over an unpublished draft and get the same seven answers the Lab gives.
+ * The input is structural rather than tied to a finished view, so shared record
+ * readers receive the same seven answers the Lab gives.
  */
 
 import type { ClaimFields } from "./demo-analysis-format.js";

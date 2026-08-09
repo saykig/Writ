@@ -11,9 +11,10 @@ describe("Start Here system walkthrough", () => {
     const startHere = nav.indexOf('label: "Start Here"');
 
     expect(startHere).toBeGreaterThan(-1);
-    for (const label of ["Corpus", "Build", "Lab"]) {
+    for (const label of ["Corpus", "Lab"]) {
       expect(startHere).toBeLessThan(nav.indexOf(`label: "${label}"`));
     }
+    expect(nav).not.toContain('label: "Build"');
     expect(nav).not.toContain('label: "How it works"');
     expect(read("app/how-it-works/page.tsx")).toContain('redirect("/start-here")');
   });
