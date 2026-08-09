@@ -69,30 +69,22 @@ The semantic packages for the domain model, evaluator, analyzer and provenance m
 
 ## Run Writ locally
 
-### Requirements
+Install [Git](https://git-scm.com/downloads) and [Bun 1.3+](https://bun.sh/docs/installation), then clone the repository and start the web interface:
 
-- Git
-- Bun 1.3+
-
-### 1. Clone Writ
-
+```bash
 git clone https://github.com/saykig/Writ.git
 cd Writ
-
-### 2. Install dependencies
-
 bun install
-
-### 3. Start the web interface
-
 bun run web
+```
 
-Then open http://localhost:3000.
+Then open `http://localhost:4317` in your browser. Docker is not required to run the web interface; the full development stack uses additional services.
 
 ### Full development environment
 
+```bash
 bun run dev
-
+```
 
 ## Which files are authoritative
 

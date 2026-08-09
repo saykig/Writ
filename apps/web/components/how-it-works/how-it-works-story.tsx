@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, Check, Copy, ExternalLink } from "lucide-react";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
 
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,11 @@ interface FoundationTopic {
 }
 
 const PIPELINE = ["SOURCE", "PASSAGE", "RECORD", "REVIEW", "CORPUS"];
+
+const LOCAL_SETUP_COMMANDS = `git clone https://github.com/saykig/Writ.git
+cd Writ
+bun install
+bun run web`;
 
 const STAGES: readonly StoryStageDefinition[] = [
   {
@@ -341,6 +346,91 @@ function TechnicalFoundations() {
   );
 }
 
+function HowToUseWrit() {
+  const [commandsCopied, setCommandsCopied] = useState(false);
+
+  async function copyLocalSetupCommands() {
+    await navigator.clipboard.writeText(LOCAL_SETUP_COMMANDS);
+    setCommandsCopied(true);
+    window.setTimeout(() => setCommandsCopied(false), 2000);
+  }
+
+  return (
+    <section className="hiw-use" aria-labelledby="hiw-use-title">
+      <header className="hiw-use-header">
+        <h2 id="hiw-use-title">How do I use Writ?</h2>
+        <p>Writ can be used directly on the web or run locally from its open-source repository.</p>
+      </header>
+
+      <div className="hiw-use-paths">
+        <article className="hiw-use-path hiw-use-path--online">
+          <div>
+            <h3>Use online</h3>
+            <p>
+              No installation required. Explore reviewed records, corpora and their evidence in Writ
+              Lab.
+            </p>
+          </div>
+          <Button
+            className="hiw-use-primary"
+            nativeButton={false}
+            render={
+              <Link href="/lab">
+                Open Writ Lab <ArrowRight aria-hidden data-icon="inline-end" />
+              </Link>
+            }
+          />
+        </article>
+
+        <article className="hiw-use-path hiw-use-path--local">
+          <div>
+            <h3>Run locally</h3>
+            <p>Run the Writ web interface from the repository on your own computer.</p>
+            <p className="hiw-use-requirements">Requires Git · Bun 1.3+</p>
+          </div>
+
+          <div className="hiw-use-terminal">
+            <div className="hiw-use-terminal-header">
+              <span>Repository quickstart</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hiw-use-copy"
+                onClick={copyLocalSetupCommands}
+                aria-label={
+                  commandsCopied ? "Local setup commands copied" : "Copy local setup commands"
+                }
+              >
+                {commandsCopied ? <Check aria-hidden /> : <Copy aria-hidden />}
+                <span aria-live="polite">{commandsCopied ? "Copied" : "Copy"}</span>
+              </Button>
+            </div>
+            <pre>
+              <code>{LOCAL_SETUP_COMMANDS}</code>
+            </pre>
+          </div>
+
+          <p className="hiw-use-open">
+            Then open <code>http://localhost:4317</code> in your browser.
+          </p>
+          <p className="hiw-use-note">
+            Docker is not required to run the web interface. The full development stack uses
+            additional services.
+          </p>
+          <a
+            className="hiw-use-repository"
+            href="https://github.com/saykig/Writ"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            View repository <ExternalLink aria-hidden />
+          </a>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 export function HowItWorksStory() {
   const storyRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion() ?? false;
@@ -417,6 +507,8 @@ export function HowItWorksStory() {
         </div>
       </div>
 
+      <HowToUseWrit />
+
       <section className="hiw-families" aria-labelledby="hiw-families-title">
         <div className="hiw-section-intro">
           <p className="hiw-kicker">Shared grammar, distinct meaning</p>
@@ -492,22 +584,6 @@ export function HowItWorksStory() {
 
       <section className="hiw-details-and-close">
         <TechnicalFoundations />
-        <div className="hiw-close">
-          <p>Ready to inspect a real record?</p>
-          <div>
-            <Button
-              nativeButton={false}
-              render={
-                <Link href="/lab">
-                  Explore in Writ Lab <ArrowRight aria-hidden data-icon="inline-end" />
-                </Link>
-              }
-            />
-            <Link className="hiw-secondary-link" href="/">
-              Return home
-            </Link>
-          </div>
-        </div>
       </section>
     </main>
   );

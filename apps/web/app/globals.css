@@ -2370,6 +2370,7 @@
 
 .hiw-opening,
 .hiw-story,
+.hiw-use,
 .hiw-families,
 .hiw-refusals,
 .hiw-details-and-close {
@@ -2384,7 +2385,6 @@
   align-items: center;
   gap: clamp(3rem, 8vw, 8rem);
   padding-block: clamp(5rem, 12vh, 9rem);
-  border-bottom: 1px solid var(--border);
 }
 
 .hiw-opening-copy {
@@ -2483,7 +2483,7 @@
   display: grid;
   grid-template-columns: 8.5rem minmax(20rem, 28rem) minmax(29rem, 1fr);
   gap: clamp(1.5rem, 3vw, 3.25rem);
-  padding-block: 7rem;
+  padding: 7rem 0 3rem;
 }
 
 .hiw-stage-rail {
@@ -3056,7 +3056,6 @@
   grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
   gap: clamp(3rem, 8vw, 8rem);
   padding-block: clamp(7rem, 14vh, 11rem);
-  border-top: 1px solid var(--border);
 }
 
 .hiw-section-intro h2 {
@@ -3189,7 +3188,6 @@
 
 .hiw-details-and-close {
   padding-block: 4rem 8rem;
-  border-top: 1px solid var(--border);
 }
 
 .hiw-technical {
@@ -3426,31 +3424,157 @@
   outline-offset: 0.25rem;
 }
 
-.hiw-close {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-top: 5rem;
+.hiw-use {
+  padding-block: clamp(3rem, 6vw, 5rem) clamp(7rem, 14vh, 11rem);
 }
 
-.hiw-close > p {
-  max-width: 16ch;
-  font-size: clamp(2rem, 3.6vw, 4rem);
+.hiw-use-header {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.8fr) minmax(18rem, 1fr);
+  gap: 3rem;
+  align-items: end;
+  padding-bottom: 2.75rem;
+}
+
+.hiw-use-header h2 {
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 4.4vw, 4.6rem);
   font-weight: 600;
-  line-height: 1;
+  line-height: 0.98;
   letter-spacing: -0.035em;
 }
 
-.hiw-close > div {
+.hiw-use-header p {
+  max-width: 38rem;
+  color: var(--muted-foreground);
+  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  line-height: 1.65;
+}
+
+.hiw-use-paths {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.hiw-use-path {
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 3.5rem);
+}
+
+.hiw-use-path h3 {
+  font-size: clamp(1.65rem, 2.4vw, 2.35rem);
+  font-weight: 580;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.hiw-use-path h3 + p {
+  max-width: 36rem;
+  margin-top: 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.hiw-use-path--online {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.hiw-use-primary {
+  min-height: 2.75rem;
+  width: max-content;
+  padding-inline: 1rem;
+}
+
+.hiw-use-path--local {
+  display: grid;
   gap: 1.5rem;
 }
 
-.hiw-secondary-link {
+.hiw-use-requirements {
+  margin-top: 1.4rem;
+  color: var(--foreground);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+}
+
+.hiw-use-terminal {
+  min-width: 0;
+  border-block: 1px solid var(--border);
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+}
+
+.hiw-use-terminal-header {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0.5rem 0.35rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hiw-use-terminal-header > span {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hiw-use-copy {
+  color: var(--muted-foreground);
+}
+
+.hiw-use-terminal pre {
+  min-width: 0;
+  margin: 0;
+  padding: 1.2rem 1rem 1.35rem;
+  overflow: hidden;
+}
+
+.hiw-use-terminal code {
+  display: block;
+  color: color-mix(in srgb, var(--foreground) 88%, var(--primary));
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.hiw-use-open,
+.hiw-use-note {
+  max-width: 60ch;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.hiw-use-open code {
+  color: var(--foreground);
+  font-family: var(--font-mono), monospace;
+  overflow-wrap: anywhere;
+}
+
+.hiw-use-note {
+  margin-top: -0.85rem;
+}
+
+.hiw-use-repository {
+  display: inline-flex;
+  min-height: 2.75rem;
+  width: max-content;
+  align-items: center;
+  gap: 0.45rem;
   color: var(--muted-foreground);
   font-size: 0.82rem;
+  font-weight: 600;
   text-decoration: underline;
   text-decoration-color: var(--border);
   text-underline-offset: 4px;
@@ -3459,8 +3583,13 @@
     text-decoration-color 160ms ease;
 }
 
-.hiw-secondary-link:hover,
-.hiw-secondary-link:focus-visible {
+.hiw-use-repository svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.hiw-use-repository:hover,
+.hiw-use-repository:focus-visible {
   color: var(--foreground);
   text-decoration-color: var(--foreground);
 }
@@ -3524,7 +3653,7 @@
 
   .hiw-story {
     display: block;
-    padding-block: 5rem 8rem;
+    padding: 5rem 0 3rem;
   }
 
   .hiw-stage-rail,
@@ -3579,6 +3708,19 @@
   .hiw-technical > header h2 {
     max-width: none;
   }
+
+  .hiw-use-header {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .hiw-use-header h2 {
+    max-width: none;
+  }
+
+  .hiw-use-paths {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -3586,6 +3728,7 @@
   .hiw-story,
   .hiw-families,
   .hiw-refusals,
+  .hiw-use,
   .hiw-details-and-close {
     width: min(calc(100% - 2rem), 76rem);
   }
@@ -3720,13 +3863,24 @@
     gap: 0.25rem;
   }
 
-  .hiw-close {
-    display: grid;
+  .hiw-use {
+    padding-block: 2rem 6rem;
   }
 
-  .hiw-close > div {
-    align-items: flex-start;
-    flex-direction: column;
+  .hiw-use-header h2 {
+    font-size: 2.7rem;
+  }
+
+  .hiw-use-path {
+    padding: 2rem 0;
+  }
+
+  .hiw-use-copy {
+    min-height: 2.75rem;
+  }
+
+  .hiw-use-terminal pre {
+    padding-inline: 0.85rem;
   }
 }
 
