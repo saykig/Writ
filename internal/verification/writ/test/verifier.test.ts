@@ -21,10 +21,12 @@ import {
   gateResult,
   loadAuthorityIndex,
   loadRepository,
+  normalizeCommandOutput,
   parseCrossFamilyHumanReviewDocument,
   parseInstitutionalMigrationDocument,
   parseMappingQueueFile,
   repositoryRoot,
+  resolveWorkspacePath,
   renderVerificationJson,
   renderVerificationText,
   runVerification,
@@ -40,6 +42,38 @@ import {
 
 const ROOT = repositoryRoot(import.meta.dir);
 const baseline = loadRepository(ROOT).snapshot;
+
+function linkedCandidateWorkspace(prefix: string): string {
+  const root = mkdtempSync(join(tmpdir(), prefix));
+  symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
+  mkdirSync(join(root, "docs", "migrations", "cross-family-interoperability"), {
+    recursive: true,
+  });
+  for (const artifact of ["mapping-queue.yaml", "human-review.yaml"]) {
+    writeFileSync(
+      join(root, "docs", "migrations", "cross-family-interoperability", artifact),
+      readFileSync(join(ROOT, "docs", "migrations", "cross-family-interoperability", artifact)),
+    );
+  }
+  mkdirSync(join(root, "corpora"));
+  for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+    }
+  }
+  writeFileSync(
+    join(root, "corpora", "catalog.yaml"),
+    readFileSync(join(ROOT, "corpora", "catalog.yaml")),
+  );
+  return root;
+}
+
+function routeFirstManifest(root: string, fileName: string, value: string): void {
+  const catalog = structuredClone(baseline.catalog);
+  catalog.native_corpora[0]!.manifest = `corpora/${fileName}`;
+  writeFileSync(join(root, "corpora", "catalog.yaml"), Bun.YAML.stringify(catalog, null, 2));
+  writeFileSync(join(root, "corpora", fileName), value);
+}
 
 function clone(): RepositorySnapshot {
   return structuredClone(baseline);
@@ -140,6 +174,19 @@ describe("authority isolation", () => {
       false,
     );
     expect(INVARIANTS.some(({ code }) => code === "INTEROP_SUPPORT_ENDPOINT_MISMATCH")).toBe(false);
+    for (const code of [
+      "INTEROP_SUPPORT_NOT_FOUND",
+      "INTEROP_EVIDENCE_NOT_FOUND",
+      "PROVENANCE_EVIDENCE_NOT_FOUND",
+      "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND",
+    ]) {
+      const invariant = INVARIANTS.find((candidate) => candidate.code === code);
+      expect(invariant?.authority).toEqual({
+        kind: "meta",
+        source: "adr/0020-deterministic-writ-verification.md",
+        section: "Mechanical reference resolution",
+      });
+    }
     expect(
       INVARIANTS.filter(
         ({ authority }) => authority.source === "adr/0019-cross-family-interoperability.md",
@@ -196,6 +243,22 @@ describe("authority isolation", () => {
 });
 
 describe("workflow adapter versions", () => {
+  test("loads only explicitly registered workflow artifacts", () => {
+    const root = linkedCandidateWorkspace("writ-workflow-scope-");
+    const futureDirectory = join(root, "docs", "migrations", "future-workflow");
+    mkdirSync(futureDirectory, { recursive: true });
+    writeFileSync(
+      join(futureDirectory, "mapping-queue.yaml"),
+      "this is intentionally not the ADR 0019 queue format: [",
+    );
+
+    const snapshot = loadRepository(root).snapshot;
+    expect(snapshot.queues.map(({ queue_id }) => queue_id)).toEqual([
+      "cross-family-interoperability-mapping-queue-v1",
+    ]);
+    expect(snapshot.loadIssues).toEqual([]);
+  });
+
   test("distinguishes malformed supported queues from unsupported future versions", () => {
     const root = mkdtempSync(join(tmpdir(), "writ-queue-"));
     const malformed = join(root, "mapping-queue.yaml");
@@ -467,6 +530,174 @@ describe("current repository", () => {
       true,
     );
     expect(renderVerificationJson(result)).toBe(output);
+  });
+
+  test("renders byte-identical failure JSON across workspace roots", () => {
+    const firstRoot = mkdtempSync(join(tmpdir(), "writ-stale-first-"));
+    const secondRoot = mkdtempSync(join(tmpdir(), "writ-stale-second-"));
+    const staleResult = (root: string) => {
+      const output = normalizeCommandOutput(
+        root,
+        `Generated projection at ${join(root, "apps/web/lib/corpus-catalog-data.ts")} is stale.`,
+      );
+      const integrity = gateResult("integrity", [
+        {
+          gate: "integrity",
+          code: "INTEGRITY_CATALOG_PROJECTION_DRIFT",
+          severity: "error",
+          message: output,
+          file: "apps/web/lib/corpus-catalog-data.ts",
+        },
+      ]);
+      return renderVerificationJson({ passed: false, gates: [integrity] });
+    };
+    const first = staleResult(firstRoot);
+    const second = staleResult(secondRoot);
+    expect(first).toBe(second);
+    expect(first).toContain("<workspace>/apps/web/lib/corpus-catalog-data.ts");
+    expect(first).not.toContain(firstRoot);
+    expect(second).not.toContain(secondRoot);
+  });
+
+  test("sorts issue keys by deterministic binary lexical order", () => {
+    const messages = gateResult(
+      "integrity",
+      ["ä", "a", "Z"].map((message) => ({
+        gate: "integrity" as const,
+        code: "INTEGRITY_CONTRACT_INVALID",
+        severity: "error" as const,
+        message,
+      })),
+    ).issues.map(({ message }) => message);
+    expect(messages).toEqual(["Z", "a", "ä"]);
+  });
+});
+
+describe("candidate repository loading", () => {
+  test("returns findings for malformed catalog syntax and structured JSON from the CLI", () => {
+    const root = linkedCandidateWorkspace("writ-malformed-catalog-");
+    writeFileSync(join(root, "corpora", "catalog.yaml"), "native_corpora: [");
+
+    const snapshot = loadRepository(root).snapshot;
+    expect(codes({ issues: snapshot.loadIssues })).toContain("INTEGRITY_CATALOG_INVALID");
+
+    const cli = Bun.spawnSync(
+      [
+        process.execPath,
+        join(ROOT, "internal/verification/writ/src/cli.ts"),
+        "ontology",
+        "--root",
+        root,
+        "--format",
+        "json",
+      ],
+      { cwd: ROOT, stdout: "pipe", stderr: "pipe" },
+    );
+    expect(cli.exitCode, cli.stderr.toString()).toBe(1);
+    expect(cli.stderr.toString()).toBe("");
+    const output = JSON.parse(cli.stdout.toString()) as {
+      status: string;
+      issues: Array<{ code: string }>;
+    };
+    expect(output.status).toBe("FAIL");
+    expect(output.issues.map(({ code }) => code)).toContain("INTEGRITY_CATALOG_INVALID");
+  });
+
+  test("returns a catalog finding without dereferencing malformed entries", () => {
+    const root = linkedCandidateWorkspace("writ-malformed-catalog-entry-");
+    const catalog = structuredClone(baseline.catalog) as unknown as {
+      native_corpora: unknown[];
+    };
+    catalog.native_corpora.unshift({ corpus_id: "unsafe-incomplete-entry" });
+    writeFileSync(join(root, "corpora", "catalog.yaml"), Bun.YAML.stringify(catalog, null, 2));
+
+    const snapshot = loadRepository(root).snapshot;
+    expect(codes({ issues: snapshot.loadIssues })).toContain("INTEGRITY_CATALOG_INVALID");
+    expect(
+      snapshot.catalogEntries.some(({ corpus_id }) => corpus_id === "unsafe-incomplete-entry"),
+    ).toBe(false);
+  });
+
+  test("returns findings for malformed manifest syntax and structure", () => {
+    const syntaxRoot = linkedCandidateWorkspace("writ-malformed-manifest-syntax-");
+    routeFirstManifest(syntaxRoot, "malformed-syntax.yaml", "locations: [");
+    const syntax = loadRepository(syntaxRoot).snapshot;
+    expect(codes({ issues: syntax.loadIssues })).toContain("INTEGRITY_MANIFEST_INVALID");
+
+    const structureRoot = linkedCandidateWorkspace("writ-malformed-manifest-structure-");
+    routeFirstManifest(
+      structureRoot,
+      "malformed-structure.yaml",
+      Bun.YAML.stringify({ schema_version: "1.0.0", corpus_id: "incomplete" }, null, 2),
+    );
+    const structure = loadRepository(structureRoot).snapshot;
+    expect(codes({ issues: structure.loadIssues })).toContain("INTEGRITY_MANIFEST_INVALID");
+    expect(structure.manifests.some(({ value }) => value.corpus_id === "incomplete")).toBe(false);
+  });
+
+  test("confines catalog corpus and manifest paths to the workspace", () => {
+    const corpusRoot = linkedCandidateWorkspace("writ-corpus-traversal-");
+    const corpusCatalog = structuredClone(baseline.catalog);
+    corpusCatalog.native_corpora[0]!.path = "../../outside-corpus";
+    writeFileSync(
+      join(corpusRoot, "corpora", "catalog.yaml"),
+      Bun.YAML.stringify(corpusCatalog, null, 2),
+    );
+    expect(codes({ issues: loadRepository(corpusRoot).snapshot.loadIssues })).toContain(
+      "INTEGRITY_ROUTED_FILE_MISSING",
+    );
+
+    const manifestRoot = linkedCandidateWorkspace("writ-manifest-traversal-");
+    const manifestCatalog = structuredClone(baseline.catalog);
+    manifestCatalog.native_corpora[0]!.manifest = join(tmpdir(), "outside-writ-manifest.yaml");
+    writeFileSync(
+      join(manifestRoot, "corpora", "catalog.yaml"),
+      Bun.YAML.stringify(manifestCatalog, null, 2),
+    );
+    expect(codes({ issues: loadRepository(manifestRoot).snapshot.loadIssues })).toContain(
+      "INTEGRITY_ROUTED_FILE_MISSING",
+    );
+  });
+
+  test("confines manifest locations and human-review artifacts to the workspace", () => {
+    const locationRoot = linkedCandidateWorkspace("writ-location-traversal-");
+    const firstEntry = baseline.catalog.native_corpora[0]!;
+    const manifest = Bun.YAML.parse(readFileSync(join(ROOT, firstEntry.manifest), "utf8")) as {
+      locations: { records: string[] };
+    };
+    manifest.locations.records = ["../../../../../../outside-record.writ"];
+    routeFirstManifest(
+      locationRoot,
+      "traversal-location.yaml",
+      Bun.YAML.stringify(manifest, null, 2),
+    );
+    expect(codes({ issues: loadRepository(locationRoot).snapshot.loadIssues })).toContain(
+      "INTEGRITY_ROUTED_FILE_MISSING",
+    );
+
+    const reviewRoot = linkedCandidateWorkspace("writ-review-traversal-");
+    const queueFile = join(
+      reviewRoot,
+      "docs",
+      "migrations",
+      "cross-family-interoperability",
+      "mapping-queue.yaml",
+    );
+    const queue = Bun.YAML.parse(readFileSync(queueFile, "utf8")) as {
+      human_review_artifact: string;
+    };
+    queue.human_review_artifact = join(tmpdir(), "outside-human-review.yaml");
+    writeFileSync(queueFile, Bun.YAML.stringify(queue, null, 2));
+    expect(codes({ issues: loadRepository(reviewRoot).snapshot.loadIssues })).toContain(
+      "PROVENANCE_HUMAN_REVIEW_INVALID",
+    );
+  });
+
+  test("allows normalized cross-corpus routes that remain inside the workspace", () => {
+    const root = linkedCandidateWorkspace("writ-contained-route-");
+    const route = resolveWorkspacePath(root, "corpora/institutional/nist", "../../catalog.yaml");
+    expect(route.ok).toBe(true);
+    if (route.ok) expect(route.relative).toBe("corpora/catalog.yaml");
   });
 });
 

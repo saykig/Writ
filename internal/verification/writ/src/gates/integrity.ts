@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
+import { join, resolve } from "node:path";
 
 import { findObjects } from "../repository.js";
 import {
@@ -190,6 +190,22 @@ export function checkManifestChecksum(input: ChecksumInput): VerificationIssue[]
   return issues;
 }
 
+export function normalizeCommandOutput(root: string, output: string): string {
+  const aliases = new Set([resolve(root)]);
+  try {
+    aliases.add(realpathSync(root));
+  } catch {
+    // The command failure is reported by its caller; normalization stays pure.
+  }
+  return [...aliases]
+    .sort((left, right) => right.length - left.length)
+    .reduce(
+      (text, absolute) => text.split(absolute).join("<workspace>"),
+      output.replace(/\r\n/g, "\n"),
+    )
+    .trim();
+}
+
 function command(
   root: string,
   executable: string,
@@ -202,7 +218,7 @@ function command(
   });
   return {
     ok: result.exitCode === 0,
-    output: `${result.stdout.toString()}${result.stderr.toString()}`.trim(),
+    output: normalizeCommandOutput(root, `${result.stdout.toString()}${result.stderr.toString()}`),
   };
 }
 

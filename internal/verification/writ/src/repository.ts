@@ -15,6 +15,8 @@ import {
   REVIEWED_DOCUMENT_SCHEMA,
   classifyRecordContract,
 } from "./adapters/current-record-contracts.js";
+import { CURRENT_WORKFLOW_ARTIFACTS } from "./adapters/workflow-artifacts.js";
+import { resolveWorkspacePath } from "./core/workspace.js";
 import {
   issue,
   type CatalogEntry,
@@ -45,6 +47,12 @@ const CATEGORIES: readonly ManifestCategory[] = [
   "judgments",
   "migration",
 ];
+const EMPTY_CATALOG: CorpusCatalog = {
+  schema_version: "1.0.0",
+  implemented_native_families: [],
+  native_corpora: [],
+  retired_corpus_migrations: [],
+};
 
 function object(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -56,6 +64,44 @@ function strings(value: unknown): string[] {
 
 function nonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.length > 0;
+}
+
+function catalogEntry(value: unknown): value is CatalogEntry {
+  return (
+    object(value) &&
+    nonEmpty(value.corpus_id) &&
+    nonEmpty(value.family) &&
+    nonEmpty(value.jurisdiction) &&
+    nonEmpty(value.status) &&
+    nonEmpty(value.path) &&
+    nonEmpty(value.manifest)
+  );
+}
+
+function corpusManifest(value: unknown): value is CorpusManifest {
+  if (
+    !object(value) ||
+    !nonEmpty(value.schema_version) ||
+    !nonEmpty(value.corpus_id) ||
+    !nonEmpty(value.title) ||
+    !nonEmpty(value.family) ||
+    !nonEmpty(value.jurisdiction) ||
+    !nonEmpty(value.corpus_version) ||
+    !nonEmpty(value.status) ||
+    !object(value.record_contract) ||
+    (value.record_contract.kind !== "native" && value.record_contract.kind !== "compatibility") ||
+    !nonEmpty(value.record_contract.id) ||
+    !nonEmpty(value.record_contract.version) ||
+    !object(value.locations) ||
+    !object(value.record_counts) ||
+    !object(value.review_counts) ||
+    typeof value.unresolved_evidence_count !== "number"
+  )
+    return false;
+  const locations = value.locations;
+  return CATEGORIES.every(
+    (category) => Array.isArray(locations[category]) && locations[category].every(nonEmpty),
+  );
 }
 
 function filesUnder(directory: string): string[] {
@@ -76,11 +122,24 @@ function structuredForCategory(category: ManifestCategory, file: string): boolea
 function expandLocation(
   root: string,
   entry: CatalogEntry,
+  manifestFile: string,
   category: ManifestCategory,
   location: string,
   issues: VerificationIssue[],
 ): string[] {
-  const absolute = resolve(root, entry.path, location);
+  const route = resolveWorkspacePath(root, entry.path, location);
+  if (!route.ok) {
+    issues.push(
+      issue(
+        "integrity",
+        "INTEGRITY_ROUTED_FILE_MISSING",
+        `Manifest location escapes the verification workspace: ${location}`,
+        { corpus_id: entry.corpus_id, file: manifestFile },
+      ),
+    );
+    return [];
+  }
+  const { absolute } = route;
   if (!existsSync(absolute)) {
     issues.push(
       issue(
@@ -385,22 +444,30 @@ function discoverWorkflowArtifacts(root: string): {
   humanReviews: CrossFamilyHumanReview[];
   issues: VerificationIssue[];
 } {
-  const migrationsRoot = join(root, "docs", "migrations");
   const queues: MappingQueue[] = [];
   const humanReviews: CrossFamilyHumanReview[] = [];
   const issues: VerificationIssue[] = [];
-  for (const file of filesUnder(migrationsRoot).filter((path) =>
-    path.endsWith("/mapping-queue.yaml"),
-  )) {
-    const parsed = parseMappingQueueFile(file, root);
+  for (const registration of CURRENT_WORKFLOW_ARTIFACTS) {
+    const route = resolveWorkspacePath(root, registration.queueArtifact);
+    if (!route.ok || !existsSync(route.absolute)) {
+      issues.push(
+        issue(
+          "integrity",
+          "INTEGRITY_ROUTED_FILE_MISSING",
+          `Registered workflow artifact does not resolve: ${registration.queueArtifact}`,
+          { file: registration.queueArtifact },
+        ),
+      );
+      continue;
+    }
+    const parsed = parseMappingQueueFile(route.absolute, root);
     issues.push(...parsed.issues);
     if (parsed.queue) queues.push(parsed.queue);
   }
   const loadedReviewFiles = new Set<string>();
   for (const queue of queues) {
-    const reviewFile = resolve(root, queue.human_review_artifact);
-    const label = relative(root, reviewFile);
-    if (label.startsWith("..") || !existsSync(reviewFile)) {
+    const route = resolveWorkspacePath(root, queue.human_review_artifact);
+    if (!route.ok || !existsSync(route.absolute)) {
       issues.push(
         issue(
           "provenance",
@@ -411,6 +478,8 @@ function discoverWorkflowArtifacts(root: string): {
       );
       continue;
     }
+    const reviewFile = route.absolute;
+    const label = route.relative;
     const physical = realpathSync(reviewFile);
     if (loadedReviewFiles.has(physical)) continue;
     loadedReviewFiles.add(physical);
@@ -553,46 +622,111 @@ export function loadRepository(root: string): LoadRepositoryResult {
   const authority = loadAuthorityIndex(root);
   const loadIssues: VerificationIssue[] = [...authority.issues];
   const catalogFile = join(root, "corpora", "catalog.yaml");
-  const catalogValue = parseStructured(catalogFile);
-  loadIssues.push(
-    ...validateDocument(
-      authority,
-      CATALOG_SCHEMA,
-      catalogValue,
-      "INTEGRITY_CATALOG_INVALID",
-      catalogFile,
-      root,
-    ),
-  );
-  const catalog = catalogValue as CorpusCatalog;
-  const entries = Array.isArray(catalog.native_corpora) ? catalog.native_corpora : [];
+  let catalogValue: unknown;
+  try {
+    catalogValue = parseStructured(catalogFile);
+  } catch {
+    loadIssues.push(
+      issue("integrity", "INTEGRITY_CATALOG_INVALID", "Cannot parse corpora/catalog.yaml.", {
+        file: "corpora/catalog.yaml",
+      }),
+    );
+  }
+  if (catalogValue !== undefined) {
+    loadIssues.push(
+      ...validateDocument(
+        authority,
+        CATALOG_SCHEMA,
+        catalogValue,
+        "INTEGRITY_CATALOG_INVALID",
+        catalogFile,
+        root,
+      ),
+    );
+  }
+  const rawEntries =
+    object(catalogValue) && Array.isArray(catalogValue.native_corpora)
+      ? catalogValue.native_corpora
+      : [];
+  const entries: CatalogEntry[] = [];
+  for (const candidate of rawEntries) {
+    if (!catalogEntry(candidate)) continue;
+    const corpusRoute = resolveWorkspacePath(root, candidate.path);
+    if (!corpusRoute.ok) {
+      loadIssues.push(
+        issue(
+          "integrity",
+          "INTEGRITY_ROUTED_FILE_MISSING",
+          `Catalog corpus path escapes the verification workspace: ${candidate.path}`,
+          { corpus_id: candidate.corpus_id, file: "corpora/catalog.yaml" },
+        ),
+      );
+      continue;
+    }
+    entries.push(candidate);
+  }
+  const catalog: CorpusCatalog = object(catalogValue)
+    ? {
+        schema_version: nonEmpty(catalogValue.schema_version)
+          ? catalogValue.schema_version
+          : EMPTY_CATALOG.schema_version,
+        implemented_native_families: strings(catalogValue.implemented_native_families),
+        native_corpora: entries,
+        retired_corpus_migrations: Array.isArray(catalogValue.retired_corpus_migrations)
+          ? catalogValue.retired_corpus_migrations
+          : [],
+      }
+    : EMPTY_CATALOG;
   const manifests: Loaded<CorpusManifest>[] = [];
   for (const entry of entries) {
-    const file = join(root, entry.manifest);
+    const manifestRoute = resolveWorkspacePath(root, entry.manifest);
+    if (!manifestRoute.ok) {
+      loadIssues.push(
+        issue(
+          "integrity",
+          "INTEGRITY_ROUTED_FILE_MISSING",
+          `Catalog manifest path escapes the verification workspace: ${entry.manifest}`,
+          { corpus_id: entry.corpus_id, file: "corpora/catalog.yaml" },
+        ),
+      );
+      continue;
+    }
+    const file = manifestRoute.absolute;
     if (!existsSync(file)) {
       loadIssues.push(
         issue("integrity", "INTEGRITY_ROUTED_FILE_MISSING", "Catalogued manifest does not exist.", {
           corpus_id: entry.corpus_id,
-          file: entry.manifest,
+          file: manifestRoute.relative,
         }),
       );
       continue;
     }
-    const value = parseStructured(file);
-    loadIssues.push(
-      ...validateDocument(
-        authority,
-        MANIFEST_SCHEMA,
-        value,
-        "INTEGRITY_MANIFEST_INVALID",
-        file,
-        root,
-        entry.corpus_id,
-      ),
+    let value: unknown;
+    try {
+      value = parseStructured(file);
+    } catch {
+      loadIssues.push(
+        issue("integrity", "INTEGRITY_MANIFEST_INVALID", "Cannot parse corpus manifest.", {
+          corpus_id: entry.corpus_id,
+          file: manifestRoute.relative,
+        }),
+      );
+      continue;
+    }
+    const manifestIssues = validateDocument(
+      authority,
+      MANIFEST_SCHEMA,
+      value,
+      "INTEGRITY_MANIFEST_INVALID",
+      file,
+      root,
+      entry.corpus_id,
     );
+    loadIssues.push(...manifestIssues);
+    if (manifestIssues.length > 0 || !corpusManifest(value)) continue;
     manifests.push({
-      value: value as CorpusManifest,
-      file: entry.manifest,
+      value,
+      file: manifestRoute.relative,
       corpus_id: entry.corpus_id,
     });
   }
@@ -642,7 +776,14 @@ export function loadRepository(root: string): LoadRepositoryResult {
     }
     for (const category of CATEGORIES) {
       for (const location of manifest.locations[category] ?? []) {
-        for (const absolute of expandLocation(root, entry, category, location, loadIssues)) {
+        for (const absolute of expandLocation(
+          root,
+          entry,
+          loadedManifest.file,
+          category,
+          location,
+          loadIssues,
+        )) {
           const label = relative(root, absolute);
           // A physical compatibility document may be listed by its owning corpus and
           // by an institutional consumer. Its canonical owner controls parsing and

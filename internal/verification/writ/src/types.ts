@@ -183,25 +183,23 @@ export function gateResult(
 }
 
 export function sortIssues(issues: readonly VerificationIssue[]): VerificationIssue[] {
-  return [...issues].sort((left, right) =>
-    [
+  return [...issues].sort((left, right) => {
+    const leftKey = [
       left.gate,
       left.code,
       left.corpus_id ?? "",
       left.object_id ?? "",
       left.file ?? "",
       left.message,
-    ]
-      .join("\0")
-      .localeCompare(
-        [
-          right.gate,
-          right.code,
-          right.corpus_id ?? "",
-          right.object_id ?? "",
-          right.file ?? "",
-          right.message,
-        ].join("\0"),
-      ),
-  );
+    ].join("\0");
+    const rightKey = [
+      right.gate,
+      right.code,
+      right.corpus_id ?? "",
+      right.object_id ?? "",
+      right.file ?? "",
+      right.message,
+    ].join("\0");
+    return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+  });
 }

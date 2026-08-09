@@ -89,12 +89,12 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "INTEROP_SUPPORT_NOT_FOUND",
     gate: "interoperability",
-    authority: schema("schemas/core/record-link.schema.json", "1.0.0", "supporting_record_ids"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEROP_EVIDENCE_NOT_FOUND",
     gate: "interoperability",
-    authority: schema("schemas/core/record-link.schema.json", "1.0.0", "evidence_refs"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "INTEROP_OWNER_NOT_FOUND",
@@ -134,7 +134,7 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "PROVENANCE_EVIDENCE_NOT_FOUND",
     gate: "provenance",
-    authority: schema("schemas/analysis/record-judgment.schema.json", "0.2.0", "evidence_refs"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "PROVENANCE_DISPOSITION_MISSING",
@@ -159,7 +159,7 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND",
     gate: "provenance",
-    authority: schema("schemas/analysis/record-judgment.schema.json", "0.2.0", "target_id"),
+    authority: meta("Mechanical reference resolution"),
   },
   {
     code: "PROVENANCE_REFERENCE_AMBIGUOUS",
