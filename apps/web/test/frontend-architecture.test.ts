@@ -380,6 +380,22 @@ describe("frontend architecture", () => {
     expect(layout).toContain("enableSystem={false}");
   });
 
+  test("the homepage keeps its dark globe palette when the saved site theme is light", () => {
+    const styles = read("app/globals.css");
+    const globe = read("components/ui/wireframe-dotted-globe.tsx");
+
+    expect(styles).toContain(".homepage-motion-world {");
+    expect(styles).toContain("--background: oklch(0.072 0.004 255);");
+    expect(styles).toContain("--foreground: oklch(0.975 0.004 255);");
+    expect(styles).toContain("--primary: oklch(0.68 0.15 259);");
+    expect(styles).toContain("--globe-line: oklch(0.7 0.075 259 / 38%);");
+    expect(styles).toContain("--globe-dot: oklch(0.86 0.05 259 / 82%);");
+    expect(globe).toContain("getComputedStyle(container).getPropertyValue(name)");
+    expect(globe).not.toContain(
+      "getComputedStyle(document.documentElement).getPropertyValue(name)",
+    );
+  });
+
   test("the footer omits retired metadata and links to the Writ repository", () => {
     const footer = read("components/site/site-footer.tsx");
     const navItems = read("components/site/nav-items.ts");

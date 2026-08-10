@@ -20,9 +20,11 @@ export function markerLeaderStyle(offset: readonly [number, number]): {
   width: string;
   transform: string;
 } {
+  const distance = Math.hypot(offset[0], offset[1]);
+  const markerGap = Math.min(10, distance);
   return {
-    width: `${Math.hypot(offset[0], offset[1]).toFixed(4)}px`,
-    transform: `rotate(${Math.atan2(-offset[1], -offset[0]).toFixed(5)}rad)`,
+    width: `${Math.max(0, distance - markerGap).toFixed(4)}px`,
+    transform: `rotate(${Math.atan2(-offset[1], -offset[0]).toFixed(5)}rad) translateX(${markerGap.toFixed(4)}px)`,
   };
 }
 
@@ -166,7 +168,7 @@ export function WireframeDottedGlobe({
     } | null = null;
 
     function themeColor(name: string, fallback: string): string {
-      return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+      return getComputedStyle(container).getPropertyValue(name).trim() || fallback;
     }
 
     function resize() {

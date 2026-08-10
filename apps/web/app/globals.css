@@ -1390,10 +1390,23 @@ body:has(.site-nav--home) {
 
 /* Homepage Motion prototype: one field, stable hero title, one E → EU cell reconstruction. */
 .homepage-motion-world {
-  --primary: oklch(0.56 0.035 255);
-  --ring: oklch(0.66 0.025 255);
-  --globe-line: oklch(0.62 0.014 255 / 20%);
-  --globe-dot: oklch(0.84 0.008 255 / 68%);
+  --background: oklch(0.072 0.004 255);
+  --foreground: oklch(0.975 0.004 255);
+  --card: oklch(0.115 0.012 255);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.13 0.014 255);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.68 0.15 259);
+  --primary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.16 0.014 255);
+  --muted-foreground: oklch(0.76 0.02 255);
+  --accent: oklch(0.2 0.055 259);
+  --accent-foreground: var(--foreground);
+  --border: oklch(0.94 0.01 255 / 16%);
+  --input: oklch(0.94 0.01 255 / 20%);
+  --ring: oklch(0.72 0.14 259);
+  --globe-line: oklch(0.7 0.075 259 / 38%);
+  --globe-dot: oklch(0.86 0.05 259 / 82%);
   position: relative;
   isolation: isolate;
   overflow: clip;
@@ -1446,8 +1459,8 @@ body:has(.site-nav--home) {
     90deg,
     transparent 0,
     transparent calc(3.32vw - 1px),
-    rgb(148 174 210 / 2%) calc(3.32vw - 0.5px),
-    rgb(148 174 210 / 2%) 3.32vw
+    rgb(126 164 224 / 5%) calc(3.32vw - 0.5px),
+    rgb(126 164 224 / 5%) 3.32vw
   );
   mask-image: radial-gradient(ellipse at center, black 4%, black 72%, transparent 108%);
   animation: home-motion-field-columns linear both;
