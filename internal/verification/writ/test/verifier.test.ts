@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   existsSync,
+  cpSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -14,13 +15,20 @@ import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } fro
 
 import {
   INVARIANTS,
+  ADR_0019_WORKFLOW_ADAPTER,
+  ADR_0019_WORKFLOW_ID,
+  ADR_0019_WORKFLOW_VERSION,
   ExactContractAdapterRegistry,
+  WorkflowArtifactAdapterRegistry,
   checkManifestChecksum,
   classifyRecordContract,
   findObjects,
+  discoverWorkflowArtifacts,
   gateResult,
   loadAuthorityIndex,
   loadRepository,
+  getAdr0019WorkflowState,
+  getWorkflowState,
   normalizeCommandOutput,
   parseCrossFamilyHumanReviewDocument,
   parseInstitutionalMigrationDocument,
@@ -38,6 +46,7 @@ import {
   verifySnapshot,
   verifyWorkspace,
   type RepositorySnapshot,
+  type WorkflowArtifactLoadContext,
 } from "../src/index.js";
 
 const ROOT = repositoryRoot(import.meta.dir);
@@ -45,7 +54,7 @@ const baseline = loadRepository(ROOT).snapshot;
 
 function linkedCandidateWorkspace(prefix: string): string {
   const root = mkdtempSync(join(tmpdir(), prefix));
-  symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
+  cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
   mkdirSync(join(root, "docs", "migrations", "cross-family-interoperability"), {
     recursive: true,
   });
@@ -58,7 +67,9 @@ function linkedCandidateWorkspace(prefix: string): string {
   mkdirSync(join(root, "corpora"));
   for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+      cpSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name), {
+        recursive: true,
+      });
     }
   }
   writeFileSync(
@@ -77,6 +88,10 @@ function routeFirstManifest(root: string, fileName: string, value: string): void
 
 function clone(): RepositorySnapshot {
   return structuredClone(baseline);
+}
+
+function adr0019State(snapshot: RepositorySnapshot) {
+  return getAdr0019WorkflowState(snapshot);
 }
 
 function codes(result: { issues: Array<{ code: string }> }): string[] {
@@ -243,6 +258,70 @@ describe("authority isolation", () => {
 });
 
 describe("workflow adapter versions", () => {
+  test("loads ADR 0019 and an unrelated synthetic workflow through the same socket", () => {
+    const root = linkedCandidateWorkspace("writ-workflow-socket-");
+    const artifact = "docs/migrations/synthetic-observations/mapping-queue.yaml";
+    mkdirSync(join(root, "docs", "migrations", "synthetic-observations"), { recursive: true });
+    writeFileSync(join(root, artifact), "alpha\nbeta\n");
+    const syntheticAdapter = {
+      workflowId: "synthetic-observations",
+      version: "7",
+      load: ({ resolvePath }: WorkflowArtifactLoadContext) => {
+        const route = resolvePath(artifact);
+        if (!route.ok) throw new Error("synthetic artifact unexpectedly escaped its workspace");
+        return {
+          state: { observations: readFileSync(route.absolute, "utf8").trim().split("\n") },
+          issues: [],
+        };
+      },
+    };
+    const adapters = new WorkflowArtifactAdapterRegistry([
+      ADR_0019_WORKFLOW_ADAPTER,
+      syntheticAdapter,
+    ]);
+    const discovered = discoverWorkflowArtifacts(
+      root,
+      [
+        { workflowId: ADR_0019_WORKFLOW_ID, version: ADR_0019_WORKFLOW_VERSION },
+        { workflowId: syntheticAdapter.workflowId, version: syntheticAdapter.version },
+      ],
+      adapters,
+    );
+
+    expect(discovered.issues).toEqual([]);
+    expect(
+      getWorkflowState<{ observations: string[] }>(
+        discovered.workflowStates,
+        syntheticAdapter.workflowId,
+        syntheticAdapter.version,
+      ),
+    ).toEqual({ observations: ["alpha", "beta"] });
+    expect(
+      getWorkflowState<{ queues: unknown[] }>(
+        discovered.workflowStates,
+        ADR_0019_WORKFLOW_ID,
+        ADR_0019_WORKFLOW_VERSION,
+      )?.queues,
+    ).toHaveLength(1);
+  });
+
+  test("selects workflow adapters by exact identity and version", () => {
+    const adapters = new WorkflowArtifactAdapterRegistry([
+      {
+        workflowId: "synthetic-exact-version",
+        version: "1",
+        load: () => ({ state: { shape: "one" }, issues: [] }),
+      },
+    ]);
+    const result = discoverWorkflowArtifacts(
+      ROOT,
+      [{ workflowId: "synthetic-exact-version", version: "2" }],
+      adapters,
+    );
+    expect(codes({ issues: result.issues })).toEqual(["VERIFIER_UNSUPPORTED_CONTRACT"]);
+    expect(result.workflowStates).toEqual({});
+  });
+
   test("loads only explicitly registered workflow artifacts", () => {
     const root = linkedCandidateWorkspace("writ-workflow-scope-");
     const futureDirectory = join(root, "docs", "migrations", "future-workflow");
@@ -253,7 +332,7 @@ describe("workflow adapter versions", () => {
     );
 
     const snapshot = loadRepository(root).snapshot;
-    expect(snapshot.queues.map(({ queue_id }) => queue_id)).toEqual([
+    expect(adr0019State(snapshot).queues.map(({ queue_id }) => queue_id)).toEqual([
       "cross-family-interoperability-mapping-queue-v1",
     ]);
     expect(snapshot.loadIssues).toEqual([]);
@@ -437,16 +516,25 @@ describe("current repository", () => {
     const result = verifySnapshot(baseline, "all", { runExternalChecks: false });
     expect(result.passed).toBe(true);
     expect(result.gates.every((gate) => gate.passed)).toBe(true);
+    expect(baseline).not.toHaveProperty("queues");
+    expect(baseline).not.toHaveProperty("humanReviews");
+    expect(Object.keys(baseline.workflowStates)).toEqual([ADR_0019_WORKFLOW_ID]);
   });
 
   test("loads externally routed evidence identically when catalog order is reversed", () => {
     const root = mkdtempSync(join(tmpdir(), "writ-reversed-catalog-"));
-    symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
-    symlinkSync(join(ROOT, "docs"), join(root, "docs"));
+    cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
+    cpSync(
+      join(ROOT, "docs", "migrations", "cross-family-interoperability"),
+      join(root, "docs", "migrations", "cross-family-interoperability"),
+      { recursive: true },
+    );
     mkdirSync(join(root, "corpora"));
     for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
       if (entry.isDirectory()) {
-        symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+        cpSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name), {
+          recursive: true,
+        });
       }
     }
     const reversedCatalog = structuredClone(baseline.catalog);
@@ -463,12 +551,18 @@ describe("current repository", () => {
 
   test("verifies an alternate workspace root without mutating it", () => {
     const root = mkdtempSync(join(tmpdir(), "writ-alternate-root-"));
-    symlinkSync(join(ROOT, "schemas"), join(root, "schemas"));
-    symlinkSync(join(ROOT, "docs"), join(root, "docs"));
+    cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
+    cpSync(
+      join(ROOT, "docs", "migrations", "cross-family-interoperability"),
+      join(root, "docs", "migrations", "cross-family-interoperability"),
+      { recursive: true },
+    );
     mkdirSync(join(root, "corpora"));
     for (const entry of readdirSync(join(ROOT, "corpora"), { withFileTypes: true })) {
       if (entry.isDirectory()) {
-        symlinkSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name));
+        cpSync(join(ROOT, "corpora", entry.name), join(root, "corpora", entry.name), {
+          recursive: true,
+        });
       }
     }
     const catalogFile = join(root, "corpora", "catalog.yaml");
@@ -693,6 +787,22 @@ describe("candidate repository loading", () => {
     );
   });
 
+  test("rejects a metadata route whose symlink resolves outside the workspace", () => {
+    const root = linkedCandidateWorkspace("writ-symlink-traversal-");
+    const outside = mkdtempSync(join(tmpdir(), "writ-outside-workspace-"));
+    const outsideManifest = join(outside, "outside-manifest.yaml");
+    writeFileSync(outsideManifest, "this malformed content must not be read: [");
+    const routedManifest = join(root, "corpora", "escaped-manifest.yaml");
+    symlinkSync(outsideManifest, routedManifest);
+    const catalog = structuredClone(baseline.catalog);
+    catalog.native_corpora[0]!.manifest = "corpora/escaped-manifest.yaml";
+    writeFileSync(join(root, "corpora", "catalog.yaml"), Bun.YAML.stringify(catalog, null, 2));
+
+    const issues = loadRepository(root).snapshot.loadIssues;
+    expect(codes({ issues })).toContain("INTEGRITY_ROUTED_FILE_MISSING");
+    expect(codes({ issues })).not.toContain("INTEGRITY_MANIFEST_INVALID");
+  });
+
   test("allows normalized cross-corpus routes that remain inside the workspace", () => {
     const root = linkedCandidateWorkspace("writ-contained-route-");
     const route = resolveWorkspacePath(root, "corpora/institutional/nist", "../../catalog.yaml");
@@ -824,7 +934,7 @@ describe("interoperability negative fixtures", () => {
   test("rejects an unresolved queue candidate activated as a Core link", () => {
     const snapshot = clone();
     const template = crossFamilyLink(snapshot);
-    const unresolved = snapshot.queues[0]!.mappings.find(
+    const unresolved = adr0019State(snapshot).queues[0]!.mappings.find(
       (mapping) => mapping.mapping_status === "unresolved" && mapping.legal_policy_record_id,
     )!;
     const value: RecordLink = {
@@ -934,15 +1044,15 @@ describe("interoperability negative fixtures", () => {
 
   test("requires queue-local active mapping and active_link_id agreement", () => {
     const missingDeclaration = clone();
-    missingDeclaration.queues[0]!.active_link_ids.pop();
+    adr0019State(missingDeclaration).queues[0]!.active_link_ids.pop();
     expect(codes(verifyInteroperability(missingDeclaration))).toContain(
       "INTEROP_ACTIVE_SET_MISMATCH",
     );
 
     const missingMapping = clone();
-    const activeId = missingMapping.queues[0]!.active_link_ids[0]!;
+    const activeId = adr0019State(missingMapping).queues[0]!.active_link_ids[0]!;
     const activeLink = missingMapping.links.find(({ value }) => value.link_id === activeId)!;
-    const activeMapping = missingMapping.queues[0]!.mappings.find(
+    const activeMapping = adr0019State(missingMapping).queues[0]!.mappings.find(
       (mapping) =>
         mapping.mapping_status === "active_approved" &&
         mapping.legal_policy_record_id === activeLink.value.source_id,
@@ -951,7 +1061,7 @@ describe("interoperability negative fixtures", () => {
     expect(codes(verifyInteroperability(missingMapping))).toContain("INTEROP_ACTIVE_SET_MISMATCH");
 
     const draftLink = clone();
-    const declaredId = draftLink.queues[0]!.active_link_ids[0]!;
+    const declaredId = adr0019State(draftLink).queues[0]!.active_link_ids[0]!;
     draftLink.links.find(({ value }) => value.link_id === declaredId)!.value.review_state = "draft";
     expect(codes(verifyInteroperability(draftLink))).toContain("INTEROP_ACTIVE_SET_MISMATCH");
   });
@@ -1042,7 +1152,7 @@ describe("provenance negative fixtures", () => {
 
   test("binds approval to the exact accepted judgment named by human review", () => {
     const snapshot = clone();
-    const decision = snapshot.humanReviews[0]!.decisions[0]!;
+    const decision = adr0019State(snapshot).humanReviews[0]!.decisions[0]!;
     const named = snapshot.judgments.find(
       ({ value }) => value.judgment_id === decision.accepted_judgment_id,
     )!;
@@ -1050,7 +1160,7 @@ describe("provenance negative fixtures", () => {
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_DISPOSITION_MISSING");
 
     const wrongReviewer = clone();
-    const reviewerDecision = wrongReviewer.humanReviews[0]!.decisions[0]!;
+    const reviewerDecision = adr0019State(wrongReviewer).humanReviews[0]!.decisions[0]!;
     wrongReviewer.judgments.find(
       ({ value }) => value.judgment_id === reviewerDecision.accepted_judgment_id,
     )!.value.reviewer = "Different Reviewer";
@@ -1059,14 +1169,14 @@ describe("provenance negative fixtures", () => {
 
   test("binds the exact proposal value, status, attribution and reciprocal supersession", () => {
     const wrongValue = clone();
-    const decision = wrongValue.humanReviews[0]!.decisions[0]!;
+    const decision = adr0019State(wrongValue).humanReviews[0]!.decisions[0]!;
     wrongValue.judgments.find(
       ({ value }) => value.judgment_id === decision.proposal_judgment_id,
     )!.value.value = "approved";
     expect(codes(verifyProvenance(wrongValue))).toContain("PROVENANCE_DISPOSITION_MISSING");
 
     const wrongStatus = clone();
-    const statusDecision = wrongStatus.humanReviews[0]!.decisions[0]!;
+    const statusDecision = adr0019State(wrongStatus).humanReviews[0]!.decisions[0]!;
     const statusProposal = wrongStatus.judgments.find(
       ({ value }) => value.judgment_id === statusDecision.proposal_judgment_id,
     )!;
@@ -1075,7 +1185,7 @@ describe("provenance negative fixtures", () => {
     expect(codes(verifyProvenance(wrongStatus))).toContain("PROVENANCE_DISPOSITION_MISSING");
 
     const oneWay = clone();
-    const oneWayDecision = oneWay.humanReviews[0]!.decisions[0]!;
+    const oneWayDecision = adr0019State(oneWay).humanReviews[0]!.decisions[0]!;
     oneWay.judgments.find(
       ({ value }) => value.judgment_id === oneWayDecision.accepted_judgment_id,
     )!.value.supersedes_judgment_ids = [];
@@ -1084,7 +1194,7 @@ describe("provenance negative fixtures", () => {
 
   test("rejects multiple current accepted ADR 0019 dispositions", () => {
     const snapshot = clone();
-    const decision = snapshot.humanReviews[0]!.decisions[0]!;
+    const decision = adr0019State(snapshot).humanReviews[0]!.decisions[0]!;
     const accepted = snapshot.judgments.find(
       ({ value }) => value.judgment_id === decision.accepted_judgment_id,
     )!;
@@ -1219,7 +1329,7 @@ describe("provenance negative fixtures", () => {
 
   test("validates migration history through structured review metadata", () => {
     const snapshot = clone();
-    const review = snapshot.humanReviews[0]!;
+    const review = adr0019State(snapshot).humanReviews[0]!;
     review.approved_id_revision.previous_id = "unrelated_previous_id";
     expect(codes(verifyProvenance(snapshot))).toContain(
       "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",

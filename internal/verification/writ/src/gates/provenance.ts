@@ -1,5 +1,6 @@
 import { validateJudgmentSupersession } from "@writ/domain";
 
+import { getAdr0019WorkflowState } from "../adapters/adr-0019-workflow.js";
 import { findObjects } from "../repository.js";
 import { activeLinks, isAdr0019Relation } from "../rules/adr-0019.js";
 import {
@@ -11,7 +12,7 @@ import {
 
 function proposalJudgmentReviewers(snapshot: RepositorySnapshot): Map<string, string> {
   const proposalReviewers = new Map<string, string>();
-  for (const review of snapshot.humanReviews) {
+  for (const review of getAdr0019WorkflowState(snapshot).humanReviews) {
     for (const decision of review.decisions) {
       proposalReviewers.set(decision.proposal_judgment_id, review.proposal_proposer);
     }
@@ -32,6 +33,7 @@ function isRecordEndpoint(kind: string): boolean {
 
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
+  const { humanReviews } = getAdr0019WorkflowState(snapshot);
   const links = activeLinks(snapshot);
   const judgmentIds = new Set(snapshot.judgments.map(({ value }) => value.judgment_id));
   const historicalMigrationIds = new Set(
@@ -183,7 +185,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
   }
 
-  for (const review of snapshot.humanReviews) {
+  for (const review of humanReviews) {
     for (const decision of review.decisions) {
       const reviewedLinks = adrLinks.filter(({ value }) => value.link_id === decision.link_id);
       const acceptedJudgments = snapshot.judgments.filter(
@@ -362,9 +364,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
       );
     }
     if (migration.review_artifact) {
-      const reviews = snapshot.humanReviews.filter(
-        (review) => review.file === migration.review_artifact,
-      );
+      const reviews = humanReviews.filter((review) => review.file === migration.review_artifact);
       const matchingReviews = reviews.filter(
         (review) =>
           review.approved_id_revision.previous_id === migration.previous_id &&

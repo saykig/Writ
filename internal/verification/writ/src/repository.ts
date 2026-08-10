@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { join, relative } from "node:path";
 import type {
   AtomicInstitutionalRecord,
   CurrentRecordJudgment,
@@ -15,21 +15,21 @@ import {
   REVIEWED_DOCUMENT_SCHEMA,
   classifyRecordContract,
 } from "./adapters/current-record-contracts.js";
-import { CURRENT_WORKFLOW_ARTIFACTS } from "./adapters/workflow-artifacts.js";
+import {
+  CURRENT_WORKFLOW_ADAPTERS,
+  CURRENT_WORKFLOW_REGISTRATIONS,
+} from "./adapters/current-workflows.js";
+import { discoverWorkflowArtifacts } from "./adapters/workflow-artifacts.js";
 import { resolveWorkspacePath } from "./core/workspace.js";
 import {
   issue,
   type CatalogEntry,
   type CorpusCatalog,
   type CorpusManifest,
-  type CrossFamilyHumanReview,
-  type CrossFamilyReviewDecision,
   type IndexedObject,
   type Loaded,
   type LoadedDocument,
   type ManifestCategory,
-  type MappingQueue,
-  type MappingQueueEntry,
   type MigrationRename,
   type RepositorySnapshot,
   type VerificationIssue,
@@ -226,293 +226,6 @@ function indexed(
       ...(typeof value.ref === "string" ? [value.ref] : []),
     ],
   };
-}
-
-export function parseMappingQueueFile(
-  file: string,
-  root: string,
-): { queue?: MappingQueue; issues: VerificationIssue[] } {
-  const issues: VerificationIssue[] = [];
-  let value: unknown;
-  try {
-    value = parseStructured(file);
-  } catch (error) {
-    return {
-      issues: [
-        issue(
-          "interoperability",
-          "INTEROP_QUEUE_INVALID",
-          `Cannot parse mapping queue: ${String(error)}`,
-          { file: relative(root, file) },
-        ),
-      ],
-    };
-  }
-  if (!object(value) || typeof value.schema_version !== "string") {
-    return {
-      issues: [
-        issue(
-          "interoperability",
-          "INTEROP_QUEUE_INVALID",
-          "Mapping queue must declare schema_version.",
-          { file: relative(root, file) },
-        ),
-      ],
-    };
-  }
-  if (value.schema_version !== "1.0.0") {
-    return {
-      issues: [
-        issue(
-          "integrity",
-          "VERIFIER_UNSUPPORTED_CONTRACT",
-          `I recognize the mapping-queue workflow identity, but I do not have verified support for declared version ${value.schema_version}.`,
-          { file: relative(root, file) },
-        ),
-      ],
-    };
-  }
-  if (
-    !nonEmpty(value.queue_id) ||
-    value.status !== "human_review_complete" ||
-    !nonEmpty(value.human_review_artifact) ||
-    !Array.isArray(value.active_link_ids) ||
-    !value.active_link_ids.every(nonEmpty) ||
-    new Set(value.active_link_ids).size !== value.active_link_ids.length ||
-    !Array.isArray(value.mappings)
-  ) {
-    issues.push(
-      issue(
-        "interoperability",
-        "INTEROP_QUEUE_INVALID",
-        "Mapping queue is malformed for adapter version 1.0.0.",
-        { file: relative(root, file) },
-      ),
-    );
-    return { issues };
-  }
-  const mappings: MappingQueueEntry[] = [];
-  const mappingIds = new Set<string>();
-  for (const candidate of value.mappings) {
-    if (
-      !object(candidate) ||
-      !nonEmpty(candidate.mapping_id) ||
-      (candidate.mapping_status !== "active_approved" &&
-        candidate.mapping_status !== "unresolved") ||
-      !(nonEmpty(candidate.legal_policy_record_id) || candidate.legal_policy_record_id === null) ||
-      !nonEmpty(candidate.proposed_relation) ||
-      !nonEmpty(candidate.target_institutional_id) ||
-      (candidate.mapping_status === "active_approved" &&
-        candidate.legal_policy_record_id === null) ||
-      mappingIds.has(candidate.mapping_id)
-    ) {
-      issues.push(
-        issue(
-          "interoperability",
-          "INTEROP_QUEUE_INVALID",
-          "Mapping queue contains a malformed mapping for adapter version 1.0.0.",
-          { file: relative(root, file) },
-        ),
-      );
-      continue;
-    }
-    mappingIds.add(candidate.mapping_id);
-    mappings.push(candidate as unknown as MappingQueueEntry);
-  }
-  if (issues.length > 0) return { issues };
-  return {
-    queue: {
-      schema_version: "1.0.0",
-      queue_id: value.queue_id,
-      status: "human_review_complete",
-      human_review_artifact: value.human_review_artifact,
-      active_link_ids: value.active_link_ids as string[],
-      mappings,
-      file: relative(root, file),
-    },
-    issues: [],
-  };
-}
-
-export function parseCrossFamilyHumanReviewDocument(
-  value: Record<string, unknown>,
-  file: string,
-): { review?: CrossFamilyHumanReview; issues: VerificationIssue[] } {
-  const invalid = (message: string): VerificationIssue =>
-    issue("provenance", "PROVENANCE_HUMAN_REVIEW_INVALID", message, { file });
-  if (!nonEmpty(value.schema_version)) {
-    return { issues: [invalid("Cross-family human review must declare schema_version.")] };
-  }
-  if (value.schema_version !== "1.0.0") {
-    return {
-      issues: [
-        issue(
-          "integrity",
-          "VERIFIER_UNSUPPORTED_CONTRACT",
-          `I recognize the cross-family human-review workflow identity, but I do not have verified support for declared version ${value.schema_version}.`,
-          { file },
-        ),
-      ],
-    };
-  }
-
-  const proposalHistory = object(value.proposal_history) ? value.proposal_history : undefined;
-  const revision = object(value.approved_id_revision) ? value.approved_id_revision : undefined;
-  if (
-    !nonEmpty(value.review_id) ||
-    !nonEmpty(value.reviewer) ||
-    value.review_type !== "human" ||
-    value.status !== "complete" ||
-    !proposalHistory ||
-    !nonEmpty(proposalHistory.proposer) ||
-    proposalHistory.proposed_link_review_state !== "draft" ||
-    proposalHistory.proposed_judgment_status !== "proposed" ||
-    proposalHistory.preserved_as !== "superseded_judgments" ||
-    !revision ||
-    !nonEmpty(revision.previous_approved_id) ||
-    !nonEmpty(revision.active_id) ||
-    revision.decision !== "approve" ||
-    !Array.isArray(value.decisions)
-  ) {
-    return {
-      issues: [invalid("Cross-family human review is malformed for adapter version 1.0.0.")],
-    };
-  }
-
-  const decisions: CrossFamilyReviewDecision[] = [];
-  const linkIds = new Set<string>();
-  const acceptedJudgmentIds = new Set<string>();
-  const proposalJudgmentIds = new Set<string>();
-  for (const [index, candidate] of value.decisions.entries()) {
-    if (
-      !object(candidate) ||
-      !nonEmpty(candidate.link_id) ||
-      candidate.decision !== "approve" ||
-      candidate.final_review_state !== "approved" ||
-      !nonEmpty(candidate.reviewer) ||
-      !nonEmpty(candidate.proposal_judgment_id) ||
-      !nonEmpty(candidate.accepted_judgment_id) ||
-      linkIds.has(candidate.link_id) ||
-      acceptedJudgmentIds.has(candidate.accepted_judgment_id) ||
-      proposalJudgmentIds.has(candidate.proposal_judgment_id)
-    ) {
-      return {
-        issues: [
-          invalid(
-            `Cross-family human review decision[${index}] is malformed or duplicates a reviewed identifier.`,
-          ),
-        ],
-      };
-    }
-    linkIds.add(candidate.link_id);
-    acceptedJudgmentIds.add(candidate.accepted_judgment_id);
-    proposalJudgmentIds.add(candidate.proposal_judgment_id);
-    decisions.push({
-      link_id: candidate.link_id,
-      decision: "approve",
-      final_review_state: "approved",
-      reviewer: candidate.reviewer,
-      proposal_judgment_id: candidate.proposal_judgment_id,
-      accepted_judgment_id: candidate.accepted_judgment_id,
-    });
-  }
-
-  return {
-    review: {
-      schema_version: "1.0.0",
-      review_id: value.review_id,
-      reviewer: value.reviewer,
-      status: "complete",
-      proposal_proposer: proposalHistory.proposer,
-      proposed_link_review_state: "draft",
-      proposed_judgment_status: "proposed",
-      proposal_preserved_as: "superseded_judgments",
-      approved_id_revision: {
-        previous_id: revision.previous_approved_id,
-        active_id: revision.active_id,
-        decision: "approve",
-      },
-      decisions,
-      file,
-    },
-    issues: [],
-  };
-}
-
-function discoverWorkflowArtifacts(root: string): {
-  queues: MappingQueue[];
-  humanReviews: CrossFamilyHumanReview[];
-  issues: VerificationIssue[];
-} {
-  const queues: MappingQueue[] = [];
-  const humanReviews: CrossFamilyHumanReview[] = [];
-  const issues: VerificationIssue[] = [];
-  for (const registration of CURRENT_WORKFLOW_ARTIFACTS) {
-    const route = resolveWorkspacePath(root, registration.queueArtifact);
-    if (!route.ok || !existsSync(route.absolute)) {
-      issues.push(
-        issue(
-          "integrity",
-          "INTEGRITY_ROUTED_FILE_MISSING",
-          `Registered workflow artifact does not resolve: ${registration.queueArtifact}`,
-          { file: registration.queueArtifact },
-        ),
-      );
-      continue;
-    }
-    const parsed = parseMappingQueueFile(route.absolute, root);
-    issues.push(...parsed.issues);
-    if (parsed.queue) queues.push(parsed.queue);
-  }
-  const loadedReviewFiles = new Set<string>();
-  for (const queue of queues) {
-    const route = resolveWorkspacePath(root, queue.human_review_artifact);
-    if (!route.ok || !existsSync(route.absolute)) {
-      issues.push(
-        issue(
-          "provenance",
-          "PROVENANCE_HUMAN_REVIEW_INVALID",
-          `Queue human-review artifact does not resolve: ${queue.human_review_artifact}`,
-          { file: queue.file },
-        ),
-      );
-      continue;
-    }
-    const reviewFile = route.absolute;
-    const label = route.relative;
-    const physical = realpathSync(reviewFile);
-    if (loadedReviewFiles.has(physical)) continue;
-    loadedReviewFiles.add(physical);
-    let value: unknown;
-    try {
-      value = parseStructured(reviewFile);
-    } catch (error) {
-      issues.push(
-        issue(
-          "provenance",
-          "PROVENANCE_HUMAN_REVIEW_INVALID",
-          `Cannot parse cross-family human review: ${String(error)}`,
-          { file: label },
-        ),
-      );
-      continue;
-    }
-    if (!object(value)) {
-      issues.push(
-        issue(
-          "provenance",
-          "PROVENANCE_HUMAN_REVIEW_INVALID",
-          "Cross-family human review must contain an object.",
-          { file: label },
-        ),
-      );
-      continue;
-    }
-    const review = parseCrossFamilyHumanReviewDocument(value, label);
-    issues.push(...review.issues);
-    if (review.review) humanReviews.push(review.review);
-  }
-  return { queues, humanReviews, issues };
 }
 
 export function parseInstitutionalMigrationDocument(
@@ -1006,7 +719,11 @@ export function loadRepository(root: string): LoadRepositoryResult {
     }
   }
 
-  const workflow = discoverWorkflowArtifacts(root);
+  const workflow = discoverWorkflowArtifacts(
+    root,
+    CURRENT_WORKFLOW_REGISTRATIONS,
+    CURRENT_WORKFLOW_ADAPTERS,
+  );
   loadIssues.push(...workflow.issues);
   return {
     authority,
@@ -1021,8 +738,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
       judgments,
       documents,
       objects: [...objectMap.values()],
-      queues: workflow.queues,
-      humanReviews: workflow.humanReviews,
+      workflowStates: workflow.workflowStates,
       migrations,
       loadIssues,
     },
@@ -1038,15 +754,4 @@ export function findObjects(
     (item) =>
       (item.id === id || item.aliases.includes(id)) && (!kinds || kinds.includes(item.kind)),
   );
-}
-
-export function repositoryRoot(from: string = import.meta.dir): string {
-  let cursor = resolve(from);
-  while (true) {
-    if (existsSync(join(cursor, "AGENTS.md")) && existsSync(join(cursor, "schemas"))) return cursor;
-    const parent = resolve(cursor, "..");
-    if (parent === cursor || isAbsolute(cursor) === false)
-      throw new Error("Cannot locate Writ repository root");
-    cursor = parent;
-  }
 }

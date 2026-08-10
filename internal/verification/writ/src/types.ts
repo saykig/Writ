@@ -145,6 +145,12 @@ export interface MigrationRename {
   corpus_id: string;
 }
 
+export interface WorkflowStateEnvelope {
+  workflow_id: string;
+  adapter_version: string;
+  state: unknown;
+}
+
 export interface RepositorySnapshot {
   root: string;
   catalog: CorpusCatalog;
@@ -156,8 +162,7 @@ export interface RepositorySnapshot {
   judgments: Loaded<CurrentRecordJudgment>[];
   documents: LoadedDocument[];
   objects: IndexedObject[];
-  queues: MappingQueue[];
-  humanReviews: CrossFamilyHumanReview[];
+  workflowStates: Record<string, WorkflowStateEnvelope>;
   migrations: MigrationRename[];
   loadIssues: VerificationIssue[];
 }

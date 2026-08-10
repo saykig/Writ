@@ -1,5 +1,6 @@
 import { InstitutionResolutionError } from "@writ/domain";
 
+import { getAdr0019WorkflowState } from "../adapters/adr-0019-workflow.js";
 import { findObjects } from "../repository.js";
 import { activeLinks, isAdr0019Relation, resolveInstitution } from "../rules/adr-0019.js";
 import {
@@ -137,6 +138,7 @@ function supportingRecordMatches(snapshot: RepositorySnapshot, id: string): Inde
 
 export function verifyInteroperability(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
+  const { queues } = getAdr0019WorkflowState(snapshot);
   const links = activeLinks(snapshot);
   const linksById = new Map<string, typeof links>();
   for (const loaded of links) {
@@ -387,7 +389,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
     matches.push(item);
     signatures.set(signature, matches);
   }
-  for (const queue of snapshot.queues) {
+  for (const queue of queues) {
     const activeQueueMappings = new Set<string>();
     for (const id of queue.active_link_ids) {
       const matches = linksById.get(id) ?? [];

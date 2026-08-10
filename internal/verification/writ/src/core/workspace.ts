@@ -1,11 +1,20 @@
-import { existsSync } from "node:fs";
-import { isAbsolute, relative, resolve } from "node:path";
-
-import { repositoryRoot } from "../repository.js";
+import { existsSync, realpathSync } from "node:fs";
+import { isAbsolute, join, relative, resolve } from "node:path";
 
 export interface VerificationWorkspace {
   /** Absolute filesystem/worktree root. */
   root: string;
+}
+
+export function repositoryRoot(from: string = import.meta.dir): string {
+  let cursor = resolve(from);
+  while (true) {
+    if (existsSync(join(cursor, "AGENTS.md")) && existsSync(join(cursor, "schemas"))) return cursor;
+    const parent = resolve(cursor, "..");
+    if (parent === cursor || isAbsolute(cursor) === false)
+      throw new Error("Cannot locate Writ repository root");
+    cursor = parent;
+  }
 }
 
 export type WorkspacePathResolution =
@@ -29,6 +38,18 @@ export function resolveWorkspacePath(
   const label = relative(root, absolute);
   if (label === ".." || label.startsWith("../") || isAbsolute(label)) {
     return { ok: false, requested };
+  }
+  if (existsSync(absolute)) {
+    try {
+      const physicalRoot = realpathSync(root);
+      const physical = realpathSync(absolute);
+      const physicalLabel = relative(physicalRoot, physical);
+      if (physicalLabel === ".." || physicalLabel.startsWith("../") || isAbsolute(physicalLabel)) {
+        return { ok: false, requested };
+      }
+    } catch {
+      return { ok: false, requested };
+    }
   }
   return { ok: true, absolute, relative: label || "." };
 }
