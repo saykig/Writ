@@ -15,12 +15,7 @@ the reviewed claim and the resulting analysis connected.
 1. Sources provide the original laws, policies, reports and research.
 2. Human-reviewed records capture specific claims and their evidence.
 3. Corpora organize those records by jurisdiction or subject.
-4. Saved queries ask reproducible questions across one or more corpora.
-5. Results retain a trace back to the records and sources that produced them.
-
-A corpus stores reviewed knowledge. A query asks a question about that
-knowledge. A memo, comparison or visualization is an output, not a new source
-of truth.
+4. Results retain a trace back to the records and sources that produced them.
 
 ## What is available now
 
