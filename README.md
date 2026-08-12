@@ -21,9 +21,9 @@ the reviewed claim and the resulting analysis connected.
 
 The Writ pilot currently includes:
 
-- independent EU and US AI-governance corpora;
+- Legal and policy corpora
+- Institutional corpora
 - G7 and G20 multilateral policy records;
-- a saved EU–US AI-governance query;
 - reproducible evaluator benchmarks;
 - Writ Lab, where structured records and analyses can be inspected.
 
