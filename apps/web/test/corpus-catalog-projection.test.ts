@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 
 import {
@@ -129,5 +130,18 @@ describe("homepage corpus catalog projection", () => {
     expect(reader).toContain('for (const key of ["corpus_id", "family", "jurisdiction", "status"]');
     expect(pkg.scripts.embed).toContain("embed-corpus-catalog.ts");
     expect(pkg.scripts.build).toContain("embed-corpus-catalog.ts");
+  });
+
+  test("check mode detects drift without mutating the generated projection", () => {
+    const generated = resolve(WEB_ROOT, "lib/corpus-catalog-data.ts");
+    const before = createHash("sha256").update(readFileSync(generated)).digest("hex");
+    const result = Bun.spawnSync([process.execPath, "scripts/embed-corpus-catalog.ts", "--check"], {
+      cwd: WEB_ROOT,
+      stdout: "pipe",
+      stderr: "pipe",
+    });
+    const after = createHash("sha256").update(readFileSync(generated)).digest("hex");
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    expect(after).toBe(before);
   });
 });

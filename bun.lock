@@ -71,6 +71,16 @@
         "yaml": "^2.9.0",
       },
     },
+    "internal/verification/writ": {
+      "name": "@writ/verification-harness",
+      "version": "0.1.0",
+      "dependencies": {
+        "@writ/domain": "workspace:*",
+        "@writ/language": "workspace:*",
+        "ajv": "^8.20.0",
+        "ajv-formats": "^3.0.1",
+      },
+    },
     "packages/analyzer": {
       "name": "@writ/analyzer",
       "version": "0.1.0",
@@ -626,6 +636,8 @@
     "@writ/language": ["@writ/language@workspace:packages/language"],
 
     "@writ/provenance": ["@writ/provenance@workspace:packages/provenance"],
+
+    "@writ/verification-harness": ["@writ/verification-harness@workspace:internal/verification/writ"],
 
     "@writ/web": ["@writ/web@workspace:apps/web"],
 

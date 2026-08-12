@@ -9,7 +9,8 @@
   },
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "internal/verification/writ"
   ],
   "scripts": {
     "build": "bun run --filter '*' build",
@@ -19,6 +20,11 @@
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "conformance": "bun test packages/conformance",
+    "verify:writ": "bun internal/verification/writ/src/cli.ts all",
+    "verify:ontology": "bun internal/verification/writ/src/cli.ts ontology",
+    "verify:interop": "bun internal/verification/writ/src/cli.ts interoperability",
+    "verify:provenance": "bun internal/verification/writ/src/cli.ts provenance",
+    "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
     "replicate": "bun internal/tooling/scripts/replicate.ts",
     "dev": "bun run --filter '@writ/api' --filter '@writ/web' dev",
     "web": "bun run --filter '@writ/web' dev",
