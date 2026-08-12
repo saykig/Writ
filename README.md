@@ -3,7 +3,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (i.e., domain-specific language (DSL)).
+traceable knowledge (domain-specific language).
 
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
@@ -15,20 +15,15 @@ the reviewed claim and the resulting analysis connected.
 1. Sources provide the original laws, policies, reports and research.
 2. Human-reviewed records capture specific claims and their evidence.
 3. Corpora organize those records by jurisdiction or subject.
-4. Saved queries ask reproducible questions across one or more corpora.
-5. Results retain a trace back to the records and sources that produced them.
-
-A corpus stores reviewed knowledge. A query asks a question about that
-knowledge. A memo, comparison or visualization is an output, not a new source
-of truth.
+4. Results retain a trace back to the records and sources that produced them.
 
 ## What is available now
 
 The Writ pilot currently includes:
 
-- independent EU and US AI-governance corpora;
+- Legal and policy corpora
+- Institutional corpora
 - G7 and G20 multilateral policy records;
-- a saved EU–US AI-governance query;
 - reproducible evaluator benchmarks;
 - Writ Lab, where structured records and analyses can be inspected.
 
