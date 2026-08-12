@@ -1,0 +1,409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json",
+  "title": "Writ deterministic data bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "catalog",
+    "corpora",
+    "resources",
+    "records",
+    "recordLinks",
+    "recordJudgments"
+  ],
+  "properties": {
+    "metadata": { "$ref": "#/$defs/metadata" },
+    "catalog": { "$ref": "#/$defs/catalog" },
+    "corpora": { "type": "array", "items": { "$ref": "#/$defs/corpus" } },
+    "resources": { "type": "array", "items": { "$ref": "#/$defs/resource" } },
+    "records": { "type": "array", "items": { "$ref": "#/$defs/record" } },
+    "recordLinks": { "type": "array", "items": { "$ref": "#/$defs/recordLink" } },
+    "recordJudgments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recordJudgment" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "nullableString": { "type": ["string", "null"] },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:[\\\\/]).+"
+    },
+    "jsonObject": { "type": "object" },
+    "stringArray": { "type": "array", "items": { "type": "string" } },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "language", "sha256", "content"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "language": { "enum": ["json", "writ", "yaml"] },
+        "sha256": { "$ref": "#/$defs/hash" },
+        "content": { "type": "string" }
+      }
+    },
+    "recordContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "version"],
+      "properties": {
+        "kind": { "enum": ["compatibility", "native"] },
+        "id": { "type": "string", "format": "uri" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundleFormatVersion",
+        "writVersion",
+        "writCommit",
+        "repository",
+        "softwareLicense",
+        "softwareLicenseFile",
+        "copyrightNotice",
+        "schemaVersions",
+        "sectionHashes",
+        "bundleHash"
+      ],
+      "properties": {
+        "bundleFormatVersion": { "const": "1.0.0" },
+        "writVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "writCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "repository": { "type": "string", "format": "uri" },
+        "softwareLicense": { "$ref": "#/$defs/nullableString" },
+        "softwareLicenseFile": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "copyrightNotice": { "$ref": "#/$defs/nullableString" },
+        "schemaVersions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["corpusCatalog", "corpusManifests", "recordContracts"],
+          "properties": {
+            "corpusCatalog": { "$ref": "#/$defs/nonEmptyString" },
+            "corpusManifests": { "$ref": "#/$defs/stringArray" },
+            "recordContracts": {
+              "type": "object",
+              "additionalProperties": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        },
+        "sectionHashes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "catalog",
+            "corpora",
+            "resources",
+            "records",
+            "recordLinks",
+            "recordJudgments"
+          ],
+          "properties": {
+            "catalog": { "$ref": "#/$defs/hash" },
+            "corpora": { "$ref": "#/$defs/hash" },
+            "resources": { "$ref": "#/$defs/hash" },
+            "records": { "$ref": "#/$defs/hash" },
+            "recordLinks": { "$ref": "#/$defs/hash" },
+            "recordJudgments": { "$ref": "#/$defs/hash" }
+          }
+        },
+        "bundleHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "schemaVersion",
+        "implementedNativeFamilies",
+        "nativeCorpora",
+        "retiredCorpusMigrations"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/source" },
+        "schemaVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "implementedNativeFamilies": { "$ref": "#/$defs/stringArray" },
+        "nativeCorpora": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["corpusId", "family", "jurisdiction", "status", "path", "manifestPath"],
+            "properties": {
+              "corpusId": { "$ref": "#/$defs/nonEmptyString" },
+              "family": { "$ref": "#/$defs/nonEmptyString" },
+              "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
+              "status": { "$ref": "#/$defs/nonEmptyString" },
+              "path": { "$ref": "#/$defs/relativePath" },
+              "manifestPath": { "$ref": "#/$defs/relativePath" }
+            }
+          }
+        },
+        "retiredCorpusMigrations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/jsonObject" }
+        }
+      }
+    },
+    "canonicalIdentity": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instrumentId"],
+          "properties": {
+            "kind": { "const": "instrument" },
+            "instrumentId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "instrumentSeriesId"],
+          "properties": {
+            "kind": { "const": "instrument_series" },
+            "instrumentSeriesId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "publicationId"],
+          "properties": {
+            "kind": { "const": "publication" },
+            "publicationId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "datasetCollectionId"],
+          "properties": {
+            "kind": { "const": "dataset_collection" },
+            "datasetCollectionId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "rootInstitutionId"],
+          "properties": {
+            "kind": { "const": "root_institution" },
+            "rootInstitutionId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        }
+      ]
+    },
+    "resourceMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sources", "passages", "records", "relationships", "judgments", "migration"],
+      "properties": {
+        "sources": { "$ref": "#/$defs/stringArray" },
+        "passages": { "$ref": "#/$defs/stringArray" },
+        "records": { "$ref": "#/$defs/stringArray" },
+        "relationships": { "$ref": "#/$defs/stringArray" },
+        "judgments": { "$ref": "#/$defs/stringArray" },
+        "migration": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "corpusId",
+        "family",
+        "jurisdiction",
+        "status",
+        "path",
+        "manifestPath",
+        "canonicalIdentity",
+        "recordContract",
+        "manifest",
+        "manifestSource",
+        "resources"
+      ],
+      "properties": {
+        "corpusId": { "$ref": "#/$defs/nonEmptyString" },
+        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "jurisdiction": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "$ref": "#/$defs/nonEmptyString" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "manifestPath": { "$ref": "#/$defs/relativePath" },
+        "canonicalIdentity": { "$ref": "#/$defs/canonicalIdentity" },
+        "recordContract": { "$ref": "#/$defs/recordContract" },
+        "manifest": { "$ref": "#/$defs/jsonObject" },
+        "manifestSource": { "$ref": "#/$defs/source" },
+        "resources": { "$ref": "#/$defs/resourceMap" }
+      }
+    },
+    "resource": { "$ref": "#/$defs/source" },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "documentVersionId",
+        "title",
+        "uri",
+        "publisher",
+        "issuedAt",
+        "retrievedAt",
+        "mediaType",
+        "sourceTier"
+      ],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/nullableString" },
+        "documentVersionId": { "$ref": "#/$defs/nullableString" },
+        "title": { "$ref": "#/$defs/nullableString" },
+        "uri": { "$ref": "#/$defs/nullableString" },
+        "publisher": { "$ref": "#/$defs/nullableString" },
+        "issuedAt": { "$ref": "#/$defs/nullableString" },
+        "retrievedAt": { "$ref": "#/$defs/nullableString" },
+        "mediaType": { "$ref": "#/$defs/nullableString" },
+        "sourceTier": { "type": ["integer", "number", "null"] }
+      }
+    },
+    "evidenceSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supportId",
+        "state",
+        "passageId",
+        "locator",
+        "quote",
+        "basis",
+        "passageHash",
+        "documentHash",
+        "reason",
+        "source"
+      ],
+      "properties": {
+        "supportId": { "$ref": "#/$defs/nonEmptyString" },
+        "state": { "enum": ["traced", "unresolved"] },
+        "passageId": { "$ref": "#/$defs/nullableString" },
+        "locator": { "$ref": "#/$defs/nullableString" },
+        "quote": { "$ref": "#/$defs/nullableString" },
+        "basis": { "$ref": "#/$defs/nullableString" },
+        "passageHash": { "$ref": "#/$defs/nullableString" },
+        "documentHash": { "$ref": "#/$defs/nullableString" },
+        "reason": { "$ref": "#/$defs/nullableString" },
+        "source": { "$ref": "#/$defs/evidenceSource" }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordKey",
+        "corpusId",
+        "recordId",
+        "family",
+        "recordType",
+        "reviewState",
+        "aliases",
+        "legacyRefs",
+        "reference",
+        "contract",
+        "evidence",
+        "uncertainties",
+        "storedSource",
+        "storedRecord",
+        "compiledRecord"
+      ],
+      "properties": {
+        "recordKey": { "$ref": "#/$defs/nonEmptyString" },
+        "corpusId": { "$ref": "#/$defs/nonEmptyString" },
+        "recordId": { "$ref": "#/$defs/nonEmptyString" },
+        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "recordType": { "$ref": "#/$defs/nonEmptyString" },
+        "reviewState": { "$ref": "#/$defs/nullableString" },
+        "aliases": { "$ref": "#/$defs/stringArray" },
+        "legacyRefs": { "$ref": "#/$defs/stringArray" },
+        "reference": { "$ref": "#/$defs/nullableString" },
+        "contract": { "$ref": "#/$defs/recordContract" },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceSupport" } },
+        "uncertainties": { "type": "array" },
+        "storedSource": { "$ref": "#/$defs/source" },
+        "storedRecord": { "oneOf": [{ "$ref": "#/$defs/jsonObject" }, { "type": "null" }] },
+        "compiledRecord": {
+          "oneOf": [{ "$ref": "#/$defs/jsonObject" }, { "type": "null" }]
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["storedRecord"],
+          "properties": {
+            "compiledRecord": { "type": "null" },
+            "storedRecord": { "type": "object" }
+          }
+        },
+        {
+          "required": ["compiledRecord"],
+          "properties": {
+            "storedRecord": { "type": "null" },
+            "compiledRecord": { "type": "object" }
+          }
+        }
+      ]
+    },
+    "recordLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "linkKey",
+        "corpusId",
+        "linkId",
+        "reviewState",
+        "contractId",
+        "storedSource",
+        "value"
+      ],
+      "properties": {
+        "linkKey": { "$ref": "#/$defs/nonEmptyString" },
+        "corpusId": { "$ref": "#/$defs/nonEmptyString" },
+        "linkId": { "$ref": "#/$defs/nonEmptyString" },
+        "reviewState": { "$ref": "#/$defs/nonEmptyString" },
+        "contractId": { "type": "string", "format": "uri" },
+        "storedSource": { "$ref": "#/$defs/source" },
+        "value": { "$ref": "#/$defs/jsonObject" }
+      }
+    },
+    "recordJudgment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "judgmentKey",
+        "corpusId",
+        "judgmentId",
+        "targetKind",
+        "targetId",
+        "status",
+        "contractId",
+        "storedSource",
+        "compiledJudgment"
+      ],
+      "properties": {
+        "judgmentKey": { "$ref": "#/$defs/nonEmptyString" },
+        "corpusId": { "$ref": "#/$defs/nonEmptyString" },
+        "judgmentId": { "$ref": "#/$defs/nonEmptyString" },
+        "targetKind": { "$ref": "#/$defs/nonEmptyString" },
+        "targetId": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "$ref": "#/$defs/nonEmptyString" },
+        "contractId": { "type": "string", "format": "uri" },
+        "storedSource": { "$ref": "#/$defs/source" },
+        "compiledJudgment": { "$ref": "#/$defs/jsonObject" }
+      }
+    }
+  }
+}

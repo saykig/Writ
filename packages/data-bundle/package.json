@@ -1,0 +1,28 @@
+{
+  "name": "@writ/data-bundle",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "export": "bun src/cli.ts export",
+    "check": "bun src/cli.ts check",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./contract": "./src/contract.ts"
+  },
+  "dependencies": {
+    "@writ/domain": "workspace:*",
+    "@writ/language": "workspace:*",
+    "@writ/provenance": "workspace:*",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.9.0"
+  }
+}
