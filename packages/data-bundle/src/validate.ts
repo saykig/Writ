@@ -69,6 +69,21 @@ function assertPortable(value: unknown, path = "$"): void {
   }
 }
 
+export function assertSourceFragments(bundle: WritDataBundle): void {
+  for (const record of bundle.records) {
+    if (record.storedSource.fragment !== record.recordId) {
+      throw new Error(`${record.recordKey} stored-source fragment must equal its record identity`);
+    }
+  }
+  for (const judgment of bundle.recordJudgments) {
+    if (judgment.storedSource.fragment !== judgment.judgmentId) {
+      throw new Error(
+        `${judgment.judgmentKey} stored-source fragment must equal its judgment identity`,
+      );
+    }
+  }
+}
+
 export function validateWritDataBundle(bundle: WritDataBundle): void {
   const ajv = new Ajv2020({ allErrors: true, strict: true, allowUnionTypes: true });
   addFormats(ajv);
@@ -84,5 +99,6 @@ export function validateWritDataBundle(bundle: WritDataBundle): void {
     if (forbidden in bundle.metadata)
       throw new Error(`metadata.${forbidden} is a generation timestamp`);
   }
+  assertSourceFragments(bundle);
   assertPortable(bundle);
 }

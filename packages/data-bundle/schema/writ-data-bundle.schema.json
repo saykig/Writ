@@ -39,9 +39,10 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["path", "language", "sha256", "content"],
+      "required": ["path", "fragment", "language", "sha256", "content"],
       "properties": {
         "path": { "$ref": "#/$defs/relativePath" },
+        "fragment": { "$ref": "#/$defs/nullableString" },
         "language": { "enum": ["json", "writ", "yaml"] },
         "sha256": { "$ref": "#/$defs/hash" },
         "content": { "type": "string" }
@@ -67,7 +68,10 @@
         "repository",
         "softwareLicense",
         "softwareLicenseFile",
+        "softwareLicenseText",
         "copyrightNotice",
+        "thirdPartyNoticesFile",
+        "thirdPartyNoticesText",
         "schemaVersions",
         "sectionHashes",
         "bundleHash"
@@ -81,7 +85,12 @@
         "softwareLicenseFile": {
           "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
         },
+        "softwareLicenseText": { "$ref": "#/$defs/nullableString" },
         "copyrightNotice": { "$ref": "#/$defs/nullableString" },
+        "thirdPartyNoticesFile": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "thirdPartyNoticesText": { "$ref": "#/$defs/nullableString" },
         "schemaVersions": {
           "type": "object",
           "additionalProperties": false,

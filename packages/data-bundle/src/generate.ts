@@ -7,18 +7,36 @@ import { hashCanonical } from "./hashing.js";
 import { projectCanonicalObjects } from "./project.js";
 import { asJsonObject, readNativeRepository, repositoryRoot, strings, text } from "./repository.js";
 
-function commitIdentity(): string {
-  const result = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: repositoryRoot });
-  if (result.exitCode !== 0) throw new Error("Unable to determine the Writ commit identity");
-  const commit = result.stdout.toString().trim();
+function gitOutput(args: readonly string[], label: string): string {
+  const result = Bun.spawnSync(["git", ...args], { cwd: repositoryRoot });
+  if (result.exitCode !== 0) throw new Error(`Unable to determine ${label}`);
+  return result.stdout.toString().trim();
+}
+
+export function resolveCommitIdentity(commit: string, worktreeStatus: string): string {
   if (!/^[0-9a-f]{40}$/.test(commit)) throw new Error(`Invalid Writ commit identity: ${commit}`);
+  if (worktreeStatus.length > 0) {
+    throw new Error(
+      "The Writ data bundle must be exported from a clean committed repository state",
+    );
+  }
   return commit;
+}
+
+function commitIdentity(): string {
+  return resolveCommitIdentity(
+    gitOutput(["rev-parse", "HEAD"], "the Writ commit identity"),
+    gitOutput(["status", "--porcelain=v1", "--untracked-files=all"], "the Writ worktree state"),
+  );
 }
 
 function licenseMetadata(): {
   softwareLicense: string | null;
   softwareLicenseFile: string | null;
+  softwareLicenseText: string | null;
   copyrightNotice: string | null;
+  thirdPartyNoticesFile: string | null;
+  thirdPartyNoticesText: string | null;
 } {
   const packageJson = JSON.parse(readFileSync(join(repositoryRoot, "package.json"), "utf8")) as {
     license?: string;
@@ -26,14 +44,26 @@ function licenseMetadata(): {
   const licenseFile = ["LICENSE", "LICENSE.md", "LICENSE.txt"].find((name) =>
     existsSync(join(repositoryRoot, name)),
   );
-  const noticeFile = ["NOTICE", "NOTICE.md", "NOTICE.txt"].find((name) =>
-    existsSync(join(repositoryRoot, name)),
-  );
+  const thirdPartyNoticesFile = [
+    "THIRD_PARTY_NOTICES.md",
+    "THIRD_PARTY_NOTICES.txt",
+    "THIRD_PARTY_NOTICES",
+  ].find((name) => existsSync(join(repositoryRoot, name)));
+  const readme = readFileSync(join(repositoryRoot, "README.md"), "utf8");
+  const copyrightNotice = readme
+    .split("\n")
+    .map((line) => line.trim())
+    .find((line) => /^(?:copyright(?:\s+\(c\))?|©)\s+\d{4}(?:[-–]\d{4})?\b/i.test(line));
   return {
     softwareLicense: packageJson.license ?? null,
     softwareLicenseFile: licenseFile ?? null,
-    copyrightNotice: noticeFile
-      ? readFileSync(join(repositoryRoot, noticeFile), "utf8").trim()
+    softwareLicenseText: licenseFile
+      ? readFileSync(join(repositoryRoot, licenseFile), "utf8")
+      : null,
+    copyrightNotice: copyrightNotice ?? null,
+    thirdPartyNoticesFile: thirdPartyNoticesFile ?? null,
+    thirdPartyNoticesText: thirdPartyNoticesFile
+      ? readFileSync(join(repositoryRoot, thirdPartyNoticesFile), "utf8")
       : null,
   };
 }
@@ -48,7 +78,10 @@ function writVersion(): string {
   return packageJson.version;
 }
 
-export function generateWritDataBundle(): WritDataBundle {
+export function generateWritDataBundleForCommit(writCommit: string): WritDataBundle {
+  if (!/^[0-9a-f]{40}$/.test(writCommit)) {
+    throw new Error(`Invalid Writ commit identity: ${writCommit}`);
+  }
   const repository = readNativeRepository();
   const projected = projectCanonicalObjects(repository);
   const catalogValue = repository.catalog;
@@ -118,7 +151,7 @@ export function generateWritDataBundle(): WritDataBundle {
   const metadataWithoutBundleHash = {
     bundleFormatVersion: WRIT_DATA_BUNDLE_FORMAT_VERSION,
     writVersion: writVersion(),
-    writCommit: commitIdentity(),
+    writCommit,
     repository: "https://github.com/saykig/Writ",
     ...license,
     schemaVersions: {
@@ -136,4 +169,9 @@ export function generateWritDataBundle(): WritDataBundle {
   };
   const bundleHash = hashCanonical({ metadata: metadataWithoutBundleHash, ...sections });
   return { metadata: { ...metadataWithoutBundleHash, bundleHash }, ...sections };
+}
+
+/** Generate an operator-chosen snapshot only when HEAD exactly represents the working tree. */
+export function generateWritDataBundle(): WritDataBundle {
+  return generateWritDataBundleForCommit(commitIdentity());
 }

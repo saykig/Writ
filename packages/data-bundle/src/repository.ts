@@ -122,7 +122,13 @@ function languageFor(path: string): BundleSource["language"] {
 export function source(path: string, content?: string): BundleSource {
   if (isAbsolute(path)) throw new Error(`Bundle source path must be relative: ${path}`);
   const bytes = content ?? readFileSync(join(repositoryRoot, path), "utf8");
-  return { path, language: languageFor(path), sha256: rawHash(bytes), content: bytes };
+  return {
+    path,
+    fragment: null,
+    language: languageFor(path),
+    sha256: rawHash(bytes),
+    content: bytes,
+  };
 }
 
 function ensureInsideRepository(absolute: string): string {

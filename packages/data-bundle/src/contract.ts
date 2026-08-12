@@ -5,6 +5,8 @@ export type BundleSourceLanguage = "json" | "writ" | "yaml";
 
 export interface BundleSource {
   readonly path: string;
+  /** Stable identity of an exact declaration/sequence item inside path, or null for the whole file. */
+  readonly fragment: string | null;
   readonly language: BundleSourceLanguage;
   readonly sha256: string;
   readonly content: string;
@@ -55,12 +57,7 @@ export interface BundleCorpus {
   readonly resources: Readonly<Record<BundleManifestCategory, readonly string[]>>;
 }
 
-export interface BundleResource {
-  readonly path: string;
-  readonly language: BundleSourceLanguage;
-  readonly sha256: string;
-  readonly content: string;
-}
+export type BundleResource = BundleSource;
 
 export interface BundleEvidenceSource {
   readonly sourceId: string | null;
@@ -135,7 +132,10 @@ export interface WritDataBundle {
     readonly repository: string;
     readonly softwareLicense: string | null;
     readonly softwareLicenseFile: string | null;
+    readonly softwareLicenseText: string | null;
     readonly copyrightNotice: string | null;
+    readonly thirdPartyNoticesFile: string | null;
+    readonly thirdPartyNoticesText: string | null;
     readonly schemaVersions: {
       readonly corpusCatalog: string;
       readonly corpusManifests: readonly string[];

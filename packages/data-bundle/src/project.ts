@@ -1,4 +1,9 @@
-import { compileSource } from "@writ/language";
+import {
+  compileSource,
+  isConceptDeclaration,
+  isSource,
+  parseDocument as parseWritDocument,
+} from "@writ/language";
 
 import type {
   BundleEvidenceSource,
@@ -25,22 +30,14 @@ import {
   validateAgainstContract,
 } from "./repository.js";
 
-const NULL_SOURCE: BundleEvidenceSource = {
-  sourceId: null,
-  documentVersionId: null,
-  title: null,
-  uri: null,
-  publisher: null,
-  issuedAt: null,
-  retrievedAt: null,
-  mediaType: null,
-  sourceTier: null,
-};
-
 const optionalText = (value: unknown): string | null =>
   typeof value === "string" && value.length > 0 ? value : null;
 const optionalNumber = (value: unknown): number | null =>
   typeof value === "number" && Number.isFinite(value) ? value : null;
+
+interface SourceRegistryEntry extends BundleEvidenceSource {
+  readonly documentHash: string | null;
+}
 
 function yamlCollections(
   corpus: NativeCorpus,
@@ -71,7 +68,7 @@ function legalSource(value: Mapping): BundleEvidenceSource {
   };
 }
 
-function projectCompatibilityEvidence(
+export function projectCompatibilityEvidence(
   corpus: NativeCorpus,
   record: Mapping,
 ): BundleEvidenceSupport[] {
@@ -140,26 +137,13 @@ function projectCompatibilityEvidence(
       source: legalSource(sourceValue),
     });
   }
-  if (result.length === 0) {
-    result.push({
-      supportId: `${recordId}:unresolved`,
-      state: "unresolved",
-      passageId: null,
-      locator: optionalText(record.source_locator),
-      quote: null,
-      basis: null,
-      passageHash: null,
-      documentHash: null,
-      reason: "No canonical passage or unresolved coverage record is registered.",
-      source: NULL_SOURCE,
-    });
-  }
   return result;
 }
 
-function sourceForRecord(path: string, content: string): BundleSource {
+function sourceForRecord(path: string, fragment: string, content: string): BundleSource {
   return {
     path,
+    fragment,
     language: path.endsWith(".writ") ? "writ" : "yaml",
     sha256: rawHash(content),
     content,
@@ -199,7 +183,7 @@ function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
           contract: corpus.manifest.record_contract,
           evidence: projectCompatibilityEvidence(corpus, exact.value),
           uncertainties: Array.isArray(exact.value.uncertainties) ? exact.value.uncertainties : [],
-          storedSource: sourceForRecord(path, exact.source),
+          storedSource: sourceForRecord(path, recordId, exact.source),
           storedRecord: asJsonObject(exact.value, `${path}.${recordId}`),
           compiledRecord: null,
         });
@@ -209,29 +193,134 @@ function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
   return records;
 }
 
-function sourceRegistry(repository: NativeRepository): ReadonlyMap<string, BundleEvidenceSource> {
-  const result = new Map<string, BundleEvidenceSource>();
-  for (const resource of repository.resources.values()) {
-    if (resource.language !== "yaml") continue;
-    const parsed = object(parsedResource(resource), resource.path);
-    if (!Array.isArray(parsed.sources)) continue;
-    for (const value of parsed.sources) {
-      const mapping = object(value, `${resource.path}.sources`);
-      const id = optionalText(mapping.machine_id);
-      if (id) result.set(id, legalSource(mapping));
+function plainProperties(
+  properties: readonly {
+    readonly $type: string;
+    readonly value?: unknown;
+    readonly name?: string;
+  }[],
+): ReadonlyMap<string, unknown> {
+  return new Map(
+    properties.map((property) => [property.name ?? property.$type, property.value] as const),
+  );
+}
+
+function registerSource(
+  corpus: NativeCorpus,
+  path: string,
+  registry: Map<string, SourceRegistryEntry>,
+  entry: SourceRegistryEntry,
+): void {
+  const sourceId = entry.sourceId;
+  if (!sourceId) throw new Error(`${path}: source metadata has no canonical source identity`);
+  if (registry.has(sourceId)) {
+    throw new Error(`${corpus.entry.corpus_id}: duplicate source identity ${sourceId}`);
+  }
+  registry.set(sourceId, entry);
+}
+
+/** Build source identity only from the current corpus's manifest-routed source modules. */
+function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, SourceRegistryEntry> {
+  const registry = new Map<string, SourceRegistryEntry>();
+  for (const path of corpus.resources.sources) {
+    const resource = source(path);
+    if (resource.language === "yaml") {
+      const parsed = object(parsedResource(resource), path);
+      if (!Array.isArray(parsed.sources)) continue;
+      for (const value of parsed.sources) {
+        const mapping = object(value, `${path}.sources`);
+        const projected = legalSource(mapping);
+        registerSource(corpus, path, registry, {
+          ...projected,
+          documentHash: optionalText(mapping.sha256),
+        });
+      }
+      continue;
+    }
+    if (resource.language !== "writ") continue;
+    const parsed = parseWritDocument(resource.content, { fileName: path });
+    if (!parsed.ok) {
+      throw new Error(`${path}: ${parsed.diagnostics.map((item) => item.message).join("; ")}`);
+    }
+    for (let index = 0; index < parsed.model.declarations.length; index += 1) {
+      const declaration = parsed.model.declarations[index];
+      if (!isSource(declaration)) continue;
+      const metadata = parsed.model.declarations[index + 1];
+      if (!isConceptDeclaration(metadata)) {
+        throw new Error(`${path}: source ${declaration.name} is not followed by source metadata`);
+      }
+      const sourceProperties = plainProperties(declaration.properties);
+      const metadataProperties = plainProperties(metadata.properties);
+      registerSource(corpus, path, registry, {
+        sourceId: optionalText(metadataProperties.get("source_id")),
+        documentVersionId: optionalText(metadataProperties.get("source_version")),
+        title: optionalText(metadataProperties.get("source_title")),
+        uri: optionalText(sourceProperties.get("SourceUri")),
+        publisher: null,
+        issuedAt: optionalText(metadataProperties.get("source_date")),
+        retrievedAt: optionalText(sourceProperties.get("SourceRetrieved")),
+        mediaType: optionalText(sourceProperties.get("SourceMediaType")),
+        sourceTier: null,
+        documentHash: optionalText(sourceProperties.get("SourceSha")),
+      });
     }
   }
-  return result;
+  return registry;
+}
+
+function embeddedLegalPolicySource(
+  corpus: NativeCorpus,
+  record: Mapping,
+  sourceId: string,
+  documentHash: string | null,
+): SourceRegistryEntry | undefined {
+  if (corpus.entry.family !== "legal_policy") return undefined;
+  const metadataValue = record.source_metadata;
+  if (metadataValue === undefined) return undefined;
+  const metadata = object(metadataValue, `${record.record_id}.source_metadata`);
+  return {
+    sourceId,
+    documentVersionId: null,
+    title: optionalText(metadata.title),
+    uri: optionalText(metadata.source_url),
+    publisher: null,
+    issuedAt: null,
+    retrievedAt: null,
+    mediaType: null,
+    sourceTier: null,
+    documentHash,
+  };
 }
 
 function compiledEvidence(
+  corpus: NativeCorpus,
   value: Mapping,
-  registry: ReadonlyMap<string, BundleEvidenceSource>,
+  registry: ReadonlyMap<string, SourceRegistryEntry>,
 ): BundleEvidenceSupport[] {
   if (!Array.isArray(value.evidence)) return [];
   return value.evidence.map((item, index) => {
     const support = object(item, `evidence[${index}]`);
-    const sourceId = optionalText(support.source_id);
+    const sourceId = text(support.source_id, `evidence[${index}].source_id`);
+    const documentHash = optionalText(support.document_hash);
+    const resolved =
+      registry.get(sourceId) ?? embeddedLegalPolicySource(corpus, value, sourceId, documentHash);
+    if (resolved?.documentHash && documentHash !== resolved.documentHash) {
+      throw new Error(
+        `${corpus.entry.corpus_id}: evidence source ${sourceId} has document hash ${documentHash ?? "null"}, expected ${resolved.documentHash}`,
+      );
+    }
+    const { documentHash: _registeredHash, ...sourceMetadata } = resolved ?? {
+      sourceId,
+      documentVersionId: null,
+      title: null,
+      uri: null,
+      publisher: null,
+      issuedAt: null,
+      retrievedAt: null,
+      mediaType: null,
+      sourceTier: null,
+      documentHash,
+    };
     return {
       supportId:
         optionalText(support.passage_id) ??
@@ -242,9 +331,15 @@ function compiledEvidence(
       quote: optionalText(support.quote),
       basis: optionalText(support.basis),
       passageHash: optionalText(support.passage_hash),
-      documentHash: optionalText(support.document_hash),
+      documentHash,
       reason: null,
-      source: (sourceId ? registry.get(sourceId) : undefined) ?? { ...NULL_SOURCE, sourceId },
+      source: {
+        ...sourceMetadata,
+        documentVersionId: text(
+          support.document_version_id,
+          `evidence[${index}].document_version_id`,
+        ),
+      },
     };
   });
 }
@@ -262,7 +357,7 @@ function compileClean(path: string, content: string) {
 
 function projectWritRecords(
   corpus: NativeCorpus,
-  registry: ReadonlyMap<string, BundleEvidenceSource>,
+  registry: ReadonlyMap<string, SourceRegistryEntry>,
 ): BundleRecord[] {
   const records: BundleRecord[] = [];
   for (const path of corpus.resources.records) {
@@ -293,9 +388,9 @@ function projectWritRecords(
         legacyRefs: [],
         reference: null,
         contract: corpus.manifest.record_contract,
-        evidence: compiledEvidence(record, registry),
+        evidence: compiledEvidence(corpus, record, registry),
         uncertainties: Array.isArray(record.uncertainties) ? record.uncertainties : [],
-        storedSource: sourceForRecord(path, exactSource),
+        storedSource: sourceForRecord(path, recordValue.record_id, exactSource),
         storedRecord: null,
         compiledRecord: asJsonObject(record, `${path}.${recordValue.record_id}`),
       });
@@ -347,7 +442,7 @@ function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
         targetId: text(judgment.target_id, `${value.judgment_id}.target_id`),
         status: text(judgment.status, `${value.judgment_id}.status`),
         contractId: RECORD_JUDGMENT_CONTRACT,
-        storedSource: sourceForRecord(path, exactSource),
+        storedSource: sourceForRecord(path, value.judgment_id, exactSource),
         compiledJudgment: asJsonObject(judgment, `${path}.${value.judgment_id}`),
       });
     }
@@ -368,7 +463,6 @@ export function projectCanonicalObjects(repository: NativeRepository): {
   readonly recordLinks: readonly BundleRecordLink[];
   readonly recordJudgments: readonly BundleRecordJudgment[];
 } {
-  const registry = sourceRegistry(repository);
   const records = repository.corpora.flatMap((corpus) => {
     const extensions = new Set(
       corpus.resources.records.map((path) =>
@@ -385,7 +479,7 @@ export function projectCanonicalObjects(repository: NativeRepository): {
       );
     }
     const projected = extensions.has("writ")
-      ? projectWritRecords(corpus, registry)
+      ? projectWritRecords(corpus, sourceRegistryForCorpus(corpus))
       : projectCompatibilityRecords(corpus);
     const counts = corpus.manifest.record_counts;
     const expected =
