@@ -411,5 +411,32 @@ tasks:
       - adr/0020-deterministic-writ-verification.md
       - docs/verification/verification-harness.md
       - .github/workflows/ci.yml
+
+  - id: WRIT-DATA-BUNDLE-001
+    title: Export the deterministic canonical Writ data bundle
+    status: review
+    dependencies:
+      - CORPUS-FAMILY-FOUNDATION-002
+      - CROSS-FAMILY-INTEROPERABILITY-001
+    scope:
+      - Define a neutral Writ-owned versioned data-bundle contract.
+      - Export every record routed through catalogued manifest record locations without review-state filtering.
+      - Preserve exact canonical source, evidence, provenance, review state, relationships and judgments.
+      - Add reproducible export and check commands with section and bundle hashes.
+    exclusions:
+      - Web presentation selections, Lab inputs, UI mappings, display ordering or search projections.
+      - Package publication, repository splitting, schema changes or corpus content changes.
+      - Changes to the Writ Verification Harness or alternate-root behavior.
+    acceptance:
+      - The bundle validates against its own contract and two clean exports are byte-identical.
+      - Catalog and manifest membership yields 72 records including accepted, approved, draft, superseded and review-less canonical records.
+      - Exact YAML and .writ source slices reparse to their canonical record identities.
+      - Six Core record links and 44 record judgments retain their canonical states.
+      - No generation timestamps, absolute machine paths or web-owned presentation decisions are exported.
+      - Formatting, linting, type checking, tests, conformance, build and verification pass.
+    outputs:
+      - packages/data-bundle
+      - package.json
+      - .github/workflows/ci.yml
 task_history:
   compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml

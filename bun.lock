@@ -123,6 +123,18 @@
         "@writ/provenance": "workspace:*",
       },
     },
+    "packages/data-bundle": {
+      "name": "@writ/data-bundle",
+      "version": "0.1.0",
+      "dependencies": {
+        "@writ/domain": "workspace:*",
+        "@writ/language": "workspace:*",
+        "@writ/provenance": "workspace:*",
+        "ajv": "^8.20.0",
+        "ajv-formats": "^3.0.1",
+        "yaml": "^2.9.0",
+      },
+    },
     "packages/domain": {
       "name": "@writ/domain",
       "version": "0.1.0",
@@ -628,6 +640,8 @@
     "@writ/cli": ["@writ/cli@workspace:packages/cli"],
 
     "@writ/conformance": ["@writ/conformance@workspace:packages/conformance"],
+
+    "@writ/data-bundle": ["@writ/data-bundle@workspace:packages/data-bundle"],
 
     "@writ/domain": ["@writ/domain@workspace:packages/domain"],
 
