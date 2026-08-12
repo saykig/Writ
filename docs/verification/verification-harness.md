@@ -1,9 +1,9 @@
 # Writ Verification Harness
 
 `bun run verify:writ` runs Writ's deterministic, authority-traced verification instrument. It reads
-an existing filesystem/worktree and reports findings; it never rewrites corpora, regenerates files,
-infers links, repairs manifests, approves judgments, or decides whether a change should be accepted or
-merged.
+a verification workspace—the Writ repository state being checked—and reports findings; it never
+rewrites corpora, regenerates files, infers links, repairs manifests, approves judgments, or decides
+whether a change should be accepted or merged.
 
 ## Result meaning
 
@@ -25,21 +25,22 @@ bun run verify:integrity
 bun run verify:writ
 ```
 
-Use an alternate existing filesystem/worktree root with `--root`:
+Normally the verification workspace is the current Writ repository. To select the filesystem path of
+an alternate existing Writ-compatible verification workspace, use `--root`:
 
 ```bash
-bun run verify:writ -- --root /path/to/writ-worktree
+bun run verify:writ -- --root <workspace>
 ```
 
-V1 verifies a filesystem/worktree root only. The caller creates and manages any sandbox or worktree;
-the harness does not create, clean or mutate one. Full integrity verification expects the input root
-to be a Git worktree because existing checksum and generated-drift checks use Git inventory.
+The caller creates and manages an alternate verification workspace; the harness does not create,
+clean or mutate one. Full integrity verification expects the verification workspace to be a Git
+worktree because existing checksum and generated-drift checks use Git inventory.
 
 For deterministic machine-readable output:
 
 ```bash
 bun run verify:writ -- --format json
-bun run verify:writ -- --root /path/to/writ-worktree --format json
+bun run verify:writ -- --root <workspace> --format json
 ```
 
 JSON output has stable top-level `status`, `gates`, `issues` and `summary` fields. It contains no
@@ -56,8 +57,8 @@ Human review determines acceptance.
 
 ## Candidate workflow
 
-1. Prepare candidate material in a Writ-compatible sandbox or worktree.
-2. Run `bun run verify:writ -- --root <sandbox>`.
+1. Prepare candidate material in a Writ-compatible verification workspace.
+2. Run `bun run verify:writ -- --root <workspace>`.
 3. Inspect ontology, interoperability, provenance and integrity findings.
 4. Fix machine-detectable problems or document unsupported or contested cases.
 5. A human reviewer decides whether and how the material enters Writ.
@@ -123,12 +124,12 @@ fails structurally; a recognizable future version reports `VERIFIER_UNSUPPORTED_
 
 ## Scale and workflow
 
-The harness is intended to run over worktrees with tens of thousands of routed records while keeping
-results bounded to deterministic findings. Callers can inspect JSON summaries, partition work by the
-four dimensions, and run the same root through human review workflows without copying corpus data into
-the harness. Future scaling work should measure loading and rule-pack performance against realistic
-inventories (for example 50,000 records) without relaxing authority isolation or inventing new family
-semantics.
+The harness is intended to run over verification workspaces with tens of thousands of routed records
+while keeping results bounded to deterministic findings. Callers can inspect JSON summaries,
+partition work by the four dimensions, and run the same verification workspace through human review
+workflows without copying corpus data into the harness. Future scaling work should measure loading
+and rule-pack performance against realistic inventories (for example 50,000 records) without relaxing
+authority isolation or inventing new family semantics.
 
 For illustration only—not as current Writ corpus counts—a 50,000-record candidate batch might report
 47,812 without findings, 1,403 unresolved identities, 531 missing evidence references, 192
