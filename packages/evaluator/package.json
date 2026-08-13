@@ -1,20 +1,25 @@
 {
   "name": "@writ/evaluator",
   "version": "0.1.0",
-  "private": true,
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "bun test",
     "lint": "eslint .",
     "format": "prettier --check ."
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "dependencies": {
     "@writ/domain": "workspace:*",

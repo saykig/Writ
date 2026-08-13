@@ -1,23 +1,37 @@
 {
   "name": "@writ/analyzer",
   "version": "0.1.0",
-  "private": true,
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "bun test",
     "lint": "eslint .",
     "format": "prettier --check ."
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": "./src/index.ts",
-    "./enumerate": "./src/enumerate.ts",
-    "./measure-analysis": "./src/measure-analysis.ts",
-    "./types": "./src/types.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./enumerate": {
+      "types": "./dist/enumerate.d.ts",
+      "import": "./dist/enumerate.js"
+    },
+    "./measure-analysis": {
+      "types": "./dist/measure-analysis.d.ts",
+      "import": "./dist/measure-analysis.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    }
   },
   "dependencies": {
     "@writ/domain": "workspace:*",

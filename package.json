@@ -27,6 +27,7 @@
     "verify:interop": "bun internal/verification/writ/src/cli.ts interoperability",
     "verify:provenance": "bun internal/verification/writ/src/cli.ts provenance",
     "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
+    "packages:pack": "bun internal/tooling/scripts/pack-semantic-packages.ts",
     "replicate": "bun internal/tooling/scripts/replicate.ts",
     "dev": "bun run --filter '@writ/api' dev",
     "db:up": "docker compose up -d postgres minio",
