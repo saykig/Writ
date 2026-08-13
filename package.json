@@ -28,8 +28,7 @@
     "verify:provenance": "bun internal/verification/writ/src/cli.ts provenance",
     "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
     "replicate": "bun internal/tooling/scripts/replicate.ts",
-    "dev": "bun run --filter '@writ/api' --filter '@writ/web' dev",
-    "web": "bun run --filter '@writ/web' dev",
+    "dev": "bun run --filter '@writ/api' dev",
     "db:up": "docker compose up -d postgres minio",
     "db:down": "docker compose down"
   },

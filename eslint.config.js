@@ -14,7 +14,6 @@ export default tseslint.config(
       "**/generated/**",
       "**/schemas.embedded.ts",
       "**/.next/**",
-      "apps/web/**",
     ],
   },
   js.configs.recommended,

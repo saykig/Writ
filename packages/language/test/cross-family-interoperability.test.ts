@@ -417,12 +417,5 @@ describe("mapping queue and preservation gates", () => {
       false,
     );
     expect(records.some((record) => record.record_id === activeId)).toBe(true);
-
-    const generatedCatalog = readFileSync(
-      join(ROOT, "apps/web/lib/corpus-catalog-data.ts"),
-      "utf8",
-    );
-    expect(generatedCatalog).not.toContain(`record ${historicalId} : institutional`);
-    expect(generatedCatalog).toContain(`record ${activeId} : institutional`);
   });
 });

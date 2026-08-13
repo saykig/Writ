@@ -73,8 +73,8 @@ Human review determines acceptance.
 - **Provenance** verifies current native/Core evidence, human dispositions, supersession and declared
   identifier migrations. Compatibility formats continue through their authoritative schemas and
   existing adapters unless a bounded new semantic check is required.
-- **Integrity** verifies catalogues, manifests, routed files, scoped counts, generated drift, the source
-  registry and the repository's complete tracked-file checksum manifest.
+- **Integrity** verifies catalogues, manifests, routed files, scoped counts, source-registry drift and
+  the repository's complete tracked-file checksum manifest.
 
 Judgment count reconciliation retains the repository's existing manifest contract. V1 does not
 redefine whether historical or superseded judgments belong in a declared count; changing that

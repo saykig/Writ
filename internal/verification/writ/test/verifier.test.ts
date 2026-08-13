@@ -632,15 +632,15 @@ describe("current repository", () => {
     const staleResult = (root: string) => {
       const output = normalizeCommandOutput(
         root,
-        `Generated projection at ${join(root, "apps/web/lib/corpus-catalog-data.ts")} is stale.`,
+        `Generated projection at ${join(root, "internal/infrastructure/generated/source-registry.json")} is stale.`,
       );
       const integrity = gateResult("integrity", [
         {
           gate: "integrity",
-          code: "INTEGRITY_CATALOG_PROJECTION_DRIFT",
+          code: "INTEGRITY_SOURCE_REGISTRY_DRIFT",
           severity: "error",
           message: output,
-          file: "apps/web/lib/corpus-catalog-data.ts",
+          file: "internal/infrastructure/generated/source-registry.json",
         },
       ]);
       return renderVerificationJson({ passed: false, gates: [integrity] });
@@ -648,7 +648,7 @@ describe("current repository", () => {
     const first = staleResult(firstRoot);
     const second = staleResult(secondRoot);
     expect(first).toBe(second);
-    expect(first).toContain("<workspace>/apps/web/lib/corpus-catalog-data.ts");
+    expect(first).toContain("<workspace>/internal/infrastructure/generated/source-registry.json");
     expect(first).not.toContain(firstRoot);
     expect(second).not.toContain(secondRoot);
   });

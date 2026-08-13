@@ -5,6 +5,12 @@
 Writ is a system for turning political, technical, and legal research into structured,
 traceable knowledge (domain-specific language).
 
+This repository is the authoritative home of the Writ language, corpora, schemas, protocols,
+verification, and deterministic data-bundle exporter. The public web projection lives in
+[Writ-Web](https://github.com/saykig/Writ-Web) and is available at
+[writewrit.vercel.app](https://writewrit.vercel.app). Writ-Web consumes deliberately pinned Writ
+data-bundle snapshots and does not automatically synchronize with this repository.
+
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
 institutions consistently or update an analysis when the evidence changes. Writ keeps the source,
@@ -25,7 +31,7 @@ The Writ pilot currently includes:
 - Institutional corpora
 - G7 and G20 multilateral policy records;
 - reproducible evaluator benchmarks;
-- Writ Lab, where structured records and analyses can be inspected.
+- a public Writ-Web interface for inspecting selected structured records and analyses.
 
 Some datasets remain incomplete. Writ records those gaps explicitly rather
 than inventing missing evidence.
@@ -37,7 +43,8 @@ If you work in policy or research:
 - Browse `corpora/` to see the reviewed knowledge.
 - Browse `queries/` to see the questions asked across that knowledge.
 - Read `docs/current/product-definition.md` for the full product model.
-- Open Writ Lab to inspect records and their evidence traces.
+- Open [Writ-Web](https://writewrit.vercel.app) to inspect its pinned projection of records and
+  evidence traces.
 
 If you are contributing code:
 
@@ -48,38 +55,39 @@ If you are contributing code:
 
 ## Repository guide
 
-| Path            | What it contains                             |
-| --------------- | -------------------------------------------- |
-| `apps/`         | Writ’s interfaces and ingestion applications |
-| `corpora/`      | Reviewed political and legal knowledge       |
-| `queries/`      | Reproducible questions over corpora          |
-| `schemas/`      | Rules defining valid Writ records            |
-| `protocols/`    | Writ language and API specifications         |
-| `packages/`     | Shared application and language code         |
-| `docs/current/` | Current explanations and technical guidance  |
-| `internal/`     | Developer-only testing and infrastructure    |
-| `archive/`      | Historical, non-authoritative material       |
+| Path            | What it contains                            |
+| --------------- | ------------------------------------------- |
+| `apps/`         | Writ API and ingestion applications         |
+| `corpora/`      | Reviewed political and legal knowledge      |
+| `queries/`      | Reproducible questions over corpora         |
+| `schemas/`      | Rules defining valid Writ records           |
+| `protocols/`    | Writ language and API specifications        |
+| `packages/`     | Shared application and language code        |
+| `docs/current/` | Current explanations and technical guidance |
+| `internal/`     | Developer-only testing and infrastructure   |
+| `archive/`      | Historical, non-authoritative material      |
 
 The semantic packages for the domain model, evaluator, analyzer and provenance must remain usable without a network connection or database.
 
-## Run Writ locally
+## Develop Writ locally
 
-Install [Git](https://git-scm.com/downloads) and [Bun 1.3+](https://bun.sh/docs/installation), then clone the repository and start the web interface:
+Install [Git](https://git-scm.com/downloads) and [Bun 1.3+](https://bun.sh/docs/installation), then
+clone the repository and install its locked dependencies:
 
 ```bash
 git clone https://github.com/saykig/Writ.git
 cd Writ
-bun install
-bun run web
+bun install --frozen-lockfile
 ```
 
-Then open `http://localhost:4317` in your browser. Docker is not required to run the web interface; the full development stack uses additional services.
-
-### Full development environment
+Run the API development service with:
 
 ```bash
 bun run dev
 ```
+
+The separate [Writ-Web repository](https://github.com/saykig/Writ-Web) contains its own frontend
+setup instructions.
 
 ## Which files are authoritative
 
