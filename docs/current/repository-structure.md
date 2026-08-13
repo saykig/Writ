@@ -12,7 +12,7 @@ authority map, not a new knowledge model.
 | `protocols/` | Writ language EBNF and API OpenAPI contracts | corpus records |
 | `queries/` | reproducible questions over versioned corpora | corpus identity or source truth |
 | `packages/` | shared runtime, compiler, analyzer, evaluator, provenance, CLI, and test tooling | reviewed political data |
-| `apps/` | ingestion and user-facing product interfaces | schema or corpus authority |
+| `apps/` | API and ingestion applications | schema or corpus authority |
 | `docs/current/` | current product and technical guidance | historical migration evidence |
 
 `adr/` holds accepted architecture decisions. When an earlier decision describes superseded

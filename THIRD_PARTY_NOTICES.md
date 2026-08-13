@@ -40,20 +40,9 @@ Items requiring particular attention when distributing Writ or bundled artifacts
 - PyMuPDF, a direct Python dependency, declares a choice of GNU Affero General Public License 3.0
   or an Artifex commercial license;
 - Psycopg and its binary and pool packages declare LGPL-3.0-only;
-- the Sharp/libvips native distribution used transitively by the web toolchain declares
-  LGPL-3.0-or-later;
-- some transitive web packages or data use MPL-2.0 or CC-BY-4.0, including `axe-core`,
-  `lightningcss`, `@vercel/og`, and `caniuse-lite` in the currently resolved dependency tree;
-- local UI components maintained through the shadcn tooling may incorporate upstream shadcn/ui
-  patterns, whose package metadata declares the MIT license.
+- JavaScript packages recorded in `bun.lock` retain their upstream licenses and notices.
 
 These dependencies do not change the license of original Writ source files, but a distributed
 combined application may carry additional source, notice, attribution, or commercial-license
 obligations. Dependency licenses must be reviewed again against the resolved versions before a
 release.
-
-## Uncertain asset
-
-The repository does not separately document the origin or license of `apps/web/app/favicon.ico`.
-That uncertainty is recorded here; the Apache License should not be understood as an ownership
-claim over that asset until its provenance is established.

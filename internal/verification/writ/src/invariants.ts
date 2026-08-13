@@ -232,11 +232,6 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
-    code: "INTEGRITY_CATALOG_PROJECTION_DRIFT",
-    gate: "integrity",
-    authority: meta("Generated projection drift"),
-  },
-  {
     code: "INTEGRITY_SOURCE_REGISTRY_DRIFT",
     gate: "integrity",
     authority: meta("Generated projection drift"),

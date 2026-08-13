@@ -312,20 +312,6 @@ export function verifyIntegrity(
         }),
       );
     }
-    const catalog = command(snapshot.root, process.execPath, [
-      "apps/web/scripts/embed-corpus-catalog.ts",
-      "--check",
-    ]);
-    if (!catalog.ok) {
-      issues.push(
-        issue(
-          "integrity",
-          "INTEGRITY_CATALOG_PROJECTION_DRIFT",
-          catalog.output || "Generated corpus catalog is stale.",
-          { file: "apps/web/lib/corpus-catalog-data.ts" },
-        ),
-      );
-    }
     const python = process.env.PYTHON_BIN ?? "python3";
     const registry = command(snapshot.root, python, [
       "internal/tooling/scripts/generate_source_registry.py",

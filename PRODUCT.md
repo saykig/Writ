@@ -4,7 +4,7 @@
 
 ## Platform
 
-web
+language, corpus, and verification system
 
 ## Users
 
@@ -40,7 +40,7 @@ definition of the product.
 - Unknown and contested values remain explicit.
 - Visualizations and memos are views, not sources of truth.
 - The initial knowledge families are institutional, legal, policy, theoretical, and empirical.
-- Deterministic derivation is independent of the web interface.
+- Deterministic derivation is independent of external presentation layers.
 - Models may propose candidates; human review and deterministic code govern accepted knowledge and
   derived results.
 
