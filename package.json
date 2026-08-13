@@ -29,7 +29,7 @@
     "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
     "replicate": "bun internal/tooling/scripts/replicate.ts",
     "dev": "bun run --filter '@writ/api' dev",
-    "db:up": "docker compose up -d postgres minio",
+    "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down"
   },
   "devDependencies": {

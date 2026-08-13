@@ -4,20 +4,9 @@ coverage/
 .env
 .env.*
 !.env.example
-.pnpm-store/
 __pycache__/
 .pytest_cache/
 .venv/
 *.pyc
 .DS_Store
-storage/
-minio-data/
 postgres-data/
-.vercel
-.env*.local
-
-# Retrieved source documents for the EU-US pilot. The provenance derived from
-# them (URI, retrieval date, byte hash, verbatim passage) is committed; the
-# documents themselves are re-fetchable and are not third-party content we
-# redistribute.
-pilot/*/sources/cache/
