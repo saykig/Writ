@@ -17,7 +17,7 @@ across revision and disagreement.
 Writ is a structured, source-grounded knowledge system and domain-specific language for political
 science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
 findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
-and revision history. Questions are asked across corpora; they do not define corpora.
+and revision history.
 
 Success means a researcher can assemble durable, reviewable corpora and ask reproducible questions
 across them without turning a question, comparison, memo, or rating into the identity of the
