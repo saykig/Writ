@@ -2,16 +2,14 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (domain-specific language).
-
-This repository is the authoritative home of the Writ language, corpora, schemas, protocols,
-verification, and deterministic data-bundle exporter.
-
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
 institutions consistently or update an analysis when the evidence changes. Writ keeps the source,
 the reviewed claim and the resulting analysis connected.
+
+Writ is a system for turning political, technical, and legal research into structured,
+traceable knowledge (domain-specific language). This repository is the authoritative home of the Writ 
+language, corpora, schemas, protocols, verification, and deterministic data-bundle exporter.
 
 ## How Writ works
 
