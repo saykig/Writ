@@ -6,10 +6,7 @@ Writ is a system for turning political, technical, and legal research into struc
 traceable knowledge (domain-specific language).
 
 This repository is the authoritative home of the Writ language, corpora, schemas, protocols,
-verification, and deterministic data-bundle exporter. The public web projection lives in
-[Writ-Web](https://github.com/saykig/Writ-Web) and is available at
-[writewrit.vercel.app](https://writewrit.vercel.app). Writ-Web consumes deliberately pinned Writ
-data-bundle snapshots and does not automatically synchronize with this repository.
+verification, and deterministic data-bundle exporter.
 
 Research in the global affairs and policy space usually ends up spread across reports,
 laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
