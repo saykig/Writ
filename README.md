@@ -8,7 +8,7 @@ institutions consistently or update an analysis when the evidence changes. Writ 
 the reviewed claim and the resulting analysis connected.
 
 Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (domain-specific language). This repository is the authoritative home of the Writ 
+traceable knowledge (domain-specific language). This repository is the authoritative home of the Writ
 language, corpora, schemas, protocols, verification, and deterministic data-bundle exporter.
 
 ## How Writ works

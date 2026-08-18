@@ -18,7 +18,6 @@ G7_COMPAT = "internal/verification/fixtures/compatibility/g7-ai-sme/schemas"
 IGNORED_DIRECTORY_NAMES = {
     ".git",
     ".mypy_cache",
-    ".next",
     ".pytest_cache",
     ".ruff_cache",
     ".venv",
