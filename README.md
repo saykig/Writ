@@ -25,8 +25,7 @@ The Writ pilot currently includes:
 - Legal and policy corpora
 - Institutional corpora
 - G7 and G20 multilateral policy records;
-- reproducible evaluator benchmarks;
-- a public Writ-Web interface for inspecting selected structured records and analyses.
+- reproducible evaluator benchmarks.
 
 Some datasets remain incomplete. Writ records those gaps explicitly rather
 than inventing missing evidence.
@@ -38,8 +37,6 @@ If you work in policy or research:
 - Browse `corpora/` to see the reviewed knowledge.
 - Browse `queries/` to see the questions asked across that knowledge.
 - Read `docs/current/product-definition.md` for the full product model.
-- Open [Writ-Web](https://writewrit.vercel.app) to inspect its pinned projection of records and
-  evidence traces.
 
 If you are contributing code:
 
@@ -80,9 +77,6 @@ Run the API development service with:
 ```bash
 bun run dev
 ```
-
-The separate [Writ-Web repository](https://github.com/saykig/Writ-Web) contains its own frontend
-setup instructions.
 
 ## Which files are authoritative
 
