@@ -87,3 +87,5 @@ without overclaiming.
 ## North star
 
 **Make political knowledge easier to inspect, verify, inherit, and reason from without replacing human judgment.**
+
+Copyright 2026 Sara Kim
