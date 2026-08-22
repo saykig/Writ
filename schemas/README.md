@@ -22,8 +22,8 @@ analysis
 - Core contracts cannot depend on extensions, analysis, or compatibility contracts.
 - Family extensions may depend only on core.
 - Analysis contracts may depend on core and named extensions.
-- Compatibility families are isolated versioned contracts. Current code may consume them during
-  migration, but new core or extension schemas must not depend on them.
+- Compatibility families are isolated versioned contracts. Retained secondary corpora may declare
+  them exactly; new core or extension schemas must not depend on them.
 - Pilot-local contracts remain self-contained.
 
 Family-specific fields are never required globally. A legal record may require legal force and an
@@ -102,19 +102,16 @@ original undirected `supersedes` field unchanged.
 
 ## Compatibility-only schemas
 
-| Schema family                                                             | Classification     | Status                                                                                                                                                                                          |
-| ------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `compatibility/compliance-corpus-v2/*.schema.json`                        | compatibility-only | Version 2 G7/G20 summit-compliance records. These contracts remain active only for existing adapters and records; they are not the universal Writ model.                                        |
-| `compatibility/g7-benchmark-v1/methodology-inventory.schema.json`         | compatibility-only | Historical G7 benchmark extraction worksheet.                                                                                                                                                   |
-| `compatibility/record-grammar-v0.1/*.schema.json`                         | compatibility-only | Frozen v0.1 base, legal-policy, institutional-profile, and record-judgment contracts.                                                                                                           |
-| `compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json` | compatibility-only | The preserved reviewed EU/US AI-governance corpus format. It describes the imported payload exactly as generated from the frozen pilot input; it is not the native legal-policy record grammar. |
+| Schema family                                                             | Classification     | Status                                                                                                                               |
+| ------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `compatibility/compliance-corpus-v2/*.schema.json`                        | compatibility-only | Dormant legacy ingestion contracts. No active corpus, data-bundle path, or verifier adapter consumes their compliance record shapes. |
+| `compatibility/record-grammar-v0.1/*.schema.json`                         | compatibility-only | Frozen v0.1 base, legal-policy, institutional-profile, and record-judgment contracts.                                                |
+| `compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json` | compatibility-only | Exact retained contract for reviewed secondary EU/US legal-policy corpora; not the native legal-policy grammar.                      |
 
-The compliance-corpus-v2 family contains `assessment`, `commitment`, `compliance_report`,
-`evidence`, `methodology`, `reconciliation_manifest`, `review_item`, `source_document`,
-`source_manifest`, and `source_registry_config`. The registry configuration remains operational
-for existing adapters, but its required commitment/score preservation controls make it
-compatibility-only rather than universal core. Its version and semantics are unchanged by
-relocation.
+The compliance-corpus-v2 family remains in place because the source registry, source-manifest, and
+generic ingestion utilities have not yet been redesigned. Retaining those contracts does not make
+their former corpus or execution semantics active architecture. Their retirement or
+generalization requires a separate decision.
 
 ## Pilot-local schemas
 

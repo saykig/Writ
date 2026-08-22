@@ -1,6 +1,6 @@
 # ADR 0019: Cross-family interoperability through institution-owned Core links
 
-**Status:** Accepted
+**Status:** Accepted; specialized workflow verification retired by ADR 0023
 
 ## Context
 

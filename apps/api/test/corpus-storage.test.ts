@@ -5,8 +5,8 @@ import { sourceRegistryRepository } from "../src/db/repositories/sourceRegistry.
 import { createTempDb, createTestSql, hasDatabase, type TempDb } from "./testdb.js";
 
 const input = {
-  logicalId: "corpus.manifest.g20.2024-rio",
-  sourceId: "g20_research_group",
+  logicalId: "corpus.manifest.synthetic.2024",
+  sourceId: "synthetic.source",
   objectKind: "source_manifest" as const,
   content: new TextEncoder().encode('{"blocked":true}\n'),
   mediaType: "application/json",
@@ -33,10 +33,10 @@ suite("online corpus artifact store", () => {
     pool = createTestSql({ max: 3 });
     db = await createTempDb(pool);
     await sourceRegistryRepository(db.sql).importEntry({
-      id: "g20_research_group",
-      name: "G20 Research Group",
+      id: "synthetic.source",
+      name: "Synthetic Source",
       publisher: "University of Toronto",
-      jurisdictions: ["G20"],
+      jurisdictions: ["Synthetic"],
       source_tier: 1,
       source_types: ["commitment_inventory"],
       base_uri: "https://example.invalid",

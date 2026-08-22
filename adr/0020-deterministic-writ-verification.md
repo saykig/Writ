@@ -1,6 +1,6 @@
 # ADR 0020: Deterministic, authority-traced Writ verification
 
-**Status:** Accepted
+**Status:** Accepted; ADR 0023 retires the ADR-0019 rule pack
 
 ## Context
 
@@ -46,9 +46,10 @@ Future contracts, families and versions can add exact adapters or rule packs wit
 kernel or being predeclared as members of a harness-owned ontology.
 
 ADR-backed constraints are reviewed code whose invariant metadata cites the ADR and section. The
-harness never interprets ADR prose dynamically. ADR 0019 supplies a scoped rule pack for the endpoint,
-ownership, inverse-link and review semantics of its six named cross-family relations; those semantics
-are not generalized to other relation types.
+harness never interprets ADR prose dynamically. ADR 0023 removes the former ADR-0019 cross-family
+rule pack and workflow adapter because the current development direction no longer depends on that
+specialized workflow. The reviewed corpora and links remain available under their generic contracts
+and corpus tests.
 
 Mechanical integrity covers paths, references, scoped counts, checksums, generated drift and declared
 inventories. It does not impose semantic completeness. An institution need not have a mission,

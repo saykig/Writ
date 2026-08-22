@@ -2,6 +2,10 @@
 
 **Status:** Accepted
 
+**Current note:** ADR 0023 narrows active development to NIST without retiring this decision's
+catalogued corpus inventory, migration ledger, or generic two-family implementation. Existing
+reviewed non-NIST corpora remain secondary material.
+
 ## Context
 
 The first reviewed EU and US AI records were migrated into jurisdiction-and-topic directories.
