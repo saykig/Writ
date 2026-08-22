@@ -1,6 +1,6 @@
 ---
 name: writ-domain
-summary: Domain rules for implementing Writ's source-grounded political-science knowledge system, language, provenance, and deterministic derivations.
+summary: Domain rules for implementing Writ's source-grounded political-knowledge records, human review, and provenance.
 ---
 
 # Writ Domain Skill
@@ -9,15 +9,15 @@ Use this skill when implementing or reviewing Writ domain behavior.
 
 ## Mental model
 
-Writ has governed layers that must remain distinct:
+Writ's immediate governed flow is:
 
 1. immutable source versions and anchored passages;
-2. reviewed institutional, legal, policy, theoretical, and empirical records;
-3. query-layer questions and explicit methodologies;
-4. deterministic derived results with traces;
-5. visualizations and memos as views.
+2. typed institutional and legal-policy records;
+3. human review;
+4. provenance that preserves the path back to the source.
 
-Questions never define corpora. Jurisdictional corpora exist independently of comparisons.
+Corpora and records exist independently of questions, comparisons, analyses, and presentation
+layers. Questions and human reasoning remain external to Writ.
 
 ## Epistemic separation
 
@@ -44,11 +44,13 @@ contested  both supported
 
 Never silently coerce `unknown` to `false` or `contested` to a single answer.
 
-## Derivation
+## Retained derivation runtime
 
-Derivation is deterministic over frozen inputs. Every Writ-derived result declares its methodology,
-version, inputs, and trace. External ratings remain source-reported judgments and are never promoted
-to universal labels or Writ facts.
+Evaluator, analyzer, benchmark, and query-expression code remains in the repository pending later
+dependency isolation. If touched, derivation stays deterministic over frozen inputs and retains its
+methodology, version, inputs, and trace. This runtime does not define the current product boundary.
+External ratings remain source-reported judgments and are never promoted to universal labels or
+Writ facts.
 
 ## Counting
 
@@ -71,6 +73,9 @@ and derived results.
 The shared core does not require commitments, obligations, legal force, or scores. Keep the
 provenance envelope small and place family-specific fields in institutional, legal, policy,
 theoretical, or empirical contracts.
+
+For institutional records, keep identity, placement, mission, mandate, function, decision right,
+and operational capacity distinct. Never infer one merely from evidence of another.
 
 ## Diagnostics
 

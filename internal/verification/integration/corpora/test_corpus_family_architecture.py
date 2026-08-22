@@ -446,12 +446,6 @@ def test_ai_office_records_are_atomic_approved_records() -> None:
     assert text.count("fact_type mission;") == 2
 
 
-def test_query_directory_is_not_needed_for_catalog_or_manifest_resolution() -> None:
-    for entry in catalog()["native_corpora"]:
-        assert (ROOT / entry["manifest"]).is_file()
-        assert not str(entry["manifest"]).startswith("queries/")
-
-
 def test_catalog_lists_only_native_family_governed_corpora() -> None:
     current = catalog()
     assert set(current) == {

@@ -2,25 +2,29 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-Research in the global affairs and policy space usually ends up spread across reports,
-laws, notes and spreadsheets. This makes it difficult to see where a claim came from, compare
-institutions consistently or update an analysis when the evidence changes. Writ keeps the source,
-the reviewed claim and the resulting analysis connected.
+Research in global affairs and political science is often spread across reports, laws, notes, and
+spreadsheets. This makes it difficult to see where a claim came from, how it was reviewed, or which
+distinctions the evidence actually supports. Writ keeps sources, passages, typed records, human
+review, and provenance connected.
 
-Writ is a system for turning political, technical, and legal research into structured,
-traceable knowledge (domain-specific language). This repository is the authoritative home of the Writ
-language, corpora, schemas, protocols, verification, and deterministic data-bundle exporter.
+Writ makes political knowledge more inspectable, reviewable, provenance-preserving, and easier for
+humans to reason from without replacing human judgment. This repository is the authoritative home
+of the Writ language, corpora, schemas, protocols, verification, and deterministic data-bundle
+exporter.
 
 ## How Writ works
 
-1. Sources provide the original laws, policies, reports and research.
-2. Human-reviewed records capture specific claims and their evidence.
-3. Corpora organize those records by jurisdiction or subject.
-4. Results retain a trace back to the records and sources that produced them.
+1. Sources preserve the original laws, policies, reports, and research.
+2. Passages anchor the exact evidence used.
+3. Typed records state only what that evidence supports.
+4. Humans review the records.
+5. Provenance preserves the path back to the source.
 
 ## What is available now
 
-The Writ pilot currently includes:
+The current proving ground is the NIST institutional corpus. It tests whether Writ can represent
+identity, placement, mission, mandate, function, decision right, and operational capacity without
+overclaiming. The repository also retains:
 
 - Legal and policy corpora
 - Institutional corpora
@@ -35,7 +39,6 @@ than inventing missing evidence.
 If you work in policy or research:
 
 - Browse `corpora/` to see the reviewed knowledge.
-- Browse `queries/` to see the questions asked across that knowledge.
 - Read `docs/current/product-definition.md` for the full product model.
 
 If you are contributing code:
@@ -51,7 +54,6 @@ If you are contributing code:
 | --------------- | ------------------------------------------- |
 | `apps/`         | Writ API and ingestion applications         |
 | `corpora/`      | Reviewed political and legal knowledge      |
-| `queries/`      | Reproducible questions over corpora         |
 | `schemas/`      | Rules defining valid Writ records           |
 | `protocols/`    | Writ language and API specifications        |
 | `packages/`     | Shared application and language code        |
@@ -93,7 +95,8 @@ Material under `archive/` is historical and non-authoritative. Material under `i
 
 ## Working rules
 
-- Keep jurisdictional corpora independent from comparisons and saved queries.
+- Keep corpora and records independent of questions, comparisons, analyses, and presentation
+  layers.
 - Keep the implemented `legal_policy` and `institutional` families distinct; add future families
   through explicit family profiles.
 - Preserve unknown and contested values instead of forcing a conclusion.

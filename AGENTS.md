@@ -2,10 +2,10 @@
 
 ## Mission
 
-Build Writ as a structured, source-grounded knowledge system and domain-specific language for
-political science and global affairs. It represents claims, institutions, laws, policies, theories,
-empirical findings, evidence and relationships while preserving provenance, scope, uncertainty,
-contestation and revision history. Questions are asked across corpora; they do not define corpora.
+Build Writ as a source-grounded knowledge system that makes political knowledge more inspectable,
+reviewable, provenance-preserving, and easier for humans to reason from without replacing human
+judgment. The current proving ground is the NIST institutional corpus, and the immediate system
+boundary is source -> passage -> typed record -> human review -> provenance.
 
 Optimize for semantic correctness, reproducibility, provenance, and reviewability before UI polish
 or automation volume.
@@ -23,23 +23,27 @@ Documents under `archive/` are historical evidence, never current instructions.
 
 ## Architectural invariants
 
-1. Questions are query-layer objects, not corpus identities.
-2. Jurisdictional corpora exist independently of comparisons.
-3. The core schema does not require commitments, obligations, or scores.
-4. External ratings are source-reported judgments.
-5. Writ-derived results declare their methodology, version, inputs, and trace.
-6. Unknown and contested values remain explicit; unknown is never silently treated as false.
-7. Visualizations and memos are views, not sources of truth.
-8. The implemented native families are `legal_policy` and `institutional`; future family
+1. Corpora and records exist independently of questions, comparisons, analyses, and presentation
+   layers.
+2. Human reasoning remains external to Writ. Questions are not first-class Writ objects.
+3. The immediate system boundary is source -> passage -> typed record -> human review ->
+   provenance.
+4. Institutional records distinguish identity, placement, mission, mandate, function, decision
+   right, and operational capacity without inferring one from another.
+5. The core schema does not require commitments, obligations, or scores.
+6. External ratings are source-reported judgments.
+7. Unknown and contested values remain explicit; unknown is never silently treated as false.
+8. Visualizations and memos are views, not sources of truth.
+9. The implemented native families are `legal_policy` and `institutional`; future family
    identifiers remain extensible at the shared record base.
-9. Deterministic derivation performs no network access, model inference, randomness, wall-clock
+10. Deterministic derivation performs no network access, model inference, randomness, wall-clock
    reads, or mutation.
-10. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
+11. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
     or publish derived results.
-11. Accepted records are superseded, not edited in place.
-12. Exact decimals and explicit units are required for money and quantities.
-13. Benchmark mismatches become discrepancy records, not hidden exceptions.
-14. Stable diagnostic codes are never silently repurposed.
+12. Accepted records are superseded, not edited in place.
+13. Exact decimals and explicit units are required for money and quantities.
+14. Benchmark mismatches become discrepancy records, not hidden exceptions.
+15. Stable diagnostic codes are never silently repurposed.
 
 ## Source of truth order
 
@@ -75,6 +79,8 @@ Do not change command names without updating this file and CI.
 - Keep the shared provenance envelope small and put family-specific fields in family contracts.
 - Do not force obligations, commitments, legal force, or scores onto every record.
 - Keep source-reported judgments distinct from Writ-derived results.
+- Treat retained evaluator, analyzer, benchmark, and query-expression code as runtime compatibility
+  material, not as the current product boundary.
 - Add tests for every behavior change and diagnostic.
 - Prefer pure functions in compiler, evaluator, analyzer, canonicalization, and proof code.
 - Return typed errors and stable diagnostic codes.
@@ -97,7 +103,7 @@ Review in this order:
 4. incomplete proof dependencies;
 5. schema drift;
 6. authorization or provenance bypass;
-7. corpus identity coupled to a query or comparison;
+7. record or corpus identity coupled to a question, comparison, analysis, or presentation;
 8. source-reported judgments presented as Writ facts;
 9. missing tests;
 10. maintainability.
