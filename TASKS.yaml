@@ -541,7 +541,7 @@ tasks:
 
   - id: NIST-PROVING-GROUND-HARDENING-001
     title: Harden the evidence and review boundary of the NIST proving ground
-    status: in_progress
+    status: review
     dependencies:
       - FOUNDATION-CORPUS-RETIREMENT-001
     scope:
@@ -562,6 +562,7 @@ tasks:
       - Formatting, linting, type checking, tests, conformance, bundle checks, verification, build, and repository integrity pass.
     outputs:
       - docs/current/nist-proving-ground-audit.md
+      - docs/verification/verification-harness.md
       - packages/language/test/nist-proving-ground-hardening.test.ts
       - internal/verification/writ
       - TASKS.yaml
