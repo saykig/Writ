@@ -11,6 +11,89 @@ const activeLinks = (snapshot: RepositorySnapshot) =>
     ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
   );
 
+interface EndpointCandidate {
+  key: string;
+  kind: string;
+}
+
+/**
+ * Resolve endpoint-kind declarations without assigning semantics to a relation.
+ * Object kinds come from the manifest-aware repository loader. Institutional
+ * symbols additionally expose the generic `institution` kind and, where an
+ * approved identity supplies one, its schema-backed institution type.
+ */
+function endpointCandidates(snapshot: RepositorySnapshot, id: string): EndpointCandidate[] {
+  const candidates = new Map<string, EndpointCandidate>();
+  for (const object of findObjects(snapshot, id)) {
+    const key = `object\0${object.corpus_id}\0${object.file}\0${object.kind}\0${object.id}`;
+    candidates.set(key, { key, kind: object.kind });
+  }
+
+  const institutional = snapshot.institutionalRecords.filter(
+    ({ value }) => value.institution_id === id || value.parent_institution_id === id,
+  );
+  for (const corpusId of new Set(institutional.map(({ corpus_id }) => corpus_id))) {
+    const key = `institution\0${corpusId}\0${id}`;
+    candidates.set(key, { key, kind: "institution" });
+  }
+  for (const { value, corpus_id: corpusId } of institutional) {
+    if (
+      value.institution_id === id &&
+      value.institutional_fact_type === "identity" &&
+      value.institution_type
+    ) {
+      const key = `institution-type\0${corpusId}\0${id}\0${value.institution_type}`;
+      candidates.set(key, { key, kind: value.institution_type });
+    }
+  }
+  return [...candidates.values()];
+}
+
+function endpointIssue(
+  snapshot: RepositorySnapshot,
+  id: string,
+  declaredKind: string,
+  missingCode: "INTEROP_SOURCE_NOT_FOUND" | "INTEROP_TARGET_NOT_FOUND",
+  label: string,
+  loaded: RepositorySnapshot["links"][number],
+) {
+  const candidates = endpointCandidates(snapshot, id);
+  if (candidates.length === 0) {
+    return issue("interoperability", missingCode, `${label} ${id} does not resolve.`, {
+      corpus_id: loaded.value.owning_corpus_id,
+      object_id: loaded.value.link_id,
+      file: loaded.file,
+    });
+  }
+  const matching = candidates.filter(({ kind }) => kind === declaredKind);
+  if (matching.length === 0) {
+    const actual = [...new Set(candidates.map(({ kind }) => kind))].sort().join(", ");
+    return issue(
+      "interoperability",
+      "INTEROP_DECLARED_KIND_MISMATCH",
+      `${label} ${id} declares kind ${declaredKind}, but resolves as: ${actual}.`,
+      {
+        corpus_id: loaded.value.owning_corpus_id,
+        object_id: loaded.value.link_id,
+        file: loaded.file,
+      },
+    );
+  }
+  if (matching.length > 1) {
+    return issue(
+      "interoperability",
+      "INTEROP_REFERENCE_AMBIGUOUS",
+      `${label} ${id} resolves to ${matching.length} ${declaredKind} endpoints.`,
+      {
+        corpus_id: loaded.value.owning_corpus_id,
+        object_id: loaded.value.link_id,
+        file: loaded.file,
+      },
+    );
+  }
+  return undefined;
+}
+
 function referenceIssue(
   snapshot: RepositorySnapshot,
   id: string,
@@ -50,12 +133,6 @@ function referenceIssue(
 export function verifyInteroperability(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
   const corpusIds = new Set(snapshot.catalogEntries.map((entry) => entry.corpus_id));
-  const institutionalSymbols = new Set(
-    snapshot.institutionalRecords.flatMap(({ value }) => [
-      value.institution_id,
-      ...(value.parent_institution_id ? [value.parent_institution_id] : []),
-    ]),
-  );
 
   for (const loaded of activeLinks(snapshot)) {
     const link = loaded.value;
@@ -70,47 +147,24 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
       );
     }
 
-    if (link.relation_type === "supersedes") {
-      const source = referenceIssue(
-        snapshot,
-        link.source_id,
-        ["record"],
-        "INTEROP_SOURCE_NOT_FOUND",
-        "Source record",
-        loaded,
-      );
-      const target = referenceIssue(
-        snapshot,
-        link.target_id,
-        ["record"],
-        "INTEROP_TARGET_NOT_FOUND",
-        "Target record",
-        loaded,
-      );
-      if (source) issues.push(source);
-      if (target) issues.push(target);
-    } else if (link.relation_type === "part_of") {
-      if (!institutionalSymbols.has(link.source_id)) {
-        issues.push(
-          issue(
-            "interoperability",
-            "INTEROP_SOURCE_NOT_FOUND",
-            `Institutional source ${link.source_id} does not resolve.`,
-            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-          ),
-        );
-      }
-      if (!institutionalSymbols.has(link.target_id)) {
-        issues.push(
-          issue(
-            "interoperability",
-            "INTEROP_TARGET_NOT_FOUND",
-            `Institutional target ${link.target_id} does not resolve.`,
-            { corpus_id: link.owning_corpus_id, object_id: link.link_id, file: loaded.file },
-          ),
-        );
-      }
-    }
+    const source = endpointIssue(
+      snapshot,
+      link.source_id,
+      link.source_kind,
+      "INTEROP_SOURCE_NOT_FOUND",
+      "Source endpoint",
+      loaded,
+    );
+    const target = endpointIssue(
+      snapshot,
+      link.target_id,
+      link.target_kind,
+      "INTEROP_TARGET_NOT_FOUND",
+      "Target endpoint",
+      loaded,
+    );
+    if (source) issues.push(source);
+    if (target) issues.push(target);
 
     for (const evidenceId of link.evidence_refs) {
       const finding = referenceIssue(

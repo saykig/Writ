@@ -57,6 +57,15 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
+    code: "INTEROP_DECLARED_KIND_MISMATCH",
+    gate: "interoperability",
+    authority: schema(
+      "schemas/core/record-link.schema.json",
+      "1.0.0",
+      "source_kind and target_kind reference declarations",
+    ),
+  },
+  {
     code: "INTEROP_SUPPORT_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),

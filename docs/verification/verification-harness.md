@@ -67,6 +67,9 @@ Human review determines acceptance.
 
 - **Ontology** reconciles the active catalog and manifest family declarations.
 - **Interoperability** resolves active Core-link endpoints, owners, evidence and supporting records.
+  For every relation type, `source_kind` and `target_kind` must mechanically match the resolved
+  endpoint objects; `INTEROP_DECLARED_KIND_MISMATCH` reports a mismatch. This check does not assign
+  relation-specific endpoint semantics or restore the retired ADR-0019 rule pack.
   It covers retained catalogued links under generic Core contracts without reactivating the
   specialized ADR-0019 workflow rule pack.
 - **Provenance** verifies current native evidence, judgment targets and evidence, judgment
