@@ -10,7 +10,6 @@ authority map, not a new knowledge model.
 | `corpora/` | reviewed jurisdictional and multilateral records, source passages, provenance, reviews, and corpus manifests | comparison questions or evaluator methodologies |
 | `schemas/` | all active JSON Schema contracts | language or HTTP protocol definitions |
 | `protocols/` | Writ language EBNF and API OpenAPI contracts | corpus records |
-| `queries/` | reproducible questions over versioned corpora | corpus identity or source truth |
 | `packages/` | shared runtime, compiler, analyzer, evaluator, provenance, CLI, and test tooling | reviewed political data |
 | `apps/` | API and ingestion applications | schema or corpus authority |
 | `docs/current/` | current product and technical guidance | historical migration evidence |
@@ -26,7 +25,8 @@ implementation wiring, a later ADR records the change rather than rewriting hist
   reproduction commands.
 - `internal/infrastructure/` contains operational registry inputs, deterministic generated
   compatibility projections, and database migrations.
-- `archive/` preserves non-normative pilots and plans that remain useful for inspection.
+- `archive/` preserves non-normative pilots and compatibility material that remain useful for
+  inspection.
 - `docs/migrations/` preserves completed reset path maps and verification handoffs.
 
 Application- and package-owned tests and generators remain colocated under `apps/*` and
@@ -42,7 +42,8 @@ stable accepted-decision paths.
 - The source-gated FATF methodology moved from the singular `benchmark/` and root `examples/` paths
   and now lives under `internal/verification/benchmarks/evaluator/fatf-mutual-evaluation-scaffold/`.
 - The general data-model diagram moved into current technical documentation.
-- Superseded methodology planning moved to `archive/plans/methodology-candidates-v1/`.
+- Obsolete compliance and methodology planning was removed from the tracked tree and remains
+  recoverable from Git history and the `pre-foundation-reset-2026-08-22` tag.
 - The duplicate `reference-core/` implementation was retired only after its remaining behavior was
   proven covered by implementation-independent conformance cases and canonical package tests.
 - An editor-specific launch file and a redundant generated source-registry summary were removed;
@@ -51,7 +52,8 @@ stable accepted-decision paths.
   `docs/migrations/internal-repository-support.md`.
 
 All deleted material remains recoverable from Git history. The cleanup does not rewrite the
-Covenant-to-Writ development history.
+Covenant-to-Writ development history. Corpora and records exist independently of questions,
+comparisons, analyses, and presentation layers.
 
 ## Preservation gate
 

@@ -1,5 +1,9 @@
 # What the analyzer decides — and what it does not
 
+This page documents the retained `packages/analyzer` runtime while dependency isolation is pending.
+The analyzer is not part of Writ's current source-to-provenance product boundary, and this document
+does not establish a query or analysis layer as active architecture.
+
 Writ's static analyzer inspects a *methodology* before any evidence exists.
 This document states, honestly, what a finding means, what a clean result
 guarantees, and where the analysis is silent. Being explicit about the bounds is

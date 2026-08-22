@@ -1,11 +1,10 @@
 version: 2
 project: writ
 governing_definition: >-
-  Writ is a structured, source-grounded knowledge system and domain-specific language for
-  political science and global affairs. It represents claims, institutions, laws, policies,
-  theories, empirical findings, evidence and relationships while preserving provenance, scope,
-  uncertainty, contestation and revision history. Questions are asked across corpora; they do not
-  define corpora.
+  Writ makes political knowledge more inspectable, reviewable, provenance-preserving, and easier
+  for humans to reason from without replacing human judgment. Its current proving ground is the
+  NIST institutional corpus. The immediate system boundary is source -> passage -> typed record ->
+  human review -> provenance.
 
 execution_policy:
   one_task_per_change: true
@@ -37,15 +36,14 @@ tasks:
       - RESET-001
     scope:
       - Adopt the current product definition and invariants.
-      - Archive the superseded compliance-product plan without changing its contents.
+      - Classify the then-current compliance-product plan as non-normative historical material.
       - Correct current documentation drift.
     acceptance:
       - No current governing document defines Writ as a compliance or commitment DSL.
-      - Historical compliance work remains inspectable and explicitly non-normative.
+      - Historical compliance work is explicitly non-normative.
       - No runtime semantics, schemas, or corpus records change.
     outputs:
       - docs/current/product-definition.md
-      - archive/plans/compliance-product-v1/README.md
 
   - id: RESET-003
     title: Remove external weighted-ordinal product artifacts
@@ -96,7 +94,7 @@ tasks:
       - Create independent EU and US jurisdictional corpora from the reviewed records.
       - Replace spreadsheet-order active references with deterministic identities and scalable references.
       - Preserve every legacy identifier through complete migration maps.
-      - Keep the comparison question and headline derivation only as an archived saved query.
+      - Keep the comparison question and headline derivation only in the archived pilot.
     acceptance:
       - The archive is byte-for-byte recoverable and carries a verified checksum manifest.
       - EU and US parent-review and atomic-claim counts match the authoritative reviewed input.
@@ -125,17 +123,16 @@ tasks:
       - archive/compatibility/g20/2024-rio
 
   - id: RESET-007
-    title: Establish saved queries and align interface language
+    title: Record the historical saved-query and interface-language change
     status: done
+    architecture_status: superseded
+    superseded_by: FOUNDATION-RESET-001
     dependencies:
       - RESET-006
     acceptance:
-      - Questions reference versioned corpora without changing corpus identities.
-      - The active interface uses Writ Lab and provenance-aware judgment language.
-      - Dead paths are removed or explicitly classified and all validation passes.
+      - This task records the former saved-query direction and is not active architecture.
+      - Its migration handoffs remain historical evidence.
     outputs:
-      - queries/README.md
-      - queries/eu-us-ai-governance-pilot/query.yaml
       - docs/migrations/repository-reset/07-handoff.md
       - docs/migrations/repository-reset/07-final-hygiene-input.md
 
@@ -170,7 +167,7 @@ tasks:
     scope:
       - Move root verification, tooling, infrastructure, generated, and integration-test paths under internal.
       - Reclassify former public examples as active language, schema, or compatibility fixtures.
-      - Preserve corpus semantics, reviewed records, protocol/query behavior, and archive bytes.
+      - Preserve corpus semantics, reviewed records, protocol behavior, and archive bytes.
     acceptance:
       - No developer-support directory named in the migration remains at the root.
       - Every active consumer resolves the new path and the complete verification suite passes.
@@ -189,7 +186,7 @@ tasks:
       - Add a small source-grounded NIST institutional corpus.
     acceptance:
       - Native Writ fixtures parse, compile, and validate against the authoritative schemas.
-      - Existing language, corpus, query, provenance, and compatibility behavior remains intact.
+      - Existing language, corpus, provenance, and compatibility behavior remains intact.
       - Constitutional imports are deterministic, source-preserving, draft-only, and size-gated.
       - NIST records distinguish mandate, function, structure, authority, and operational capacity.
       - Formatting, linting, type checking, tests, conformance, build, drift, and manifest checks pass.
@@ -255,7 +252,7 @@ tasks:
       - Changes to accepted EU or US substantive claim values or review decisions.
       - NIST substantive review or changes to its six records.
       - Open US Law adapter-metadata migration.
-      - G7, G20, archived pilot, query architecture or frontend redesign.
+      - G7, G20, archived pilot, analysis architecture or frontend redesign.
     acceptance:
       - Every active native corpus has exactly one family and a valid family-first path.
       - All 15 EU and 17 US accepted claims occur once in their approved instrument corpora.
@@ -317,6 +314,8 @@ tasks:
   - id: START-HERE-ONBOARDING-001
     title: Add the Start Here onboarding walkthrough
     status: done
+    architecture_status: superseded
+    superseded_by: FOUNDATION-RESET-001
     dependencies:
       - CORPUS-FAMILY-FOUNDATION-002
     scope:
@@ -338,6 +337,8 @@ tasks:
   - id: START-HERE-SYSTEM-STORY-002
     title: Embed the current How it works model in Start Here
     status: done
+    architecture_status: superseded
+    superseded_by: FOUNDATION-RESET-001
     dependencies:
       - START-HERE-ONBOARDING-001
     scope:
@@ -438,5 +439,35 @@ tasks:
       - packages/data-bundle
       - package.json
       - .github/workflows/ci.yml
-task_history:
-  compliance_product_v1: archive/plans/compliance-product-v1/TASKS.yaml
+
+  - id: FOUNDATION-RESET-001
+    title: Reset the governing architecture to evidence-bound political knowledge records
+    status: in_progress
+    dependencies:
+      - WRIT-VERIFICATION-HARNESS-001
+    scope:
+      - Replace the saved-query and compliance-product direction with the narrower source-to-provenance boundary.
+      - Make the NIST institutional corpus the current proving ground.
+      - Remove the saved-query product layer and clearly obsolete planning archives.
+      - Preserve retained runtime code, language syntax, schemas, corpus semantics, and NIST content.
+    exclusions:
+      - Evaluator, analyzer, benchmark, canonical IR, language syntax, schema, or corpus-semantic changes.
+      - Deletion of compatibility archives, the EU-US archived pilot, runtime consumers, or apps.
+      - NIST substantive record changes.
+    acceptance:
+      - Corpora and records exist independently of questions, comparisons, analyses, and presentation layers.
+      - No active governing document requires a query layer or compliance-product architecture.
+      - No tracked current file requires either deleted planning directory.
+      - Every NIST corpus byte and its substantive semantics match the pre-reset tag.
+      - Institutional record compilation, repository integrity, validation, tests, conformance, and build pass.
+      - Runtime compliance semantics remain untouched for a later dependency-isolation change.
+    outputs:
+      - adr/0021-foundation-reset-to-evidence-bound-records.md
+      - AGENTS.md
+      - PRODUCT.md
+      - README.md
+      - docs/current/product-definition.md
+      - docs/current/repository-structure.md
+      - .agents/skills/writ-domain/SKILL.md
+      - TASKS.yaml
+      - MANIFEST.sha256

@@ -4,45 +4,44 @@
 
 ## Platform
 
-language, corpus, and verification system
+political-knowledge record and provenance system
 
 ## Users
 
 Political scientists, global-affairs researchers, legal and policy researchers, evidence reviewers,
-methodology authors, and engineers who need source-grounded knowledge that remains inspectable
-across revision and disagreement.
+and engineers who need source-grounded knowledge that remains inspectable across revision and
+disagreement.
 
 ## Product Purpose
 
-Writ is a structured, source-grounded knowledge system and domain-specific language for political
-science and global affairs. It represents claims, institutions, laws, policies, theories, empirical
-findings, evidence and relationships while preserving provenance, scope, uncertainty, contestation
-and revision history. Questions are asked across corpora; they do not define corpora.
+Writ makes political knowledge more inspectable, reviewable, provenance-preserving, and easier for
+humans to reason from without replacing human judgment. Its immediate system boundary is:
 
-Success means a researcher can assemble durable, reviewable corpora and ask reproducible questions
-across them without turning a question, comparison, memo, or rating into the identity of the
-underlying knowledge.
+source -> passage -> typed record -> human review -> provenance
+
+Success means a researcher can inspect what an institutional record asserts, which passage supports
+it, how it was reviewed, and what remains unknown or contested. The current proving ground is the
+NIST institutional corpus.
 
 ## Positioning
 
-Writ combines governed knowledge records with a typed language for explicit derivation. It keeps
-source statements, reviewed claims, interpretations, source-reported judgments, and Writ-derived
-results distinct. Deterministic analyzers and evaluators remain useful capabilities, not the
-definition of the product.
+Writ is not a question modeller, compliance engine, policy reasoning engine, or answer-generating
+system. Human reasoning remains external. Retained evaluator, analyzer, benchmark, and language
+features do not define the current product boundary.
 
 ## Capabilities and Constraints
 
-- Questions are query-layer objects, not corpus identities.
-- Jurisdictional corpora exist independently of comparisons.
+- Corpora and records exist independently of questions, comparisons, analyses, and presentation
+  layers.
+- Questions are not first-class Writ objects.
+- Institutional records represent identity, placement, mission, mandate, function, decision right,
+  and operational capacity without overclaiming one from evidence of another.
 - The core schema does not require commitments, obligations, or scores.
 - External ratings are source-reported judgments.
-- Writ-derived results declare their methodology, version, inputs, and trace.
 - Unknown and contested values remain explicit.
 - Visualizations and memos are views, not sources of truth.
-- The initial knowledge families are institutional, legal, policy, theoretical, and empirical.
-- Deterministic derivation is independent of external presentation layers.
-- Models may propose candidates; human review and deterministic code govern accepted knowledge and
-  derived results.
+- The implemented native families remain `institutional` and `legal_policy`.
+- Models may propose candidates; humans govern accepted knowledge.
 
 ## Brand Commitments
 
@@ -51,7 +50,9 @@ science and global-affairs research.
 
 ## Evidence on Hand
 
-- The EU–US comparison is a pilot analysis. It is not the identity of an EU or US corpus.
+- The NIST corpus contains reviewed institutional records spanning the distinctions Writ must
+  preserve without overclaiming.
+- The EU–US comparison remains a historical pilot. It is not the identity of an EU or US corpus.
 - G20 Rio normalized records exist, including 13 ingested political statements, two reports, and
   546 source-reported member judgments.
 - The G7 AI-for-SMEs reproduction is a historical benchmark over 87 reviewed government-action
@@ -59,10 +60,9 @@ science and global-affairs research.
 
 ## Product Principles
 
-- Make analytical judgment visible.
+- Keep human judgment visible and external to automated acceptance.
 - Preserve unknown and contested states.
 - Prefer real, reviewable evidence over promotional claims.
 - Keep source-reported judgments distinct from Writ-derived results.
-- Keep every derived result reproducible and provenance-bearing.
 - Supersede accepted records instead of silently rewriting them.
 - Preserve stable diagnostics and complete evidence traces.

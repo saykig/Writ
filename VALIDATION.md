@@ -32,16 +32,14 @@ For documentation-only changes:
 
 ```bash
 bun x prettier --check AGENTS.md README.md PRODUCT.md \
-  VALIDATION.md VERSION_POLICY.md TASKS.yaml adr docs archive/plans internal
+  VALIDATION.md VERSION_POLICY.md TASKS.yaml adr docs internal
 git diff --check
 ```
 
 Also verify that:
 
 - current governing documents use `docs/current/product-definition.md`;
-- archived plans are not referenced as current instructions;
+- no active governing document requires a query layer or compliance-product architecture;
+- removed planning archives are absent from the tracked tree and current references;
 - external ratings are described as source-reported judgments;
 - generated files, schemas, runtime code, and corpus records are unchanged.
-
-Historical pack validation instructions are preserved at
-`archive/plans/compliance-product-v1/VALIDATION.md`.
