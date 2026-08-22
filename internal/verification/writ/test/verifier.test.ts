@@ -330,6 +330,44 @@ describe("focused negative fixtures", () => {
     expect(findings).toContain("PROVENANCE_SUPERSESSION_INVALID");
   });
 
+  test("detects missing and mismatched institutional evidence sources", () => {
+    const missing = clone();
+    const missingRecord = missing.institutionalRecords.find(
+      ({ value }) => value.evidence.length > 0,
+    )!;
+    missingRecord.value.evidence[0]!.source_id = "synthetic.missing_source";
+    missingRecord.value.evidence[0]!.document_hash = `sha256:${"0".repeat(64)}`;
+    expect(codes(verifyProvenance(missing))).toContain("PROVENANCE_SOURCE_NOT_FOUND");
+
+    const mismatch = clone();
+    const mismatchedRecord = mismatch.institutionalRecords.find(
+      ({ value }) =>
+        value.evidence.length > 0 &&
+        findObjects(mismatch, value.evidence[0]!.source_id, ["source_document"]).length === 1,
+    )!;
+    mismatchedRecord.value.evidence[0]!.document_hash = `sha256:${"f".repeat(64)}`;
+    expect(codes(verifyProvenance(mismatch))).toContain("PROVENANCE_SOURCE_MISMATCH");
+  });
+
+  test("detects wrong local passage references and conflicting passage identities", () => {
+    const wrongReference = clone();
+    const capacity = wrongReference.institutionalRecords.find(
+      ({ value }) => value.operational_capacity !== undefined,
+    )!;
+    capacity.value.operational_capacity!.evidence_refs = ["synthetic.wrong_passage"];
+    expect(codes(verifyProvenance(wrongReference))).toContain("PROVENANCE_EVIDENCE_NOT_FOUND");
+
+    const conflict = clone();
+    const occurrences = conflict.institutionalRecords.filter(({ value }) =>
+      value.evidence.some((evidence) => evidence.passage_id === "nist.about.mission"),
+    );
+    expect(occurrences).toHaveLength(2);
+    occurrences[1]!.value.evidence[0]!.quote = "Conflicting passage bytes";
+    const findings = codes(verifyProvenance(conflict));
+    expect(findings).toContain("PROVENANCE_PASSAGE_CONFLICT");
+    expect(findings).toContain("PROVENANCE_PASSAGE_HASH_MISMATCH");
+  });
+
   test("rejects previous record IDs on active surfaces within the migrated corpus", () => {
     const snapshot = clone();
     const migration = snapshot.migrations.find(
