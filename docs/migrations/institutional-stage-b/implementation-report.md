@@ -45,21 +45,27 @@ metadata and its image were removed from this PR; the generated corpus-catalog p
 
 ## Official sources and statutory currency
 
-All Stage B captures remain in their corpus-local `sources/captures/` directories with their
-complete stored-document hashes. The former 2024-edition GovInfo § 272 PDF was replaced by a
-captured current official OLRC page whose own header states that it contains laws in effect on
-August 7, 2026. Direct origin access timed out from the capture environment, so the stored HTML was
-retrieved through a Google Translate pass-through that detected English; the capture retains the
-canonical OLRC URL and transport metadata. This transport fact is recorded in `migration.yaml`
-rather than hidden.
+Stage B originally retained complete source captures with their stored-document hashes. A later
+repository-boundary audit removed the raw HTML webpage snapshots after confirming that the active
+source registrations and records preserve the source identities, canonical URLs, retrieval and
+version metadata, exact selected passages, locators, passage hashes, document hashes, evidence
+basis, uncertainty, review, and provenance. The hashes remain pinned evidence metadata; the raw
+HTML is not moved to another tracked archive.
+
+The former 2024-edition GovInfo § 272 PDF was replaced during Stage B by a retrieved current
+official OLRC page whose own header states that it contains laws in effect on August 7, 2026.
+Direct origin access timed out from the retrieval environment, so the HTML was retrieved through a
+Google Translate pass-through that detected English; the retrieval preserved the canonical OLRC
+URL and transport metadata. This transport fact remains recorded in `migration.yaml` rather than
+hidden.
 
 Direct OLRC retrieval was retried during human-review application and again timed out. A fresh
-pass-through replay was then compared with the stored capture. The canonical URL metadata,
+pass-through replay was then compared with the then-stored capture. The canonical URL metadata,
 laws-in-effect date, selected passage and substantive OLRC content are byte-identical; differences
 are limited to volatile JSF session/ViewState and Google transport-configuration values. The
 publisher remains the Office of the Law Revision Counsel, not the transport provider.
 
-The stored § 272 document hash is
+The pinned § 272 document hash is
 `sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d`.
 The exact § 272(b)(2) quotation is byte-identical to the prior annual-edition quotation, so its
 recalculated passage hash remains

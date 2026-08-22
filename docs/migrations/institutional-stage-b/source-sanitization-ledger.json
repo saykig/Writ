@@ -1,6 +1,7 @@
 {
   "ledger_version": "1.0.0",
   "sanitization_date": "2026-08-05",
+  "retention_status": "Historical sanitization provenance; the affected raw HTML files are no longer tracked after the structured-evidence retention audit.",
   "reason": "GitHub push protection identified publisher-supplied Mapbox access tokens embedded in official NIST HTML responses. Transport credentials are not evidence and must not be stored in repository history.",
   "transformation_rule": {
     "target": "Only the complete publisher-supplied Mapbox token value embedded in each affected HTML capture",

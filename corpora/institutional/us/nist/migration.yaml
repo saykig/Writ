@@ -195,19 +195,20 @@ source_sanitization:
     - file: sources/captures/nist-laboratories.html
       previous_document_hash: sha256:7ae29232445f976cdf273a2adf052b811929f54cb1b39e91007c359566d75b0f
       stored_document_hash: sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b
-current_statutory_capture:
+current_statutory_source_version:
   source_id: us_code.title15_usc_272
   canonical_source_url: https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272
   retrieval_transport_url: https://uscode-house-gov.translate.goog/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title15-section272&_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en
   retrieval_transport_note: Direct origin access timed out from the capture environment. The
     Google Translate pass-through detected English and preserved the selected statutory passage
-    exactly; the stored HTML retains both the canonical OLRC source URL and transport metadata.
+    exactly; the retrieval retained both the canonical OLRC source URL and transport metadata.
   retrieved_at: 2026-08-08T00:36:14-04:00
   laws_in_effect_through: 2026-08-07
-  capture_path: sources/captures/us-code-15-usc-272-current.html
-  previous_capture_path: sources/captures/us-code-15-usc-272.pdf
+  retired_capture_path: sources/captures/us-code-15-usc-272-current.html
+  previous_retired_capture_path: sources/captures/us-code-15-usc-272.pdf
+  raw_capture_retention: not_tracked_after_structured_evidence_audit
   previous_document_hash: sha256:3d5174600552a4bf000a45fb7cd082cf833097ff5cd43745e43e269f013f3a85
-  stored_document_hash: sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d
+  document_hash: sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d
   passage_id: us_code.title15_usc_272.b_2
   passage_hash: sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019
   selected_passage_byte_identical_to_previous_capture: true

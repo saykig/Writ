@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -147,6 +147,48 @@ interface SanitizationLedger {
     evidence_quotations_byte_identical: boolean;
     substantive_source_content_unchanged: boolean;
   }>;
+}
+
+interface StructuredSourceMetadata {
+  sourceId: string;
+  uri: string;
+  mediaType: string;
+  retrievedAt: string;
+  documentHash: string;
+  sourceVersion: string;
+  sourceDate: string;
+}
+
+function structuredSources(root: string): Map<string, StructuredSourceMetadata> {
+  const text = read(root, "sources.writ");
+  const result = new Map<string, StructuredSourceMetadata>();
+  const pairs = text.matchAll(/source\s+\S+\s*\{([\s\S]*?)\}\s*concept\s+\S+\s*\{([\s\S]*?)\}/g);
+  const quoted = (block: string, key: string): string => {
+    const value = new RegExp(`${key}\\s+"([^"]+)";`).exec(block)?.[1];
+    if (!value) throw new Error(`Missing ${key} in structured source metadata`);
+    return value;
+  };
+  const bare = (block: string, key: string): string => {
+    const value = new RegExp(`${key}\\s+([^;]+);`).exec(block)?.[1]?.trim();
+    if (!value) throw new Error(`Missing ${key} in structured source metadata`);
+    return value;
+  };
+  for (const pair of pairs) {
+    const source = pair[1]!;
+    const concept = pair[2]!;
+    const metadata: StructuredSourceMetadata = {
+      sourceId: bare(concept, "source_id"),
+      uri: quoted(source, "uri"),
+      mediaType: quoted(source, "media_type"),
+      retrievedAt: bare(source, "retrieved"),
+      documentHash: quoted(source, "sha256"),
+      sourceVersion: quoted(concept, "source_version"),
+      sourceDate: bare(concept, "source_date"),
+    };
+    if (result.has(metadata.sourceId)) throw new Error(`Duplicate source ${metadata.sourceId}`);
+    result.set(metadata.sourceId, metadata);
+  }
+  return result;
 }
 
 const allRecords = [...nist.records, ...commission.records] as TestRecord[];
@@ -859,11 +901,7 @@ describe("review preservation, judgments, links, and migrations", () => {
 });
 
 describe("source and repository boundaries", () => {
-  const captures: Record<string, string> = {
-    "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d": join(
-      NIST,
-      "sources/captures/us-code-15-usc-272-current.html",
-    ),
+  const retainedSourceArtifacts: Record<string, string> = {
     "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919": join(
       NIST,
       "sources/captures/ecfr-15-cfr-part-285.xml",
@@ -872,83 +910,64 @@ describe("source and repository boundaries", () => {
       NIST,
       "sources/captures/nist-handbook-150-2020-update-1.pdf",
     ),
-    "sha256:3e1c7a56c31e74b719b8366d655e0b390948125d73b49f7204a4d0d3bc7e83db": join(
-      NIST,
-      "sources/captures/nist-accreditation.html",
-    ),
-    "sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b": join(
-      NIST,
-      "sources/captures/nist-laboratories.html",
-    ),
-    "sha256:f928e083da64fc2bf6ae582adbdb2021f62b8b9f0349f80601cecfb6bcb8e101": join(
-      NIST,
-      "sources/captures/nist-advanced-measurement-laboratory.html",
-    ),
-    "sha256:01e47437970773cf5932e2a10975034f2de636d50c313f31d429604865efea22": join(
-      NIST,
-      "sources/captures/nist-ai-research-measurement-standards-division.html",
-    ),
-    "sha256:9673a9ebb47ccf7804be898dff2c8c6238e42f508da762b06d11ba06f7a7bfb0": join(
-      NIST,
-      "sources/captures/nist-ai-consortium.html",
-    ),
-    "sha256:6479ed7c9761fb1b63f4a946d7a740d4157a7bbc2998a577ec4249b564622fca": join(
-      NIST,
-      "sources/captures/nist-ai-consortium-expansion-2026-05-29.html",
-    ),
-    "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37": join(
-      EC,
-      "sources/captures/teu-article-13.html",
-    ),
-    "sha256:ee9da1327b780b2b4290b866dedceccad86793d468b36bbcc0fac594e93d2c08": join(
-      EC,
-      "sources/captures/teu-article-17.html",
-    ),
-    "sha256:ec05de3ed032bc882a25fb54d4ae239cb68fba85ee88a3d3ceb003762ebaf017": join(
-      EC,
-      "sources/captures/tfeu-article-258.html",
-    ),
     "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71": join(
       EC,
       "sources/captures/commission-decision-c-2024-1459.pdf",
     ),
-    "sha256:408360a1e92d48ee1812f81080afa3f55129fc94a4a12c04156e64258d6c1fca": join(
-      EC,
-      "sources/captures/european-commission-institution.html",
-    ),
-    "sha256:6bfc04ef05306f758e2bb02cf9c9819dc6f1d00eb271fdac27ac345e01b733df": join(
-      EC,
-      "sources/captures/commission-planning-proposing-law.html",
-    ),
-    "sha256:2bd2e3ab0f53136a316476ce0a31963b9147461930bbde5b8bf736632149e64b": join(
-      EC,
-      "sources/captures/commission-budget-funding.html",
-    ),
-    "sha256:a110ad6a4dacc47bd1a5b63d955374e3ab4fea4323547657e93f5258036fd2eb": join(
-      EC,
-      "sources/captures/european-ai-office.html",
-    ),
-    "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7": join(
-      EC,
-      "sources/captures/jrc-open-access-research-infrastructures.html",
-    ),
   };
 
-  test("every captured document and every quoted passage matches its hash", () => {
-    for (const [expected, path] of Object.entries(captures)) {
+  test("structured source metadata and exact evidence remain complete without raw HTML", () => {
+    const sources = new Map([...structuredSources(NIST), ...structuredSources(EC)]);
+    const aiAct = yaml<{
+      sources: Array<{
+        uri: string;
+        media_type: string;
+        retrieved_at: string;
+        sha256: string;
+      }>;
+    }>(
+      ROOT,
+      "corpora/legal-policy/eu/european-union/artificial-intelligence-act-2024-1689/sources/sources.yaml",
+    ).sources[0]!;
+    sources.set("eu_ai_act_2024_1689", {
+      sourceId: "eu_ai_act_2024_1689",
+      uri: aiAct.uri,
+      mediaType: aiAct.media_type,
+      retrievedAt: aiAct.retrieved_at,
+      documentHash: aiAct.sha256,
+      sourceVersion: "Regulation (EU) 2024/1689",
+      sourceDate: "2024-07-12",
+    });
+
+    for (const metadata of sources.values()) {
+      expect(() => new URL(metadata.uri), metadata.sourceId).not.toThrow();
+      expect(metadata.mediaType, metadata.sourceId).toBeTruthy();
+      expect(metadata.retrievedAt, metadata.sourceId).toBeTruthy();
+      expect(metadata.sourceVersion, metadata.sourceId).toBeTruthy();
+      expect(metadata.sourceDate, metadata.sourceId).toBeTruthy();
+      expect(metadata.documentHash, metadata.sourceId).toMatch(/^sha256:[0-9a-f]{64}$/);
+    }
+
+    for (const [expected, path] of Object.entries(retainedSourceArtifacts)) {
       expect(sha256(readFileSync(path)), path).toBe(expected);
     }
     for (const target of allRecords) {
+      expect(target.review_state, target.record_id).toBeTruthy();
+      expect(target.provenance, target.record_id).toBeTruthy();
       for (const item of target.evidence) {
+        const metadata = sources.get(item.source_id);
+        expect(metadata, `${target.record_id}:${item.source_id}`).toBeDefined();
+        expect(item.document_version_id, item.passage_id).toBeTruthy();
+        expect(item.locator, item.passage_id).toBeTruthy();
+        expect(item.quote, item.passage_id).toBeTruthy();
+        expect(["direct", "inferred", "inherited"]).toContain(item.basis);
         expect(sha256(item.quote), item.passage_id).toBe(item.passage_hash);
-        if (captures[item.document_hash]) {
-          expect(sha256(readFileSync(captures[item.document_hash]!))).toBe(item.document_hash);
-        }
+        expect(item.document_hash, item.passage_id).toBe(metadata!.documentHash);
       }
     }
   });
 
-  test("publisher transport credentials are deterministically sanitized outside evidence", () => {
+  test("sanitization provenance remains verifiable after raw HTML retirement", () => {
     const ledger = JSON.parse(
       readFileSync(
         join(ROOT, "docs/migrations/institutional-stage-b/source-sanitization-ledger.json"),
@@ -963,16 +982,11 @@ describe("source and repository boundaries", () => {
       selected_evidence_intersections: 0,
     });
 
-    const sources = read(NIST, "sources.writ");
+    const sources = structuredSources(NIST);
     const evidence = nist.records.flatMap((target) => target.evidence);
     for (const entry of ledger.affected_files) {
-      const capture = readFileSync(join(ROOT, entry.file));
-      const text = capture.toString("utf8");
-      expect(sha256(capture)).toBe(entry.post_sanitization_sha256);
+      expect(existsSync(join(ROOT, entry.file)), entry.file).toBe(false);
       expect(entry.pre_sanitization_sha256).not.toBe(entry.post_sanitization_sha256);
-      expect(text.split(ledger.transformation_rule.replacement)).toHaveLength(
-        ledger.transformation_rule.replacement_count_per_file + 1,
-      );
       expect(entry.selected_evidence_intersected_redaction).toBe(false);
       expect(entry.evidence_quotations_byte_identical).toBe(true);
       expect(entry.substantive_source_content_unchanged).toBe(true);
@@ -989,19 +1003,15 @@ describe("source and repository boundaries", () => {
           expect(sha256(reference.quote)).toBe(expectedHash);
         }
       }
-      expect(sources).toContain(`uri "${entry.source_url}";`);
-      expect(sources).toContain(`retrieved ${entry.retrieved_at};`);
+      const source = [...sources.values()].find(({ uri }) => uri === entry.source_url);
+      expect(source, entry.source_url).toBeDefined();
+      expect(source!.retrievedAt).toBe(entry.retrieved_at);
+      expect(source!.documentHash).toBe(entry.post_sanitization_sha256);
     }
 
     for (const root of [NIST, EC]) {
       const directory = join(root, "sources/captures");
-      for (const file of readdirSync(directory).filter((name) => name.endsWith(".html"))) {
-        const html = readFileSync(join(directory, file), "utf8");
-        expect(html, file).not.toMatch(/(?:pk|sk)\.[A-Za-z0-9._-]{20,}/);
-        expect(html, file).not.toMatch(
-          /(?:access[_-]?token|accessToken)\s*[:=]\s*["']?(?:pk|sk)\./i,
-        );
-      }
+      expect(readdirSync(directory).filter((name) => name.endsWith(".html"))).toEqual([]);
     }
   });
 
@@ -1018,9 +1028,8 @@ describe("source and repository boundaries", () => {
     );
   });
 
-  test("the stored statutory mandate uses the current official OLRC capture", () => {
+  test("the statutory mandate pins the reviewed current OLRC source version", () => {
     const target = record("nist_national_measurement_standards_mandate");
-    const capture = read(NIST, "sources/captures/us-code-15-usc-272-current.html");
     expect(target.assertion.text).toContain("laws in effect on August 7, 2026");
     expect(target.uncertainties[0]?.description).toContain(
       "does not establish currency after that date",
@@ -1029,9 +1038,18 @@ describe("source and repository boundaries", () => {
     expect(target.evidence[0]?.passage_hash).toBe(
       "sha256:7b5d22a2d42aa1f5b42b3d1b32e4a2fca3c6640db6467adb2dd2cb3a48e8a019",
     );
-    expect(capture).toContain("Text contains those laws in effect on August 7, 2026");
-    expect(capture).toContain(target.evidence[0]!.quote);
-    expect(read(NIST, "sources.writ")).toContain('source_version "current-through-2026-08-07"');
+    expect(target.evidence[0]?.document_hash).toBe(
+      "sha256:456fb61742da7ee5e996116af634ca569955a3319429027aed083903d41bcb7d",
+    );
+    const sources = read(NIST, "sources.writ");
+    expect(sources).toContain('uri "https://uscode.house.gov/view.xhtml?edition=prelim');
+    expect(sources).toContain("retrieved 2026-08-08T00:36:14-04:00");
+    expect(sources).toContain('source_version "current-through-2026-08-07"');
+    const migration = read(NIST, "migration.yaml");
+    expect(migration).toContain("current_statutory_source_version:");
+    expect(migration).toContain(
+      "raw_capture_retention: not_tracked_after_structured_evidence_audit",
+    );
   });
 
   test("unpublished typo-bearing identifiers have no remaining tracked reference", () => {

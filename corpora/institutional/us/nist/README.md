@@ -18,17 +18,20 @@ administer accreditation. Sara Kim approved all nine additions on 2026-08-08 aft
 assertions, fact payloads, evidence passages, uncertainties and proposed dispositions. The original
 automated proposal phase remains recorded separately in the review queue and migration ledger.
 
-Official captured source representations are under `sources/captures/`. Each record embeds exact
-passages, narrow locators, passage hashes, and captured-document hashes. The two Stage A source
-identities and their document hashes were not replaced or mutated.
+Official source identities, URLs, retrieval and version metadata, and pinned document hashes are
+registered in `sources.writ`. Each record embeds its exact supporting passage, narrow locator,
+passage hash, document hash, evidence basis, uncertainty, review state, and provenance. Raw HTML
+webpage captures are not tracked; Writ preserves the structured evidence contract rather than
+serving as a web archive. The two Stage A source identities and their document hashes were not
+replaced or mutated.
 
 Workforce, budget, AI-budget, degraded-facility, generic operating-status, AI-group mission, and
 Director decision-right proposals were intentionally not added. Their absence is not a false value.
 External consortium resources remain external and are never represented as NIST-owned resources.
 
-The stored U.S. Code capture is the current official OLRC preliminary text containing laws in
+The registered U.S. Code source version is the official OLRC preliminary text containing laws in
 effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are unchanged from the
-prior annual-edition capture; the current captured-document hash and retrieval transport are
+prior annual-edition capture; the pinned document hash and original retrieval transport are
 recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml` and
 `docs/migrations/institutional-stage-b/human-review.yaml`; accepted human dispositions are in
 `judgments.writ`. The two

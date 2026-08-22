@@ -14,10 +14,13 @@ inverse is stored. Human review approved omission of the model-evaluation capaci
 because the evidence does not independently establish concrete organizational or technical
 machinery; the separate function and decision-right records are approved and remain active.
 
-New evidence comes only from official EU sources captured under `sources/captures/`. The three
-original AI Act passages and document version are reused from the legal-policy corpus without
-modifying its shared source or passage files. Treaty mandates, functions, decision rights, and
-maintained capacities are not treated as interchangeable.
+New evidence comes only from identified official EU sources. Source identities, URLs, retrieval
+and version metadata, and pinned document hashes are registered in `sources.writ`; records preserve
+their exact supporting passages, locators, passage hashes, evidence basis, uncertainty, review, and
+provenance. Raw HTML webpage captures are not tracked. The three original AI Act passages and
+document version are reused from the legal-policy corpus without modifying its shared source or
+passage files. Treaty mandates, functions, decision rights, and maintained capacities are not
+treated as interchangeable.
 
 The Commission is represented as a `supranational_institution`; the AI Office remains an
 `organizational_unit`. No Commission placement, DG CONNECT identity, holder hierarchy, workforce or

@@ -29,10 +29,6 @@ archive/pilots/eu-us-ai-evaluation-v1/
 # Generated embed outputs (regenerated on build)
 **/schemas.embedded.ts
 
-# Byte-preserved official source captures may contain publisher HTML that is not
-# Prettier-parseable. Their source manifests and evidence hashes guard the bytes.
-corpora/institutional/**/sources/captures/
-
 # The reviewed EU/US legal-policy corpora are emitted byte-for-byte by
 # writ_ingest.corpus.eu_us_ai_governance.canonical_yaml_bytes and checked with
 # `--check`. Reformatting them here would drift them from their generator.
