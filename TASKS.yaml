@@ -442,7 +442,7 @@ tasks:
 
   - id: FOUNDATION-RESET-001
     title: Reset the governing architecture to evidence-bound political knowledge records
-    status: in_progress
+    status: review
     dependencies:
       - WRIT-VERIFICATION-HARNESS-001
     scope:
