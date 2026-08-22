@@ -19,11 +19,6 @@ const schema = (source: string, version: string, section: string): InvariantAuth
   version,
   section,
 });
-const adr19 = (section: string): InvariantAuthority => ({
-  kind: "adr",
-  source: "adr/0019-cross-family-interoperability.md",
-  section,
-});
 const meta = (section: string): InvariantAuthority => ({
   kind: "meta",
   source: "adr/0020-deterministic-writ-verification.md",
@@ -47,26 +42,6 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Scoped catalog and manifest reconciliation"),
   },
   {
-    code: "ONTOLOGY_IDENTITY_NOT_FOUND",
-    gate: "ontology",
-    authority: adr19("Canonical institutional identity"),
-  },
-  {
-    code: "ONTOLOGY_IDENTITY_AMBIGUOUS",
-    gate: "ontology",
-    authority: adr19("Canonical institutional identity"),
-  },
-  {
-    code: "ONTOLOGY_INVALID_SOURCE_KIND",
-    gate: "ontology",
-    authority: adr19("Relation endpoint contract"),
-  },
-  {
-    code: "ONTOLOGY_INVALID_TARGET_KIND",
-    gate: "ontology",
-    authority: adr19("Relation endpoint contract"),
-  },
-  {
     code: "INTEROP_SOURCE_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),
@@ -75,11 +50,6 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     code: "INTEROP_TARGET_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),
-  },
-  {
-    code: "INTEROP_ENDPOINT_KIND_MISMATCH",
-    gate: "interoperability",
-    authority: adr19("Relation endpoint contract"),
   },
   {
     code: "INTEROP_REFERENCE_AMBIGUOUS",
@@ -102,59 +72,9 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
-    code: "INTEROP_OWNER_MISMATCH",
-    gate: "interoperability",
-    authority: adr19("Institution-owned storage"),
-  },
-  {
-    code: "INTEROP_INVERSE_DUPLICATE",
-    gate: "interoperability",
-    authority: adr19("Reverse traversal"),
-  },
-  {
-    code: "INTEROP_UNRESOLVED_ACTIVE",
-    gate: "interoperability",
-    authority: adr19("Unresolved mappings"),
-  },
-  {
-    code: "INTEROP_INHERITED_SUPPORT_MISSING",
-    gate: "interoperability",
-    authority: adr19("Inherited supporting records"),
-  },
-  {
-    code: "INTEROP_ACTIVE_SET_MISMATCH",
-    gate: "interoperability",
-    authority: meta("Exact workflow adapter support"),
-  },
-  {
-    code: "INTEROP_QUEUE_INVALID",
-    gate: "interoperability",
-    authority: meta("Exact workflow adapter support"),
-  },
-  {
     code: "PROVENANCE_EVIDENCE_NOT_FOUND",
     gate: "provenance",
     authority: meta("Mechanical reference resolution"),
-  },
-  {
-    code: "PROVENANCE_DISPOSITION_MISSING",
-    gate: "provenance",
-    authority: adr19("Independent link review"),
-  },
-  {
-    code: "PROVENANCE_DISPOSITION_AMBIGUOUS",
-    gate: "provenance",
-    authority: adr19("Independent link review"),
-  },
-  {
-    code: "PROVENANCE_DRAFT_HUMAN_MISMATCH",
-    gate: "provenance",
-    authority: adr19("Independent link review"),
-  },
-  {
-    code: "PROVENANCE_AUTOMATION_ATTRIBUTION",
-    gate: "provenance",
-    authority: adr19("Automated proposal history"),
   },
   {
     code: "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND",
@@ -179,20 +99,15 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
   {
     code: "PROVENANCE_ACTIVE_LEGACY_ID",
     gate: "provenance",
-    authority: meta("Exact workflow adapter and mechanical reference consistency"),
+    authority: meta("Mechanical reference consistency"),
   },
   {
     code: "PROVENANCE_MIGRATION_HISTORY_INCONSISTENT",
     gate: "provenance",
-    authority: meta("Exact workflow adapter and mechanical reference consistency"),
+    authority: meta("Mechanical reference consistency"),
   },
   {
     code: "PROVENANCE_MIGRATION_INVALID",
-    gate: "provenance",
-    authority: meta("Exact workflow adapter support"),
-  },
-  {
-    code: "PROVENANCE_HUMAN_REVIEW_INVALID",
     gate: "provenance",
     authority: meta("Exact workflow adapter support"),
   },

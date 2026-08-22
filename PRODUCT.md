@@ -51,11 +51,9 @@ science and global-affairs research.
 
 - The NIST corpus contains reviewed institutional records spanning the distinctions Writ must
   preserve without overclaiming.
-- The EU–US comparison remains a historical pilot. It is not the identity of an EU or US corpus.
-- G20 Rio normalized records exist, including 13 ingested political statements, two reports, and
-  546 source-reported member judgments.
-- Archived G7 and G20 compatibility datasets remain available as historical evidence without
-  defining the active architecture.
+- NIST is the sole active development proving ground. Existing reviewed European Commission and
+  legal-policy corpora remain catalogued as secondary material without setting the current product
+  direction.
 
 ## Product Principles
 

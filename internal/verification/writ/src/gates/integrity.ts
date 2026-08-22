@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { delimiter, join, resolve } from "node:path";
 
 import { findObjects } from "../repository.js";
 import {
@@ -210,9 +210,11 @@ function command(
   root: string,
   executable: string,
   args: string[],
+  env: Record<string, string | undefined> = process.env,
 ): { ok: boolean; output: string } {
   const result = Bun.spawnSync([executable, ...args], {
     cwd: root,
+    env,
     stdout: "pipe",
     stderr: "pipe",
   });
@@ -312,11 +314,24 @@ export function verifyIntegrity(
         }),
       );
     }
-    const python = process.env.PYTHON_BIN ?? "python3";
-    const registry = command(snapshot.root, python, [
-      "internal/tooling/scripts/generate_source_registry.py",
-      "--check",
-    ]);
+    const virtualPython = join(
+      snapshot.root,
+      ".venv",
+      process.platform === "win32" ? "Scripts/python.exe" : "bin/python",
+    );
+    const python =
+      process.env.PYTHON_BIN ?? (existsSync(virtualPython) ? virtualPython : "python3");
+    const registry = command(
+      snapshot.root,
+      python,
+      ["internal/tooling/scripts/generate_source_registry.py", "--check"],
+      {
+        ...process.env,
+        PYTHONPATH: [join(snapshot.root, "apps/ingest/src"), process.env.PYTHONPATH]
+          .filter((entry): entry is string => Boolean(entry))
+          .join(delimiter),
+      },
+    );
     if (!registry.ok) {
       issues.push(
         issue(

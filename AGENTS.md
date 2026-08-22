@@ -36,13 +36,15 @@ Documents under `archive/` are historical evidence, never current instructions.
 8. Visualizations and memos are views, not sources of truth.
 9. The implemented native families are `legal_policy` and `institutional`; future family
    identifiers remain extensible at the shared record base.
-10. Deterministic compilation and verification perform no network access, model inference, randomness, wall-clock
-   reads, or mutation.
-11. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
+10. NIST is the sole active development proving ground. Other reviewed catalogued corpora remain
+    secondary material and do not set the current product direction.
+11. Deterministic compilation and verification perform no network access, model inference,
+    randomness, wall-clock reads, or mutation.
+12. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
     or publish derived results.
-12. Accepted records are superseded, not edited in place.
-13. Exact decimals and explicit units are required for money and quantities.
-14. Stable diagnostic codes are never silently repurposed.
+13. Accepted records are superseded, not edited in place.
+14. Exact decimals and explicit units are required for money and quantities.
+15. Stable diagnostic codes are never silently repurposed.
 
 ## Source of truth order
 

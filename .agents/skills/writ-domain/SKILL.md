@@ -17,7 +17,9 @@ Writ's immediate governed flow is:
 4. provenance that preserves the path back to the source.
 
 Corpora and records exist independently of questions, comparisons, analyses, and presentation
-layers. Questions and human reasoning remain external to Writ.
+layers. Questions and human reasoning remain external to Writ. NIST is the sole active development
+proving ground. Existing reviewed European Commission and legal-policy corpora remain
+catalogued secondary material without setting the current product direction.
 
 ## Epistemic separation
 

@@ -40,6 +40,9 @@ git diff --check
 Also verify that:
 
 - current governing documents use `docs/current/product-definition.md`;
+- `us.institutions.nist` remains the sole active development proving ground while reviewed
+  European Commission and legal-policy corpora remain catalogued secondary material;
+- retained catalogued corpora still satisfy their declared native or compatibility contracts;
 - no active governing document requires a query layer or compliance-product architecture;
 - removed planning archives are absent from the tracked tree and current references;
 - external ratings are described as source-reported judgments;

@@ -52,13 +52,12 @@ facts merely because the repository can preserve them.
 
 - The NIST institutional corpus is the current proving ground for typed records that distinguish
   identity, placement, mission, mandate, function, decision right, and operational capacity.
-- The reviewed EU and US AI claims are distributed across issuer-and-instrument legal-policy
-  corpora resolved through the native corpus catalog. The former EU–US
-  comparison question, headline rule, and conclusion are preserved only in the archived pilot.
-- G20 Rio records remain archived compatibility material. The frozen review copy contains
-  13 ingested statements and 546 source-reported member judgments; it explicitly records that 161
-  reported commitments have not been ingested.
-- G7 AI-for-SMEs material remains in the archived compatibility dataset and Git history.
+- NIST is the sole active development proving ground. Existing reviewed European Commission and
+  legal-policy corpora remain catalogued, inspectable secondary material; they do not define the
+  current development roadmap.
+- Source-specific compatibility runtimes and archived benchmark consumers are not required merely
+  because reviewed secondary corpora remain available. Generic catalog, bundle, schema, and
+  verification support continues to preserve those corpora.
 
 ## Explicit non-goals
 

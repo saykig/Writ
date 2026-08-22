@@ -65,14 +65,12 @@ Human review determines acceptance.
 
 ## Verification dimensions
 
-- **Ontology** validates objects within their governing schema scope, resolves canonical approved
-  institutional identities and applies the explicitly coded endpoint rules accepted in ADR 0019.
+- **Ontology** reconciles the active catalog and manifest family declarations.
 - **Interoperability** resolves active Core-link endpoints, owners, evidence and supporting records.
-  Explicit migration queues under `docs/migrations/**/mapping-queue.yaml` are workflow history, not the
-  canonical graph; unresolved candidates remain queue-only.
-- **Provenance** verifies current native/Core evidence, human dispositions, supersession and declared
-  identifier migrations. Compatibility formats continue through their authoritative schemas and
-  existing adapters unless a bounded new semantic check is required.
+  It covers retained catalogued links under generic Core contracts without reactivating the
+  specialized ADR-0019 workflow rule pack.
+- **Provenance** verifies current native evidence, judgment targets and evidence, judgment
+  supersession, and declared identifier migrations.
 - **Integrity** verifies catalogues, manifests, routed files, scoped counts, source-registry drift and
   the repository's complete tracked-file checksum manifest.
 
@@ -84,8 +82,8 @@ contract requires a separate normative decision.
 
 The stable kernel selects dimensions, orchestrates rule execution and renders results. It has no
 closed corpus-family vocabulary. Current Writ adapters load the exact `(contract_id,
-declared_version)` pairs supported today. Scoped semantic rule packs, such as ADR 0019, apply only the
-semantics their authority explicitly establishes.
+declared_version)` pairs supported today. No migration-workflow adapter is currently registered;
+historical workflow artifacts are not active verifier inputs.
 
 The harness indexes `$id` values from the authoritative `schemas/` tree. Core, extension, analysis
 and compatibility schemas remain scoped contracts; their enums are never unioned into a harness-owned
@@ -97,16 +95,15 @@ recognized authoritative identity without an exact adapter reports `VERIFIER_UNS
 this says only that verified support is unavailable and makes no claim that the version itself is
 valid or invalid. No semantic-version compatibility is inferred.
 
-## V1 native-source boundary
+## Native-source boundary
 
 For compiled native records, V1 reconstructs resolvable evidence-passage and source-reference objects
-from each record's compiled evidence envelope. Those reconstructed source references are not treated
-as independently loaded publication, source-document or instrument objects, and therefore cannot
-satisfy an ADR 0019 endpoint that declares one of those specific kinds. V1 does not independently
-parse every source declaration in every `.writ` file. Existing pack validation, source-registry checks
-and repository tests remain responsible for those declarations and stored-source integrity. Expanding
-that boundary requires a bounded adapter backed by an existing contract, not a harness-owned source
-ontology.
+from each record's compiled evidence envelope. Those reconstructed source references are not
+treated as independently loaded publication, source-document or instrument objects. The harness
+does not independently parse every source declaration in every `.writ` file. Existing pack
+validation, source-registry checks and repository tests remain responsible for those declarations
+and stored-source integrity. Expanding that boundary requires a bounded adapter backed by an
+existing contract, not a harness-owned source ontology.
 
 ## Extending verification
 

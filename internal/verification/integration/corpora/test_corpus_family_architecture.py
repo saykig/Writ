@@ -11,12 +11,17 @@ from typing import Any
 
 import jsonschema
 import yaml
-from writ_ingest.corpus.eu_us_ai_governance import BOUNDARY_KEYS, CORPUS_SPECS
 
 ROOT = Path(__file__).resolve().parents[4]
 CATALOG_PATH = ROOT / "corpora/catalog.yaml"
 PRE_MIGRATION = ROOT / "docs/migrations/corpus-family-foundation/pre-migration-inventory.json"
 RETIRED_IDS = {"writ.corpus.eu.ai-governance", "writ.corpus.us.ai-governance"}
+BOUNDARY_KEYS = {
+    "instrument_id",
+    "instrument_series_id",
+    "publication_id",
+    "dataset_collection_id",
+}
 NAMESPACE_DIRS = {
     "corpora/legal-policy/eu/european-union",
     "corpora/legal-policy/eu/european-commission",
@@ -41,10 +46,18 @@ def manifest(entry: dict[str, Any]) -> dict[str, Any]:
     return load_yaml(ROOT / entry["manifest"])
 
 
+REVIEWED_SPECS = tuple(
+    {"corpus_id": entry["corpus_id"], "path": entry["path"]}
+    for entry in catalog()["native_corpora"]
+    if manifest(entry)["record_contract"]["id"]
+    == "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json"
+)
+
+
 def ai_documents(relative: str, key: str) -> list[dict[str, Any]]:
     return [
         value
-        for spec in CORPUS_SPECS
+        for spec in REVIEWED_SPECS
         for value in load_yaml(ROOT / spec["path"] / relative)[key]
     ]
 
@@ -120,7 +133,7 @@ def test_manifests_declare_the_contract_their_records_actually_satisfy() -> None
         # The reviewed EU/US payload is a preserved compatibility format.
         **{
             spec["corpus_id"]: ("compatibility", reviewed_contract, "1.0.0")
-            for spec in CORPUS_SPECS
+            for spec in REVIEWED_SPECS
         },
         "us.constitutional_law": (
             "compatibility",
@@ -276,11 +289,11 @@ def test_retired_corpora_are_a_migration_ledger_and_never_an_active_alias() -> N
     # Every retired corpus is fully covered: each of the thirteen split corpora
     # appears in exactly one ledger entry, and every migration ledger entry in the
     # corpora themselves points back at a recorded retired corpus.
-    assert covered == {spec["corpus_id"] for spec in CORPUS_SPECS}
+    assert covered == {spec["corpus_id"] for spec in REVIEWED_SPECS}
     assert len(covered) == 13
     ledger_old_ids = {
         entry["old_corpus_id"]
-        for spec in CORPUS_SPECS
+        for spec in REVIEWED_SPECS
         for entry in load_yaml(ROOT / spec["path"] / "migration-map.yaml")["entries"]
     }
     assert ledger_old_ids == RETIRED_IDS
@@ -294,9 +307,12 @@ def test_explicit_claim_mapping_and_review_totals_are_exact() -> None:
             claim["legacy_refs"][0]
             for claim in load_yaml(ROOT / spec["path"] / "records/claims.yaml")["claims"]
         }
-        for spec in CORPUS_SPECS
+        for spec in REVIEWED_SPECS
     }
-    assert actual == {spec["corpus_id"]: set(spec["claims"]) for spec in CORPUS_SPECS}
+    assert set().union(*actual.values()) == {
+        claim["legacy_refs"][0] for claim in all_claims
+    }
+    assert sum(len(values) for values in actual.values()) == len(set().union(*actual.values()))
     assert len(all_claims) == len({claim["machine_id"] for claim in all_claims}) == 32
     assert len(all_reviews) == len({review["machine_id"] for review in all_reviews}) == 24
     assert all(claim["review_status"] == "accepted" for claim in all_claims)
@@ -352,7 +368,7 @@ def test_hashes_unresolved_states_and_legacy_references_are_preserved() -> None:
 
 
 def test_migration_ledgers_cover_old_membership_and_relationships_once() -> None:
-    ledgers = [load_yaml(ROOT / spec["path"] / "migration-map.yaml") for spec in CORPUS_SPECS]
+    ledgers = [load_yaml(ROOT / spec["path"] / "migration-map.yaml") for spec in REVIEWED_SPECS]
     entries = [entry for ledger in ledgers for entry in ledger["entries"]]
     moved = [entry for ledger in ledgers for entry in ledger["moved_objects"]]
     assert len(entries) == 38

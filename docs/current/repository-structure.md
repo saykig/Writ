@@ -25,8 +25,8 @@ implementation wiring, a later ADR records the change rather than rewriting hist
   reproduction commands.
 - `internal/infrastructure/` contains operational registry inputs, deterministic generated
   compatibility projections, and database migrations.
-- `archive/` preserves non-normative pilots and compatibility material that remain useful for
-  inspection.
+- `archive/` contains non-normative historical material. Active code and verification do not
+  require it; reviewed catalogued corpora remain under `corpora/`, not `archive/`.
 - `docs/migrations/` preserves completed reset path maps and verification handoffs.
 
 Application- and package-owned tests and generators remain colocated under `apps/*` and
@@ -53,15 +53,9 @@ comparisons, analyses, and presentation layers.
 
 ## Preservation gate
 
-Structural cleanup does not change corpus meaning or any frozen EU–US pilot byte. The G7 corpus's
-benchmark locator follows the benchmark to its internal path; all substantive records, identifiers,
-sources, passages, reviews, judgments, and provenance remain unchanged. Validation enforces:
-
-- 12 EU and 12 US reviewed parent annotations;
-- 15 EU and 17 US atomic claims and every legacy identifier mapping;
-- 87 G7 government-action records;
-- 13 ingested G20 Rio political statements, two reports, and 546 published member judgments;
-- the 174-item G20 inventory with 161 entries explicitly missing rather than fabricated.
-
-Unknown and contested values, reviewed judgments, source locators, identifiers, passages, and
-provenance remain unchanged.
+Structural cleanup does not change NIST, European Commission, or legal-policy corpus bytes or
+substantive semantics. NIST is the sole active development proving ground, while the other reviewed
+catalogued corpora remain secondary material. Validation continues to enforce declared contracts,
+catalog-to-manifest routes, evidence resolution, source checksums, migration history, deterministic
+bundle output, and the repository checksum inventory. Historical archive material is not an active
+verification input.

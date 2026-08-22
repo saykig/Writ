@@ -364,6 +364,8 @@ tasks:
   - id: CROSS-FAMILY-INTEROPERABILITY-001
     title: Establish reviewed legal-policy to institutional record links
     status: complete
+    architecture_status: amended
+    amended_by: FOUNDATION-CORPUS-RETIREMENT-001
     dependencies:
       - CORPUS-FAMILY-FOUNDATION-002
     scope:
@@ -392,6 +394,8 @@ tasks:
   - id: WRIT-VERIFICATION-HARNESS-001
     title: Add the deterministic, authority-traced Writ Verification Harness
     status: done
+    architecture_status: amended
+    amended_by: FOUNDATION-CORPUS-RETIREMENT-001
     dependencies:
       - CROSS-FAMILY-INTEROPERABILITY-001
     scope:
@@ -499,5 +503,38 @@ tasks:
       - packages/cli
       - apps/api
       - protocols
+      - TASKS.yaml
+      - MANIFEST.sha256
+
+  - id: FOUNDATION-CORPUS-RETIREMENT-001
+    title: Make NIST the active development proving ground and retire obsolete corpus consumers
+    status: review
+    dependencies:
+      - FOUNDATION-RUNTIME-RETIREMENT-001
+    scope:
+      - Make NIST the sole active development proving ground without deleting reviewed secondary corpora.
+      - Retain the European Commission institutional corpus, legal-policy corpora, their declared contracts, and generic bundle and verification support.
+      - Retire source-specific G20, EU-US migration, constitutional import, and archived compatibility consumers that no longer serve current Writ.
+      - Retire the ADR-0019 workflow adapter and specialized verifier rule pack while preserving reviewed cross-family records and corpus tests.
+      - Keep historical archives non-authoritative and free of active runtime consumers.
+    exclusions:
+      - Changes to substantive NIST records, evidence, sources, judgments, or semantics.
+      - Retirement of the generic legal_policy family or record-grammar contracts.
+      - Changes to substantive European Commission or legal-policy corpus content or semantics.
+      - General G7/G20 archive cleanup or redesign of generic ingestion machinery.
+      - New analysis, interoperability, query, or application architecture.
+    acceptance:
+      - NIST is identified as the sole active development proving ground while all reviewed catalogued corpora remain present.
+      - NIST, European Commission, and legal-policy corpus bytes and compiled semantics match the rebased main tree.
+      - The data bundle exports every retained catalogued corpus deterministically.
+      - No active verifier workflow or specialized rule pack depends on ADR 0019 artifacts.
+      - No active source-specific runtime consumes retired G20, EU-US migration, constitutional import, or archived G7 data.
+      - Formatting, linting, type checking, tests, data checks, verification, Python checks, build,
+        and repository integrity pass.
+    outputs:
+      - adr/0023-single-active-nist-corpus.md
+      - corpora/catalog.yaml
+      - packages/data-bundle
+      - internal/verification/writ
       - TASKS.yaml
       - MANIFEST.sha256
