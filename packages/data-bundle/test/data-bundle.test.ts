@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 import { generateWritDataBundleForCommit, resolveCommitIdentity } from "../src/generate.js";
@@ -141,6 +142,34 @@ describe("canonical source and provenance", () => {
       .find((support) => support.source.sourceId === "nist.about")!;
     expect(scopedNistSupport.source.title).toBeNull();
     expect(scopedNistSupport.source.title).not.toBe("Borrowed from another corpus");
+  });
+
+  test("exports every NIST fact with complete portable structured evidence", () => {
+    const records = bundle.records.filter((record) => record.corpusId === "us.institutions.nist");
+    expect(records).toHaveLength(15);
+    for (const record of records) {
+      expect(record.recordKey).toBe(`us.institutions.nist::${record.recordId}`);
+      expect(record.evidence.length, record.recordId).toBeGreaterThan(0);
+      for (const support of record.evidence) {
+        expect(support).toMatchObject({
+          state: "traced",
+          basis: "direct",
+        });
+        expect(support.passageId, record.recordId).toBeTruthy();
+        expect(support.locator, record.recordId).toBeTruthy();
+        expect(support.quote, record.recordId).toBeTruthy();
+        expect(support.passageHash, record.recordId).toMatch(/^sha256:[0-9a-f]{64}$/);
+        expect(support.documentHash, record.recordId).toMatch(/^sha256:[0-9a-f]{64}$/);
+        expect(support.source.sourceId, record.recordId).toBeTruthy();
+        expect(support.source.documentVersionId, record.recordId).toBeTruthy();
+        expect(support.source.title, record.recordId).toBeTruthy();
+        expect(support.source.uri, record.recordId).toMatch(/^https:\/\//);
+        expect(support.source.retrievedAt, record.recordId).toBeTruthy();
+        expect(support.source.mediaType, record.recordId).toBeTruthy();
+        const passageHash = `sha256:${createHash("sha256").update(support.quote!).digest("hex")}`;
+        expect(passageHash, `${record.recordId}:${support.passageId}`).toBe(support.passageHash!);
+      }
+    }
   });
 
   test("preserves multiple and unresolved evidence supports separately", () => {

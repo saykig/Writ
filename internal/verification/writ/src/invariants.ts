@@ -86,6 +86,26 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
+    code: "PROVENANCE_SOURCE_NOT_FOUND",
+    gate: "provenance",
+    authority: meta("Mechanical reference resolution"),
+  },
+  {
+    code: "PROVENANCE_SOURCE_MISMATCH",
+    gate: "provenance",
+    authority: meta("Mechanical reference consistency"),
+  },
+  {
+    code: "PROVENANCE_PASSAGE_CONFLICT",
+    gate: "provenance",
+    authority: meta("Mechanical reference consistency"),
+  },
+  {
+    code: "PROVENANCE_PASSAGE_HASH_MISMATCH",
+    gate: "provenance",
+    authority: meta("Mechanical reference consistency"),
+  },
+  {
     code: "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND",
     gate: "provenance",
     authority: meta("Mechanical reference resolution"),

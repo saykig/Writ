@@ -6,7 +6,7 @@ import type {
   RecordLink,
   WritRecord,
 } from "@writ/domain";
-import { compileSource } from "@writ/language";
+import { compileSource, isConceptDeclaration, isSource, parseDocument } from "@writ/language";
 
 import { loadAuthorityIndex, renderSchemaErrors, type AuthorityIndex } from "./authority.js";
 import {
@@ -60,6 +60,18 @@ function object(value: unknown): value is Record<string, unknown> {
 
 function strings(value: unknown): string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string") ? value : [];
+}
+
+function declarationProperties(
+  properties: readonly {
+    readonly $type: string;
+    readonly name?: string;
+    readonly value?: unknown;
+  }[],
+): ReadonlyMap<string, unknown> {
+  return new Map(
+    properties.map((property) => [property.name ?? property.$type, property.value] as const),
+  );
 }
 
 function nonEmpty(value: unknown): value is string {
@@ -516,6 +528,73 @@ export function loadRepository(root: string): LoadRepositoryResult {
           routed.add(routeKey);
 
           if (absolute.endsWith(".writ")) {
+            if (category === "sources") {
+              const parsed = parseDocument(readFileSync(absolute, "utf8"), { fileName: label });
+              const errors = parsed.diagnostics.filter(
+                (diagnostic) => diagnostic.severity === "error",
+              );
+              if (!parsed.ok || errors.length > 0) {
+                loadIssues.push(
+                  issue(
+                    "integrity",
+                    "INTEGRITY_CONTRACT_INVALID",
+                    `Writ source metadata parsing failed: ${errors.map((item) => item.message).join("; ")}`,
+                    { corpus_id: ownerCorpus, file: label },
+                  ),
+                );
+                continue;
+              }
+              for (let index = 0; index < parsed.model.declarations.length; index += 1) {
+                const declaration = parsed.model.declarations[index];
+                if (!isSource(declaration)) continue;
+                const metadata = parsed.model.declarations[index + 1];
+                if (!isConceptDeclaration(metadata)) {
+                  loadIssues.push(
+                    issue(
+                      "integrity",
+                      "INTEGRITY_CONTRACT_INVALID",
+                      `Source ${declaration.name} is not followed by structured source metadata.`,
+                      { corpus_id: ownerCorpus, file: label },
+                    ),
+                  );
+                  continue;
+                }
+                const sourceProperties = declarationProperties(declaration.properties);
+                const metadataProperties = declarationProperties(metadata.properties);
+                const sourceId = metadataProperties.get("source_id");
+                const documentHash = sourceProperties.get("SourceSha");
+                if (!nonEmpty(sourceId) || !nonEmpty(documentHash)) {
+                  loadIssues.push(
+                    issue(
+                      "integrity",
+                      "INTEGRITY_CONTRACT_INVALID",
+                      `Source ${declaration.name} must declare source_id and sha256.`,
+                      { corpus_id: ownerCorpus, file: label },
+                    ),
+                  );
+                  continue;
+                }
+                const sourceVersion = metadataProperties.get("source_version");
+                addObject({
+                  id: sourceId,
+                  kind: "source_document",
+                  value: {
+                    source_id: sourceId,
+                    document_hash: documentHash,
+                    uri: sourceProperties.get("SourceUri"),
+                    media_type: sourceProperties.get("SourceMediaType"),
+                    retrieved_at: sourceProperties.get("SourceRetrieved"),
+                    source_title: metadataProperties.get("source_title"),
+                    source_version: sourceVersion,
+                    source_date: metadataProperties.get("source_date"),
+                  },
+                  file: label,
+                  corpus_id: ownerCorpus,
+                  aliases: nonEmpty(sourceVersion) ? [sourceVersion] : [],
+                });
+              }
+              continue;
+            }
             if (category !== "records" && category !== "judgments") continue;
             const compiled = compileSource(readFileSync(absolute, "utf8"), { fileName: label });
             const errors = compiled.diagnostics.filter(
@@ -641,6 +720,14 @@ export function loadRepository(root: string): LoadRepositoryResult {
             continue;
           }
           documents.push({ value, file: label, corpus_id: ownerCorpus, category });
+
+          if (category === "sources" && Array.isArray(value.sources)) {
+            for (const candidate of value.sources) {
+              if (!object(candidate)) continue;
+              const sourceObject = indexed(candidate, "source_document", label, ownerCorpus);
+              if (sourceObject) addObject(sourceObject);
+            }
+          }
 
           if (governingContract.id === REVIEWED_DOCUMENT_SCHEMA) {
             governingAdapter.adapt({ family: governingManifest.value.family, value });

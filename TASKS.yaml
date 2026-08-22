@@ -538,3 +538,31 @@ tasks:
       - internal/verification/writ
       - TASKS.yaml
       - MANIFEST.sha256
+
+  - id: NIST-PROVING-GROUND-HARDENING-001
+    title: Harden the evidence and review boundary of the NIST proving ground
+    status: in_progress
+    dependencies:
+      - FOUNDATION-CORPUS-RETIREMENT-001
+    scope:
+      - Audit every approved and superseded NIST institutional record before semantic edits.
+      - Prove source, passage, record, link, judgment, migration, portability, and determinism boundaries.
+      - Add generic verifier reference checks and synthetic institutional fixtures without designing another proving ground.
+      - Make only the smallest reviewed NIST correction warranted by the completed audit.
+    exclusions:
+      - New corpora, applications, queries, reasoning, recommendations, cross-family design, or web features.
+      - Restoration of raw HTML captures or use of retained secondary corpora to drive new semantics.
+      - Replacement of the Writ DSL or invention of mechanical ontology for semantic human-review decisions.
+    acceptance:
+      - A record-by-record report identifies clear, debatable, unsupported, provenance, DSL, kernel, and test findings.
+      - Every NIST evidence source and passage resolves exactly and repeated passage identities are byte-consistent.
+      - Authoritative structural and reference violations fail mechanically with stable verifier findings.
+      - Semantic category errors, unsupported certainty, conflicting judgments, and accepted-record mutation remain explicit human-review boundaries where no mechanical rule is authorized.
+      - Synthetic fixtures prove the institutional kernel is not NIST-specific and serialization is portable and deterministic.
+      - Formatting, linting, type checking, tests, conformance, bundle checks, verification, build, and repository integrity pass.
+    outputs:
+      - docs/current/nist-proving-ground-audit.md
+      - packages/language/test/nist-proving-ground-hardening.test.ts
+      - internal/verification/writ
+      - TASKS.yaml
+      - MANIFEST.sha256

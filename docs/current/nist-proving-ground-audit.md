@@ -94,9 +94,10 @@ This is sufficient to understand and review every current fact. Two limitations 
    remain independently reproducible.
 
 The smallest structured remedy is to make source declarations first-class inputs to generic
-verification and require every record evidence source to match the declaration's document hash and
-metadata. Passage IDs should also be unique per corpus and byte-consistent wherever repeated. No
-raw web capture is needed.
+verification and require every record evidence source to match the declaration's document hash.
+Passage IDs should also be unique per corpus and byte-consistent wherever repeated. No raw web
+capture is needed. The hardening implementation following this audit applies those mechanical
+checks, with immutable document-hash fallback for retained legacy source identities.
 
 ## Contract boundary and adversarial model
 
@@ -153,8 +154,9 @@ properties, subject to the source-resolution gap above.
 
 ### Corpus/content
 
-- Remove only the unsupported word **principal** from `nist_lab_network_capacity` after this report
-  is committed.
+- Correct the unsupported word **principal** only through a human-reviewed superseding record. The
+  approved record must not be edited in place, and this task has no authority to manufacture the
+  required human decision.
 - Do not silently reclassify the three debatable records. Make the composed/inferred support visible
   through a reviewed correction only if the existing evidence-basis vocabulary is judged to apply
   to assertion composition.
@@ -169,11 +171,13 @@ properties, subject to the source-resolution gap above.
 
 ### Verifier
 
-- Load structured Writ source declarations generically instead of reconstructing source existence
-  from record evidence.
-- Fail on missing sources, missing passages, repeated passage-ID conflicts, document-hash mismatch,
-  ambiguous references, broken supersession, stale migrated IDs and endpoint-kind mismatch.
-- Use synthetic fixtures to prove kernel neutrality and deterministic output.
+- Structured Writ source declarations are now loaded generically instead of reconstructing source
+  existence from record evidence.
+- Missing sources and passages, quotation-hash mismatch, repeated passage-ID conflicts,
+  document-hash mismatch, ambiguous references, broken supersession, stale migrated IDs and
+  endpoint-kind mismatch now have adversarial coverage.
+- Synthetic fixtures prove kernel neutrality, atomic payload enforcement, portable output and
+  deterministic compilation.
 
 ### Provenance
 
