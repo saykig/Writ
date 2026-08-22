@@ -1,16 +1,6 @@
 import { expect, test, describe } from "bun:test";
 import { createHash } from "node:crypto";
-import {
-  canonicalJson,
-  sha256Canonical,
-  CanonicalJsonError,
-  methodologyBundleHash,
-  evidenceSnapshotHash,
-  interpretationProfileHash,
-  evaluatorBuildHash,
-  receiptHash,
-  releaseManifestHash,
-} from "../src/index.js";
+import { canonicalJson, sha256Canonical, CanonicalJsonError } from "../src/index.js";
 import {
   goldenCases,
   equivalenceGroups,
@@ -125,81 +115,5 @@ describe("dropFields", () => {
     // With the field dropped, both hash identically.
     const opts = { dropFields: ["/volatile"] };
     expect(sha256Canonical(base, opts)).toBe(sha256Canonical(changed, opts));
-  });
-});
-
-describe("named hash helpers", () => {
-  const receipt = {
-    schema_version: "1.0.0",
-    id: "receipt-1",
-    result: "+1",
-    result_status: "supported",
-    dependencies: {
-      methodology_bundle_hash: "sha256:" + "a".repeat(64),
-      evidence_snapshot_hash: "sha256:" + "b".repeat(64),
-      interpretation_profile_hash: "sha256:" + "c".repeat(64),
-      evaluator_build_hash: "sha256:" + "d".repeat(64),
-      source_snapshot_ids: ["s1", "s2"],
-    },
-    canonical_hash: "sha256:" + "0".repeat(64),
-    signature: { alg: "ed25519", sig: "PLACEHOLDER" },
-  };
-
-  test("all helpers return the sha256:<64 hex> shape", () => {
-    expect(methodologyBundleHash({ x: 1 })).toMatch(HASH_RE);
-    expect(evidenceSnapshotHash({ x: 1 })).toMatch(HASH_RE);
-    expect(interpretationProfileHash({ x: 1 })).toMatch(HASH_RE);
-    expect(evaluatorBuildHash({ x: 1 })).toMatch(HASH_RE);
-    expect(receiptHash(receipt)).toMatch(HASH_RE);
-    expect(releaseManifestHash({ manifest_hash: "sha256:" + "0".repeat(64) })).toMatch(HASH_RE);
-  });
-
-  test("receiptHash ignores its own canonical_hash and signature", () => {
-    const withDifferentEnvelope = {
-      ...receipt,
-      canonical_hash: "sha256:" + "f".repeat(64),
-      signature: { alg: "ed25519", sig: "A_COMPLETELY_DIFFERENT_SIGNATURE" },
-    };
-    expect(receiptHash(withDifferentEnvelope)).toBe(receiptHash(receipt));
-  });
-
-  test("receiptHash still depends on substantive fields", () => {
-    const changed = { ...receipt, result: "-1" };
-    expect(receiptHash(changed)).not.toBe(receiptHash(receipt));
-  });
-
-  test("receiptHash equals sha256Canonical with canonical_hash+signature dropped", () => {
-    expect(receiptHash(receipt)).toBe(
-      sha256Canonical(receipt, { dropFields: ["/canonical_hash", "/signature"] }),
-    );
-  });
-
-  test("releaseManifestHash ignores its own manifest_hash and signature", () => {
-    const manifest = {
-      schema_version: "1.0.0",
-      id: "rel-1",
-      name: "Release",
-      version: "1.0.0",
-      status: "candidate",
-      manifest_hash: "sha256:" + "0".repeat(64),
-      signature: { sig: "X" },
-    };
-    const other = {
-      ...manifest,
-      manifest_hash: "sha256:" + "e".repeat(64),
-      signature: { sig: "Y" },
-    };
-    expect(releaseManifestHash(manifest)).toBe(releaseManifestHash(other));
-    // Status IS substantive content and still affects the hash.
-    expect(releaseManifestHash({ ...manifest, status: "published" })).not.toBe(
-      releaseManifestHash(manifest),
-    );
-  });
-
-  test("caller dropFields compose with a helper's default drops", () => {
-    const a = { ...receipt, extra: "one" };
-    const b = { ...receipt, extra: "two" };
-    const opts = { dropFields: ["/extra"] };
-    expect(receiptHash(a, opts)).toBe(receiptHash(b, opts));
   });
 });

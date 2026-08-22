@@ -21,14 +21,14 @@ analysis
 
 - Core contracts cannot depend on extensions, analysis, or compatibility contracts.
 - Family extensions may depend only on core.
-- Analysis/output contracts may depend on core and named extensions.
+- Analysis contracts may depend on core and named extensions.
 - Compatibility families are isolated versioned contracts. Current code may consume them during
   migration, but new core or extension schemas must not depend on them.
 - Pilot-local contracts remain self-contained.
 
-Family-specific fields are never required globally. A legal record may require legal force, an
-empirical record may require study design, and an analysis result may require a methodology and
-trace; those requirements belong to their family or layer, not the shared core.
+Family-specific fields are never required globally. A legal record may require legal force and an
+institutional record may require a fact-specific payload; those requirements belong to their
+family, not the shared core.
 
 The native institutional v0.2 operational-capacity branch is finalized by ADR 0018. It represents
 one atomic capacity with controlled status and capacity type, stable component identifiers, optional
@@ -56,17 +56,11 @@ No core schema requires a commitment, obligation, compliance result, or score.
 extensions. The classification and dependency rules are recorded in
 [`extensions/README.md`](./extensions/README.md).
 
-## Analysis and output schemas
+## Human-review schemas
 
-| Schema                                        | Classification  | Responsibility                                                                                                              |
-| --------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `analysis/canonical-ir.schema.json`           | analysis/output | Compiled methodology program; commitment and score constructs here are analysis-language constructs, not universal records. |
-| `analysis/evaluation-receipt.schema.json`     | analysis/output | Writ-derived result, declared inputs, proof nodes, dependencies, and canonical trace.                                       |
-| `analysis/interpretation-profile.schema.json` | analysis/output | Versioned analytical choices and waivers.                                                                                   |
-| `analysis/search-protocol.schema.json`        | analysis/output | Reviewed evidence-coverage protocol for negative analytical claims.                                                         |
-| `analysis/discrepancy.schema.json`            | analysis/output | Differences between source-reported judgments and derived benchmark results.                                                |
-| `analysis/release.schema.json`                | analysis/output | Reproducible publication bundle and dependency hashes.                                                                      |
-| `analysis/record-judgment.schema.json`        | analysis        | Independent judgments targeting a record or record link.                                                                    |
+| Schema                                 | Classification | Responsibility                                           |
+| -------------------------------------- | -------------- | -------------------------------------------------------- |
+| `analysis/record-judgment.schema.json` | human review   | Independent judgments targeting a record or record link. |
 
 ### Declared record contracts
 
@@ -142,8 +136,6 @@ relocation.
 | review             | core; evidence review definition                                                                            |
 | corpus manifest    | core responsibility; legacy source manifests remain compatibility-only until migration                      |
 | published judgment | the relevant family extension plus core provenance; legacy score-shaped judgments remain compatibility-only |
-| derived result     | analysis/output; evaluation receipt                                                                         |
-| trace              | analysis/output; receipt proof and dependency graph                                                         |
 
 ## Protocols and migration records
 

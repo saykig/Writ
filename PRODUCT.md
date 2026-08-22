@@ -25,9 +25,8 @@ NIST institutional corpus.
 
 ## Positioning
 
-Writ is not a question modeller, compliance engine, policy reasoning engine, or answer-generating
-system. Human reasoning remains external. Retained evaluator, analyzer, benchmark, and language
-features do not define the current product boundary.
+Writ is not a question modeller, compliance engine, scoring engine, scenario engine, policy
+reasoning engine, or answer-generating system. Human reasoning remains external.
 
 ## Capabilities and Constraints
 
@@ -55,14 +54,14 @@ science and global-affairs research.
 - The EU–US comparison remains a historical pilot. It is not the identity of an EU or US corpus.
 - G20 Rio normalized records exist, including 13 ingested political statements, two reports, and
   546 source-reported member judgments.
-- The G7 AI-for-SMEs reproduction is a historical benchmark over 87 reviewed government-action
-  records across eight members.
+- Archived G7 and G20 compatibility datasets remain available as historical evidence without
+  defining the active architecture.
 
 ## Product Principles
 
 - Keep human judgment visible and external to automated acceptance.
 - Preserve unknown and contested states.
 - Prefer real, reviewable evidence over promotional claims.
-- Keep source-reported judgments distinct from Writ-derived results.
+- Keep source-reported judgments distinct from Writ records.
 - Supersede accepted records instead of silently rewriting them.
 - Preserve stable diagnostics and complete evidence traces.

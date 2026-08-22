@@ -56,52 +56,6 @@ CREATE TABLE passages (
 CREATE INDEX passages_document_idx ON passages(document_version_id);
 CREATE INDEX passages_fts_idx ON passages USING gin(to_tsvector('simple', normalized_quote));
 
-CREATE TABLE methodology_bundles (
-  id text PRIMARY KEY,
-  package_name text NOT NULL,
-  package_version text NOT NULL,
-  language_version text NOT NULL,
-  canonical_ir jsonb NOT NULL,
-  canonical_hash text NOT NULL UNIQUE,
-  source_bundle_hash text NOT NULL,
-  status text NOT NULL DEFAULT 'draft',
-  created_by text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  published_at timestamptz,
-  UNIQUE(package_name, package_version),
-  CHECK (status IN ('draft', 'review', 'published', 'withdrawn'))
-);
-
-CREATE TABLE interpretation_profiles (
-  id text PRIMARY KEY,
-  methodology_bundle_id text NOT NULL REFERENCES methodology_bundles(id),
-  name text NOT NULL,
-  version text NOT NULL,
-  parameters jsonb NOT NULL DEFAULT '{}'::jsonb,
-  waivers jsonb NOT NULL DEFAULT '[]'::jsonb,
-  canonical_hash text NOT NULL UNIQUE,
-  status text NOT NULL DEFAULT 'draft',
-  created_by text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(methodology_bundle_id, name, version)
-);
-
-CREATE TABLE evidence_snapshots (
-  id text PRIMARY KEY,
-  frozen_at timestamptz NOT NULL,
-  cutoff timestamptz NOT NULL,
-  content_hash text NOT NULL UNIQUE,
-  description text,
-  created_by text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE snapshot_document_versions (
-  snapshot_id text NOT NULL REFERENCES evidence_snapshots(id),
-  document_version_id text NOT NULL REFERENCES document_versions(id),
-  PRIMARY KEY(snapshot_id, document_version_id)
-);
-
 CREATE TABLE claims (
   id text PRIMARY KEY,
   claim_type text NOT NULL,
@@ -190,70 +144,6 @@ CREATE TABLE reviews (
 );
 CREATE INDEX reviews_object_idx ON reviews(object_type, object_id, created_at DESC);
 
-CREATE TABLE evaluation_runs (
-  id text PRIMARY KEY,
-  methodology_bundle_id text NOT NULL REFERENCES methodology_bundles(id),
-  interpretation_profile_id text NOT NULL REFERENCES interpretation_profiles(id),
-  evidence_snapshot_id text NOT NULL REFERENCES evidence_snapshots(id),
-  commitment_id text NOT NULL,
-  subject_id text NOT NULL,
-  as_of timestamptz NOT NULL,
-  cutoff timestamptz NOT NULL,
-  evaluator_build_hash text NOT NULL,
-  status text NOT NULL DEFAULT 'queued',
-  started_at timestamptz,
-  completed_at timestamptz,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(methodology_bundle_id, interpretation_profile_id, evidence_snapshot_id, commitment_id, subject_id, evaluator_build_hash)
-);
-
-CREATE TABLE evaluation_receipts (
-  id text PRIMARY KEY,
-  evaluation_run_id text NOT NULL UNIQUE REFERENCES evaluation_runs(id),
-  result text NOT NULL,
-  result_status text NOT NULL,
-  receipt jsonb NOT NULL,
-  canonical_hash text NOT NULL UNIQUE,
-  signature jsonb,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  CHECK (result IN ('-1', '0', '+1', 'not_applicable', 'unresolved')),
-  CHECK (result_status IN ('supported', 'contested', 'incomplete', 'ambiguous', 'invalid'))
-);
-
-CREATE TABLE discrepancies (
-  id text PRIMARY KEY,
-  benchmark_reference text NOT NULL,
-  commitment_id text NOT NULL,
-  subject_id text NOT NULL,
-  published_result text NOT NULL,
-  computed_result text NOT NULL,
-  category text NOT NULL,
-  summary text NOT NULL,
-  details text,
-  blocking boolean NOT NULL,
-  resolution_status text NOT NULL,
-  linked_objects jsonb NOT NULL DEFAULT '{}'::jsonb,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  resolved_at timestamptz
-);
-
-CREATE TABLE releases (
-  id text PRIMARY KEY,
-  name text NOT NULL,
-  version text NOT NULL,
-  methodology_bundle_ids jsonb NOT NULL,
-  evidence_snapshot_ids jsonb NOT NULL,
-  receipt_ids jsonb NOT NULL,
-  manifest jsonb NOT NULL,
-  canonical_hash text NOT NULL UNIQUE,
-  signature jsonb,
-  status text NOT NULL DEFAULT 'draft',
-  created_by text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  published_at timestamptz,
-  UNIQUE(name, version)
-);
-
 CREATE TABLE audit_events (
   sequence bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   occurred_at timestamptz NOT NULL DEFAULT now(),
@@ -266,19 +156,6 @@ CREATE TABLE audit_events (
   payload jsonb NOT NULL
 );
 
-
-CREATE TABLE negative_search_protocols (
-  id text PRIMARY KEY,
-  commitment_id text NOT NULL,
-  subject_id text NOT NULL,
-  cutoff timestamptz NOT NULL,
-  body jsonb NOT NULL,
-  content_hash text NOT NULL UNIQUE,
-  status text NOT NULL DEFAULT 'draft',
-  created_by text NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  CHECK (status IN ('draft', 'review', 'accepted', 'rejected', 'contested'))
-);
 
 CREATE TABLE challenges (
   id text PRIMARY KEY,

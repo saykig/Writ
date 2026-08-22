@@ -442,7 +442,7 @@ tasks:
 
   - id: FOUNDATION-RESET-001
     title: Reset the governing architecture to evidence-bound political knowledge records
-    status: review
+    status: done
     dependencies:
       - WRIT-VERIFICATION-HARNESS-001
     scope:
@@ -469,5 +469,35 @@ tasks:
       - docs/current/product-definition.md
       - docs/current/repository-structure.md
       - .agents/skills/writ-domain/SKILL.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
+  - id: FOUNDATION-RUNTIME-RETIREMENT-001
+    title: Retire the obsolete compliance execution architecture
+    status: review
+    dependencies:
+      - FOUNDATION-RESET-001
+    scope:
+      - Remove commitment, scoring, measure, profile, scenario, and query-expression execution from the active language and domain model.
+      - Retire evaluator, analyzer, benchmark, and compliance-only conformance packages and their active fixtures.
+      - Limit the CLI to native formatting, checking, and compilation.
+      - Detach the API from evaluation, receipt, scoring-snapshot, and compliance-release modules without redesigning it.
+      - Preserve native record compilation and the byte-identical NIST institutional corpus.
+    exclusions:
+      - Changes to substantive NIST content or native corpus semantics.
+      - Deletion of archived G7, G20, or EU-US pilot material.
+      - API redesign, ingestion redesign, querying, AI reasoning, simulation, or replacement execution architecture.
+    acceptance:
+      - Record-only Writ documents compile and validate without a compliance canonical IR.
+      - The NIST records and judgments compile to the same native objects as before this task.
+      - No retired package remains in the workspace graph and no active CLI command exposes retired execution behavior.
+      - Formatting, linting, type checking, surviving tests, data checks, Writ verification, Python checks, build, and repository integrity pass.
+    outputs:
+      - adr/0022-retire-compliance-execution-runtime.md
+      - packages/domain
+      - packages/language
+      - packages/cli
+      - apps/api
+      - protocols
       - TASKS.yaml
       - MANIFEST.sha256

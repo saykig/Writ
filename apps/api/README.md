@@ -1,5 +1,5 @@
 # `@writ/api`
 
-Fastify and OpenAPI service for sources, evidence, methodology bundles, evaluations, discrepancies, and releases.
+Minimal Fastify command API for the retained evidence-ledger surface.
 
-The application must consume semantic packages rather than reimplementing their rules.
+It does not execute commitments, scores, analyses, scenarios, or evaluation receipts.

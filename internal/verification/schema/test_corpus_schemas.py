@@ -421,10 +421,3 @@ def test_null_is_never_a_negative_or_computed_result() -> None:
     assert published_percentage("+1") == 100
     with pytest.raises(CorpusInvariantError):
         validate_computed_result(None)
-
-
-def test_production_code_has_no_missing_classification_to_weak_fallback() -> None:
-    benchmark_source = (
-        ROOT / "packages/benchmark/src/evidence.ts"
-    ).read_text(encoding="utf-8")
-    assert '?? "weak"' not in benchmark_source

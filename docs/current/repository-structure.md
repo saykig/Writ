@@ -7,10 +7,10 @@ authority map, not a new knowledge model.
 
 | Path | Owns | Does not own |
 | --- | --- | --- |
-| `corpora/` | reviewed jurisdictional and multilateral records, source passages, provenance, reviews, and corpus manifests | comparison questions or evaluator methodologies |
+| `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | questions or execution methodologies |
 | `schemas/` | all active JSON Schema contracts | language or HTTP protocol definitions |
 | `protocols/` | Writ language EBNF and API OpenAPI contracts | corpus records |
-| `packages/` | shared runtime, compiler, analyzer, evaluator, provenance, CLI, and test tooling | reviewed political data |
+| `packages/` | domain contracts, native compiler, provenance, CLI, data export, and test tooling | reviewed political data |
 | `apps/` | API and ingestion applications | schema or corpus authority |
 | `docs/current/` | current product and technical guidance | historical migration evidence |
 
@@ -19,8 +19,8 @@ implementation wiring, a later ADR records the change rather than rewriting hist
 
 ## Supporting and historical areas
 
-- `internal/verification/` owns evaluator benchmarks, conformance cases, fixtures, and root-level
-  integration/schema suites. A benchmark may read a corpus but is not a corpus authority.
+- `internal/verification/` owns native fixtures, the Writ Verification Harness, and root-level
+  integration/schema suites.
 - `internal/tooling/` contains repository-maintenance, migration, validation, publication, and
   reproduction commands.
 - `internal/infrastructure/` contains operational registry inputs, deterministic generated
@@ -37,15 +37,11 @@ stable accepted-decision paths.
 ## Final-hygiene decisions
 
 - Historical reset reports moved from `docs/current/` to `docs/migrations/repository-reset/`.
-- Historical G7 pilot, proof, replication, and architecture notes moved beside their evaluator
-  benchmark.
-- The source-gated FATF methodology moved from the singular `benchmark/` and root `examples/` paths
-  and now lives under `internal/verification/benchmarks/evaluator/fatf-mutual-evaluation-scaffold/`.
 - The general data-model diagram moved into current technical documentation.
 - Obsolete compliance and methodology planning was removed from the tracked tree and remains
   recoverable from Git history and the `pre-foundation-reset-2026-08-22` tag.
-- The duplicate `reference-core/` implementation was retired only after its remaining behavior was
-  proven covered by implementation-independent conformance cases and canonical package tests.
+- The obsolete evaluator, analyzer, benchmark, and compliance conformance packages were retired
+  after native record lowering was proven independent.
 - An editor-specific launch file and a redundant generated source-registry summary were removed;
   neither had a consumer.
 - Developer-only root machinery was consolidated under `internal/`; the complete path map is in

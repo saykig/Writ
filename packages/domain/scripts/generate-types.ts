@@ -20,15 +20,8 @@ const SCHEMAS_DIR = join(HERE, "..", "schemas");
 
 /** File stem -> exported interface name for the root type of each schema. */
 export const GENERATED_TYPES: ReadonlyArray<{ file: string; name: string }> = [
-  { file: "canonical-ir", name: "CanonicalIr" },
   { file: "evidence", name: "Evidence" },
-  { file: "evaluation-receipt", name: "EvaluationReceipt" },
-  { file: "interpretation-profile", name: "InterpretationProfile" },
-  { file: "search-protocol", name: "SearchProtocol" },
-  { file: "methodology-inventory", name: "MethodologyInventory" },
   { file: "source-registry", name: "SourceRegistry" },
-  { file: "discrepancy", name: "Discrepancy" },
-  { file: "release", name: "Release" },
 ];
 
 const BANNER =

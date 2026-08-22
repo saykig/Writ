@@ -1,88 +1,47 @@
-import { afterAll, describe, expect, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { fileURLToPath } from "node:url";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { runCli, type CliIO } from "../src/index.js";
 
-function example(name: string): string {
-  return fileURLToPath(
-    new URL(
-      `../../../internal/verification/fixtures/compatibility/g7-ai-sme/schemas/${name}`,
-      import.meta.url,
-    ),
-  );
-}
-
-const IR = example("2025-ai-sme-literal.ir.json");
-const EVIDENCE = example("2025-ai-sme.sample-evidence.json");
-const PROFILE = example("2025-ai-sme.sample-profile.json");
-
-const workdir = mkdtempSync(join(tmpdir(), "writ-cli-"));
-afterAll(() => rmSync(workdir, { recursive: true, force: true }));
+const NIST_RECORDS = fileURLToPath(
+  new URL("../../../corpora/institutional/us/nist/records.writ", import.meta.url),
+);
 
 function capture(): { io: CliIO; out: string[]; err: string[] } {
   const out: string[] = [];
   const err: string[] = [];
-  return { io: { out: (l) => out.push(l), err: (l) => err.push(l) }, out, err };
+  return { io: { out: (line) => out.push(line), err: (line) => err.push(line) }, out, err };
 }
 
 describe("writ CLI", () => {
-  test("evaluate prints a human summary and exits 0", async () => {
-    const { io, out } = capture();
-    const code = await runCli(
-      ["evaluate", "--ir", IR, "--evidence", EVIDENCE, "--subject", "Canada", "--profile", PROFILE],
-      io,
-    );
-    expect(code).toBe(0);
-    const text = out.join("\n");
-    expect(text).toContain("Result:");
-    expect(text).toContain("unresolved");
-    expect(text).toContain("sha256:");
+  test("help exposes only active record commands", async () => {
+    const captured = capture();
+    expect(await runCli(["help"], captured.io)).toBe(0);
+    const usage = captured.out.join("\n");
+    expect(usage).toContain("writ fmt");
+    expect(usage).toContain("writ check");
+    expect(usage).toContain("writ compile");
+    for (const retired of ["evaluate", "receipt", "analyze", "scenario", "writ test"])
+      expect(usage).not.toContain(retired);
   });
 
-  test("evaluate --json emits a receipt that round-trips through verify", async () => {
-    const evalIO = capture();
-    const code = await runCli(
-      ["evaluate", "--ir", IR, "--evidence", EVIDENCE, "--subject", "Canada", "--json"],
-      evalIO.io,
-    );
-    expect(code).toBe(0);
-    const receiptJson = evalIO.out.join("\n");
-    const receipt = JSON.parse(receiptJson);
-    expect(receipt.schema_version).toBe("1.0.0");
-
-    const path = join(workdir, "receipt.json");
-    writeFileSync(path, receiptJson);
-
-    const verifyIO = capture();
-    const verifyCode = await runCli(["receipt", "verify", path], verifyIO.io);
-    expect(verifyCode).toBe(0);
-    expect(verifyIO.out.join("\n")).toContain("OK:");
+  test("retired execution commands are unknown", async () => {
+    for (const command of ["evaluate", "receipt", "analyze", "test"]) {
+      const captured = capture();
+      expect(await runCli([command], captured.io)).toBe(2);
+      expect(captured.err[0]).toBe(`Unknown command: ${command}`);
+    }
   });
 
-  test("receipt verify exits non-zero on a tampered receipt", async () => {
-    const evalIO = capture();
-    await runCli(
-      ["evaluate", "--ir", IR, "--evidence", EVIDENCE, "--subject", "Canada", "--json"],
-      evalIO.io,
-    );
-    const receipt = JSON.parse(evalIO.out.join("\n"));
-    receipt.result = "+1"; // tamper without recomputing the hash
-
-    const path = join(workdir, "tampered.json");
-    writeFileSync(path, JSON.stringify(receipt));
-
-    const verifyIO = capture();
-    const code = await runCli(["receipt", "verify", path], verifyIO.io);
-    expect(code).toBe(1);
-    expect(verifyIO.err.join("\n")).toContain("TAMPERED");
-  });
-
-  test("missing required flags exit 2 with usage", async () => {
-    const { io, err } = capture();
-    const code = await runCli(["evaluate", "--ir", IR], io);
-    expect(code).toBe(2);
-    expect(err.join("\n")).toContain("missing required flag");
+  test("compile succeeds for the NIST record corpus and emits native records", async () => {
+    const captured = capture();
+    expect(await runCli(["compile", NIST_RECORDS, "--json"], captured.io)).toBe(0);
+    const output = JSON.parse(captured.out.join("\n")) as {
+      records: Array<{ family: string }>;
+      judgments: unknown[];
+    };
+    expect(output.records.length).toBeGreaterThan(0);
+    expect(output.records.every((record) => record.family === "institutional")).toBe(true);
+    expect(output.judgments).toEqual([]);
+    expect(captured.err).toEqual([]);
   });
 });

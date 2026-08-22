@@ -25,7 +25,6 @@ import {
   type CommandContext,
   type CommandResult,
 } from "../commands/evidence.js";
-import { exportSnapshot, freezeSnapshot, type FreezeInput } from "../services/snapshot.js";
 import { authenticate, devTokenVerifier, type Actor, type TokenVerifier } from "./auth.js";
 import { isCommandError } from "./errors.js";
 import {
@@ -63,8 +62,6 @@ export const ENDPOINTS: readonly string[] = [
   "POST /v1/actions/:id/reject",
   "POST /v1/actions/:id/contest",
   "POST /v1/actions/:id/supersede",
-  "POST /v1/snapshots/freeze",
-  "GET  /v1/snapshots/:id/export",
 ];
 
 function headerValue(value: string | string[] | undefined): string | undefined {
@@ -204,24 +201,6 @@ export function buildApp(options: BuildAppOptions): FastifyInstance {
     command(request, reply, async (actor) =>
       created(await supersedeAction(ctxFor(actor), paramId(request), bodyOf(request))),
     ),
-  );
-
-  // --- Snapshot freeze + export (DATA-003) ----------------------------------
-  app.post("/v1/snapshots/freeze", (request, reply) =>
-    command(request, reply, async (actor) => {
-      const summary = await freezeSnapshot(
-        options.client,
-        actor,
-        bodyOf(request) as unknown as FreezeInput,
-      );
-      return { status: 201, body: summary };
-    }),
-  );
-  app.get("/v1/snapshots/:id/export", (request, reply) =>
-    command(request, reply, async () => {
-      const evidence = await exportSnapshot(options.client, paramId(request));
-      return { status: 200, body: evidence };
-    }),
   );
 
   return app;

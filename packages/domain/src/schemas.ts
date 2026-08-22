@@ -15,15 +15,8 @@ import {
 
 /** The canonical set of schema kinds, ordered. */
 export const SCHEMA_KINDS = [
-  "canonical-ir",
   "evidence",
-  "evaluation-receipt",
-  "interpretation-profile",
-  "search-protocol",
-  "methodology-inventory",
   "source-registry",
-  "discrepancy",
-  "release",
   "record",
   "corpus-manifest",
   "corpus-catalog",
@@ -38,15 +31,8 @@ export type SchemaKind = (typeof SCHEMA_KINDS)[number];
 
 /** Filename relative to the package's vendored `schemas/` directory for each kind. */
 export const SCHEMA_FILES: Readonly<Record<SchemaKind, string>> = Object.freeze({
-  "canonical-ir": "canonical-ir.schema.json",
   evidence: "evidence.schema.json",
-  "evaluation-receipt": "evaluation-receipt.schema.json",
-  "interpretation-profile": "interpretation-profile.schema.json",
-  "search-protocol": "search-protocol.schema.json",
-  "methodology-inventory": "methodology-inventory.schema.json",
   "source-registry": "source-registry.schema.json",
-  discrepancy: "discrepancy.schema.json",
-  release: "release.schema.json",
   record: "record.schema.json",
   "corpus-manifest": "corpus-manifest.schema.json",
   "corpus-catalog": "corpus-catalog.schema.json",
@@ -58,15 +44,8 @@ export const SCHEMA_FILES: Readonly<Record<SchemaKind, string>> = Object.freeze(
 
 /** Authoritative path (relative to repository `schemas/`) for each vendored kind. */
 export const SCHEMA_AUTHORITY_FILES: Readonly<Record<SchemaKind, string>> = Object.freeze({
-  "canonical-ir": "analysis/canonical-ir.schema.json",
   evidence: "core/evidence.schema.json",
-  "evaluation-receipt": "analysis/evaluation-receipt.schema.json",
-  "interpretation-profile": "analysis/interpretation-profile.schema.json",
-  "search-protocol": "analysis/search-protocol.schema.json",
-  "methodology-inventory": "compatibility/g7-benchmark-v1/methodology-inventory.schema.json",
   "source-registry": "core/source-registry.schema.json",
-  discrepancy: "analysis/discrepancy.schema.json",
-  release: "analysis/release.schema.json",
   record: "core/record.schema.json",
   "corpus-manifest": "core/corpus-manifest.schema.json",
   "corpus-catalog": "core/corpus-catalog.schema.json",

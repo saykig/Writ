@@ -3,8 +3,7 @@
 -- Refines the baseline schema (0001) to satisfy the Writ ledger invariants:
 --   * institutions / institution_aliases (identity of publishers and actors);
 --   * bitemporal version rows for claims and actions (valid-time + system-time);
---   * immutability of frozen / published rows (snapshots, receipts, published
---     releases, audit events) enforced by triggers;
+--   * immutability of audit events enforced by triggers;
 --   * accepted claims are superseded via new rows, never edited in place;
 --   * evidence-link stance / support_type aligned to schemas/core/evidence.schema.json.
 --
@@ -111,20 +110,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Reject UPDATE / DELETE only once a release row is published.
-CREATE OR REPLACE FUNCTION writ_freeze_if_published() RETURNS trigger AS $$
-BEGIN
-  IF OLD.status = 'published' THEN
-    RAISE EXCEPTION 'release % is published and immutable; % rejected', OLD.id, TG_OP
-      USING ERRCODE = '23514';
-  END IF;
-  IF TG_OP = 'DELETE' THEN
-    RETURN OLD;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 -- Accepted claims are superseded via new rows, never edited in place. The only
 -- permitted mutation of an accepted claim is closing its system-time interval
 -- (status -> superseded/withdrawn, set system_to) with content left unchanged.
@@ -161,30 +146,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS evidence_snapshots_freeze ON evidence_snapshots;
-CREATE TRIGGER evidence_snapshots_freeze
-  BEFORE UPDATE OR DELETE ON evidence_snapshots
-  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
-
-DROP TRIGGER IF EXISTS snapshot_members_freeze ON snapshot_document_versions;
-CREATE TRIGGER snapshot_members_freeze
-  BEFORE UPDATE OR DELETE ON snapshot_document_versions
-  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
-
-DROP TRIGGER IF EXISTS evaluation_receipts_freeze ON evaluation_receipts;
-CREATE TRIGGER evaluation_receipts_freeze
-  BEFORE UPDATE OR DELETE ON evaluation_receipts
-  FOR EACH ROW EXECUTE FUNCTION writ_freeze();
-
 DROP TRIGGER IF EXISTS audit_events_freeze ON audit_events;
 CREATE TRIGGER audit_events_freeze
   BEFORE UPDATE OR DELETE ON audit_events
   FOR EACH ROW EXECUTE FUNCTION writ_freeze();
-
-DROP TRIGGER IF EXISTS releases_freeze ON releases;
-CREATE TRIGGER releases_freeze
-  BEFORE UPDATE OR DELETE ON releases
-  FOR EACH ROW EXECUTE FUNCTION writ_freeze_if_published();
 
 DROP TRIGGER IF EXISTS claims_guard ON claims;
 CREATE TRIGGER claims_guard
@@ -211,29 +176,5 @@ ALTER TABLE claim_evidence_links
     CHECK (stance IN ('supports', 'contradicts', 'qualifies', 'context_only')),
   ADD CONSTRAINT claim_evidence_links_support_type_check
     CHECK (support_type IN ('direct', 'derived', 'corroborating', 'negative_search'));
-
--- ---------------------------------------------------------------------------
--- Spec alignment: discrepancy resolution_status / category and release status
--- (schemas/analysis/discrepancy.schema.json, schemas/analysis/release.schema.json)
--- ---------------------------------------------------------------------------
-ALTER TABLE discrepancies
-  DROP CONSTRAINT IF EXISTS discrepancies_resolution_status_check,
-  ADD CONSTRAINT discrepancies_resolution_status_check
-    CHECK (resolution_status IN ('open', 'under_review', 'resolved', 'accepted_difference'));
-
-ALTER TABLE discrepancies
-  DROP CONSTRAINT IF EXISTS discrepancies_category_check,
-  ADD CONSTRAINT discrepancies_category_check
-    CHECK (category IN (
-      'missing_evidence', 'implicit_interpretation', 'rule_gap', 'rule_overlap',
-      'prose_metric_mismatch', 'action_identity_ambiguity', 'attribution_ambiguity',
-      'temporal_ambiguity', 'extraction_error', 'published_data_inconsistency',
-      'implementation_defect'
-    ));
-
-ALTER TABLE releases
-  DROP CONSTRAINT IF EXISTS releases_status_check,
-  ADD CONSTRAINT releases_status_check
-    CHECK (status IN ('draft', 'candidate', 'published', 'withdrawn'));
 
 COMMIT;

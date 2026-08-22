@@ -25,7 +25,6 @@ Run corpus validation from the repository root with the ingest development envir
 pytest tests
 ruff check apps/ingest/src tests scripts
 mypy apps/ingest/src
-PYTHONPATH=apps/ingest/src python internal/tooling/scripts/validate_corpus.py --g7-fixture
 ```
 
 Database tests ignore the application's `DATABASE_URL` and run only when

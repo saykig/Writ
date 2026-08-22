@@ -27,36 +27,6 @@ const CASES: readonly InvalidCase[] = [
     expectPath: "/claims/0/truth_value",
     expectKeyword: "enum",
   },
-  {
-    file: "receipt-bad-result.json",
-    kind: "evaluation-receipt",
-    expectPath: "/result",
-    expectKeyword: "enum",
-  },
-  {
-    file: "release-bad-hash.json",
-    kind: "release",
-    expectPath: "/manifest_hash",
-    expectKeyword: "pattern",
-  },
-  {
-    file: "canonical-ir-bad-evidence-policy.json",
-    kind: "canonical-ir",
-    expectPath: "/commitments/0/evidence_policy",
-    expectKeyword: "enum",
-  },
-  {
-    file: "discrepancy-additional-prop.json",
-    kind: "discrepancy",
-    expectPath: "",
-    expectKeyword: "additionalProperties",
-  },
-  {
-    file: "interpretation-profile-bad-hash.json",
-    kind: "interpretation-profile",
-    expectPath: "/methodology_bundle_hash",
-    expectKeyword: "pattern",
-  },
 ];
 
 describe("invalid fixtures fail at the expected schema path", () => {

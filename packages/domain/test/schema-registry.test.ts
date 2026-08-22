@@ -51,7 +51,7 @@ describe("schema-version registry", () => {
   });
 
   test("currentSchemaVersion returns the pinned version", () => {
-    expect(currentSchemaVersion("release")).toBe("1.0.0");
+    expect(currentSchemaVersion("source-registry")).toBe("1.0.0");
   });
 
   test("registry is frozen", () => {

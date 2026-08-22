@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""Validate Writ schemas, protocols, fixtures, tasks, and conformance cases."""
+"""Validate Writ schemas, protocols, fixtures, and tasks."""
 
 from __future__ import annotations
 
 import json
-import os
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -14,7 +11,6 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[3]
-G7_COMPAT = "internal/verification/fixtures/compatibility/g7-ai-sme/schemas"
 IGNORED_DIRECTORY_NAMES = {
     ".git",
     ".mypy_cache",
@@ -31,26 +27,6 @@ SCHEMA_EXAMPLES = [
         "schemas/core/source-registry.schema.json",
         "internal/infrastructure/generated/source-registry.json",
     ),
-    ("schemas/analysis/canonical-ir.schema.json", f"{G7_COMPAT}/2025-ai-sme-literal.ir.json"),
-    ("schemas/core/evidence.schema.json", f"{G7_COMPAT}/2025-ai-sme.sample-evidence.json"),
-    (
-        "schemas/analysis/evaluation-receipt.schema.json",
-        f"{G7_COMPAT}/2025-ai-sme.sample-receipt.json",
-    ),
-    ("schemas/analysis/discrepancy.schema.json", f"{G7_COMPAT}/2025-ai-sme.sample-discrepancy.json"),
-    (
-        "schemas/analysis/interpretation-profile.schema.json",
-        f"{G7_COMPAT}/2025-ai-sme.sample-profile.json",
-    ),
-    (
-        "schemas/analysis/search-protocol.schema.json",
-        f"{G7_COMPAT}/2025-ai-sme.sample-search-protocol.json",
-    ),
-    (
-        "schemas/compatibility/g7-benchmark-v1/methodology-inventory.schema.json",
-        f"{G7_COMPAT}/2025-ai-sme.methodology-inventory.json",
-    ),
-    ("schemas/analysis/release.schema.json", f"{G7_COMPAT}/2025-benchmark.sample-release.json"),
 ]
 
 REQUIRED_FILES = [
@@ -61,7 +37,6 @@ REQUIRED_FILES = [
     "protocols/language/writ.ebnf",
     "protocols/api/openapi.yaml",
     ".agents/skills/writ-domain/SKILL.md",
-    "internal/verification/conformance/case.schema.json",
     "internal/infrastructure/generated/source-registry.json",
 ]
 
@@ -133,29 +108,11 @@ def validate_yaml() -> None:
             fail(f"task {task.get('id')} has unknown dependencies: {missing}")
 
 
-def run_conformance() -> None:
-    bun = os.environ.get("BUN_BIN") or shutil.which("bun")
-    if bun is None:
-        fallback = Path.home() / ".bun" / "bin" / "bun"
-        bun = str(fallback) if fallback.is_file() else None
-    if bun is None:
-        fail("Bun executable not found; set BUN_BIN or install Bun")
-    completed = subprocess.run(
-        [bun, "run", "conformance"],
-        cwd=ROOT,
-        check=False,
-        text=True,
-    )
-    if completed.returncode != 0:
-        fail("conformance tests failed")
-
-
 def main() -> None:
     validate_required_files()
     validate_all_json_syntax()
     validate_schemas_and_examples()
     validate_yaml()
-    run_conformance()
     print("OK: Writ build pack validated")
 
 

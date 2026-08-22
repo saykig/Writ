@@ -8,7 +8,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-from writ_ingest.corpus.adapters.g7_2025_ai_sme import G7AiSmeFixtureAdapter
 from writ_ingest.corpus.adapters.g20 import G20RioAdapter
 from writ_ingest.corpus.validation import validate_corpus_graph, validate_record
 
@@ -41,11 +40,6 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path)
     parser.add_argument(
-        "--g7-fixture",
-        action="store_true",
-        help="Validate the frozen G7 adapter output in memory without writing records.",
-    )
-    parser.add_argument(
         "--g20-rio",
         action="store_true",
         help="Validate the G20 2024 Rio adapter output in memory without writing records.",
@@ -72,11 +66,6 @@ def main() -> int:
         validate_record(kind, value)
         validated.append(path.as_posix())
     adapter_counts: dict[str, int] | None = None
-    if args.g7_fixture:
-        output = G7AiSmeFixtureAdapter().emit()
-        _validate_output(output)
-        adapter_counts = _adapter_counts(output)
-        validated.append("archive/compatibility/g7/2025-ai-sme (in-memory adapter)")
     if args.g20_rio:
         output = G20RioAdapter().emit()
         _validate_output(output)
