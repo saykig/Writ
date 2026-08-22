@@ -9,4 +9,4 @@ Rules:
 2. Commit `bun.lock` and the Python lockfile when one is introduced.
 3. Use automated update pull requests, but merge only after conformance and migration tests pass.
 4. Treat parser, canonicalization, cryptography, database driver, PDF parser, browser automation, and solver upgrades as review-required changes.
-5. Record semantic changes in an ADR and bump the relevant language, schema, or evaluator version.
+5. Record semantic changes in an ADR and bump the relevant language, schema, or compiler version.

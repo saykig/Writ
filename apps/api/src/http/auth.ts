@@ -11,7 +11,7 @@ import { UnauthorizedError } from "./errors.js";
 /**
  * Coarse authorization roles. `model` actors may create candidate evidence but
  * never accept/publish (AGENTS.md invariant 4); `author` submits; `reviewer`
- * decides; `admin` may also freeze snapshots.
+ * decides.
  */
 export type Role = "author" | "reviewer" | "admin" | "model";
 

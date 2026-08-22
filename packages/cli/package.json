@@ -20,9 +20,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@writ/analyzer": "workspace:*",
-    "@writ/domain": "workspace:*",
-    "@writ/evaluator": "workspace:*",
     "@writ/language": "workspace:*"
   }
 }

@@ -14,15 +14,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 const SCHEMA_FILES = {
-  "canonical-ir": "canonical-ir.schema.json",
   evidence: "evidence.schema.json",
-  "evaluation-receipt": "evaluation-receipt.schema.json",
-  "interpretation-profile": "interpretation-profile.schema.json",
-  "search-protocol": "search-protocol.schema.json",
-  "methodology-inventory": "methodology-inventory.schema.json",
   "source-registry": "source-registry.schema.json",
-  discrepancy: "discrepancy.schema.json",
-  release: "release.schema.json",
   record: "record.schema.json",
   "corpus-manifest": "corpus-manifest.schema.json",
   "corpus-catalog": "corpus-catalog.schema.json",

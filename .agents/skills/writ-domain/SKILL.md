@@ -44,29 +44,17 @@ contested  both supported
 
 Never silently coerce `unknown` to `false` or `contested` to a single answer.
 
-## Retained derivation runtime
-
-Evaluator, analyzer, benchmark, and query-expression code remains in the repository pending later
-dependency isolation. If touched, derivation stays deterministic over frozen inputs and retains its
-methodology, version, inputs, and trace. This runtime does not define the current product boundary.
 External ratings remain source-reported judgments and are never promoted to universal labels or
 Writ facts.
 
-## Counting
-
-When a methodology counts entities or actions, count its declared identities, not rows. If
-membership or identity is uncertain, compute lower and upper bounds or require review. Do not guess.
-
 ## Evidence
 
-Only frozen, eligible, accepted records support a published derivation. Every decisive dependency
-needs immutable source anchors and review history. Accepted records are superseded, never silently
-rewritten.
+Every record needs immutable source anchors and review history appropriate to its state. Accepted
+records are superseded, never silently rewritten.
 
 ## Automation boundary
 
-Models may propose candidates. Deterministic code and human decisions control accepted knowledge
-and derived results.
+Models may propose candidates. Human decisions control accepted knowledge.
 
 ## Schema boundary
 

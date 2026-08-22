@@ -2,7 +2,7 @@
 //
 // These mirror the SQL columns (snake_case) rather than the evaluator/domain
 // types on purpose: per AGENTS.md, database types must not leak into the
-// evaluator. Records the DB persists are shaped by the authoritative JSON Schemas in `schemas/`.
+// runtime. Records the DB persists are shaped by the authoritative JSON Schemas in `schemas/`.
 
 export type Json = unknown;
 export type JsonObject = Record<string, Json>;
@@ -231,107 +231,6 @@ export interface ReviewInput {
   created_at: string | Date;
   conflict_of_interest?: string | null;
   supersedes_review_id?: string | null;
-}
-
-// ---------------------------------------------------------------------------
-// Snapshots
-// ---------------------------------------------------------------------------
-export interface EvidenceSnapshotRow {
-  id: string;
-  frozen_at: Date;
-  cutoff: Date;
-  content_hash: string;
-  description: string | null;
-  created_by: string;
-  created_at: Date;
-}
-export interface EvidenceSnapshotInput {
-  id: string;
-  frozen_at: string | Date;
-  cutoff: string | Date;
-  content_hash: string;
-  created_by: string;
-  description?: string | null;
-  document_version_ids?: string[];
-}
-
-// ---------------------------------------------------------------------------
-// Evaluation runs / receipts / discrepancies
-// ---------------------------------------------------------------------------
-export interface EvaluationRunInput {
-  id: string;
-  methodology_bundle_id: string;
-  interpretation_profile_id: string;
-  evidence_snapshot_id: string;
-  commitment_id: string;
-  subject_id: string;
-  as_of: string | Date;
-  cutoff: string | Date;
-  evaluator_build_hash: string;
-  status?: string;
-  started_at?: string | Date | null;
-  completed_at?: string | Date | null;
-}
-
-export type ReceiptResult = "-1" | "0" | "+1" | "not_applicable" | "unresolved";
-export type ReceiptStatus = "supported" | "contested" | "incomplete" | "ambiguous" | "invalid";
-export interface ReceiptInput {
-  id: string;
-  evaluation_run_id: string;
-  result: ReceiptResult;
-  result_status: ReceiptStatus;
-  receipt: JsonObject;
-  canonical_hash: string;
-  signature?: JsonObject | null;
-}
-
-export interface DiscrepancyInput {
-  id: string;
-  benchmark_reference: string;
-  commitment_id: string;
-  subject_id: string;
-  published_result: string;
-  computed_result: string;
-  category: string;
-  summary: string;
-  blocking: boolean;
-  resolution_status: string;
-  details?: string | null;
-  linked_objects?: JsonObject;
-}
-
-// ---------------------------------------------------------------------------
-// Releases
-// ---------------------------------------------------------------------------
-export type ReleaseStatus = "draft" | "candidate" | "published" | "withdrawn";
-export interface ReleaseRow {
-  id: string;
-  name: string;
-  version: string;
-  methodology_bundle_ids: Json;
-  evidence_snapshot_ids: Json;
-  receipt_ids: Json;
-  manifest: JsonObject;
-  canonical_hash: string;
-  signature: JsonObject | null;
-  status: ReleaseStatus;
-  created_by: string;
-  created_at: Date;
-  published_at: Date | null;
-}
-export interface ReleaseInput {
-  id: string;
-  name: string;
-  version: string;
-  methodology_bundle_ids: string[];
-  evidence_snapshot_ids: string[];
-  receipt_ids: string[];
-  manifest: JsonObject;
-  canonical_hash: string;
-  created_by: string;
-  status?: ReleaseStatus;
-  signature?: JsonObject | null;
-  published_at?: string | Date | null;
 }
 
 // ---------------------------------------------------------------------------

@@ -28,8 +28,7 @@ overclaiming. The repository also retains:
 
 - Legal and policy corpora
 - Institutional corpora
-- G7 and G20 multilateral policy records;
-- reproducible evaluator benchmarks.
+- archived G7 and G20 compatibility datasets.
 
 Some datasets remain incomplete. Writ records those gaps explicitly rather
 than inventing missing evidence.
@@ -61,7 +60,8 @@ If you are contributing code:
 | `internal/`     | Developer-only testing and infrastructure   |
 | `archive/`      | Historical, non-authoritative material      |
 
-The semantic packages for the domain model, evaluator, analyzer and provenance must remain usable without a network connection or database.
+The domain, language, provenance, and deterministic data-bundle packages remain usable without a
+network connection or database.
 
 ## Develop Writ locally
 
@@ -101,8 +101,8 @@ Material under `archive/` is historical and non-authoritative. Material under `i
   through explicit family profiles.
 - Preserve unknown and contested values instead of forcing a conclusion.
 - Treat external ratings as source-reported judgments.
-- Make every Writ-derived result reproducible from named and versioned inputs.
-- Preserve a trace from each result back to its records and evidence.
+- Keep compiled records reproducible from named source files and versioned contracts.
+- Preserve a trace from each record back to its evidence.
 - Treat visualizations and memos as views, not source records.
 - Supersede accepted records instead of silently rewriting them.
 - Do not fabricate missing evidence or infer certainty from absent information.

@@ -36,14 +36,13 @@ Documents under `archive/` are historical evidence, never current instructions.
 8. Visualizations and memos are views, not sources of truth.
 9. The implemented native families are `legal_policy` and `institutional`; future family
    identifiers remain extensible at the shared record base.
-10. Deterministic derivation performs no network access, model inference, randomness, wall-clock
+10. Deterministic compilation and verification perform no network access, model inference, randomness, wall-clock
    reads, or mutation.
 11. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
     or publish derived results.
 12. Accepted records are superseded, not edited in place.
 13. Exact decimals and explicit units are required for money and quantities.
-14. Benchmark mismatches become discrepancy records, not hidden exceptions.
-15. Stable diagnostic codes are never silently repurposed.
+14. Stable diagnostic codes are never silently repurposed.
 
 ## Source of truth order
 
@@ -65,7 +64,8 @@ bun run format
 bun run lint
 bun run typecheck
 bun run test
-bun run conformance
+bun run data:check
+bun run verify:writ
 bun run build
 ```
 
@@ -73,16 +73,14 @@ Do not change command names without updating this file and CI.
 
 ## Implementation rules
 
-- Keep packages small and dependency direction one-way: domain and schemas -> evaluator/analyzer/compiler -> API/UI.
-- Do not let API or database types become evaluator types.
+- Keep packages small and dependency direction one-way: domain and schemas -> language/provenance/data export -> API/UI.
+- Do not let API or database types become native record types.
 - Use JSON Schema 2020-12 as interchange authority.
 - Keep the shared provenance envelope small and put family-specific fields in family contracts.
 - Do not force obligations, commitments, legal force, or scores onto every record.
-- Keep source-reported judgments distinct from Writ-derived results.
-- Treat retained evaluator, analyzer, benchmark, and query-expression code as runtime compatibility
-  material, not as the current product boundary.
+- Keep source-reported judgments distinct from Writ records.
 - Add tests for every behavior change and diagnostic.
-- Prefer pure functions in compiler, evaluator, analyzer, canonicalization, and proof code.
+- Prefer pure functions in compilation, canonicalization, validation, and verification code.
 - Return typed errors and stable diagnostic codes.
 - Do not add arbitrary JavaScript execution to the DSL.
 - Do not introduce a graph database, workflow platform, or vector database without measured need and an ADR.

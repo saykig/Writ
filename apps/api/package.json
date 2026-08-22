@@ -13,9 +13,6 @@
     "dev": "bun --env-file=../../.env --watch src/index.ts"
   },
   "dependencies": {
-    "@writ/analyzer": "workspace:*",
-    "@writ/domain": "workspace:*",
-    "@writ/evaluator": "workspace:*",
     "@writ/provenance": "workspace:*",
     "fastify": "^5.10.0",
     "postgres": "^3.4.9"

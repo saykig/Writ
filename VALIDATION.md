@@ -9,7 +9,8 @@ bun run format
 bun run lint
 bun run typecheck
 bun run test
-bun run conformance
+bun run data:check
+bun run verify:writ
 bun run build
 ```
 
@@ -21,7 +22,7 @@ For schema and protocol authority changes:
 bun test packages/domain
 PYTHONPATH=apps/ingest/src .venv/bin/pytest -q internal/verification/schema
 .venv/bin/python internal/tooling/scripts/validate_pack.py
-bun run conformance
+bun run verify:writ
 ```
 
 Authoritative schemas live only under `schemas/`. Runtime vendor copies under
@@ -42,4 +43,4 @@ Also verify that:
 - no active governing document requires a query layer or compliance-product architecture;
 - removed planning archives are absent from the tracked tree and current references;
 - external ratings are described as source-reported judgments;
-- generated files, schemas, runtime code, and corpus records are unchanged.
+- generated files and schemas are current and corpus records change only when explicitly in scope.

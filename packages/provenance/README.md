@@ -1,5 +1,5 @@
 # `@writ/provenance`
 
-Document and passage hashing, WARC links, anchor relocation, receipt canonicalization, signatures, and verification.
+Canonical JSON and content hashing for provenance-bearing records and bundles.
 
-Keep public APIs small, versioned, and covered by conformance fixtures.
+Keep public APIs small, versioned, and covered by deterministic golden tests.

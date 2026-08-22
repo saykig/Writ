@@ -1,5 +1,5 @@
 # `@writ/cli`
 
-Commands for parse, compile, lint, evaluate, receipt verify, benchmark, source verify, and release.
+Commands for formatting, checking, and compiling native Writ records and judgments.
 
-Keep public APIs small, versioned, and covered by conformance fixtures.
+Keep public APIs small, versioned, and covered by native record tests.

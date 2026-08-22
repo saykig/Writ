@@ -2,23 +2,17 @@ openapi: 3.1.0
 info:
   title: Writ API
   version: 0.1.0
-  summary: Governed methodology, evidence, evaluation, and release API.
+  summary: Minimal evidence-ledger command API.
   description: |
-    Planning contract. Command endpoints perform explicit state transitions and
-    require authorization, optimistic concurrency, idempotency, and audit events.
+    Current implementation contract only. This API does not execute commitments,
+    score records, analyze methodologies, or produce evaluation receipts.
 servers:
   - url: http://localhost:3000
-    description: Local development
 security:
-  - oidc: []
+  - bearerAuth: []
 tags:
   - name: system
-  - name: sources
   - name: evidence
-  - name: methodology
-  - name: evaluations
-  - name: releases
-  - name: challenges
 paths:
   /health:
     get:
@@ -32,139 +26,11 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [status]
+                required: [status, service]
                 properties:
                   status: { type: string, const: ok }
-  /v1/source-registry:
-    get:
-      tags: [sources]
-      operationId: listSourceRegistryEntries
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - name: jurisdiction
-          in: query
-          schema: { type: string }
-        - name: verification_status
-          in: query
-          schema: { type: string }
-      responses:
-        "200":
-          $ref: "#/components/responses/SourceRegistryPage"
-    post:
-      tags: [sources]
-      operationId: createSourceRegistryEntry
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "source-registry.schema.json#/$defs/entry"
-      responses:
-        "201":
-          description: Created source entry.
-          content:
-            application/json:
-              schema:
-                $ref: "source-registry.schema.json#/$defs/entry"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/source-registry/{sourceId}/validate:
-    post:
-      tags: [sources]
-      operationId: validateSourceRegistryEntry
-      parameters:
-        - $ref: "#/components/parameters/SourceId"
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/Command" }
-      responses:
-        "202": { $ref: "#/components/responses/AcceptedJob" }
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/source-registry/{sourceId}/fetch:
-    post:
-      tags: [sources]
-      operationId: fetchSourceRegistryEntry
-      parameters:
-        - $ref: "#/components/parameters/SourceId"
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/Command"
-                - type: object
-                  properties:
-                    resource_uri: { type: string, format: uri }
-                    cutoff: { type: string, format: date-time }
-      responses:
-        "202": { $ref: "#/components/responses/AcceptedJob" }
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/documents:
-    get:
-      tags: [sources]
-      operationId: listDocuments
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - name: source_registry_id
-          in: query
-          schema: { type: string }
-      responses:
-        "200": { $ref: "#/components/responses/GenericPage" }
-  /v1/document-versions/{documentVersionId}:
-    get:
-      tags: [sources]
-      operationId: getDocumentVersion
-      parameters:
-        - $ref: "#/components/parameters/DocumentVersionId"
-      responses:
-        "200":
-          description: Immutable source version metadata.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/documentVersion"
-        "404": { $ref: "#/components/responses/Problem" }
-  /v1/document-versions/{documentVersionId}/passages/{passageId}:
-    get:
-      tags: [sources]
-      operationId: getPassage
-      parameters:
-        - $ref: "#/components/parameters/DocumentVersionId"
-        - name: passageId
-          in: path
-          required: true
-          schema: { type: string }
-      responses:
-        "200":
-          description: Passage and relocatable anchor.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/passage"
-        "404": { $ref: "#/components/responses/Problem" }
+                  service: { type: string, const: "@writ/api" }
   /v1/claims:
-    get:
-      tags: [evidence]
-      operationId: listClaims
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - name: status
-          in: query
-          schema: { type: string }
-        - name: subject_ref
-          in: query
-          schema: { type: string }
-      responses:
-        "200": { $ref: "#/components/responses/GenericPage" }
     post:
       tags: [evidence]
       operationId: createClaim
@@ -174,60 +40,31 @@ paths:
         required: true
         content:
           application/json:
-            schema:
-              $ref: "evidence.schema.json#/$defs/claim"
+            schema: { type: object }
       responses:
-        "201":
-          description: Candidate claim created.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/claim"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/claims/{claimId}/{command}:
+        "201": { $ref: "#/components/responses/CommandResult" }
+  /v1/claims/{id}/{command}:
     post:
       tags: [evidence]
       operationId: transitionClaim
       parameters:
-        - name: claimId
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: "#/components/parameters/ObjectId"
         - name: command
           in: path
           required: true
           schema:
             type: string
-            enum: [submit-review, accept, reject, contest, withdraw]
+            enum: [submit, accept, reject, contest, supersede]
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: "#/components/schemas/Command" }
+            schema: { type: object }
       responses:
-        "200":
-          description: Updated claim projection.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/claim"
-        "409": { $ref: "#/components/responses/Problem" }
+        "200": { $ref: "#/components/responses/CommandResult" }
+        "201": { $ref: "#/components/responses/CommandResult" }
   /v1/actions:
-    get:
-      tags: [evidence]
-      operationId: listActions
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - name: jurisdiction
-          in: query
-          schema: { type: string }
-        - name: status
-          in: query
-          schema: { type: string }
-      responses:
-        "200": { $ref: "#/components/responses/GenericPage" }
     post:
       tags: [evidence]
       operationId: createAction
@@ -237,543 +74,50 @@ paths:
         required: true
         content:
           application/json:
-            schema:
-              $ref: "evidence.schema.json#/$defs/action"
+            schema: { type: object }
       responses:
-        "201":
-          description: Candidate action created.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/action"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/actions/{actionId}/relationships:
+        "201": { $ref: "#/components/responses/CommandResult" }
+  /v1/actions/{id}/{command}:
     post:
       tags: [evidence]
-      operationId: createActionRelationship
+      operationId: transitionAction
       parameters:
-        - name: actionId
-          in: path
-          required: true
-          schema: { type: string }
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "evidence.schema.json#/$defs/relationship"
-      responses:
-        "201":
-          description: Relationship created.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/relationship"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/search-protocols:
-    post:
-      tags: [evidence]
-      operationId: createNegativeEvidenceSearchProtocol
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "search-protocol.schema.json"
-      responses:
-        "201":
-          description: Search protocol created.
-          content:
-            application/json:
-              schema:
-                $ref: "search-protocol.schema.json"
-  /v1/evidence-snapshots:
-    post:
-      tags: [evidence]
-      operationId: createEvidenceSnapshot
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [cutoff, description]
-              properties:
-                cutoff: { type: string, format: date-time }
-                description: { type: string }
-      responses:
-        "201":
-          description: Mutable draft snapshot.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/snapshot"
-  /v1/evidence-snapshots/{snapshotId}/freeze:
-    post:
-      tags: [evidence]
-      operationId: freezeEvidenceSnapshot
-      parameters:
-        - name: snapshotId
-          in: path
-          required: true
-          schema: { type: string }
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/Command" }
-      responses:
-        "200":
-          description: Frozen snapshot with content hash.
-          content:
-            application/json:
-              schema:
-                $ref: "evidence.schema.json#/$defs/snapshot"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/methodology/packages/compile:
-    post:
-      tags: [methodology]
-      operationId: compileMethodologyPackage
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [source]
-              properties:
-                source: { type: string }
-                filename: { type: string }
-      responses:
-        "200":
-          description: Compiled canonical IR and diagnostics.
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [ir, diagnostics]
-                properties:
-                  ir: { $ref: "canonical-ir.schema.json" }
-                  diagnostics:
-                    type: array
-                    items: { $ref: "#/components/schemas/Diagnostic" }
-        "422": { $ref: "#/components/responses/Problem" }
-  /v1/methodology/packages/analyze:
-    post:
-      tags: [methodology]
-      operationId: analyzeMethodologyPackage
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "canonical-ir.schema.json"
-      responses:
-        "200":
-          description: Static diagnostics and bounded witnesses.
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [diagnostics]
-                properties:
-                  diagnostics:
-                    type: array
-                    items: { $ref: "#/components/schemas/Diagnostic" }
-  /v1/interpretation-profiles:
-    post:
-      tags: [methodology]
-      operationId: createInterpretationProfile
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "interpretation-profile.schema.json"
-      responses:
-        "201":
-          description: Interpretation profile created.
-          content:
-            application/json:
-              schema:
-                $ref: "interpretation-profile.schema.json"
-  /v1/evaluation-runs:
-    post:
-      tags: [evaluations]
-      operationId: createEvaluationRun
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: false
-              required:
-                [
-                  commitment_version_id,
-                  subject_id,
-                  interpretation_profile_id,
-                  evidence_snapshot_id,
-                  as_of,
-                  cutoff,
-                ]
-              properties:
-                commitment_version_id: { type: string }
-                subject_id: { type: string }
-                interpretation_profile_id: { type: string }
-                evidence_snapshot_id: { type: string }
-                as_of: { type: string, format: date-time }
-                cutoff: { type: string, format: date-time }
-      responses:
-        "202": { $ref: "#/components/responses/AcceptedJob" }
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/evaluation-runs/{runId}:
-    get:
-      tags: [evaluations]
-      operationId: getEvaluationRun
-      parameters:
-        - name: runId
-          in: path
-          required: true
-          schema: { type: string }
-      responses:
-        "200":
-          description: Evaluation run status and receipt reference.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Job" }
-        "404": { $ref: "#/components/responses/Problem" }
-  /v1/receipts/{receiptId}:
-    get:
-      tags: [evaluations]
-      operationId: getEvaluationReceipt
-      parameters:
-        - name: receiptId
-          in: path
-          required: true
-          schema: { type: string }
-      responses:
-        "200":
-          description: Canonical evaluation receipt.
-          content:
-            application/json:
-              schema:
-                $ref: "evaluation-receipt.schema.json"
-        "404": { $ref: "#/components/responses/Problem" }
-  /v1/receipts/verify:
-    post:
-      tags: [evaluations]
-      operationId: verifyEvaluationReceipt
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "evaluation-receipt.schema.json"
-      responses:
-        "200":
-          description: Verification result.
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [valid]
-                properties:
-                  valid: { type: boolean }
-                  failures:
-                    type: array
-                    items: { type: string }
-  /v1/discrepancies:
-    get:
-      tags: [evaluations]
-      operationId: listDiscrepancies
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - name: resolution_status
-          in: query
-          schema: { type: string }
-      responses:
-        "200": { $ref: "#/components/responses/GenericPage" }
-    post:
-      tags: [evaluations]
-      operationId: createDiscrepancy
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "discrepancy.schema.json"
-      responses:
-        "201":
-          description: Discrepancy created.
-          content:
-            application/json:
-              schema:
-                $ref: "discrepancy.schema.json"
-  /v1/releases/build:
-    post:
-      tags: [releases]
-      operationId: buildRelease
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                [
-                  name,
-                  version,
-                  methodology_bundle_ids,
-                  interpretation_profile_ids,
-                  evidence_snapshot_ids,
-                ]
-              properties:
-                name: { type: string }
-                version: { type: string }
-                methodology_bundle_ids: { type: array, items: { type: string } }
-                interpretation_profile_ids: { type: array, items: { type: string } }
-                evidence_snapshot_ids: { type: array, items: { type: string } }
-      responses:
-        "202": { $ref: "#/components/responses/AcceptedJob" }
-  /v1/releases/{releaseId}:
-    get:
-      tags: [releases]
-      operationId: getRelease
-      parameters:
-        - name: releaseId
-          in: path
-          required: true
-          schema: { type: string }
-      responses:
-        "200":
-          description: Release manifest.
-          content:
-            application/json:
-              schema:
-                $ref: "release.schema.json"
-        "404": { $ref: "#/components/responses/Problem" }
-  /v1/releases/{releaseId}/{command}:
-    post:
-      tags: [releases]
-      operationId: transitionRelease
-      parameters:
-        - name: releaseId
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: "#/components/parameters/ObjectId"
         - name: command
           in: path
           required: true
           schema:
             type: string
-            enum: [approve, publish, withdraw, verify]
+            enum: [submit, accept, reject, contest, supersede]
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: "#/components/schemas/Command" }
+            schema: { type: object }
       responses:
-        "200":
-          description: Release after command.
-          content:
-            application/json:
-              schema:
-                $ref: "release.schema.json"
-        "409": { $ref: "#/components/responses/Problem" }
-  /v1/challenges:
-    post:
-      tags: [challenges]
-      operationId: createChallenge
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: false
-              required: [object_type, object_id, summary, details]
-              properties:
-                object_type: { type: string }
-                object_id: { type: string }
-                summary: { type: string }
-                details: { type: string }
-                evidence: { type: array, items: { type: object } }
-      responses:
-        "201":
-          description: Challenge created.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Challenge" }
-  /v1/challenges/{challengeId}/{command}:
-    post:
-      tags: [challenges]
-      operationId: transitionChallenge
-      parameters:
-        - name: challengeId
-          in: path
-          required: true
-          schema: { type: string }
-        - name: command
-          in: path
-          required: true
-          schema:
-            type: string
-            enum: [triage, respond, resolve, reject, withdraw]
-        - $ref: "#/components/parameters/IdempotencyKey"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/Command" }
-      responses:
-        "200":
-          description: Challenge after command.
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Challenge" }
-        "409": { $ref: "#/components/responses/Problem" }
+        "200": { $ref: "#/components/responses/CommandResult" }
+        "201": { $ref: "#/components/responses/CommandResult" }
 components:
   securitySchemes:
-    oidc:
-      type: openIdConnect
-      openIdConnectUrl: https://identity.example/.well-known/openid-configuration
+    bearerAuth:
+      type: http
+      scheme: bearer
   parameters:
-    Cursor:
-      name: cursor
-      in: query
+    ObjectId:
+      name: id
+      in: path
+      required: true
       schema: { type: string }
-    Limit:
-      name: limit
-      in: query
-      schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
     IdempotencyKey:
       name: Idempotency-Key
       in: header
-      required: true
-      schema: { type: string, minLength: 8, maxLength: 200 }
-    SourceId:
-      name: sourceId
-      in: path
-      required: true
+      required: false
       schema: { type: string }
-    DocumentVersionId:
-      name: documentVersionId
-      in: path
-      required: true
-      schema: { type: string }
-  schemas:
-    Command:
-      type: object
-      additionalProperties: false
-      required: [expected_version, reason]
-      properties:
-        expected_version: { type: integer, minimum: 0 }
-        reason: { type: string, minLength: 1 }
-        metadata: { type: object }
-    Diagnostic:
-      type: object
-      additionalProperties: false
-      required: [code, severity, message]
-      properties:
-        code: { type: string }
-        severity: { type: string, enum: [error, warning, info] }
-        message: { type: string }
-        source_location: { type: object }
-        witness: { type: object }
-    Job:
-      type: object
-      required: [id, status]
-      properties:
-        id: { type: string }
-        status: { type: string, enum: [queued, running, succeeded, failed, cancelled] }
-        result_ref: { type: string }
-        error: { $ref: "#/components/schemas/Problem" }
-    Challenge:
-      type: object
-      required: [id, object_type, object_id, summary, details, status, created_at]
-      properties:
-        id: { type: string }
-        object_type: { type: string }
-        object_id: { type: string }
-        summary: { type: string }
-        details: { type: string }
-        evidence: { type: array, items: { type: object } }
-        status: { type: string }
-        resolution: { type: string }
-        created_at: { type: string, format: date-time }
-        resolved_at: { type: string, format: date-time }
-    Problem:
-      type: object
-      additionalProperties: false
-      required: [type, title, status, code, detail, request_id]
-      properties:
-        type: { type: string, format: uri }
-        title: { type: string }
-        status: { type: integer, minimum: 400, maximum: 599 }
-        code: { type: string }
-        detail: { type: string }
-        instance: { type: string }
-        request_id: { type: string }
-        context: { type: object }
-    Page:
-      type: object
-      required: [items]
-      properties:
-        items: { type: array, items: { type: object } }
-        next_cursor: { type: string }
-        request_id: { type: string }
   responses:
-    Problem:
-      description: Problem details.
-      content:
-        application/problem+json:
-          schema: { $ref: "#/components/schemas/Problem" }
-    AcceptedJob:
-      description: Asynchronous command accepted.
-      headers:
-        Location:
-          schema: { type: string }
-      content:
-        application/json:
-          schema: { $ref: "#/components/schemas/Job" }
-    GenericPage:
-      description: Cursor-paginated resources.
-      content:
-        application/json:
-          schema: { $ref: "#/components/schemas/Page" }
-    SourceRegistryPage:
-      description: Cursor-paginated source entries.
+    CommandResult:
+      description: Governed command result.
       content:
         application/json:
           schema:
             type: object
-            required: [items]
-            properties:
-              items:
-                type: array
-                items:
-                  $ref: "source-registry.schema.json#/$defs/entry"
-              next_cursor: { type: string }
-              request_id: { type: string }

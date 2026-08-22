@@ -1,211 +1,87 @@
-(* Writ 0.1 reference grammar. This is the language design target, not a generated parser. *)
+(* Informative EBNF for the active evidence-bound Writ language.
+   packages/language/writ.langium is the executable grammar authority. *)
 
-Document        = Header, { Import | Source | TypeDecl | SetDecl | Rationale |
-                            Commitment | Record | Judgment | Profile | Scenario } ;
-Header          = "language", "writ", String, "package", QName,
-                  "version", String, ";" ;
-Import          = "import", QName, "version", String,
-                  [ "hash", String ], ";" ;
-Source          = "source", Identifier, "{", { Property }, "}" ;
-TypeDecl        = EnumDecl | ConceptDecl ;
-EnumDecl        = "enum", Identifier, "{", Identifier,
-                  { ",", Identifier }, [ "," ], "}" ;
-ConceptDecl     = "concept", Identifier, [ ":", TypeRef ], "{",
-                  { Property | Support }, "}" ;
-SetDecl         = "set", Identifier, ":", TypeRef, "=", SetLiteral, ";" ;
-Rationale       = "rationale", Identifier, "{", "text", String, ";",
-                  { Support }, "}" ;
+Model            = "language", "writ", String,
+                   "package", QName, "version", String, ";",
+                   { Declaration } ;
+Declaration      = Source | Concept | Record | Judgment ;
 
-Record          = "record", Identifier, ":", RecordFamily, "{",
-                  { RecordMember }, "}" ;
-RecordFamily    = Identifier ;
-RecordMember    = RecordCorpus | RecordVersion | RecordTitle | RecordSubjects |
-                  RecordAssertion | RecordTopics | RecordScope | RecordEvidence |
-                  RecordUncertainty | RecordProvenance | RecordReviewState |
-                  LegalPolicyExtension | InstitutionalExtension ;
-RecordCorpus    = "corpus", QName, ";" ;
-RecordVersion   = "version", String, ";" ;
-RecordTitle     = "title", String, ";" ;
-RecordSubjects  = "subjects", ( IdentifierList | StructuredSubjectList ), ";" ;
-StructuredSubjectList = "{", RecordSubject, { RecordSubject }, "}" ;
-RecordSubject   = "subject", QName, "type", QName,
-                  [ "label", String ], [ "role", String ], ";" ;
-RecordAssertion = "assertion", AssertionMode, String, ";" ;
-AssertionMode   = "requires" | "permits" | "prohibits" | "defines" |
-                  "authorizes" | "assigns" | "performs" | "states" | "observes" ;
-RecordTopics    = "topics", TopicList, ";" ;
-RecordScope     = "scope", "{",
-                  [ "jurisdiction", String, ";" ],
-                  [ "jurisdictions", StringList, ";" ],
-                  [ "institutional_scope", IdentifierList, ";" ],
-                  [ "temporal_scope", TemporalScope ],
-                  { "condition", String, ";" },
-                  [ "conditions", StringList, ";" ], "}" ;
-TemporalScope   = "{", [ "from", Date, ";" ], [ "until", Date, ";" ], "}" ;
-RecordEvidence  = "evidence", "{", EvidenceReference,
-                  { EvidenceReference }, "}" ;
+Source           = "source", Identifier, "{", { SourceProperty }, "}" ;
+SourceProperty   = ( "uri", String
+                   | "media_type", String
+                   | "retrieved", DateTime
+                   | "sha256", String ), ";" ;
+Concept          = "concept", Identifier, [ ":", QName ], "{",
+                   { Identifier, ( String | Number | Date | QName ), ";" }, "}" ;
+
+Record           = "record", Identifier, ":", RecordFamily, "{",
+                   { RecordMember }, "}" ;
+RecordFamily     = "legal_policy" | "institutional" | Identifier ;
+RecordMember     = CommonRecordMember | LegalPolicyBlock | InstitutionalBlock ;
+CommonRecordMember =
+                   "corpus", QName, ";"
+                 | "version", String, ";"
+                 | "title", String, ";"
+                 | "subjects", SubjectList, ";"
+                 | "assertion", AssertionMode, String, ";"
+                 | "topics", TopicList, ";"
+                 | "scope", Scope
+                 | "evidence", "{", EvidenceReference, { EvidenceReference }, "}"
+                 | "uncertainty", "{", { "item", UncertaintyType, String, ";" }, "}"
+                 | "provenance", "{", "created_by", String, ";",
+                   "created_at", Date, ";", "}"
+                 | "review_state", ReviewState, ";" ;
+SubjectList      = "{", { "subject", QName, "type", QName,
+                   [ "label", String ], [ "role", String ], ";" }, "}"
+                 | IdentifierList ;
 EvidenceReference = "support", QName, "document_version", QName, "passage", QName,
-                  "locator", String, "quote", String, "passage_hash", String,
-                  "document_hash", String, "basis", EvidenceBasis, ";" ;
-EvidenceBasis   = "direct" | "inferred" | "inherited" ;
-RecordUncertainty = "uncertainty", "{", { "item", UncertaintyType, String, ";" }, "}" ;
-UncertaintyType = "unknown" | "contested" | "ambiguous" | "incomplete_evidence" ;
-RecordProvenance = "provenance", "{", "created_by", String, ";",
-                  "created_at", Date, ";", "}" ;
-RecordReviewState = "review_state", ( "draft" | "reviewed" | "approved" |
-                  "superseded" | "withdrawn" ), ";" ;
-LegalPolicyExtension = "legal_policy", "{", { Property | SourceMetadata }, "}" ;
-SourceMetadata  = "source_metadata", "{",
-                  "dataset_name", String, ";",
-                  "dataset_snapshot", String, ";",
-                  "source_row_identifier", String, ";",
-                  [ "source_url", String, ";" ],
-                  "jurisdiction", String, ";",
-                  "title", String, ";",
-                  [ "chapter", String, ";" ],
-                  [ "section_number", String, ";" ],
-                  [ "section_title", String, ";" ],
-                  "original_text", String, ";",
-                  [ "last_amended_year", Integer, ";" ],
-                  "row_hash", String, ";", "}" ;
-InstitutionalExtension = "institutional", "{",
-                  { Property | InstitutionalFactType | InstitutionalRecordLink |
-                    Mandate | Mission | DecisionRight | OperationalCapacity }, "}" ;
-InstitutionalFactType = "fact_type", ( "identity" | "placement" | "relationship" |
-                  "mission" | "mandate" | "function" | "decision_right" |
-                  "operational_capacity" ), ";" ;
-InstitutionalRecordLink = "record_link", "{",
-                  "link_id", QName, ";",
-                  "source", QName, "kind", QName, ";",
-                  "target", QName, "kind", QName, ";",
-                  "relation", QName, ";",
-                  "basis", EvidenceBasis, ";",
-                  "evidence_refs", IdentifierList, ";", "}" ;
-Mandate         = "mandate", ( String, ";" | "{",
-                  "status", ( "established" | "unknown" | "contested" ), ";",
-                  [ "text", String, ";" ],
-                  [ "authority_source_ids", IdentifierList, ";" ],
-                  [ "evidence_refs", IdentifierList, ";" ], "}" ) ;
-Mission         = "mission", "{", "text", String, ";",
-                  [ "source_ids", IdentifierList, ";" ],
-                  [ "evidence_refs", IdentifierList, ";" ], "}" ;
-DecisionRight   = "decision_right", "{",
-                  "status", ( "established" | "unknown" | "contested" ), ";",
-                  [ "text", String, ";" ],
-                  [ "authority_source_ids", IdentifierList, ";" ],
-                  [ "evidence_refs", IdentifierList, ";" ], "}" ;
-OperationalCapacity = "operational_capacity", "{",
-                  "status", CapacityStatus, ";",
-                  "capacity_type", CapacityType, ";",
-                  [ "capacity_components", IdentifierList, ";" ],
-                  [ "as_of_date", Date, ";" ],
-                  [ "quantity", "{", "value", Number, ";",
-                    "unit", QName, ";", "qualifier", QuantityQualifier, ";", "}" ],
-                  "evidence_refs", IdentifierList, ";", "}" ;
-CapacityStatus  = "active" | "planned" | "limited" | "degraded" |
-                  "suspended" | "retired" | "unknown" ;
-CapacityType    = "organizational_unit" | "laboratory_network" | "facility" |
-                  "program" | "technical_capability" | "accreditation_system" |
-                  "partnership_network" | "other" ;
-QuantityQualifier = "exact" | "approximate" | "minimum" | "maximum" ;
+                   "locator", String, "quote", String, "passage_hash", String,
+                   "document_hash", String, "basis", EvidenceBasis, ";" ;
+EvidenceBasis    = "direct" | "inferred" | "inherited" ;
+UncertaintyType  = "unknown" | "contested" | "ambiguous" | "incomplete_evidence" ;
+ReviewState      = "draft" | "reviewed" | "approved" | "superseded" | "withdrawn" ;
 
-Judgment        = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
-JudgmentMember  = JudgmentTarget | Property ;
-JudgmentTarget  = "target", [ "record" | "record_link" ], QName, ";" ;
-IdentifierList  = "{", [ QName, { ",", QName } ], [ "," ], "}" ;
-StringList      = "{", [ String, { ",", String } ], [ "," ], "}" ;
-TopicList       = "{", [ ( QName | String ), { ",", ( QName | String ) } ], [ "," ], "}" ;
+(* Family blocks preserve independent atomic institutional distinctions. *)
+InstitutionalBlock = "institutional", "{", { InstitutionalProperty }, "}" ;
+InstitutionalProperty =
+                   "institution_id", QName, ";"
+                 | "fact_type", ( "identity" | "placement" | "relationship" | "mission"
+                   | "mandate" | "function" | "decision_right" | "operational_capacity" ), ";"
+                 | "institution_type", QName, ";"
+                 | "mission", StructuredValue
+                 | "mandate", ( StructuredValue | String, ";" )
+                 | "function", QName, ";"
+                 | "functions", IdentifierList, ";"
+                 | "decision_right", StructuredValue
+                 | "decision_rights", StringList, ";"
+                 | "operational_capacity", StructuredValue
+                 | "record_link", StructuredValue
+                 | Identifier, ( QName | StringList | IdentifierList | StructuredValue ), [ ";" ] ;
+LegalPolicyBlock = "legal_policy", "{", { Identifier,
+                   ( QName | String | Date | Number | StringList | IdentifierList | StructuredValue ),
+                   [ ";" ] }, "}" ;
 
-Commitment      = "commitment", Identifier, "{", { CommitmentMember }, "}" ;
-CommitmentMember= Property | Authority | Subjects | Window | EvidencePolicy |
-                  UnknownPolicy | Dimension | Goal | PartnerClass | Parameter |
-                  Identity | Predicate | Classification | Variable | Score |
-                  Assertion | Support ;
-Authority       = "authority", Citation, ";" ;
-Subjects        = "subjects", Expr, ";" ;
-Window          = "evaluation_window", Interval, ";" ;
-EvidencePolicy  = "evidence_policy", ( "open_world" | "closed_world" ), ";" ;
-UnknownPolicy   = "unknown_policy", ( "propagate" | "explicit_rules_only" |
-                  "treat_false" | "treat_true" ), ";" ;
-Dimension       = "dimension", Identifier, [ String ], ";" ;
-Goal            = "goal", Identifier, [ String ], ";" ;
-PartnerClass    = "partner_class", Identifier, [ String ], ";" ;
-Parameter       = "parameter", Identifier, ":", TypeRef, "=", Literal,
-                  [ "allowed", SetLiteral ], ";" ;
-Identity        = "action_identity", ( "review_required" | "strict_deduplicate" |
-                  "strict_separate" | "propagate_uncertainty" ), "by",
-                  Path, { ",", Path }, ";" ;
+Judgment         = "judgment", Identifier, "{", { JudgmentMember }, "}" ;
+JudgmentMember   = "target", [ "record" | "record_link" ], QName, ";"
+                 | "type", QName, ";"
+                 | "value", Literal, ";"
+                 | "rationale", String, ";"
+                 | "evidence_refs", IdentifierList, ";"
+                 | "reviewer", String, ";"
+                 | "status", ( "proposed" | "accepted" | "contested" | "superseded" ), ";"
+                 | "created_at", Date, ";"
+                 | "family_context", RecordFamily, ";"
+                 | ( "supersedes" | "superseded_by_judgment_id" ), QName, ";"
+                 | ( "supersedes_judgment_ids" | "related_judgment_ids" ), IdentifierList, ";" ;
 
-Predicate       = "predicate", Identifier, "(", [ ParamList ], ")", "->", "Truth",
-                  "{", { DeriveRule }, "}" ;
-DeriveRule      = "derive", TruthLiteral, [ "priority", Integer ], "when", Expr,
-                  [ "because", Identifier ], [ Support ], ";" ;
-Classification  = "classify", Identifier, ( "exclusive" | "multi_label" ), "{",
-                  { ClassRule }, [ OtherwiseClass ], "}" ;
-ClassRule       = "label", Identifier, "priority", Integer, "when", Expr,
-                  [ "because", Identifier ], [ Support ], ";" ;
-OtherwiseClass  = "otherwise", Identifier, [ "safe_under_open_world" ], ";" ;
-Variable        = "let", Identifier, ":", TypeRef, "=", Expr, ";" ;
-
-Score           = "score", "{", { ScoreRule }, OtherwiseScore, "}" ;
-ScoreRule       = "result", ScoreValue, "priority", Integer, "when", Expr,
-                  [ "id", Identifier ], [ "intentional_overlap" ],
-                  [ "because", Identifier ], [ Support ], ";" ;
-OtherwiseScore  = "otherwise", ( ScoreValue | "unresolved" | "not_applicable" ),
-                  String, ";" ;
-Assertion       = "assert", ( "exhaustive" | "non_overlapping" | "monotonic" |
-                  "no_unanchored_claims" | "all_score_inputs_reviewed" ),
-                  [ "over", DomainList ], [ "except", Expr ], ";" ;
-
-Profile         = "profile", Identifier, "for", QName, "{", { ProfileMember }, "}" ;
-ProfileMember   = "set", Path, "=", Literal, ";" | "waive", Identifier,
-                  "because", String, ";" ;
-Scenario        = "scenario", Identifier, "for", QName, "{", { Given }, Expect, "}" ;
-Given           = "given", Path, "=", Literal, ";" ;
-Expect          = "expect", ( "result", ScoreValue | "diagnostic", Identifier ), ";" ;
-
-Expr            = OrExpr ;
-OrExpr          = AndExpr, { "or", AndExpr } ;
-AndExpr         = NotExpr, { "and", NotExpr } ;
-NotExpr         = [ "not" ], CompareExpr ;
-CompareExpr     = AddExpr, [ CompareOp, AddExpr ] ;
-AddExpr         = Primary, { ( "+" | "-" ), Primary } ;
-Primary         = Literal | Path | Call | Query | SetLiteral | Interval |
-                  "(", Expr, ")" ;
-Call            = QName, "(", [ ArgList ], ")" ;
-Query           = ( "count" | "count_distinct" | "exists" | "forall" | "sum" |
-                  "ratio" | "coverage" | "min" | "max" ), "(", QName,
-                  [ "where", Expr ], [ "distinct_by", Path ],
-                  [ "select", Expr ], ")" ;
-CompareOp       = "==" | "!=" | ">" | ">=" | "<" | "<=" | "in" |
-                  "between" | "overlaps" | "before" | "after" | "contains" ;
-
-Citation        = Identifier, ( "page", Integer | "pages", Range |
-                  "lines", Range | "quote", String | "dom", String |
-                  "json_pointer", String ) ;
-Support         = "support", Citation, ";" ;
-Property        = Identifier, ( String | Number | Date | DateTime | QName ), ";" ;
-Interval        = ( "[" | "(" ), ( Date | DateTime ), ",", ( Date | DateTime ),
-                  ( "]" | ")" ) ;
-DomainList      = Domain, { ",", Domain } ;
-Domain          = Path, "in", ( SetLiteral | Range ) ;
-SetLiteral      = "{", [ Literal, { ",", Literal } ], "}" ;
-Range           = Literal, "..", Literal ;
-ParamList       = Param, { ",", Param } ;
-Param           = Identifier, ":", TypeRef ;
-ArgList         = Expr, { ",", Expr } ;
-TypeRef         = QName, [ "<", TypeRef, { ",", TypeRef }, ">" ] ;
-Path            = QName ;
-QName           = Identifier, { ".", Identifier } ;
-Literal         = String | Number | Integer | Date | DateTime | TruthLiteral |
-                  "true" | "false" | "null" ;
-TruthLiteral    = "true" | "false" | "unknown" | "contested" ;
-ScoreValue      = '"-1"' | '"0"' | '"+1"' ;
-Identifier      = Letter, { Letter | Digit | "_" | "-" } ;
-String          = '"', { ? any character except unescaped quote ? }, '"' ;
-Integer         = [ "-" ], Digit, { Digit } ;
-Number          = Integer, [ ".", Digit, { Digit } ] ;
-Date            = Digit, Digit, Digit, Digit, "-", Digit, Digit, "-", Digit, Digit ;
-DateTime        = Date, "T", ? RFC 3339 time and offset ? ;
-Letter          = "A" | ... | "Z" | "a" | ... | "z" ;
-Digit           = "0" | ... | "9" ;
+Literal          = String | Number | Date | "true" | "false" | "unknown" | "contested" ;
+IdentifierList   = "{", [ QName, { ",", QName }, [ "," ] ], "}" ;
+StringList       = "{", [ String, { ",", String }, [ "," ] ], "}" ;
+TopicList        = "{", [ ( QName | String ), { ",", ( QName | String ) }, [ "," ] ], "}" ;
+Scope            = "{", { Identifier, ( String | StringList | IdentifierList | StructuredValue ),
+                   [ ";" ] }, "}" ;
+StructuredValue  = "{", { Identifier, ( Literal | QName | StringList | IdentifierList
+                   | StructuredValue ), [ ";" ] }, "}" ;
+AssertionMode    = "requires" | "permits" | "prohibits" | "defines" | "authorizes"
+                 | "assigns" | "performs" | "states" | "observes" ;
+QName            = Identifier, { ".", Identifier } ;

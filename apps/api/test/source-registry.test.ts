@@ -126,7 +126,7 @@ suite("DATA-004 registry import", () => {
     await pool?.end({ timeout: 5 });
   });
 
-  test("the 104-entry seed imports and only verified+ready connectors enable", async () => {
+  test("the 107-entry seed imports and only verified+ready connectors enable", async () => {
     const doc = JSON.parse(
       readFileSync(
         new URL("../../../internal/infrastructure/generated/source-registry.json", import.meta.url),
@@ -135,17 +135,16 @@ suite("DATA-004 registry import", () => {
     ) as RegistryDocument;
 
     const summary = await repos.sourceRegistry.importRegistry(doc);
-    expect(summary.total).toBe(104);
-    expect(summary.imported).toBe(104);
-    // g20_research_group is enabled (verified) in this branch, so one more source
-    // is enabled/eligible and one fewer is verification-pending/disabled.
-    expect(summary.enabled).toBe(6);
-    expect(summary.eligible).toBe(7);
+    expect(summary.total).toBe(107);
+    expect(summary.imported).toBe(107);
+    // Only reviewed, verified, operator-enabled sources may become active.
+    expect(summary.enabled).toBe(7);
+    expect(summary.eligible).toBe(8);
     expect(summary.verificationPending).toBe(91);
-    expect(summary.disabled).toBe(98);
+    expect(summary.disabled).toBe(100);
 
     const enabled = await repos.sourceRegistry.listEnabled();
-    expect(enabled.length).toBe(6);
+    expect(enabled.length).toBe(7);
     for (const row of enabled) {
       expect(row.verification_status).toBe("verified");
       expect(row.eligible).toBe(true);
@@ -155,9 +154,9 @@ suite("DATA-004 registry import", () => {
       { total: string; enabled: string; eligible: string }[]
     >`SELECT total::text, enabled::text, eligible::text
         FROM source_coverage_by_status WHERE verification_status = 'verified'`;
-    expect(Number(verified?.total)).toBe(12);
-    expect(Number(verified?.enabled)).toBe(6);
-    expect(Number(verified?.eligible)).toBe(7);
+    expect(Number(verified?.total)).toBe(13);
+    expect(Number(verified?.enabled)).toBe(7);
+    expect(Number(verified?.eligible)).toBe(8);
 
     const g20 = await repos.sourceRegistry.getEntry("g20_research_group");
     expect(g20?.verification_status).toBe("verified");

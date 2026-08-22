@@ -1,9 +1,0 @@
-{
-  "id": "unknown-threshold",
-  "expression": "count(strong_actions) >= 5",
-  "count_interval": {
-    "min": 4,
-    "max": 6
-  },
-  "expected_truth": "unknown"
-}
