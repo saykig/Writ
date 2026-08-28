@@ -151,6 +151,7 @@ interface SanitizationLedger {
 
 interface StructuredSourceMetadata {
   sourceId: string;
+  documentVersionId: string;
   uri: string;
   mediaType: string;
   retrievedAt: string;
@@ -162,6 +163,19 @@ interface StructuredSourceMetadata {
 function structuredSources(root: string): Map<string, StructuredSourceMetadata> {
   const text = read(root, "sources.writ");
   const result = new Map<string, StructuredSourceMetadata>();
+  const documentVersions = new Map(
+    [...text.matchAll(/concept\s+\S+\s*\{([\s\S]*?)\}/g)]
+      .map((match) => match[1]!)
+      .filter((block) => block.includes("document_version_id"))
+      .map((block) => {
+        const sourceId = /source_id\s+([^;]+);/.exec(block)?.[1]?.trim();
+        const documentVersionId = /document_version_id\s+([^;]+);/.exec(block)?.[1]?.trim();
+        if (!sourceId || !documentVersionId) {
+          throw new Error("Incomplete structured document-version identity");
+        }
+        return [sourceId, documentVersionId] as const;
+      }),
+  );
   const pairs = text.matchAll(/source\s+\S+\s*\{([\s\S]*?)\}\s*concept\s+\S+\s*\{([\s\S]*?)\}/g);
   const quoted = (block: string, key: string): string => {
     const value = new RegExp(`${key}\\s+"([^"]+)";`).exec(block)?.[1];
@@ -176,8 +190,10 @@ function structuredSources(root: string): Map<string, StructuredSourceMetadata> 
   for (const pair of pairs) {
     const source = pair[1]!;
     const concept = pair[2]!;
+    const sourceId = bare(concept, "source_id");
     const metadata: StructuredSourceMetadata = {
-      sourceId: bare(concept, "source_id"),
+      sourceId,
+      documentVersionId: documentVersions.get(sourceId) ?? "",
       uri: quoted(source, "uri"),
       mediaType: quoted(source, "media_type"),
       retrievedAt: bare(source, "retrieved"),
@@ -931,6 +947,7 @@ describe("source and repository boundaries", () => {
     ).sources[0]!;
     sources.set("eu_ai_act_2024_1689", {
       sourceId: "eu_ai_act_2024_1689",
+      documentVersionId: "dv_eu_ai_act_2024_1689",
       uri: aiAct.uri,
       mediaType: aiAct.media_type,
       retrievedAt: aiAct.retrieved_at,
@@ -958,6 +975,7 @@ describe("source and repository boundaries", () => {
         const metadata = sources.get(item.source_id);
         expect(metadata, `${target.record_id}:${item.source_id}`).toBeDefined();
         expect(item.document_version_id, item.passage_id).toBeTruthy();
+        expect(item.document_version_id, item.passage_id).toBe(metadata!.documentVersionId);
         expect(item.locator, item.passage_id).toBeTruthy();
         expect(item.quote, item.passage_id).toBeTruthy();
         expect(["direct", "inferred", "inherited"]).toContain(item.basis);

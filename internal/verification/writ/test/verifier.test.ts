@@ -330,15 +330,16 @@ describe("focused negative fixtures", () => {
     expect(findings).toContain("PROVENANCE_SUPERSESSION_INVALID");
   });
 
-  test("detects missing and mismatched institutional evidence sources", () => {
+  test("does not rescue an incorrect native source ID with a matching document hash", () => {
     const missing = clone();
     const missingRecord = missing.institutionalRecords.find(
       ({ value }) => value.evidence.length > 0,
     )!;
     missingRecord.value.evidence[0]!.source_id = "synthetic.missing_source";
-    missingRecord.value.evidence[0]!.document_hash = `sha256:${"0".repeat(64)}`;
     expect(codes(verifyProvenance(missing))).toContain("PROVENANCE_SOURCE_NOT_FOUND");
+  });
 
+  test("detects mismatched institutional document hashes and version identities", () => {
     const mismatch = clone();
     const mismatchedRecord = mismatch.institutionalRecords.find(
       ({ value }) =>
@@ -347,6 +348,13 @@ describe("focused negative fixtures", () => {
     )!;
     mismatchedRecord.value.evidence[0]!.document_hash = `sha256:${"f".repeat(64)}`;
     expect(codes(verifyProvenance(mismatch))).toContain("PROVENANCE_SOURCE_MISMATCH");
+
+    const wrongVersion = clone();
+    const versionedRecord = wrongVersion.institutionalRecords.find(
+      ({ value }) => value.evidence.length > 0,
+    )!;
+    versionedRecord.value.evidence[0]!.document_version_id = "synthetic.wrong_version";
+    expect(codes(verifyProvenance(wrongVersion))).toContain("PROVENANCE_SOURCE_VERSION_MISMATCH");
   });
 
   test("detects wrong local passage references and conflicting passage identities", () => {

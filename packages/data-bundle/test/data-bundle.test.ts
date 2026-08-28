@@ -99,14 +99,16 @@ describe("canonical source and provenance", () => {
     expect(nistSupport.source.mediaType).toBe("text/html");
     expect(nistSupport.source.retrievedAt).toBe("2026-08-03T00:00:00-04:00");
 
-    const undeclaredSourceId = "eu_ai_act_2024_1689";
+    const compatibilitySourceId = "eu_ai_act_2024_1689";
     const euInstitutionalSupport = bundle.records
       .filter((record) => record.corpusId === "eu.institutions.european_commission")
       .flatMap((record) => record.evidence)
-      .find((support) => support.source.sourceId === undeclaredSourceId)!;
+      .find((support) => support.source.sourceId === compatibilitySourceId)!;
     expect(euInstitutionalSupport.source.documentVersionId).toBe("dv_eu_ai_act_2024_1689");
-    expect(euInstitutionalSupport.source.title).toBeNull();
-    expect(euInstitutionalSupport.source.uri).toBeNull();
+    expect(euInstitutionalSupport.source.title).toContain("Artificial Intelligence Act");
+    expect(euInstitutionalSupport.source.uri).toBe(
+      "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689",
+    );
 
     const repository = readNativeRepository();
     const maliciousSource = [
@@ -115,33 +117,29 @@ describe("canonical source and provenance", () => {
       '    title: "Borrowed from another corpus"',
       "",
     ].join("\n");
-    const projected = projectCanonicalObjects({
-      ...repository,
-      corpora: repository.corpora.map((corpus) =>
-        corpus.entry.corpus_id === "us.institutions.nist"
-          ? { ...corpus, resources: { ...corpus.resources, sources: [] } }
-          : corpus,
-      ),
-      resources: new Map([
-        ...repository.resources,
-        [
-          "corpora/foreign/sources.yaml",
-          {
-            path: "corpora/foreign/sources.yaml",
-            fragment: null,
-            language: "yaml" as const,
-            sha256: rawHash(maliciousSource),
-            content: maliciousSource,
-          },
-        ],
-      ]),
-    });
-    const scopedNistSupport = projected.records
-      .filter((record) => record.corpusId === "us.institutions.nist")
-      .flatMap((record) => record.evidence)
-      .find((support) => support.source.sourceId === "nist.about")!;
-    expect(scopedNistSupport.source.title).toBeNull();
-    expect(scopedNistSupport.source.title).not.toBe("Borrowed from another corpus");
+    expect(() =>
+      projectCanonicalObjects({
+        ...repository,
+        corpora: repository.corpora.map((corpus) =>
+          corpus.entry.corpus_id === "us.institutions.nist"
+            ? { ...corpus, resources: { ...corpus.resources, sources: [] } }
+            : corpus,
+        ),
+        resources: new Map([
+          ...repository.resources,
+          [
+            "corpora/foreign/sources.yaml",
+            {
+              path: "corpora/foreign/sources.yaml",
+              fragment: null,
+              language: "yaml" as const,
+              sha256: rawHash(maliciousSource),
+              content: maliciousSource,
+            },
+          ],
+        ]),
+      }),
+    ).toThrow(/evidence source nist\.about does not resolve/);
   });
 
   test("exports every NIST fact with complete portable structured evidence", () => {

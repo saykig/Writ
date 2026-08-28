@@ -31,6 +31,13 @@ function sourceDocumentHash(value: Record<string, unknown>): string | undefined 
   return undefined;
 }
 
+function sourceDocumentVersionIds(value: Record<string, unknown>): string[] {
+  if (typeof value.document_version_id === "string") return [value.document_version_id];
+  return value.record_type === "source_document_version" && Array.isArray(value.legacy_refs)
+    ? value.legacy_refs.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
 /** Check judgment evidence, targets, supersession, and native ID migration history. */
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
@@ -70,21 +77,28 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           ),
         );
       }
-      const sourceMatchesById = findObjects(snapshot, evidence.source_id, [
-        "source_document",
-        "source",
-      ]);
-      // Retained compatibility material can carry a reviewed legacy source ID while
-      // routing the canonical document under a machine identity. Its immutable hash
-      // is the deterministic fallback; native source modules resolve by source ID.
-      const sourceMatches =
-        sourceMatchesById.length > 0
-          ? sourceMatchesById
-          : snapshot.objects.filter(
-              (candidate) =>
-                (candidate.kind === "source_document" || candidate.kind === "source") &&
-                sourceDocumentHash(candidate.value) === evidence.document_hash,
-            );
+      let sourceMatches = findObjects(snapshot, evidence.source_id, ["source_document", "source"]);
+      let compatibilityVersion: string | undefined;
+      if (sourceMatches.length === 0) {
+        const compatibilityMappings = findObjects(snapshot, evidence.source_id, [
+          "compatibility_source_identity",
+        ]);
+        if (compatibilityMappings.length === 1) {
+          const mapping = compatibilityMappings[0]!.value;
+          if (
+            typeof mapping.compatibility_source_id === "string" &&
+            typeof mapping.document_version_id === "string"
+          ) {
+            sourceMatches = findObjects(snapshot, mapping.compatibility_source_id, [
+              "source_document",
+              "source",
+            ]);
+            compatibilityVersion = mapping.document_version_id;
+          }
+        } else if (compatibilityMappings.length > 1) {
+          sourceMatches = compatibilityMappings;
+        }
+      }
       if (sourceMatches.length === 0) {
         issues.push(
           issue(
@@ -111,6 +125,19 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
               "provenance",
               "PROVENANCE_SOURCE_MISMATCH",
               `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash}.`,
+              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+            ),
+          );
+        }
+        const declaredVersions = compatibilityVersion
+          ? [compatibilityVersion]
+          : sourceDocumentVersionIds(sourceMatches[0]!.value);
+        if (!declaredVersions.includes(evidence.document_version_id)) {
+          issues.push(
+            issue(
+              "provenance",
+              "PROVENANCE_SOURCE_VERSION_MISMATCH",
+              `Evidence source ${evidence.source_id} has document version ${evidence.document_version_id}, but structured source metadata declares ${declaredVersions.join(", ") || "no version identity"}.`,
               { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
             ),
           );

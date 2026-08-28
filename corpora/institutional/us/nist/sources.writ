@@ -154,3 +154,58 @@ concept NistAiConsortiumExpansionSource {
   source_version "published-2026-05-29";
   source_date 2026-05-29;
 }
+
+concept NistAboutDocumentVersionIdentity {
+  source_id nist.about;
+  document_version_id nist.about.v2022_01_11;
+}
+
+concept NistAiStandardsGroupDocumentVersionIdentity {
+  source_id nist.ai_standards_group;
+  document_version_id nist.ai_standards_group.v2026_08_03;
+}
+
+concept UsCode15Usc272DocumentVersionIdentity {
+  source_id us_code.title15_usc_272;
+  document_version_id us_code.title15_usc_272.v2026_08_07;
+}
+
+concept Ecfr15CfrPart285DocumentVersionIdentity {
+  source_id ecfr.title15_cfr_part_285;
+  document_version_id ecfr.title15_cfr_part_285.v2026_08_01;
+}
+
+concept NistHandbook150DocumentVersionIdentity {
+  source_id nist.handbook_150;
+  document_version_id nist.handbook_150.v2020_update_1;
+}
+
+concept NistAccreditationDocumentVersionIdentity {
+  source_id nist.accreditation;
+  document_version_id nist.accreditation.v2026_08_05;
+}
+
+concept NistLaboratoriesDocumentVersionIdentity {
+  source_id nist.laboratories;
+  document_version_id nist.laboratories.v2026_08_05;
+}
+
+concept NistAdvancedMeasurementLaboratoryDocumentVersionIdentity {
+  source_id nist.advanced_measurement_laboratory;
+  document_version_id nist.advanced_measurement_laboratory.v2026_08_05;
+}
+
+concept NistAiResearchMeasurementStandardsDivisionDocumentVersionIdentity {
+  source_id nist.ai_research_measurement_standards_division;
+  document_version_id nist.ai_research_measurement_standards_division.v2026_08_05;
+}
+
+concept NistAiConsortiumDocumentVersionIdentity {
+  source_id nist.ai_consortium;
+  document_version_id nist.ai_consortium.v2026_08_05;
+}
+
+concept NistAiConsortiumExpansionDocumentVersionIdentity {
+  source_id nist.ai_consortium_expansion;
+  document_version_id "sha256:6479ed7c9761fb1b63f4a946d7a740d4157a7bbc2998a577ec4249b564622fca";
+}

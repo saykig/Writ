@@ -103,10 +103,16 @@ valid or invalid. No semantic-version compatibility is inferred.
 
 For compiled native records, the harness reconstructs evidence passages from each record's compiled
 evidence envelope and parses manifest-routed `.writ` source declarations as independent structured
-source documents. Native institutional evidence must resolve to that metadata and match its
-document hash. Retained compatibility material may resolve a reviewed legacy source identity by one
-unique immutable document hash. Repeated passage IDs within one corpus must preserve identical
-source, version, locator, quotation and hashes, and quotation bytes must reproduce the passage hash.
+source documents. Native institutional evidence must resolve by its declared source identity and
+match both its document hash and explicitly declared document-version identity. A matching hash
+cannot rescue an incorrect native source ID. Retained compatibility material resolves only through
+identities declared by its compatibility contract; there is no repository-wide hash fallback.
+Repeated passage IDs within one corpus must preserve identical source, version, locator, quotation
+and hashes, and quotation bytes must reproduce the passage hash.
+
+`document_version_id` is an opaque stable identity for the declared natural version, retrieval
+snapshot or content-derived version. Verification requires exact equality with structured source
+metadata and never derives, normalizes or interprets an identifier from its spelling or a date.
 
 This is reference and byte consistency, not source interpretation. The harness does not decide
 whether a passage semantically warrants a fact type, independently authenticate a retired web page,

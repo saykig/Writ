@@ -544,6 +544,43 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 );
                 continue;
               }
+              const documentVersions = new Map<string, string>();
+              for (const declaration of parsed.model.declarations) {
+                if (!isConceptDeclaration(declaration)) continue;
+                const properties = declarationProperties(declaration.properties);
+                const sourceId = properties.get("source_id");
+                const documentVersionId = properties.get("document_version_id");
+                if (!nonEmpty(documentVersionId)) continue;
+                const compatibilitySourceId = properties.get("compatibility_source_id");
+                if (nonEmpty(sourceId) && nonEmpty(compatibilitySourceId)) {
+                  addObject({
+                    id: sourceId,
+                    kind: "compatibility_source_identity",
+                    value: {
+                      source_id: sourceId,
+                      document_version_id: documentVersionId,
+                      compatibility_source_id: compatibilitySourceId,
+                    },
+                    file: label,
+                    corpus_id: ownerCorpus,
+                    aliases: [],
+                  });
+                  continue;
+                }
+                if (!nonEmpty(sourceId) || documentVersions.has(sourceId)) {
+                  loadIssues.push(
+                    issue(
+                      "integrity",
+                      "INTEGRITY_CONTRACT_INVALID",
+                      `Document-version identity ${declaration.name} must declare one unique source_id.`,
+                      { corpus_id: ownerCorpus, file: label },
+                    ),
+                  );
+                  continue;
+                }
+                documentVersions.set(sourceId, documentVersionId);
+              }
+              const declaredSourceIds = new Set<string>();
               for (let index = 0; index < parsed.model.declarations.length; index += 1) {
                 const declaration = parsed.model.declarations[index];
                 if (!isSource(declaration)) continue;
@@ -563,17 +600,21 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 const metadataProperties = declarationProperties(metadata.properties);
                 const sourceId = metadataProperties.get("source_id");
                 const documentHash = sourceProperties.get("SourceSha");
-                if (!nonEmpty(sourceId) || !nonEmpty(documentHash)) {
+                const documentVersionId = nonEmpty(sourceId)
+                  ? documentVersions.get(sourceId)
+                  : undefined;
+                if (!nonEmpty(sourceId) || !nonEmpty(documentHash) || !documentVersionId) {
                   loadIssues.push(
                     issue(
                       "integrity",
                       "INTEGRITY_CONTRACT_INVALID",
-                      `Source ${declaration.name} must declare source_id and sha256.`,
+                      `Source ${declaration.name} must declare source_id, sha256, and one explicit document_version_id identity.`,
                       { corpus_id: ownerCorpus, file: label },
                     ),
                   );
                   continue;
                 }
+                declaredSourceIds.add(sourceId);
                 const sourceVersion = metadataProperties.get("source_version");
                 addObject({
                   id: sourceId,
@@ -587,11 +628,23 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     source_title: metadataProperties.get("source_title"),
                     source_version: sourceVersion,
                     source_date: metadataProperties.get("source_date"),
+                    document_version_id: documentVersionId,
                   },
                   file: label,
                   corpus_id: ownerCorpus,
-                  aliases: nonEmpty(sourceVersion) ? [sourceVersion] : [],
+                  aliases: [],
                 });
+              }
+              for (const sourceId of documentVersions.keys()) {
+                if (declaredSourceIds.has(sourceId)) continue;
+                loadIssues.push(
+                  issue(
+                    "integrity",
+                    "INTEGRITY_CONTRACT_INVALID",
+                    `Document-version identity references missing source ${sourceId}.`,
+                    { corpus_id: ownerCorpus, file: label },
+                  ),
+                );
               }
               continue;
             }

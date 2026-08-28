@@ -559,7 +559,7 @@ tasks:
       - Authoritative structural and reference violations fail mechanically with stable verifier findings.
       - Semantic category errors, unsupported certainty, conflicting judgments, and accepted-record mutation remain explicit human-review boundaries where no mechanical rule is authorized.
       - Synthetic fixtures prove the institutional kernel is not NIST-specific and serialization is portable and deterministic.
-      - Formatting, linting, type checking, tests, conformance, bundle checks, verification, build, and repository integrity pass.
+      - Formatting, linting, type checking, tests, bundle checks, verification, build, and repository integrity pass.
     outputs:
       - docs/current/nist-proving-ground-audit.md
       - docs/verification/verification-harness.md

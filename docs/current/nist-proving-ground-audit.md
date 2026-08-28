@@ -79,12 +79,14 @@ passage hash and document hash. The current NIST corpus does so.
 ## Evidence after raw HTML retirement
 
 Ten source registrations are used by NIST records. Each used source has a stable source ID, URL,
-media type, retrieval time, source title, source version/date and document hash in `sources.writ`.
+media type, retrieval time, source title, source version/date, explicit document-version identity
+and document hash in `sources.writ`.
 Every record repeats a document-version ID, locator, exact quote, passage hash, document hash and
 basis. The eCFR XML and Handbook PDF are retained and hash-verifiable. The other eight used source
 documents are intentionally represented by structured metadata and selected passages only.
 
-This is sufficient to understand and review every current fact. Two limitations remain:
+This is sufficient to understand and review every current fact. The pre-hardening audit identified
+two mechanical limitations:
 
 1. The generic verifier reconstructs source and passage objects from record evidence; it does not
    load the manifest-routed Writ source declarations. A nonexistent source ID can therefore look
@@ -93,11 +95,18 @@ This is sufficient to understand and review every current fact. Two limitations 
    consequence of not being a web archive, not a missing record fact. Their selected passage hashes
    remain independently reproducible.
 
-The smallest structured remedy is to make source declarations first-class inputs to generic
+The implemented structured remedy makes source declarations first-class inputs to generic
 verification and require every record evidence source to match the declaration's document hash.
 Passage IDs should also be unique per corpus and byte-consistent wherever repeated. No raw web
 capture is needed. The hardening implementation following this audit applies those mechanical
-checks, with immutable document-hash fallback for retained legacy source identities.
+checks. Native source identity is exact and cannot be rescued by a matching hash. Retained
+compatibility material resolves only through identities explicitly declared in its compatibility
+metadata.
+
+Document-version identities are opaque exact identifiers. Existing date-bearing NIST identifiers
+remain because the records already use them as explicit retrieval-snapshot identities, not because
+the verifier imposes a date format. The currently unused consortium-expansion source uses its
+content hash as its explicit version identity.
 
 ## Contract boundary and adversarial model
 
@@ -173,9 +182,10 @@ properties, subject to the source-resolution gap above.
 
 - Structured Writ source declarations are now loaded generically instead of reconstructing source
   existence from record evidence.
-- Missing sources and passages, quotation-hash mismatch, repeated passage-ID conflicts,
-  document-hash mismatch, ambiguous references, broken supersession, stale migrated IDs and
-  endpoint-kind mismatch now have adversarial coverage.
+- Missing sources and passages, wrong source IDs with otherwise-valid hashes, document-version
+  mismatch, quotation-hash mismatch, repeated passage-ID conflicts, document-hash mismatch,
+  ambiguous references, broken supersession, stale migrated IDs and endpoint-kind mismatch now
+  have adversarial coverage.
 - Synthetic fixtures prove kernel neutrality, atomic payload enforcement, portable output and
   deterministic compilation.
 
