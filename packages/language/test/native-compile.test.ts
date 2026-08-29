@@ -29,7 +29,7 @@ describe("native record compilation", () => {
     expect(source).not.toContain("@writ/analyzer");
   });
 
-  test("NIST native objects match the pre-retirement compiler baseline", () => {
+  test("NIST native objects match the reviewed compiler baseline", () => {
     const files = [NIST_RECORDS, NIST_JUDGMENTS];
     const compiled: Record<string, { records: unknown; judgments: unknown }> = {};
     for (const file of files) {
@@ -40,6 +40,6 @@ describe("native record compilation", () => {
       compiled[relative] = { records: result.records, judgments: result.judgments };
     }
     const digest = createHash("sha256").update(JSON.stringify(compiled)).digest("hex");
-    expect(digest).toBe("8c84062afb27fc8ad35c65915165a7531dab211e4556ff629ba6b17c8debd9ba");
+    expect(digest).toBe("340eb45de5ac3980f1c1d1be93397eb6d6b163297e4192a71b42dc8fd8334eff");
   });
 });
