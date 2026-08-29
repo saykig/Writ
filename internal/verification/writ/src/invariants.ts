@@ -96,6 +96,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference consistency"),
   },
   {
+    code: "PROVENANCE_SOURCE_VERSION_MISMATCH",
+    gate: "provenance",
+    authority: meta("Mechanical reference consistency"),
+  },
+  {
     code: "PROVENANCE_PASSAGE_CONFLICT",
     gate: "provenance",
     authority: meta("Mechanical reference consistency"),

@@ -156,8 +156,9 @@ verification without naming NIST or another real institution.
 The compiler is pure over provided text. The verifier and bundle read only the selected workspace;
 they perform no network access. The data bundle uses corpus-qualified stable keys, exact source
 slices, explicit contract versions, canonical hashes and rejects absolute machine paths. Repeated
-generation is byte-identical for a fixed commit identity. These are adequate interoperability
-properties, subject to the source-resolution gap above.
+generation is byte-identical for a fixed commit identity. With exact source and document-version
+identity checks now in place, these are adequate interoperability properties for the current
+boundary.
 
 ## Problems and smallest corrections
 

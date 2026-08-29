@@ -148,12 +148,30 @@ describe("canonical source and provenance", () => {
     for (const record of records) {
       expect(record.recordKey).toBe(`us.institutions.nist::${record.recordId}`);
       expect(record.evidence.length, record.recordId).toBeGreaterThan(0);
+      const compiledEvidence = record.compiledRecord?.evidence;
+      expect(Array.isArray(compiledEvidence), record.recordId).toBe(true);
+      const sourceBasisByPassage = new Map<string, string>();
+      for (const evidence of compiledEvidence as Array<{
+        passage_id?: unknown;
+        basis?: unknown;
+      }>) {
+        if (typeof evidence.passage_id !== "string" || typeof evidence.basis !== "string") {
+          throw new Error(`${record.recordId}: compiled evidence has no passage ID or basis`);
+        }
+        sourceBasisByPassage.set(evidence.passage_id, evidence.basis);
+      }
       for (const support of record.evidence) {
-        expect(support).toMatchObject({
-          state: "traced",
-          basis: "direct",
-        });
+        expect(support.state, record.recordId).toBe("traced");
         expect(support.passageId, record.recordId).toBeTruthy();
+        if (support.passageId === null || support.basis === null) {
+          throw new Error(`${record.recordId}: portable evidence has no passage ID or basis`);
+        }
+        expect(["direct", "inferred", "inherited"], record.recordId).toContain(support.basis);
+        const sourceBasis = sourceBasisByPassage.get(support.passageId);
+        if (sourceBasis === undefined) {
+          throw new Error(`${record.recordId}: portable passage is absent from compiled evidence`);
+        }
+        expect(support.basis, `${record.recordId}:${support.passageId}`).toBe(sourceBasis);
         expect(support.locator, record.recordId).toBeTruthy();
         expect(support.quote, record.recordId).toBeTruthy();
         expect(support.passageHash, record.recordId).toMatch(/^sha256:[0-9a-f]{64}$/);

@@ -354,7 +354,18 @@ describe("focused negative fixtures", () => {
       ({ value }) => value.evidence.length > 0,
     )!;
     versionedRecord.value.evidence[0]!.document_version_id = "synthetic.wrong_version";
-    expect(codes(verifyProvenance(wrongVersion))).toContain("PROVENANCE_SOURCE_VERSION_MISMATCH");
+    const result = verifyProvenance(wrongVersion);
+    expect(codes(result)).toContain("PROVENANCE_SOURCE_VERSION_MISMATCH");
+    const output = JSON.parse(renderVerificationJson({ passed: false, gates: [result] })) as {
+      issues: Array<{ code: string; authority?: Record<string, unknown> }>;
+    };
+    expect(
+      output.issues.find(({ code }) => code === "PROVENANCE_SOURCE_VERSION_MISMATCH")?.authority,
+    ).toEqual({
+      kind: "meta",
+      source: "adr/0020-deterministic-writ-verification.md",
+      section: "Mechanical reference consistency",
+    });
   });
 
   test("detects wrong local passage references and conflicting passage identities", () => {
