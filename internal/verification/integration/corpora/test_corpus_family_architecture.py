@@ -387,7 +387,7 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert manifest(by_id["us.constitutional_law"])["family"] == "legal_policy"
     assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
-    assert nist.count("\nrecord ") == 15
+    assert nist.count("\nrecord ") == 16
     # Stage A dispositioned its six drafts, and the completed Stage B human review
     # approved the nine later proposals without changing the superseded Stage A record.
     assert nist.count("review_state draft;") == 0
