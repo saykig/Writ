@@ -125,7 +125,8 @@ judgment judgment_nist_ai_standards_group_identity_stage_b {
 judgment judgment_nist_ai_standards_group_placement_stage_b {
   target record nist_ai_standards_group_placement; type review_disposition; value "approved";
   rationale "Human review approves the automated Stage B proposal mapping the group directly to the AI Research, Measurement, and Standards Division, the parent established by the selected passages. Placement is not independent authority, mandate or capacity.";
-  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups }; reviewer "Sara Kim"; status accepted; created_at 2026-08-08; family_context institutional;
+  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups }; reviewer "Sara Kim"; status superseded; created_at 2026-08-08; family_context institutional;
+  superseded_by_judgment_id judgment_nist_ai_standards_group_placement_v2_human_review;
 }
 
 judgment judgment_nist_lab_network_capacity_stage_b {
@@ -138,7 +139,8 @@ judgment judgment_nist_lab_network_capacity_stage_b {
 judgment judgment_nist_aml_facility_capacity_stage_b {
   target record nist_aml_facility_capacity; type review_disposition; value "approved";
   rationale "Human review approves the automated Stage B proposal mapping the directly documented facility design as capacity. Physical design and intended technical capability do not establish current utilization, maintenance or uptime.";
-  evidence_refs { nist.aml.features }; reviewer "Sara Kim"; status accepted; created_at 2026-08-08; family_context institutional;
+  evidence_refs { nist.aml.features }; reviewer "Sara Kim"; status superseded; created_at 2026-08-08; family_context institutional;
+  superseded_by_judgment_id judgment_nist_aml_facility_capacity_v2_human_review;
 }
 
 judgment judgment_nist_nvlap_accred_capacity_stage_b {
@@ -150,7 +152,8 @@ judgment judgment_nist_nvlap_accred_capacity_stage_b {
 judgment judgment_nist_ai_measurement_capacity_stage_b {
   target record nist_ai_measurement_capacity; type review_disposition; value "approved";
   rationale "Human review approves the automated Stage B proposal mapping the dedicated division as organizational-unit capacity and retains only work and groups named in the selected passages. It does not infer technical machinery, guidance, staff, compute, throughput, model access or conclusive legal authority.";
-  evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; reviewer "Sara Kim"; status accepted; created_at 2026-08-08; family_context institutional;
+  evidence_refs { nist.ai_division.capacity, nist.ai_division.groups }; reviewer "Sara Kim"; status superseded; created_at 2026-08-08; family_context institutional;
+  superseded_by_judgment_id judgment_nist_ai_measurement_function_human_review;
 }
 
 judgment judgment_nist_ai_consortium_capacity_stage_b {
@@ -181,6 +184,84 @@ judgment judgment_nist_lab_network_capacity_v2_supersession_link_human_review {
   value "approved";
   rationale "Human review approves the directed supersession link from the minimally corrected laboratory-network record to the preserved record containing the unsupported modifier principal.";
   evidence_refs { nist.laboratories.six_labs };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+}
+
+// Follow-up human review resolves the three remaining debatable records while
+// preserving each previously approved record and judgment as superseded history.
+
+judgment judgment_nist_ai_standards_group_placement_v2_human_review {
+  target record nist_ai_standards_group_placement_v2;
+  type review_disposition;
+  value "approved";
+  rationale "The placement is supported by combining the passage that places the AI Research, Measurement, and Standards Division in ITL with the passage stating that the Division’s efforts are carried out by the AI Standards and Guidelines Group; no single selected passage directly states the full placement.";
+  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_nist_ai_standards_group_placement_stage_b };
+}
+
+judgment judgment_nist_ai_standards_group_placement_v2_supersession_link_human_review {
+  target record_link nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directed supersession link from the inferred-basis placement record to the preserved record whose evidence was incorrectly marked direct.";
+  evidence_refs { nist.ai_division.itl_placement, nist.ai_division.groups };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+}
+
+judgment judgment_nist_aml_facility_capacity_v2_human_review {
+  target record nist_aml_facility_capacity_v2;
+  type review_disposition;
+  value "approved";
+  rationale "The cited passage directly establishes the Advanced Measurement Laboratory complex’s physical features and measurement infrastructure, but does not require the stronger wording “NIST maintains.” Utilization, uptime, maintenance condition, and full operational availability remain unknown.";
+  evidence_refs { nist.aml.features };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_nist_aml_facility_capacity_stage_b };
+}
+
+judgment judgment_nist_aml_facility_capacity_v2_supersession_link_human_review {
+  target record_link nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directed supersession link from the minimally corrected facility-capacity record to the preserved record containing the unnecessary stronger wording “NIST maintains.”";
+  evidence_refs { nist.aml.features };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+}
+
+judgment judgment_nist_ai_measurement_function_human_review {
+  target record nist_ai_measurement_function;
+  type review_disposition;
+  value "approved";
+  rationale "Human review finds the operational-capacity classification too strong. The cited passage directly establishes only the Division’s stated work in AI measurement science, testing and evaluation, and standards; it does not establish technical machinery, resources, throughput, or operational availability.";
+  evidence_refs { nist.ai_division.capacity };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_nist_ai_measurement_capacity_stage_b };
+}
+
+judgment judgment_nist_ai_measurement_function_supersession_link_human_review {
+  target record_link nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directed supersession link from the atomic AI measurement function to the preserved record whose operational-capacity classification was too strong.";
+  evidence_refs { nist.ai_division.capacity };
   reviewer "Sara Kim";
   status accepted;
   created_at 2026-08-29;

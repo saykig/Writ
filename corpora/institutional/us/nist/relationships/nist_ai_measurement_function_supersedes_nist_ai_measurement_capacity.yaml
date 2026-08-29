@@ -1,0 +1,18 @@
+# Human review replaces the too-strong capacity classification with one atomic
+# function fact. The older capacity record remains resolvable as review history.
+schema_version: 1.0.0
+link_id: nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity
+owning_corpus_id: us.institutions.nist
+source_id: nist_ai_measurement_function
+source_kind: record
+target_id: nist_ai_measurement_capacity
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - nist.ai_division.capacity
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-29
+review_state: approved

@@ -185,13 +185,13 @@ describe("every catalogued manifest declares the contract its record files satis
     }
     expect(covered.size).toBe(16);
     // Nine generated files across each of the thirteen reviewed corpora, plus the
-    // four approved institutional Core links and three approved cross-family links.
-    expect(yamlDocuments).toBe(117 + 7);
-    expect(linkDocuments).toBe(7);
-    // Three constitutional drafts, sixteen NIST records, and twenty Commission records.
-    expect(writRecords).toBe(39);
+    // seven approved institutional Core links and three approved cross-family links.
+    expect(yamlDocuments).toBe(117 + 10);
+    expect(linkDocuments).toBe(10);
+    // Three constitutional drafts, nineteen NIST records, and twenty Commission records.
+    expect(writRecords).toBe(42);
     // Existing judgments, preserved superseded decisions, and accepted human dispositions.
-    expect(writJudgments).toBe(46);
+    expect(writJudgments).toBe(52);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -245,6 +245,9 @@ describe("every catalogued manifest declares the contract its record files satis
     expect([...routed.keys()].sort()).toEqual([
       "corpora/institutional/us/nist/judgments.writ",
       "corpora/institutional/us/nist/records.writ",
+      "corpora/institutional/us/nist/relationships/nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity.yaml",
+      "corpora/institutional/us/nist/relationships/nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement.yaml",
+      "corpora/institutional/us/nist/relationships/nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity.yaml",
       "corpora/institutional/us/nist/relationships/nist_department_of_commerce_relationship.yaml",
       "corpora/institutional/us/nist/relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
       "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
@@ -268,7 +271,7 @@ describe("every catalogued manifest declares the contract its record files satis
       fileName: judgmentsPath,
     });
     expect(compiled.records).toHaveLength(0);
-    expect(compiled.judgments).toHaveLength(19);
+    expect(compiled.judgments).toHaveLength(25);
     expect(checkFile(judgmentsPath, RECORD_JUDGMENT)).toEqual([]);
     for (const judgment of compiled.judgments) {
       expect(validateContract(declared, judgment).valid).toBe(false);

@@ -1,0 +1,19 @@
+# The reviewed placement remains supported, but only by composing two passages.
+# The direction is newer -> older; the older direct-basis record remains history.
+schema_version: 1.0.0
+link_id: nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement
+owning_corpus_id: us.institutions.nist
+source_id: nist_ai_standards_group_placement_v2
+source_kind: record
+target_id: nist_ai_standards_group_placement
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - nist.ai_division.itl_placement
+  - nist.ai_division.groups
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-29
+review_state: approved
