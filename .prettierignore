@@ -18,8 +18,6 @@ internal/tooling/scripts/
 MANIFEST.sha256
 AGENTS.md
 TASKS.yaml
-VALIDATION.md
-VERSION_POLICY.md
 
 # Generated canonical corpora, emitted by the Python adapters via
 # canonical_json_bytes. Their emitters are asserted to be byte-for-byte
