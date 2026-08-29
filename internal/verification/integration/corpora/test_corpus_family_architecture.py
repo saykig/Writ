@@ -387,16 +387,17 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert manifest(by_id["us.constitutional_law"])["family"] == "legal_policy"
     assert manifest(by_id["us.institutions.nist"])["family"] == "institutional"
     nist = (institutional_nist / "records.writ").read_text(encoding="utf-8")
-    assert nist.count("\nrecord ") == 15
-    # Stage A dispositioned its six drafts, and the completed Stage B human review
-    # approved the nine later proposals without changing the superseded Stage A record.
+    assert nist.count("\nrecord ") == 16
+    # Stage A dispositioned its six drafts, Stage B approved nine proposals, and the
+    # follow-up human correction preserves its predecessor as a second superseded record.
     assert nist.count("review_state draft;") == 0
     assert nist.count("review_state approved;") == 14
-    assert nist.count("review_state superseded;") == 1
+    assert nist.count("review_state superseded;") == 2
     # The Stage A provenance remains intact and Stage B implementation provenance is separate.
     assert nist.count('created_by "OpenAI Codex automated draft";') == 5
     assert nist.count('created_by "Claude Code implementation of approved human review";') == 1
     assert nist.count('created_by "OpenAI Codex automated proposal";') == 9
+    assert nist.count('created_by "OpenAI Codex implementation of approved human review";') == 1
     # `accepted` is a judgment status, never a record or record-link review state.
     assert "review_state accepted" not in nist
 

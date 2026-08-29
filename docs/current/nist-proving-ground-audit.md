@@ -3,24 +3,33 @@
 Audit base: `cc9dec9f0e9ec5692afec087e1fd16df5db8706c` (2026-08-22)
 
 This report precedes any semantic record or institutional-schema change made during NIST
-proving-ground hardening. It audits the 15 institutional records, 2 record links, 17 review
+proving-ground hardening. It audits the original 15 institutional records, 2 record links, 17 review
 judgments, 11 structured source registrations and the generic compiler, data-bundle and verifier.
 NIST is the development proving ground; retained secondary corpora were not used to propose new
 semantics.
 
+The follow-up human review completed on 2026-08-29 adds one minimally corrected successor, one
+directed supersession link and two judgments. The current inventory is 16 records, 3 links and 19
+judgments.
+
 ## Result
 
-Fourteen records are active and approved. One record is intentionally retained as superseded
-history. Ten approved records are clearly supported at their present fact type. Four approved
-records are defensible but expose a direct-versus-inferred or capacity boundary. One of those four,
-`nist_lab_network_capacity`, also contains the unsupported modifier **principal** in its assertion.
-The superseded `nist_measurement_science_function` is a preserved example of a category error, not
-an active fact.
+Fourteen records are active and approved. Two records are intentionally retained as superseded
+history. Eleven approved records are clearly supported at their present fact type. Three approved
+records are defensible but expose a direct-versus-inferred or capacity boundary. The unsupported
+modifier **principal** remains visible only in the superseded `nist_lab_network_capacity`; the
+active `nist_lab_network_capacity_v2` removes it. The superseded
+`nist_measurement_science_function` remains a preserved example of a category error, not an active
+fact.
 
-Every evidence quotation reproduces its declared passage hash: 22 evidence occurrences covering
+The human-review rationale is explicit: “The cited passage establishes six NIST labs and user
+facilities but does not establish that they are NIST’s principal or primary facilities.”
+
+Every evidence quotation reproduces its declared passage hash: 23 evidence occurrences covering
 18 unique passages from 10 sources. Both retained non-HTML captures reproduce their document
-hashes. All 15 records have explicit uncertainty, provenance and exactly one accepted human-review
-judgment by Sara Kim. The two links also have accepted review judgments.
+hashes. All 16 records have explicit uncertainty and provenance. Every active record has an
+accepted human-review judgment by Sara Kim; the earlier lab-network judgment is retained as
+superseded history. All three links also have accepted review judgments.
 
 The structured evidence is sufficient to inspect why each record exists without restoring raw
 HTML. It does not make Writ an offline web archive: for retired HTML captures, a reviewer cannot
@@ -44,7 +53,8 @@ ledger below. `Links` lists only stored supporting relationships; an empty entry
 | `nist_nvlap_lab_decision_right` | decision right / approved | Regulation assigns accreditation actions to the NVLAP chief and the handbook says NVLAP decides accreditation. This establishes a scoped decision right, not implementation capacity. | `ecfr.title15_cfr_part_285` / `section_285_9_a`; `nist.handbook_150` / `competence`, `accreditation_decision` / direct | Scope is limited to NVLAP laboratory accreditation; unrelated authority is excluded. Automated proposal; accepted human judgment. | — | Clear. |
 | `nist_ai_standards_group_identity` | identity / approved | The passage names the group carrying out division efforts. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.groups` / direct | Explicitly excludes legal personality, mandate, independent rights and capacity. Automated proposal; accepted human judgment. | — | Clear. |
 | `nist_ai_standards_group_placement` | placement / approved | Two passages establish the division's ITL placement and say its efforts are carried out by the group. “Group operates within the division” is a reasonable composition, but it is not stated in one selected sentence. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.itl_placement`, `nist.ai_division.groups` / both marked direct | Excludes mandate, rights and capacity. Automated proposal; accepted human judgment. | — | Debatable basis: placement is defensible, but the composed support should be described as inferred or its rationale made explicit. |
-| `nist_lab_network_capacity` | operational capacity / approved | Six labs and user facilities directly support a laboratory-network capacity. The assertion's word “principal” does not appear in or follow from the passage. | `nist.laboratories` / `nist.laboratories.six_labs` / direct | Excludes equal status, staffing, funding, use, performance and condition. Automated proposal; accepted human judgment. | — | Capacity is clear; **principal** is an unsupported modifier and should be removed. |
+| `nist_lab_network_capacity` | operational capacity / superseded | Six labs and user facilities support a laboratory-network capacity, but the preserved assertion's word “principal” does not appear in or follow from the passage. | `nist.laboratories` / `nist.laboratories.six_labs` / direct | Excludes equal status, staffing, funding, use, performance and condition. Automated proposal; its earlier approval judgment is superseded. | Target of `nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity`. | Unsupported modifier; correctly inactive and retained as history. |
+| `nist_lab_network_capacity_v2` | operational capacity / approved | Six labs and user facilities directly support the laboratory-network capacity. The assertion is unchanged except for removal of “principal.” | `nist.laboratories` / `nist.laboratories.six_labs` / direct | Preserves the same uncertainty boundaries. Human-review implementation; accepted human judgment. | Source of `nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity`. | Clear. |
 | `nist_aml_facility_capacity` | operational capacity / approved | The passage directly inventories facility features and intended measurement uses. “Maintains” and active operational status are inferred from the current official facility description rather than directly measured. | `nist.advanced_measurement_laboratory` / `nist.aml.features` / marked direct | Explicitly excludes current utilization, uptime, maintenance and full availability. Automated proposal; accepted human judgment. | — | Debatable basis, but not an unsupported facility-capacity claim because the record limits itself to documented physical infrastructure. |
 | `nist_nvlap_accred_capacity` | operational capacity / approved | The regulation and program page directly describe an operating accreditation process and its components. The separate decision-right record prevents the process from silently implying broader authority. | `ecfr.title15_cfr_part_285` / `section_285_9_d`; `nist.accreditation` / `nist.accreditation.process` / direct | Excludes product certification, guaranteed results and NIST certification. Automated proposal; accepted human judgment. | — | Clear. |
 | `nist_ai_measurement_capacity` | operational capacity / approved | A named division and two named groups establish organizational machinery; the stated subject matter establishes its intended work. This is the weakest active capacity classification because it proves organization, not technical resources or throughput. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.capacity`, `nist.ai_division.groups` / marked direct | Explicitly excludes machinery, guidance, staffing, compute, throughput, model access and conclusive authority. Automated proposal; accepted human judgment. | — | Debatable but bounded: acceptable as `organizational_unit` capacity under ADR-0018, with the direct/inferred rationale needing stronger mechanical visibility. |
@@ -164,9 +174,9 @@ boundary.
 
 ### Corpus/content
 
-- Correct the unsupported word **principal** only through a human-reviewed superseding record. The
-  approved record must not be edited in place, and this task has no authority to manufacture the
-  required human decision.
+- The approved human decision has been implemented through `nist_lab_network_capacity_v2`. The
+  original record and judgment remain superseded history, and the Core link records the replacement
+  direction without a record-level supersession field.
 - Do not silently reclassify the three debatable records. Make the composed/inferred support visible
   through a reviewed correction only if the existing evidence-basis vocabulary is judged to apply
   to assertion composition.

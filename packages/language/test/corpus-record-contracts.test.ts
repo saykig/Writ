@@ -185,13 +185,13 @@ describe("every catalogued manifest declares the contract its record files satis
     }
     expect(covered.size).toBe(16);
     // Nine generated files across each of the thirteen reviewed corpora, plus the
-    // three approved institutional Core links and three approved cross-family links.
-    expect(yamlDocuments).toBe(117 + 6);
-    expect(linkDocuments).toBe(6);
-    // Three constitutional drafts, fifteen NIST records, and twenty Commission records.
-    expect(writRecords).toBe(38);
-    // Existing judgments, three preserved superseded proposals, and three accepted human dispositions.
-    expect(writJudgments).toBe(44);
+    // four approved institutional Core links and three approved cross-family links.
+    expect(yamlDocuments).toBe(117 + 7);
+    expect(linkDocuments).toBe(7);
+    // Three constitutional drafts, sixteen NIST records, and twenty Commission records.
+    expect(writRecords).toBe(39);
+    // Existing judgments, preserved superseded decisions, and accepted human dispositions.
+    expect(writJudgments).toBe(46);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -246,6 +246,7 @@ describe("every catalogued manifest declares the contract its record files satis
       "corpora/institutional/us/nist/judgments.writ",
       "corpora/institutional/us/nist/records.writ",
       "corpora/institutional/us/nist/relationships/nist_department_of_commerce_relationship.yaml",
+      "corpora/institutional/us/nist/relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
       "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
     ]);
 
@@ -267,7 +268,7 @@ describe("every catalogued manifest declares the contract its record files satis
       fileName: judgmentsPath,
     });
     expect(compiled.records).toHaveLength(0);
-    expect(compiled.judgments).toHaveLength(17);
+    expect(compiled.judgments).toHaveLength(19);
     expect(checkFile(judgmentsPath, RECORD_JUDGMENT)).toEqual([]);
     for (const judgment of compiled.judgments) {
       expect(validateContract(declared, judgment).valid).toBe(false);

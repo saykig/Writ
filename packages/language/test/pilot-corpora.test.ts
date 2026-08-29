@@ -41,7 +41,7 @@ describe("Stage 1 pilot corpora", () => {
     const path = join(ROOT, "corpora/institutional/us/nist/records.writ");
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
-    expect(compiled.records).toHaveLength(15);
+    expect(compiled.records).toHaveLength(16);
     // Stage A human review dispositioned these six records and moved them onto the
     // native atomic contract, so the v0.1 draft state and its placeholder mandate and
     // capacity payloads are gone. What this test still guards is the evidence layer:

@@ -162,7 +162,11 @@ describe("corpus contract and status", () => {
       sources: ["sources.writ", "sources/captures/"],
       passages: ["sources.writ", "records.writ"],
       records: ["records.writ"],
-      relationships: [LINK_FILES.part_of, LINK_FILES.supersedes],
+      relationships: [
+        LINK_FILES.part_of,
+        "relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
+        LINK_FILES.supersedes,
+      ],
       judgments: ["judgments.writ"],
       migration: ["migration.yaml"],
     });

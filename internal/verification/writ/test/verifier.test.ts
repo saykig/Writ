@@ -182,9 +182,9 @@ describe("retained corpus repository with NIST as the development proving ground
     expect(corpusIds).toContain(
       "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
     );
-    expect(baseline.records).toHaveLength(38);
-    expect(baseline.links).toHaveLength(6);
-    expect(baseline.judgments).toHaveLength(44);
+    expect(baseline.records).toHaveLength(39);
+    expect(baseline.links).toHaveLength(7);
+    expect(baseline.judgments).toHaveLength(46);
     expect(baseline.workflowStates).toEqual({});
     expect(baseline.loadIssues).toEqual([]);
   });
@@ -206,7 +206,7 @@ describe("retained corpus repository with NIST as the development proving ground
     expect(renderVerificationText(result)).toContain("VERIFICATION RESULT: PASS");
   });
 
-  test("verifies an alternate workspace without mutating it", () => {
+  test("verifies an alternate workspace without mutating it", async () => {
     const root = candidateWorkspace("writ-alternate-workspace-");
     const catalogFile = join(root, "corpora", "catalog.yaml");
     const before = readFileSync(catalogFile);
@@ -215,7 +215,7 @@ describe("retained corpus repository with NIST as the development proving ground
     const result = verifyWorkspace(verificationWorkspace(root), "ontology", {
       runExternalChecks: false,
     });
-    const cli = Bun.spawnSync(
+    const cli = Bun.spawn(
       [
         process.execPath,
         join(ROOT, "internal/verification/writ/src/cli.ts"),
@@ -227,13 +227,18 @@ describe("retained corpus repository with NIST as the development proving ground
       ],
       { cwd: ROOT, stdout: "pipe", stderr: "pipe" },
     );
+    const [exitCode, stdout, stderr] = await Promise.all([
+      cli.exited,
+      new Response(cli.stdout).text(),
+      new Response(cli.stderr).text(),
+    ]);
 
     expect(result.passed).toBe(true);
-    expect(cli.exitCode, cli.stderr.toString()).toBe(0);
-    expect(JSON.parse(cli.stdout.toString()).status).toBe("PASS");
+    expect(exitCode, stderr).toBe(0);
+    expect(JSON.parse(stdout).status).toBe("PASS");
     expect(readFileSync(catalogFile)).toEqual(before);
     expect(readdirSync(root).sort()).toEqual(contents);
-  });
+  }, 10_000);
 
   test("normalizes workspace-specific paths in deterministic failure output", () => {
     const firstRoot = mkdtempSync(join(tmpdir(), "writ-output-first-"));

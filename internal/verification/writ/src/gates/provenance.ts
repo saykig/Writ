@@ -259,11 +259,36 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
   const activeJudgments = snapshot.judgments.filter(({ value }) => value.status !== "superseded");
   const links = activeLinks(snapshot);
   for (const migration of snapshot.migrations) {
+    const historicalTargets = snapshot.records.filter(
+      ({ value, corpus_id }) =>
+        corpus_id === migration.corpus_id && value.record_id === migration.active_id,
+    );
     const activeTargets = activeRecords.filter(
       ({ value, corpus_id }) =>
         corpus_id === migration.corpus_id && value.record_id === migration.active_id,
     );
-    if (activeTargets.length !== 1) {
+    const approvedSupersessionLinks = links.filter(
+      ({ value }) =>
+        value.owning_corpus_id === migration.corpus_id &&
+        value.review_state === "approved" &&
+        value.relation_type === "supersedes" &&
+        value.source_kind === "record" &&
+        value.target_kind === "record" &&
+        value.target_id === migration.active_id,
+    );
+    const activeSuccessors = approvedSupersessionLinks.flatMap(({ value }) =>
+      activeRecords.filter(
+        ({ value: record, corpus_id }) =>
+          corpus_id === migration.corpus_id && record.record_id === value.source_id,
+      ),
+    );
+    const preservedSupersededTarget =
+      activeTargets.length === 0 &&
+      historicalTargets.length === 1 &&
+      historicalTargets[0]!.value.review_state === "superseded" &&
+      approvedSupersessionLinks.length === 1 &&
+      activeSuccessors.length === 1;
+    if (activeTargets.length !== 1 && !preservedSupersededTarget) {
       issues.push(
         issue(
           "provenance",
