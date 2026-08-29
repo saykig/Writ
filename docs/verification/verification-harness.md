@@ -72,8 +72,9 @@ Human review determines acceptance.
   relation-specific endpoint semantics or restore the retired ADR-0019 rule pack.
   It covers retained catalogued links under generic Core contracts without reactivating the
   specialized ADR-0019 workflow rule pack.
-- **Provenance** verifies current native evidence, judgment targets and evidence, judgment
-  supersession, and declared identifier migrations.
+- **Provenance** verifies current native institutional source and passage resolution, quotation and
+  document hashes, local fact-payload evidence references, repeated passage consistency, judgment
+  targets and evidence, judgment supersession, and declared identifier migrations.
 - **Integrity** verifies catalogues, manifests, routed files, scoped counts, source-registry drift and
   the repository's complete tracked-file checksum manifest.
 
@@ -100,13 +101,22 @@ valid or invalid. No semantic-version compatibility is inferred.
 
 ## Native-source boundary
 
-For compiled native records, V1 reconstructs resolvable evidence-passage and source-reference objects
-from each record's compiled evidence envelope. Those reconstructed source references are not
-treated as independently loaded publication, source-document or instrument objects. The harness
-does not independently parse every source declaration in every `.writ` file. Existing pack
-validation, source-registry checks and repository tests remain responsible for those declarations
-and stored-source integrity. Expanding that boundary requires a bounded adapter backed by an
-existing contract, not a harness-owned source ontology.
+For compiled native records, the harness reconstructs evidence passages from each record's compiled
+evidence envelope and parses manifest-routed `.writ` source declarations as independent structured
+source documents. Native institutional evidence must resolve by its declared source identity and
+match both its document hash and explicitly declared document-version identity. A matching hash
+cannot rescue an incorrect native source ID. Retained compatibility material resolves only through
+identities declared by its compatibility contract; there is no repository-wide hash fallback.
+Repeated passage IDs within one corpus must preserve identical source, version, locator, quotation
+and hashes, and quotation bytes must reproduce the passage hash.
+
+`document_version_id` is an opaque stable identity for the declared natural version, retrieval
+snapshot or content-derived version. Verification requires exact equality with structured source
+metadata and never derives, normalizes or interprets an identifier from its spelling or a date.
+
+This is reference and byte consistency, not source interpretation. The harness does not decide
+whether a passage semantically warrants a fact type, independently authenticate a retired web page,
+or introduce a global source ontology.
 
 ## Extending verification
 

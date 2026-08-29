@@ -72,3 +72,19 @@ source ec_jrc_research_infrastructures {
   sha256 "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7";
 }
 concept EcJrcResearchInfrastructuresSource { source_id ec.jrc_research_infrastructures; source_title "Open access to JRC research infrastructures"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
+
+concept EuTeuArticle13DocumentVersionIdentity { source_id eu.teu_article_13; document_version_id eu.teu_article_13.v2026_08_05; }
+concept EuTeuArticle17DocumentVersionIdentity { source_id eu.teu_article_17; document_version_id eu.teu_article_17.v2026_08_05; }
+concept EuTfeuArticle258DocumentVersionIdentity { source_id eu.tfeu_article_258; document_version_id eu.tfeu_article_258.v2026_08_05; }
+concept EuCommissionDecisionC20241459DocumentVersionIdentity { source_id eu.commission_decision_c_2024_1459; document_version_id eu.commission_decision_c_2024_1459.v2024_02_14; }
+concept EuEuropeanCommissionInstitutionDocumentVersionIdentity { source_id eu.european_commission_institution; document_version_id eu.european_commission_institution.v2026_08_05; }
+concept EcPlanningProposingLawDocumentVersionIdentity { source_id ec.planning_proposing_law; document_version_id ec.planning_proposing_law.v2026_08_05; }
+concept EcBudgetFundingDocumentVersionIdentity { source_id ec.budget_funding; document_version_id ec.budget_funding.v2026_08_05; }
+concept EcEuropeanAiOfficeDocumentVersionIdentity { source_id ec.european_ai_office; document_version_id ec.european_ai_office.v2026_08_05; }
+concept EcJrcResearchInfrastructuresDocumentVersionIdentity { source_id ec.jrc_research_infrastructures; document_version_id ec.jrc_research_infrastructures.v2026_08_05; }
+
+concept EuAiActCompatibilitySourceIdentity {
+  source_id eu_ai_act_2024_1689;
+  document_version_id dv_eu_ai_act_2024_1689;
+  compatibility_source_id "80bce319-838e-5518-bab4-6da5ba6c0c2d";
+}

@@ -37,6 +37,7 @@ const optionalNumber = (value: unknown): number | null =>
 
 interface SourceRegistryEntry extends BundleEvidenceSource {
   readonly documentHash: string | null;
+  readonly documentVersionIds: readonly string[];
 }
 
 function yamlCollections(
@@ -210,18 +211,30 @@ function registerSource(
   path: string,
   registry: Map<string, SourceRegistryEntry>,
   entry: SourceRegistryEntry,
+  identities: readonly string[] = entry.sourceId === null ? [] : [entry.sourceId],
 ): void {
-  const sourceId = entry.sourceId;
-  if (!sourceId) throw new Error(`${path}: source metadata has no canonical source identity`);
-  if (registry.has(sourceId)) {
-    throw new Error(`${corpus.entry.corpus_id}: duplicate source identity ${sourceId}`);
+  if (identities.length === 0) {
+    throw new Error(`${path}: source metadata has no canonical source identity`);
   }
-  registry.set(sourceId, entry);
+  for (const sourceId of identities) {
+    if (registry.has(sourceId)) {
+      throw new Error(`${corpus.entry.corpus_id}: duplicate source identity ${sourceId}`);
+    }
+    registry.set(sourceId, { ...entry, sourceId });
+  }
 }
 
 /** Build source identity only from the current corpus's manifest-routed source modules. */
 function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, SourceRegistryEntry> {
   const registry = new Map<string, SourceRegistryEntry>();
+  const compatibilityMappings = new Map<
+    string,
+    {
+      readonly compatibilitySourceId: string;
+      readonly documentVersionId: string;
+      readonly path: string;
+    }
+  >();
   for (const path of corpus.resources.sources) {
     const resource = source(path);
     if (resource.language === "yaml") {
@@ -230,10 +243,25 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
       for (const value of parsed.sources) {
         const mapping = object(value, `${path}.sources`);
         const projected = legalSource(mapping);
-        registerSource(corpus, path, registry, {
-          ...projected,
-          documentHash: optionalText(mapping.sha256),
-        });
+        const sourceId = text(mapping.machine_id, `${path}.sources.machine_id`);
+        const aliases = strings(mapping.aliases ?? [], `${path}.${sourceId}.aliases`);
+        const documentVersionIds =
+          mapping.record_type === "source_document_version"
+            ? strings(mapping.legacy_refs ?? [], `${path}.${sourceId}.legacy_refs`)
+            : projected.documentVersionId === null
+              ? []
+              : [projected.documentVersionId];
+        registerSource(
+          corpus,
+          path,
+          registry,
+          {
+            ...projected,
+            documentHash: optionalText(mapping.sha256),
+            documentVersionIds,
+          },
+          [sourceId, ...aliases],
+        );
       }
       continue;
     }
@@ -242,6 +270,27 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
     if (!parsed.ok) {
       throw new Error(`${path}: ${parsed.diagnostics.map((item) => item.message).join("; ")}`);
     }
+    const documentVersions = new Map<string, string>();
+    for (const declaration of parsed.model.declarations) {
+      if (!isConceptDeclaration(declaration)) continue;
+      const properties = plainProperties(declaration.properties);
+      const sourceId = optionalText(properties.get("source_id"));
+      const documentVersionId = optionalText(properties.get("document_version_id"));
+      if (documentVersionId === null) continue;
+      const compatibilitySourceId = optionalText(properties.get("compatibility_source_id"));
+      if (sourceId !== null && compatibilitySourceId !== null) {
+        if (compatibilityMappings.has(sourceId)) {
+          throw new Error(`${path}: duplicate compatibility source identity ${sourceId}`);
+        }
+        compatibilityMappings.set(sourceId, { compatibilitySourceId, documentVersionId, path });
+        continue;
+      }
+      if (sourceId === null || documentVersions.has(sourceId)) {
+        throw new Error(`${path}: document-version identities require one unique source_id`);
+      }
+      documentVersions.set(sourceId, documentVersionId);
+    }
+    const declaredSourceIds = new Set<string>();
     for (let index = 0; index < parsed.model.declarations.length; index += 1) {
       const declaration = parsed.model.declarations[index];
       if (!isSource(declaration)) continue;
@@ -251,9 +300,17 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
       }
       const sourceProperties = plainProperties(declaration.properties);
       const metadataProperties = plainProperties(metadata.properties);
+      const sourceId = optionalText(metadataProperties.get("source_id"));
+      const documentVersionId = sourceId === null ? undefined : documentVersions.get(sourceId);
+      if (sourceId === null || documentVersionId === undefined) {
+        throw new Error(
+          `${path}: source ${declaration.name} requires one explicit document_version_id identity`,
+        );
+      }
+      declaredSourceIds.add(sourceId);
       registerSource(corpus, path, registry, {
-        sourceId: optionalText(metadataProperties.get("source_id")),
-        documentVersionId: optionalText(metadataProperties.get("source_version")),
+        sourceId,
+        documentVersionId,
         title: optionalText(metadataProperties.get("source_title")),
         uri: optionalText(sourceProperties.get("SourceUri")),
         publisher: null,
@@ -262,8 +319,34 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
         mediaType: optionalText(sourceProperties.get("SourceMediaType")),
         sourceTier: null,
         documentHash: optionalText(sourceProperties.get("SourceSha")),
+        documentVersionIds: [documentVersionId],
       });
     }
+    for (const sourceId of documentVersions.keys()) {
+      if (!declaredSourceIds.has(sourceId)) {
+        throw new Error(`${path}: document-version identity references missing source ${sourceId}`);
+      }
+    }
+  }
+  for (const [sourceId, mapping] of compatibilityMappings) {
+    const target = registry.get(mapping.compatibilitySourceId);
+    if (!target) {
+      throw new Error(
+        `${mapping.path}: compatibility source ${sourceId} references missing structured source ${mapping.compatibilitySourceId}`,
+      );
+    }
+    registerSource(
+      corpus,
+      mapping.path,
+      registry,
+      {
+        ...target,
+        sourceId,
+        documentVersionId: mapping.documentVersionId,
+        documentVersionIds: [mapping.documentVersionId],
+      },
+      [sourceId],
+    );
   }
   return registry;
 }
@@ -289,6 +372,7 @@ function embeddedLegalPolicySource(
     mediaType: null,
     sourceTier: null,
     documentHash,
+    documentVersionIds: [],
   };
 }
 
@@ -302,14 +386,36 @@ function compiledEvidence(
     const support = object(item, `evidence[${index}]`);
     const sourceId = text(support.source_id, `evidence[${index}].source_id`);
     const documentHash = optionalText(support.document_hash);
+    const documentVersionId = text(
+      support.document_version_id,
+      `evidence[${index}].document_version_id`,
+    );
     const resolved =
       registry.get(sourceId) ?? embeddedLegalPolicySource(corpus, value, sourceId, documentHash);
+    if (corpus.entry.family === "institutional" && resolved === undefined) {
+      throw new Error(
+        `${corpus.entry.corpus_id}: evidence source ${sourceId} does not resolve to structured source metadata`,
+      );
+    }
     if (resolved?.documentHash && documentHash !== resolved.documentHash) {
       throw new Error(
         `${corpus.entry.corpus_id}: evidence source ${sourceId} has document hash ${documentHash ?? "null"}, expected ${resolved.documentHash}`,
       );
     }
-    const { documentHash: _registeredHash, ...sourceMetadata } = resolved ?? {
+    if (
+      resolved !== undefined &&
+      resolved.documentVersionIds.length > 0 &&
+      !resolved.documentVersionIds.includes(documentVersionId)
+    ) {
+      throw new Error(
+        `${corpus.entry.corpus_id}: evidence source ${sourceId} has document version ${documentVersionId}, expected ${resolved.documentVersionIds.join(", ")}`,
+      );
+    }
+    const {
+      documentHash: _registeredHash,
+      documentVersionIds: _registeredVersionIds,
+      ...sourceMetadata
+    } = resolved ?? {
       sourceId,
       documentVersionId: null,
       title: null,
@@ -320,6 +426,7 @@ function compiledEvidence(
       mediaType: null,
       sourceTier: null,
       documentHash,
+      documentVersionIds: [],
     };
     return {
       supportId:
@@ -335,10 +442,7 @@ function compiledEvidence(
       reason: null,
       source: {
         ...sourceMetadata,
-        documentVersionId: text(
-          support.document_version_id,
-          `evidence[${index}].document_version_id`,
-        ),
+        documentVersionId,
       },
     };
   });

@@ -330,6 +330,63 @@ describe("focused negative fixtures", () => {
     expect(findings).toContain("PROVENANCE_SUPERSESSION_INVALID");
   });
 
+  test("does not rescue an incorrect native source ID with a matching document hash", () => {
+    const missing = clone();
+    const missingRecord = missing.institutionalRecords.find(
+      ({ value }) => value.evidence.length > 0,
+    )!;
+    missingRecord.value.evidence[0]!.source_id = "synthetic.missing_source";
+    expect(codes(verifyProvenance(missing))).toContain("PROVENANCE_SOURCE_NOT_FOUND");
+  });
+
+  test("detects mismatched institutional document hashes and version identities", () => {
+    const mismatch = clone();
+    const mismatchedRecord = mismatch.institutionalRecords.find(
+      ({ value }) =>
+        value.evidence.length > 0 &&
+        findObjects(mismatch, value.evidence[0]!.source_id, ["source_document"]).length === 1,
+    )!;
+    mismatchedRecord.value.evidence[0]!.document_hash = `sha256:${"f".repeat(64)}`;
+    expect(codes(verifyProvenance(mismatch))).toContain("PROVENANCE_SOURCE_MISMATCH");
+
+    const wrongVersion = clone();
+    const versionedRecord = wrongVersion.institutionalRecords.find(
+      ({ value }) => value.evidence.length > 0,
+    )!;
+    versionedRecord.value.evidence[0]!.document_version_id = "synthetic.wrong_version";
+    const result = verifyProvenance(wrongVersion);
+    expect(codes(result)).toContain("PROVENANCE_SOURCE_VERSION_MISMATCH");
+    const output = JSON.parse(renderVerificationJson({ passed: false, gates: [result] })) as {
+      issues: Array<{ code: string; authority?: Record<string, unknown> }>;
+    };
+    expect(
+      output.issues.find(({ code }) => code === "PROVENANCE_SOURCE_VERSION_MISMATCH")?.authority,
+    ).toEqual({
+      kind: "meta",
+      source: "adr/0020-deterministic-writ-verification.md",
+      section: "Mechanical reference consistency",
+    });
+  });
+
+  test("detects wrong local passage references and conflicting passage identities", () => {
+    const wrongReference = clone();
+    const capacity = wrongReference.institutionalRecords.find(
+      ({ value }) => value.operational_capacity !== undefined,
+    )!;
+    capacity.value.operational_capacity!.evidence_refs = ["synthetic.wrong_passage"];
+    expect(codes(verifyProvenance(wrongReference))).toContain("PROVENANCE_EVIDENCE_NOT_FOUND");
+
+    const conflict = clone();
+    const occurrences = conflict.institutionalRecords.filter(({ value }) =>
+      value.evidence.some((evidence) => evidence.passage_id === "nist.about.mission"),
+    );
+    expect(occurrences).toHaveLength(2);
+    occurrences[1]!.value.evidence[0]!.quote = "Conflicting passage bytes";
+    const findings = codes(verifyProvenance(conflict));
+    expect(findings).toContain("PROVENANCE_PASSAGE_CONFLICT");
+    expect(findings).toContain("PROVENANCE_PASSAGE_HASH_MISMATCH");
+  });
+
   test("rejects previous record IDs on active surfaces within the migrated corpus", () => {
     const snapshot = clone();
     const migration = snapshot.migrations.find(
