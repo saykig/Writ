@@ -8,10 +8,10 @@ authority map, not a new knowledge model.
 | Path | Owns | Does not own |
 | --- | --- | --- |
 | `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | questions or execution methodologies |
-| `schemas/` | all active JSON Schema contracts | language or HTTP protocol definitions |
-| `protocols/` | Writ language EBNF and API OpenAPI contracts | corpus records |
+| `schemas/` | all active JSON Schema contracts | language protocol definitions |
+| `protocols/` | Writ language EBNF contract | corpus records |
 | `packages/` | domain contracts, native compiler, provenance, CLI, data export, and test tooling | reviewed political data |
-| `apps/` | API and ingestion applications | schema or corpus authority |
+| `apps/` | retained database and ingestion tooling | schema or corpus authority |
 | `docs/current/` | current product and technical guidance | historical migration evidence |
 
 `adr/` holds accepted architecture decisions. When an earlier decision describes superseded

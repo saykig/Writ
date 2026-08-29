@@ -15,7 +15,7 @@ check:
 test: check
 
 db-up:
-	docker compose up -d postgres minio
+	docker compose up -d postgres
 
 db-down:
 	docker compose down

@@ -26,7 +26,6 @@
     "verify:interop": "bun internal/verification/writ/src/cli.ts interoperability",
     "verify:provenance": "bun internal/verification/writ/src/cli.ts provenance",
     "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
-    "dev": "bun run --filter '@writ/api' dev",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down"
   },

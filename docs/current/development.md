@@ -29,8 +29,7 @@ After installing the ingestion development dependencies, run:
 
 Authoritative schemas live under [`schemas/`](../../schemas/). Runtime vendor copies under
 `packages/domain/schemas/` must remain synchronized with their authority mapping.
-Language and API protocol authorities live at `protocols/language/writ.ebnf` and
-`protocols/api/openapi.yaml`.
+The language protocol authority lives at `protocols/language/writ.ebnf`.
 
 For schema or protocol authority changes, also run:
 
