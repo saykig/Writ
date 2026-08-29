@@ -131,7 +131,8 @@ judgment judgment_nist_ai_standards_group_placement_stage_b {
 judgment judgment_nist_lab_network_capacity_stage_b {
   target record nist_lab_network_capacity; type review_disposition; value "approved";
   rationale "Human review approves the automated Stage B proposal mapping the directly quoted six-laboratory structure and user facilities as active network capacity without naming uncited laboratories. Structure is not proof of equal legal status, resources, utilization, condition or performance.";
-  evidence_refs { nist.laboratories.six_labs }; reviewer "Sara Kim"; status accepted; created_at 2026-08-08; family_context institutional;
+  evidence_refs { nist.laboratories.six_labs }; reviewer "Sara Kim"; status superseded; created_at 2026-08-08; family_context institutional;
+  superseded_by_judgment_id judgment_nist_lab_network_capacity_v2_human_review;
 }
 
 judgment judgment_nist_aml_facility_capacity_stage_b {
@@ -156,4 +157,32 @@ judgment judgment_nist_ai_consortium_capacity_stage_b {
   target record nist_ai_consortium_capacity; type review_disposition; value "approved";
   rationale "Human review approves the automated Stage B proposal mapping only the partnership, contribution types, AI-measurement work and organization count stated in the selected passages. CRADA, task-group, prototype-evaluation and technology-transfer mechanisms are omitted as unsupported. External resources remain external.";
   evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; reviewer "Sara Kim"; status accepted; created_at 2026-08-08; family_context institutional;
+}
+
+// Follow-up human review preserves the original approved record and judgment as
+// superseded history while approving the minimally corrected successor and link.
+
+judgment judgment_nist_lab_network_capacity_v2_human_review {
+  target record nist_lab_network_capacity_v2;
+  type review_disposition;
+  value "approved";
+  rationale "The cited passage establishes six NIST labs and user facilities but does not establish that they are NIST’s principal or primary facilities.";
+  evidence_refs { nist.laboratories.six_labs };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
+  supersedes_judgment_ids { judgment_nist_lab_network_capacity_stage_b };
+}
+
+judgment judgment_nist_lab_network_capacity_v2_supersession_link_human_review {
+  target record_link nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity;
+  type record_link_disposition;
+  value "approved";
+  rationale "Human review approves the directed supersession link from the minimally corrected laboratory-network record to the preserved record containing the unsupported modifier principal.";
+  evidence_refs { nist.laboratories.six_labs };
+  reviewer "Sara Kim";
+  status accepted;
+  created_at 2026-08-29;
+  family_context institutional;
 }

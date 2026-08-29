@@ -28,6 +28,15 @@ stage_b_review:
       approved_id: nist_lab_network_capacity
     - previous_draft_id: nist_nvlap_accreditation_capacity
       approved_id: nist_nvlap_accred_capacity
+follow_up_review:
+  status: completed_human_review
+  reviewer: Sara Kim
+  reviewed_at: 2026-08-29
+  superseded_record: nist_lab_network_capacity
+  approved_successor: nist_lab_network_capacity_v2
+  supersession_link: nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity
+  rationale: The cited passage establishes six NIST labs and user facilities but does not establish
+    that they are NIST’s principal or primary facilities.
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -117,10 +126,12 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_lab_network_capacity
-    final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_form: native v0.2 atomic operational-capacity record retained as history
+    final_review_state: superseded
     identity_preserved: false
-    note: Automated Stage B proposal subsequently approved by human review; uncited laboratory names were removed.
+    note: Automated Stage B proposal subsequently approved by human review; uncited laboratory
+      names were removed. Follow-up human review retained this record as history because its
+      assertion used the unsupported modifier principal.
   - previous_object: null
     previous_form: none
     final_object: nist_aml_facility_capacity
@@ -149,6 +160,21 @@ entries:
     final_review_state: approved
     identity_preserved: false
     note: Automated Stage B proposal subsequently approved by human review; unsupported CRADA, task-group, prototype-evaluation and technology-transfer mechanisms were removed, and external resources remain external.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_lab_network_capacity_v2
+    final_form: native v0.2 atomic operational-capacity record produced by follow-up human review
+    final_review_state: approved
+    identity_preserved: false
+    note: The successor preserves the evidence, passage, fact type, uncertainty and
+      operational-capacity payload while removing only the unsupported modifier principal.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: Directed from the minimally corrected approved record to the preserved superseded record.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:

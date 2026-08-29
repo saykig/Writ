@@ -15,16 +15,17 @@ migration_aliases:
   - corpora/us/institutions/nist
 root_institution_id: nist
 record_counts:
-  institutional_records: 15
-  record_links: 2
-  disposition_judgments: 17
+  institutional_records: 16
+  record_links: 3
+  disposition_judgments: 19
 review_counts:
   approved_records: 14
-  superseded_records: 1
+  superseded_records: 2
   draft_records: 0
-  approved_record_links: 2
-  accepted_disposition_judgments: 17
+  approved_record_links: 3
+  accepted_disposition_judgments: 18
   proposed_disposition_judgments: 0
+  superseded_disposition_judgments: 1
 unresolved_evidence_count: 0
 locations:
   sources:
@@ -37,6 +38,7 @@ locations:
     - records.writ
   relationships:
     - relationships/nist_department_of_commerce_relationship.yaml
+    - relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml
     - relationships/nist_mission_supersedes_nist_measurement_science_function.yaml
   judgments:
     - judgments.writ

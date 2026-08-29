@@ -222,6 +222,7 @@ const NIST_STAGE_B_IDS = [
   "nist_ai_measurement_capacity",
   "nist_ai_consortium_capacity",
 ] as const;
+const NIST_LAB_NETWORK_CURRENT_ID = "nist_lab_network_capacity_v2";
 const COMMISSION_BASELINE_IDS = [
   "eu_ai_office_tech_doc_receipt",
   "eu_ai_office_training_sum_temp_function",
@@ -296,23 +297,80 @@ describe("Stage B production inventories", () => {
     }
   });
 
-  test("NIST has exactly six Stage A and nine Stage B records", () => {
-    expect(nist.records).toHaveLength(15);
+  test("NIST preserves six Stage A and nine Stage B records plus the reviewed correction", () => {
+    expect(nist.records).toHaveLength(16);
     expect(NIST_STAGE_B_IDS.every((id) => byId.has(id))).toBe(true);
     expect(new Set(NIST_STAGE_B_IDS).size).toBe(9);
+    expect(byId.has(NIST_LAB_NETWORK_CURRENT_ID)).toBe(true);
     expect(manifest(NIST).record_counts).toEqual({
-      institutional_records: 15,
-      record_links: 2,
-      disposition_judgments: 17,
+      institutional_records: 16,
+      record_links: 3,
+      disposition_judgments: 19,
     });
     expect(manifest(NIST).review_counts).toEqual({
       approved_records: 14,
-      superseded_records: 1,
+      superseded_records: 2,
       draft_records: 0,
-      approved_record_links: 2,
-      accepted_disposition_judgments: 17,
+      approved_record_links: 3,
+      accepted_disposition_judgments: 18,
       proposed_disposition_judgments: 0,
+      superseded_disposition_judgments: 1,
     });
+  });
+
+  test("the lab-network correction changes only identity, assertion, provenance, and review state", () => {
+    const historical = capacityRecord("nist_lab_network_capacity");
+    const current = capacityRecord(NIST_LAB_NETWORK_CURRENT_ID);
+    const {
+      record_id: historicalId,
+      assertion: historicalAssertion,
+      provenance: historicalProvenance,
+      review_state: historicalReviewState,
+      ...historicalStable
+    } = historical;
+    const {
+      record_id: currentId,
+      assertion: currentAssertion,
+      provenance: currentProvenance,
+      review_state: currentReviewState,
+      ...currentStable
+    } = current;
+
+    expect(historicalId).toBe("nist_lab_network_capacity");
+    expect(historicalAssertion.text).toBe(
+      "NIST conducts its principal research through six laboratory components and associated user facilities.",
+    );
+    expect(historicalProvenance).toEqual({
+      created_by: "OpenAI Codex automated proposal",
+      created_at: "2026-08-05",
+    });
+    expect(historicalReviewState).toBe("superseded");
+    expect(currentId).toBe(NIST_LAB_NETWORK_CURRENT_ID);
+    expect(currentAssertion).toEqual({
+      mode: "observes",
+      text: "NIST conducts its research through six laboratory components and associated user facilities.",
+    });
+    expect(currentProvenance).toEqual({
+      created_by: "OpenAI Codex implementation of approved human review",
+      created_at: "2026-08-29",
+    });
+    expect(currentReviewState).toBe("approved");
+    expect(currentStable).toEqual(historicalStable);
+
+    const link = yaml<RecordLink>(
+      NIST,
+      "relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
+    );
+    expect(link).toMatchObject({
+      source_id: NIST_LAB_NETWORK_CURRENT_ID,
+      target_id: "nist_lab_network_capacity",
+      source_kind: "record",
+      target_kind: "record",
+      relation_type: "supersedes",
+      evidence_refs: ["nist.laboratories.six_labs"],
+      review_state: "approved",
+    });
+    expect(validate("record-link", link).valid).toBe(true);
   });
 
   test("Commission preserves three baseline records and has 20 human-approved records", () => {
@@ -470,7 +528,8 @@ describe("operational-capacity contract", () => {
   const capacities = allRecords.filter(
     (item): item is TestRecord & { operational_capacity: InstitutionalOperationalCapacity } =>
       item.institutional_fact_type === "operational_capacity" &&
-      item.operational_capacity !== undefined,
+      item.operational_capacity !== undefined &&
+      item.review_state !== "superseded",
   );
 
   test("five NIST and three Commission capacities use one controlled type and direct evidence", () => {
@@ -495,27 +554,27 @@ describe("operational-capacity contract", () => {
     const identity = structuredClone(record("european_commission_identity"));
     identity.institution_type = "unknown_new_type";
     expect(validate("institutional-record", identity).valid).toBe(false);
-    const base = structuredClone(capacityRecord("nist_lab_network_capacity"));
+    const base = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
     (base.operational_capacity as unknown as Record<string, unknown>).capacity_type =
       "unknown_capacity";
     expect(validate("institutional-record", base).valid).toBe(false);
-    const status = structuredClone(capacityRecord("nist_lab_network_capacity"));
+    const status = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
     (status.operational_capacity as unknown as Record<string, unknown>).status = "established";
     expect(validate("institutional-record", status).valid).toBe(false);
-    const duplicate = structuredClone(capacityRecord("nist_lab_network_capacity"));
+    const duplicate = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
     duplicate.operational_capacity.capacity_components = [
       "engineering_laboratory",
       "engineering_laboratory",
     ];
     expect(validate("institutional-record", duplicate).valid).toBe(false);
-    const quantity = structuredClone(capacityRecord("nist_lab_network_capacity"));
+    const quantity = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
     quantity.operational_capacity.quantity = {
       value: 6,
       unit: "laboratory_components",
       qualifier: "exact",
     };
     expect(validate("institutional-record", quantity).valid).toBe(false);
-    const qualifier = structuredClone(capacityRecord("nist_lab_network_capacity"));
+    const qualifier = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
     qualifier.operational_capacity.as_of_date = "2026-08-05";
     qualifier.operational_capacity.quantity = {
       value: 6,
@@ -532,11 +591,13 @@ describe("operational-capacity contract", () => {
       ROOT,
       "docs/migrations/institutional-stage-b/capacity-evidence-audit.yaml",
     );
+    const auditRecordId = (recordId: string) =>
+      recordId === NIST_LAB_NETWORK_CURRENT_ID ? "nist_lab_network_capacity" : recordId;
     expect(Object.keys(audit.records).sort()).toEqual(
-      capacities.map((item) => item.record_id).sort(),
+      capacities.map((item) => auditRecordId(item.record_id)).sort(),
     );
     for (const target of capacities) {
-      const mapping = audit.records[target.record_id]!;
+      const mapping = audit.records[auditRecordId(target.record_id)]!;
       const evidence = new Map(target.evidence.map((item) => [item.passage_id, item.quote]));
       expect(mapping.status.value).toBe(target.operational_capacity.status);
       expect(mapping.capacity_type.value).toBe(target.operational_capacity.capacity_type);
@@ -577,7 +638,7 @@ describe("operational-capacity contract", () => {
   });
 
   test("different institutional forms retain distinct components and ownership boundaries", () => {
-    const nistLabs = capacityRecord("nist_lab_network_capacity").operational_capacity;
+    const nistLabs = capacityRecord(NIST_LAB_NETWORK_CURRENT_ID).operational_capacity;
     const jrc = capacityRecord("european_commission_jrc_infra_capacity").operational_capacity;
     expect(nistLabs.capacity_type).toBe(jrc.capacity_type);
     expect(nistLabs.capacity_components).not.toEqual(jrc.capacity_components);
@@ -623,8 +684,8 @@ describe("review preservation, judgments, links, and migrations", () => {
     }
   });
 
-  test("all Stage B judgments are accepted human decisions", () => {
-    expect(nistJudgments).toHaveLength(17);
+  test("judgments preserve the superseded lab-network decision and approve its correction", () => {
+    expect(nistJudgments).toHaveLength(19);
     expect(commissionJudgments).toHaveLength(21);
     const commissionLink = yaml<RecordLink>(
       EC,
@@ -632,26 +693,72 @@ describe("review preservation, judgments, links, and migrations", () => {
     );
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
       expect(validate("record-judgment", judgment).valid).toBe(true);
-      expect(judgment).not.toHaveProperty("supersedes_judgment_ids");
-      expect(judgment).not.toHaveProperty("superseded_by_judgment_id");
       if (judgment.target_kind === "record") expect(byId.has(judgment.target_id)).toBe(true);
       else
         expect([
           "nist_department_of_commerce_relationship",
+          "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
           "nist_mission_supersedes_nist_measurement_science_function",
           commissionLink.link_id,
         ]).toContain(judgment.target_id);
     }
+
+    const original = nistJudgments.find(
+      (item) => item.judgment_id === "judgment_nist_lab_network_capacity_stage_b",
+    )!;
+    const correction = nistJudgments.find(
+      (item) => item.judgment_id === "judgment_nist_lab_network_capacity_v2_human_review",
+    )!;
+    const correctionLink = nistJudgments.find(
+      (item) =>
+        item.judgment_id === "judgment_nist_lab_network_capacity_v2_supersession_link_human_review",
+    )!;
+    expect(original).toMatchObject({
+      target_id: "nist_lab_network_capacity",
+      value: "approved",
+      status: "superseded",
+      superseded_by_judgment_id: correction.judgment_id,
+    });
+    expect(correction).toMatchObject({
+      target_id: NIST_LAB_NETWORK_CURRENT_ID,
+      value: "approved",
+      status: "accepted",
+      reviewer: "Sara Kim",
+      created_at: "2026-08-29",
+      supersedes_judgment_ids: [original.judgment_id],
+    });
+    expect(correction.rationale).toBe(
+      "The cited passage establishes six NIST labs and user facilities but does not establish that they are NIST’s principal or primary facilities.",
+    );
+    expect(correctionLink).toMatchObject({
+      target_id: "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+      value: "approved",
+      status: "accepted",
+      reviewer: "Sara Kim",
+      created_at: "2026-08-29",
+    });
+    for (const judgment of [...nistJudgments, ...commissionJudgments]) {
+      if (judgment.judgment_id === original.judgment_id) continue;
+      if (judgment.judgment_id === correction.judgment_id) continue;
+      expect(judgment).not.toHaveProperty("supersedes_judgment_ids");
+      expect(judgment).not.toHaveProperty("superseded_by_judgment_id");
+    }
+
     const stageA = nistJudgments.slice(0, 8);
-    const stageB = [...nistJudgments.slice(8), ...commissionJudgments];
+    const originalStageB = nistJudgments.slice(8, 17);
     expect(stageA).toHaveLength(8);
     expect(stageA.every((item) => item.status === "accepted")).toBe(true);
     expect(stageA.every((item) => item.reviewer === "Sara Kim")).toBe(true);
-    expect(stageB).toHaveLength(30);
-    expect(stageB.every((item) => item.status === "accepted")).toBe(true);
-    expect(stageB.every((item) => item.value === "approved")).toBe(true);
-    expect(stageB.every((item) => item.reviewer === "Sara Kim")).toBe(true);
-    expect(stageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
+    expect(originalStageB).toHaveLength(9);
+    expect(originalStageB.every((item) => item.value === "approved")).toBe(true);
+    expect(originalStageB.every((item) => item.reviewer === "Sara Kim")).toBe(true);
+    expect(originalStageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
+    expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(8);
+    expect(originalStageB.filter((item) => item.status === "superseded")).toEqual([original]);
+    expect(commissionJudgments.every((item) => item.status === "accepted")).toBe(true);
+    expect(commissionJudgments.every((item) => item.value === "approved")).toBe(true);
+    expect(commissionJudgments.every((item) => item.reviewer === "Sara Kim")).toBe(true);
+    expect(commissionJudgments.every((item) => item.created_at === "2026-08-08")).toBe(true);
     expect(validateJudgmentSupersession(nistJudgments).valid).toBe(true);
     expect(validateJudgmentSupersession(commissionJudgments).valid).toBe(true);
     expect(nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b"))).toHaveLength(9);
@@ -685,13 +792,17 @@ describe("review preservation, judgments, links, and migrations", () => {
 
   test("migration ledgers cover all additions without rewriting Stage A entries", () => {
     const nistMigration = yaml<MigrationLedger>(NIST, "migration.yaml");
-    expect(nistMigration.entries).toHaveLength(17);
-    expect(nistMigration.entries.slice(8).map((item) => item.final_object)).toEqual([
+    expect(nistMigration.entries).toHaveLength(19);
+    expect(nistMigration.entries.slice(8, 17).map((item) => item.final_object)).toEqual([
       ...NIST_STAGE_B_IDS,
     ]);
-    expect(nistMigration.entries.slice(8).every((item) => item.previous_object === null)).toBe(
+    expect(nistMigration.entries.slice(8, 17).every((item) => item.previous_object === null)).toBe(
       true,
     );
+    expect(nistMigration.entries.slice(17).map((item) => item.final_object)).toEqual([
+      NIST_LAB_NETWORK_CURRENT_ID,
+      "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+    ]);
     const ecMigration = yaml<MigrationLedger>(EC, "migration.yaml");
     expect(ecMigration.entries).toHaveLength(22);
     expect(new Set(ecMigration.entries.map((item) => item.final_object)).size).toBe(22);
@@ -711,14 +822,18 @@ describe("review preservation, judgments, links, and migrations", () => {
     const items = Object.values(queue.schema_queues).flat();
     expect(items).toHaveLength(30);
     expect(new Set(items.map((item) => item.judgment_id))).toEqual(
-      new Set([...nistJudgments.slice(8), ...commissionJudgments].map((item) => item.judgment_id)),
+      new Set(
+        [...nistJudgments.slice(8, 17), ...commissionJudgments].map((item) => item.judgment_id),
+      ),
     );
     expect(
       new Set(
         items.map((item) => POST_REVIEW_TARGET_RENAMES.get(item.target_id) ?? item.target_id),
       ),
     ).toEqual(
-      new Set([...nistJudgments.slice(8), ...commissionJudgments].map((item) => item.target_id)),
+      new Set(
+        [...nistJudgments.slice(8, 17), ...commissionJudgments].map((item) => item.target_id),
+      ),
     );
     expect(
       items.find((item) => item.target_id === "nist_national_measurement_standards_mandate"),

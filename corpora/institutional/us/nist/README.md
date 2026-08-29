@@ -1,8 +1,8 @@
 # NIST institutional corpus
 
-This draft corpus contains 15 atomic, source-grounded NIST institutional records. Fourteen records
-are approved and one Stage A record remains superseded review history. Record approval does not
-publish the corpus.
+This draft corpus contains 16 atomic, source-grounded NIST institutional records. Fourteen records
+are approved and two records remain superseded review history. Record approval does not publish
+the corpus.
 
 Stage A preserved identity, organizational placement, NIST’s source-reported mission, and two AI
 Standards and Guidelines Group functions from the two initial sources. Its six records, two Core
@@ -17,6 +17,12 @@ the determination NIST may make; the capacity record separately describes the ma
 administer accreditation. Sara Kim approved all nine additions on 2026-08-08 after reviewing their
 assertions, fact payloads, evidence passages, uncertainties and proposed dispositions. The original
 automated proposal phase remains recorded separately in the review queue and migration ledger.
+
+A follow-up human review on 2026-08-29 superseded `nist_lab_network_capacity` without deleting it.
+Its approved successor, `nist_lab_network_capacity_v2`, preserves the same evidence, passage, fact
+type, uncertainty and operational-capacity meaning while removing only the unsupported modifier
+“principal.” The directed Core supersession link and paired judgment history make the correction
+explicit.
 
 Official source identities, URLs, retrieval and version metadata, and pinned document hashes are
 registered in `sources.writ`. Each record embeds its exact supporting passage, narrow locator,
@@ -34,6 +40,5 @@ effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are 
 prior annual-edition capture; the pinned document hash and original retrieval transport are
 recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml` and
 `docs/migrations/institutional-stage-b/human-review.yaml`; accepted human dispositions are in
-`judgments.writ`. The two
-existing Core links remain the only NIST relationship links, and inverse links are derived rather
-than stored.
+`judgments.writ`. The three Core links are stored only in their authoritative direction, and
+inverse links are derived rather than stored.

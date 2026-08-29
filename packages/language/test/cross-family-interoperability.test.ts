@@ -368,16 +368,17 @@ describe("mapping queue and preservation gates", () => {
       superseded_disposition_judgments: 3,
     });
     expect(nist.record_counts).toMatchObject({
-      institutional_records: 15,
-      record_links: 2,
-      disposition_judgments: 17,
+      institutional_records: 16,
+      record_links: 3,
+      disposition_judgments: 19,
     });
     expect(nist.review_counts).toMatchObject({
       approved_records: 14,
-      superseded_records: 1,
-      approved_record_links: 2,
-      accepted_disposition_judgments: 17,
+      superseded_records: 2,
+      approved_record_links: 3,
+      accepted_disposition_judgments: 18,
       proposed_disposition_judgments: 0,
+      superseded_disposition_judgments: 1,
     });
   });
 
@@ -388,10 +389,10 @@ describe("mapping queue and preservation gates", () => {
       "362adc02793a0dd125ce9adf9bf15a5e37c00c648797bc4b01210b577820c72e",
     );
     expect(fileHash(join(NIST, "records.writ"))).toBe(
-      "4175b725d2dc0212a218626165cf7a639727667d7c9c872acc2a77107a76a632",
+      "cefb6a0c816188979762dff3543d59cafdc5a91d29822eded37ea337f9d0f331",
     );
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
-      "1d661df564dbb640b8d83a11ec3f50fc24cb10b692ae3f28d3bcc19a94f0b4c1",
+      "dc8883512a06b495fb637d02b74b70767fd29ab86598659ea511e50baf322578",
     );
     expect(
       normalizedFileHash(

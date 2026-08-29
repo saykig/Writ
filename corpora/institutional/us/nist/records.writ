@@ -265,7 +265,7 @@ record nist_lab_network_capacity : institutional {
   }
   uncertainty { item unknown "This establishes NIST’s current laboratory structure. It does not establish equal legal status, staffing, funding, utilization, performance or operational condition across all components."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state approved;
+  review_state superseded;
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type laboratory_network; capacity_components { six_laboratories, user_facilities }; evidence_refs { nist.laboratories.six_labs }; }
@@ -353,5 +353,25 @@ record nist_ai_consortium_capacity : institutional {
   institutional {
     institution_id nist; fact_type operational_capacity;
     operational_capacity { status active; capacity_type partnership_network; capacity_components { research_partnership, external_expertise, external_products, external_data, external_models, ai_measurement_guidelines_and_standards }; evidence_refs { nist.ai_consortium.partnership, nist.ai_consortium.contributions, nist.ai_consortium.organization_count }; }
+  }
+}
+
+record nist_lab_network_capacity_v2 : institutional {
+  corpus us.institutions.nist;
+  version "0.2.0";
+  title "NIST laboratory-network capacity";
+  subjects { subject nist type institution role "operator"; };
+  assertion observes "NIST conducts its research through six laboratory components and associated user facilities.";
+  topics { measurement_science, research_infrastructure };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Current laboratory structure as retrieved on 2026-08-05" }; }
+  evidence {
+    support nist.laboratories document_version nist.laboratories.v2026_08_05 passage nist.laboratories.six_labs locator "NIST Laboratories, opening paragraph" quote "Researchers at NIST—including five Nobel Prize winners—have been at the forefront of science in the nation’s premier measurement institute for more than 120 years. Their groundbreaking research happens in six labs (listed below) and user facilities." passage_hash "sha256:8b09ac60a63c3e38eebf65f623b1c52954ba78f83a8e888c41947e96e3ee52ac" document_hash "sha256:c1d5324f319ef5b58b4a1446113dae1425e6ae6c685130c551aec74fca61087b" basis direct;
+  }
+  uncertainty { item unknown "This establishes NIST’s current laboratory structure. It does not establish equal legal status, staffing, funding, utilization, performance or operational condition across all components."; }
+  provenance { created_by "OpenAI Codex implementation of approved human review"; created_at 2026-08-29; }
+  review_state approved;
+  institutional {
+    institution_id nist; fact_type operational_capacity;
+    operational_capacity { status active; capacity_type laboratory_network; capacity_components { six_laboratories, user_facilities }; evidence_refs { nist.laboratories.six_labs }; }
   }
 }
