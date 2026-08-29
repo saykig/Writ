@@ -137,7 +137,6 @@ generalization requires a separate decision.
 ## Protocols and migration records
 
 - Language grammar protocol: `protocols/language/writ.ebnf`
-- API protocol: `protocols/api/openapi.yaml`
 - Architecture decision: `adr/0013-schema-and-protocol-authority.md`
 - Completed path map: `docs/migrations/repository-reset/04-schema-protocol-path-map.md`
 - Completed reference implementation retirement:

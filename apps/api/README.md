@@ -1,5 +1,6 @@
 # `@writ/api`
 
-Minimal Fastify command API for the retained evidence-ledger surface.
+Retained Postgres persistence primitives for the source registry and corpus artifact store.
 
-It does not execute commitments, scores, analyses, scenarios, or evaluation receipts.
+Writ has no active long-running HTTP application. Database-backed source and artifact storage
+remain available pending a separate decision about their future.

@@ -1,7 +1,7 @@
 // Typed repositories layer. `createRepositories(sql)` returns one repository per
-// aggregate; the DATA-002 command API builds on this surface. Every repository
-// accepts the same `DbClient`, so a caller can pass either the shared pool or a
-// reserved connection (e.g. a hermetic temp-schema test connection).
+// aggregate. Every repository accepts the same `DbClient`, so a caller can pass
+// either the shared pool or a reserved connection (e.g. a hermetic temp-schema
+// test connection).
 import type { DbClient } from "../client.js";
 import { actionsRepository } from "./actions.js";
 import { auditRepository } from "./audit.js";

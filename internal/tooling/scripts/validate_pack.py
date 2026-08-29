@@ -35,7 +35,6 @@ REQUIRED_FILES = [
     "TASKS.yaml",
     "schemas/README.md",
     "protocols/language/writ.ebnf",
-    "protocols/api/openapi.yaml",
     ".agents/skills/writ-domain/SKILL.md",
     "internal/infrastructure/generated/source-registry.json",
 ]
@@ -93,11 +92,6 @@ def validate_yaml() -> None:
     if not isinstance(tasks, dict) or not isinstance(tasks.get("tasks"), list):
         fail("TASKS.yaml does not contain a task list")
 
-    openapi = parsed_yaml.get("protocols/api/openapi.yaml")
-    if not isinstance(openapi, dict) or openapi.get("openapi") != "3.1.0":
-        fail("protocols/api/openapi.yaml is missing the OpenAPI 3.1.0 marker")
-    if not isinstance(openapi.get("paths"), dict) or not isinstance(openapi.get("components"), dict):
-        fail("protocols/api/openapi.yaml is missing paths or components")
     ids = [task.get("id") for task in tasks["tasks"]]
     if len(ids) != len(set(ids)):
         fail("TASKS.yaml contains duplicate task IDs")
