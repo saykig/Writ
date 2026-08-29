@@ -182,9 +182,9 @@ describe("retained corpus repository with NIST as the development proving ground
     expect(corpusIds).toContain(
       "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
     );
-    expect(baseline.records).toHaveLength(39);
-    expect(baseline.links).toHaveLength(7);
-    expect(baseline.judgments).toHaveLength(46);
+    expect(baseline.records).toHaveLength(42);
+    expect(baseline.links).toHaveLength(10);
+    expect(baseline.judgments).toHaveLength(52);
     expect(baseline.workflowStates).toEqual({});
     expect(baseline.loadIssues).toEqual([]);
   });

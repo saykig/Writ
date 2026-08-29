@@ -223,6 +223,18 @@ const NIST_STAGE_B_IDS = [
   "nist_ai_consortium_capacity",
 ] as const;
 const NIST_LAB_NETWORK_CURRENT_ID = "nist_lab_network_capacity_v2";
+const NIST_FOLLOW_UP_SUCCESSOR_IDS = [
+  NIST_LAB_NETWORK_CURRENT_ID,
+  "nist_ai_standards_group_placement_v2",
+  "nist_aml_facility_capacity_v2",
+  "nist_ai_measurement_function",
+] as const;
+const NIST_FOLLOW_UP_LINK_IDS = [
+  "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+  "nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement",
+  "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
+  "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
+] as const;
 const COMMISSION_BASELINE_IDS = [
   "eu_ai_office_tech_doc_receipt",
   "eu_ai_office_training_sum_temp_function",
@@ -297,24 +309,24 @@ describe("Stage B production inventories", () => {
     }
   });
 
-  test("NIST preserves six Stage A and nine Stage B records plus the reviewed correction", () => {
-    expect(nist.records).toHaveLength(16);
+  test("NIST preserves six Stage A and nine Stage B records plus reviewed successors", () => {
+    expect(nist.records).toHaveLength(19);
     expect(NIST_STAGE_B_IDS.every((id) => byId.has(id))).toBe(true);
     expect(new Set(NIST_STAGE_B_IDS).size).toBe(9);
-    expect(byId.has(NIST_LAB_NETWORK_CURRENT_ID)).toBe(true);
+    expect(NIST_FOLLOW_UP_SUCCESSOR_IDS.every((id) => byId.has(id))).toBe(true);
     expect(manifest(NIST).record_counts).toEqual({
-      institutional_records: 16,
-      record_links: 3,
-      disposition_judgments: 19,
+      institutional_records: 19,
+      record_links: 6,
+      disposition_judgments: 25,
     });
     expect(manifest(NIST).review_counts).toEqual({
       approved_records: 14,
-      superseded_records: 2,
+      superseded_records: 5,
       draft_records: 0,
-      approved_record_links: 3,
-      accepted_disposition_judgments: 18,
+      approved_record_links: 6,
+      accepted_disposition_judgments: 21,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 1,
+      superseded_disposition_judgments: 4,
     });
   });
 
@@ -373,6 +385,116 @@ describe("Stage B production inventories", () => {
     expect(validate("record-link", link).valid).toBe(true);
   });
 
+  test("the placement successor preserves the claim while exposing inferred support", () => {
+    const historical = record("nist_ai_standards_group_placement");
+    const current = record("nist_ai_standards_group_placement_v2");
+    const {
+      record_id: historicalId,
+      evidence: historicalEvidence,
+      provenance: historicalProvenance,
+      review_state: historicalReviewState,
+      ...historicalStable
+    } = historical;
+    const {
+      record_id: currentId,
+      evidence: currentEvidence,
+      provenance: currentProvenance,
+      review_state: currentReviewState,
+      ...currentStable
+    } = current;
+    const withoutBasis = (items: typeof historicalEvidence) =>
+      items.map(({ basis: _basis, ...item }) => item);
+
+    expect(historicalId).toBe("nist_ai_standards_group_placement");
+    expect(currentId).toBe("nist_ai_standards_group_placement_v2");
+    expect(historicalReviewState).toBe("superseded");
+    expect(currentReviewState).toBe("approved");
+    expect(currentStable).toEqual(historicalStable);
+    expect(withoutBasis(currentEvidence)).toEqual(withoutBasis(historicalEvidence));
+    expect(historicalEvidence.map((item) => item.basis)).toEqual(["direct", "direct"]);
+    expect(currentEvidence.map((item) => item.basis)).toEqual(["inferred", "inferred"]);
+    expect(historicalProvenance).toEqual({
+      created_by: "OpenAI Codex automated proposal",
+      created_at: "2026-08-05",
+    });
+    expect(currentProvenance).toEqual({
+      created_by: "OpenAI Codex implementation of approved human review",
+      created_at: "2026-08-29",
+    });
+  });
+
+  test("the AML successor changes only its identity, assertion, provenance, and review state", () => {
+    const historical = capacityRecord("nist_aml_facility_capacity");
+    const current = capacityRecord("nist_aml_facility_capacity_v2");
+    const {
+      record_id: historicalId,
+      assertion: historicalAssertion,
+      provenance: historicalProvenance,
+      review_state: historicalReviewState,
+      ...historicalStable
+    } = historical;
+    const {
+      record_id: currentId,
+      assertion: currentAssertion,
+      provenance: currentProvenance,
+      review_state: currentReviewState,
+      ...currentStable
+    } = current;
+
+    expect(historicalId).toBe("nist_aml_facility_capacity");
+    expect(historicalAssertion.text).toContain("NIST maintains");
+    expect(historicalReviewState).toBe("superseded");
+    expect(currentId).toBe("nist_aml_facility_capacity_v2");
+    expect(currentAssertion).toEqual({
+      mode: "observes",
+      text: "The Advanced Measurement Laboratory complex features laboratories with electromagnetic shielding, vibration isolation, and environmental control of temperature, humidity, and air quality, together with two underground metrology wings, two above-ground physical-sciences wings, and an above-ground cleanroom wing.",
+    });
+    expect(currentAssertion.text).not.toContain("maintains");
+    expect(currentReviewState).toBe("approved");
+    expect(currentStable).toEqual(historicalStable);
+    expect(historicalProvenance).toEqual({
+      created_by: "OpenAI Codex automated proposal",
+      created_at: "2026-08-05",
+    });
+    expect(currentProvenance).toEqual({
+      created_by: "OpenAI Codex implementation of approved human review",
+      created_at: "2026-08-29",
+    });
+  });
+
+  test("the AI measurement successor is one directly supported atomic function", () => {
+    const historical = capacityRecord("nist_ai_measurement_capacity");
+    const current = record("nist_ai_measurement_function");
+
+    expect(historical.review_state).toBe("superseded");
+    expect(historical.evidence.map((item) => item.passage_id)).toEqual([
+      "nist.ai_division.capacity",
+      "nist.ai_division.groups",
+    ]);
+    expect(current).toMatchObject({
+      record_id: "nist_ai_measurement_function",
+      review_state: "approved",
+      institution_id: "nist.ai_research_measurement_standards_division",
+      institutional_fact_type: "function",
+      function: "measurement_science",
+      assertion: {
+        mode: "performs",
+        text: "The AI Research, Measurement, and Standards Division advances measurement science related to AI, testing and evaluation, and standards.",
+      },
+    });
+    expect(current.operational_capacity).toBeUndefined();
+    expect(current.evidence).toEqual([historical.evidence[0]!]);
+    expect(current.evidence[0]?.basis).toBe("direct");
+    expect(current.uncertainties).toEqual(historical.uncertainties);
+    expect(current.scope.institutional_scope).toEqual([
+      "nist",
+      "nist.ai_research_measurement_standards_division",
+    ]);
+    expect(current.assertion.text).not.toContain("AI Standards and Guidelines Group");
+    expect(current.assertion.text).not.toContain("Applied AI Research Group");
+    expect(record("nist_ai_standards_group_identity").evidence[0]).toEqual(historical.evidence[1]!);
+  });
+
   test("Commission preserves three baseline records and has 20 human-approved records", () => {
     expect(commission.records).toHaveLength(20);
     for (const id of COMMISSION_BASELINE_IDS) expect(record(id).review_state).toBe("approved");
@@ -407,7 +529,8 @@ describe("atomic institutional distinctions", () => {
     ["nist_national_measurement_standards_mandate", "mandate"],
     ["nist_nvlap_lab_decision_right", "decision_right"],
     ["nist_ai_standards_group_identity", "identity"],
-    ["nist_ai_standards_group_placement", "placement"],
+    ["nist_ai_standards_group_placement_v2", "placement"],
+    ["nist_ai_measurement_function", "function"],
     ["european_commission_identity", "identity"],
     ["eu_ai_office_identity", "identity"],
     ["eu_ai_office_placement", "placement"],
@@ -475,7 +598,7 @@ describe("atomic institutional distinctions", () => {
   });
 
   test("placement payloads name the directly evidenced immediate parent", () => {
-    expect(record("nist_ai_standards_group_placement").parent_institution_id).toBe(
+    expect(record("nist_ai_standards_group_placement_v2").parent_institution_id).toBe(
       "nist.ai_research_measurement_standards_division",
     );
     expect(record("eu_ai_office_placement").parent_institution_id).toBe(
@@ -483,20 +606,15 @@ describe("atomic institutional distinctions", () => {
     );
   });
 
-  test("NIST holds AI measurement capacity implemented through the scoped division", () => {
-    const target = record("nist_ai_measurement_capacity");
-    expect(target.institution_id).toBe("nist");
-    expect(target.scope.institutional_scope).toContain(
+  test("NIST AI measurement work remains a function rather than capacity", () => {
+    const target = record("nist_ai_measurement_function");
+    expect(target.institution_id).toBe("nist.ai_research_measurement_standards_division");
+    expect(target.scope.institutional_scope).toEqual([
+      "nist",
       "nist.ai_research_measurement_standards_division",
-    );
-    expect(target.operational_capacity?.capacity_type).toBe("organizational_unit");
-    expect(target.operational_capacity?.capacity_components).toEqual([
-      "ai_measurement_science",
-      "testing_and_evaluation",
-      "standards",
-      "ai_standards_and_guidelines_group",
-      "applied_ai_research_group",
     ]);
+    expect(target.function).toBe("measurement_science");
+    expect(target.operational_capacity).toBeUndefined();
   });
 
   test("Article 258 mandatory modality is preserved as a human-approved function", () => {
@@ -532,9 +650,9 @@ describe("operational-capacity contract", () => {
       item.review_state !== "superseded",
   );
 
-  test("five NIST and three Commission capacities use one controlled type and direct evidence", () => {
-    expect(capacities).toHaveLength(8);
-    expect(capacities.filter((item) => item.corpus_id === "us.institutions.nist")).toHaveLength(5);
+  test("four NIST and three Commission capacities use one controlled type and direct evidence", () => {
+    expect(capacities).toHaveLength(7);
+    expect(capacities.filter((item) => item.corpus_id === "us.institutions.nist")).toHaveLength(4);
     expect(
       capacities.filter((item) => item.corpus_id === "eu.institutions.european_commission"),
     ).toHaveLength(3);
@@ -591,10 +709,16 @@ describe("operational-capacity contract", () => {
       ROOT,
       "docs/migrations/institutional-stage-b/capacity-evidence-audit.yaml",
     );
-    const auditRecordId = (recordId: string) =>
-      recordId === NIST_LAB_NETWORK_CURRENT_ID ? "nist_lab_network_capacity" : recordId;
+    const auditRecordId = (recordId: string) => {
+      if (recordId === NIST_LAB_NETWORK_CURRENT_ID) return "nist_lab_network_capacity";
+      if (recordId === "nist_aml_facility_capacity_v2") return "nist_aml_facility_capacity";
+      return recordId;
+    };
     expect(Object.keys(audit.records).sort()).toEqual(
-      capacities.map((item) => auditRecordId(item.record_id)).sort(),
+      [
+        ...capacities.map((item) => auditRecordId(item.record_id)),
+        "nist_ai_measurement_capacity",
+      ].sort(),
     );
     for (const target of capacities) {
       const mapping = audit.records[auditRecordId(target.record_id)]!;
@@ -684,8 +808,8 @@ describe("review preservation, judgments, links, and migrations", () => {
     }
   });
 
-  test("judgments preserve the superseded lab-network decision and approve its correction", () => {
-    expect(nistJudgments).toHaveLength(19);
+  test("judgments preserve all superseded decisions and approve each reviewed successor", () => {
+    expect(nistJudgments).toHaveLength(25);
     expect(commissionJudgments).toHaveLength(21);
     const commissionLink = yaml<RecordLink>(
       EC,
@@ -697,49 +821,90 @@ describe("review preservation, judgments, links, and migrations", () => {
       else
         expect([
           "nist_department_of_commerce_relationship",
-          "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+          ...NIST_FOLLOW_UP_LINK_IDS,
           "nist_mission_supersedes_nist_measurement_science_function",
           commissionLink.link_id,
         ]).toContain(judgment.target_id);
     }
 
-    const original = nistJudgments.find(
-      (item) => item.judgment_id === "judgment_nist_lab_network_capacity_stage_b",
-    )!;
-    const correction = nistJudgments.find(
-      (item) => item.judgment_id === "judgment_nist_lab_network_capacity_v2_human_review",
-    )!;
-    const correctionLink = nistJudgments.find(
-      (item) =>
-        item.judgment_id === "judgment_nist_lab_network_capacity_v2_supersession_link_human_review",
-    )!;
-    expect(original).toMatchObject({
-      target_id: "nist_lab_network_capacity",
-      value: "approved",
-      status: "superseded",
-      superseded_by_judgment_id: correction.judgment_id,
-    });
-    expect(correction).toMatchObject({
-      target_id: NIST_LAB_NETWORK_CURRENT_ID,
-      value: "approved",
-      status: "accepted",
-      reviewer: "Sara Kim",
-      created_at: "2026-08-29",
-      supersedes_judgment_ids: [original.judgment_id],
-    });
-    expect(correction.rationale).toBe(
-      "The cited passage establishes six NIST labs and user facilities but does not establish that they are NIST’s principal or primary facilities.",
+    const chains = [
+      {
+        originalJudgment: "judgment_nist_lab_network_capacity_stage_b",
+        originalRecord: "nist_lab_network_capacity",
+        correctionJudgment: "judgment_nist_lab_network_capacity_v2_human_review",
+        correctionRecord: NIST_LAB_NETWORK_CURRENT_ID,
+        linkJudgment: "judgment_nist_lab_network_capacity_v2_supersession_link_human_review",
+        link: "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+        rationale:
+          "The cited passage establishes six NIST labs and user facilities but does not establish that they are NIST’s principal or primary facilities.",
+      },
+      {
+        originalJudgment: "judgment_nist_ai_standards_group_placement_stage_b",
+        originalRecord: "nist_ai_standards_group_placement",
+        correctionJudgment: "judgment_nist_ai_standards_group_placement_v2_human_review",
+        correctionRecord: "nist_ai_standards_group_placement_v2",
+        linkJudgment:
+          "judgment_nist_ai_standards_group_placement_v2_supersession_link_human_review",
+        link: "nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement",
+        rationale:
+          "The placement is supported by combining the passage that places the AI Research, Measurement, and Standards Division in ITL with the passage stating that the Division’s efforts are carried out by the AI Standards and Guidelines Group; no single selected passage directly states the full placement.",
+      },
+      {
+        originalJudgment: "judgment_nist_aml_facility_capacity_stage_b",
+        originalRecord: "nist_aml_facility_capacity",
+        correctionJudgment: "judgment_nist_aml_facility_capacity_v2_human_review",
+        correctionRecord: "nist_aml_facility_capacity_v2",
+        linkJudgment: "judgment_nist_aml_facility_capacity_v2_supersession_link_human_review",
+        link: "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
+        rationale:
+          "The cited passage directly establishes the Advanced Measurement Laboratory complex’s physical features and measurement infrastructure, but does not require the stronger wording “NIST maintains.” Utilization, uptime, maintenance condition, and full operational availability remain unknown.",
+      },
+      {
+        originalJudgment: "judgment_nist_ai_measurement_capacity_stage_b",
+        originalRecord: "nist_ai_measurement_capacity",
+        correctionJudgment: "judgment_nist_ai_measurement_function_human_review",
+        correctionRecord: "nist_ai_measurement_function",
+        linkJudgment: "judgment_nist_ai_measurement_function_supersession_link_human_review",
+        link: "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
+        rationale:
+          "Human review finds the operational-capacity classification too strong. The cited passage directly establishes only the Division’s stated work in AI measurement science, testing and evaluation, and standards; it does not establish technical machinery, resources, throughput, or operational availability.",
+      },
+    ];
+    for (const chain of chains) {
+      const original = nistJudgments.find((item) => item.judgment_id === chain.originalJudgment)!;
+      const correction = nistJudgments.find(
+        (item) => item.judgment_id === chain.correctionJudgment,
+      )!;
+      const correctionLink = nistJudgments.find((item) => item.judgment_id === chain.linkJudgment)!;
+      expect(original).toMatchObject({
+        target_id: chain.originalRecord,
+        value: "approved",
+        status: "superseded",
+        superseded_by_judgment_id: correction.judgment_id,
+      });
+      expect(correction).toMatchObject({
+        target_id: chain.correctionRecord,
+        value: "approved",
+        status: "accepted",
+        reviewer: "Sara Kim",
+        created_at: "2026-08-29",
+        supersedes_judgment_ids: [original.judgment_id],
+      });
+      expect(correction.rationale).toBe(chain.rationale);
+      expect(correctionLink).toMatchObject({
+        target_id: chain.link,
+        value: "approved",
+        status: "accepted",
+        reviewer: "Sara Kim",
+        created_at: "2026-08-29",
+      });
+    }
+
+    const chainJudgments = new Set(
+      chains.flatMap((chain) => [chain.originalJudgment, chain.correctionJudgment]),
     );
-    expect(correctionLink).toMatchObject({
-      target_id: "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
-      value: "approved",
-      status: "accepted",
-      reviewer: "Sara Kim",
-      created_at: "2026-08-29",
-    });
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
-      if (judgment.judgment_id === original.judgment_id) continue;
-      if (judgment.judgment_id === correction.judgment_id) continue;
+      if (chainJudgments.has(judgment.judgment_id)) continue;
       expect(judgment).not.toHaveProperty("supersedes_judgment_ids");
       expect(judgment).not.toHaveProperty("superseded_by_judgment_id");
     }
@@ -753,8 +918,8 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(originalStageB.every((item) => item.value === "approved")).toBe(true);
     expect(originalStageB.every((item) => item.reviewer === "Sara Kim")).toBe(true);
     expect(originalStageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
-    expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(8);
-    expect(originalStageB.filter((item) => item.status === "superseded")).toEqual([original]);
+    expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(5);
+    expect(originalStageB.filter((item) => item.status === "superseded")).toHaveLength(4);
     expect(commissionJudgments.every((item) => item.status === "accepted")).toBe(true);
     expect(commissionJudgments.every((item) => item.value === "approved")).toBe(true);
     expect(commissionJudgments.every((item) => item.reviewer === "Sara Kim")).toBe(true);
@@ -792,7 +957,7 @@ describe("review preservation, judgments, links, and migrations", () => {
 
   test("migration ledgers cover all additions without rewriting Stage A entries", () => {
     const nistMigration = yaml<MigrationLedger>(NIST, "migration.yaml");
-    expect(nistMigration.entries).toHaveLength(19);
+    expect(nistMigration.entries).toHaveLength(25);
     expect(nistMigration.entries.slice(8, 17).map((item) => item.final_object)).toEqual([
       ...NIST_STAGE_B_IDS,
     ]);
@@ -802,6 +967,12 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(nistMigration.entries.slice(17).map((item) => item.final_object)).toEqual([
       NIST_LAB_NETWORK_CURRENT_ID,
       "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
+      "nist_ai_standards_group_placement_v2",
+      "nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement",
+      "nist_aml_facility_capacity_v2",
+      "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
+      "nist_ai_measurement_function",
+      "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
     ]);
     const ecMigration = yaml<MigrationLedger>(EC, "migration.yaml");
     expect(ecMigration.entries).toHaveLength(22);

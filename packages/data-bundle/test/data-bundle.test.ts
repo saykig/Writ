@@ -26,27 +26,27 @@ function countBy(values: readonly string[]): Record<string, number> {
 describe("Writ data bundle membership", () => {
   test("exports every manifest-routed record without approval filtering", () => {
     expect(bundle.corpora).toHaveLength(16);
-    expect(bundle.records).toHaveLength(73);
-    expect(bundle.recordLinks).toHaveLength(7);
-    expect(bundle.recordJudgments).toHaveLength(46);
+    expect(bundle.records).toHaveLength(76);
+    expect(bundle.recordLinks).toHaveLength(10);
+    expect(bundle.recordJudgments).toHaveLength(52);
 
     expect(countBy(bundle.records.map((record) => record.reviewState ?? "none"))).toEqual({
       accepted: 32,
       none: 2,
       draft: 3,
       approved: 34,
-      superseded: 2,
+      superseded: 5,
     });
     expect(countBy(bundle.records.map((record) => record.recordType))).toEqual({
       political_claim: 32,
       political_entity: 2,
       legal_policy: 3,
-      institutional: 36,
+      institutional: 39,
     });
   });
 
   test("uses globally unique stable keys and preserves corpus membership", () => {
-    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(73);
+    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(76);
     for (const record of bundle.records) {
       expect(record.recordKey).toBe(`${record.corpusId}::${record.recordId}`);
       expect(bundle.corpora.some((corpus) => corpus.corpusId === record.corpusId)).toBe(true);
@@ -144,7 +144,7 @@ describe("canonical source and provenance", () => {
 
   test("exports every NIST fact with complete portable structured evidence", () => {
     const records = bundle.records.filter((record) => record.corpusId === "us.institutions.nist");
-    expect(records).toHaveLength(16);
+    expect(records).toHaveLength(19);
     for (const record of records) {
       expect(record.recordKey).toBe(`us.institutions.nist::${record.recordId}`);
       expect(record.evidence.length, record.recordId).toBeGreaterThan(0);

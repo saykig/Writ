@@ -32,11 +32,27 @@ follow_up_review:
   status: completed_human_review
   reviewer: Sara Kim
   reviewed_at: 2026-08-29
-  superseded_record: nist_lab_network_capacity
-  approved_successor: nist_lab_network_capacity_v2
-  supersession_link: nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity
-  rationale: The cited passage establishes six NIST labs and user facilities but does not establish
-    that they are NIST’s principal or primary facilities.
+  decisions:
+    - superseded_record: nist_lab_network_capacity
+      approved_successor: nist_lab_network_capacity_v2
+      supersession_link: nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity
+      rationale: The cited passage establishes six NIST labs and user facilities but does not
+        establish that they are NIST’s principal or primary facilities.
+    - superseded_record: nist_ai_standards_group_placement
+      approved_successor: nist_ai_standards_group_placement_v2
+      supersession_link: nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement
+      rationale: The placement is supported by combining two passages rather than being stated
+        directly in one passage, so the successor evidence basis is inferred.
+    - superseded_record: nist_aml_facility_capacity
+      approved_successor: nist_aml_facility_capacity_v2
+      supersession_link: nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity
+      rationale: The passage directly establishes physical facility features and measurement
+        infrastructure without requiring the stronger wording “NIST maintains.”
+    - superseded_record: nist_ai_measurement_capacity
+      approved_successor: nist_ai_measurement_function
+      supersession_link: nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity
+      rationale: The passages establish a Division and its stated work but do not establish
+        operational capacity; the successor records only the atomic directly supported function.
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -119,10 +135,12 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_placement
-    final_form: native v0.2 atomic placement record
-    final_review_state: approved
+    final_form: native v0.2 atomic placement record retained as history
+    final_review_state: superseded
     identity_preserved: false
-    note: Automated Stage B proposal subsequently approved by human review with the directly evidenced AI division as parent.
+    note: Automated Stage B proposal subsequently approved by human review. Follow-up human review
+      retained the placement but corrected its evidence basis from direct to inferred because the
+      placement is established by composing two passages.
   - previous_object: null
     previous_form: none
     final_object: nist_lab_network_capacity
@@ -135,10 +153,12 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_aml_facility_capacity
-    final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_form: native v0.2 atomic operational-capacity record retained as history
+    final_review_state: superseded
     identity_preserved: false
-    note: Automated Stage B proposal subsequently approved by human review.
+    note: Automated Stage B proposal subsequently approved by human review. Follow-up human review
+      retained the facility-capacity classification but removed the unnecessary stronger wording
+      “NIST maintains” in a successor.
   - previous_object: null
     previous_form: none
     final_object: nist_nvlap_accred_capacity
@@ -149,10 +169,11 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_ai_measurement_capacity
-    final_form: native v0.2 atomic operational-capacity record
-    final_review_state: approved
+    final_form: native v0.2 atomic operational-capacity record retained as history
+    final_review_state: superseded
     identity_preserved: false
-    note: Automated Stage B proposal subsequently approved by human review held by NIST and implemented through the scoped AI division, classified as organizational-unit capacity; unsupported technical machinery and guidance were removed.
+    note: Automated Stage B proposal subsequently approved by human review. Follow-up human review
+      found the operational-capacity classification too strong and retained this record as history.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_consortium_capacity
@@ -175,6 +196,51 @@ entries:
     final_review_state: approved
     identity_preserved: false
     note: Directed from the minimally corrected approved record to the preserved superseded record.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_standards_group_placement_v2
+    final_form: native v0.2 atomic placement record produced by follow-up human review
+    final_review_state: approved
+    identity_preserved: false
+    note: The successor preserves the placement assertion, evidence, uncertainty and payload while
+      marking the two-passages composition as inferred.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: Directed from the inferred-basis placement record to the preserved historical record.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_aml_facility_capacity_v2
+    final_form: native v0.2 atomic operational-capacity record produced by follow-up human review
+    final_review_state: approved
+    identity_preserved: false
+    note: The successor preserves the direct evidence, facility-capacity payload and uncertainty
+      while limiting its assertion to the physical features established by the passage.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: Directed from the minimally corrected facility-capacity record to the preserved history.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_measurement_function
+    final_form: native v0.2 atomic function record produced by follow-up human review
+    final_review_state: approved
+    identity_preserved: false
+    note: The successor uses only the directly stated AI measurement-science, testing/evaluation
+      and standards work. The separate named-groups passage remains preserved outside this record.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: Directed from the atomic function record to the preserved historical capacity record.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:

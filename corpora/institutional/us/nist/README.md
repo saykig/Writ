@@ -1,7 +1,7 @@
 # NIST institutional corpus
 
-This draft corpus contains 16 atomic, source-grounded NIST institutional records. Fourteen records
-are approved and two records remain superseded review history. Record approval does not publish
+This draft corpus contains 19 atomic, source-grounded NIST institutional records. Fourteen records
+are approved and five records remain superseded review history. Record approval does not publish
 the corpus.
 
 Stage A preserved identity, organizational placement, NIST’s source-reported mission, and two AI
@@ -24,6 +24,15 @@ type, uncertainty and operational-capacity meaning while removing only the unsup
 “principal.” The directed Core supersession link and paired judgment history make the correction
 explicit.
 
+The same review completed the three remaining semantic decisions. The approved
+`nist_ai_standards_group_placement_v2` retains the placement while marking its two-passage support
+as inferred. `nist_aml_facility_capacity_v2` retains the direct facility-capacity evidence and
+uncertainty while limiting its assertion to the documented physical features. The atomic
+`nist_ai_measurement_function` replaces the too-strong capacity classification with only the
+Division’s directly stated AI measurement-science, testing/evaluation and standards work. The
+separate named-groups passage remains preserved in the source ledger, historical capacity record,
+and existing group records rather than being forced into the function successor.
+
 Official source identities, URLs, retrieval and version metadata, and pinned document hashes are
 registered in `sources.writ`. Each record embeds its exact supporting passage, narrow locator,
 passage hash, document hash, evidence basis, uncertainty, review state, and provenance. Raw HTML
@@ -40,5 +49,5 @@ effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are 
 prior annual-edition capture; the pinned document hash and original retrieval transport are
 recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml` and
 `docs/migrations/institutional-stage-b/human-review.yaml`; accepted human dispositions are in
-`judgments.writ`. The three Core links are stored only in their authoritative direction, and
+`judgments.writ`. The six Core links are stored only in their authoritative direction, and
 inverse links are derived rather than stored.

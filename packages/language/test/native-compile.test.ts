@@ -40,6 +40,6 @@ describe("native record compilation", () => {
       compiled[relative] = { records: result.records, judgments: result.judgments };
     }
     const digest = createHash("sha256").update(JSON.stringify(compiled)).digest("hex");
-    expect(digest).toBe("340eb45de5ac3980f1c1d1be93397eb6d6b163297e4192a71b42dc8fd8334eff");
+    expect(digest).toBe("b005340532aabbc7f1059156f6b538c2e8ffb4294ff00f9b9280f67cfc1c5489");
   });
 });

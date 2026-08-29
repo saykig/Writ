@@ -163,6 +163,9 @@ describe("corpus contract and status", () => {
       passages: ["sources.writ", "records.writ"],
       records: ["records.writ"],
       relationships: [
+        "relationships/nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity.yaml",
+        "relationships/nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement.yaml",
+        "relationships/nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity.yaml",
         LINK_FILES.part_of,
         "relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
         LINK_FILES.supersedes,
