@@ -48,6 +48,15 @@ interface DirectedSupportEdge {
   targetId: string;
 }
 
+function hasGroundedEvidence(
+  record: RepositorySnapshot["institutionalRecords"][number]["value"],
+): boolean {
+  return (
+    record.evidence.length > 0 &&
+    record.evidence.every(({ basis }) => basis === "direct" || basis === "inferred")
+  );
+}
+
 function inheritedSupportEdges(
   snapshot: RepositorySnapshot,
   inheritedLink: RepositorySnapshot["links"][number],
@@ -56,28 +65,23 @@ function inheritedSupportEdges(
   const edges: DirectedSupportEdge[] = [];
 
   for (const { value: record } of activeInstitutionalRecords(snapshot)) {
-    if (record.review_state !== "approved" || !supportIds.has(record.record_id)) continue;
+    if (
+      record.review_state !== "approved" ||
+      !supportIds.has(record.record_id) ||
+      !hasGroundedEvidence(record)
+    )
+      continue;
     if (record.institutional_fact_type === "placement") {
       edges.push({ sourceId: record.institution_id, targetId: record.parent_institution_id });
     } else if (
       record.institutional_fact_type === "relationship" &&
-      record.record_link.relation_type === "part_of"
+      record.record_link.relation_type === "part_of" &&
+      (record.record_link.basis === "direct" || record.record_link.basis === "inferred")
     ) {
       edges.push({
         sourceId: record.record_link.source_id,
         targetId: record.record_link.target_id,
       });
-    }
-  }
-
-  for (const { value: link } of activeLinks(snapshot)) {
-    if (
-      link.review_state === "approved" &&
-      link.relation_type === "part_of" &&
-      link.link_id !== inheritedLink.value.link_id &&
-      supportIds.has(link.link_id)
-    ) {
-      edges.push({ sourceId: link.source_id, targetId: link.target_id });
     }
   }
 
@@ -266,7 +270,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
         issue(
           "provenance",
           "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
-          `Inherited link ${link.link_id} does not have a compatible directed path from ${link.source_id} to ${link.target_id} through its declared approved placement or part_of support (${supportIds}); declare every directed support step or use a supported non-inherited basis.`,
+          `Inherited link ${link.link_id} does not have a compatible directed path from ${link.source_id} to ${link.target_id} through its declared approved, grounded placement or part_of relationship records (${supportIds}); declare every directed support step or use a supported non-inherited basis.`,
           { corpus_id: loaded.corpus_id, object_id: link.link_id, file: loaded.file },
         ),
       );

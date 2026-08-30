@@ -87,6 +87,45 @@ function addSyntheticScopeSupport(
   snapshot.records.push(loaded);
 }
 
+function addSyntheticRelationshipRecord(
+  snapshot: RepositorySnapshot,
+  recordId: string,
+  sourceId: string,
+  targetId: string,
+  basis: "direct" | "inferred" | "inherited",
+  supportingIds: string[] = [],
+): void {
+  const template = snapshot.institutionalRecords.find(
+    ({ value }) =>
+      value.institutional_fact_type === "placement" && value.review_state === "approved",
+  )!;
+  const base = structuredClone(template.value);
+  delete base.parent_institution_id;
+  const loaded = {
+    ...template,
+    file: `synthetic/${recordId}.writ`,
+    value: {
+      ...base,
+      record_id: recordId,
+      institution_id: sourceId,
+      institutional_fact_type: "relationship" as const,
+      record_link: {
+        link_id: `${recordId}_payload`,
+        source_id: sourceId,
+        source_kind: "institution",
+        target_id: targetId,
+        target_kind: "institution",
+        relation_type: "part_of" as const,
+        basis,
+        evidence_refs: [base.evidence[0]!.passage_id],
+        ...(supportingIds.length > 0 ? { supporting_record_ids: supportingIds } : {}),
+      },
+    },
+  };
+  snapshot.institutionalRecords.push(loaded);
+  snapshot.records.push(loaded);
+}
+
 function addSyntheticPartOfLink(
   snapshot: RepositorySnapshot,
   linkId: string,
@@ -340,18 +379,18 @@ describe("focused negative fixtures", () => {
     expect(findings).toContain("INTEROP_SUPPORT_NOT_FOUND");
   });
 
-  test("resolves an explicitly declared supporting record-link object", () => {
+  test("keeps supporting_record_ids limited to records", () => {
     const snapshot = clone();
     const link = snapshot.links.find(
       ({ value }) =>
         value.relation_type === "assigns_function_to" && value.review_state === "approved",
     )!;
-    const support = snapshot.links.find(
+    const unsupportedLink = snapshot.links.find(
       ({ value }) => value.relation_type === "part_of" && value.review_state === "approved",
     )!;
-    link.value.supporting_record_ids = [support.value.link_id];
+    link.value.supporting_record_ids = [unsupportedLink.value.link_id];
 
-    expect(codes(verifyInteroperability(snapshot))).not.toContain("INTEROP_SUPPORT_NOT_FOUND");
+    expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_SUPPORT_NOT_FOUND");
   });
 
   test("mechanically rejects endpoint kinds that do not match resolved objects", () => {
@@ -518,16 +557,15 @@ describe("focused negative fixtures", () => {
     }
   });
 
-  test("accepts a two-step inherited path composed from declared placement and part-of support", () => {
+  test("accepts a two-step inherited path composed from grounded placement and relationship records", () => {
     const snapshot = clone();
     addSyntheticPlacement(snapshot, "synthetic_placement_a_b", "synthetic_a", "synthetic_b");
-    addSyntheticPartOfLink(
+    addSyntheticRelationshipRecord(
       snapshot,
-      "synthetic_part_of_b_c",
+      "synthetic_relationship_b_c",
       "synthetic_b",
       "synthetic_c",
-      "direct",
-      [],
+      "inferred",
     );
     addSyntheticPartOfLink(
       snapshot,
@@ -535,7 +573,7 @@ describe("focused negative fixtures", () => {
       "synthetic_a",
       "synthetic_c",
       "inherited",
-      ["synthetic_placement_a_b", "synthetic_part_of_b_c"],
+      ["synthetic_placement_a_b", "synthetic_relationship_b_c"],
     );
 
     expect(
@@ -615,6 +653,69 @@ describe("focused negative fixtures", () => {
     expect(codes(verifyProvenance(snapshot))).toContain(
       "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
     );
+  });
+
+  test("rejects circular and self-supporting inherited links", () => {
+    const snapshot = clone();
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_cycle_one",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_cycle_two"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_cycle_two",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_cycle_one"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_self_support",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_self_support"],
+    );
+
+    const rejectedIds = verifyProvenance(snapshot)
+      .issues.filter(({ code }) => code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED")
+      .map(({ object_id }) => object_id);
+    expect(rejectedIds).toContain("synthetic_inherited_cycle_one");
+    expect(rejectedIds).toContain("synthetic_inherited_cycle_two");
+    expect(rejectedIds).toContain("synthetic_inherited_self_support");
+  });
+
+  test("rejects an ungrounded inherited institutional relationship record", () => {
+    const snapshot = clone();
+    addSyntheticRelationshipRecord(
+      snapshot,
+      "synthetic_inherited_relationship_a_b",
+      "synthetic_a",
+      "synthetic_b",
+      "inherited",
+      ["synthetic_inherited_relationship_a_b"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_b",
+      "synthetic_a",
+      "synthetic_b",
+      "inherited",
+      ["synthetic_inherited_relationship_a_b"],
+    );
+
+    expect(
+      verifyProvenance(snapshot).issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED" &&
+          object_id === "synthetic_inherited_a_b",
+      ),
+    ).toBe(true);
   });
 
   test("fails closed when part-of support cannot establish another inherited relation type", () => {
