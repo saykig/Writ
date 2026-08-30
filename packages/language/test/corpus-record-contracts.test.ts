@@ -185,13 +185,13 @@ describe("every catalogued manifest declares the contract its record files satis
     }
     expect(covered.size).toBe(16);
     // Nine generated files across each of the thirteen reviewed corpora, plus the
-    // seven approved institutional Core links and three approved cross-family links.
-    expect(yamlDocuments).toBe(117 + 10);
-    expect(linkDocuments).toBe(10);
-    // Three constitutional drafts, nineteen NIST records, and twenty Commission records.
-    expect(writRecords).toBe(42);
+    // twelve stored institutional Core links and three approved cross-family links.
+    expect(yamlDocuments).toBe(117 + 15);
+    expect(linkDocuments).toBe(15);
+    // Three constitutional drafts, nineteen NIST records, and twenty-four stored Commission records.
+    expect(writRecords).toBe(46);
     // Existing judgments, preserved superseded decisions, and accepted human dispositions.
-    expect(writJudgments).toBe(52);
+    expect(writJudgments).toBe(61);
   });
 
   for (const { entry, manifest } of corpora) {
