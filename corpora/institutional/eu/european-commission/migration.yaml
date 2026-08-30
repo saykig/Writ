@@ -31,6 +31,50 @@ post_review_id_renames:
     approved_by: Sara Kim
     approved_at: 2026-08-08
     review_artifact: docs/migrations/cross-family-interoperability/human-review.yaml
+transfer_test_follow_up_review:
+  status: completed_human_review
+  reviewer: Sara Kim
+  reviewed_at: 2026-08-30
+  source_version_check:
+    source: Treaty on European Union, Article 13
+    historical_source_id: eu.teu_article_13
+    historical_document_version_id: eu.teu_article_13.v2026_08_05
+    historical_document_sha256: sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37
+    retrieved_official_uri: https://publications.europa.eu/resource/celex/12012M013.ENG.html
+    retrieved_document_sha256: sha256:69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222
+    byte_comparison: different
+    disposition: Preserve the historical source/version and register a new content-derived exact
+      document-version identity for the corrected passage.
+  decisions:
+    - superseded_record: european_commission_identity
+      approved_successor: european_commission_identity_v2
+      supersession_link: european_commission_identity_v2_supersedes_european_commission_identity
+      rationale: The earlier quotation named the Commission without the institutional-list
+        predicate; the successor uses a self-sufficient exact Article 13(1) passage.
+    - superseded_record: eu_ai_office_placement
+      approved_successor: eu_ai_office_placement_v2
+      supersession_link: eu_ai_office_placement_v2_supersedes_eu_ai_office_placement
+      rationale: The successor states only the directly established DG CONNECT placement, removes
+        the unsupported possessive wording and corrects the Directorate-General name.
+    - superseded_record: european_commission_jrc_infra_capacity
+      approved_successor: european_commission_jrc_infra_capacity_v2
+      supersession_link: european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity
+      rationale: The source directly attributes the maintained physical infrastructures to the
+        Joint Research Centre rather than to the Commission as maintainer.
+    - superseded_record: eu_ai_office_gp_ai_enforcement_mandate
+      approved_successor: eu_ai_office_gp_ai_enforcement_mandate_v2
+      supersession_link: eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate
+      rationale: The successor retains only the authority source represented in its evidence
+        envelope.
+    - superseded_record_link: eu_ai_office_european_commission_relationship
+      approved_successor_link: eu_ai_office_european_commission_relationship_v2
+      basis: direct
+      evidence_passages:
+        - eu.commission_decision_c_2024_1459.recital_6
+        - eu.commission_decision_c_2024_1459.article_1
+      rationale: Recital (6) directly places the Office within the Commission and Article 1
+        directly establishes the Office's DG CONNECT placement; the old Article-1-only inherited
+        transition remains superseded history.
 entries:
   - previous_object: eu_ai_office_technical_documentation_receipt
     final_object: eu_ai_office_tech_doc_receipt
@@ -136,3 +180,30 @@ entries:
       final_object: eu_ai_office_cooperation_capacity,
       treatment: new automated proposal subsequently approved by human review,
     }
+  - previous_object: european_commission_identity
+    final_object: european_commission_identity_v2
+    treatment: post-NIST human-review successor using a self-sufficient Article 13 institutional-list passage from a newly registered exact source version
+  - previous_object: null
+    final_object: european_commission_identity_v2_supersedes_european_commission_identity
+    treatment: directed Core supersession link preserving the earlier identity record as history
+  - previous_object: eu_ai_office_placement
+    final_object: eu_ai_office_placement_v2
+    treatment: post-NIST human-review successor limited to the directly stated DG CONNECT placement
+  - previous_object: null
+    final_object: eu_ai_office_placement_v2_supersedes_eu_ai_office_placement
+    treatment: directed Core supersession link preserving the earlier placement record as history
+  - previous_object: european_commission_jrc_infra_capacity
+    final_object: european_commission_jrc_infra_capacity_v2
+    treatment: post-NIST human-review successor attributing the maintained infrastructure directly to the JRC
+  - previous_object: null
+    final_object: european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity
+    treatment: directed Core supersession link preserving the earlier capacity record as history
+  - previous_object: eu_ai_office_gp_ai_enforcement_mandate
+    final_object: eu_ai_office_gp_ai_enforcement_mandate_v2
+    treatment: post-NIST human-review successor retaining only authority sources present in the evidence envelope
+  - previous_object: null
+    final_object: eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate
+    treatment: directed Core supersession link preserving the earlier mandate record as history
+  - previous_object: eu_ai_office_european_commission_relationship
+    final_object: eu_ai_office_european_commission_relationship_v2
+    treatment: direct-evidence successor using recital (6) and Article 1 while preserving the Article-1-only inherited link as superseded history

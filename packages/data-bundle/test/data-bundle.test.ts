@@ -26,27 +26,27 @@ function countBy(values: readonly string[]): Record<string, number> {
 describe("Writ data bundle membership", () => {
   test("exports every manifest-routed record without approval filtering", () => {
     expect(bundle.corpora).toHaveLength(16);
-    expect(bundle.records).toHaveLength(76);
-    expect(bundle.recordLinks).toHaveLength(10);
-    expect(bundle.recordJudgments).toHaveLength(52);
+    expect(bundle.records).toHaveLength(80);
+    expect(bundle.recordLinks).toHaveLength(15);
+    expect(bundle.recordJudgments).toHaveLength(61);
 
     expect(countBy(bundle.records.map((record) => record.reviewState ?? "none"))).toEqual({
       accepted: 32,
       none: 2,
       draft: 3,
       approved: 34,
-      superseded: 5,
+      superseded: 9,
     });
     expect(countBy(bundle.records.map((record) => record.recordType))).toEqual({
       political_claim: 32,
       political_entity: 2,
       legal_policy: 3,
-      institutional: 39,
+      institutional: 43,
     });
   });
 
   test("uses globally unique stable keys and preserves corpus membership", () => {
-    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(76);
+    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(80);
     for (const record of bundle.records) {
       expect(record.recordKey).toBe(`${record.corpusId}::${record.recordId}`);
       expect(bundle.corpora.some((corpus) => corpus.corpusId === record.corpusId)).toBe(true);

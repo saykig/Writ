@@ -1,0 +1,16 @@
+schema_version: 1.0.0
+link_id: eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate
+owning_corpus_id: eu.institutions.european_commission
+source_id: eu_ai_office_gp_ai_enforcement_mandate_v2
+source_kind: record
+target_id: eu_ai_office_gp_ai_enforcement_mandate
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - passage_eu_ai_act_art_88_1
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-30
+review_state: approved

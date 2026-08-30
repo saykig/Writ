@@ -182,9 +182,9 @@ describe("retained corpus repository with NIST as the development proving ground
     expect(corpusIds).toContain(
       "writ.corpus.legal-policy.eu.european-union.artificial-intelligence-act-2024-1689",
     );
-    expect(baseline.records).toHaveLength(42);
-    expect(baseline.links).toHaveLength(10);
-    expect(baseline.judgments).toHaveLength(52);
+    expect(baseline.records).toHaveLength(46);
+    expect(baseline.links).toHaveLength(15);
+    expect(baseline.judgments).toHaveLength(61);
     expect(baseline.workflowStates).toEqual({});
     expect(baseline.loadIssues).toEqual([]);
   });
@@ -269,7 +269,9 @@ describe("focused negative fixtures", () => {
 
   test("detects missing native link endpoints, evidence, and support", () => {
     const snapshot = clone();
-    const partOf = snapshot.links.find(({ value }) => value.relation_type === "part_of")!;
+    const partOf = snapshot.links.find(
+      ({ value }) => value.relation_type === "part_of" && value.review_state === "approved",
+    )!;
     partOf.value.source_id = "missing_institution";
     partOf.value.evidence_refs = ["missing_passage"];
     partOf.value.supporting_record_ids = ["missing_record"];
@@ -398,7 +400,8 @@ describe("focused negative fixtures", () => {
       ({ previous_id }) => previous_id === "eu_ai_office_technical_documentation_receipt",
     )!;
     const link = snapshot.links.find(
-      ({ value }) => value.owning_corpus_id === migration.corpus_id,
+      ({ value }) =>
+        value.owning_corpus_id === migration.corpus_id && value.review_state === "approved",
     )!;
     link.value.supporting_record_ids = [migration.previous_id];
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_ACTIVE_LEGACY_ID");
@@ -426,7 +429,8 @@ describe("focused negative fixtures", () => {
 
   test("detects dangling active links", () => {
     const snapshot = clone();
-    snapshot.links[0]!.value.source_id = "missing_source";
+    const active = snapshot.links.find(({ value }) => value.review_state === "approved")!;
+    active.value.source_id = "missing_source";
     expect(codes(verifyIntegrity(snapshot, { runExternalChecks: false }))).toContain(
       "INTEGRITY_DANGLING_REFERENCE",
     );

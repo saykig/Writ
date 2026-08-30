@@ -9,6 +9,14 @@ source eu_teu_article_13 {
 }
 concept EuTeuArticle13Source { source_id eu.teu_article_13; source_title "Treaty on European Union, Article 13"; source_version "retrieved-2026-08-05"; source_date 2012-10-26; }
 
+source eu_teu_article_13_official_html {
+  uri "https://publications.europa.eu/resource/celex/12012M013.ENG.html";
+  media_type "text/html";
+  retrieved 2026-08-30T01:11:18-04:00;
+  sha256 "sha256:69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222";
+}
+concept EuTeuArticle13OfficialHtmlSource { source_id eu.teu_article_13.official_html; source_title "Treaty on European Union, Article 13"; source_version "official-journal-2012-10-26-english-html-retrieved-2026-08-30"; source_date 2012-10-26; }
+
 source eu_teu_article_17 {
   uri "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012M017";
   media_type "text/html";
@@ -74,6 +82,7 @@ source ec_jrc_research_infrastructures {
 concept EcJrcResearchInfrastructuresSource { source_id ec.jrc_research_infrastructures; source_title "Open access to JRC research infrastructures"; source_version "retrieved-2026-08-05"; source_date 2026-08-05; }
 
 concept EuTeuArticle13DocumentVersionIdentity { source_id eu.teu_article_13; document_version_id eu.teu_article_13.v2026_08_05; }
+concept EuTeuArticle13OfficialHtmlDocumentVersionIdentity { source_id eu.teu_article_13.official_html; document_version_id eu.teu_article_13.official_html.sha256_69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222; }
 concept EuTeuArticle17DocumentVersionIdentity { source_id eu.teu_article_17; document_version_id eu.teu_article_17.v2026_08_05; }
 concept EuTfeuArticle258DocumentVersionIdentity { source_id eu.tfeu_article_258; document_version_id eu.tfeu_article_258.v2026_08_05; }
 concept EuCommissionDecisionC20241459DocumentVersionIdentity { source_id eu.commission_decision_c_2024_1459; document_version_id eu.commission_decision_c_2024_1459.v2024_02_14; }

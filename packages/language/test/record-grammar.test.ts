@@ -71,7 +71,7 @@ describe("structured record lowering", () => {
     );
     const compiled = compileSource(readFileSync(path, "utf8"), { fileName: path });
     expect(compiled.schemaValid).toBe(true);
-    expect(compiled.records).toHaveLength(20);
+    expect(compiled.records).toHaveLength(24);
     const preservedFunctions = compiled.records.filter((record) =>
       [
         "eu_ai_office_tech_doc_receipt",
