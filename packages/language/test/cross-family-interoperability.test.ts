@@ -381,7 +381,7 @@ describe("mapping queue and preservation gates", () => {
     });
   });
 
-  test("preserves legal-policy and NIST reference bytes", () => {
+  test("preserves legal-policy, NIST, and reviewed Commission bytes", () => {
     const legalPolicyFiles = filesUnder(join(ROOT, "corpora/legal-policy"));
     expect(legalPolicyFiles).toHaveLength(138);
     expect(treeHash(legalPolicyFiles)).toBe(
@@ -392,6 +392,12 @@ describe("mapping queue and preservation gates", () => {
     );
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
       "a2c63c4be16836edcddc66cdc353c6975cad211936a6107c52d3e317a9a50e21",
+    );
+    expect(fileHash(join(EC, "records.writ"))).toBe(
+      "05cd96bb274e27d8eb455ab4aea3d37368088a56591144fc7bf3227331d36a11",
+    );
+    expect(fileHash(join(EC, "judgments.writ"))).toBe(
+      "bfa7bfc50e58548e5ddeb9f352837c57bfde53a041cfa22d189a20e988e111ec",
     );
   });
 
