@@ -1,14 +1,17 @@
 /**
- * RFC 8785 (JSON Canonicalization Scheme, "JCS") serializer plus Writ's
- * additional pre-hash normalization from `04_FORMAL_SEMANTICS.md` §16:
+ * Writ Canonical JSON v1.
  *
- *   - strings are Unicode NFC-normalized, then escaped with JCS string rules;
- *   - object keys are sorted by UTF-16 code unit (the JCS rule);
- *   - numbers use the ECMAScript `Number` serialization (RFC 8785 §3.2.2.3);
- *     non-finite numbers (NaN, ±Infinity) are rejected, and `-0` becomes `0`;
- *   - array order is preserved (order is semantically meaningful in Writ);
- *   - declared transport / volatile / self-referential fields are dropped
- *     before canonicalizing so that they do not affect the content hash.
+ * The profile derives whitespace-free serialization, JSON literal and string
+ * escaping, finite ECMAScript number serialization, recursive UTF-16 property
+ * ordering, preserved array order, and UTF-8 output from RFC 8785/JCS.
+ *
+ * Writ v1 additionally NFC-normalizes every string value and object key, and
+ * may omit declared JSON-Pointer fields before serialization. RFC 8785 instead
+ * requires parsed Unicode strings to remain unchanged and does not define this
+ * field-omission transform. The complete Writ profile is therefore not RFC
+ * 8785-conformant, even though it deliberately reuses JCS serialization rules.
+ * Existing Writ hashes remain defined by this profile; changing these steps
+ * would require a new profile and an explicit hash migration.
  *
  * The serializer operates on an in-memory JSON value (the result of
  * `JSON.parse` or an equivalent plain structure): `null`, boolean, number,
@@ -27,8 +30,9 @@ export class CanonicalJsonError extends Error {
 
 export interface CanonicalOptions {
   /**
-   * Fields to omit before canonicalizing (transport / volatile /
-   * self-referential fields declared non-semantic).
+   * Writ-specific fields to omit before canonicalizing (transport / volatile /
+   * self-referential fields declared non-semantic). This transform is not part
+   * of RFC 8785/JCS.
    *
    * Each entry is an RFC 6901 JSON Pointer, e.g. `"/signature"` or
    * `"/dependencies/methodology_bundle_hash"`. As a convenience, a bare token
@@ -58,9 +62,8 @@ function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<str
 }
 
 /**
- * Serialize `value` to its canonical JSON string per the rules documented at
- * the top of this module. The output is stable UTF-16 text; hashing is done
- * over its UTF-8 encoding (see `hash.ts`).
+ * Serialize `value` as Writ Canonical JSON v1. The output is stable UTF-16
+ * text; hashing is done over its UTF-8 encoding (see `hash.ts`).
  */
 export function canonicalJson(value: unknown, options?: CanonicalOptions): string {
   const drops = normalizeDropSet(options?.dropFields);
@@ -90,11 +93,10 @@ function serialize(value: unknown, pointer: string, drops: ReadonlySet<string>):
 }
 
 /**
- * NFC-normalize, then escape using JCS string rules. `JSON.stringify` of a
- * string already implements exactly the RFC 8785 §3.2.2.2 escaping: two-char
- * escapes for `"` `\` `\b` `\f` `\n` `\r` `\t`, lowercase `\u00xx` for the
- * remaining C0 controls, and all other characters (including non-ASCII) emitted
- * literally.
+ * Apply Writ's NFC transform, then use JCS-compatible escaping for valid
+ * Unicode string data. `JSON.stringify` emits two-character escapes for `"`
+ * `\` `\b` `\f` `\n` `\r` `\t`, lowercase `\u00xx` for the remaining C0
+ * controls, and other characters (including non-ASCII) literally.
  */
 function serializeString(value: string): string {
   return JSON.stringify(value.normalize("NFC"));
@@ -156,8 +158,9 @@ function serializeObject(
     seen.add(normKey);
     entries.push({ origKey, normKey, value: propertyValue });
   }
-  // Sort by UTF-16 code unit of the (normalized) key. JavaScript's `<` on
-  // strings compares code unit by code unit, exactly the JCS ordering.
+  // Sort by UTF-16 code unit of the Writ-normalized key. JavaScript's `<` on
+  // strings provides the ordering operation JCS specifies, but JCS would sort
+  // the original key without NFC normalization.
   entries.sort((a, b) => (a.normKey < b.normKey ? -1 : a.normKey > b.normKey ? 1 : 0));
 
   const parts: string[] = [];

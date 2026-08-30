@@ -1,11 +1,10 @@
 /**
- * Golden fixtures for RFC 8785 canonical JSON + SHA-256 hashing (CORE-003).
+ * Historical golden fixtures for Writ Canonical JSON v1 + SHA-256 hashing.
  *
- * `expectedCanonical` and `expectedHash` were produced by this package's own
- * implementation and are pinned here as cross-platform regression locks: any
- * drift in canonicalization or hashing changes these bytes and fails the suite.
- * `canonical.test.ts` additionally re-derives one hash with `node:crypto` to
- * guard against a self-consistent-but-wrong hash step.
+ * `expectedCanonical` and `expectedHash` are retained as cross-platform
+ * regression locks: any drift in canonicalization or hashing changes these
+ * bytes and fails the suite. Independent shared-JCS and Writ-specific profile
+ * vectors live in `profile-conformance.test.ts`.
  *
  * Non-ASCII is written with `\u` escapes so this source file stays pure ASCII
  * and unambiguous. At runtime `"café"` is the literal composed "café".
@@ -66,7 +65,8 @@ export const goldenCases: readonly GoldenCase[] = [
     expectedHash: "sha256:298ebe9dfd0022919780451da01d6ff22cd701ae9f614b77522b751906ac2784",
   },
   {
-    // JCS string escaping: quote, backslash, \n, \t, and a C0 control (U+0001).
+    // JCS-compatible escaping after Writ's NFC step: quote, backslash, \n, \t,
+    // and a C0 control (U+0001).
     name: "string_escapes",
     input: { s: 'a"b\\c\n\t\u0001' },
     expectedCanonical: '{"s":"a\\"b\\\\c\\n\\t\\u0001"}',
