@@ -1,5 +1,5 @@
 /**
- * Content-addressed SHA-256 hashing over RFC 8785 canonical JSON.
+ * Content-addressed SHA-256 hashing over Writ Canonical JSON v1.
  *
  * Every hash is `"sha256:" + lowercaseHex(sha256(utf8(canonicalJson(value))))`,
  * matching the `^sha256:[0-9a-f]{64}$` shape used throughout Writ's
@@ -16,8 +16,10 @@ export type HashOptions = CanonicalOptions;
 const PREFIX = "sha256:";
 
 /**
- * Canonicalize `value` (RFC 8785 + Writ §16 normalization) and return its
- * content hash as `"sha256:<64 lowercase hex>"`.
+ * Canonicalize `value` with Writ Canonical JSON v1 and return its content hash
+ * as `"sha256:<64 lowercase hex>"`. Existing Writ hashes are pinned to this
+ * profile, including NFC normalization and optional pre-canonicalization field
+ * omission; this function does not claim complete RFC 8785 conformance.
  */
 export function sha256Canonical(value: unknown, options?: HashOptions): string {
   const canonical = canonicalJson(value, options);

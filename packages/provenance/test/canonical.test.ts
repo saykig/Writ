@@ -70,9 +70,9 @@ test("insignificant whitespace in the source JSON text does not change bytes or 
   expect(canonicalJson(a)).toBe('{"a":[1,2,3],"b":1,"c":{"x":1,"y":2}}');
 });
 
-test("independent verification: node:crypto over the canonical string matches the pinned hash", () => {
-  // Guards against a self-consistent-but-wrong hash step: the implementation
-  // hashes with Bun.CryptoHasher, this recomputes with node:crypto.
+test("the documented SHA-256 formula over canonical UTF-8 matches the pinned hash", () => {
+  // The pinned literal is the regression oracle; this recomputation makes the
+  // canonical-text -> UTF-8 -> SHA-256 formula explicit.
   for (const c of goldenCases) {
     const canonical = canonicalJson(c.input, optsFor(c.dropFields));
     const independent = "sha256:" + createHash("sha256").update(canonical, "utf8").digest("hex");
