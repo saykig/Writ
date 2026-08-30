@@ -181,9 +181,9 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
       const finding = referenceIssue(
         snapshot,
         supportingId,
-        ["record", "legal_policy_claim"],
+        ["record", "legal_policy_claim", "record_link"],
         "INTEROP_SUPPORT_NOT_FOUND",
-        "Supporting record",
+        "Supporting object",
         loaded,
       );
       if (finding) issues.push(finding);

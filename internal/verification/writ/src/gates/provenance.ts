@@ -14,6 +14,11 @@ const activeLinks = (snapshot: RepositorySnapshot) =>
     ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
   );
 
+const activeInstitutionalRecords = (snapshot: RepositorySnapshot) =>
+  snapshot.institutionalRecords.filter(
+    ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
+  );
+
 function nestedReferences(value: unknown, key: string): string[] {
   if (Array.isArray(value)) return value.flatMap((item) => nestedReferences(item, key));
   if (value === null || typeof value !== "object") return [];
@@ -38,6 +43,68 @@ function sourceDocumentVersionIds(value: Record<string, unknown>): string[] {
     : [];
 }
 
+interface DirectedSupportEdge {
+  sourceId: string;
+  targetId: string;
+}
+
+function inheritedSupportEdges(
+  snapshot: RepositorySnapshot,
+  inheritedLink: RepositorySnapshot["links"][number],
+): DirectedSupportEdge[] {
+  const supportIds = new Set(inheritedLink.value.supporting_record_ids ?? []);
+  const edges: DirectedSupportEdge[] = [];
+
+  for (const { value: record } of activeInstitutionalRecords(snapshot)) {
+    if (record.review_state !== "approved" || !supportIds.has(record.record_id)) continue;
+    if (record.institutional_fact_type === "placement") {
+      edges.push({ sourceId: record.institution_id, targetId: record.parent_institution_id });
+    } else if (
+      record.institutional_fact_type === "relationship" &&
+      record.record_link.relation_type === "part_of"
+    ) {
+      edges.push({
+        sourceId: record.record_link.source_id,
+        targetId: record.record_link.target_id,
+      });
+    }
+  }
+
+  for (const { value: link } of activeLinks(snapshot)) {
+    if (
+      link.review_state === "approved" &&
+      link.relation_type === "part_of" &&
+      link.link_id !== inheritedLink.value.link_id &&
+      supportIds.has(link.link_id)
+    ) {
+      edges.push({ sourceId: link.source_id, targetId: link.target_id });
+    }
+  }
+
+  return edges;
+}
+
+function establishesDirectedPath(
+  sourceId: string,
+  targetId: string,
+  edges: readonly DirectedSupportEdge[],
+): boolean {
+  const visited = new Set([sourceId]);
+  const pending = [sourceId];
+  while (pending.length > 0) {
+    const current = pending.shift()!;
+    for (const edge of edges) {
+      if (edge.sourceId !== current) continue;
+      if (edge.targetId === targetId) return true;
+      if (!visited.has(edge.targetId)) {
+        visited.add(edge.targetId);
+        pending.push(edge.targetId);
+      }
+    }
+  }
+  return false;
+}
+
 /** Check judgment evidence, targets, supersession, and native ID migration history. */
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
@@ -50,6 +117,22 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
   for (const loaded of snapshot.institutionalRecords) {
     const record = loaded.value;
     const localPassages = new Set(record.evidence.map((evidence) => evidence.passage_id));
+
+    if (record.review_state !== "superseded" && record.review_state !== "withdrawn") {
+      const evidenceSourceIds = new Set(record.evidence.map((evidence) => evidence.source_id));
+      for (const authoritySourceId of nestedReferences(record, "authority_source_ids")) {
+        if (!evidenceSourceIds.has(authoritySourceId)) {
+          issues.push(
+            issue(
+              "provenance",
+              "PROVENANCE_AUTHORITY_SOURCE_NOT_EVIDENCED",
+              `Authority source ${authoritySourceId} is not present among the record's evidence source_id values; add evidence from that source or remove the unsupported authority declaration.`,
+              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+            ),
+          );
+        }
+      }
+    }
 
     for (const evidenceRef of nestedReferences(record, "evidence_refs")) {
       if (!localPassages.has(evidenceRef)) {
@@ -170,6 +253,23 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           file: loaded.file,
         });
       }
+    }
+  }
+
+  for (const loaded of activeLinks(snapshot)) {
+    const link = loaded.value;
+    if (link.basis !== "inherited") continue;
+    const edges = link.relation_type === "part_of" ? inheritedSupportEdges(snapshot, loaded) : [];
+    if (!establishesDirectedPath(link.source_id, link.target_id, edges)) {
+      const supportIds = link.supporting_record_ids?.join(", ") || "none";
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+          `Inherited link ${link.link_id} does not have a compatible directed path from ${link.source_id} to ${link.target_id} through its declared approved placement or part_of support (${supportIds}); declare every directed support step or use a supported non-inherited basis.`,
+          { corpus_id: loaded.corpus_id, object_id: link.link_id, file: loaded.file },
+        ),
+      );
     }
   }
 
