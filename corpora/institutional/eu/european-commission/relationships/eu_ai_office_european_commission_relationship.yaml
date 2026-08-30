@@ -1,6 +1,5 @@
-# The placement record is the authoritative direct assertion: AI Office is part of
-# DG CONNECT. This Core link provides inherited traversal from the Office to the
-# Commission root through that placement chain; no inverse is stored.
+# Historical root link retained after post-NIST review found that Article 1 alone
+# does not establish the transition from DG CONNECT to the Commission root.
 schema_version: 1.0.0
 link_id: eu_ai_office_european_commission_relationship
 owning_corpus_id: eu.institutions.european_commission
@@ -24,4 +23,4 @@ uncertainties:
 provenance:
   created_by: OpenAI Codex automated proposal
   created_at: 2026-08-05
-review_state: approved
+review_state: superseded

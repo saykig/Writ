@@ -86,16 +86,14 @@ function fileHash(path: string): string {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
-function normalizedFileHash(path: string, activeId: string, historicalId: string): string {
-  return createHash("sha256")
-    .update(readFileSync(path, "utf8").replaceAll(activeId, historicalId))
-    .digest("hex");
-}
-
 describe("approved institutional endpoint resolution", () => {
   test.each([
     ["nist", "us.institutions.nist", "nist_identity"],
-    ["european_commission", "eu.institutions.european_commission", "european_commission_identity"],
+    [
+      "european_commission",
+      "eu.institutions.european_commission",
+      "european_commission_identity_v2",
+    ],
     ["eu_ai_office", "eu.institutions.european_commission", "eu_ai_office_identity"],
   ])("%s resolves through exactly one approved identity", (institutionId, corpusId, recordId) => {
     expect(resolveApprovedInstitutionEndpoint(institutionId, resolutionInput)).toEqual({
@@ -355,17 +353,18 @@ describe("mapping queue and preservation gates", () => {
     )!;
     const nist = manifests.find((manifest) => manifest.corpus_id === "us.institutions.nist")!;
     expect(commission.record_counts).toMatchObject({
-      institutional_records: 20,
-      record_links: 4,
-      disposition_judgments: 27,
+      institutional_records: 24,
+      record_links: 9,
+      disposition_judgments: 36,
     });
     expect(commission.review_counts).toMatchObject({
       approved_records: 20,
-      approved_record_links: 4,
+      superseded_records: 4,
+      approved_record_links: 8,
       draft_record_links: 0,
-      accepted_disposition_judgments: 24,
+      accepted_disposition_judgments: 28,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 3,
+      superseded_disposition_judgments: 8,
     });
     expect(nist.record_counts).toMatchObject({
       institutional_records: 19,
@@ -382,7 +381,7 @@ describe("mapping queue and preservation gates", () => {
     });
   });
 
-  test("preserves legal-policy and reviewed institutional bytes", () => {
+  test("preserves legal-policy and NIST reference bytes", () => {
     const legalPolicyFiles = filesUnder(join(ROOT, "corpora/legal-policy"));
     expect(legalPolicyFiles).toHaveLength(138);
     expect(treeHash(legalPolicyFiles)).toBe(
@@ -394,20 +393,6 @@ describe("mapping queue and preservation gates", () => {
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
       "a2c63c4be16836edcddc66cdc353c6975cad211936a6107c52d3e317a9a50e21",
     );
-    expect(
-      normalizedFileHash(
-        join(EC, "records.writ"),
-        "eu_ai_office_tech_doc_receipt",
-        "eu_ai_office_technical_documentation_receipt",
-      ),
-    ).toBe("8d139e2d50b6c9237fe05132a09edde189fe3134a956c95da57b806b4289dc3d");
-    expect(
-      normalizedFileHash(
-        join(EC, "judgments.writ"),
-        "eu_ai_office_tech_doc_receipt",
-        "eu_ai_office_technical_documentation_receipt",
-      ),
-    ).toBe("e23481a97107b66d8a6c981270815b3fc560c6b4c158a64fbf611272c96fed1e");
   });
 
   test("keeps the pre-migration identifier out of active records and supporting references", () => {

@@ -1,0 +1,27 @@
+# Recital (6) directly states that the Office is established within the Commission;
+# Article 1 directly gives its DG CONNECT placement. No inverse is stored.
+schema_version: 1.0.0
+link_id: eu_ai_office_european_commission_relationship_v2
+owning_corpus_id: eu.institutions.european_commission
+source_id: eu_ai_office
+source_kind: organizational_unit
+target_id: european_commission
+target_kind: supranational_institution
+relation_type: part_of
+basis: direct
+evidence_refs:
+  - eu.commission_decision_c_2024_1459.recital_6
+  - eu.commission_decision_c_2024_1459.article_1
+supporting_record_ids:
+  - eu_ai_office_placement_v2
+uncertainties:
+  - type: incomplete_evidence
+    description:
+      Recital (6) directly establishes the Office within the Commission and Article 1 directly
+      establishes its placement in DG CONNECT. These passages do not establish independent legal
+      personality, mandate, decision rights or the Commission's degree of control over each Office
+      activity.
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-30
+review_state: approved

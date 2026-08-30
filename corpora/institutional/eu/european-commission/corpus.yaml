@@ -13,17 +13,18 @@ identity_namespace: eu.institutions.european_commission
 migration_aliases: []
 root_institution_id: european_commission
 record_counts:
-  institutional_records: 20
-  record_links: 4
-  disposition_judgments: 27
+  institutional_records: 24
+  record_links: 9
+  disposition_judgments: 36
 review_counts:
   approved_records: 20
+  superseded_records: 4
   draft_records: 0
-  approved_record_links: 4
+  approved_record_links: 8
   draft_record_links: 0
-  accepted_disposition_judgments: 24
+  accepted_disposition_judgments: 28
   proposed_disposition_judgments: 0
-  superseded_disposition_judgments: 3
+  superseded_disposition_judgments: 8
 unresolved_evidence_count: 0
 locations:
   sources:
@@ -37,6 +38,11 @@ locations:
     - records.writ
   relationships:
     - relationships/eu_ai_office_european_commission_relationship.yaml
+    - relationships/eu_ai_office_european_commission_relationship_v2.yaml
+    - relationships/european_commission_identity_v2_supersedes_european_commission_identity.yaml
+    - relationships/eu_ai_office_placement_v2_supersedes_eu_ai_office_placement.yaml
+    - relationships/european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity.yaml
+    - relationships/eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate.yaml
     - relationships/cross-family/eu_ai_act_art_53_1_a_assigns_function_to_eu_ai_office.yaml
     - relationships/cross-family/eu_ai_act_art_53_1_d_assigns_function_to_eu_ai_office.yaml
     - relationships/cross-family/eu_ai_act_art_55_1_c_assigns_function_to_eu_ai_office.yaml

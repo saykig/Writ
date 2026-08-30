@@ -453,13 +453,14 @@ def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_
 
 def test_ai_office_records_are_atomic_approved_records() -> None:
     text = (ROOT / "corpora/institutional/eu/european-commission/records.writ").read_text()
-    assert text.count("\nrecord ") == 20
+    assert text.count("\nrecord ") == 24
     assert text.count("fact_type function;") == 7
     assert text.count("review_state draft;") == 0
     assert text.count("review_state approved;") == 20
-    assert text.count("fact_type mandate;") == 2
+    assert text.count("review_state superseded;") == 4
+    assert text.count("fact_type mandate;") == 3
     assert text.count("fact_type decision_right;") == 3
-    assert text.count("fact_type operational_capacity;") == 3
+    assert text.count("fact_type operational_capacity;") == 4
     assert text.count("fact_type mission;") == 2
 
 

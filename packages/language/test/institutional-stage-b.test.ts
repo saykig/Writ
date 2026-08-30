@@ -235,6 +235,18 @@ const NIST_FOLLOW_UP_LINK_IDS = [
   "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
   "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
 ] as const;
+const COMMISSION_FOLLOW_UP_SUCCESSOR_IDS = [
+  "european_commission_identity_v2",
+  "eu_ai_office_placement_v2",
+  "european_commission_jrc_infra_capacity_v2",
+  "eu_ai_office_gp_ai_enforcement_mandate_v2",
+] as const;
+const COMMISSION_FOLLOW_UP_LINK_IDS = [
+  "european_commission_identity_v2_supersedes_european_commission_identity",
+  "eu_ai_office_placement_v2_supersedes_eu_ai_office_placement",
+  "european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity",
+  "eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate",
+] as const;
 const COMMISSION_BASELINE_IDS = [
   "eu_ai_office_tech_doc_receipt",
   "eu_ai_office_training_sum_temp_function",
@@ -495,26 +507,127 @@ describe("Stage B production inventories", () => {
     expect(record("nist_ai_standards_group_identity").evidence[0]).toEqual(historical.evidence[1]!);
   });
 
-  test("Commission preserves three baseline records and has 20 human-approved records", () => {
-    expect(commission.records).toHaveLength(20);
+  test("Commission preserves its history and has 20 active human-approved records", () => {
+    expect(commission.records).toHaveLength(24);
     for (const id of COMMISSION_BASELINE_IDS) expect(record(id).review_state).toBe("approved");
     const baselineIds = new Set<string>(COMMISSION_BASELINE_IDS);
-    expect(commission.records.filter((item) => !baselineIds.has(item.record_id))).toHaveLength(17);
-    expect(new Set(commission.records.map((item) => item.record_id)).size).toBe(20);
-    expect(commission.records.every((item) => item.review_state === "approved")).toBe(true);
+    expect(commission.records.filter((item) => !baselineIds.has(item.record_id))).toHaveLength(21);
+    expect(new Set(commission.records.map((item) => item.record_id)).size).toBe(24);
+    expect(commission.records.filter((item) => item.review_state === "approved")).toHaveLength(20);
+    expect(commission.records.filter((item) => item.review_state === "superseded")).toHaveLength(4);
+    expect(COMMISSION_FOLLOW_UP_SUCCESSOR_IDS.every((id) => byId.has(id))).toBe(true);
     expect(manifest(EC).record_counts).toEqual({
-      institutional_records: 20,
-      record_links: 4,
-      disposition_judgments: 27,
+      institutional_records: 24,
+      record_links: 9,
+      disposition_judgments: 36,
     });
     expect(manifest(EC).review_counts).toEqual({
       approved_records: 20,
+      superseded_records: 4,
       draft_records: 0,
-      approved_record_links: 4,
+      approved_record_links: 8,
       draft_record_links: 0,
-      accepted_disposition_judgments: 24,
+      accepted_disposition_judgments: 28,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 3,
+      superseded_disposition_judgments: 8,
+    });
+  });
+
+  test("the Commission identity successor uses a self-sufficient exact source version", () => {
+    const historical = record("european_commission_identity");
+    const current = record("european_commission_identity_v2");
+    expect(historical.review_state).toBe("superseded");
+    expect(historical.evidence[0]).toMatchObject({
+      source_id: "eu.teu_article_13",
+      document_version_id: "eu.teu_article_13.v2026_08_05",
+      passage_id: "eu.teu_article_13.commission",
+      document_hash: "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37",
+    });
+    expect(current).toMatchObject({
+      review_state: "approved",
+      institutional_fact_type: "identity",
+      institution_id: "european_commission",
+      institution_type: "supranational_institution",
+      assertion: {
+        mode: "defines",
+        text: "The European Commission is an institution of the European Union.",
+      },
+    });
+    expect(current.evidence).toHaveLength(1);
+    expect(current.evidence[0]).toMatchObject({
+      source_id: "eu.teu_article_13.official_html",
+      document_version_id:
+        "eu.teu_article_13.official_html.sha256_69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222",
+      passage_id: "eu.teu_article_13.official_html.institutional_list",
+      document_hash: "sha256:69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222",
+      basis: "direct",
+    });
+    expect(current.evidence[0]!.quote).toContain("The Union's institutions shall be:");
+    expect(current.evidence[0]!.quote).toContain("- the European Commission");
+    expect(current.provenance).toEqual({
+      created_by: "OpenAI Codex implementation of approved human review",
+      created_at: "2026-08-30",
+    });
+  });
+
+  test("the AI Office placement successor states only the direct DG CONNECT placement", () => {
+    const historical = record("eu_ai_office_placement");
+    const current = record("eu_ai_office_placement_v2");
+    expect(historical.review_state).toBe("superseded");
+    expect(current).toMatchObject({
+      review_state: "approved",
+      institutional_fact_type: "placement",
+      institution_id: "eu_ai_office",
+      parent_institution_id: "european_commission.dg_connect",
+      assertion: {
+        mode: "states",
+        text: "The European Artificial Intelligence Office is part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology.",
+      },
+    });
+    expect(current.assertion.text).not.toContain("European Commission’s");
+    expect(current.assertion.text).not.toContain("Communications Networks");
+    expect(current.evidence[0]).toEqual(historical.evidence[0]);
+    expect(current.evidence[1]).toMatchObject({
+      passage_id: "eu.commission_decision_c_2024_1459.recital_6",
+      basis: "direct",
+    });
+  });
+
+  test("the JRC capacity successor changes the holder without changing its machinery", () => {
+    const historical = capacityRecord("european_commission_jrc_infra_capacity");
+    const current = capacityRecord("european_commission_jrc_infra_capacity_v2");
+    expect(historical.review_state).toBe("superseded");
+    expect(current.review_state).toBe("approved");
+    expect(current.institution_id).toBe("european_commission.joint_research_centre");
+    expect(current.subjects).toEqual([
+      {
+        subject_id: "european_commission.joint_research_centre",
+        subject_type: "organizational_unit",
+        role: "infrastructure maintainer",
+      },
+    ]);
+    expect(current.scope.institutional_scope).toEqual([
+      "european_commission.joint_research_centre",
+    ]);
+    expect(current.evidence).toEqual(historical.evidence);
+    expect(current.operational_capacity).toEqual(historical.operational_capacity);
+    expect(current.assertion.text).toContain("The Joint Research Centre maintains");
+    expect(current.assertion.text).not.toContain("European Commission maintains");
+  });
+
+  test("the GPAI mandate successor removes only the uncited authority source", () => {
+    const historical = record("eu_ai_office_gp_ai_enforcement_mandate");
+    const current = record("eu_ai_office_gp_ai_enforcement_mandate_v2");
+    expect(historical.review_state).toBe("superseded");
+    expect(current.review_state).toBe("approved");
+    expect(current.assertion).toEqual(historical.assertion);
+    expect(current.evidence).toEqual(historical.evidence);
+    expect(current.uncertainties).toEqual(historical.uncertainties);
+    const { authority_source_ids: _historicalAuthoritySources, ...historicalMandate } =
+      historical.mandate as Record<string, unknown>;
+    expect(current.mandate).toEqual({
+      ...historicalMandate,
+      authority_source_ids: ["eu_ai_act_2024_1689"],
     });
   });
 
@@ -531,13 +644,13 @@ describe("atomic institutional distinctions", () => {
     ["nist_ai_standards_group_identity", "identity"],
     ["nist_ai_standards_group_placement_v2", "placement"],
     ["nist_ai_measurement_function", "function"],
-    ["european_commission_identity", "identity"],
+    ["european_commission_identity_v2", "identity"],
     ["eu_ai_office_identity", "identity"],
-    ["eu_ai_office_placement", "placement"],
+    ["eu_ai_office_placement_v2", "placement"],
     ["european_commission_mission", "mission"],
     ["eu_ai_office_mission", "mission"],
     ["european_commission_union_law_mandate", "mandate"],
-    ["eu_ai_office_gp_ai_enforcement_mandate", "mandate"],
+    ["eu_ai_office_gp_ai_enforcement_mandate_v2", "mandate"],
     ["european_commission_legislative_proposal_function", "function"],
     ["european_commission_budget_mgmt_function", "function"],
     ["eu_ai_office_model_eval_function", "function"],
@@ -601,7 +714,7 @@ describe("atomic institutional distinctions", () => {
     expect(record("nist_ai_standards_group_placement_v2").parent_institution_id).toBe(
       "nist.ai_research_measurement_standards_division",
     );
-    expect(record("eu_ai_office_placement").parent_institution_id).toBe(
+    expect(record("eu_ai_office_placement_v2").parent_institution_id).toBe(
       "european_commission.dg_connect",
     );
   });
@@ -669,7 +782,7 @@ describe("operational-capacity contract", () => {
   });
 
   test("unknown vocabulary, duplicate components, and unqualified quantities fail", () => {
-    const identity = structuredClone(record("european_commission_identity"));
+    const identity = structuredClone(record("european_commission_identity_v2"));
     identity.institution_type = "unknown_new_type";
     expect(validate("institutional-record", identity).valid).toBe(false);
     const base = structuredClone(capacityRecord(NIST_LAB_NETWORK_CURRENT_ID));
@@ -712,6 +825,8 @@ describe("operational-capacity contract", () => {
     const auditRecordId = (recordId: string) => {
       if (recordId === NIST_LAB_NETWORK_CURRENT_ID) return "nist_lab_network_capacity";
       if (recordId === "nist_aml_facility_capacity_v2") return "nist_aml_facility_capacity";
+      if (recordId === "european_commission_jrc_infra_capacity_v2")
+        return "european_commission_jrc_infra_capacity";
       return recordId;
     };
     expect(Object.keys(audit.records).sort()).toEqual(
@@ -754,7 +869,7 @@ describe("operational-capacity contract", () => {
 
   test("federal, supranational, and organizational-unit types remain distinct", () => {
     expect(record("nist_identity").institution_type).toBe("federal_agency");
-    expect(record("european_commission_identity").institution_type).toBe(
+    expect(record("european_commission_identity_v2").institution_type).toBe(
       "supranational_institution",
     );
     expect(record("nist_ai_standards_group_identity").institution_type).toBe("organizational_unit");
@@ -763,7 +878,7 @@ describe("operational-capacity contract", () => {
 
   test("different institutional forms retain distinct components and ownership boundaries", () => {
     const nistLabs = capacityRecord(NIST_LAB_NETWORK_CURRENT_ID).operational_capacity;
-    const jrc = capacityRecord("european_commission_jrc_infra_capacity").operational_capacity;
+    const jrc = capacityRecord("european_commission_jrc_infra_capacity_v2").operational_capacity;
     expect(nistLabs.capacity_type).toBe(jrc.capacity_type);
     expect(nistLabs.capacity_components).not.toEqual(jrc.capacity_components);
     expect(record("nist_ai_consortium_capacity").uncertainties[0]!.description).toContain(
@@ -810,11 +925,12 @@ describe("review preservation, judgments, links, and migrations", () => {
 
   test("judgments preserve all superseded decisions and approve each reviewed successor", () => {
     expect(nistJudgments).toHaveLength(25);
-    expect(commissionJudgments).toHaveLength(21);
-    const commissionLink = yaml<RecordLink>(
-      EC,
-      "relationships/eu_ai_office_european_commission_relationship.yaml",
-    );
+    expect(commissionJudgments).toHaveLength(30);
+    const commissionLinkIds = [
+      "eu_ai_office_european_commission_relationship",
+      "eu_ai_office_european_commission_relationship_v2",
+      ...COMMISSION_FOLLOW_UP_LINK_IDS,
+    ];
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
       expect(validate("record-judgment", judgment).valid).toBe(true);
       if (judgment.target_kind === "record") expect(byId.has(judgment.target_id)).toBe(true);
@@ -823,7 +939,7 @@ describe("review preservation, judgments, links, and migrations", () => {
           "nist_department_of_commerce_relationship",
           ...NIST_FOLLOW_UP_LINK_IDS,
           "nist_mission_supersedes_nist_measurement_science_function",
-          commissionLink.link_id,
+          ...commissionLinkIds,
         ]).toContain(judgment.target_id);
     }
 
@@ -900,9 +1016,106 @@ describe("review preservation, judgments, links, and migrations", () => {
       });
     }
 
+    const commissionChains = [
+      {
+        originalJudgment: "judgment_european_commission_identity_review",
+        originalRecord: "european_commission_identity",
+        correctionJudgment: "judgment_european_commission_identity_v2_human_review",
+        correctionRecord: "european_commission_identity_v2",
+        linkJudgment: "judgment_european_commission_identity_v2_supersession_link_human_review",
+        link: "european_commission_identity_v2_supersedes_european_commission_identity",
+      },
+      {
+        originalJudgment: "judgment_eu_ai_office_placement_review",
+        originalRecord: "eu_ai_office_placement",
+        correctionJudgment: "judgment_eu_ai_office_placement_v2_human_review",
+        correctionRecord: "eu_ai_office_placement_v2",
+        linkJudgment: "judgment_eu_ai_office_placement_v2_supersession_link_human_review",
+        link: "eu_ai_office_placement_v2_supersedes_eu_ai_office_placement",
+      },
+      {
+        originalJudgment: "judgment_european_commission_jrc_infra_capacity_review",
+        originalRecord: "european_commission_jrc_infra_capacity",
+        correctionJudgment: "judgment_european_commission_jrc_infra_capacity_v2_human_review",
+        correctionRecord: "european_commission_jrc_infra_capacity_v2",
+        linkJudgment:
+          "judgment_european_commission_jrc_infra_capacity_v2_supersession_link_human_review",
+        link: "european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity",
+      },
+      {
+        originalJudgment: "judgment_eu_ai_office_gp_ai_enforcement_mandate_review",
+        originalRecord: "eu_ai_office_gp_ai_enforcement_mandate",
+        correctionJudgment: "judgment_eu_ai_office_gp_ai_enforcement_mandate_v2_human_review",
+        correctionRecord: "eu_ai_office_gp_ai_enforcement_mandate_v2",
+        linkJudgment:
+          "judgment_eu_ai_office_gp_ai_enforcement_mandate_v2_supersession_link_human_review",
+        link: "eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate",
+      },
+    ];
+    for (const chain of commissionChains) {
+      const original = commissionJudgments.find(
+        (item) => item.judgment_id === chain.originalJudgment,
+      )!;
+      const correction = commissionJudgments.find(
+        (item) => item.judgment_id === chain.correctionJudgment,
+      )!;
+      const correctionLink = commissionJudgments.find(
+        (item) => item.judgment_id === chain.linkJudgment,
+      )!;
+      expect(original).toMatchObject({
+        target_id: chain.originalRecord,
+        value: "approved",
+        status: "superseded",
+        superseded_by_judgment_id: correction.judgment_id,
+      });
+      expect(correction).toMatchObject({
+        target_id: chain.correctionRecord,
+        value: "approved",
+        status: "accepted",
+        reviewer: "Sara Kim",
+        created_at: "2026-08-30",
+        supersedes_judgment_ids: [original.judgment_id],
+      });
+      expect(correctionLink).toMatchObject({
+        target_id: chain.link,
+        value: "approved",
+        status: "accepted",
+        reviewer: "Sara Kim",
+        created_at: "2026-08-30",
+      });
+    }
+
+    const historicalRootLinkJudgment = commissionJudgments.find(
+      (item) =>
+        item.judgment_id === "judgment_eu_ai_office_european_commission_relationship_review",
+    )!;
+    const currentRootLinkJudgment = commissionJudgments.find(
+      (item) =>
+        item.judgment_id ===
+        "judgment_eu_ai_office_european_commission_relationship_v2_human_review",
+    )!;
+    expect(historicalRootLinkJudgment).toMatchObject({
+      target_id: "eu_ai_office_european_commission_relationship",
+      status: "superseded",
+      superseded_by_judgment_id: currentRootLinkJudgment.judgment_id,
+    });
+    expect(currentRootLinkJudgment).toMatchObject({
+      target_id: "eu_ai_office_european_commission_relationship_v2",
+      value: "approved",
+      status: "accepted",
+      reviewer: "Sara Kim",
+      created_at: "2026-08-30",
+      supersedes_judgment_ids: [historicalRootLinkJudgment.judgment_id],
+    });
+
     const chainJudgments = new Set(
-      chains.flatMap((chain) => [chain.originalJudgment, chain.correctionJudgment]),
+      [...chains, ...commissionChains].flatMap((chain) => [
+        chain.originalJudgment,
+        chain.correctionJudgment,
+      ]),
     );
+    chainJudgments.add(historicalRootLinkJudgment.judgment_id);
+    chainJudgments.add(currentRootLinkJudgment.judgment_id);
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
       if (chainJudgments.has(judgment.judgment_id)) continue;
       expect(judgment).not.toHaveProperty("supersedes_judgment_ids");
@@ -920,39 +1133,69 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(originalStageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
     expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(5);
     expect(originalStageB.filter((item) => item.status === "superseded")).toHaveLength(4);
-    expect(commissionJudgments.every((item) => item.status === "accepted")).toBe(true);
-    expect(commissionJudgments.every((item) => item.value === "approved")).toBe(true);
+    const originalCommissionReview = commissionJudgments.filter(
+      (item) => item.created_at === "2026-08-08",
+    );
+    const commissionFollowUp = commissionJudgments.filter(
+      (item) => item.created_at === "2026-08-30",
+    );
+    expect(originalCommissionReview).toHaveLength(21);
+    expect(originalCommissionReview.every((item) => item.value === "approved")).toBe(true);
+    expect(originalCommissionReview.filter((item) => item.status === "accepted")).toHaveLength(16);
+    expect(originalCommissionReview.filter((item) => item.status === "superseded")).toHaveLength(5);
+    expect(commissionFollowUp).toHaveLength(9);
+    expect(commissionFollowUp.every((item) => item.status === "accepted")).toBe(true);
+    expect(commissionFollowUp.every((item) => item.value === "approved")).toBe(true);
     expect(commissionJudgments.every((item) => item.reviewer === "Sara Kim")).toBe(true);
-    expect(commissionJudgments.every((item) => item.created_at === "2026-08-08")).toBe(true);
     expect(validateJudgmentSupersession(nistJudgments).valid).toBe(true);
     expect(validateJudgmentSupersession(commissionJudgments).valid).toBe(true);
     expect(nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b"))).toHaveLength(9);
-    expect(commissionJudgments.filter((item) => item.target_kind === "record")).toHaveLength(20);
+    expect(commissionJudgments.filter((item) => item.target_kind === "record")).toHaveLength(24);
     expect(commissionJudgments.filter((item) => item.target_kind === "record_link")).toHaveLength(
-      1,
+      6,
     );
   });
 
-  test("the Commission root link is inherited through direct DG CONNECT placement", () => {
-    const link = yaml<RecordLink>(
+  test("the Commission root link successor cites the exact direct transition", () => {
+    const historical = yaml<RecordLink>(
       EC,
       "relationships/eu_ai_office_european_commission_relationship.yaml",
     );
-    expect(validate("record-link", link).valid).toBe(true);
-    expect(link).toMatchObject({
+    const current = yaml<RecordLink>(
+      EC,
+      "relationships/eu_ai_office_european_commission_relationship_v2.yaml",
+    );
+    expect(validate("record-link", historical).valid).toBe(true);
+    expect(historical).toMatchObject({
       link_id: "eu_ai_office_european_commission_relationship",
+      basis: "inherited",
+      supporting_record_ids: ["eu_ai_office_placement"],
+      review_state: "superseded",
+    });
+    expect(validate("record-link", current).valid).toBe(true);
+    expect(current).toMatchObject({
+      link_id: "eu_ai_office_european_commission_relationship_v2",
       source_id: "eu_ai_office",
       source_kind: "organizational_unit",
       target_id: "european_commission",
       target_kind: "supranational_institution",
       relation_type: "part_of",
-      basis: "inherited",
-      supporting_record_ids: ["eu_ai_office_placement"],
+      basis: "direct",
+      evidence_refs: [
+        "eu.commission_decision_c_2024_1459.recital_6",
+        "eu.commission_decision_c_2024_1459.article_1",
+      ],
+      supporting_record_ids: ["eu_ai_office_placement_v2"],
       review_state: "approved",
     });
-    const source = read(EC, "relationships/eu_ai_office_european_commission_relationship.yaml");
-    expect(source).not.toContain("has_part");
-    expect(source).not.toContain("eu_ai_office_euro_comiss_relationship");
+    for (const path of [
+      "relationships/eu_ai_office_european_commission_relationship.yaml",
+      "relationships/eu_ai_office_european_commission_relationship_v2.yaml",
+    ]) {
+      const source = read(EC, path);
+      expect(source).not.toContain("has_part");
+      expect(source).not.toContain("eu_ai_office_euro_comiss_relationship");
+    }
   });
 
   test("migration ledgers cover all additions without rewriting Stage A entries", () => {
@@ -975,8 +1218,19 @@ describe("review preservation, judgments, links, and migrations", () => {
       "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
     ]);
     const ecMigration = yaml<MigrationLedger>(EC, "migration.yaml");
-    expect(ecMigration.entries).toHaveLength(22);
-    expect(new Set(ecMigration.entries.map((item) => item.final_object)).size).toBe(22);
+    expect(ecMigration.entries).toHaveLength(31);
+    expect(new Set(ecMigration.entries.map((item) => item.final_object)).size).toBe(31);
+    expect(ecMigration.entries.slice(22).map((item) => item.final_object)).toEqual([
+      "european_commission_identity_v2",
+      "european_commission_identity_v2_supersedes_european_commission_identity",
+      "eu_ai_office_placement_v2",
+      "eu_ai_office_placement_v2_supersedes_eu_ai_office_placement",
+      "european_commission_jrc_infra_capacity_v2",
+      "european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity",
+      "eu_ai_office_gp_ai_enforcement_mandate_v2",
+      "eu_ai_office_gp_ai_enforcement_mandate_v2_supersedes_eu_ai_office_gp_ai_enforcement_mandate",
+      "eu_ai_office_european_commission_relationship_v2",
+    ]);
   });
 
   test("the completed queue and durable artifact cover every Stage B human decision", () => {
@@ -991,10 +1245,15 @@ describe("review preservation, judgments, links, and migrations", () => {
       "docs/migrations/institutional-stage-b/human-review.yaml",
     );
     const items = Object.values(queue.schema_queues).flat();
+    const originalCommissionJudgments = commissionJudgments.filter(
+      (item) => item.created_at === "2026-08-08",
+    );
     expect(items).toHaveLength(30);
     expect(new Set(items.map((item) => item.judgment_id))).toEqual(
       new Set(
-        [...nistJudgments.slice(8, 17), ...commissionJudgments].map((item) => item.judgment_id),
+        [...nistJudgments.slice(8, 17), ...originalCommissionJudgments].map(
+          (item) => item.judgment_id,
+        ),
       ),
     );
     expect(
@@ -1003,7 +1262,9 @@ describe("review preservation, judgments, links, and migrations", () => {
       ),
     ).toEqual(
       new Set(
-        [...nistJudgments.slice(8, 17), ...commissionJudgments].map((item) => item.target_id),
+        [...nistJudgments.slice(8, 17), ...originalCommissionJudgments].map(
+          (item) => item.target_id,
+        ),
       ),
     );
     expect(
@@ -1269,6 +1530,28 @@ describe("source and repository boundaries", () => {
         expect(item.document_hash, item.passage_id).toBe(metadata!.documentHash);
       }
     }
+  });
+
+  test("the corrected Article 13 passage uses a distinct exact source-version identity", () => {
+    const sources = structuredSources(EC);
+    const historical = sources.get("eu.teu_article_13")!;
+    const current = sources.get("eu.teu_article_13.official_html")!;
+    expect(historical).toMatchObject({
+      documentVersionId: "eu.teu_article_13.v2026_08_05",
+      documentHash: "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37",
+    });
+    expect(current).toEqual({
+      sourceId: "eu.teu_article_13.official_html",
+      documentVersionId:
+        "eu.teu_article_13.official_html.sha256_69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222",
+      uri: "https://publications.europa.eu/resource/celex/12012M013.ENG.html",
+      mediaType: "text/html",
+      retrievedAt: "2026-08-30T01:11:18-04:00",
+      documentHash: "sha256:69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222",
+      sourceVersion: "official-journal-2012-10-26-english-html-retrieved-2026-08-30",
+      sourceDate: "2012-10-26",
+    });
+    expect(current.documentHash).not.toBe(historical.documentHash);
   });
 
   test("sanitization provenance remains verifiable after raw HTML retirement", () => {

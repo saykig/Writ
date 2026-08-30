@@ -86,7 +86,18 @@ record european_commission_identity : institutional {
   topics {}; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
   evidence { support eu.teu_article_13 document_version eu.teu_article_13.v2026_08_05 passage eu.teu_article_13.commission locator "Treaty on European Union, Article 13(1), institutional list" quote "the European Commission (hereinafter referred to as ‘the Commission’)," passage_hash "sha256:06c3a4bad78e46f84fc98d9b521a77c29e1db9ed415689902a8b2595ad13a382" document_hash "sha256:2e730cdff0b3c14eb51f1b0ce2fd67d88f4b99c51501424ed53b565dd968ac37" basis direct; }
   uncertainty { item unknown "This establishes the Commission’s institutional identity. It does not by itself establish its mission, mandate, functions, decision rights, organizational composition or operational capacity."; }
-  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state superseded;
+  institutional { institution_id european_commission; fact_type identity; institution_type supranational_institution; }
+}
+
+record european_commission_identity_v2 : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European Commission identity";
+  subjects { subject european_commission type institution role "subject"; };
+  assertion defines "The European Commission is an institution of the European Union.";
+  topics {}; scope { jurisdictions { "European Union" }; institutional_scope { european_commission }; temporal_scope {} conditions {}; }
+  evidence { support eu.teu_article_13.official_html document_version eu.teu_article_13.official_html.sha256_69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222 passage eu.teu_article_13.official_html.institutional_list locator "Treaty on European Union, Article 13(1), complete institutional list" quote "The Union's institutions shall be: - the European Parliament, - the European Council, - the Council, - the European Commission (hereinafter referred to as \"the Commission\"), - the Court of Justice of the European Union, - the European Central Bank, - the Court of Auditors." passage_hash "sha256:cfb5797068be0b13398f9bd232a9ee7e00ae93ccf9fe58d126e7d81c082dca07" document_hash "sha256:69e5c3f35d1539aadd39189b6166aa263b6c481d7f5c98e76f5b3bf16cee3222" basis direct; }
+  uncertainty { item unknown "This establishes the Commission’s institutional identity. It does not by itself establish its mission, mandate, functions, decision rights, organizational composition or operational capacity."; }
+  provenance { created_by "OpenAI Codex implementation of approved human review"; created_at 2026-08-30; } review_state approved;
   institutional { institution_id european_commission; fact_type identity; institution_type supranational_institution; }
 }
 
@@ -108,7 +119,21 @@ record eu_ai_office_placement : institutional {
   topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission, european_commission.dg_connect }; temporal_scope {} conditions {}; }
   evidence { support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_1 locator "Commission Decision C/2024/1459, Article 1" quote "The European Artificial Intelligence Office (the ‘Office’) is established. The Office shall be part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology (the ‘Directorate-General’)." passage_hash "sha256:ed16a848f122f4f373cbf90e05fdf13e358dbf7bed9b4c6bc4c6d5befdbd4d54" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct; }
   uncertainty { item unknown "This establishes the Office’s administrative placement. It does not establish independence, legal personality, mandate, decision rights, functions or operational capacity."; }
-  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state superseded;
+  institutional { institution_id eu_ai_office; fact_type placement; parent_institution_id european_commission.dg_connect; }
+}
+
+record eu_ai_office_placement_v2 : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office placement";
+  subjects { subject eu_ai_office type organizational_unit role "subunit"; };
+  assertion states "The European Artificial Intelligence Office is part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission, european_commission.dg_connect }; temporal_scope {} conditions {}; }
+  evidence {
+    support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.article_1 locator "Commission Decision C/2024/1459, Article 1" quote "The European Artificial Intelligence Office (the ‘Office’) is established. The Office shall be part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology (the ‘Directorate-General’)." passage_hash "sha256:ed16a848f122f4f373cbf90e05fdf13e358dbf7bed9b4c6bc4c6d5befdbd4d54" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct;
+    support eu.commission_decision_c_2024_1459 document_version eu.commission_decision_c_2024_1459.v2024_02_14 passage eu.commission_decision_c_2024_1459.recital_6 locator "Commission Decision C/2024/1459, recital (6)" quote "Therefore, a European Artificial Intelligence Office should be established within the Commission as part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology and subject to its annual management plan." passage_hash "sha256:b391212bf51f84dd908969e78dc201cf9435e47dc8325756c7521ba7c5fefaee" document_hash "sha256:d78be7e77403adb1f454035bb39ac31f288fefd783e5a2b43bde80a3b38b8e71" basis direct;
+  }
+  uncertainty { item unknown "Article 1 directly establishes the Office’s administrative placement in the named Directorate-General, and recital (6) directly situates that placement within the Commission. They do not establish independence, legal personality, mandate, decision rights, functions or operational capacity."; }
+  provenance { created_by "OpenAI Codex implementation of approved human review"; created_at 2026-08-30; } review_state approved;
   institutional { institution_id eu_ai_office; fact_type placement; parent_institution_id european_commission.dg_connect; }
 }
 
@@ -152,8 +177,19 @@ record eu_ai_office_gp_ai_enforcement_mandate : institutional {
   topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission }; temporal_scope {} conditions { "AI Act Chapter V supervision and enforcement" }; }
   evidence { support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_ai_act_art_88_1 locator "Regulation (EU) 2024/1689, Article 88(1)" quote "The Commission shall have exclusive powers to supervise and enforce Chapter V, taking into account the procedural guarantees under Article 94. The Commission shall entrust the implementation of these tasks to the AI Office, without prejudice to the powers of organisation of the Commission and the division of competences between Member States and the Union based on the Treaties." passage_hash "sha256:2dd98837f63e348517aad1b7413956d8b856601152817fa3cc711917cf955989" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct; }
   uncertainty { item unknown "The mandate concerns implementation of the Commission’s supervision and enforcement tasks. It does not transfer the Commission’s exclusive legal powers to the AI Office or establish every specific decision the Office may make."; }
-  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state superseded;
   institutional { institution_id eu_ai_office; fact_type mandate; mandate { status established; text "Implement the Commission’s supervision and enforcement tasks concerning providers of general-purpose AI models under AI Act Chapter V."; authority_source_ids { eu_ai_act_2024_1689, eu.commission_decision_c_2024_1459 }; evidence_refs { passage_eu_ai_act_art_88_1 }; } }
+}
+
+record eu_ai_office_gp_ai_enforcement_mandate_v2 : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "European AI Office GPAI-enforcement mandate";
+  subjects { subject eu_ai_office type organizational_unit role "implementing office"; };
+  assertion assigns "Union law assigns the European AI Office responsibility for implementing the Commission’s supervision and enforcement tasks concerning providers of general-purpose AI models under Chapter V of the AI Act.";
+  topics { artificial_intelligence }; scope { jurisdictions { "European Union" }; institutional_scope { eu_ai_office, european_commission }; temporal_scope {} conditions { "AI Act Chapter V supervision and enforcement" }; }
+  evidence { support eu_ai_act_2024_1689 document_version dv_eu_ai_act_2024_1689 passage passage_eu_ai_act_art_88_1 locator "Regulation (EU) 2024/1689, Article 88(1)" quote "The Commission shall have exclusive powers to supervise and enforce Chapter V, taking into account the procedural guarantees under Article 94. The Commission shall entrust the implementation of these tasks to the AI Office, without prejudice to the powers of organisation of the Commission and the division of competences between Member States and the Union based on the Treaties." passage_hash "sha256:2dd98837f63e348517aad1b7413956d8b856601152817fa3cc711917cf955989" document_hash "sha256:903240828eef48f5d9ae9724aa365b6946d58fb9fb70143506292b3112c4248c" basis direct; }
+  uncertainty { item unknown "The mandate concerns implementation of the Commission’s supervision and enforcement tasks. It does not transfer the Commission’s exclusive legal powers to the AI Office or establish every specific decision the Office may make."; }
+  provenance { created_by "OpenAI Codex implementation of approved human review"; created_at 2026-08-30; } review_state approved;
+  institutional { institution_id eu_ai_office; fact_type mandate; mandate { status established; text "Implement the Commission’s supervision and enforcement tasks concerning providers of general-purpose AI models under AI Act Chapter V."; authority_source_ids { eu_ai_act_2024_1689 }; evidence_refs { passage_eu_ai_act_art_88_1 }; } }
 }
 
 record european_commission_legislative_proposal_function : institutional {
@@ -240,8 +276,19 @@ record european_commission_jrc_infra_capacity : institutional {
   topics { research_infrastructure }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission, european_commission.joint_research_centre }; temporal_scope {} conditions { "JRC infrastructure available for opening access to external users as retrieved on 2026-08-05" }; }
   evidence { support ec.jrc_research_infrastructures document_version ec.jrc_research_infrastructures.v2026_08_05 passage ec.jrc_research_infrastructures.inventory locator "Open access to JRC research infrastructures, opening paragraph" quote "The JRC maintains 39 physical research infrastructures suitable for opening access to external users in the nuclear and radiological (Euratom Laboratories) fields, chemistry, biosciences/life sciences, physical sciences and ICT. They are located at our sites in Ispra (Italy), Geel (Belgium), Karlsruhe (Germany) and Petten (The Netherlands). These infrastructures (i.e. laboratories) are fit for experimental work generating data for users’ analyses." passage_hash "sha256:fabc372f9903395ae652330c34cc58330bdc9c2295f19394336252494d733522" document_hash "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7" basis direct; }
   uncertainty { item unknown "This establishes maintained scientific infrastructure. It does not establish equal staffing, funding, utilization, performance or operational condition across every facility."; }
-  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state approved;
+  provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; } review_state superseded;
   institutional { institution_id european_commission; fact_type operational_capacity; operational_capacity { status active; capacity_type laboratory_network; capacity_components { nuclear_and_radiological_research, chemistry, biosciences_and_life_sciences, physical_sciences, information_and_communication_technology }; evidence_refs { ec.jrc_research_infrastructures.inventory }; } }
+}
+
+record european_commission_jrc_infra_capacity_v2 : institutional {
+  corpus eu.institutions.european_commission; version "0.2.0"; title "Joint Research Centre infrastructure capacity";
+  subjects { subject european_commission.joint_research_centre type organizational_unit role "infrastructure maintainer"; };
+  assertion observes "The Joint Research Centre maintains physical research infrastructures across nuclear and radiological research, chemistry, biosciences/life sciences, physical sciences, and information and communication technology.";
+  topics { research_infrastructure }; scope { jurisdictions { "European Union" }; institutional_scope { european_commission.joint_research_centre }; temporal_scope {} conditions { "JRC infrastructure available for opening access to external users as retrieved on 2026-08-05" }; }
+  evidence { support ec.jrc_research_infrastructures document_version ec.jrc_research_infrastructures.v2026_08_05 passage ec.jrc_research_infrastructures.inventory locator "Open access to JRC research infrastructures, opening paragraph" quote "The JRC maintains 39 physical research infrastructures suitable for opening access to external users in the nuclear and radiological (Euratom Laboratories) fields, chemistry, biosciences/life sciences, physical sciences and ICT. They are located at our sites in Ispra (Italy), Geel (Belgium), Karlsruhe (Germany) and Petten (The Netherlands). These infrastructures (i.e. laboratories) are fit for experimental work generating data for users’ analyses." passage_hash "sha256:fabc372f9903395ae652330c34cc58330bdc9c2295f19394336252494d733522" document_hash "sha256:25f2cdb0ed3773313b9a5e6d398e02346fef13bc3c80d32149ef39040e6c55c7" basis direct; }
+  uncertainty { item unknown "This establishes maintained scientific infrastructure. It does not establish staffing, funding, maintenance condition, utilization, performance or equal operational condition across every facility."; }
+  provenance { created_by "OpenAI Codex implementation of approved human review"; created_at 2026-08-30; } review_state approved;
+  institutional { institution_id european_commission.joint_research_centre; fact_type operational_capacity; operational_capacity { status active; capacity_type laboratory_network; capacity_components { nuclear_and_radiological_research, chemistry, biosciences_and_life_sciences, physical_sciences, information_and_communication_technology }; evidence_refs { ec.jrc_research_infrastructures.inventory }; } }
 }
 
 record eu_ai_office_org_capacity : institutional {

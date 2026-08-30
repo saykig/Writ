@@ -1,0 +1,17 @@
+schema_version: 1.0.0
+link_id: eu_ai_office_placement_v2_supersedes_eu_ai_office_placement
+owning_corpus_id: eu.institutions.european_commission
+source_id: eu_ai_office_placement_v2
+source_kind: record
+target_id: eu_ai_office_placement
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - eu.commission_decision_c_2024_1459.article_1
+  - eu.commission_decision_c_2024_1459.recital_6
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-30
+review_state: approved

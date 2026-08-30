@@ -1,0 +1,16 @@
+schema_version: 1.0.0
+link_id: european_commission_jrc_infra_capacity_v2_supersedes_european_commission_jrc_infra_capacity
+owning_corpus_id: eu.institutions.european_commission
+source_id: european_commission_jrc_infra_capacity_v2
+source_kind: record
+target_id: european_commission_jrc_infra_capacity
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - ec.jrc_research_infrastructures.inventory
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of approved human review
+  created_at: 2026-08-30
+review_state: approved
