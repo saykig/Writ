@@ -50,6 +50,104 @@ const clone = (): RepositorySnapshot => structuredClone(baseline);
 const codes = (result: { issues: Array<{ code: string }> }): string[] =>
   result.issues.map(({ code }) => code);
 
+function addSyntheticPlacement(
+  snapshot: RepositorySnapshot,
+  recordId: string,
+  institutionId: string,
+  parentInstitutionId: string,
+): void {
+  const template = snapshot.institutionalRecords.find(
+    ({ value }) =>
+      value.institutional_fact_type === "placement" && value.review_state === "approved",
+  )!;
+  const loaded = structuredClone(template);
+  loaded.file = `synthetic/${recordId}.writ`;
+  loaded.value.record_id = recordId;
+  loaded.value.institution_id = institutionId;
+  loaded.value.parent_institution_id = parentInstitutionId;
+  loaded.value.scope.institutional_scope = [institutionId, parentInstitutionId];
+  snapshot.institutionalRecords.push(loaded);
+  snapshot.records.push(loaded);
+}
+
+function addSyntheticScopeSupport(
+  snapshot: RepositorySnapshot,
+  recordId: string,
+  institutionalScope: string[],
+): void {
+  const template = snapshot.institutionalRecords.find(
+    ({ value }) =>
+      value.institutional_fact_type === "function" && value.review_state === "approved",
+  )!;
+  const loaded = structuredClone(template);
+  loaded.file = `synthetic/${recordId}.writ`;
+  loaded.value.record_id = recordId;
+  loaded.value.scope.institutional_scope = institutionalScope;
+  snapshot.institutionalRecords.push(loaded);
+  snapshot.records.push(loaded);
+}
+
+function addSyntheticRelationshipRecord(
+  snapshot: RepositorySnapshot,
+  recordId: string,
+  sourceId: string,
+  targetId: string,
+  basis: "direct" | "inferred" | "inherited",
+  supportingIds: string[] = [],
+): void {
+  const template = snapshot.institutionalRecords.find(
+    ({ value }) =>
+      value.institutional_fact_type === "placement" && value.review_state === "approved",
+  )!;
+  const base = structuredClone(template.value);
+  delete base.parent_institution_id;
+  const loaded = {
+    ...template,
+    file: `synthetic/${recordId}.writ`,
+    value: {
+      ...base,
+      record_id: recordId,
+      institution_id: sourceId,
+      institutional_fact_type: "relationship" as const,
+      record_link: {
+        link_id: `${recordId}_payload`,
+        source_id: sourceId,
+        source_kind: "institution",
+        target_id: targetId,
+        target_kind: "institution",
+        relation_type: "part_of" as const,
+        basis,
+        evidence_refs: [base.evidence[0]!.passage_id],
+        ...(supportingIds.length > 0 ? { supporting_record_ids: supportingIds } : {}),
+      },
+    },
+  };
+  snapshot.institutionalRecords.push(loaded);
+  snapshot.records.push(loaded);
+}
+
+function addSyntheticPartOfLink(
+  snapshot: RepositorySnapshot,
+  linkId: string,
+  sourceId: string,
+  targetId: string,
+  basis: "direct" | "inferred" | "inherited",
+  supportingIds: string[],
+): void {
+  const template = snapshot.links.find(
+    ({ value }) => value.relation_type === "part_of" && value.review_state === "approved",
+  )!;
+  const loaded = structuredClone(template);
+  loaded.file = `synthetic/${linkId}.yaml`;
+  loaded.value.link_id = linkId;
+  loaded.value.source_id = sourceId;
+  loaded.value.target_id = targetId;
+  loaded.value.basis = basis;
+  if (supportingIds.length > 0) loaded.value.supporting_record_ids = supportingIds;
+  else delete loaded.value.supporting_record_ids;
+  snapshot.links.push(loaded);
+}
+
 function candidateWorkspace(prefix: string): string {
   const root = mkdtempSync(join(tmpdir(), prefix));
   cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
@@ -281,6 +379,20 @@ describe("focused negative fixtures", () => {
     expect(findings).toContain("INTEROP_SUPPORT_NOT_FOUND");
   });
 
+  test("keeps supporting_record_ids limited to records", () => {
+    const snapshot = clone();
+    const link = snapshot.links.find(
+      ({ value }) =>
+        value.relation_type === "assigns_function_to" && value.review_state === "approved",
+    )!;
+    const unsupportedLink = snapshot.links.find(
+      ({ value }) => value.relation_type === "part_of" && value.review_state === "approved",
+    )!;
+    link.value.supporting_record_ids = [unsupportedLink.value.link_id];
+
+    expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_SUPPORT_NOT_FOUND");
+  });
+
   test("mechanically rejects endpoint kinds that do not match resolved objects", () => {
     const snapshot = clone();
     const link = snapshot.links.find(({ value }) => value.relation_type === "assigns_function_to")!;
@@ -392,6 +504,262 @@ describe("focused negative fixtures", () => {
     const findings = codes(verifyProvenance(conflict));
     expect(findings).toContain("PROVENANCE_PASSAGE_CONFLICT");
     expect(findings).toContain("PROVENANCE_PASSAGE_HASH_MISMATCH");
+  });
+
+  test("requires mandate and decision-right authority sources to occur in record evidence", () => {
+    for (const factType of ["mandate", "decision_right"] as const) {
+      const snapshot = clone();
+      const loaded = snapshot.institutionalRecords.find(
+        ({ value }) =>
+          value.institutional_fact_type === factType &&
+          value.review_state !== "superseded" &&
+          value.review_state !== "withdrawn",
+      )!;
+      const declaration =
+        loaded.value.institutional_fact_type === "mandate"
+          ? loaded.value.mandate
+          : loaded.value.decision_right;
+      if (!declaration) throw new Error(`Missing ${factType} declaration in test fixture.`);
+      declaration.authority_source_ids = [`synthetic.unsupported.${factType}`];
+
+      const finding = verifyProvenance(snapshot).issues.find(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_AUTHORITY_SOURCE_NOT_EVIDENCED" &&
+          object_id === loaded.value.record_id,
+      );
+      expect(finding?.message).toContain(`synthetic.unsupported.${factType}`);
+    }
+  });
+
+  test("accepts mandate and decision-right authority sources present in record evidence", () => {
+    for (const factType of ["mandate", "decision_right"] as const) {
+      const snapshot = clone();
+      const loaded = snapshot.institutionalRecords.find(
+        ({ value }) =>
+          value.institutional_fact_type === factType &&
+          value.review_state !== "superseded" &&
+          value.review_state !== "withdrawn",
+      )!;
+      const declaration =
+        loaded.value.institutional_fact_type === "mandate"
+          ? loaded.value.mandate
+          : loaded.value.decision_right;
+      if (!declaration) throw new Error(`Missing ${factType} declaration in test fixture.`);
+      declaration.authority_source_ids = [loaded.value.evidence[0]!.source_id];
+
+      expect(
+        verifyProvenance(snapshot).issues.some(
+          ({ code, object_id }) =>
+            code === "PROVENANCE_AUTHORITY_SOURCE_NOT_EVIDENCED" &&
+            object_id === loaded.value.record_id,
+        ),
+      ).toBe(false);
+    }
+  });
+
+  test("accepts a two-step inherited path composed from grounded placement and relationship records", () => {
+    const snapshot = clone();
+    addSyntheticPlacement(snapshot, "synthetic_placement_a_b", "synthetic_a", "synthetic_b");
+    addSyntheticRelationshipRecord(
+      snapshot,
+      "synthetic_relationship_b_c",
+      "synthetic_b",
+      "synthetic_c",
+      "inferred",
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_placement_a_b", "synthetic_relationship_b_c"],
+    );
+
+    expect(
+      verifyProvenance(snapshot).issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED" &&
+          object_id === "synthetic_inherited_a_c",
+      ),
+    ).toBe(false);
+  });
+
+  test("rejects an inherited path with a missing intermediate edge", () => {
+    const snapshot = clone();
+    addSyntheticPlacement(snapshot, "synthetic_placement_a_b", "synthetic_a", "synthetic_b");
+    addSyntheticPlacement(snapshot, "synthetic_placement_d_c", "synthetic_d", "synthetic_c");
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_placement_a_b", "synthetic_placement_d_c"],
+    );
+
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+  });
+
+  test("rejects supporting records that do not reach the inherited target", () => {
+    const snapshot = clone();
+    addSyntheticPlacement(snapshot, "synthetic_placement_a_b", "synthetic_a", "synthetic_b");
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_placement_a_b"],
+    );
+
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+  });
+
+  test("rejects reversed inherited support direction", () => {
+    const snapshot = clone();
+    addSyntheticPlacement(snapshot, "synthetic_placement_b_a", "synthetic_b", "synthetic_a");
+    addSyntheticPlacement(snapshot, "synthetic_placement_c_b", "synthetic_c", "synthetic_b");
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_placement_b_a", "synthetic_placement_c_b"],
+    );
+
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+  });
+
+  test("does not treat institutional scope membership as inherited path support", () => {
+    const snapshot = clone();
+    addSyntheticScopeSupport(snapshot, "synthetic_scope_support", ["synthetic_a", "synthetic_c"]);
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_scope_support"],
+    );
+
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+  });
+
+  test("rejects circular and self-supporting inherited links", () => {
+    const snapshot = clone();
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_cycle_one",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_cycle_two"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_cycle_two",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_cycle_one"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_self_support",
+      "synthetic_a",
+      "synthetic_c",
+      "inherited",
+      ["synthetic_inherited_self_support"],
+    );
+
+    const rejectedIds = verifyProvenance(snapshot)
+      .issues.filter(({ code }) => code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED")
+      .map(({ object_id }) => object_id);
+    expect(rejectedIds).toContain("synthetic_inherited_cycle_one");
+    expect(rejectedIds).toContain("synthetic_inherited_cycle_two");
+    expect(rejectedIds).toContain("synthetic_inherited_self_support");
+  });
+
+  test("rejects an ungrounded inherited institutional relationship record", () => {
+    const snapshot = clone();
+    addSyntheticRelationshipRecord(
+      snapshot,
+      "synthetic_inherited_relationship_a_b",
+      "synthetic_a",
+      "synthetic_b",
+      "inherited",
+      ["synthetic_inherited_relationship_a_b"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_b",
+      "synthetic_a",
+      "synthetic_b",
+      "inherited",
+      ["synthetic_inherited_relationship_a_b"],
+    );
+
+    expect(
+      verifyProvenance(snapshot).issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED" &&
+          object_id === "synthetic_inherited_a_b",
+      ),
+    ).toBe(true);
+  });
+
+  test("fails closed when part-of support cannot establish another inherited relation type", () => {
+    const snapshot = clone();
+    addSyntheticPlacement(snapshot, "synthetic_placement_a_b", "synthetic_a", "synthetic_b");
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inherited_a_b",
+      "synthetic_a",
+      "synthetic_b",
+      "inherited",
+      ["synthetic_placement_a_b"],
+    );
+    snapshot.links.at(-1)!.value.relation_type = "oversees";
+
+    expect(codes(verifyProvenance(snapshot))).toContain(
+      "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+  });
+
+  test("leaves direct and inferred links outside inherited-path verification", () => {
+    const snapshot = clone();
+    addSyntheticScopeSupport(snapshot, "synthetic_scope_support", ["synthetic_a", "synthetic_c"]);
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_direct_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "direct",
+      ["synthetic_scope_support"],
+    );
+    addSyntheticPartOfLink(
+      snapshot,
+      "synthetic_inferred_a_c",
+      "synthetic_a",
+      "synthetic_c",
+      "inferred",
+      ["synthetic_scope_support"],
+    );
+
+    const inheritedIssues = verifyProvenance(snapshot).issues.filter(
+      ({ code }) => code === "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    );
+    expect(inheritedIssues).toEqual([]);
   });
 
   test("rejects previous record IDs on active surfaces within the migrated corpus", () => {

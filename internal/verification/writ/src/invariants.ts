@@ -86,6 +86,24 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
+    code: "PROVENANCE_AUTHORITY_SOURCE_NOT_EVIDENCED",
+    gate: "provenance",
+    authority: schema(
+      "schemas/extensions/institutional-record.schema.json",
+      "0.2.0",
+      "mandate and decisionRight authority_source_ids resolved against the Core evidence envelope",
+    ),
+  },
+  {
+    code: "PROVENANCE_INHERITED_PATH_NOT_ESTABLISHED",
+    gate: "provenance",
+    authority: schema(
+      "schemas/core/record-link.schema.json",
+      "1.0.0",
+      "basis=inherited and supportingRecordIds directed support contract",
+    ),
+  },
+  {
     code: "PROVENANCE_SOURCE_NOT_FOUND",
     gate: "provenance",
     authority: meta("Mechanical reference resolution"),
