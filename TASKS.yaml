@@ -541,7 +541,7 @@ tasks:
 
   - id: NIST-PROVING-GROUND-HARDENING-001
     title: Harden the evidence and review boundary of the NIST proving ground
-    status: review
+    status: done
     dependencies:
       - FOUNDATION-CORPUS-RETIREMENT-001
     scope:
