@@ -1,10 +1,6 @@
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import type {
-  AtomicInstitutionalRecord,
-  CurrentRecordJudgment,
-  RecordLink,
-} from "@writ/domain";
+import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } from "@writ/domain";
 import { compileSource, isConceptDeclaration, isSource, parseDocument } from "@writ/language";
 
 import { loadAuthorityIndex, renderSchemaErrors, type AuthorityIndex } from "./authority.js";
