@@ -52,6 +52,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical record and governing-contract consistency"),
   },
   {
+    code: "ONTOLOGY_RECORD_CORPUS_MISMATCH",
+    gate: "ontology",
+    authority: meta("Mechanical record and manifest/storage consistency"),
+  },
+  {
     code: "INTEROP_SOURCE_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),
@@ -89,6 +94,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     code: "INTEROP_OWNER_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),
+  },
+  {
+    code: "INTEROP_OWNER_MISMATCH",
+    gate: "interoperability",
+    authority: meta("Mechanical relationship and manifest/storage consistency"),
   },
   {
     code: "PROVENANCE_EVIDENCE_NOT_FOUND",

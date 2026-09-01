@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -24,6 +24,8 @@ import {
 
 const ROOT = repositoryRoot(import.meta.dir);
 const FIXTURE = join(import.meta.dir, "fixtures/native-legal-policy");
+const REVIEWED_CORPUS_PATH =
+  "corpora/legal-policy/eu/european-union/artificial-intelligence-act-2024-1689";
 const baseline = loadRepository(ROOT).snapshot;
 const clone = (): RepositorySnapshot => structuredClone(baseline);
 const codes = (result: { issues: Array<{ code: string }> }): string[] =>
@@ -142,6 +144,51 @@ function miniNativeLegalWorkspace(): string {
     }),
   );
   return root;
+}
+
+function miniReviewedCompatibilityWorkspace(): string {
+  const root = mkdtempSync(join(tmpdir(), "writ-reviewed-compatibility-"));
+  cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
+  mkdirSync(join(root, REVIEWED_CORPUS_PATH, ".."), { recursive: true });
+  cpSync(join(ROOT, REVIEWED_CORPUS_PATH), join(root, REVIEWED_CORPUS_PATH), {
+    recursive: true,
+  });
+  const entry = baseline.catalog.native_corpora.find(({ path }) => path === REVIEWED_CORPUS_PATH)!;
+  mkdirSync(join(root, "corpora"), { recursive: true });
+  writeFileSync(
+    join(root, "corpora/catalog.yaml"),
+    Bun.YAML.stringify({
+      schema_version: "1.0.0",
+      implemented_native_families: ["legal_policy", "institutional"],
+      native_corpora: [entry],
+      retired_corpus_migrations: [],
+    }),
+  );
+  return root;
+}
+
+function duplicateReviewedItem(
+  root: string,
+  category: "sources" | "passages",
+  variation: "identical" | "conflicting" | "alias" | "legacy" = "identical",
+): RepositorySnapshot {
+  const relativeFile = category === "sources" ? "sources/sources.yaml" : "passages/passages.yaml";
+  const file = join(root, REVIEWED_CORPUS_PATH, relativeFile);
+  const document = Bun.YAML.parse(readFileSync(file, "utf8")) as Record<string, unknown[]>;
+  const first = document[category]![0] as Record<string, unknown>;
+  const duplicate = structuredClone(first);
+  if (variation === "conflicting") {
+    if (category === "sources") duplicate.sha256 = `sha256:${"f".repeat(64)}`;
+    else duplicate.quote = "A conflicting passage declaration.";
+  } else if (variation === "alias" || variation === "legacy") {
+    duplicate.machine_id = "aaaaaaaa-aaaa-5aaa-8aaa-aaaaaaaaaaaa";
+    duplicate.ref = `synthetic/${category}/${variation}`;
+    duplicate.aliases = variation === "alias" ? [first.machine_id] : [];
+    duplicate.legacy_refs = variation === "legacy" ? [first.machine_id] : [variation];
+  }
+  document[category]!.push(duplicate);
+  writeFileSync(file, Bun.YAML.stringify(document));
+  return loadRepository(root).snapshot;
 }
 
 const positiveWorkspace = miniNativeLegalWorkspace();
@@ -326,6 +373,137 @@ describe("generic current-native Core provenance", () => {
       file: "synthetic/alias-collision.writ",
     });
     expect(codes(verifyProvenance(aliasCollision))).toContain("PROVENANCE_REFERENCE_AMBIGUOUS");
+  });
+
+  test("rejects same-file native source declarations with identical or conflicting metadata", () => {
+    for (const variation of ["identical", "conflicting"] as const) {
+      const root = miniNativeLegalWorkspace();
+      const file = join(root, "corpora/test/native-legal-policy/sources.writ");
+      const original = readFileSync(file, "utf8");
+      const sourceBlock = original.match(/source synthetic_policy_source \{[\s\S]*?\n\}/)![0];
+      const metadataBlock = original.match(
+        /concept SyntheticPolicySourceMetadata \{[\s\S]*?\n\}/,
+      )![0];
+      const duplicateSource = sourceBlock
+        .replace("synthetic_policy_source", "synthetic_policy_source_duplicate")
+        .replace(
+          /sha256:[0-9a-f]{64}/,
+          variation === "conflicting"
+            ? `sha256:${"f".repeat(64)}`
+            : original.match(/sha256:[0-9a-f]{64}/)![0],
+        );
+      const duplicateMetadata = metadataBlock.replace(
+        "SyntheticPolicySourceMetadata",
+        "SyntheticPolicySourceMetadataDuplicate",
+      );
+      writeFileSync(file, `${original.trim()}\n\n${duplicateSource}\n${duplicateMetadata}\n`);
+      const snapshot = loadRepository(root).snapshot;
+      expect(
+        snapshot.loadIssues.some(
+          ({ code, message }) =>
+            code === "INTEGRITY_CONTRACT_INVALID" &&
+            message.includes("duplicate source identity synthetic.policy.source"),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  test("rejects same-file reviewed source canonical, alias, and legacy identity collisions", () => {
+    for (const variation of ["identical", "conflicting", "alias", "legacy"] as const) {
+      const snapshot = duplicateReviewedItem(
+        miniReviewedCompatibilityWorkspace(),
+        "sources",
+        variation,
+      );
+      expect(
+        snapshot.loadIssues.some(
+          ({ code, message }) =>
+            code === "INTEGRITY_CONTRACT_INVALID" && message.includes("duplicate source identity"),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  test("rejects identical and conflicting same-file reviewed passage identities", () => {
+    for (const variation of ["identical", "conflicting"] as const) {
+      const snapshot = duplicateReviewedItem(
+        miniReviewedCompatibilityWorkspace(),
+        "passages",
+        variation,
+      );
+      expect(
+        snapshot.loadIssues.some(
+          ({ code, message }) =>
+            code === "INTEGRITY_CONTRACT_INVALID" && message.includes("duplicate passage identity"),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  test("authorizes one physical source through normalized and internal-symlink routes", () => {
+    for (const reverseCatalog of [false, true]) {
+      const root = miniNativeLegalWorkspace();
+      const firstPath = "corpora/test/native-legal-policy";
+      const secondPath = "corpora/test/native-legal-policy-consumer";
+      mkdirSync(join(root, secondPath), { recursive: true });
+      symlinkSync(
+        "../native-legal-policy/sources.writ",
+        join(root, secondPath, "source-alias.writ"),
+      );
+      const firstManifest = Bun.YAML.parse(
+        readFileSync(join(root, firstPath, "corpus.yaml"), "utf8"),
+      ) as Record<string, unknown> & { corpus_id: string };
+      const secondManifest = structuredClone(firstManifest);
+      Object.assign(secondManifest, {
+        corpus_id: "test.native_legal_policy.consumer",
+        title: "Synthetic source consumer",
+        instrument_id: "synthetic_policy_consumer",
+        record_counts: { legal_policy_records: 0, record_links: 0, disposition_judgments: 0 },
+        review_counts: {},
+        locations: {
+          sources: ["source-alias.writ"],
+          passages: [],
+          records: [],
+          relationships: [],
+          judgments: [],
+          migration: [],
+        },
+      });
+      writeFileSync(join(root, secondPath, "corpus.yaml"), Bun.YAML.stringify(secondManifest));
+      const catalogFile = join(root, "corpora/catalog.yaml");
+      const catalog = Bun.YAML.parse(readFileSync(catalogFile, "utf8")) as {
+        native_corpora: Array<Record<string, unknown>>;
+      };
+      const firstEntry = catalog.native_corpora[0]!;
+      const secondEntry = {
+        ...firstEntry,
+        corpus_id: secondManifest.corpus_id,
+        path: secondPath,
+        manifest: `${secondPath}/corpus.yaml`,
+      };
+      catalog.native_corpora = reverseCatalog
+        ? [secondEntry, firstEntry]
+        : [firstEntry, secondEntry];
+      writeFileSync(catalogFile, Bun.YAML.stringify(catalog));
+
+      const snapshot = loadRepository(root).snapshot;
+      const first = resolveRoutedSource(
+        snapshot,
+        firstManifest.corpus_id,
+        "synthetic.policy.source",
+      );
+      const second = resolveRoutedSource(
+        snapshot,
+        secondManifest.corpus_id,
+        "synthetic.policy.source",
+      );
+      expect(first.status).toBe("resolved");
+      expect(second.status).toBe("resolved");
+      if (first.status === "resolved" && second.status === "resolved") {
+        expect(first.source.file).toBe(second.source.file);
+        expect(first.source.corpus_id).toBe(firstManifest.corpus_id);
+      }
+    }
   });
 
   test("keeps current compatibility source mappings governed and fail-closed", () => {
@@ -580,6 +758,42 @@ describe("logical unqualified passage identity", () => {
     ).toBe(true);
   });
 
+  test("resolves reviewed passages only through their owning corpus source routes", () => {
+    for (const collision of ["canonical", "alias"] as const) {
+      const snapshot = clone();
+      const passage = snapshot.objects.find(
+        (object) =>
+          object.kind === "passage" &&
+          typeof object.value.source_machine_id === "string" &&
+          snapshot.documents.some(
+            (document) =>
+              document.file === object.file &&
+              document.governing_contract.adapter_kind === "reviewed_compatibility_document",
+          ),
+      )!;
+      const sourceId = passage.value.source_machine_id as string;
+      const source = snapshot.objects.find(
+        (object) => object.kind === "source_document" && object.id === sourceId,
+      )!;
+      const duplicate = structuredClone(source);
+      duplicate.file = `unrelated/${collision}-source.yaml`;
+      if (collision === "alias") {
+        duplicate.id = "synthetic.unrelated.source";
+        duplicate.aliases = [sourceId];
+      }
+      snapshot.objects.push(duplicate);
+
+      expect(buildLogicalPassageIndex(snapshot).resolve(passage.id).status).toBe("resolved");
+      snapshot.sourceRoutes.push({ corpus_id: passage.corpus_id, file: duplicate.file });
+      expect(
+        verifyProvenance(snapshot).issues.some(
+          ({ code, object_id }) =>
+            code === "PROVENANCE_REFERENCE_AMBIGUOUS" && object_id === passage.id,
+        ),
+      ).toBe(true);
+    }
+  });
+
   test("uses the same logical resolution for Core links and judgments", () => {
     const identical = repeatedPair();
     const link = identical.links.find(({ value }) => value.review_state === "approved")!;
@@ -657,6 +871,97 @@ describe("logical unqualified passage identity", () => {
           (object_id === link.value.link_id || object_id === judgment.value.judgment_id),
       ),
     ).toEqual([]);
+  });
+
+  test("rejects link owner laundering and native record corpus mismatch", () => {
+    const snapshot = clone();
+    const carrier = addNativeLegalRecord(snapshot, "synthetic_owner_carrier", "synthetic.owner.a");
+    const evidence = carrier.value.evidence[0]!;
+    const link = structuredClone(
+      snapshot.links.find(({ value }) => value.review_state === "approved")!,
+    );
+    Object.assign(link.value, {
+      link_id: "synthetic_owner_laundering_link",
+      owning_corpus_id: "synthetic.owner.b",
+      evidence_refs: [evidence.passage_id],
+      basis: "direct",
+    });
+    link.corpus_id = "synthetic.owner.a";
+    link.file = "synthetic/owner-laundering-link.yaml";
+    snapshot.links.push(link);
+    const source = snapshot.objects.find(
+      (object) => object.kind === "source_document" && object.id === evidence.source_id,
+    )!;
+    snapshot.sourceRoutes = snapshot.sourceRoutes.filter(
+      (route) => route.corpus_id !== link.corpus_id || route.file !== source.file,
+    );
+    snapshot.sourceRoutes.push({ corpus_id: link.value.owning_corpus_id, file: source.file });
+
+    expect(codes(verifyInteroperability(snapshot))).toContain("INTEROP_OWNER_MISMATCH");
+    expect(
+      verifyProvenance(snapshot).issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_SOURCE_NOT_ROUTED" && object_id === link.value.link_id,
+      ),
+    ).toBe(true);
+
+    carrier.value.corpus_id = "synthetic.owner.b";
+    expect(codes(verifyOntology(snapshot))).toContain("ONTOLOGY_RECORD_CORPUS_MISMATCH");
+  });
+
+  test("keeps historical link evidence auditable without reactivating endpoint semantics", () => {
+    for (const state of ["superseded", "withdrawn"] as const) {
+      const valid = clone();
+      const carrier = addNativeLegalRecord(valid, `synthetic_historical_carrier_${state}`);
+      carrier.value.evidence[0]!.passage_id = `synthetic.historical.passage.${state}`;
+      const link = structuredClone(
+        valid.links.find(({ value }) => value.review_state === "approved")!,
+      );
+      Object.assign(link.value, {
+        link_id: `synthetic_historical_link_${state}`,
+        source_id: `obsolete.source.${state}`,
+        target_id: `obsolete.target.${state}`,
+        evidence_refs: [carrier.value.evidence[0]!.passage_id],
+        review_state: state,
+        basis: "direct",
+      });
+      link.corpus_id = carrier.corpus_id;
+      link.value.owning_corpus_id = carrier.corpus_id;
+      link.file = `synthetic/historical-link-${state}.yaml`;
+      valid.links.push(link);
+      expect(
+        verifyInteroperability(valid).issues.some(
+          ({ object_id }) => object_id === link.value.link_id,
+        ),
+      ).toBe(false);
+      expect(
+        verifyProvenance(valid).issues.some(({ object_id }) => object_id === link.value.link_id),
+      ).toBe(false);
+
+      const missing = structuredClone(valid);
+      missing.records = missing.records.filter(
+        ({ value }) => value.record_id !== carrier.value.record_id,
+      );
+      expect(
+        verifyProvenance(missing).issues.some(
+          ({ code, object_id }) =>
+            code === "PROVENANCE_EVIDENCE_NOT_FOUND" && object_id === link.value.link_id,
+        ),
+      ).toBe(true);
+
+      const tampered = structuredClone(valid);
+      const routedSource = tampered.objects.find(
+        (object) =>
+          object.kind === "source_document" && object.id === carrier.value.evidence[0]!.source_id,
+      )!;
+      routedSource.value.document_hash = `sha256:${"0".repeat(64)}`;
+      expect(
+        verifyProvenance(tampered).issues.some(
+          ({ code, object_id }) =>
+            code === "PROVENANCE_SOURCE_MISMATCH" && object_id === link.value.link_id,
+        ),
+      ).toBe(true);
+    }
   });
 
   test("keeps passage conflict output deterministic under occurrence order reversal", () => {

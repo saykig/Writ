@@ -1,6 +1,7 @@
 import type { WritRecord } from "@writ/domain";
 
 import type { IndexedObject, RepositorySnapshot } from "../types.js";
+import { resolveRoutedSource } from "./sources.js";
 
 export interface PassageSignature {
   source_id: string;
@@ -84,20 +85,17 @@ function structuredPassageOccurrence(
   )
     return undefined;
 
-  const sources = snapshot.objects.filter(
-    (candidate) =>
-      (candidate.kind === "source_document" || candidate.kind === "source") &&
-      (candidate.id === sourceId || candidate.aliases.includes(sourceId)),
-  );
-  if (sources.length !== 1) return undefined;
-  const source = sources[0]!;
+  const resolved = resolveRoutedSource(snapshot, object.corpus_id, sourceId);
+  if (resolved.status !== "resolved") return undefined;
+  const source = resolved.source;
   const documentHash = sourceHash(source.value);
   const documentVersionId =
-    typeof source.value.document_version_id === "string"
+    resolved.compatibilityVersion ??
+    (typeof source.value.document_version_id === "string"
       ? source.value.document_version_id
       : source.value.record_type === "source_document_version"
         ? source.id
-        : undefined;
+        : undefined);
   if (documentHash === undefined || documentVersionId === undefined) return undefined;
 
   const signature = {
@@ -120,14 +118,8 @@ function structuredPassageOccurrence(
   };
 }
 
-/**
- * Index each unqualified Core passage identity by its complete evidence
- * signature. Evidence basis is deliberately excluded from identity.
- */
-export function logicalPassageOccurrences(
-  snapshot: RepositorySnapshot,
-): LogicalPassageOccurrence[] {
-  const reviewedCompatibilityPassageFiles = new Set(
+export function reviewedCompatibilityPassageObjects(snapshot: RepositorySnapshot): IndexedObject[] {
+  const files = new Set(
     snapshot.documents
       .filter(
         (document) =>
@@ -136,6 +128,21 @@ export function logicalPassageOccurrences(
       )
       .map(({ file }) => file),
   );
+  return snapshot.objects.filter(
+    (object) =>
+      object.kind === "passage" &&
+      typeof object.value.source_id !== "string" &&
+      files.has(object.file),
+  );
+}
+
+/**
+ * Index each unqualified Core passage identity by its complete evidence
+ * signature. Evidence basis is deliberately excluded from identity.
+ */
+export function logicalPassageOccurrences(
+  snapshot: RepositorySnapshot,
+): LogicalPassageOccurrence[] {
   const occurrences: LogicalPassageOccurrence[] = snapshot.records
     .filter(({ governing_contract }) => governing_contract.verifies_core_provenance)
     .flatMap((loaded) =>
@@ -158,13 +165,7 @@ export function logicalPassageOccurrences(
   // do not acquire current-native Core provenance semantics. The reviewed
   // compatibility passage adapter remains a bounded resolution input because
   // current Core links and judgments already cite those preserved passages.
-  for (const object of snapshot.objects) {
-    if (
-      object.kind !== "passage" ||
-      typeof object.value.source_id === "string" ||
-      !reviewedCompatibilityPassageFiles.has(object.file)
-    )
-      continue;
+  for (const object of reviewedCompatibilityPassageObjects(snapshot)) {
     const occurrence = structuredPassageOccurrence(snapshot, object);
     if (occurrence) occurrences.push(occurrence);
   }

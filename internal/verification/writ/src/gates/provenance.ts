@@ -1,7 +1,11 @@
 import { createHash } from "node:crypto";
 import { validateJudgmentSupersession } from "@writ/domain";
 
-import { buildLogicalPassageIndex, type LogicalPassageResolution } from "../core/passages.js";
+import {
+  buildLogicalPassageIndex,
+  reviewedCompatibilityPassageObjects,
+  type LogicalPassageResolution,
+} from "../core/passages.js";
 import { resolveRoutedSource } from "../core/sources.js";
 import {
   gateResult,
@@ -202,6 +206,40 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     snapshot.migrations.map((migration) => migration.previous_id),
   );
 
+  for (const passage of reviewedCompatibilityPassageObjects(snapshot)) {
+    const sourceId = passage.value.source_machine_id;
+    if (typeof sourceId !== "string") continue;
+    const source = resolveRoutedSource(snapshot, passage.corpus_id, sourceId);
+    if (source.status === "missing") {
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_SOURCE_NOT_FOUND",
+          `Structured passage ${passage.id} uses source ${sourceId}, which does not resolve to structured source metadata.`,
+          { corpus_id: passage.corpus_id, object_id: passage.id, file: passage.file },
+        ),
+      );
+    } else if (source.status === "not_routed") {
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_SOURCE_NOT_ROUTED",
+          `Structured passage ${passage.id} uses source ${sourceId}, but ${passage.corpus_id} does not route its declaration through locations.sources.`,
+          { corpus_id: passage.corpus_id, object_id: passage.id, file: passage.file },
+        ),
+      );
+    } else if (source.status === "ambiguous") {
+      issues.push(
+        issue(
+          "provenance",
+          "PROVENANCE_REFERENCE_AMBIGUOUS",
+          `Structured passage ${passage.id} uses source ${sourceId}, which resolves to ${source.matches.length} routed declarations.`,
+          { corpus_id: passage.corpus_id, object_id: passage.id, file: passage.file },
+        ),
+      );
+    }
+  }
+
   for (const loaded of currentNativeCoreRecords(snapshot)) {
     const record = loaded.value;
     for (const evidence of record.evidence) {
@@ -326,22 +364,41 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
   }
 
-  for (const loaded of activeLinks(snapshot)) {
+  for (const loaded of snapshot.links) {
     const link = loaded.value;
     for (const evidenceId of link.evidence_refs) {
-      issues.push(
-        ...citationSourceIssues(
-          snapshot,
-          link.owning_corpus_id,
-          evidenceId,
-          passageIndex.resolve(evidenceId),
-          {
+      const evidence = passageIndex.resolve(evidenceId);
+      if (evidence.status === "missing") {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_EVIDENCE_NOT_FOUND",
+            `Link evidence ${evidenceId} does not resolve.`,
+            { corpus_id: loaded.corpus_id, object_id: link.link_id, file: loaded.file },
+          ),
+        );
+      } else if (evidence.status === "conflict") {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_REFERENCE_AMBIGUOUS",
+            `Link evidence ${evidenceId} resolves to ${evidence.signatureKeys.length} conflicting logical passage signatures.`,
+            { corpus_id: loaded.corpus_id, object_id: link.link_id, file: loaded.file },
+          ),
+        );
+      } else {
+        issues.push(
+          ...citationSourceIssues(snapshot, loaded.corpus_id, evidenceId, evidence, {
             object_id: link.link_id,
             file: loaded.file,
-          },
-        ),
-      );
+          }),
+        );
+      }
     }
+  }
+
+  for (const loaded of activeLinks(snapshot)) {
+    const link = loaded.value;
     if (link.basis !== "inherited") continue;
     const edges = link.relation_type === "part_of" ? inheritedSupportEdges(snapshot, loaded) : [];
     if (!establishesDirectedPath(link.source_id, link.target_id, edges)) {

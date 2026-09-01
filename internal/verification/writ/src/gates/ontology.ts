@@ -49,6 +49,23 @@ export function verifyOntology(snapshot: RepositorySnapshot): VerificationGateRe
 
   for (const loaded of snapshot.records) {
     if (
+      loaded.governing_contract.verifies_core_provenance &&
+      loaded.value.corpus_id !== loaded.corpus_id
+    ) {
+      issues.push(
+        issue(
+          "ontology",
+          "ONTOLOGY_RECORD_CORPUS_MISMATCH",
+          `Record ${loaded.value.record_id} declares corpus ${loaded.value.corpus_id}, but its manifest/storage owner is ${loaded.corpus_id}.`,
+          {
+            corpus_id: loaded.corpus_id,
+            object_id: loaded.value.record_id,
+            file: loaded.file,
+          },
+        ),
+      );
+    }
+    if (
       loaded.value.family !== loaded.governing_contract.expected_family ||
       loaded.value.family !== loaded.manifest_family
     ) {

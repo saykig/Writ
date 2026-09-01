@@ -56,6 +56,44 @@ function yamlCollections(
   });
 }
 
+function uniqueCompatibilityIdentities(
+  values: readonly Mapping[],
+  kind: "source" | "passage",
+  includeAlternateIdentities: boolean,
+): ReadonlyMap<string, Mapping> {
+  const claims = new Map<string, number>();
+  const canonical = new Map<string, Mapping>();
+  for (const [index, value] of values.entries()) {
+    const id = text(value.machine_id, `${kind}[${index}].machine_id`);
+    const identities = new Set([
+      id,
+      ...(includeAlternateIdentities
+        ? [
+            ...strings(value.aliases ?? [], `${kind}[${index}].aliases`),
+            ...strings(value.legacy_refs ?? [], `${kind}[${index}].legacy_refs`),
+            ...(typeof value.ref === "string" ? [value.ref] : []),
+          ]
+        : []),
+    ]);
+    for (const identity of identities) {
+      const previous = claims.get(identity);
+      if (previous !== undefined && previous !== index) {
+        throw new Error(
+          `duplicate ${kind} identity ${identity} at ${kind}[${index}] (already claimed at ${kind}[${previous}])`,
+        );
+      }
+      claims.set(identity, index);
+    }
+    canonical.set(id, value);
+  }
+  return canonical;
+}
+
+function assertCompatibilityEvidenceIdentities(corpus: NativeCorpus): void {
+  uniqueCompatibilityIdentities(yamlCollections(corpus, "sources", "sources"), "source", true);
+  uniqueCompatibilityIdentities(yamlCollections(corpus, "passages", "passages"), "passage", false);
+}
+
 function legalSource(value: Mapping): BundleEvidenceSource {
   return {
     sourceId: optionalText(value.machine_id),
@@ -80,12 +118,8 @@ export function projectCompatibilityEvidence(
   const passages = yamlCollections(corpus, "passages", "passages");
   const unresolved = yamlCollections(corpus, "passages", "unresolved");
   const sources = yamlCollections(corpus, "sources", "sources");
-  const passagesById = new Map(
-    passages.map((item) => [text(item.machine_id, "passage.machine_id"), item]),
-  );
-  const sourcesById = new Map(
-    sources.map((item) => [text(item.machine_id, "source.machine_id"), item]),
-  );
+  const passagesById = uniqueCompatibilityIdentities(passages, "passage", false);
+  const sourcesById = uniqueCompatibilityIdentities(sources, "source", true);
   const result: BundleEvidenceSupport[] = [];
 
   for (const relationship of relationships) {
@@ -154,6 +188,7 @@ function sourceForRecord(path: string, fragment: string, content: string): Bundl
 
 function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
   const records: BundleRecord[] = [];
+  assertCompatibilityEvidenceIdentities(corpus);
   for (const path of corpus.resources.records) {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) continue;
     const wholeSource = source(path);
@@ -228,6 +263,7 @@ function registerSource(
 /** Build source identity only from the current corpus's manifest-routed source modules. */
 function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, SourceRegistryEntry> {
   const registry = new Map<string, SourceRegistryEntry>();
+  uniqueCompatibilityIdentities(yamlCollections(corpus, "sources", "sources"), "source", true);
   const compatibilityMappings = new Map<
     string,
     {
@@ -520,7 +556,7 @@ function projectWritRecords(
   return records;
 }
 
-function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
+export function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
   const links: BundleRecordLink[] = [];
   if (corpus.manifest.record_contract.kind === "compatibility") return links;
   for (const path of corpus.resources.relationships) {
@@ -529,6 +565,12 @@ function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
     const value = asJsonObject(parsedResource(whole), path);
     validateAgainstContract(RECORD_LINK_CONTRACT, value, path);
     const id = text(value.link_id, `${path}.link_id`);
+    const declaredOwner = text(value.owning_corpus_id, `${path}.owning_corpus_id`);
+    if (declaredOwner !== corpus.entry.corpus_id) {
+      throw new Error(
+        `${path}: ${id} declares owning corpus ${declaredOwner} but is stored by ${corpus.entry.corpus_id}`,
+      );
+    }
     links.push({
       linkKey: `${corpus.entry.corpus_id}::${id}`,
       corpusId: corpus.entry.corpus_id,

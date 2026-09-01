@@ -61,7 +61,7 @@ function endpointIssue(
   const candidates = endpointCandidates(snapshot, id);
   if (candidates.length === 0) {
     return issue("interoperability", missingCode, `${label} ${id} does not resolve.`, {
-      corpus_id: loaded.value.owning_corpus_id,
+      corpus_id: loaded.corpus_id,
       object_id: loaded.value.link_id,
       file: loaded.file,
     });
@@ -74,7 +74,7 @@ function endpointIssue(
       "INTEROP_DECLARED_KIND_MISMATCH",
       `${label} ${id} declares kind ${declaredKind}, but resolves as: ${actual}.`,
       {
-        corpus_id: loaded.value.owning_corpus_id,
+        corpus_id: loaded.corpus_id,
         object_id: loaded.value.link_id,
         file: loaded.file,
       },
@@ -86,7 +86,7 @@ function endpointIssue(
       "INTEROP_REFERENCE_AMBIGUOUS",
       `${label} ${id} resolves to ${matching.length} ${declaredKind} endpoints.`,
       {
-        corpus_id: loaded.value.owning_corpus_id,
+        corpus_id: loaded.corpus_id,
         object_id: loaded.value.link_id,
         file: loaded.file,
       },
@@ -110,7 +110,7 @@ function referenceIssue(
   const matches = findObjects(snapshot, id, kinds);
   if (matches.length === 0) {
     return issue("interoperability", missingCode, `${label} ${id} does not resolve.`, {
-      corpus_id: loaded.value.owning_corpus_id,
+      corpus_id: loaded.corpus_id,
       object_id: loaded.value.link_id,
       file: loaded.file,
     });
@@ -121,7 +121,7 @@ function referenceIssue(
       "INTEROP_REFERENCE_AMBIGUOUS",
       `${label} ${id} resolves to ${matches.length} objects.`,
       {
-        corpus_id: loaded.value.owning_corpus_id,
+        corpus_id: loaded.corpus_id,
         object_id: loaded.value.link_id,
         file: loaded.file,
       },
@@ -135,6 +135,19 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
   const issues = [];
   const passageIndex = buildLogicalPassageIndex(snapshot);
   const corpusIds = new Set(snapshot.catalogEntries.map((entry) => entry.corpus_id));
+
+  for (const loaded of snapshot.links) {
+    if (loaded.corpus_id !== loaded.value.owning_corpus_id) {
+      issues.push(
+        issue(
+          "interoperability",
+          "INTEROP_OWNER_MISMATCH",
+          `Link ${loaded.value.link_id} declares owning corpus ${loaded.value.owning_corpus_id}, but its manifest/storage owner is ${loaded.corpus_id}.`,
+          { corpus_id: loaded.corpus_id, object_id: loaded.value.link_id, file: loaded.file },
+        ),
+      );
+    }
+  }
 
   for (const loaded of activeLinks(snapshot)) {
     const link = loaded.value;
@@ -177,7 +190,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             "INTEROP_EVIDENCE_NOT_FOUND",
             `Evidence passage ${evidenceId} does not resolve.`,
             {
-              corpus_id: link.owning_corpus_id,
+              corpus_id: loaded.corpus_id,
               object_id: link.link_id,
               file: loaded.file,
             },
@@ -190,7 +203,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
             "INTEROP_REFERENCE_AMBIGUOUS",
             `Evidence passage ${evidenceId} resolves to ${evidence.signatureKeys.length} conflicting logical passage signatures.`,
             {
-              corpus_id: link.owning_corpus_id,
+              corpus_id: loaded.corpus_id,
               object_id: link.link_id,
               file: loaded.file,
             },
