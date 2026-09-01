@@ -863,6 +863,52 @@ describe("candidate repository loading", () => {
     );
   });
 
+  test("independently rejects source dialects that do not satisfy the manifest contract", () => {
+    const legacyUnderNative = candidateWorkspace("writ-v1-under-native-contract-");
+    const legacyManifestPath = join(
+      legacyUnderNative,
+      "corpora/legal-policy/us/constitutional-law/corpus.yaml",
+    );
+    const legacyManifest = Bun.YAML.parse(readFileSync(legacyManifestPath, "utf8")) as {
+      record_contract: { kind: string; id: string; version: string };
+    };
+    legacyManifest.record_contract = {
+      kind: "native",
+      id: LEGAL_POLICY_RECORD_SCHEMA,
+      version: "0.2.0",
+    };
+    writeFileSync(legacyManifestPath, Bun.YAML.stringify(legacyManifest, null, 2));
+    expect(codes({ issues: loadRepository(legacyUnderNative).snapshot.loadIssues })).toContain(
+      "INTEGRITY_CONTRACT_INVALID",
+    );
+
+    const nativeUnderLegacy = candidateWorkspace("writ-v2-under-legacy-contract-");
+    const nativeRecordPath = join(
+      nativeUnderLegacy,
+      "corpora/legal-policy/us/constitutional-law/federal/amendment-xiii.writ",
+    );
+    writeFileSync(
+      nativeRecordPath,
+      readFileSync(nativeRecordPath, "utf8").replace('language writ "0.1"', 'language writ "0.2"'),
+    );
+    expect(codes({ issues: loadRepository(nativeUnderLegacy).snapshot.loadIssues })).toContain(
+      "INTEGRITY_CONTRACT_INVALID",
+    );
+  });
+
+  test("rejects a manifest with a known contract ID and unsupported exact version", () => {
+    const root = candidateWorkspace("writ-unsupported-record-contract-version-");
+    const manifestPath = join(root, "corpora/legal-policy/us/constitutional-law/corpus.yaml");
+    const manifest = Bun.YAML.parse(readFileSync(manifestPath, "utf8")) as {
+      record_contract: { kind: string; id: string; version: string };
+    };
+    manifest.record_contract.version = "0.1.1";
+    writeFileSync(manifestPath, Bun.YAML.stringify(manifest, null, 2));
+    expect(codes({ issues: loadRepository(root).snapshot.loadIssues })).toContain(
+      "VERIFIER_UNSUPPORTED_CONTRACT",
+    );
+  });
+
   test("confines catalog, manifest, and location routes to the workspace", () => {
     const corpusRoot = candidateWorkspace("writ-corpus-traversal-");
     const corpusCatalog = structuredClone(baseline.catalog);

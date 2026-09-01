@@ -8,10 +8,11 @@
  */
 
 import type { RecordJudgment, WritRecord } from "@writ/domain";
-import { validateVersion } from "@writ/domain";
+import { validateContract } from "@writ/domain";
 import type { Model } from "./generated/ast.js";
 import { parseDocument, type ParsedDocument } from "./parse.js";
 import { compileModel, type CompileResult, type SourceMapEntry } from "./compile.js";
+import { recordContractForFamily, resolveWritDialect } from "./contract-dispatch.js";
 import { sortDiagnostics, hasErrors, type LanguageDiagnostic } from "./diagnostics.js";
 
 export { createWritServices, type WritServices } from "./writ-module.js";
@@ -30,6 +31,15 @@ export {
   type CompileOptions,
   type SourceMapEntry,
 } from "./compile.js";
+export {
+  WRIT_DIALECT_CONTRACTS,
+  recordContractForFamily,
+  resolveWritDialect,
+  type ArtifactContract,
+  type CompiledSchemaVersion,
+  type SupportedWritDialect,
+  type WritDialectContracts,
+} from "./contract-dispatch.js";
 export { formatText, printModel, printLiteral } from "./format.js";
 export {
   hasErrors,
@@ -83,26 +93,28 @@ export function compileSource(
 
   const compiled: CompileResult = compileModel(parsed.model);
   diagnostics.push(...compiled.diagnostics);
+  const contracts = resolveWritDialect(parsed.model.languageVersion);
 
   const validations = [
     ...compiled.records.map((record) => {
-      const artifact =
-        record.family === "legal_policy"
-          ? "legal-policy-record"
-          : record.family === "institutional"
-            ? "institutional-record"
-            : "record";
+      const contract = contracts ? recordContractForFamily(contracts, record.family) : undefined;
+      const artifact = contract?.id ?? `unsupported dialect ${parsed.model.languageVersion}`;
       return {
         artifact,
-        result: validateVersion(artifact, record, record.schema_version),
+        result: contract
+          ? validateContract(contract.id, record)
+          : { valid: false as const, errors: [] },
       };
     }),
     ...compiled.judgments.map((judgment) => ({
-      artifact: "record-judgment",
-      result: validateVersion("record-judgment", judgment, judgment.schema_version),
+      artifact: contracts?.judgment.id ?? `unsupported dialect ${parsed.model.languageVersion}`,
+      result: contracts
+        ? validateContract(contracts.judgment.id, judgment)
+        : { valid: false as const, errors: [] },
     })),
   ];
-  const schemaValid = validations.every((validation) => validation.result.valid);
+  const schemaValid =
+    !hasErrors(diagnostics) && validations.every((validation) => validation.result.valid);
   const schemaErrors = validations.flatMap(({ artifact, result }) =>
     result.valid
       ? []

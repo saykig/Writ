@@ -16,6 +16,11 @@ import type {
 import type { LanguageDiagnostic, SourceSpan } from "./diagnostics.js";
 import { spanOf } from "./parse.js";
 import { TOPIC_ALIASES } from "./topic-aliases.js";
+import {
+  recordContractForFamily,
+  resolveWritDialect,
+  type CompiledSchemaVersion,
+} from "./contract-dispatch.js";
 
 export interface SourceMapEntry {
   readonly key: string;
@@ -29,9 +34,8 @@ export interface CompileResult {
   readonly sourceMap: readonly SourceMapEntry[];
 }
 
-export interface CompileOptions {
-  readonly languageVersion?: string;
-}
+/** Reserved pure-lowering options; source dialect is always declared in the Writ document. */
+export type CompileOptions = Readonly<Record<string, never>>;
 
 export function normalizeTopic(value: string): string {
   const normalized = value.trim().toLowerCase();
@@ -265,7 +269,11 @@ function lowerInstitutional(
   return result;
 }
 
-function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): WritRecord {
+function lowerRecord(
+  record: RecordDeclaration,
+  schemaVersion: CompiledSchemaVersion,
+  sourceMap: SourceMapEntry[],
+): WritRecord {
   const find = (type: string) => record.members.find((member) => member.$type === type);
   const corpus = find("RecordCorpus");
   const version = find("RecordVersion");
@@ -300,7 +308,7 @@ function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): Wr
         : [],
     );
   const common: Record<string, unknown> = {
-    schema_version: "0.1.0",
+    schema_version: schemaVersion,
     record_id: record.name,
     corpus_id: corpus?.$type === "RecordCorpus" ? corpus.value : "",
     record_version: version?.$type === "RecordVersion" ? version.value : "",
@@ -361,19 +369,19 @@ function lowerRecord(record: RecordDeclaration, sourceMap: SourceMapEntry[]): Wr
   if (record.family === "institutional") {
     const extension = find("InstitutionalExtension");
     const institutional = extension?.$type === "InstitutionalExtension" ? extension : undefined;
-    const atomic = institutional?.properties.some(
-      (property) => property.$type === "InstitutionalFactTypeProperty",
-    );
     return {
       ...common,
-      ...(atomic ? { schema_version: "0.2.0" } : {}),
       ...lowerInstitutional(institutional),
     } as unknown as InstitutionalRecord;
   }
   return common as unknown as WritRecord;
 }
 
-function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[]): RecordJudgment {
+function lowerJudgment(
+  judgment: JudgmentDeclaration,
+  schemaVersion: RecordJudgment["schema_version"],
+  sourceMap: SourceMapEntry[],
+): RecordJudgment {
   const find = (type: string) => judgment.members.find((member) => member.$type === type);
   const target = find("JudgmentTarget");
   const type = find("JudgmentTypeProperty");
@@ -392,7 +400,7 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
   if (span) sourceMap.push({ key: `judgment:${judgment.name}`, span });
   const targetKind = target?.$type === "JudgmentTarget" ? target.kind : undefined;
   const common = {
-    schema_version: targetKind ? "0.2.0" : "0.1.0",
+    schema_version: schemaVersion,
     judgment_id: judgment.name,
     judgment_type: type?.$type === "JudgmentTypeProperty" ? type.value : "disagreement",
     value: value?.$type === "JudgmentValue" ? literalScalar(value.value) : null,
@@ -426,16 +434,39 @@ function lowerJudgment(judgment: JudgmentDeclaration, sourceMap: SourceMapEntry[
 
 export function compileModel(model: Model, _options: CompileOptions = {}): CompileResult {
   const sourceMap: SourceMapEntry[] = [];
+  const contracts = resolveWritDialect(model.languageVersion);
+  if (!contracts) {
+    const modelSpan = spanOf(model);
+    return {
+      records: [],
+      judgments: [],
+      diagnostics: [
+        {
+          code: "WRT-DIALECT-UNSUPPORTED",
+          severity: "error",
+          message: `Unsupported Writ source dialect: ${model.languageVersion}`,
+          ...(modelSpan ? { span: modelSpan } : {}),
+        },
+      ],
+      sourceMap,
+    };
+  }
   const records = model.declarations
     .filter(
       (declaration): declaration is RecordDeclaration => declaration.$type === "RecordDeclaration",
     )
-    .map((record) => lowerRecord(record, sourceMap));
+    .map((record) =>
+      lowerRecord(
+        record,
+        recordContractForFamily(contracts, record.family).schemaVersion,
+        sourceMap,
+      ),
+    );
   const judgments = model.declarations
     .filter(
       (declaration): declaration is JudgmentDeclaration =>
         declaration.$type === "JudgmentDeclaration",
     )
-    .map((judgment) => lowerJudgment(judgment, sourceMap));
+    .map((judgment) => lowerJudgment(judgment, contracts.judgment.schemaVersion, sourceMap));
   return { records, judgments, diagnostics: [], sourceMap };
 }

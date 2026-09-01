@@ -16,6 +16,7 @@ import type {
 import { extractWritDeclarations, extractYamlSequenceRecords } from "./exact-source.js";
 import {
   asJsonObject,
+  assertSupportedRecordContract,
   RECORD_JUDGMENT_CONTRACT,
   RECORD_LINK_CONTRACT,
   type Mapping,
@@ -567,6 +568,9 @@ export function projectCanonicalObjects(repository: NativeRepository): {
   readonly recordLinks: readonly BundleRecordLink[];
   readonly recordJudgments: readonly BundleRecordJudgment[];
 } {
+  for (const corpus of repository.corpora) {
+    assertSupportedRecordContract(corpus.manifest.record_contract, corpus.entry.manifest);
+  }
   const records = repository.corpora.flatMap((corpus) => {
     const extensions = new Set(
       corpus.resources.records.map((path) =>
