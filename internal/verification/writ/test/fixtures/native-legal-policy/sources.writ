@@ -1,0 +1,21 @@
+language writ "0.1"
+package test.native_legal_policy.sources version "0.1.0";
+
+source synthetic_policy_source {
+  uri "https://example.test/policy";
+  media_type "text/plain";
+  retrieved 2026-08-31T00:00:00Z;
+  sha256 "sha256:1111111111111111111111111111111111111111111111111111111111111111";
+}
+
+concept SyntheticPolicySourceMetadata {
+  source_id synthetic.policy.source;
+  source_title "Synthetic policy source";
+  source_version "version-1";
+  source_date 2026-08-31;
+}
+
+concept SyntheticPolicyDocumentVersionIdentity {
+  source_id synthetic.policy.source;
+  document_version_id synthetic.policy.source.v1;
+}

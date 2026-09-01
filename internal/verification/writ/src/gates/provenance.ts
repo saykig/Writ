@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { validateJudgmentSupersession } from "@writ/domain";
 
-import { findObjects } from "../repository.js";
+import { logicalPassageConflicts, resolveLogicalPassage } from "../core/passages.js";
+import { resolveRoutedSource } from "../core/sources.js";
 import {
   gateResult,
   issue,
@@ -18,6 +19,9 @@ const activeInstitutionalRecords = (snapshot: RepositorySnapshot) =>
   snapshot.institutionalRecords.filter(
     ({ value }) => value.review_state !== "superseded" && value.review_state !== "withdrawn",
   );
+
+const currentNativeCoreRecords = (snapshot: RepositorySnapshot) =>
+  snapshot.records.filter(({ governing_contract }) => governing_contract.verifies_core_provenance);
 
 function nestedReferences(value: unknown, key: string): string[] {
   if (Array.isArray(value)) return value.flatMap((item) => nestedReferences(item, key));
@@ -117,7 +121,96 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     snapshot.migrations.map((migration) => migration.previous_id),
   );
 
-  const passages = new Map<string, { signature: string; recordId: string; file: string }>();
+  for (const loaded of currentNativeCoreRecords(snapshot)) {
+    const record = loaded.value;
+    for (const evidence of record.evidence) {
+      const actualPassageHash = `sha256:${createHash("sha256")
+        .update(Buffer.from(evidence.quote, "utf8"))
+        .digest("hex")}`;
+      if (actualPassageHash !== evidence.passage_hash) {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_PASSAGE_HASH_MISMATCH",
+            `Evidence passage ${evidence.passage_id} hashes to ${actualPassageHash}, not ${evidence.passage_hash}.`,
+            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+          ),
+        );
+      }
+
+      const source = resolveRoutedSource(snapshot, loaded.corpus_id, evidence.source_id);
+      if (source.status === "missing") {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_SOURCE_NOT_FOUND",
+            `Evidence source ${evidence.source_id} does not resolve to structured source metadata.`,
+            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+          ),
+        );
+      } else if (source.status === "not_routed") {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_SOURCE_NOT_ROUTED",
+            `Evidence source ${evidence.source_id} exists, but ${loaded.corpus_id} does not route its structured declaration through locations.sources.`,
+            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+          ),
+        );
+      } else if (source.status === "ambiguous") {
+        issues.push(
+          issue(
+            "provenance",
+            "PROVENANCE_REFERENCE_AMBIGUOUS",
+            `Evidence source ${evidence.source_id} resolves to ${source.matches.length} physical source declarations.`,
+            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+          ),
+        );
+      } else {
+        const declaredHash = sourceDocumentHash(source.source.value);
+        if (declaredHash !== evidence.document_hash) {
+          issues.push(
+            issue(
+              "provenance",
+              "PROVENANCE_SOURCE_MISMATCH",
+              `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash ?? "no document hash"}.`,
+              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+            ),
+          );
+        }
+        const declaredVersions = source.compatibilityVersion
+          ? [source.compatibilityVersion]
+          : sourceDocumentVersionIds(source.source.value);
+        if (!declaredVersions.includes(evidence.document_version_id)) {
+          issues.push(
+            issue(
+              "provenance",
+              "PROVENANCE_SOURCE_VERSION_MISMATCH",
+              `Evidence source ${evidence.source_id} has document version ${evidence.document_version_id}, but structured source metadata declares ${declaredVersions.join(", ") || "no version identity"}.`,
+              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  for (const conflict of logicalPassageConflicts(snapshot)) {
+    const first = conflict.occurrences[0]!;
+    const identities = conflict.occurrences
+      .map((occurrence) => `${occurrence.corpusId}:${occurrence.objectId}`)
+      .sort()
+      .join(", ");
+    issues.push(
+      issue(
+        "provenance",
+        "PROVENANCE_PASSAGE_CONFLICT",
+        `Passage ${conflict.passageId} has ${conflict.signatureKeys.length} distinct logical signatures across ${identities}.`,
+        { corpus_id: first.corpusId, object_id: conflict.passageId, file: first.file },
+      ),
+    );
+  }
+
   for (const loaded of snapshot.institutionalRecords) {
     const record = loaded.value;
     const localPassages = new Set(record.evidence.map((evidence) => evidence.passage_id));
@@ -148,114 +241,6 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
             { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
           ),
         );
-      }
-    }
-    for (const evidence of record.evidence) {
-      const actualPassageHash = `sha256:${createHash("sha256")
-        .update(evidence.quote)
-        .digest("hex")}`;
-      if (actualPassageHash !== evidence.passage_hash) {
-        issues.push(
-          issue(
-            "provenance",
-            "PROVENANCE_PASSAGE_HASH_MISMATCH",
-            `Evidence passage ${evidence.passage_id} hashes to ${actualPassageHash}, not ${evidence.passage_hash}.`,
-            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-          ),
-        );
-      }
-      let sourceMatches = findObjects(snapshot, evidence.source_id, ["source_document", "source"]);
-      let compatibilityVersion: string | undefined;
-      if (sourceMatches.length === 0) {
-        const compatibilityMappings = findObjects(snapshot, evidence.source_id, [
-          "compatibility_source_identity",
-        ]);
-        if (compatibilityMappings.length === 1) {
-          const mapping = compatibilityMappings[0]!.value;
-          if (
-            typeof mapping.compatibility_source_id === "string" &&
-            typeof mapping.document_version_id === "string"
-          ) {
-            sourceMatches = findObjects(snapshot, mapping.compatibility_source_id, [
-              "source_document",
-              "source",
-            ]);
-            compatibilityVersion = mapping.document_version_id;
-          }
-        } else if (compatibilityMappings.length > 1) {
-          sourceMatches = compatibilityMappings;
-        }
-      }
-      if (sourceMatches.length === 0) {
-        issues.push(
-          issue(
-            "provenance",
-            "PROVENANCE_SOURCE_NOT_FOUND",
-            `Evidence source ${evidence.source_id} does not resolve to structured source metadata.`,
-            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-          ),
-        );
-      } else if (sourceMatches.length > 1) {
-        issues.push(
-          issue(
-            "provenance",
-            "PROVENANCE_REFERENCE_AMBIGUOUS",
-            `Evidence source ${evidence.source_id} resolves to ${sourceMatches.length} source documents.`,
-            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-          ),
-        );
-      } else {
-        const declaredHash = sourceDocumentHash(sourceMatches[0]!.value);
-        if (declaredHash !== undefined && declaredHash !== evidence.document_hash) {
-          issues.push(
-            issue(
-              "provenance",
-              "PROVENANCE_SOURCE_MISMATCH",
-              `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash}.`,
-              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-            ),
-          );
-        }
-        const declaredVersions = compatibilityVersion
-          ? [compatibilityVersion]
-          : sourceDocumentVersionIds(sourceMatches[0]!.value);
-        if (!declaredVersions.includes(evidence.document_version_id)) {
-          issues.push(
-            issue(
-              "provenance",
-              "PROVENANCE_SOURCE_VERSION_MISMATCH",
-              `Evidence source ${evidence.source_id} has document version ${evidence.document_version_id}, but structured source metadata declares ${declaredVersions.join(", ") || "no version identity"}.`,
-              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-            ),
-          );
-        }
-      }
-
-      const passageKey = `${loaded.corpus_id}\0${evidence.passage_id}`;
-      const signature = JSON.stringify({
-        source_id: evidence.source_id,
-        document_version_id: evidence.document_version_id,
-        locator: evidence.locator,
-        quote: evidence.quote,
-        passage_hash: evidence.passage_hash,
-        document_hash: evidence.document_hash,
-      });
-      const prior = passages.get(passageKey);
-      if (prior && prior.signature !== signature) {
-        issues.push(
-          issue(
-            "provenance",
-            "PROVENANCE_PASSAGE_CONFLICT",
-            `Passage ${evidence.passage_id} conflicts with its occurrence in ${prior.recordId}.`,
-            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-          ),
-        );
-      } else if (!prior) {
-        passages.set(passageKey, {
-          signature,
-          recordId: record.record_id,
-          file: loaded.file,
-        });
       }
     }
   }
@@ -306,8 +291,8 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
 
     for (const evidenceId of judgment.evidence_refs) {
-      const evidenceMatches = findObjects(snapshot, evidenceId, ["passage"]);
-      if (evidenceMatches.length === 0) {
+      const evidence = resolveLogicalPassage(snapshot, evidenceId);
+      if (evidence.status === "missing") {
         issues.push(
           issue(
             "provenance",
@@ -316,12 +301,12 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
             { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
           ),
         );
-      } else if (evidenceMatches.length > 1) {
+      } else if (evidence.status === "conflict") {
         issues.push(
           issue(
             "provenance",
             "PROVENANCE_REFERENCE_AMBIGUOUS",
-            `Judgment evidence ${evidenceId} resolves to ${evidenceMatches.length} passages.`,
+            `Judgment evidence ${evidenceId} resolves to ${evidence.signatureKeys.length} conflicting logical passage signatures.`,
             { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
           ),
         );

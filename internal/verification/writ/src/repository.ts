@@ -4,7 +4,6 @@ import type {
   AtomicInstitutionalRecord,
   CurrentRecordJudgment,
   RecordLink,
-  WritRecord,
 } from "@writ/domain";
 import { compileSource, isConceptDeclaration, isSource, parseDocument } from "@writ/language";
 
@@ -29,6 +28,7 @@ import {
   type IndexedObject,
   type Loaded,
   type LoadedDocument,
+  type LoadedRecord,
   type ManifestCategory,
   type MigrationRename,
   type RepositorySnapshot,
@@ -456,14 +456,15 @@ export function loadRepository(root: string): LoadRepositoryResult {
     });
   }
 
-  const records: Loaded<WritRecord>[] = [];
-  const institutionalRecords: Loaded<AtomicInstitutionalRecord>[] = [];
+  const records: LoadedRecord[] = [];
+  const institutionalRecords: LoadedRecord<AtomicInstitutionalRecord>[] = [];
   const links: Loaded<RecordLink>[] = [];
   const judgments: Loaded<CurrentRecordJudgment>[] = [];
   const documents: LoadedDocument[] = [];
   const objectMap = new Map<string, IndexedObject>();
   const migrations: MigrationRename[] = [];
   const routed = new Set<string>();
+  const sourceRouteMap = new Map<string, { corpus_id: string; file: string }>();
 
   const addObject = (item: IndexedObject): void => {
     const physical = realpathSync(join(root, item.file));
@@ -510,6 +511,13 @@ export function loadRepository(root: string): LoadRepositoryResult {
           loadIssues,
         )) {
           const label = relative(root, absolute);
+          if (category === "sources") {
+            const physical = realpathSync(absolute);
+            sourceRouteMap.set(`${manifest.corpus_id}\0${physical}`, {
+              corpus_id: manifest.corpus_id,
+              file: label,
+            });
+          }
           // A physical compatibility document may be listed by its owning corpus and
           // by an institutional consumer. Its canonical owner controls parsing and
           // validation regardless of which route is encountered first.
@@ -670,6 +678,9 @@ export function loadRepository(root: string): LoadRepositoryResult {
                   family: record.family,
                   value: record,
                 });
+                const governingEntry = entries.find(
+                  (candidate) => candidate.corpus_id === ownerCorpus,
+                );
                 loadIssues.push(
                   ...validateDocument(
                     authority,
@@ -681,14 +692,26 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     ownerCorpus,
                   ),
                 );
-                const loaded = { value: record, file: label, corpus_id: ownerCorpus };
+                const loaded: LoadedRecord = {
+                  value: record,
+                  file: label,
+                  corpus_id: ownerCorpus,
+                  governing_contract: {
+                    ...governingContract,
+                    adapter_kind: adapted.capabilities.adapterKind,
+                    expected_family: adapted.capabilities.expectedFamily,
+                    verifies_core_provenance: adapted.capabilities.verifiesCoreProvenance,
+                  },
+                  manifest_family: governingManifest.value.family,
+                  catalog_family: governingEntry?.family ?? governingManifest.value.family,
+                };
                 records.push(loaded);
                 if (
-                  adapted.adapterKind === "compiled_native" &&
+                  adapted.capabilities.adapterKind === "current_native_core" &&
                   governingContract.id === INSTITUTIONAL_RECORD_SCHEMA &&
                   record.schema_version === "0.2.0"
                 )
-                  institutionalRecords.push(loaded as Loaded<AtomicInstitutionalRecord>);
+                  institutionalRecords.push(loaded as LoadedRecord<AtomicInstitutionalRecord>);
                 const recordObject = indexed(
                   record as unknown as Record<string, unknown>,
                   "record",
@@ -772,7 +795,25 @@ export function loadRepository(root: string): LoadRepositoryResult {
             );
             continue;
           }
-          documents.push({ value, file: label, corpus_id: ownerCorpus, category });
+          const documentAdapted = governingAdapter.adapt({
+            family: governingManifest.value.family,
+            value,
+          });
+          const documentEntry = entries.find((candidate) => candidate.corpus_id === ownerCorpus);
+          documents.push({
+            value,
+            file: label,
+            corpus_id: ownerCorpus,
+            category,
+            governing_contract: {
+              ...governingContract,
+              adapter_kind: documentAdapted.capabilities.adapterKind,
+              expected_family: documentAdapted.capabilities.expectedFamily,
+              verifies_core_provenance: documentAdapted.capabilities.verifiesCoreProvenance,
+            },
+            manifest_family: governingManifest.value.family,
+            catalog_family: documentEntry?.family ?? governingManifest.value.family,
+          });
 
           if (category === "sources" && Array.isArray(value.sources)) {
             for (const candidate of value.sources) {
@@ -878,6 +919,11 @@ export function loadRepository(root: string): LoadRepositoryResult {
       judgments,
       documents,
       objects: [...objectMap.values()],
+      sourceRoutes: [...sourceRouteMap.values()].sort((left, right) => {
+        const leftKey = `${left.corpus_id}\0${left.file}`;
+        const rightKey = `${right.corpus_id}\0${right.file}`;
+        return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+      }),
       workflowStates: workflow.workflowStates,
       migrations,
       loadIssues,

@@ -13,12 +13,72 @@ import {
   rawHash,
   readNativeRepository,
   repositoryRoot,
+  source,
   type NativeCorpus,
+  type NativeRepository,
 } from "../src/repository.js";
 import { assertSourceFragments, validateWritDataBundle } from "../src/validate.js";
 
 const TEST_COMMIT = "0123456789abcdef0123456789abcdef01234567";
 const bundle = generateWritDataBundleForCommit(TEST_COMMIT);
+const NATIVE_LEGAL_FIXTURE = "internal/verification/writ/test/fixtures/native-legal-policy";
+
+function nativeLegalFixtureRepository(includeRoutedSource = true): NativeRepository {
+  const recordPath = `${NATIVE_LEGAL_FIXTURE}/records.writ`;
+  const sourcePath = `${NATIVE_LEGAL_FIXTURE}/sources.writ`;
+  const manifest = {
+    schema_version: "1.0.0",
+    corpus_id: "test.native_legal_policy",
+    title: "Synthetic native legal-policy verifier corpus",
+    family: "legal_policy",
+    jurisdiction: "US",
+    status: "draft",
+    corpus_version: "0.2.0",
+    record_contract: {
+      kind: "native" as const,
+      id: SCHEMA_IDS["legal-policy-record"],
+      version: "0.2.0",
+    },
+    locations: {
+      sources: includeRoutedSource ? [sourcePath] : [],
+      passages: [recordPath],
+      records: [recordPath],
+      relationships: [],
+      judgments: [],
+      migration: [],
+    },
+    record_counts: { legal_policy_records: 1, record_links: 0, disposition_judgments: 0 },
+    review_counts: {},
+    unresolved_evidence_count: 0,
+  };
+  const entry = {
+    corpus_id: manifest.corpus_id,
+    family: manifest.family,
+    jurisdiction: manifest.jurisdiction,
+    status: manifest.status,
+    path: NATIVE_LEGAL_FIXTURE,
+    manifest: `${NATIVE_LEGAL_FIXTURE}/corpus.yaml`,
+  };
+  const manifestText = Bun.YAML.stringify(manifest);
+  const corpus: NativeCorpus = {
+    entry,
+    manifest,
+    manifestSource: source(entry.manifest, manifestText),
+    canonicalIdentity: { kind: "instrument", instrumentId: "synthetic_policy" },
+    resources: manifest.locations,
+  };
+  return {
+    catalog: {},
+    catalogSource: source("corpora/catalog.yaml", "{}\n"),
+    corpora: [corpus],
+    resources: new Map(
+      [recordPath, ...(includeRoutedSource ? [sourcePath] : [])].map((path) => [
+        path,
+        source(path),
+      ]),
+    ),
+  };
+}
 
 function countBy(values: readonly string[]): Record<string, number> {
   const counts: Record<string, number> = {};
@@ -58,6 +118,30 @@ describe("Writ data bundle membership", () => {
 });
 
 describe("canonical source and provenance", () => {
+  test("projects a valid native legal-policy record through routed source authority", () => {
+    const projected = projectCanonicalObjects(nativeLegalFixtureRepository());
+    expect(projected.records).toHaveLength(1);
+    expect(projected.records[0]!.recordId).toBe("synthetic_native_legal_policy_record");
+    expect(projected.records[0]!.evidence).toEqual([
+      expect.objectContaining({
+        state: "traced",
+        passageId: "synthetic.policy.passage",
+        passageHash: "sha256:3f6fe63be01912fb99033b62c4c8affb4ae3b0cf8b428b4e5cbb8b88fc209a18",
+        documentHash: "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        source: expect.objectContaining({
+          sourceId: "synthetic.policy.source",
+          documentVersionId: "synthetic.policy.source.v1",
+        }),
+      }),
+    ]);
+  });
+
+  test("does not let native source_metadata fabricate traced evidence", () => {
+    expect(() => projectCanonicalObjects(nativeLegalFixtureRepository(false))).toThrow(
+      /evidence source synthetic\.policy\.source does not resolve to structured source metadata/,
+    );
+  });
+
   test("exports exact reparsed YAML and Writ source slices", () => {
     const yaml = bundle.records.find((record) => record.recordType === "political_claim")!;
     expect(yaml.storedSource.language).toBe("yaml");

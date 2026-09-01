@@ -76,11 +76,32 @@ export interface Loaded<T> {
   corpus_id: string;
 }
 
+export interface LoadedRecordContract extends RecordContract {
+  adapter_kind:
+    "current_native_core" | "frozen_compiled_compatibility" | "reviewed_compatibility_document";
+  expected_family: "institutional" | "legal_policy";
+  verifies_core_provenance: boolean;
+}
+
+export interface LoadedRecord<T extends WritRecord = WritRecord> extends Loaded<T> {
+  governing_contract: LoadedRecordContract;
+  manifest_family: string;
+  catalog_family: string;
+}
+
+export interface StructuredSourceRoute {
+  corpus_id: string;
+  file: string;
+}
+
 export interface LoadedDocument {
   value: Record<string, unknown>;
   file: string;
   corpus_id: string;
   category: ManifestCategory;
+  governing_contract: LoadedRecordContract;
+  manifest_family: string;
+  catalog_family: string;
 }
 
 export interface IndexedObject {
@@ -156,12 +177,13 @@ export interface RepositorySnapshot {
   catalog: CorpusCatalog;
   catalogEntries: CatalogEntry[];
   manifests: Loaded<CorpusManifest>[];
-  records: Loaded<WritRecord>[];
-  institutionalRecords: Loaded<AtomicInstitutionalRecord>[];
+  records: LoadedRecord[];
+  institutionalRecords: LoadedRecord<AtomicInstitutionalRecord>[];
   links: Loaded<RecordLink>[];
   judgments: Loaded<CurrentRecordJudgment>[];
   documents: LoadedDocument[];
   objects: IndexedObject[];
+  sourceRoutes: StructuredSourceRoute[];
   workflowStates: Record<string, WorkflowStateEnvelope>;
   migrations: MigrationRename[];
   loadIssues: VerificationIssue[];

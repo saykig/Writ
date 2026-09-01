@@ -5,6 +5,8 @@ export * from "./adapters/workflow-artifacts.js";
 export * from "./core/adapter-registry.js";
 export * from "./core/engine.js";
 export * from "./core/output.js";
+export * from "./core/passages.js";
+export * from "./core/sources.js";
 export * from "./core/workspace.js";
 export * from "./invariants.js";
 export * from "./repository.js";

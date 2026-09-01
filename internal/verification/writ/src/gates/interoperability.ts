@@ -1,4 +1,5 @@
 import { findObjects } from "../repository.js";
+import { resolveLogicalPassage } from "../core/passages.js";
 import {
   gateResult,
   issue,
@@ -167,15 +168,34 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
     if (target) issues.push(target);
 
     for (const evidenceId of link.evidence_refs) {
-      const finding = referenceIssue(
-        snapshot,
-        evidenceId,
-        ["passage"],
-        "INTEROP_EVIDENCE_NOT_FOUND",
-        "Evidence passage",
-        loaded,
-      );
-      if (finding) issues.push(finding);
+      const evidence = resolveLogicalPassage(snapshot, evidenceId);
+      if (evidence.status === "missing") {
+        issues.push(
+          issue(
+            "interoperability",
+            "INTEROP_EVIDENCE_NOT_FOUND",
+            `Evidence passage ${evidenceId} does not resolve.`,
+            {
+              corpus_id: link.owning_corpus_id,
+              object_id: link.link_id,
+              file: loaded.file,
+            },
+          ),
+        );
+      } else if (evidence.status === "conflict") {
+        issues.push(
+          issue(
+            "interoperability",
+            "INTEROP_REFERENCE_AMBIGUOUS",
+            `Evidence passage ${evidenceId} resolves to ${evidence.signatureKeys.length} conflicting logical passage signatures.`,
+            {
+              corpus_id: link.owning_corpus_id,
+              object_id: link.link_id,
+              file: loaded.file,
+            },
+          ),
+        );
+      }
     }
     for (const supportingId of link.supporting_record_ids ?? []) {
       const finding = referenceIssue(

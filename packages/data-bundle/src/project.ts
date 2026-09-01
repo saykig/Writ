@@ -391,11 +391,27 @@ function compiledEvidence(
       support.document_version_id,
       `evidence[${index}].document_version_id`,
     );
+    // Native Core records may describe import lineage in source_metadata, but
+    // only manifest-routed structured source declarations authorize traced
+    // evidence. Frozen compatibility 0.1 retains its historical embedded
+    // source behavior.
     const resolved =
-      registry.get(sourceId) ?? embeddedLegalPolicySource(corpus, value, sourceId, documentHash);
-    if (corpus.entry.family === "institutional" && resolved === undefined) {
+      registry.get(sourceId) ??
+      (corpus.manifest.record_contract.kind === "compatibility"
+        ? embeddedLegalPolicySource(corpus, value, sourceId, documentHash)
+        : undefined);
+    if (corpus.manifest.record_contract.kind === "native" && resolved === undefined) {
       throw new Error(
         `${corpus.entry.corpus_id}: evidence source ${sourceId} does not resolve to structured source metadata`,
+      );
+    }
+    if (
+      corpus.manifest.record_contract.kind === "native" &&
+      resolved !== undefined &&
+      (resolved.documentHash === null || resolved.documentVersionIds.length === 0)
+    ) {
+      throw new Error(
+        `${corpus.entry.corpus_id}: evidence source ${sourceId} lacks authoritative document hash or version metadata`,
       );
     }
     if (resolved?.documentHash && documentHash !== resolved.documentHash) {
