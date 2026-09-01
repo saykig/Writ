@@ -592,3 +592,34 @@ tasks:
       - packages/data-bundle
       - TASKS.yaml
       - MANIFEST.sha256
+
+  - id: KERNEL-NATIVE-PROVENANCE-001
+    title: Give all current native records Core provenance parity
+    status: in_progress
+    dependencies:
+      - KERNEL-CONTRACT-DISPATCH-001
+    scope:
+      - Make exact governing contract metadata available for every loaded record.
+      - Apply shared Core source, document-version, passage, quote-hash, and reference verification to every current native record.
+      - Resolve repeated unqualified passage IDs by one deterministic logical passage signature across corpora.
+      - Enforce catalog, manifest, contract, and compiled-record family coherence for supported catalogued contracts.
+      - Keep bundle projection faithful to manifest-routed native source authority without becoming a second verifier.
+    exclusions:
+      - Commission Decision content, decision ontology, new corpus families, schemas, grammar, or relation vocabulary.
+      - Canonical JSON, review-state policy, query, reasoning, compliance, database, or frontend changes.
+      - Substantive NIST, European Commission, or legal-policy corpus changes.
+    acceptance:
+      - Every current native record is verified through its exact governing contract and shared Core evidence envelope.
+      - Native source authority resolves only through deliberately manifest-routed structured source metadata.
+      - Exact UTF-8 quote bytes determine passage hashes without normalization.
+      - Repeated identical passage IDs resolve across corpora while conflicting signatures fail deterministically.
+      - Core links and judgments use the same logical passage resolution semantics.
+      - Supported catalogued contracts enforce catalog, manifest, contract, and compiled-record family coherence.
+      - Frozen compatibility behavior and existing institutional semantic checks remain unchanged.
+      - Existing semantic bundle sections remain unchanged apart from commit-derived metadata.
+      - Formatting, linting, type checking, tests, data checks, verification, Python checks, build, CI, and repository integrity pass.
+    outputs:
+      - internal/verification/writ
+      - packages/data-bundle
+      - TASKS.yaml
+      - MANIFEST.sha256
