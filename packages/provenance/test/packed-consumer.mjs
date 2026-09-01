@@ -12,6 +12,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
+import { execPath, stdout, version } from "node:process";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -150,12 +151,12 @@ const consumerSource = `
 `;
 writeFileSync(join(consumerRoot, "consumer.mjs"), consumerSource);
 const runtimeResult = JSON.parse(
-  execFileSync(process.execPath, [join(consumerRoot, "consumer.mjs")], {
+  execFileSync(execPath, [join(consumerRoot, "consumer.mjs")], {
     cwd: consumerRoot,
     encoding: "utf8",
   }),
 );
-assert.equal(runtimeResult.node, process.version);
+assert.equal(runtimeResult.node, version);
 assert.equal(runtimeResult.internalBlocked, true);
 
 const typeConsumerSource = `
@@ -198,6 +199,6 @@ execFileSync(
   { cwd: consumerRoot, stdio: "pipe" },
 );
 
-process.stdout.write(
-  `packed external consumer passed under ${process.version} (${packResult.filename}, ${packResult.integrity})\n`,
+stdout.write(
+  `packed external consumer passed under ${version} (${packResult.filename}, ${packResult.integrity})\n`,
 );

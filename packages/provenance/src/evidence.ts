@@ -146,7 +146,7 @@ function sortOccurrences<T>(
   );
 }
 
-/** Resolve an unqualified passage ID (or alias) by its complete signature. */
+/** Resolve an unqualified passage ID by its complete signature. */
 export function resolveLogicalPassage<T>(
   occurrences: readonly LogicalPassageOccurrence<T>[],
   passageId: string,
@@ -154,14 +154,21 @@ export function resolveLogicalPassage<T>(
   const matching = sortOccurrences(occurrences).filter(
     (occurrence) => occurrence.passageId === passageId,
   );
+  return resolutionFromOccurrences(passageId, matching);
+}
+
+function resolutionFromOccurrences<T>(
+  passageId: string,
+  occurrences: LogicalPassageOccurrence<T>[],
+): LogicalPassageResolution<T> {
   const signatureKeys = [
-    ...new Set(matching.map(({ signature }) => passageSignatureKey(signature))),
+    ...new Set(occurrences.map(({ signature }) => passageSignatureKey(signature))),
   ].sort(compare);
   return {
     status:
-      matching.length === 0 ? "missing" : signatureKeys.length === 1 ? "resolved" : "conflict",
+      occurrences.length === 0 ? "missing" : signatureKeys.length === 1 ? "resolved" : "conflict",
     passageId,
-    occurrences: matching,
+    occurrences,
     signatureKeys,
   };
 }
@@ -170,11 +177,14 @@ export function resolveLogicalPassage<T>(
 export function logicalPassageConflicts<T>(
   occurrences: readonly LogicalPassageOccurrence<T>[],
 ): LogicalPassageResolution<T>[] {
-  const identifiers = new Set<string>();
-  for (const occurrence of occurrences) identifiers.add(occurrence.passageId);
-  return [...identifiers]
-    .sort(compare)
-    .map((passageId) => resolveLogicalPassage(occurrences, passageId))
+  const grouped = new Map<string, LogicalPassageOccurrence<T>[]>();
+  for (const occurrence of sortOccurrences(occurrences)) {
+    const matching = grouped.get(occurrence.passageId) ?? [];
+    matching.push(occurrence);
+    grouped.set(occurrence.passageId, matching);
+  }
+  return [...grouped.entries()]
+    .map(([passageId, matching]) => resolutionFromOccurrences(passageId, matching))
     .filter((resolution) => resolution.status === "conflict");
 }
 
