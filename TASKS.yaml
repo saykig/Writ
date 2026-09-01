@@ -570,7 +570,7 @@ tasks:
 
   - id: KERNEL-CONTRACT-DISPATCH-001
     title: Make Writ source and record-contract dispatch exact
-    status: in_progress
+    status: done
     dependencies:
       - NIST-PROVING-GROUND-HARDENING-001
     scope:
