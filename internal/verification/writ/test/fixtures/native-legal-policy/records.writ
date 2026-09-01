@@ -1,0 +1,51 @@
+language writ "0.2"
+package test.native_legal_policy.records version "0.2.0";
+
+record synthetic_native_legal_policy_record : legal_policy {
+  corpus test.native_legal_policy;
+  version "0.2.0";
+  title "Synthetic native legal-policy record";
+  subjects {
+    subject synthetic_policy type policy_instrument role "subject";
+  };
+  assertion states "A policy states one bounded requirement.";
+  topics {};
+  scope {
+    jurisdictions { "United States" };
+    institutional_scope {};
+    temporal_scope {}
+    conditions {};
+  }
+  evidence {
+    support synthetic.policy.source document_version synthetic.policy.source.v1 passage synthetic.policy.passage locator "Synthetic policy, paragraph 1" quote "A policy states one bounded requirement." passage_hash "sha256:3f6fe63be01912fb99033b62c4c8affb4ae3b0cf8b428b4e5cbb8b88fc209a18" document_hash "sha256:1111111111111111111111111111111111111111111111111111111111111111" basis direct;
+  }
+  uncertainty {
+    item unknown "The fixture does not establish implementation or enforcement.";
+  }
+  provenance {
+    created_by "Writ verifier synthetic fixture";
+    created_at 2026-08-31;
+  }
+  review_state draft;
+  legal_policy {
+    instrument_type agency_policy;
+    jurisdiction_level federal;
+    force nonbinding;
+    adoption_status adopted;
+    applicability_status government_use;
+    enforcement_status none_specified;
+    official_citation "Synthetic Policy v1";
+    provision_identifier "paragraph-1";
+    jurisdictions { "United States" };
+    source_metadata {
+      dataset_name "Synthetic import";
+      dataset_snapshot "v1";
+      source_row_identifier "row-1";
+      source_url "https://example.test/policy";
+      jurisdiction "US";
+      title "Synthetic policy source";
+      original_text "A policy states one bounded requirement.";
+      row_hash "sha256:1111111111111111111111111111111111111111111111111111111111111111";
+    }
+  }
+}

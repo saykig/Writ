@@ -1,30 +1,150 @@
 import { describe, expect, test } from "bun:test";
 
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { relative } from "node:path";
 
 import { RAW_COMPATIBILITY_SCHEMAS, SCHEMA_IDS } from "@writ/domain";
 import { generateWritDataBundleForCommit, resolveCommitIdentity } from "../src/generate.js";
 import { serializeBundle } from "../src/hashing.js";
-import { projectCanonicalObjects, projectCompatibilityEvidence } from "../src/project.js";
+import {
+  projectCanonicalObjects,
+  projectCompatibilityEvidence,
+  projectRecordLinks,
+} from "../src/project.js";
 import {
   REVIEWED_DOCUMENT_CONTRACT,
   assertSupportedRecordContract,
   rawHash,
   readNativeRepository,
   repositoryRoot,
+  source,
   type NativeCorpus,
+  type NativeRepository,
 } from "../src/repository.js";
 import { assertSourceFragments, validateWritDataBundle } from "../src/validate.js";
 
 const TEST_COMMIT = "0123456789abcdef0123456789abcdef01234567";
 const bundle = generateWritDataBundleForCommit(TEST_COMMIT);
+const NATIVE_LEGAL_FIXTURE = "internal/verification/writ/test/fixtures/native-legal-policy";
+
+function nativeLegalFixtureRepository(includeRoutedSource = true): NativeRepository {
+  const recordPath = `${NATIVE_LEGAL_FIXTURE}/records.writ`;
+  const sourcePath = `${NATIVE_LEGAL_FIXTURE}/sources.writ`;
+  const manifest = {
+    schema_version: "1.0.0",
+    corpus_id: "test.native_legal_policy",
+    title: "Synthetic native legal-policy verifier corpus",
+    family: "legal_policy",
+    jurisdiction: "US",
+    status: "draft",
+    corpus_version: "0.2.0",
+    record_contract: {
+      kind: "native" as const,
+      id: SCHEMA_IDS["legal-policy-record"],
+      version: "0.2.0",
+    },
+    locations: {
+      sources: includeRoutedSource ? [sourcePath] : [],
+      passages: [recordPath],
+      records: [recordPath],
+      relationships: [],
+      judgments: [],
+      migration: [],
+    },
+    record_counts: { legal_policy_records: 1, record_links: 0, disposition_judgments: 0 },
+    review_counts: {},
+    unresolved_evidence_count: 0,
+  };
+  const entry = {
+    corpus_id: manifest.corpus_id,
+    family: manifest.family,
+    jurisdiction: manifest.jurisdiction,
+    status: manifest.status,
+    path: NATIVE_LEGAL_FIXTURE,
+    manifest: `${NATIVE_LEGAL_FIXTURE}/corpus.yaml`,
+  };
+  const manifestText = Bun.YAML.stringify(manifest);
+  const corpus: NativeCorpus = {
+    entry,
+    manifest,
+    manifestSource: source(entry.manifest, manifestText),
+    canonicalIdentity: { kind: "instrument", instrumentId: "synthetic_policy" },
+    resources: manifest.locations,
+  };
+  return {
+    catalog: {},
+    catalogSource: source("corpora/catalog.yaml", "{}\n"),
+    corpora: [corpus],
+    resources: new Map(
+      [recordPath, ...(includeRoutedSource ? [sourcePath] : [])].map((path) => [
+        path,
+        source(path),
+      ]),
+    ),
+  };
+}
 
 function countBy(values: readonly string[]): Record<string, number> {
   const counts: Record<string, number> = {};
   for (const value of values) counts[value] = (counts[value] ?? 0) + 1;
   return counts;
 }
+
+function compatibilityEvidenceCorpus(
+  sources: Array<Record<string, unknown>>,
+  passages: Array<Record<string, unknown>>,
+): { corpus: NativeCorpus; cleanup: () => void } {
+  const directory = mkdtempSync(`${repositoryRoot}/packages/data-bundle/test/.adversarial-`);
+  const sourcePath = relative(repositoryRoot, `${directory}/sources.yaml`);
+  const passagePath = relative(repositoryRoot, `${directory}/passages.yaml`);
+  const relationshipPath = relative(repositoryRoot, `${directory}/relationships.yaml`);
+  writeFileSync(`${directory}/sources.yaml`, Bun.YAML.stringify({ sources }));
+  writeFileSync(`${directory}/passages.yaml`, Bun.YAML.stringify({ passages }));
+  writeFileSync(
+    `${directory}/relationships.yaml`,
+    Bun.YAML.stringify({
+      relationships: [
+        {
+          machine_id: "support.one",
+          relationship_type: "supported_by_passage",
+          subject_machine_id: "claim.one",
+          object_machine_id: "passage.one",
+        },
+      ],
+    }),
+  );
+  const base = nativeLegalFixtureRepository().corpora[0]!;
+  return {
+    corpus: {
+      ...base,
+      resources: {
+        ...base.resources,
+        sources: [sourcePath],
+        passages: [passagePath],
+        relationships: [relationshipPath],
+      },
+    },
+    cleanup: () => rmSync(directory, { recursive: true, force: true }),
+  };
+}
+
+const compatibilitySource = {
+  machine_id: "source.one",
+  aliases: [],
+  legacy_refs: [],
+  document_version_id: "source.one.v1",
+  title: "Synthetic source",
+  uri: "https://example.test/source",
+  sha256: `sha256:${"1".repeat(64)}`,
+};
+const compatibilityPassage = {
+  machine_id: "passage.one",
+  source_machine_id: "source.one",
+  dom_path: "main/p[1]",
+  quote: "Synthetic evidence.",
+  anchor_hash: `sha256:${"2".repeat(64)}`,
+};
 
 describe("Writ data bundle membership", () => {
   test("exports every manifest-routed record without approval filtering", () => {
@@ -58,6 +178,143 @@ describe("Writ data bundle membership", () => {
 });
 
 describe("canonical source and provenance", () => {
+  test("projects a valid native legal-policy record through routed source authority", () => {
+    const projected = projectCanonicalObjects(nativeLegalFixtureRepository());
+    expect(projected.records).toHaveLength(1);
+    expect(projected.records[0]!.recordId).toBe("synthetic_native_legal_policy_record");
+    expect(projected.records[0]!.evidence).toEqual([
+      expect.objectContaining({
+        state: "traced",
+        passageId: "synthetic.policy.passage",
+        passageHash: "sha256:3f6fe63be01912fb99033b62c4c8affb4ae3b0cf8b428b4e5cbb8b88fc209a18",
+        documentHash: "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        source: expect.objectContaining({
+          sourceId: "synthetic.policy.source",
+          documentVersionId: "synthetic.policy.source.v1",
+        }),
+      }),
+    ]);
+  });
+
+  test("does not let native source_metadata fabricate traced evidence", () => {
+    expect(() => projectCanonicalObjects(nativeLegalFixtureRepository(false))).toThrow(
+      /evidence source synthetic\.policy\.source does not resolve to structured source metadata/,
+    );
+  });
+
+  test("rejects duplicate native Writ source declarations before projection", () => {
+    for (const variation of ["identical", "conflicting"] as const) {
+      const directory = mkdtempSync(`${repositoryRoot}/packages/data-bundle/test/.adversarial-`);
+      const path = relative(repositoryRoot, `${directory}/sources.writ`);
+      const original = readFileSync(
+        `${repositoryRoot}/${NATIVE_LEGAL_FIXTURE}/sources.writ`,
+        "utf8",
+      );
+      const sourceBlock = original.match(/source synthetic_policy_source \{[\s\S]*?\n\}/)![0];
+      const metadataBlock = original.match(
+        /concept SyntheticPolicySourceMetadata \{[\s\S]*?\n\}/,
+      )![0];
+      const duplicateSource = sourceBlock
+        .replace("synthetic_policy_source", "synthetic_policy_source_duplicate")
+        .replace(
+          /sha256:[0-9a-f]{64}/,
+          variation === "conflicting"
+            ? `sha256:${"f".repeat(64)}`
+            : original.match(/sha256:[0-9a-f]{64}/)![0],
+        );
+      const duplicateMetadata = metadataBlock.replace(
+        "SyntheticPolicySourceMetadata",
+        "SyntheticPolicySourceMetadataDuplicate",
+      );
+      writeFileSync(
+        `${directory}/sources.writ`,
+        `${original.trim()}\n\n${duplicateSource}\n${duplicateMetadata}\n`,
+      );
+      const repository = nativeLegalFixtureRepository();
+      try {
+        expect(() =>
+          projectCanonicalObjects({
+            ...repository,
+            corpora: repository.corpora.map((corpus) => ({
+              ...corpus,
+              resources: { ...corpus.resources, sources: [path] },
+            })),
+          }),
+        ).toThrow(/duplicate source identity synthetic\.policy\.source/);
+      } finally {
+        rmSync(directory, { recursive: true, force: true });
+      }
+    }
+  });
+
+  test("rejects reviewed source canonical, alias, and legacy identity collisions", () => {
+    for (const variation of ["identical", "conflicting", "alias", "legacy"] as const) {
+      const first = structuredClone(compatibilitySource);
+      const second: Record<string, unknown> = structuredClone(compatibilitySource);
+      if (variation === "conflicting") second.sha256 = `sha256:${"f".repeat(64)}`;
+      if (variation === "alias" || variation === "legacy") {
+        second.machine_id = "source.two";
+        second.aliases = variation === "alias" ? [first.machine_id] : [];
+        second.legacy_refs = variation === "legacy" ? [first.machine_id] : [];
+      }
+      const fixture = compatibilityEvidenceCorpus(
+        [first, second],
+        [structuredClone(compatibilityPassage)],
+      );
+      try {
+        expect(() =>
+          projectCompatibilityEvidence(fixture.corpus, {
+            record_type: "political_claim",
+            machine_id: "claim.one",
+          }),
+        ).toThrow(/duplicate source identity/);
+      } finally {
+        fixture.cleanup();
+      }
+    }
+  });
+
+  test("rejects identical and conflicting reviewed passage declarations", () => {
+    for (const variation of ["identical", "conflicting"] as const) {
+      const first = structuredClone(compatibilityPassage);
+      const second: Record<string, unknown> = structuredClone(compatibilityPassage);
+      if (variation === "conflicting") {
+        second.quote = "Conflicting evidence.";
+        second.anchor_hash = `sha256:${"f".repeat(64)}`;
+      }
+      const fixture = compatibilityEvidenceCorpus(
+        [structuredClone(compatibilitySource)],
+        [first, second],
+      );
+      try {
+        expect(() =>
+          projectCompatibilityEvidence(fixture.corpus, {
+            record_type: "political_claim",
+            machine_id: "claim.one",
+          }),
+        ).toThrow(/duplicate passage identity/);
+      } finally {
+        fixture.cleanup();
+      }
+    }
+  });
+
+  test("rejects record-link owning corpus contradictions", () => {
+    const repository = readNativeRepository();
+    const corpus = repository.corpora.find(
+      ({ manifest, resources }) =>
+        manifest.record_contract.kind === "native" &&
+        resources.relationships.some((path) => path.endsWith(".yaml")),
+    )!;
+    expect(corpus.resources.relationships.length).toBeGreaterThan(0);
+    expect(() =>
+      projectRecordLinks({
+        ...corpus,
+        entry: { ...corpus.entry, corpus_id: "synthetic.laundered.owner" },
+      }),
+    ).toThrow(/declares owning corpus .* but is stored by synthetic\.laundered\.owner/);
+  });
+
   test("exports exact reparsed YAML and Writ source slices", () => {
     const yaml = bundle.records.find((record) => record.recordType === "political_claim")!;
     expect(yaml.storedSource.language).toBe("yaml");

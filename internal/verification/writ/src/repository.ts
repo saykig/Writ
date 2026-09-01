@@ -1,11 +1,6 @@
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import type {
-  AtomicInstitutionalRecord,
-  CurrentRecordJudgment,
-  RecordLink,
-  WritRecord,
-} from "@writ/domain";
+import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } from "@writ/domain";
 import { compileSource, isConceptDeclaration, isSource, parseDocument } from "@writ/language";
 
 import { loadAuthorityIndex, renderSchemaErrors, type AuthorityIndex } from "./authority.js";
@@ -29,6 +24,7 @@ import {
   type IndexedObject,
   type Loaded,
   type LoadedDocument,
+  type LoadedRecord,
   type ManifestCategory,
   type MigrationRename,
   type RepositorySnapshot,
@@ -240,6 +236,48 @@ function indexed(
   };
 }
 
+function structuredIdentityIssues(
+  values: readonly unknown[],
+  kind: "source" | "passage",
+  file: string,
+  corpusId: string,
+): VerificationIssue[] {
+  const claims = new Map<string, number>();
+  const issues: VerificationIssue[] = [];
+  for (const [index, candidate] of values.entries()) {
+    if (!object(candidate)) continue;
+    const canonical =
+      typeof candidate.machine_id === "string"
+        ? candidate.machine_id
+        : typeof candidate.id === "string"
+          ? candidate.id
+          : undefined;
+    if (!canonical) continue;
+    const identities = new Set([
+      canonical,
+      ...strings(candidate.aliases),
+      ...strings(candidate.legacy_refs),
+      ...(typeof candidate.ref === "string" ? [candidate.ref] : []),
+    ]);
+    for (const identity of identities) {
+      const previous = claims.get(identity);
+      if (previous !== undefined && previous !== index) {
+        issues.push(
+          issue(
+            "integrity",
+            "INTEGRITY_CONTRACT_INVALID",
+            `Structured ${kind} declaration at index ${index} claims duplicate ${kind} identity ${identity} already claimed at index ${previous}.`,
+            { corpus_id: corpusId, file },
+          ),
+        );
+      } else {
+        claims.set(identity, index);
+      }
+    }
+  }
+  return issues;
+}
+
 export function parseInstitutionalMigrationDocument(
   value: Record<string, unknown>,
   file: string,
@@ -344,6 +382,7 @@ export interface LoadRepositoryResult {
 }
 
 export function loadRepository(root: string): LoadRepositoryResult {
+  const physicalRoot = realpathSync(root);
   const authority = loadAuthorityIndex(root);
   const loadIssues: VerificationIssue[] = [...authority.issues];
   const catalogFile = join(root, "corpora", "catalog.yaml");
@@ -456,14 +495,15 @@ export function loadRepository(root: string): LoadRepositoryResult {
     });
   }
 
-  const records: Loaded<WritRecord>[] = [];
-  const institutionalRecords: Loaded<AtomicInstitutionalRecord>[] = [];
+  const records: LoadedRecord[] = [];
+  const institutionalRecords: LoadedRecord<AtomicInstitutionalRecord>[] = [];
   const links: Loaded<RecordLink>[] = [];
   const judgments: Loaded<CurrentRecordJudgment>[] = [];
   const documents: LoadedDocument[] = [];
   const objectMap = new Map<string, IndexedObject>();
   const migrations: MigrationRename[] = [];
   const routed = new Set<string>();
+  const sourceRouteMap = new Map<string, { corpus_id: string; file: string }>();
 
   const addObject = (item: IndexedObject): void => {
     const physical = realpathSync(join(root, item.file));
@@ -509,11 +549,18 @@ export function loadRepository(root: string): LoadRepositoryResult {
           location,
           loadIssues,
         )) {
-          const label = relative(root, absolute);
+          const physical = realpathSync(absolute);
+          const label = relative(physicalRoot, physical);
+          if (category === "sources") {
+            sourceRouteMap.set(`${manifest.corpus_id}\0${physical}`, {
+              corpus_id: manifest.corpus_id,
+              file: label,
+            });
+          }
           // A physical compatibility document may be listed by its owning corpus and
           // by an institutional consumer. Its canonical owner controls parsing and
           // validation regardless of which route is encountered first.
-          const ownerCorpus = ownerForFile(root, entries, absolute) ?? manifest.corpus_id;
+          const ownerCorpus = ownerForFile(physicalRoot, entries, physical) ?? manifest.corpus_id;
           const governingManifest =
             manifests.find((candidate) => candidate.value.corpus_id === ownerCorpus) ??
             loadedManifest;
@@ -523,13 +570,13 @@ export function loadRepository(root: string): LoadRepositoryResult {
             governingContract.version,
           );
           if (!governingAdapter) continue;
-          const routeKey = `${realpathSync(absolute)}\0${category}`;
+          const routeKey = `${physical}\0${category}`;
           if (routed.has(routeKey)) continue;
           routed.add(routeKey);
 
-          if (absolute.endsWith(".writ")) {
+          if (physical.endsWith(".writ")) {
             if (category === "sources") {
-              const parsed = parseDocument(readFileSync(absolute, "utf8"), { fileName: label });
+              const parsed = parseDocument(readFileSync(physical, "utf8"), { fileName: label });
               const errors = parsed.diagnostics.filter(
                 (diagnostic) => diagnostic.severity === "error",
               );
@@ -614,6 +661,17 @@ export function loadRepository(root: string): LoadRepositoryResult {
                   );
                   continue;
                 }
+                if (declaredSourceIds.has(sourceId)) {
+                  loadIssues.push(
+                    issue(
+                      "integrity",
+                      "INTEGRITY_CONTRACT_INVALID",
+                      `Source ${declaration.name} claims duplicate source identity ${sourceId}.`,
+                      { corpus_id: ownerCorpus, file: label },
+                    ),
+                  );
+                  continue;
+                }
                 declaredSourceIds.add(sourceId);
                 const sourceVersion = metadataProperties.get("source_version");
                 addObject({
@@ -649,7 +707,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
               continue;
             }
             if (category !== "records" && category !== "judgments") continue;
-            const compiled = compileSource(readFileSync(absolute, "utf8"), { fileName: label });
+            const compiled = compileSource(readFileSync(physical, "utf8"), { fileName: label });
             const errors = compiled.diagnostics.filter(
               (diagnostic) => diagnostic.severity === "error",
             );
@@ -670,25 +728,40 @@ export function loadRepository(root: string): LoadRepositoryResult {
                   family: record.family,
                   value: record,
                 });
+                const governingEntry = entries.find(
+                  (candidate) => candidate.corpus_id === ownerCorpus,
+                );
                 loadIssues.push(
                   ...validateDocument(
                     authority,
                     governingContract.id,
                     record,
                     "INTEGRITY_CONTRACT_INVALID",
-                    absolute,
-                    root,
+                    physical,
+                    physicalRoot,
                     ownerCorpus,
                   ),
                 );
-                const loaded = { value: record, file: label, corpus_id: ownerCorpus };
+                const loaded: LoadedRecord = {
+                  value: record,
+                  file: label,
+                  corpus_id: ownerCorpus,
+                  governing_contract: {
+                    ...governingContract,
+                    adapter_kind: adapted.capabilities.adapterKind,
+                    expected_family: adapted.capabilities.expectedFamily,
+                    verifies_core_provenance: adapted.capabilities.verifiesCoreProvenance,
+                  },
+                  manifest_family: governingManifest.value.family,
+                  catalog_family: governingEntry?.family ?? governingManifest.value.family,
+                };
                 records.push(loaded);
                 if (
-                  adapted.adapterKind === "compiled_native" &&
+                  adapted.capabilities.adapterKind === "current_native_core" &&
                   governingContract.id === INSTITUTIONAL_RECORD_SCHEMA &&
                   record.schema_version === "0.2.0"
                 )
-                  institutionalRecords.push(loaded as Loaded<AtomicInstitutionalRecord>);
+                  institutionalRecords.push(loaded as LoadedRecord<AtomicInstitutionalRecord>);
                 const recordObject = indexed(
                   record as unknown as Record<string, unknown>,
                   "record",
@@ -725,8 +798,8 @@ export function loadRepository(root: string): LoadRepositoryResult {
                     RECORD_JUDGMENT_SCHEMA,
                     judgment,
                     "INTEGRITY_CONTRACT_INVALID",
-                    absolute,
-                    root,
+                    physical,
+                    physicalRoot,
                     ownerCorpus,
                   ),
                 );
@@ -749,7 +822,7 @@ export function loadRepository(root: string): LoadRepositoryResult {
 
           let value: unknown;
           try {
-            value = parseStructured(absolute);
+            value = parseStructured(physical);
           } catch (error) {
             loadIssues.push(
               issue(
@@ -772,9 +845,30 @@ export function loadRepository(root: string): LoadRepositoryResult {
             );
             continue;
           }
-          documents.push({ value, file: label, corpus_id: ownerCorpus, category });
+          const documentAdapted = governingAdapter.adapt({
+            family: governingManifest.value.family,
+            value,
+          });
+          const documentEntry = entries.find((candidate) => candidate.corpus_id === ownerCorpus);
+          documents.push({
+            value,
+            file: label,
+            corpus_id: ownerCorpus,
+            category,
+            governing_contract: {
+              ...governingContract,
+              adapter_kind: documentAdapted.capabilities.adapterKind,
+              expected_family: documentAdapted.capabilities.expectedFamily,
+              verifies_core_provenance: documentAdapted.capabilities.verifiesCoreProvenance,
+            },
+            manifest_family: governingManifest.value.family,
+            catalog_family: documentEntry?.family ?? governingManifest.value.family,
+          });
 
           if (category === "sources" && Array.isArray(value.sources)) {
+            loadIssues.push(
+              ...structuredIdentityIssues(value.sources, "source", label, ownerCorpus),
+            );
             for (const candidate of value.sources) {
               if (!object(candidate)) continue;
               const sourceObject = indexed(candidate, "source_document", label, ownerCorpus);
@@ -790,11 +884,16 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 governingContract.id,
                 value,
                 "INTEGRITY_CONTRACT_INVALID",
-                absolute,
-                root,
+                physical,
+                physicalRoot,
                 ownerCorpus,
               ),
             );
+            if (category === "passages" && Array.isArray(value.passages)) {
+              loadIssues.push(
+                ...structuredIdentityIssues(value.passages, "passage", label, ownerCorpus),
+              );
+            }
             const keysByCategory: Record<ManifestCategory, string[]> = {
               sources: ["sources"],
               passages: ["passages", "unresolved"],
@@ -827,8 +926,8 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 RECORD_LINK_SCHEMA,
                 value,
                 "INTEGRITY_CONTRACT_INVALID",
-                absolute,
-                root,
+                physical,
+                physicalRoot,
                 ownerCorpus,
               ),
             );
@@ -878,6 +977,11 @@ export function loadRepository(root: string): LoadRepositoryResult {
       judgments,
       documents,
       objects: [...objectMap.values()],
+      sourceRoutes: [...sourceRouteMap.values()].sort((left, right) => {
+        const leftKey = `${left.corpus_id}\0${left.file}`;
+        const rightKey = `${right.corpus_id}\0${right.file}`;
+        return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+      }),
       workflowStates: workflow.workflowStates,
       migrations,
       loadIssues,

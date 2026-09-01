@@ -42,6 +42,21 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Scoped catalog and manifest reconciliation"),
   },
   {
+    code: "ONTOLOGY_CONTRACT_FAMILY_MISMATCH",
+    gate: "ontology",
+    authority: meta("Scoped exact-contract capability reconciliation"),
+  },
+  {
+    code: "ONTOLOGY_RECORD_FAMILY_MISMATCH",
+    gate: "ontology",
+    authority: meta("Mechanical record and governing-contract consistency"),
+  },
+  {
+    code: "ONTOLOGY_RECORD_CORPUS_MISMATCH",
+    gate: "ontology",
+    authority: meta("Mechanical record and manifest/storage consistency"),
+  },
+  {
     code: "INTEROP_SOURCE_NOT_FOUND",
     gate: "interoperability",
     authority: meta("Mechanical reference resolution"),
@@ -81,6 +96,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
+    code: "INTEROP_OWNER_MISMATCH",
+    gate: "interoperability",
+    authority: meta("Mechanical relationship and manifest/storage consistency"),
+  },
+  {
     code: "PROVENANCE_EVIDENCE_NOT_FOUND",
     gate: "provenance",
     authority: meta("Mechanical reference resolution"),
@@ -107,6 +127,16 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     code: "PROVENANCE_SOURCE_NOT_FOUND",
     gate: "provenance",
     authority: meta("Mechanical reference resolution"),
+  },
+  {
+    code: "PROVENANCE_SOURCE_NOT_ROUTED",
+    gate: "provenance",
+    authority: {
+      kind: "manifest_contract",
+      source: "schemas/core/corpus-manifest.schema.json",
+      version: "1.0.0",
+      section: "locations.sources authoritative routing",
+    },
   },
   {
     code: "PROVENANCE_SOURCE_MISMATCH",

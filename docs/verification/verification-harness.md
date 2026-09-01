@@ -65,16 +65,18 @@ Human review determines acceptance.
 
 ## Verification dimensions
 
-- **Ontology** reconciles the active catalog and manifest family declarations.
+- **Ontology** reconciles the active catalog, manifest, exact record-contract capability and
+  compiled-record family declarations.
 - **Interoperability** resolves active Core-link endpoints, owners, evidence and supporting records.
   For every relation type, `source_kind` and `target_kind` must mechanically match the resolved
   endpoint objects; `INTEROP_DECLARED_KIND_MISMATCH` reports a mismatch. This check does not assign
   relation-specific endpoint semantics or restore the retired ADR-0019 rule pack.
   It covers retained catalogued links under generic Core contracts without reactivating the
   specialized ADR-0019 workflow rule pack.
-- **Provenance** verifies current native institutional source and passage resolution, quotation and
-  document hashes, local fact-payload evidence references, repeated passage consistency, judgment
-  targets and evidence, judgment supersession, and declared identifier migrations.
+- **Provenance** verifies source, document-version, exact quotation-byte and passage identity for
+  every current native Core record. Institutional authority-source, local fact-payload evidence and
+  inherited-path checks remain separately scoped. The gate also checks judgment targets and
+  evidence, judgment supersession, and declared identifier migrations.
 - **Integrity** verifies catalogues, manifests, routed files, scoped counts, source-registry drift and
   the repository's complete tracked-file checksum manifest.
 
@@ -102,13 +104,38 @@ valid or invalid. No semantic-version compatibility is inferred.
 ## Native-source boundary
 
 For compiled native records, the harness reconstructs evidence passages from each record's compiled
-evidence envelope and parses manifest-routed `.writ` source declarations as independent structured
-source documents. Native institutional evidence must resolve by its declared source identity and
-match both its document hash and explicitly declared document-version identity. A matching hash
-cannot rescue an incorrect native source ID. Retained compatibility material resolves only through
-identities declared by its compatibility contract; there is no repository-wide hash fallback.
-Repeated passage IDs within one corpus must preserve identical source, version, locator, quotation
-and hashes, and quotation bytes must reproduce the passage hash.
+Core evidence envelope and loads manifest-routed structured source declarations independently from
+the record. Every current native record, regardless of family, must resolve its declared source
+identity through its own corpus's `locations.sources` routes and match both the document hash and
+explicitly declared document-version identity. A routed declaration may physically belong to
+another catalogued corpus; the route is permission to cite, while physical ownership is not. A
+matching hash or embedded `source_metadata` cannot rescue a missing, wrong or unrouted native source
+ID. Retained compatibility material continues to use its exact compatibility adapter and historical
+source behavior; there is no repository-wide hash fallback.
+
+For current-native Core verification, an unqualified passage ID is immutable once used: its source
+ID, document version ID, locator, exact quote, passage hash and document hash form one logical
+signature. A correction that changes any of those fields must use a new passage ID; superseding or
+withdrawing the record does not rewrite the earlier passage occurrence. Repeated current-native
+occurrences with the same signature resolve as one passage even across catalogued corpora, while
+differing current-native signatures report `PROVENANCE_PASSAGE_CONFLICT`. This is the verifier's
+current repository-resolution rule, not a claim that Writ has established a universal passage
+namespace outside a verification workspace.
+
+Evidence `basis` is usage metadata and is intentionally not part of passage identity: the same exact
+passage may support one claim directly and another by inference. Core links and judgments use the
+same logical resolution rather than choosing a physical occurrence. Their owning corpus must also
+route the cited passage's structured source declaration through `locations.sources`. Routing grants
+citation authority; it does not make the carrier record valid, and a carrier record's review state
+does not change the identity or byte integrity of its evidence. Frozen compiled compatibility
+records keep their historical adapter and do not acquire this current-native conflict rule. Passages
+loaded by the exact reviewed-compatibility document adapter remain bounded citation inputs for
+existing current Core links and judgments.
+
+`passage_hash` is SHA-256 over the exact UTF-8 bytes of `quote`. The verifier does not normalize
+Unicode, trim or collapse whitespace, case-fold, or apply Writ Canonical JSON v1. Consequently NFC
+and NFD spellings, non-breaking and ordinary spaces, and smart and ASCII quotation marks remain
+byte-distinct.
 
 `document_version_id` is an opaque stable identity for the declared natural version, retrieval
 snapshot or content-derived version. Verification requires exact equality with structured source
@@ -134,12 +161,13 @@ fails structurally; a recognizable future version reports `VERIFIER_UNSUPPORTED_
 
 ## Scale and workflow
 
-The harness is intended to run over verification workspaces with tens of thousands of routed records
-while keeping results bounded to deterministic findings. Callers can inspect JSON summaries,
-partition work by the four dimensions, and run the same verification workspace through human review
-workflows without copying corpus data into the harness. Future scaling work should measure loading
-and rule-pack performance against realistic inventories (for example 50,000 records) without relaxing
-authority isolation or inventing new family semantics.
+The harness builds one deterministic logical-passage index per verification gate rather than
+rescanning and resorting the complete record inventory for every evidence reference. This preserves
+the same resolution and conflict semantics while keeping passage lookup and conflict detection
+bounded by one inventory pass plus indexed lookups. The harness is intended to run over verification
+workspaces with tens of thousands of routed records while keeping results bounded to deterministic
+findings. Callers can inspect JSON summaries, partition work by the four dimensions, and run the same
+verification workspace through human review workflows without copying corpus data into the harness.
 
 For illustration only—not as current Writ corpus counts—a 50,000-record candidate batch might report
 47,812 without findings, 1,403 unresolved identities, 531 missing evidence references, 192
