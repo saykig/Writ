@@ -19,6 +19,7 @@ export interface LogicalPassageOccurrence {
   corpusId: string;
   objectId: string;
   file: string;
+  adapterKind: "current_native_core" | "reviewed_compatibility_passage";
 }
 
 export interface LogicalPassageResolution {
@@ -26,6 +27,12 @@ export interface LogicalPassageResolution {
   passageId: string;
   occurrences: LogicalPassageOccurrence[];
   signatureKeys: string[];
+}
+
+export interface LogicalPassageIndex {
+  occurrences: LogicalPassageOccurrence[];
+  resolve(passageId: string): LogicalPassageResolution;
+  currentNativeConflicts(): LogicalPassageResolution[];
 }
 
 type Evidence = WritRecord["evidence"][number];
@@ -109,6 +116,7 @@ function structuredPassageOccurrence(
     corpusId: object.corpus_id,
     objectId: object.id,
     file: object.file,
+    adapterKind: "reviewed_compatibility_passage",
   };
 }
 
@@ -119,25 +127,44 @@ function structuredPassageOccurrence(
 export function logicalPassageOccurrences(
   snapshot: RepositorySnapshot,
 ): LogicalPassageOccurrence[] {
-  const occurrences: LogicalPassageOccurrence[] = snapshot.records.flatMap((loaded) =>
-    loaded.value.evidence.map((evidence) => {
-      const signature = corePassageSignature(evidence);
-      return {
-        passageId: evidence.passage_id,
-        aliases: [],
-        signature,
-        signatureKey: passageSignatureKey(signature),
-        corpusId: loaded.corpus_id,
-        objectId: loaded.value.record_id,
-        file: loaded.file,
-      };
-    }),
+  const reviewedCompatibilityPassageFiles = new Set(
+    snapshot.documents
+      .filter(
+        (document) =>
+          document.category === "passages" &&
+          document.governing_contract.adapter_kind === "reviewed_compatibility_document",
+      )
+      .map(({ file }) => file),
   );
+  const occurrences: LogicalPassageOccurrence[] = snapshot.records
+    .filter(({ governing_contract }) => governing_contract.verifies_core_provenance)
+    .flatMap((loaded) =>
+      loaded.value.evidence.map((evidence) => {
+        const signature = corePassageSignature(evidence);
+        return {
+          passageId: evidence.passage_id,
+          aliases: [],
+          signature,
+          signatureKey: passageSignatureKey(signature),
+          corpusId: loaded.corpus_id,
+          objectId: loaded.value.record_id,
+          file: loaded.file,
+          adapterKind: "current_native_core" as const,
+        };
+      }),
+    );
 
-  // Compiled record evidence is indexed above without physical-file
-  // deduplication. Add only separately stored compatibility passages here.
+  // Frozen compiled compatibility records retain their historical adapter and
+  // do not acquire current-native Core provenance semantics. The reviewed
+  // compatibility passage adapter remains a bounded resolution input because
+  // current Core links and judgments already cite those preserved passages.
   for (const object of snapshot.objects) {
-    if (object.kind !== "passage" || typeof object.value.source_id === "string") continue;
+    if (
+      object.kind !== "passage" ||
+      typeof object.value.source_id === "string" ||
+      !reviewedCompatibilityPassageFiles.has(object.file)
+    )
+      continue;
     const occurrence = structuredPassageOccurrence(snapshot, object);
     if (occurrence) occurrences.push(occurrence);
   }
@@ -149,13 +176,10 @@ export function logicalPassageOccurrences(
   });
 }
 
-export function resolveLogicalPassage(
-  snapshot: RepositorySnapshot,
+function resolution(
   passageId: string,
+  occurrences: LogicalPassageOccurrence[],
 ): LogicalPassageResolution {
-  const occurrences = logicalPassageOccurrences(snapshot).filter(
-    (occurrence) => occurrence.passageId === passageId || occurrence.aliases.includes(passageId),
-  );
   const signatureKeys = [...new Set(occurrences.map(({ signatureKey }) => signatureKey))].sort();
   return {
     status:
@@ -166,14 +190,50 @@ export function resolveLogicalPassage(
   };
 }
 
-export function logicalPassageConflicts(snapshot: RepositorySnapshot): LogicalPassageResolution[] {
-  const identifiers = new Set<string>();
-  for (const occurrence of logicalPassageOccurrences(snapshot)) {
-    identifiers.add(occurrence.passageId);
-    for (const alias of occurrence.aliases) identifiers.add(alias);
+function addOccurrence(
+  index: Map<string, LogicalPassageOccurrence[]>,
+  identifier: string,
+  occurrence: LogicalPassageOccurrence,
+): void {
+  const current = index.get(identifier);
+  if (current) current.push(occurrence);
+  else index.set(identifier, [occurrence]);
+}
+
+/** Build one deterministic passage index for all lookups performed by a gate. */
+export function buildLogicalPassageIndex(snapshot: RepositorySnapshot): LogicalPassageIndex {
+  const occurrences = logicalPassageOccurrences(snapshot);
+  const all = new Map<string, LogicalPassageOccurrence[]>();
+  const currentNative = new Map<string, LogicalPassageOccurrence[]>();
+  for (const occurrence of occurrences) {
+    for (const identifier of [occurrence.passageId, ...occurrence.aliases]) {
+      addOccurrence(all, identifier, occurrence);
+      if (occurrence.adapterKind === "current_native_core") {
+        addOccurrence(currentNative, identifier, occurrence);
+      }
+    }
   }
-  return [...identifiers]
-    .sort()
-    .map((passageId) => resolveLogicalPassage(snapshot, passageId))
-    .filter((resolution) => resolution.status === "conflict");
+  return {
+    occurrences,
+    resolve(passageId) {
+      return resolution(passageId, all.get(passageId) ?? []);
+    },
+    currentNativeConflicts() {
+      return [...currentNative]
+        .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+        .map(([passageId, matches]) => resolution(passageId, matches))
+        .filter(({ status }) => status === "conflict");
+    },
+  };
+}
+
+export function resolveLogicalPassage(
+  snapshot: RepositorySnapshot,
+  passageId: string,
+): LogicalPassageResolution {
+  return buildLogicalPassageIndex(snapshot).resolve(passageId);
+}
+
+export function logicalPassageConflicts(snapshot: RepositorySnapshot): LogicalPassageResolution[] {
+  return buildLogicalPassageIndex(snapshot).currentNativeConflicts();
 }

@@ -1,13 +1,14 @@
 import { createHash } from "node:crypto";
 import { validateJudgmentSupersession } from "@writ/domain";
 
-import { logicalPassageConflicts, resolveLogicalPassage } from "../core/passages.js";
+import { buildLogicalPassageIndex, type LogicalPassageResolution } from "../core/passages.js";
 import { resolveRoutedSource } from "../core/sources.js";
 import {
   gateResult,
   issue,
   type RepositorySnapshot,
   type VerificationGateResult,
+  type VerificationIssue,
 } from "../types.js";
 
 const activeLinks = (snapshot: RepositorySnapshot) =>
@@ -40,11 +41,90 @@ function sourceDocumentHash(value: Record<string, unknown>): string | undefined 
   return undefined;
 }
 
-function sourceDocumentVersionIds(value: Record<string, unknown>): string[] {
-  if (typeof value.document_version_id === "string") return [value.document_version_id];
-  return value.record_type === "source_document_version" && Array.isArray(value.legacy_refs)
-    ? value.legacy_refs.filter((item): item is string => typeof item === "string")
+function sourceDocumentVersionIds(source: {
+  id: string;
+  value: Record<string, unknown>;
+}): string[] {
+  if (typeof source.value.document_version_id === "string") {
+    return [source.value.document_version_id];
+  }
+  return source.value.record_type === "source_document_version"
+    ? [
+        source.id,
+        ...(Array.isArray(source.value.legacy_refs)
+          ? source.value.legacy_refs.filter((item): item is string => typeof item === "string")
+          : []),
+      ]
     : [];
+}
+
+function citationSourceIssues(
+  snapshot: RepositorySnapshot,
+  corpusId: string,
+  evidenceId: string,
+  evidence: LogicalPassageResolution,
+  context: { object_id: string; file: string },
+): VerificationIssue[] {
+  if (evidence.status !== "resolved") return [];
+  const signature = evidence.occurrences[0]!.signature;
+  const source = resolveRoutedSource(snapshot, corpusId, signature.source_id);
+  if (source.status === "missing") {
+    return [
+      issue(
+        "provenance",
+        "PROVENANCE_SOURCE_NOT_FOUND",
+        `Cited passage ${evidenceId} uses source ${signature.source_id}, which does not resolve to structured source metadata.`,
+        { corpus_id: corpusId, ...context },
+      ),
+    ];
+  }
+  if (source.status === "not_routed") {
+    return [
+      issue(
+        "provenance",
+        "PROVENANCE_SOURCE_NOT_ROUTED",
+        `Cited passage ${evidenceId} uses source ${signature.source_id}, but ${corpusId} does not route its structured declaration through locations.sources.`,
+        { corpus_id: corpusId, ...context },
+      ),
+    ];
+  }
+  if (source.status === "ambiguous") {
+    return [
+      issue(
+        "provenance",
+        "PROVENANCE_REFERENCE_AMBIGUOUS",
+        `Cited passage ${evidenceId} uses source ${signature.source_id}, which resolves to ${source.matches.length} routed declarations.`,
+        { corpus_id: corpusId, ...context },
+      ),
+    ];
+  }
+
+  const findings: VerificationIssue[] = [];
+  const declaredHash = sourceDocumentHash(source.source.value);
+  if (declaredHash !== signature.document_hash) {
+    findings.push(
+      issue(
+        "provenance",
+        "PROVENANCE_SOURCE_MISMATCH",
+        `Cited passage ${evidenceId} has document hash ${signature.document_hash}, but the routed source declares ${declaredHash ?? "no document hash"}.`,
+        { corpus_id: corpusId, ...context },
+      ),
+    );
+  }
+  const declaredVersions = source.compatibilityVersion
+    ? [source.compatibilityVersion]
+    : sourceDocumentVersionIds(source.source);
+  if (!declaredVersions.includes(signature.document_version_id)) {
+    findings.push(
+      issue(
+        "provenance",
+        "PROVENANCE_SOURCE_VERSION_MISMATCH",
+        `Cited passage ${evidenceId} has document version ${signature.document_version_id}, but the routed source declares ${declaredVersions.join(", ") || "no version identity"}.`,
+        { corpus_id: corpusId, ...context },
+      ),
+    );
+  }
+  return findings;
 }
 
 interface DirectedSupportEdge {
@@ -116,6 +196,7 @@ function establishesDirectedPath(
 /** Check judgment evidence, targets, supersession, and native ID migration history. */
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
+  const passageIndex = buildLogicalPassageIndex(snapshot);
   const judgmentIds = new Set(snapshot.judgments.map(({ value }) => value.judgment_id));
   const historicalMigrationIds = new Set(
     snapshot.migrations.map((migration) => migration.previous_id),
@@ -180,7 +261,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
         }
         const declaredVersions = source.compatibilityVersion
           ? [source.compatibilityVersion]
-          : sourceDocumentVersionIds(source.source.value);
+          : sourceDocumentVersionIds(source.source);
         if (!declaredVersions.includes(evidence.document_version_id)) {
           issues.push(
             issue(
@@ -195,7 +276,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
   }
 
-  for (const conflict of logicalPassageConflicts(snapshot)) {
+  for (const conflict of passageIndex.currentNativeConflicts()) {
     const first = conflict.occurrences[0]!;
     const identities = conflict.occurrences
       .map((occurrence) => `${occurrence.corpusId}:${occurrence.objectId}`)
@@ -247,6 +328,20 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
 
   for (const loaded of activeLinks(snapshot)) {
     const link = loaded.value;
+    for (const evidenceId of link.evidence_refs) {
+      issues.push(
+        ...citationSourceIssues(
+          snapshot,
+          link.owning_corpus_id,
+          evidenceId,
+          passageIndex.resolve(evidenceId),
+          {
+            object_id: link.link_id,
+            file: loaded.file,
+          },
+        ),
+      );
+    }
     if (link.basis !== "inherited") continue;
     const edges = link.relation_type === "part_of" ? inheritedSupportEdges(snapshot, loaded) : [];
     if (!establishesDirectedPath(link.source_id, link.target_id, edges)) {
@@ -291,7 +386,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
     }
 
     for (const evidenceId of judgment.evidence_refs) {
-      const evidence = resolveLogicalPassage(snapshot, evidenceId);
+      const evidence = passageIndex.resolve(evidenceId);
       if (evidence.status === "missing") {
         issues.push(
           issue(
@@ -309,6 +404,13 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
             `Judgment evidence ${evidenceId} resolves to ${evidence.signatureKeys.length} conflicting logical passage signatures.`,
             { corpus_id: loaded.corpus_id, object_id: judgment.judgment_id, file: loaded.file },
           ),
+        );
+      } else {
+        issues.push(
+          ...citationSourceIssues(snapshot, loaded.corpus_id, evidenceId, evidence, {
+            object_id: judgment.judgment_id,
+            file: loaded.file,
+          }),
         );
       }
     }

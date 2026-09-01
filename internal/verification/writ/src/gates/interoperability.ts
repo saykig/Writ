@@ -1,5 +1,5 @@
 import { findObjects } from "../repository.js";
-import { resolveLogicalPassage } from "../core/passages.js";
+import { buildLogicalPassageIndex } from "../core/passages.js";
 import {
   gateResult,
   issue,
@@ -133,6 +133,7 @@ function referenceIssue(
 /** Resolve only references used by the active native corpus contracts. */
 export function verifyInteroperability(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
+  const passageIndex = buildLogicalPassageIndex(snapshot);
   const corpusIds = new Set(snapshot.catalogEntries.map((entry) => entry.corpus_id));
 
   for (const loaded of activeLinks(snapshot)) {
@@ -168,7 +169,7 @@ export function verifyInteroperability(snapshot: RepositorySnapshot): Verificati
     if (target) issues.push(target);
 
     for (const evidenceId of link.evidence_refs) {
-      const evidence = resolveLogicalPassage(snapshot, evidenceId);
+      const evidence = passageIndex.resolve(evidenceId);
       if (evidence.status === "missing") {
         issues.push(
           issue(

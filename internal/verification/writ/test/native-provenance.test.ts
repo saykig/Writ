@@ -7,6 +7,7 @@ import type { WritRecord } from "@writ/domain";
 import { compileSource } from "@writ/language";
 
 import {
+  buildLogicalPassageIndex,
   LEGAL_POLICY_RECORD_SCHEMA,
   loadRepository,
   logicalPassageConflicts,
@@ -259,25 +260,54 @@ describe("generic current-native Core provenance", () => {
       ).toBeGreaterThanOrEqual(2);
     }
 
-    for (const differentMetadata of [false, true]) {
+    for (const variation of ["identical", "hash", "version"] as const) {
       const duplicate = clone();
-      const record = addNativeLegalRecord(duplicate, `synthetic_duplicate_${differentMetadata}`);
+      const record = addNativeLegalRecord(duplicate, `synthetic_duplicate_${variation}`);
       const source = duplicate.objects.find(
         (object) => object.id === record.value.evidence[0]!.source_id,
       )!;
       duplicate.objects.push({
         ...structuredClone(source),
-        file: `synthetic/duplicate-${differentMetadata}.writ`,
+        file: `synthetic/duplicate-${variation}.writ`,
         value: {
           ...structuredClone(source.value),
-          ...(differentMetadata ? { document_hash: `sha256:${"f".repeat(64)}` } : {}),
+          ...(variation === "hash" ? { document_hash: `sha256:${"f".repeat(64)}` } : {}),
+          ...(variation === "version"
+            ? { document_version_id: "synthetic.duplicate.version" }
+            : {}),
         },
       });
       duplicate.sourceRoutes.push({
         corpus_id: record.corpus_id,
-        file: `synthetic/duplicate-${differentMetadata}.writ`,
+        file: `synthetic/duplicate-${variation}.writ`,
       });
       expect(codes(verifyProvenance(duplicate))).toContain("PROVENANCE_REFERENCE_AMBIGUOUS");
+    }
+
+    for (const collision of ["same-id", "alias", "provider-id"] as const) {
+      const unrelated = clone();
+      const record = addNativeLegalRecord(unrelated, `synthetic_unrelated_${collision}`);
+      const source = unrelated.objects.find(
+        (object) => object.id === record.value.evidence[0]!.source_id,
+      )!;
+      unrelated.objects.push({
+        ...structuredClone(source),
+        id: collision === "same-id" ? source.id : `synthetic.unrelated.${collision}`,
+        aliases: collision === "alias" ? [source.id] : [],
+        file: `unrelated/${collision}.writ`,
+        value: {
+          ...structuredClone(source.value),
+          ...(collision === "same-id" ? { document_hash: `sha256:${"f".repeat(64)}` } : {}),
+          ...(collision === "provider-id" ? { provider_native_id: source.id } : {}),
+        },
+      });
+      const resolution = resolveRoutedSource(
+        unrelated,
+        record.corpus_id,
+        record.value.evidence[0]!.source_id,
+      );
+      expect(resolution.status).toBe("resolved");
+      expect(codes(verifyProvenance(unrelated))).not.toContain("PROVENANCE_REFERENCE_AMBIGUOUS");
     }
 
     const aliasCollision = clone();
@@ -330,7 +360,12 @@ describe("generic current-native Core provenance", () => {
 describe("exact UTF-8 evidence passage hashing", () => {
   const vectors = [
     ["space space", "sha256:40efc2c669a6e18c40c890f99719fc9f3efab119703658ca34b52164b68a5eda"],
+    ["space  space", "sha256:ce368795775c8ea10e6a8b5329bde94997615e5d9688105eeb8b4f0744af4643"],
     ["space\u00a0space", "sha256:b21f516d46c09df3bf5f1eace4ac2ddbc72cee5c9b02c79972f960113c9b3461"],
+    ["line1\nline2", "sha256:683376e290829b482c2655745caffa7a1dccfa10afaa62dac2b42dd6c68d0f83"],
+    ["line1\r\nline2", "sha256:d14a91a6d1c6ee83bf0c774ebecbee6d8b393b395dae29eea839c354d6fba9c0"],
+    ["trailing", "sha256:6d388d29cd7aee3b77fb86462745dc8c57a5a417f4620a4d753defba64e33442"],
+    ["trailing ", "sha256:b1635c0aaf9633268d91b00162e2c0a26ae1a8f977d27352cfd72646216e300a"],
     ["Café", NFC_HASH],
     ["Café", NFD_HASH],
     ["“quoted”", "sha256:675587678ab187204408a9804299a93a49763fc568c472e5663e86cb1d62521c"],
@@ -472,6 +507,79 @@ describe("logical unqualified passage identity", () => {
     );
   });
 
+  test("keeps passage identity immutable across correction and supersession history", () => {
+    for (const historicalState of ["superseded", "withdrawn"] as const) {
+      const unchanged = repeatedPair();
+      unchanged.records.find(
+        ({ value }) => value.record_id === "synthetic_passage_first",
+      )!.value.review_state = historicalState;
+      unchanged.records.find(
+        ({ value }) => value.record_id === "synthetic_passage_second",
+      )!.value.review_state = "approved";
+      expect(resolveLogicalPassage(unchanged, "synthetic.shared.passage").status).toBe("resolved");
+
+      const changed = repeatedPair((record) => {
+        record.value.evidence[0]!.locator = "Corrected locator";
+      });
+      changed.records.find(
+        ({ value }) => value.record_id === "synthetic_passage_first",
+      )!.value.review_state = historicalState;
+      changed.records.find(
+        ({ value }) => value.record_id === "synthetic_passage_second",
+      )!.value.review_state = "approved";
+      expect(resolveLogicalPassage(changed, "synthetic.shared.passage").status).toBe("conflict");
+
+      changed.records.find(
+        ({ value }) => value.record_id === "synthetic_passage_second",
+      )!.value.evidence[0]!.passage_id = "synthetic.corrected.passage";
+      expect(resolveLogicalPassage(changed, "synthetic.shared.passage").status).toBe("resolved");
+      expect(resolveLogicalPassage(changed, "synthetic.corrected.passage").status).toBe("resolved");
+    }
+  });
+
+  test("keeps frozen compiled compatibility outside current-native conflicts", () => {
+    const snapshot = repeatedPair();
+    const frozen = structuredClone(
+      snapshot.records.find(({ value }) => value.record_id === "synthetic_passage_first")!,
+    );
+    frozen.value.record_id = "synthetic_frozen_compatibility";
+    frozen.value.evidence[0]!.locator = "Frozen compatibility locator";
+    frozen.file = "synthetic/frozen-compatibility.writ";
+    frozen.governing_contract = {
+      kind: "compatibility",
+      id: "https://writ.example/schemas/compatibility/record-grammar-v0.1/legal-policy-record.schema.json",
+      version: "0.1.0",
+      adapter_kind: "frozen_compiled_compatibility",
+      expected_family: "legal_policy",
+      verifies_core_provenance: false,
+    };
+    snapshot.records.push(frozen);
+
+    const resolution = resolveLogicalPassage(snapshot, "synthetic.shared.passage");
+    expect(resolution.status).toBe("resolved");
+    expect(resolution.occurrences).toHaveLength(2);
+    expect(logicalPassageConflicts(snapshot)).toEqual([]);
+  });
+
+  test("keeps reviewed compatibility passages available as bounded citation inputs", () => {
+    const passage = baseline.objects.find(
+      (object) =>
+        object.kind === "passage" &&
+        baseline.documents.some(
+          (document) =>
+            document.file === object.file &&
+            document.governing_contract.adapter_kind === "reviewed_compatibility_document",
+        ),
+    )!;
+    const resolution = buildLogicalPassageIndex(baseline).resolve(passage.id);
+    expect(resolution.status).toBe("resolved");
+    expect(
+      resolution.occurrences.every(
+        ({ adapterKind }) => adapterKind === "reviewed_compatibility_passage",
+      ),
+    ).toBe(true);
+  });
+
   test("uses the same logical resolution for Core links and judgments", () => {
     const identical = repeatedPair();
     const link = identical.links.find(({ value }) => value.review_state === "approved")!;
@@ -492,6 +600,63 @@ describe("logical unqualified passage identity", () => {
     ];
     expect(codes(verifyInteroperability(conflict))).toContain("INTEROP_REFERENCE_AMBIGUOUS");
     expect(codes(verifyProvenance(conflict))).toContain("PROVENANCE_REFERENCE_AMBIGUOUS");
+  });
+
+  test("requires link and judgment owners to route the source behind cited passages", () => {
+    const snapshot = clone();
+    const carrier = addNativeLegalRecord(snapshot, "synthetic_citation_carrier");
+    const evidence = carrier.value.evidence[0]!;
+    const consumerCorpus = "synthetic.citation.consumer";
+
+    const link = structuredClone(
+      snapshot.links.find(({ value }) => value.review_state === "approved")!,
+    );
+    Object.assign(link.value, {
+      link_id: "synthetic_unrouted_citation_link",
+      owning_corpus_id: consumerCorpus,
+      evidence_refs: [evidence.passage_id],
+      basis: "direct",
+    });
+    link.corpus_id = consumerCorpus;
+    link.file = "synthetic/unrouted-link.yaml";
+    snapshot.links.push(link);
+
+    const judgment = structuredClone(
+      snapshot.judgments.find(({ value }) => value.status === "accepted")!,
+    );
+    Object.assign(judgment.value, {
+      judgment_id: "synthetic_unrouted_citation_judgment",
+      target_kind: "record",
+      target_id: carrier.value.record_id,
+      evidence_refs: [evidence.passage_id],
+      status: "accepted",
+    });
+    delete judgment.value.supersedes_judgment_ids;
+    delete judgment.value.superseded_by_judgment_id;
+    judgment.corpus_id = consumerCorpus;
+    judgment.file = "synthetic/unrouted-judgment.writ";
+    snapshot.judgments.push(judgment);
+
+    const unrouted = verifyProvenance(snapshot).issues.filter(
+      ({ code, object_id }) =>
+        code === "PROVENANCE_SOURCE_NOT_ROUTED" &&
+        (object_id === link.value.link_id || object_id === judgment.value.judgment_id),
+    );
+    expect(unrouted.map(({ object_id }) => object_id).sort()).toEqual(
+      [judgment.value.judgment_id, link.value.link_id].sort(),
+    );
+
+    const source = snapshot.objects.find(
+      (object) => object.id === evidence.source_id && object.kind === "source_document",
+    )!;
+    snapshot.sourceRoutes.push({ corpus_id: consumerCorpus, file: source.file });
+    expect(
+      verifyProvenance(snapshot).issues.filter(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_SOURCE_NOT_ROUTED" &&
+          (object_id === link.value.link_id || object_id === judgment.value.judgment_id),
+      ),
+    ).toEqual([]);
   });
 
   test("keeps passage conflict output deterministic under occurrence order reversal", () => {
