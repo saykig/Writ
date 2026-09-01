@@ -626,7 +626,7 @@ tasks:
 
   - id: KERNEL-PORTABLE-PROVENANCE-001
     title: Falsify the portable generic provenance-kernel boundary
-    status: in_progress
+    status: review
     dependencies:
       - KERNEL-NATIVE-PROVENANCE-001
     scope:
