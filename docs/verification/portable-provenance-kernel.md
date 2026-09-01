@@ -1,8 +1,11 @@
 # Portable provenance-kernel boundary
 
 This is the implementation audit for `KERNEL-PORTABLE-PROVENANCE-001`. It tests the boundary
-against Writ PR #35 (`ca18518`) and the read-only Aldera lineage implementation at commits
-`f00518f` and `9b7d05e`.
+against the final Writ PR #35 head used by this stack (`dd386bc`) and the read-only Aldera lineage
+implementation at commits `f00518f` and `9b7d05e`. The sprint initially began at PR #35 head
+`ca18518`; when #35 advanced, the downstream commits were rebased onto `dd386bc`. The added
+current-native/compatibility scoping, routed-citation authority, and gate-level indexing corrections
+are `UPSTREAM_PR35_DEFECT` fixes already carried by that final baseline, not downstream workarounds.
 
 The result is a small package boundary, not a generalization of Writ. Native research objects stay
 sovereign. Callers supply source/document-version authority; Writ separately decides whether that
