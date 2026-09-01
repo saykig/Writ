@@ -38,27 +38,18 @@ const contractKey = (contract: BundleRecordContract): string =>
  * This is a capability list, not schema authority, and it never infers SemVer
  * compatibility. Authoritative contract identity still resolves through
  * `@writ/domain`; the bundle separately declares which exact versions it can
- * project.
+ * project. Source-dialect compilation capability does not activate a contract
+ * for catalogued-corpus export; this set matches the verifier's current exact
+ * record adapters.
  */
 const SUPPORTED_RECORD_CONTRACTS = new Set(
   (
     [
-      { kind: "native", id: SCHEMA_IDS.record, version: "0.2.0" },
       { kind: "native", id: SCHEMA_IDS["legal-policy-record"], version: "0.2.0" },
       { kind: "native", id: SCHEMA_IDS["institutional-record"], version: "0.2.0" },
       {
         kind: "compatibility",
-        id: String(RAW_COMPATIBILITY_SCHEMAS.record.$id),
-        version: "0.1.0",
-      },
-      {
-        kind: "compatibility",
         id: String(RAW_COMPATIBILITY_SCHEMAS["legal-policy-record"].$id),
-        version: "0.1.0",
-      },
-      {
-        kind: "compatibility",
-        id: String(RAW_COMPATIBILITY_SCHEMAS["institutional-record"].$id),
         version: "0.1.0",
       },
       { kind: "compatibility", id: REVIEWED_DOCUMENT_CONTRACT, version: "1.0.0" },

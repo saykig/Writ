@@ -3,10 +3,13 @@ import { describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
+import { RAW_COMPATIBILITY_SCHEMAS, SCHEMA_IDS } from "@writ/domain";
 import { generateWritDataBundleForCommit, resolveCommitIdentity } from "../src/generate.js";
 import { serializeBundle } from "../src/hashing.js";
 import { projectCanonicalObjects, projectCompatibilityEvidence } from "../src/project.js";
 import {
+  REVIEWED_DOCUMENT_CONTRACT,
+  assertSupportedRecordContract,
   rawHash,
   readNativeRepository,
   repositoryRoot,
@@ -258,6 +261,57 @@ describe("deterministic neutral contract", () => {
     expect(() => projectCanonicalObjects(changed)).toThrow(
       /unsupported exact record contract .* version 9\.0\.0/,
     );
+  });
+
+  test("accepts exactly the current verifier-supported manifest contract capabilities", () => {
+    const supported = [
+      {
+        kind: "native",
+        id: SCHEMA_IDS["institutional-record"],
+        version: "0.2.0",
+      },
+      {
+        kind: "native",
+        id: SCHEMA_IDS["legal-policy-record"],
+        version: "0.2.0",
+      },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS["legal-policy-record"].$id),
+        version: "0.1.0",
+      },
+      {
+        kind: "compatibility",
+        id: REVIEWED_DOCUMENT_CONTRACT,
+        version: "1.0.0",
+      },
+    ] as const;
+
+    for (const contract of supported) {
+      expect(() => assertSupportedRecordContract(contract, "supported fixture")).not.toThrow();
+    }
+  });
+
+  test("does not export compiler-only contracts unsupported by verifier manifest adapters", () => {
+    const compilerOnly = [
+      { kind: "native", id: SCHEMA_IDS.record, version: "0.2.0" },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS.record.$id),
+        version: "0.1.0",
+      },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS["institutional-record"].$id),
+        version: "0.1.0",
+      },
+    ] as const;
+
+    for (const contract of compilerOnly) {
+      expect(() => assertSupportedRecordContract(contract, "compiler-only fixture")).toThrow(
+        /unsupported exact record contract/,
+      );
+    }
   });
 
   test("validates hashes and is byte-identical across clean generation", () => {

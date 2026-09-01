@@ -18,6 +18,15 @@ const NIST_SOURCES = fileURLToPath(
 const LEGAL_V1 = readFileSync(`${FIXTURES}/valid-legal-policy.writ`, "utf8");
 const INSTITUTIONAL_V1 = readFileSync(`${FIXTURES}/valid-institutional.writ`, "utf8");
 const JUDGMENT_V1 = readFileSync(`${FIXTURES}/valid-record-judgment.writ`, "utf8");
+const SOURCE_ONLY_V1 = `language writ "0.1"
+package writ.fixtures.source_only version "0.1.0";
+
+source fixture_source {
+  uri "https://example.com/source";
+  media_type "text/html";
+  retrieved 2026-08-31T00:00:00Z;
+  sha256 "sha256:0000000000000000000000000000000000000000000000000000000000000000";
+}`;
 
 const dialect = (source: string, value: string): string =>
   source.replace(/language writ "[^"]+"/, `language writ "${value}"`);
@@ -32,6 +41,33 @@ const futureFamily = (source: string, id: string): string =>
 
 const CURRENT_LEGAL_CONTRACT =
   "https://writ.example/schemas/extensions/legal-policy-record.schema.json";
+const UNSUPPORTED_DIALECTS = [
+  "__proto__",
+  "constructor",
+  "toString",
+  "valueOf",
+  "hasOwnProperty",
+  "9.9",
+] as const;
+
+function expectUnsupportedDialect(source: string, sourceDialect: string): void {
+  let compiled: ReturnType<typeof compileSource> | undefined;
+  expect(() => {
+    compiled = compileSource(dialect(source, sourceDialect));
+  }).not.toThrow();
+  if (!compiled) throw new Error(`Compilation did not return for ${sourceDialect}`);
+
+  expect(resolveWritDialect(sourceDialect), sourceDialect).toBeUndefined();
+  expect(compiled.schemaValid, sourceDialect).toBe(false);
+  expect(compiled.records, sourceDialect).toEqual([]);
+  expect(compiled.judgments, sourceDialect).toEqual([]);
+  expect(compiled.diagnostics, sourceDialect).toHaveLength(1);
+  expect(compiled.diagnostics[0], sourceDialect).toMatchObject({
+    code: "WRT-DIALECT-UNSUPPORTED",
+    severity: "error",
+    message: `Unsupported Writ source dialect: ${sourceDialect}`,
+  });
+}
 
 describe("exact source-dialect contract dispatch", () => {
   test("maps Writ 0.1 and 0.2 explicitly rather than equating dialect and schema strings", () => {
@@ -115,15 +151,19 @@ judgment link_review {
     expect(compiled.schemaErrors.some((error) => error.message.includes("target_kind"))).toBe(true);
   });
 
-  test("rejects an unsupported source dialect deterministically", () => {
-    const first = compileSource(dialect(LEGAL_V1, "9.9"));
-    const second = compileSource(dialect(LEGAL_V1, "9.9"));
-    expect(first).toEqual(second);
-    expect(first.schemaValid).toBe(false);
-    expect(first.records).toEqual([]);
-    expect(first.judgments).toEqual([]);
-    expect(first.diagnostics.map(({ code }) => code)).toEqual(["WRT-DIALECT-UNSUPPORTED"]);
-  });
+  for (const sourceDialect of UNSUPPORTED_DIALECTS) {
+    test(`rejects unsupported dialect ${sourceDialect} for record modules`, () => {
+      expectUnsupportedDialect(LEGAL_V1, sourceDialect);
+    });
+
+    test(`rejects unsupported dialect ${sourceDialect} for judgment modules`, () => {
+      expectUnsupportedDialect(JUDGMENT_V1, sourceDialect);
+    });
+
+    test(`rejects unsupported dialect ${sourceDialect} for source-only modules`, () => {
+      expectUnsupportedDialect(SOURCE_ONLY_V1, sourceDialect);
+    });
+  }
 
   test("keeps future shared-Core families extensible under each dialect", () => {
     for (const [sourceDialect, schemaVersion] of [
@@ -139,6 +179,24 @@ judgment link_review {
       expect(compiled.records[0]?.family).toBe("theoretical");
       expect(compiled.records[0]?.schema_version).toBe(schemaVersion);
     }
+  });
+
+  test("keeps standalone compilation broader than catalogued manifest adapter support", () => {
+    const compatibilityInstitutional = compileSource(INSTITUTIONAL_V1);
+    expect(compatibilityInstitutional.schemaValid).toBe(true);
+    expect(compatibilityInstitutional.records[0]).toMatchObject({
+      family: "institutional",
+      schema_version: "0.1.0",
+    });
+
+    const futureCore = compileSource(
+      futureFamily(dialect(LEGAL_V1, "0.2"), "future_standalone_record"),
+    );
+    expect(futureCore.schemaValid).toBe(true);
+    expect(futureCore.records[0]).toMatchObject({
+      family: "theoretical",
+      schema_version: "0.2.0",
+    });
   });
 
   test("does not use package or record revision metadata for contract dispatch", () => {

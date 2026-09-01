@@ -77,7 +77,14 @@ export const WRIT_DIALECT_CONTRACTS: Readonly<Record<SupportedWritDialect, WritD
   });
 
 export function resolveWritDialect(dialect: string): WritDialectContracts | undefined {
-  return WRIT_DIALECT_CONTRACTS[dialect as SupportedWritDialect];
+  switch (dialect) {
+    case "0.1":
+      return WRIT_DIALECT_CONTRACTS["0.1"];
+    case "0.2":
+      return WRIT_DIALECT_CONTRACTS["0.2"];
+    default:
+      return undefined;
+  }
 }
 
 export function recordContractForFamily(
