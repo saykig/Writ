@@ -1,5 +1,10 @@
-import { createHash } from "node:crypto";
 import { validateJudgmentSupersession } from "@writ/domain";
+import {
+  sha256Utf8Text,
+  verifyEvidenceReferences,
+  type EvidenceReference,
+  type SourceVersionDeclaration,
+} from "@writ/provenance";
 
 import {
   buildLogicalPassageIndex,
@@ -131,6 +136,24 @@ function citationSourceIssues(
   return findings;
 }
 
+function pushPassageHashIssue(
+  issues: ReturnType<typeof issue>[],
+  evidence: EvidenceReference,
+  context: { corpus_id: string; object_id: string; file: string },
+): void {
+  const actualPassageHash = sha256Utf8Text(evidence.quote);
+  if (actualPassageHash !== evidence.passage_hash) {
+    issues.push(
+      issue(
+        "provenance",
+        "PROVENANCE_PASSAGE_HASH_MISMATCH",
+        `Evidence passage ${evidence.passage_id} hashes to ${actualPassageHash}, not ${evidence.passage_hash}.`,
+        context,
+      ),
+    );
+  }
+}
+
 interface DirectedSupportEdge {
   sourceId: string;
   targetId: string;
@@ -243,22 +266,14 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
   for (const loaded of currentNativeCoreRecords(snapshot)) {
     const record = loaded.value;
     for (const evidence of record.evidence) {
-      const actualPassageHash = `sha256:${createHash("sha256")
-        .update(Buffer.from(evidence.quote, "utf8"))
-        .digest("hex")}`;
-      if (actualPassageHash !== evidence.passage_hash) {
-        issues.push(
-          issue(
-            "provenance",
-            "PROVENANCE_PASSAGE_HASH_MISMATCH",
-            `Evidence passage ${evidence.passage_id} hashes to ${actualPassageHash}, not ${evidence.passage_hash}.`,
-            { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-          ),
-        );
-      }
-
+      const context = {
+        corpus_id: loaded.corpus_id,
+        object_id: record.record_id,
+        file: loaded.file,
+      };
       const source = resolveRoutedSource(snapshot, loaded.corpus_id, evidence.source_id);
       if (source.status === "missing") {
+        pushPassageHashIssue(issues, evidence, context);
         issues.push(
           issue(
             "provenance",
@@ -268,6 +283,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           ),
         );
       } else if (source.status === "not_routed") {
+        pushPassageHashIssue(issues, evidence, context);
         issues.push(
           issue(
             "provenance",
@@ -277,6 +293,7 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
           ),
         );
       } else if (source.status === "ambiguous") {
+        pushPassageHashIssue(issues, evidence, context);
         issues.push(
           issue(
             "provenance",
@@ -287,28 +304,56 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
         );
       } else {
         const declaredHash = sourceDocumentHash(source.source.value);
-        if (declaredHash !== evidence.document_hash) {
+        const declaredVersions = source.compatibilityVersion
+          ? [source.compatibilityVersion]
+          : sourceDocumentVersionIds(source.source);
+        if (declaredVersions.length === 0 || declaredHash === undefined) {
+          pushPassageHashIssue(issues, evidence, context);
+          if (declaredHash !== evidence.document_hash) {
+            issues.push(
+              issue(
+                "provenance",
+                "PROVENANCE_SOURCE_MISMATCH",
+                `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash ?? "no document hash"}.`,
+                context,
+              ),
+            );
+          }
+          if (!declaredVersions.includes(evidence.document_version_id)) {
+            issues.push(
+              issue(
+                "provenance",
+                "PROVENANCE_SOURCE_VERSION_MISMATCH",
+                `Evidence source ${evidence.source_id} has document version ${evidence.document_version_id}, but structured source metadata declares ${declaredVersions.join(", ") || "no version identity"}.`,
+                context,
+              ),
+            );
+          }
+          continue;
+        }
+        const authority: SourceVersionDeclaration[] = [...new Set(declaredVersions)].map(
+          (documentVersionId) => ({
+            source_id: evidence.source_id,
+            document_version_id: documentVersionId,
+            document_hash: declaredHash,
+          }),
+        );
+        const diagnostics = verifyEvidenceReferences([evidence], authority);
+        if (
+          declaredHash !== evidence.document_hash &&
+          !diagnostics.some(({ code }) => code === "PROVENANCE_SOURCE_MISMATCH")
+        ) {
           issues.push(
             issue(
               "provenance",
               "PROVENANCE_SOURCE_MISMATCH",
-              `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash ?? "no document hash"}.`,
-              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
+              `Evidence source ${evidence.source_id} has document hash ${evidence.document_hash}, but structured source metadata declares ${declaredHash}.`,
+              context,
             ),
           );
         }
-        const declaredVersions = source.compatibilityVersion
-          ? [source.compatibilityVersion]
-          : sourceDocumentVersionIds(source.source);
-        if (!declaredVersions.includes(evidence.document_version_id)) {
-          issues.push(
-            issue(
-              "provenance",
-              "PROVENANCE_SOURCE_VERSION_MISMATCH",
-              `Evidence source ${evidence.source_id} has document version ${evidence.document_version_id}, but structured source metadata declares ${declaredVersions.join(", ") || "no version identity"}.`,
-              { corpus_id: loaded.corpus_id, object_id: record.record_id, file: loaded.file },
-            ),
-          );
+        for (const diagnostic of diagnostics) {
+          issues.push(issue("provenance", diagnostic.code, diagnostic.message, context));
         }
       }
     }

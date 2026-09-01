@@ -14,6 +14,7 @@
   "dependencies": {
     "@writ/domain": "workspace:*",
     "@writ/language": "workspace:*",
+    "@writ/provenance": "workspace:*",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1"
   }

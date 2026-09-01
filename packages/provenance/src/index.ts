@@ -5,4 +5,21 @@
 // so the complete algorithm is not plain RFC 8785/JCS.
 export { canonicalJson, CanonicalJsonError, type CanonicalOptions } from "./canonical-json.js";
 
-export { sha256Canonical, type HashOptions } from "./hash.js";
+export {
+  evidencePassageSignature,
+  logicalPassageConflicts,
+  passageSignatureKey,
+  resolveLogicalPassage,
+  resolveSourceVersion,
+  verifyEvidenceReferences,
+  type EvidenceReference,
+  type LogicalPassageOccurrence,
+  type LogicalPassageResolution,
+  type PassageSignature,
+  type ProvenanceDiagnostic,
+  type ProvenanceDiagnosticCode,
+  type SourceVersionDeclaration,
+  type SourceVersionResolution,
+} from "./evidence.js";
+
+export { sha256Canonical, sha256Utf8Text, type HashOptions } from "./hash.js";

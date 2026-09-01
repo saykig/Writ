@@ -13,9 +13,12 @@
     "internal/verification/writ"
   ],
   "scripts": {
+    "prebuild": "bun run --filter '@writ/provenance' build",
     "build": "bun run --filter '*' build",
+    "pretest": "bun run --filter '@writ/provenance' build",
     "test": "bun run --filter '*' test",
     "lint": "bun run --filter '*' lint",
+    "pretypecheck": "bun run --filter '@writ/provenance' build",
     "typecheck": "bun run --filter '*' typecheck",
     "format": "prettier --check .",
     "format:write": "prettier --write .",

@@ -1,0 +1,23 @@
+{
+  "source": {
+    "source_id": "ucdp.brd_codebook",
+    "provider": "ucdp",
+    "document_version_id": "ucdp.brd_codebook.v26_1",
+    "title": "UCDP Battle-related Deaths Dataset Codebook Version 26.1",
+    "uri": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+    "filename": "ucdp-brd-codebook-261.pdf",
+    "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
+    "media_type": "application/pdf"
+  },
+  "reference": {
+    "source_id": "ucdp.brd_codebook",
+    "document_version_id": "ucdp.brd_codebook.v26_1",
+    "passage_id": "ucdp.brd_codebook.v26_1.introduction",
+    "locator": "pdf:3-4:Introduction",
+    "quote": "exact quotation",
+    "passage_hash": "sha256:00df511ec9b12ae6505573e1f6ce2b1e557f0ac84566809b424c8a2a27063efb",
+    "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
+    "basis": "direct",
+    "role": "dependency"
+  }
+}

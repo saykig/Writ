@@ -1,7 +1,37 @@
 # `@writ/provenance`
 
-`@writ/provenance` implements **Writ Canonical JSON v1** and content-addressed SHA-256 hashing for
-provenance-bearing records and bundles.
+`@writ/provenance` is Writ's portable, domain-neutral provenance/evidence kernel. It implements
+**Writ Canonical JSON v1**, content-addressed SHA-256, exact UTF-8 passage hashing, exact
+source/document-version resolution against caller-supplied authority, evidence-reference
+verification, and byte-sensitive logical-passage conflict detection.
+
+The package supports Node.js 22 or newer and Bun 1.3 or newer. Its built ESM and declarations are
+published through the package root export. It has no runtime dependencies beyond `node:crypto`.
+
+## Public surface
+
+Runtime exports:
+
+- `canonicalJson` and `CanonicalJsonError`;
+- `sha256Canonical` and `sha256Utf8Text`;
+- `resolveSourceVersion` and `verifyEvidenceReferences`;
+- `evidencePassageSignature` and `passageSignatureKey`;
+- `resolveLogicalPassage` and `logicalPassageConflicts`.
+
+Type-only exports:
+
+- `CanonicalOptions` and `HashOptions`;
+- `EvidenceReference` and `SourceVersionDeclaration`;
+- `SourceVersionResolution`, `ProvenanceDiagnostic`, and `ProvenanceDiagnosticCode`;
+- `PassageSignature`, `LogicalPassageOccurrence`, and `LogicalPassageResolution`.
+
+`EvidenceReference` deliberately contains only the seven fields needed for provenance identity and
+verification. Consumer-specific fields such as Writ assertion basis or Aldera lineage role may
+extend that shape without becoming kernel semantics.
+
+The authority passed to `resolveSourceVersion` or `verifyEvidenceReferences` is authoritative only
+because the caller supplied it. The package does not decide corpus routing, source authorization,
+review state, family semantics, or lineage.
 
 ## Writ Canonical JSON v1
 
@@ -34,5 +64,8 @@ is not changed by the profile-naming cleanup.
 
 Existing Writ canonical bytes and hashes remain defined by Writ Canonical JSON v1. Any behavioral
 change requires a new profile identity and an explicit hash-migration decision.
+
+Passage identity is separate: `sha256Utf8Text` hashes the exact UTF-8 quote bytes. It does not call
+`canonicalJson`, normalize Unicode, trim whitespace, replace NBSP, or normalize quotation marks.
 
 Keep public APIs small, versioned, and covered by deterministic golden tests.

@@ -16,6 +16,14 @@ export type HashOptions = CanonicalOptions;
 const PREFIX = "sha256:";
 
 /**
+ * Hash the exact UTF-8 bytes of `value` without canonicalization or Unicode
+ * normalization. This is the identity operation for quoted passage text.
+ */
+export function sha256Utf8Text(value: string): string {
+  return PREFIX + createHash("sha256").update(value, "utf8").digest("hex");
+}
+
+/**
  * Canonicalize `value` with Writ Canonical JSON v1 and return its content hash
  * as `"sha256:<64 lowercase hex>"`. Existing Writ hashes are pinned to this
  * profile, including NFC normalization and optional pre-canonicalization field
@@ -23,5 +31,5 @@ const PREFIX = "sha256:";
  */
 export function sha256Canonical(value: unknown, options?: HashOptions): string {
   const canonical = canonicalJson(value, options);
-  return PREFIX + createHash("sha256").update(canonical, "utf8").digest("hex");
+  return sha256Utf8Text(canonical);
 }

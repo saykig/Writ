@@ -623,3 +623,31 @@ tasks:
       - packages/data-bundle
       - TASKS.yaml
       - MANIFEST.sha256
+
+  - id: KERNEL-PORTABLE-PROVENANCE-001
+    title: Falsify the portable generic provenance-kernel boundary
+    status: in_progress
+    dependencies:
+      - KERNEL-NATIVE-PROVENANCE-001
+    scope:
+      - Audit current Writ and Aldera provenance behavior into portable, repository-adapter, domain-specific, and not-proven-generic categories.
+      - Make only the coherent generic evidence substrate in @writ/provenance independently consumable as a packed Node.js 22 package.
+      - Refactor the Writ repository verifier to consume the extracted hashing, source/version, and logical-passage primitives.
+      - Use Aldera's tracked UCDP provenance shapes as a read-only external compatibility holdout.
+    exclusions:
+      - WritRecord, RepositorySnapshot, corpus routing, family contracts, institutional semantics, links, judgments, review policy, or lineage computation in the portable package.
+      - Changes to corpora, schemas, grammar, protocols, reviewed records, ontology, query systems, databases, or frontend behavior.
+      - Publishing the package to a remote registry or modifying Aldera.
+    acceptance:
+      - The package imports no Writ workspace or internal-verifier module and declares no undeclared runtime dependency.
+      - An isolated Node.js 22 consumer installs and imports only the packed artifact without a Writ workspace symlink.
+      - Aldera canonicalization, exact passage hashing, source/version resolution, document/passage hash checks, and passage-conflict semantics match.
+      - Writ source authorization remains manifest-routed in its repository adapter while the generic kernel verifies only caller-supplied authority.
+      - Caller and authority ordering are deterministic, malformed references fail closed, and canonical hashes remain unchanged.
+      - Formatting, linting, type checking, tests, data checks, verification, build, package-content, protected-byte, and repository-integrity checks pass.
+    outputs:
+      - packages/provenance
+      - internal/verification/writ
+      - docs/verification/portable-provenance-kernel.md
+      - TASKS.yaml
+      - MANIFEST.sha256
