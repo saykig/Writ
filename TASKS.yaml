@@ -567,3 +567,28 @@ tasks:
       - internal/verification/writ
       - TASKS.yaml
       - MANIFEST.sha256
+
+  - id: KERNEL-CONTRACT-DISPATCH-001
+    title: Make Writ source and record-contract dispatch exact
+    status: in_progress
+    dependencies:
+      - NIST-PROVING-GROUND-HARDENING-001
+    scope:
+      - Map each supported source dialect explicitly to its emitted Core and family contract versions.
+      - Keep compilation pure while making repository validation independently enforce manifest-declared contracts.
+      - Make judgment compilation and data-bundle contract-version handling fail closed on exact unsupported versions.
+      - Preserve frozen Writ 0.1 compatibility, current Writ 0.2 institutional semantics, and shared-Core family extensibility.
+    exclusions:
+      - Commission Decision records, Commission ontology, new corpus families, or corpus-content changes.
+      - Schema, grammar, relation-vocabulary, canonical-JSON, query, reasoning, or compliance changes.
+    acceptance:
+      - Source dialect rather than incidental payload fields deterministically selects emitted record and judgment schema versions.
+      - Direct compilation, manifest validation, and bundle projection agree on exact supported contract IDs and versions.
+      - Mandatory compatibility, native-family, shared-Core, mixed-family, and unsupported-version adversarial cases pass.
+      - Existing catalogued corpus projections remain semantically unchanged apart from commit-derived bundle metadata.
+      - Formatting, linting, type checking, tests, data checks, verification, Python checks, build, and repository integrity pass.
+    outputs:
+      - packages/language
+      - packages/data-bundle
+      - TASKS.yaml
+      - MANIFEST.sha256
