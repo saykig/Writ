@@ -12,7 +12,8 @@ export {
   resolveLogicalPassage,
   resolveSourceVersion,
   verifyEvidenceReferences,
-  type EvidenceReference,
+  LogicalPassageOccurrenceError,
+  type AnchoredTextEvidenceReference,
   type LogicalPassageOccurrence,
   type LogicalPassageResolution,
   type PassageSignature,
@@ -22,4 +23,9 @@ export {
   type SourceVersionResolution,
 } from "./evidence.js";
 
-export { sha256Canonical, sha256Utf8Text, type HashOptions } from "./hash.js";
+export {
+  IllFormedUnicodeError,
+  sha256Canonical,
+  sha256Utf8Text,
+  type HashOptions,
+} from "./hash.js";

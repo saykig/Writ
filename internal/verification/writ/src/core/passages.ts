@@ -3,7 +3,7 @@ import {
   logicalPassageConflicts as portablePassageConflicts,
   passageSignatureKey,
   resolveLogicalPassage as resolvePortablePassage,
-  type EvidenceReference,
+  type AnchoredTextEvidenceReference,
   type LogicalPassageOccurrence as PortablePassageOccurrence,
   type LogicalPassageResolution as PortablePassageResolution,
   type PassageSignature,
@@ -39,7 +39,7 @@ export interface LogicalPassageIndex {
   currentNativeConflicts(): LogicalPassageResolution[];
 }
 
-export function corePassageSignature(evidence: EvidenceReference): PassageSignature {
+export function corePassageSignature(evidence: AnchoredTextEvidenceReference): PassageSignature {
   return evidencePassageSignature(evidence);
 }
 
@@ -170,13 +170,21 @@ export function logicalPassageOccurrences(
 function portableOccurrences(
   occurrences: readonly LogicalPassageOccurrence[],
 ): Array<PortablePassageOccurrence<LogicalPassageOccurrence>> {
+  const counts = new Map<string, Map<string, number>>();
   return occurrences.flatMap((occurrence) =>
-    [occurrence.passageId, ...occurrence.aliases].map((passageId) => ({
-      passageId,
-      signature: occurrence.signature,
-      occurrenceId: `${occurrence.corpusId}\0${occurrence.objectId}\0${occurrence.file}`,
-      context: occurrence,
-    })),
+    [occurrence.passageId, ...occurrence.aliases].map((passageId) => {
+      const baseId = `${occurrence.corpusId}\0${occurrence.objectId}\0${occurrence.file}`;
+      const passageCounts = counts.get(passageId) ?? new Map<string, number>();
+      const ordinal = passageCounts.get(baseId) ?? 0;
+      passageCounts.set(baseId, ordinal + 1);
+      counts.set(passageId, passageCounts);
+      return {
+        passageId,
+        signature: occurrence.signature,
+        occurrenceId: `${baseId}\0${ordinal}`,
+        context: occurrence,
+      };
+    }),
   );
 }
 

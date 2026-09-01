@@ -3,108 +3,222 @@ import { readFileSync } from "node:fs";
 
 import {
   evidencePassageSignature,
+  IllFormedUnicodeError,
+  LogicalPassageOccurrenceError,
   logicalPassageConflicts,
   passageSignatureKey,
   resolveLogicalPassage,
   resolveSourceVersion,
+  sha256Canonical,
   sha256Utf8Text,
   verifyEvidenceReferences,
-  type EvidenceReference,
+  type AnchoredTextEvidenceReference,
   type LogicalPassageOccurrence,
+  type PassageSignature,
   type SourceVersionDeclaration,
+  type SourceVersionResolution,
 } from "../src/index.js";
+
+interface AlderaOracleFixture {
+  oracle: {
+    repository: string;
+    commit: string;
+    manifest: string;
+    registry: string;
+    generated_receipt: string;
+  };
+  sources: Array<SourceVersionDeclaration & Record<string, unknown>>;
+  references: Array<AnchoredTextEvidenceReference & Record<string, unknown>>;
+  expected: {
+    source_resolution: Array<SourceVersionResolution["status"]>;
+    verification_codes: string[];
+    combined_conflict_passage_ids: string[];
+  };
+}
 
 const fixture = JSON.parse(
   readFileSync(new URL("./fixtures/aldera-ucdp-holdout.json", import.meta.url), "utf8"),
-) as {
-  source: SourceVersionDeclaration & Record<string, unknown>;
-  reference: EvidenceReference & Record<string, unknown>;
-};
-
-const authority: SourceVersionDeclaration[] = [fixture.source];
-const reference: EvidenceReference = fixture.reference;
+) as AlderaOracleFixture;
+const authority: SourceVersionDeclaration[] = fixture.sources;
+const reference = fixture.references[0]!;
 
 function codes(values: readonly { code: string }[]): string[] {
   return values.map(({ code }) => code);
 }
 
-describe("exact UTF-8 passage hashing is distinct from canonical JSON", () => {
+function occurrence<T>(
+  id: string,
+  value: AnchoredTextEvidenceReference,
+  context: T,
+): LogicalPassageOccurrence<T> {
+  return {
+    passageId: value.passage_id,
+    signature: evidencePassageSignature(value),
+    occurrenceId: id,
+    context,
+  };
+}
+
+describe("exact UTF-8 anchored-text hashing", () => {
   const vectors = [
-    ["space space", "sha256:40efc2c669a6e18c40c890f99719fc9f3efab119703658ca34b52164b68a5eda"],
-    ["space space ", "sha256:f917f5182f4df6b9c0720936dd6b377c1c457c17182c47ef11c701be3458e79d"],
-    ["space\u00a0space", "sha256:b21f516d46c09df3bf5f1eace4ac2ddbc72cee5c9b02c79972f960113c9b3461"],
-    ["Café", "sha256:73473dcc12b763085904a5279d048c4d5b3b008c46f1f32443b99de04aa83a14"],
-    ["Café", "sha256:c42cc7a1ca08364b6fd859fa50d2454730a8236290a423373cc630da77c6d711"],
-    ["“quoted”", "sha256:675587678ab187204408a9804299a93a49763fc568c472e5663e86cb1d62521c"],
-    ['"quoted"', "sha256:272fca25899893eeb27b89583d5c81b8a4ac5af4d1e37e3909d879947303c1c5"],
+    ["\ufffd", "sha256:83d544ccc223c057d2bf80d3f2a32982c32c3c0db8e2674820da5064783fb097"],
+    ["\ud83d\ude00", "sha256:f0443a342c5ef54783a111b51ba56c938e474c32324d90c3a60c9c8e3a37e2d9"],
+    ["Caf\u00e9", "sha256:73473dcc12b763085904a5279d048c4d5b3b008c46f1f32443b99de04aa83a14"],
+    ["Cafe\u0301", "sha256:c42cc7a1ca08364b6fd859fa50d2454730a8236290a423373cc630da77c6d711"],
+    ["line1\nline2", "sha256:683376e290829b482c2655745caffa7a1dccfa10afaa62dac2b42dd6c68d0f83"],
+    ["line1\r\nline2", "sha256:d14a91a6d1c6ee83bf0c774ebecbee6d8b393b395dae29eea839c354d6fba9c0"],
+    ["a\u00a0b", "sha256:9507017c6d887511a5a6ac28ea7e3a438882576e1bd76fe3df27a336f49c263b"],
+    ["a\tb", "sha256:894891f8b78a9945b0aa07e70d5f71f10b1f1990af127de561cc0ac36024c188"],
+    [" a ", "sha256:cbf7f30004f3667cb093b3c7b55169a90e3f0044f6ea3ff93d3f75427a72e377"],
+    ["\ufefftext", "sha256:3f290fb3a24328c76f4d09294c8be46a8c10c4a7ac8a7642782c7152d2761a13"],
+    ["a\u200bb", "sha256:8df62aef5f92e4c30c0c938497f55f60078c361a476e7e0448485194ad79f884"],
   ] as const;
 
-  test("pins byte-sensitive whitespace, NBSP, normalization, and quotation vectors", () => {
+  test("pins valid replacement, pair, normalization, line-ending, and whitespace bytes", () => {
     for (const [quote, expected] of vectors) expect(sha256Utf8Text(quote)).toBe(expected);
     expect(new Set(vectors.map(([quote]) => sha256Utf8Text(quote))).size).toBe(vectors.length);
+  });
+
+  test("rejects unpaired surrogates instead of hashing replacement bytes", () => {
+    for (const malformed of ["\ud800", "\udc00", "prefix\ud800suffix", "prefix\udc00suffix"]) {
+      expect(() => sha256Utf8Text(malformed)).toThrow(IllFormedUnicodeError);
+    }
+    expect(sha256Utf8Text("\ufffd")).not.toBe(sha256Utf8Text("\ud83d\ude00"));
+  });
+
+  test("fails malformed quote references closed", () => {
+    expect(codes(verifyEvidenceReferences([{ ...reference, quote: "\ud800" }], authority))).toEqual(
+      ["PROVENANCE_EVIDENCE_REFERENCE_INVALID"],
+    );
+  });
+});
+
+describe("passage signature identity", () => {
+  test("is independent of JavaScript property insertion order", () => {
+    const signature = evidencePassageSignature(reference);
+    const reversed = Object.fromEntries(
+      Object.entries(signature).reverse(),
+    ) as unknown as PassageSignature;
+    const permuted: PassageSignature = {
+      quote: signature.quote,
+      document_hash: signature.document_hash,
+      source_id: signature.source_id,
+      passage_hash: signature.passage_hash,
+      locator: signature.locator,
+      document_version_id: signature.document_version_id,
+    };
+    expect(passageSignatureKey(reversed)).toBe(passageSignatureKey(signature));
+    expect(passageSignatureKey(permuted)).toBe(passageSignatureKey(signature));
+  });
+
+  test("does not canonicalize byte-sensitive signature fields", () => {
+    const composed = { ...evidencePassageSignature(reference), quote: "Caf\u00e9" };
+    const decomposed = { ...composed, quote: "Cafe\u0301" };
+    expect(passageSignatureKey(composed)).not.toBe(passageSignatureKey(decomposed));
   });
 });
 
 describe("caller-supplied source and document-version authority", () => {
-  test("resolves the tracked Aldera UCDP authority shape without its extra fields", () => {
-    expect(
-      resolveSourceVersion(authority, reference.source_id, reference.document_version_id),
-    ).toEqual({
+  test("resolves extension-bearing declarations but returns only the mechanical projection", () => {
+    const source = fixture.sources[0]!;
+    expect(resolveSourceVersion([source], source.source_id, source.document_version_id)).toEqual({
       status: "resolved",
       source: {
-        source_id: fixture.source.source_id,
-        document_version_id: fixture.source.document_version_id,
-        document_hash: fixture.source.document_hash,
+        source_id: source.source_id,
+        document_version_id: source.document_version_id,
+        document_hash: source.document_hash,
       },
       matches: [
         {
-          source_id: fixture.source.source_id,
-          document_version_id: fixture.source.document_version_id,
-          document_hash: fixture.source.document_hash,
+          source_id: source.source_id,
+          document_version_id: source.document_version_id,
+          document_hash: source.document_hash,
         },
       ],
     });
-    expect(verifyEvidenceReferences([fixture.reference], authority)).toEqual([]);
   });
 
-  test("distinguishes missing source, wrong version, and duplicate exact authority", () => {
-    expect(resolveSourceVersion(authority, "missing", reference.document_version_id).status).toBe(
-      "missing_source",
-    );
-    expect(resolveSourceVersion(authority, reference.source_id, "ucdp.other.version").status).toBe(
-      "version_mismatch",
-    );
+  test("fails closed on every malformed authority shape", () => {
+    const valid = fixture.sources[0]!;
+    const malformed = [
+      null,
+      {},
+      { document_version_id: valid.document_version_id, document_hash: valid.document_hash },
+      { ...valid, source_id: "" },
+      { ...valid, document_version_id: "" },
+      { ...valid, document_hash: "not-a-hash" },
+      { ...valid, document_hash: valid.document_hash.toUpperCase() },
+      { ...valid, source_id: 7 },
+      { ...valid, document_version_id: false },
+      { ...valid, document_hash: 7 },
+    ];
+    for (const value of malformed) {
+      expect(resolveSourceVersion([value], valid.source_id, valid.document_version_id)).toEqual({
+        status: "invalid_authority",
+        matches: [],
+        invalidCount: 1,
+      });
+      expect(codes(verifyEvidenceReferences([reference], [value]))).toEqual([
+        "PROVENANCE_AUTHORITY_INVALID",
+      ]);
+    }
+  });
+
+  test("does not discard a malformed declaration beside a valid duplicate", () => {
+    const malformedDuplicate = { ...fixture.sources[0]!, document_hash: "bad" };
     expect(
       resolveSourceVersion(
-        [fixture.source, structuredClone(fixture.source)],
+        [fixture.sources[0]!, malformedDuplicate],
         reference.source_id,
         reference.document_version_id,
-      ).status,
-    ).toBe("ambiguous");
+      ),
+    ).toEqual({ status: "invalid_authority", matches: [], invalidCount: 1 });
   });
 
-  test("is deterministic under authority ordering", () => {
-    const another = {
-      source_id: reference.source_id,
-      document_version_id: "ucdp.brd_codebook.v25_1",
-      document_hash: `sha256:${"1".repeat(64)}`,
-    };
+  test("distinguishes identical duplicates, conflicting duplicates, and several versions", () => {
+    const source = fixture.sources[0]!;
+    expect(
+      resolveSourceVersion(
+        [source, structuredClone(source)],
+        source.source_id,
+        source.document_version_id,
+      ).status,
+    ).toBe("ambiguous");
+    expect(
+      resolveSourceVersion(
+        [source, { ...source, document_hash: `sha256:${"1".repeat(64)}` }],
+        source.source_id,
+        source.document_version_id,
+      ).status,
+    ).toBe("ambiguous");
+
+    const older = { ...source, document_version_id: "ucdp.brd_codebook.v25_1" };
+    expect(
+      resolveSourceVersion([older, source], source.source_id, source.document_version_id).status,
+    ).toBe("resolved");
+    expect(resolveSourceVersion([older, source], source.source_id, "missing").status).toBe(
+      "version_mismatch",
+    );
+  });
+
+  test("is invariant under authority ordering for valid and invalid authority", () => {
+    const malformed = { ...fixture.sources[0]!, document_hash: "bad" };
     const forward = resolveSourceVersion(
-      [fixture.source, another],
+      [...authority, malformed],
       reference.source_id,
-      "missing-version",
+      reference.document_version_id,
     );
     const reversed = resolveSourceVersion(
-      [another, fixture.source],
+      [malformed, ...authority].reverse(),
       reference.source_id,
-      "missing-version",
+      reference.document_version_id,
     );
     expect(reversed).toEqual(forward);
   });
 });
 
-describe("generic evidence-reference verification", () => {
-  test("reports every required negative case with stable codes", () => {
+describe("anchored-text integrity is separate from passage namespace policy", () => {
+  test("reports source, version, document, passage, and structural failures", () => {
     expect(
       codes(verifyEvidenceReferences([{ ...reference, source_id: "missing" }], authority)),
     ).toEqual(["PROVENANCE_SOURCE_NOT_FOUND"]);
@@ -116,11 +230,6 @@ describe("generic evidence-reference verification", () => {
         ),
       ),
     ).toEqual(["PROVENANCE_SOURCE_VERSION_MISMATCH"]);
-    expect(
-      codes(
-        verifyEvidenceReferences([reference], [fixture.source, structuredClone(fixture.source)]),
-      ),
-    ).toEqual(["PROVENANCE_REFERENCE_AMBIGUOUS"]);
     expect(
       codes(
         verifyEvidenceReferences(
@@ -137,10 +246,7 @@ describe("generic evidence-reference verification", () => {
         ),
       ),
     ).toContain("PROVENANCE_PASSAGE_HASH_MISMATCH");
-  });
 
-  test("fails closed on malformed references while allowing consumer extension fields", () => {
-    expect(verifyEvidenceReferences([fixture.reference], authority)).toEqual([]);
     for (const malformed of [
       null,
       {},
@@ -154,70 +260,109 @@ describe("generic evidence-reference verification", () => {
     }
   });
 
-  test("coalesces identical passage signatures and detects every signature-field conflict", () => {
-    expect(verifyEvidenceReferences([reference, structuredClone(reference)], authority)).toEqual(
-      [],
-    );
+  test("does not turn an arbitrary verification array into a passage namespace", () => {
+    const first = { ...fixture.references[0]!, passage_id: "passage-17" };
+    const second = { ...fixture.references[1]!, passage_id: "passage-17" };
+    expect(verifyEvidenceReferences([first], authority)).toEqual([]);
+    expect(verifyEvidenceReferences([second], authority)).toEqual([]);
+    expect(verifyEvidenceReferences([first, second], authority)).toEqual([]);
 
-    const mutations: Array<Partial<EvidenceReference>> = [
-      { source_id: "other-source" },
-      { document_version_id: "other-version" },
-      { locator: "other-locator" },
-      { quote: "different", passage_hash: sha256Utf8Text("different") },
-      { passage_hash: `sha256:${"4".repeat(64)}` },
-      { document_hash: `sha256:${"5".repeat(64)}` },
-    ];
-    for (const mutation of mutations) {
-      expect(
-        codes(verifyEvidenceReferences([reference, { ...reference, ...mutation }], authority)),
-      ).toContain("PROVENANCE_PASSAGE_CONFLICT");
-    }
+    const firstScope = [occurrence("scope-a", first, { scope: "a" })];
+    const secondScope = [occurrence("scope-b", second, { scope: "b" })];
+    expect(logicalPassageConflicts(firstScope)).toEqual([]);
+    expect(logicalPassageConflicts(secondScope)).toEqual([]);
+    expect(logicalPassageConflicts([...firstScope, ...secondScope])).toHaveLength(1);
   });
 
-  test("is deterministic under caller and registry ordering", () => {
+  test("is deterministic under reference and authority ordering", () => {
     const wrongHash = { ...reference, passage_hash: `sha256:${"6".repeat(64)}` };
-    const conflict = {
-      ...reference,
-      quote: "different",
-      passage_hash: sha256Utf8Text("different"),
-    };
-    const duplicateAuthority = [fixture.source, structuredClone(fixture.source)];
-    const forward = verifyEvidenceReferences([reference, wrongHash, conflict], duplicateAuthority);
+    const missingSource = { ...fixture.references[1]!, source_id: "missing" };
+    const forward = verifyEvidenceReferences([reference, wrongHash, missingSource], authority);
     const reversed = verifyEvidenceReferences(
-      [conflict, wrongHash, reference],
-      [...duplicateAuthority].reverse(),
+      [missingSource, wrongHash, reference],
+      [...authority].reverse(),
     );
     expect(reversed).toEqual(forward);
   });
 });
 
 describe("portable logical passage resolution", () => {
-  function occurrence(
-    id: string,
-    value: EvidenceReference,
-  ): LogicalPassageOccurrence<EvidenceReference> {
-    return {
-      passageId: value.passage_id,
-      signature: evidencePassageSignature(value),
-      occurrenceId: id,
-      context: value,
-    };
-  }
-
-  test("resolves identical occurrences and conflicts independently of input order", () => {
-    const identical = [occurrence("b", reference), occurrence("a", structuredClone(reference))];
+  test("resolves and conflicts independently of input order", () => {
+    const identical = [
+      occurrence("b", reference, { source: "b" }),
+      occurrence("a", structuredClone(reference), { source: "a" }),
+    ];
     expect(resolveLogicalPassage(identical, reference.passage_id).status).toBe("resolved");
 
     const conflicting = [
       ...identical,
-      occurrence("c", { ...reference, locator: "different locator" }),
+      occurrence("c", { ...reference, locator: "different locator" }, { source: "c" }),
     ];
     const forward = logicalPassageConflicts(conflicting);
     const reversed = logicalPassageConflicts([...conflicting].reverse());
     expect(forward).toHaveLength(1);
     expect(reversed).toEqual(forward);
-    expect(forward[0]!.signatureKeys).toContain(
-      passageSignatureKey(evidencePassageSignature(reference)),
+  });
+
+  test("rejects duplicate occurrence identity without inspecting opaque context", () => {
+    const duplicates = [
+      occurrence("same", reference, { opaque: "first" }),
+      occurrence("same", structuredClone(reference), { opaque: "second" }),
+    ];
+    for (const input of [duplicates, [...duplicates].reverse()]) {
+      expect(() => resolveLogicalPassage(input, reference.passage_id)).toThrow(
+        LogicalPassageOccurrenceError,
+      );
+      expect(() => logicalPassageConflicts(input)).toThrow(LogicalPassageOccurrenceError);
+    }
+  });
+});
+
+describe("cross-primitive identity rules", () => {
+  test("canonical equivalence does not redefine sovereign external identifiers", () => {
+    const composed = "caf\u00e9";
+    const decomposed = "cafe\u0301";
+    expect(sha256Canonical({ source_id: composed })).toBe(
+      sha256Canonical({ source_id: decomposed }),
+    );
+
+    const hash = `sha256:${"a".repeat(64)}`;
+    const source = { source_id: composed, document_version_id: composed, document_hash: hash };
+    expect(resolveSourceVersion([source], decomposed, composed).status).toBe("missing_source");
+    expect(resolveSourceVersion([source], composed, decomposed).status).toBe("version_mismatch");
+
+    const signature = evidencePassageSignature(reference);
+    expect(passageSignatureKey({ ...signature, locator: composed })).not.toBe(
+      passageSignatureKey({ ...signature, locator: decomposed }),
+    );
+    expect(sha256Utf8Text(composed)).not.toBe(sha256Utf8Text(decomposed));
+  });
+});
+
+describe("frozen real Aldera UCDP oracle", () => {
+  test("pins the reviewed commit and actual PDF and HTML evidence", () => {
+    expect(fixture.oracle.commit).toBe("9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4");
+    expect(fixture.sources.map(({ media_type }) => media_type)).toEqual([
+      "application/pdf",
+      "text/html",
+    ]);
+    expect(
+      fixture.references.map(
+        ({ source_id, document_version_id }) =>
+          resolveSourceVersion(authority, source_id, document_version_id).status,
+      ),
+    ).toEqual(fixture.expected.source_resolution);
+    expect(codes(verifyEvidenceReferences(fixture.references, authority))).toEqual(
+      fixture.expected.verification_codes,
+    );
+    for (const item of fixture.references) {
+      expect(sha256Utf8Text(item.quote)).toBe(item.passage_hash);
+    }
+    const occurrences = fixture.references.map((item, index) =>
+      occurrence(`aldera-${index}`, item, { oracle: fixture.oracle.commit }),
+    );
+    expect(logicalPassageConflicts(occurrences).map(({ passageId }) => passageId)).toEqual(
+      fixture.expected.combined_conflict_passage_ids,
     );
   });
 });

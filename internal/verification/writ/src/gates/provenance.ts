@@ -1,8 +1,9 @@
 import { validateJudgmentSupersession } from "@writ/domain";
 import {
+  IllFormedUnicodeError,
   sha256Utf8Text,
   verifyEvidenceReferences,
-  type EvidenceReference,
+  type AnchoredTextEvidenceReference,
   type SourceVersionDeclaration,
 } from "@writ/provenance";
 
@@ -138,10 +139,24 @@ function citationSourceIssues(
 
 function pushPassageHashIssue(
   issues: ReturnType<typeof issue>[],
-  evidence: EvidenceReference,
+  evidence: AnchoredTextEvidenceReference,
   context: { corpus_id: string; object_id: string; file: string },
 ): void {
-  const actualPassageHash = sha256Utf8Text(evidence.quote);
+  let actualPassageHash: string;
+  try {
+    actualPassageHash = sha256Utf8Text(evidence.quote);
+  } catch (error) {
+    if (!(error instanceof IllFormedUnicodeError)) throw error;
+    issues.push(
+      issue(
+        "provenance",
+        "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
+        `Evidence passage ${evidence.passage_id} contains ill-formed Unicode text.`,
+        context,
+      ),
+    );
+    return;
+  }
   if (actualPassageHash !== evidence.passage_hash) {
     issues.push(
       issue(

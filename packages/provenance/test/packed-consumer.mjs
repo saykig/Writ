@@ -106,6 +106,8 @@ const consumerSource = `
 
   const expectedExports = [
     "CanonicalJsonError",
+    "IllFormedUnicodeError",
+    "LogicalPassageOccurrenceError",
     "canonicalJson",
     "evidencePassageSignature",
     "logicalPassageConflicts",
@@ -162,7 +164,7 @@ assert.equal(runtimeResult.internalBlocked, true);
 const typeConsumerSource = `
   import {
     verifyEvidenceReferences,
-    type EvidenceReference,
+    type AnchoredTextEvidenceReference,
     type SourceVersionDeclaration,
   } from "@writ/provenance";
 
@@ -171,7 +173,7 @@ const typeConsumerSource = `
     document_version_id: "source.v1",
     document_hash: "sha256:${"1".repeat(64)}",
   }];
-  const reference: EvidenceReference = {
+  const reference: AnchoredTextEvidenceReference = {
     source_id: "source",
     document_version_id: "source.v1",
     passage_id: "passage",

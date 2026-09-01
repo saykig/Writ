@@ -1,23 +1,60 @@
 {
-  "source": {
-    "source_id": "ucdp.brd_codebook",
-    "provider": "ucdp",
-    "document_version_id": "ucdp.brd_codebook.v26_1",
-    "title": "UCDP Battle-related Deaths Dataset Codebook Version 26.1",
-    "uri": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
-    "filename": "ucdp-brd-codebook-261.pdf",
-    "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
-    "media_type": "application/pdf"
+  "oracle": {
+    "repository": "Aldera",
+    "commit": "9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4",
+    "manifest": "fixtures/real/ucdp-lineage-26.1/brd-dyadic.object.json",
+    "registry": "fixtures/real/ucdp-lineage-26.1/source-registry.json",
+    "generated_receipt": "data/local/lineage/ucdp-26.1/output/brd-dyadic.receipt.json"
   },
-  "reference": {
-    "source_id": "ucdp.brd_codebook",
-    "document_version_id": "ucdp.brd_codebook.v26_1",
-    "passage_id": "ucdp.brd_codebook.v26_1.introduction",
-    "locator": "pdf:3-4:Introduction",
-    "quote": "exact quotation",
-    "passage_hash": "sha256:00df511ec9b12ae6505573e1f6ce2b1e557f0ac84566809b424c8a2a27063efb",
-    "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
-    "basis": "direct",
-    "role": "dependency"
+  "sources": [
+    {
+      "source_id": "ucdp.brd_codebook",
+      "provider": "ucdp",
+      "document_version_id": "ucdp.brd_codebook.v26_1",
+      "title": "UCDP Battle-related Deaths Dataset Codebook Version 26.1",
+      "uri": "https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf",
+      "filename": "ucdp-brd-codebook-261.pdf",
+      "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
+      "media_type": "application/pdf"
+    },
+    {
+      "source_id": "ucdp.downloads",
+      "provider": "ucdp",
+      "document_version_id": "ucdp.downloads.v2026_08_31",
+      "title": "UCDP Dataset Download Center",
+      "uri": "https://ucdp.uu.se/downloads/",
+      "filename": "ucdp-downloads-2026-08-31.html",
+      "document_hash": "sha256:1e83d7e0ad98fb73151381f7fd77a4ac3f4473e66a81b472beeffd307046c53b",
+      "media_type": "text/html"
+    }
+  ],
+  "references": [
+    {
+      "source_id": "ucdp.brd_codebook",
+      "document_version_id": "ucdp.brd_codebook.v26_1",
+      "passage_id": "ucdp.brd_codebook.v26_1.title_page",
+      "locator": "PDF page 1",
+      "quote": "UCDP Battle-related Deaths Dataset Codebook Version 26.1 Uppsala Conflict Data Program Department of Peace and Conflict Research Uppsala University This version compiled and upd ated by Therese Pettersson (2026 ) When using this data, please always cite: Davies, S., Pettersson, T., & Öberg, M. (2026 ). Organized violence 1989-2025, and violent political protests. Journal of Peace Research, 63 (4). When appropriate, also cite this cod ebook: Pettersson, T. (2026 ). UCDP Battle-rela ted Deaths Dataset Codebook v 26.1 (https://ucdp.uu.se/downloads/). Always include the Version number in analyses using the dataset.",
+      "passage_hash": "sha256:c38b4bbc074149e1346453cf59ce0e5a0c9deb2e3d5f06ed84c6ffc4d9e4cd88",
+      "document_hash": "sha256:b0f9162cee38358dc108c7ecf4218c7b6c121e64d456b04a9fcbf1f8414b9b75",
+      "basis": "direct",
+      "role": "object_identity"
+    },
+    {
+      "source_id": "ucdp.downloads",
+      "document_version_id": "ucdp.downloads.v2026_08_31",
+      "passage_id": "ucdp.downloads.v2026_08_31.brd_26_1",
+      "locator": "UCDP Dataset Download Center, Battle-Related Deaths 26.1 entry",
+      "quote": "UCDP Battle-Related Deaths Dataset version 26.1 This file contains a dyad-year dataset with information on the number of battle-related deaths in the conflicts from 1989-2023 that appear in the UCDP/PRIO Armed Conflict Dataset. Available at dyadic level as: https://ucdp.uu.se/downloads/brd/ucdp-brd-dyadic-261-csv.zip CSV https://ucdp.uu.se/downloads/brd/ucdp-brd-dyadic-261-xlsx.zip Excel https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf Codebook Available at conflict level as: https://ucdp.uu.se/downloads/brd/ucdp-brd-conf-261-csv.zip CSV https://ucdp.uu.se/downloads/brd/ucdp-brd-conf-261-xlsx.zip Excel https://ucdp.uu.se/downloads/brd/ucdp-brd-codebook-261.pdf Codebook https://ucdp.uu.se/downloads/brd/versionhistory-brd-261.pdf Version history Please cite • Shawn Davies, Therése Pettersson, Magnus Öberg, Organized violence 1989-2025, and violent political protests, Journal of Peace Research, 2026. https://doi.org/10.1093/jopres/xjag046 https://doi.org/10.1093/jopres/xjag046 • UCDP is part of and funded by DEMSCORE, national research infrastructure grant 2021-00162 from the Swedish Research Council. Other UCDP Datasets",
+      "passage_hash": "sha256:7421fc991fd3989ff12335901dd714063f1663865b0cea3755cc22348c8c3a3e",
+      "document_hash": "sha256:1e83d7e0ad98fb73151381f7fd77a4ac3f4473e66a81b472beeffd307046c53b",
+      "basis": "direct",
+      "role": "object_identity"
+    }
+  ],
+  "expected": {
+    "source_resolution": ["resolved", "resolved"],
+    "verification_codes": [],
+    "combined_conflict_passage_ids": []
   }
 }
