@@ -3,7 +3,12 @@ import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from "n
 import { extname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { validateContract } from "@writ/domain";
+import {
+  RAW_COMPATIBILITY_SCHEMAS,
+  SCHEMA_IDS,
+  isKnownContract,
+  validateContract,
+} from "@writ/domain";
 
 import type {
   BundleCanonicalIdentity,
@@ -23,6 +28,45 @@ export const RECORD_JUDGMENT_CONTRACT =
   "https://writ.example/schemas/analysis/record-judgment.schema.json";
 export const REVIEWED_DOCUMENT_CONTRACT =
   "https://writ.example/schemas/compatibility/eu-us-ai-reviewed-v1/reviewed-corpus-document.schema.json";
+
+const contractKey = (contract: BundleRecordContract): string =>
+  `${contract.kind}\0${contract.id}\0${contract.version}`;
+
+/**
+ * Exact record-contract adapters implemented by the bundle projection.
+ *
+ * This is a capability list, not schema authority, and it never infers SemVer
+ * compatibility. Authoritative contract identity still resolves through
+ * `@writ/domain`; the bundle separately declares which exact versions it can
+ * project. Source-dialect compilation capability does not activate a contract
+ * for catalogued-corpus export; this set matches the verifier's current exact
+ * record adapters.
+ */
+const SUPPORTED_RECORD_CONTRACTS = new Set(
+  (
+    [
+      { kind: "native", id: SCHEMA_IDS["legal-policy-record"], version: "0.2.0" },
+      { kind: "native", id: SCHEMA_IDS["institutional-record"], version: "0.2.0" },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS["legal-policy-record"].$id),
+        version: "0.1.0",
+      },
+      { kind: "compatibility", id: REVIEWED_DOCUMENT_CONTRACT, version: "1.0.0" },
+    ] as const satisfies readonly BundleRecordContract[]
+  ).map(contractKey),
+);
+
+export function assertSupportedRecordContract(contract: BundleRecordContract, label: string): void {
+  if (!isKnownContract(contract.id)) {
+    throw new Error(`${label}: unknown record contract ${contract.id}`);
+  }
+  if (!SUPPORTED_RECORD_CONTRACTS.has(contractKey(contract))) {
+    throw new Error(
+      `${label}: unsupported exact record contract ${contract.kind} ${contract.id} version ${contract.version}`,
+    );
+  }
+}
 
 export const MANIFEST_CATEGORIES: readonly BundleManifestCategory[] = [
   "sources",
@@ -251,6 +295,7 @@ export function readNativeRepository(): NativeRepository {
     const manifestSource = source(entry.manifest);
     const manifest = corpusManifest(parse(entry.manifest, manifestSource.content), entry.manifest);
     validate(MANIFEST_CONTRACT, manifest, entry.manifest);
+    assertSupportedRecordContract(manifest.record_contract, entry.manifest);
     for (const key of ["corpus_id", "family", "jurisdiction", "status"] as const) {
       if (entry[key] !== manifest[key]) {
         throw new Error(`${entry.manifest}: ${key} disagrees with ${catalogPath}`);

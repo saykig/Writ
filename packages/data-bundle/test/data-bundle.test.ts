@@ -3,10 +3,13 @@ import { describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
+import { RAW_COMPATIBILITY_SCHEMAS, SCHEMA_IDS } from "@writ/domain";
 import { generateWritDataBundleForCommit, resolveCommitIdentity } from "../src/generate.js";
 import { serializeBundle } from "../src/hashing.js";
 import { projectCanonicalObjects, projectCompatibilityEvidence } from "../src/project.js";
 import {
+  REVIEWED_DOCUMENT_CONTRACT,
+  assertSupportedRecordContract,
   rawHash,
   readNativeRepository,
   repositoryRoot,
@@ -228,6 +231,89 @@ describe("canonical source and provenance", () => {
 });
 
 describe("deterministic neutral contract", () => {
+  test("preserves every pre-repair semantic projection at a fixed commit identity", () => {
+    expect(bundle.metadata.sectionHashes).toEqual({
+      catalog: "sha256:144f343a1234b167fa84db89ec20216c47162d796b3131a9eaf8eeaa4275ad4d",
+      corpora: "sha256:637d6421b7ce3d090213ff2f18d5bf7e6fd81edb8790a888bdf900ba5d12b516",
+      resources: "sha256:ba723705aece6153cde99eafb92de547644e51f46dcfaa3f80e09eb81b1a0822",
+      records: "sha256:34d5a3f01b0366383e270179b0356be5f10f6ff54557dde9fffd097d676df507",
+      recordLinks: "sha256:2c39be2785f6094a70d671872a85b00b38623635c6fff36c325c8b87e9d06672",
+      recordJudgments: "sha256:27e57f803214fa58d7b332a8cff415a0ca1aa5b6b51f15931d3dd7314b347253",
+    });
+  });
+
+  test("rejects a known record contract with an unsupported exact version", () => {
+    const repository = readNativeRepository();
+    const changed = {
+      ...repository,
+      corpora: repository.corpora.map((corpus, index) =>
+        index === 0
+          ? {
+              ...corpus,
+              manifest: {
+                ...corpus.manifest,
+                record_contract: { ...corpus.manifest.record_contract, version: "9.0.0" },
+              },
+            }
+          : corpus,
+      ),
+    };
+    expect(() => projectCanonicalObjects(changed)).toThrow(
+      /unsupported exact record contract .* version 9\.0\.0/,
+    );
+  });
+
+  test("accepts exactly the current verifier-supported manifest contract capabilities", () => {
+    const supported = [
+      {
+        kind: "native",
+        id: SCHEMA_IDS["institutional-record"],
+        version: "0.2.0",
+      },
+      {
+        kind: "native",
+        id: SCHEMA_IDS["legal-policy-record"],
+        version: "0.2.0",
+      },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS["legal-policy-record"].$id),
+        version: "0.1.0",
+      },
+      {
+        kind: "compatibility",
+        id: REVIEWED_DOCUMENT_CONTRACT,
+        version: "1.0.0",
+      },
+    ] as const;
+
+    for (const contract of supported) {
+      expect(() => assertSupportedRecordContract(contract, "supported fixture")).not.toThrow();
+    }
+  });
+
+  test("does not export compiler-only contracts unsupported by verifier manifest adapters", () => {
+    const compilerOnly = [
+      { kind: "native", id: SCHEMA_IDS.record, version: "0.2.0" },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS.record.$id),
+        version: "0.1.0",
+      },
+      {
+        kind: "compatibility",
+        id: String(RAW_COMPATIBILITY_SCHEMAS["institutional-record"].$id),
+        version: "0.1.0",
+      },
+    ] as const;
+
+    for (const contract of compilerOnly) {
+      expect(() => assertSupportedRecordContract(contract, "compiler-only fixture")).toThrow(
+        /unsupported exact record contract/,
+      );
+    }
+  });
+
   test("validates hashes and is byte-identical across clean generation", () => {
     validateWritDataBundle(bundle);
     const second = generateWritDataBundleForCommit(TEST_COMMIT);
