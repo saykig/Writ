@@ -595,7 +595,7 @@ tasks:
 
   - id: KERNEL-NATIVE-PROVENANCE-001
     title: Give all current native records Core provenance parity
-    status: in_progress
+    status: done
     dependencies:
       - KERNEL-CONTRACT-DISPATCH-001
     scope:
