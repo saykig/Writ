@@ -2,8 +2,10 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 
 import {
+  DeclaredReferenceInputError,
   evidencePassageSignature,
   IllFormedUnicodeError,
+  LogicalPassageIdentityError,
   LogicalPassageOccurrenceError,
   logicalPassageConflicts,
   passageSignatureKey,
@@ -12,7 +14,7 @@ import {
   sha256Canonical,
   sha256Utf8Text,
   verifyEvidenceReferences,
-  type AnchoredTextEvidenceReference,
+  type DeclaredTextReference,
   type LogicalPassageOccurrence,
   type PassageSignature,
   type SourceVersionDeclaration,
@@ -25,10 +27,15 @@ interface AlderaOracleFixture {
     commit: string;
     manifest: string;
     registry: string;
-    generated_receipt: string;
+    tracked_source_metadata: string;
+    untracked_generated_receipt: string;
+    untracked_artifacts: string[];
+    attribution: string;
+    license: string;
+    license_url: string;
   };
   sources: Array<SourceVersionDeclaration & Record<string, unknown>>;
-  references: Array<AnchoredTextEvidenceReference & Record<string, unknown>>;
+  references: Array<DeclaredTextReference & Record<string, unknown>>;
   expected: {
     source_resolution: Array<SourceVersionResolution["status"]>;
     verification_codes: string[];
@@ -48,7 +55,7 @@ function codes(values: readonly { code: string }[]): string[] {
 
 function occurrence<T>(
   id: string,
-  value: AnchoredTextEvidenceReference,
+  value: DeclaredTextReference,
   context: T,
 ): LogicalPassageOccurrence<T> {
   return {
@@ -59,7 +66,7 @@ function occurrence<T>(
   };
 }
 
-describe("exact UTF-8 anchored-text hashing", () => {
+describe("exact UTF-8 declared-text hashing", () => {
   const vectors = [
     ["\ufffd", "sha256:83d544ccc223c057d2bf80d3f2a32982c32c3c0db8e2674820da5064783fb097"],
     ["\ud83d\ude00", "sha256:f0443a342c5ef54783a111b51ba56c938e474c32324d90c3a60c9c8e3a37e2d9"],
@@ -173,6 +180,42 @@ describe("caller-supplied source and document-version authority", () => {
         reference.document_version_id,
       ),
     ).toEqual({ status: "invalid_authority", matches: [], invalidCount: 1 });
+    expect(
+      codes(verifyEvidenceReferences([reference], [fixture.sources[0]!, malformedDuplicate])),
+    ).toEqual(["PROVENANCE_AUTHORITY_INVALID"]);
+  });
+
+  test("reports malformed authority even when no valid reference reaches resolution", () => {
+    const malformed = { ...fixture.sources[0]!, document_hash: "bad" };
+    expect(codes(verifyEvidenceReferences([], [malformed]))).toEqual([
+      "PROVENANCE_AUTHORITY_INVALID",
+    ]);
+    expect(codes(verifyEvidenceReferences([null, { passage_id: "broken" }], [malformed]))).toEqual([
+      "PROVENANCE_AUTHORITY_INVALID",
+      "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
+      "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
+    ]);
+  });
+
+  test("treats throwing authority accessors as malformed without invoking them", () => {
+    for (const field of ["source_id", "document_version_id", "document_hash"] as const) {
+      const item = { ...fixture.sources[0]! };
+      Object.defineProperty(item, field, {
+        enumerable: true,
+        get: () => {
+          throw new Error(`must not invoke authority ${field}`);
+        },
+      });
+      expect(() => verifyEvidenceReferences([], [item])).not.toThrow();
+      expect(codes(verifyEvidenceReferences([], [item]))).toEqual(["PROVENANCE_AUTHORITY_INVALID"]);
+      expect(
+        resolveSourceVersion([item], reference.source_id, reference.document_version_id),
+      ).toEqual({
+        status: "invalid_authority",
+        matches: [],
+        invalidCount: 1,
+      });
+    }
   });
 
   test("distinguishes identical duplicates, conflicting duplicates, and several versions", () => {
@@ -217,7 +260,22 @@ describe("caller-supplied source and document-version authority", () => {
   });
 });
 
-describe("anchored-text integrity is separate from passage namespace policy", () => {
+describe("declared-reference integrity is separate from grounding and passage policy", () => {
+  test("accepts a fabricated self-hashed quote and arbitrary locator by design", () => {
+    const fabricatedQuote = "This text is fabricated and is not grounded by the kernel.";
+    const fabricated = {
+      ...reference,
+      passage_id: "fabricated-but-self-consistent",
+      locator: "arbitrary locator that the kernel never opens",
+      quote: fabricatedQuote,
+      passage_hash: sha256Utf8Text(fabricatedQuote),
+    };
+
+    // This empty result is the boundary proof: document extraction and
+    // quote-at-locator grounding are separate caller obligations.
+    expect(verifyEvidenceReferences([fabricated], authority)).toEqual([]);
+  });
+
   test("reports source, version, document, passage, and structural failures", () => {
     expect(
       codes(verifyEvidenceReferences([{ ...reference, source_id: "missing" }], authority)),
@@ -257,6 +315,31 @@ describe("anchored-text integrity is separate from passage namespace policy", ()
       expect(codes(verifyEvidenceReferences([malformed], authority))).toEqual([
         "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
       ]);
+    }
+  });
+
+  test("treats throwing reference accessors as malformed without invoking them", () => {
+    for (const field of [
+      "source_id",
+      "document_version_id",
+      "passage_id",
+      "locator",
+      "quote",
+      "passage_hash",
+      "document_hash",
+    ] as const) {
+      const item = { ...reference };
+      Object.defineProperty(item, field, {
+        enumerable: true,
+        get: () => {
+          throw new Error(`must not invoke reference ${field}`);
+        },
+      });
+      expect(() => verifyEvidenceReferences([item], authority)).not.toThrow();
+      expect(codes(verifyEvidenceReferences([item], authority))).toEqual([
+        "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
+      ]);
+      expect(() => evidencePassageSignature(item)).toThrow(DeclaredReferenceInputError);
     }
   });
 
@@ -318,6 +401,81 @@ describe("portable logical passage resolution", () => {
   });
 });
 
+describe("well-formed exact identity strings", () => {
+  test("rejects lone surrogates in every declared-reference identity field", () => {
+    for (const field of ["source_id", "document_version_id", "passage_id", "locator"] as const) {
+      expect(
+        codes(verifyEvidenceReferences([{ ...reference, [field]: "bad\ud800id" }], authority)),
+      ).toEqual(["PROVENANCE_EVIDENCE_REFERENCE_INVALID"]);
+    }
+  });
+
+  test("rejects lone surrogates in authority and resolution identity fields", () => {
+    for (const field of ["source_id", "document_version_id"] as const) {
+      expect(
+        resolveSourceVersion(
+          [{ ...fixture.sources[0]!, [field]: "bad\udc00id" }],
+          reference.source_id,
+          reference.document_version_id,
+        ),
+      ).toEqual({ status: "invalid_authority", matches: [], invalidCount: 1 });
+      expect(
+        codes(verifyEvidenceReferences([], [{ ...fixture.sources[0]!, [field]: "bad\udc00id" }])),
+      ).toEqual(["PROVENANCE_AUTHORITY_INVALID"]);
+    }
+
+    expect(
+      resolveSourceVersion(authority, "bad\ud800source", reference.document_version_id),
+    ).toEqual({
+      status: "invalid_identity",
+      matches: [],
+      fields: ["source_id"],
+    });
+    expect(resolveSourceVersion(authority, reference.source_id, "bad\udc00version")).toEqual({
+      status: "invalid_identity",
+      matches: [],
+      fields: ["document_version_id"],
+    });
+  });
+
+  test("rejects lone surrogates in signatures and logical occurrence identities", () => {
+    const signature = evidencePassageSignature(reference);
+    for (const field of ["source_id", "document_version_id", "locator"] as const) {
+      expect(() => passageSignatureKey({ ...signature, [field]: "bad\ud800id" })).toThrow(
+        IllFormedUnicodeError,
+      );
+    }
+
+    expect(() =>
+      resolveLogicalPassage(
+        [{ ...occurrence("occurrence", reference, null), passageId: "bad\ud800passage" }],
+        reference.passage_id,
+      ),
+    ).toThrow(LogicalPassageIdentityError);
+    expect(() =>
+      logicalPassageConflicts([
+        { ...occurrence("occurrence", reference, null), occurrenceId: "bad\udc00occurrence" },
+      ]),
+    ).toThrow(LogicalPassageIdentityError);
+    expect(() => resolveLogicalPassage([], "bad\ud800lookup")).toThrow(LogicalPassageIdentityError);
+  });
+
+  test("preserves NFC and NFD identity spellings without normalization", () => {
+    const composed = "caf\u00e9";
+    const decomposed = "cafe\u0301";
+    const first = { ...occurrence(composed, reference, null), passageId: composed };
+    const second = { ...occurrence(decomposed, reference, null), passageId: decomposed };
+    expect(resolveLogicalPassage([first, second], composed).occurrences).toEqual([first]);
+    expect(resolveLogicalPassage([first, second], decomposed).occurrences).toEqual([second]);
+
+    const samePassage = [
+      occurrence(composed, reference, null),
+      occurrence(decomposed, reference, null),
+    ];
+    expect(resolveLogicalPassage(samePassage, reference.passage_id).occurrences).toHaveLength(2);
+  });
+});
+
 describe("cross-primitive identity rules", () => {
   test("canonical equivalence does not redefine sovereign external identifiers", () => {
     const composed = "caf\u00e9";
@@ -339,9 +497,13 @@ describe("cross-primitive identity rules", () => {
   });
 });
 
-describe("frozen real Aldera UCDP oracle", () => {
-  test("pins the reviewed commit and actual PDF and HTML evidence", () => {
+describe("frozen Aldera-derived UCDP golden vectors", () => {
+  test("pins tracked provenance and derived PDF and HTML declarations", () => {
     expect(fixture.oracle.commit).toBe("9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4");
+    expect(fixture.oracle.attribution).toContain("Uppsala Conflict Data Program");
+    expect(fixture.oracle.license).toBe("CC BY 4.0");
+    expect(fixture.oracle.untracked_artifacts).toHaveLength(2);
+    expect(fixture.oracle.untracked_generated_receipt).toContain("data/local/");
     expect(fixture.sources.map(({ media_type }) => media_type)).toEqual([
       "application/pdf",
       "text/html",

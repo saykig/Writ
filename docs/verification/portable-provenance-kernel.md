@@ -5,6 +5,10 @@ mechanical package boundary, not a generalization of Writ. Native research objec
 Callers supply source/document-version authority; Writ separately decides whether that authority is
 routed for a corpus.
 
+**Final gate: `PORTABLE_KERNEL_PROVISIONALLY_SUPPORTED`.** The kernel's mechanical boundary is
+supported, but document extraction and proof that quoted bytes occur at a declared locator remain
+caller-owned and are intentionally not kernel-proven.
+
 ## Frozen Writ baseline and rebase proof
 
 PR #36 was rebased onto `main` at `646c82ede1b6ffd94f592e23d754f2f8e3e307fa`, whose history
@@ -37,22 +41,24 @@ frozen test oracle unchanged and keep every repository rule in the Writ adapter.
 | --- | --- | --- | --- |
 | 1. Rebase parity | `CONFIRMED` | Exact frozen-main test bytes; 26/26 tests and 125 expectations pass after rebase. | PR #35 behavior remains authoritative Writ behavior. |
 | 2. Signature construction order | `DEFECT_FIXED` | Multiple six-field insertion permutations now produce one key; NFC/NFD quote bytes still differ. | `passageSignatureKey` reconstructs one fixed field order without Canonical JSON. |
-| 3. Canonical runtime domain | `DEFECT_FIXED` | Date, Map, Set, RegExp, boxed values, class/custom-prototype objects, cyclic objects/arrays, and depth 513 throw `CanonicalJsonError`; depth 512 and all historical goldens pass. | Only plain in-memory JSON is supported; no hash migration. |
+| 3. Canonical runtime domain | `DEFECT_FIXED` | Date, Map, Set, RegExp, boxed values, class/custom-prototype objects, `undefined` object values, cyclic objects/arrays, and depth 513 throw `CanonicalJsonError`; depth 512 and all protected goldens pass. | Only plain in-memory JSON is supported; no hash migration. No tracked protected Writ/Aldera call site or vector depended on implicit `undefined` omission. |
 | 4. NFC × `dropFields` | `DEFECT_FIXED` | `/café` drops both composed and decomposed spellings, including nested normalized paths; an undropped NFC collision still fails. | Omission pointers address the NFC-normalized key space. |
-| 5. Malformed caller authority | `DEFECT_FIXED` | Missing/empty/non-string fields, malformed/uppercase hashes, and a malformed item beside a valid duplicate return `invalid_authority` / `PROVENANCE_AUTHORITY_INVALID`; valid extensions pass. | Any malformed declaration invalidates the complete supplied authority; institutional legitimacy remains caller policy. |
+| 5. Malformed caller authority | `DEFECT_FIXED` | Missing/empty/non-string fields, malformed/uppercase hashes, zero or malformed references, mixed valid/malformed declarations, and throwing accessors return `invalid_authority` / `PROVENANCE_AUTHORITY_INVALID`; valid extensions pass. | Any malformed declaration invalidates the complete supplied authority independently of source resolution; authority legitimacy remains caller policy. |
 | 6. Integrity versus namespace | `DEFECT_FIXED` | Two unrelated scopes use `passage-17` with different valid signatures: per-reference verification passes; only an explicitly combined occurrence scope conflicts. | `verifyEvidenceReferences` is per-reference; `logicalPassageConflicts` is explicitly caller-scoped. |
-| 7. Exact UTF-8 / malformed Unicode | `DEFECT_FIXED` | Lone high/low surrogates throw `IllFormedUnicodeError`; U+FFFD, a valid pair, NFC/NFD, LF/CRLF, NBSP, tabs, outer whitespace, BOM, and zero-width text have pinned distinct valid hashes. | Exact valid text remains byte-sensitive; malformed JS strings cannot collapse through replacement encoding. |
+| 7. Exact UTF-8 / malformed Unicode | `DEFECT_FIXED` | Lone high/low surrogates fail in exact text, source/version/passage/locator/authority IDs, logical passage IDs, and occurrence IDs; U+FFFD, valid pairs, NFC/NFD, and whitespace variants remain distinct. | External identities remain exact and unnormalized; malformed JS strings cannot collapse through replacement encoding. |
 | 8. Occurrence determinism | `DEFECT_FIXED` | Reversing valid occurrences preserves output; duplicate `(passageId, occurrenceId)` with different opaque context throws the same typed `LogicalPassageOccurrenceError`. | Occurrence identity is a caller contract; the kernel never inspects opaque context. |
 | 9. Cross-primitive identity | `CONFIRMED_WITH_NARROW_CONTRACT` | Canonical NFC/NFD objects may hash equally while source IDs, version IDs, locators, and quotes remain distinct in resolution/signatures. | Canonical hashes are not identifier-equivalence oracles; external identifier sovereignty is preserved. |
 | 10. `dropFields` profile | `CONFIRMED_WITH_NARROW_CONTRACT` | `{id, decision}` hashed with `/decision` omitted equals `{id}` while its unprofiled hash differs. | `dropFields` is a specified Writ identity-profile transform, not generic object equality. |
-| 11. Real Aldera oracle | `CONFIRMED_WITH_LIMITS` | Frozen fixture pins actual extracted PDF-page and HTML-section references, document hashes, normalized quotes, passage hashes, source resolution, verification, and conflict outcomes from Aldera commit `9b7d05e…`. | Read-only golden data; no runtime import or Aldera modification. |
-| 12. Evidence naming | `DEFECT_FIXED` | Public declarations and packed TypeScript consumer use `AnchoredTextEvidenceReference`. | The package claims quoted/anchored text only and adds no speculative evidence types. |
-| 13. Decision-provenance layering | `CONFIRMED` | Imports and boundary tests keep repository/domain modules out of the package; documentation makes every semantic non-implication explicit. | Mechanical integrity does not accept evidence, facts, relationships, transitions, or decisions. |
+| 11. Aldera-derived vectors | `CONFIRMED_WITH_LIMITS` | Frozen fixture pins derived PDF/HTML declarations and hashes plus tracked Aldera manifest, registry, and source-metadata provenance at `9b7d05e…`; it identifies the ignored raw artifacts and receipt as uncommitted. | Read-only golden data; not a claim that Aldera's commit can recover its local artifacts or receipt. |
+| 12. Evidence naming | `DEFECT_FIXED` | Public declarations and packed TypeScript consumer use `DeclaredTextReference`. A fabricated self-hashed quote with the correct declared document identity and an arbitrary locator passes verification. | The package claims declared-reference integrity only; extraction and quote-at-locator grounding are caller-owned. |
+| 13. Decision-provenance layering | `CONFIRMED_WITH_EXPLICIT_GAP` | Imports and boundary tests keep repository/domain modules out; the layer diagram visibly preserves caller-owned document/locator grounding. | Mechanical integrity does not prove grounding or accept evidence, facts, relationships, transitions, or decisions. |
+| 14. Numeric identity | `CONFIRMED_WITH_NARROW_CONTRACT` | JSON spellings `9007199254740992` and `9007199254740993` parse to one ECMAScript number and canonical hash. | Writ v1 identifies the in-memory numeric value/profile; it is not a raw source-byte hash or arbitrary-precision format. |
+| 15. Private packed release boundary | `CONFIRMED` | The manifest remains `"private": true`; two `npm pack` runs are byte-identical and an isolated Node/TypeScript tarball consumer passes. | Local deterministic packaging is tested; remote publication is outside this sprint. |
 
-## Real Aldera oracle
+## Aldera-derived UCDP golden vectors
 
-`packages/provenance/test/fixtures/aldera-ucdp-holdout.json` freezes two actual references produced
-by the reviewed Aldera code and local artifacts at commit
+`packages/provenance/test/fixtures/aldera-ucdp-holdout.json` freezes two declarations derived by
+reviewed Aldera code from local artifacts while the repository was at commit
 `9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4`:
 
 - PDF page 1 of `ucdp-brd-codebook-261.pdf`, source `ucdp.brd_codebook`, version
@@ -65,18 +71,25 @@ by the reviewed Aldera code and local artifacts at commit
   `sha256:1e83d7e0ad98fb73151381f7fd77a4ac3f4473e66a81b472beeffd307046c53b`, and
   passage hash `sha256:7421fc991fd3989ff12335901dd714063f1663865b0cea3755cc22348c8c3a3e`.
 
-Both artifact hashes independently agree with Aldera's tracked source registry. The frozen fixture
-contains the real Aldera-normalized extracted text and expected resolved/no-diagnostic/no-conflict
-outcomes. It imports no Aldera code or artifact at runtime. This oracle does **not** prove Aldera
-lineage-graph equivalence, receipts, traversal, coverage, or replacement of Aldera dependencies.
+At fixture-derivation time, both artifact hashes agreed with Aldera's tracked source registry. The
+Aldera commit tracks the manifest, registry, source metadata, license, and expected artifact hashes.
+It does **not** track the raw PDF, HTML snapshot, or generated receipt: Aldera ignores their
+`data/local/` paths. Writ's fixture makes the derived text vectors recoverable here, not the raw
+inputs or receipt from Aldera's commit. The fixture imports no Aldera code or artifact at runtime
+and does not prove extraction reproducibility, quote-at-locator grounding, lineage-graph
+equivalence, receipts, traversal, coverage, or replacement of Aldera dependencies.
+
+The vectors are attributed to the Uppsala Conflict Data Program (UCDP), Uppsala University, under
+CC BY 4.0 as declared in Aldera's tracked source metadata. Writ records the attribution and license
+in both the fixture and `THIRD_PARTY_NOTICES.md`.
 
 ## Boundary audit
 
 | Classification | Concrete code | Reason |
 | --- | --- | --- |
-| `PORTABLE_GENERIC` | `packages/provenance/src/canonical-json.ts`: `canonicalJson`, `CanonicalJsonError` | Writ Canonical JSON v1 has a bounded plain-JSON runtime domain and pinned historical vectors. |
-| `PORTABLE_GENERIC` | `packages/provenance/src/hash.ts`: canonical and exact-text hashing | The operations are pure and deterministic; exact text rejects ill-formed Unicode. |
-| `PORTABLE_GENERIC` | `packages/provenance/src/evidence.ts`: anchored-text and caller-authority integrity | The minimal contract answers only mechanical source/version/document/passage-hash questions. |
+| `PORTABLE_WRIT_IDENTITY_PROFILE` | `packages/provenance/src/canonical-json.ts` and `sha256Canonical` | Writ Canonical JSON v1 is deterministic and portable across supported runtimes, but its NFC and `dropFields` semantics are a Writ identity profile, not universal generic canonical JSON. |
+| `PORTABLE_GENERIC` | `packages/provenance/src/hash.ts`: exact valid-text hashing | Exact text hashing is pure and deterministic and rejects ill-formed Unicode. It is not raw document-byte hashing. |
+| `PORTABLE_GENERIC` | `packages/provenance/src/evidence.ts`: declared-reference and caller-authority integrity | The minimal contract answers only mechanical declared source/version/document/passage-hash questions; it does not inspect documents or locators. |
 | `PORTABLE_GENERIC` | `packages/provenance/src/evidence.ts`: explicit logical-passage scope | Conflict detection operates only on caller-supplied occurrences and opaque context. |
 | `WRIT_REPOSITORY_ADAPTER` | `internal/verification/writ/src/core/sources.ts` | Physical lookup, manifest routes, aliases, compatibility identity mappings, and authorization are Writ policy. |
 | `WRIT_REPOSITORY_ADAPTER` | `internal/verification/writ/src/core/passages.ts` | Writ defines native/compatibility scope, expands aliases, and supplies unique occurrence IDs and repository context. |
@@ -89,16 +102,19 @@ lineage-graph equivalence, receipts, traversal, coverage, or replacement of Alde
 
 The architecture remains:
 
-`source/version mechanical integrity` → `anchored evidence integrity` → `Writ evidence grounding` →
-`typed institutional/policy fact` → `human review` → `relationship` → `defensible transition` →
-`eventual decision-provenance chain`
+`source/version declared-reference integrity` → **`caller-owned document/locator/quote grounding
+(not kernel-proven)`** → `Writ evidence grounding` → `typed institutional/policy fact` → `human
+review` → `relationship` → `defensible transition` → `eventual decision-provenance chain`
 
-The portable package owns only the first two mechanics. A valid source hash does not mean the
-passage supports a claim; a valid passage hash does not mean the claim is true; neither means an
-inference is justified, a relationship is accepted, or a decision was warranted.
+The portable package owns only the first declared-reference mechanics. A valid result can still
+contain fabricated quoted text and an arbitrary locator when its declarations and self-hash are
+internally consistent. The caller must separately prove that the quote occurs in the referenced
+document at that locator. Grounded text still does not mean a passage supports a claim, the claim is
+true, an inference is justified, a relationship is accepted, or a decision was warranted.
 
 The packed artifact contains only its README, package manifest, built ESM, source maps, and type
 declarations. Its external-consumer test installs the tarball into a temporary directory, verifies
 that the installed package is not a workspace symlink, compiles a TypeScript consumer, executes a
 Node.js consumer, rejects internal subpaths, and scans the artifact for workspace imports and
-absolute local paths.
+absolute local paths. The package manifest remains private, so this proves deterministic local
+packing and isolated installation, not remote publishability or release authorization.

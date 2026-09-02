@@ -1,9 +1,9 @@
-import { sha256Utf8Text } from "./hash.js";
+import { assertWellFormedUnicode, sha256Utf8Text } from "./hash.js";
 
 const SHA256_PATTERN = /^sha256:[0-9a-f]{64}$/;
 
-/** Fields needed to identify and verify one anchored quotation from a source. */
-export interface AnchoredTextEvidenceReference {
+/** A quotation and its caller-declared source, locator, and integrity hashes. */
+export interface DeclaredTextReference {
   source_id: string;
   document_version_id: string;
   passage_id: string;
@@ -22,6 +22,11 @@ export interface SourceVersionDeclaration {
 
 export type SourceVersionResolution =
   | { status: "invalid_authority"; matches: []; invalidCount: number }
+  | {
+      status: "invalid_identity";
+      matches: [];
+      fields: ("source_id" | "document_version_id")[];
+    }
   | { status: "missing_source"; matches: SourceVersionDeclaration[] }
   | { status: "version_mismatch"; matches: SourceVersionDeclaration[] }
   | { status: "ambiguous"; matches: SourceVersionDeclaration[] }
@@ -70,6 +75,16 @@ export interface LogicalPassageResolution<T = unknown> {
   signatureKeys: string[];
 }
 
+/** Error thrown when a declared-reference helper receives malformed input. */
+export class DeclaredReferenceInputError extends Error {
+  readonly code = "PROVENANCE_EVIDENCE_REFERENCE_INVALID";
+
+  constructor() {
+    super("declared text reference is malformed");
+    this.name = "DeclaredReferenceInputError";
+  }
+}
+
 /** Error thrown when one caller scope reuses an occurrence identity. */
 export class LogicalPassageOccurrenceError extends Error {
   readonly code = "PROVENANCE_OCCURRENCE_ID_DUPLICATE";
@@ -85,21 +100,65 @@ export class LogicalPassageOccurrenceError extends Error {
   }
 }
 
+/** Error thrown when a logical-passage identity is ill-formed Unicode. */
+export class LogicalPassageIdentityError extends Error {
+  readonly code = "PROVENANCE_LOGICAL_ID_INVALID";
+
+  constructor(
+    readonly field: "passageId" | "occurrenceId",
+    readonly value: string,
+  ) {
+    super(`${field} must be a well-formed Unicode string`);
+    this.name = "LogicalPassageIdentityError";
+  }
+}
+
 function compare(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
 }
 
-function validAuthorityDeclaration(value: unknown): value is SourceVersionDeclaration {
-  if (value === null || typeof value !== "object") return false;
-  const declaration = value as Record<string, unknown>;
-  return (
-    typeof declaration.source_id === "string" &&
-    declaration.source_id.length > 0 &&
-    typeof declaration.document_version_id === "string" &&
-    declaration.document_version_id.length > 0 &&
-    typeof declaration.document_hash === "string" &&
-    SHA256_PATTERN.test(declaration.document_hash)
-  );
+const INVALID_PROPERTY = Symbol("invalid-property");
+
+function ownDataProperty(value: object, key: string): unknown | typeof INVALID_PROPERTY {
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    return descriptor !== undefined && "value" in descriptor ? descriptor.value : INVALID_PROPERTY;
+  } catch {
+    return INVALID_PROPERTY;
+  }
+}
+
+function isWellFormedUnicode(value: string): boolean {
+  try {
+    assertWellFormedUnicode(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function normalizedAuthorityDeclaration(value: unknown): SourceVersionDeclaration | undefined {
+  if (value === null || typeof value !== "object") return undefined;
+  const sourceId = ownDataProperty(value, "source_id");
+  const documentVersionId = ownDataProperty(value, "document_version_id");
+  const documentHash = ownDataProperty(value, "document_hash");
+  if (
+    typeof sourceId !== "string" ||
+    sourceId.length === 0 ||
+    !isWellFormedUnicode(sourceId) ||
+    typeof documentVersionId !== "string" ||
+    documentVersionId.length === 0 ||
+    !isWellFormedUnicode(documentVersionId) ||
+    typeof documentHash !== "string" ||
+    !SHA256_PATTERN.test(documentHash)
+  ) {
+    return undefined;
+  }
+  return {
+    source_id: sourceId,
+    document_version_id: documentVersionId,
+    document_hash: documentHash,
+  };
 }
 
 function compareDeclarations(
@@ -119,17 +178,14 @@ function normalizedAuthority(authority: readonly unknown[]): {
 } {
   const declarations: SourceVersionDeclaration[] = [];
   let invalidCount = 0;
-  authority.forEach((item) => {
-    if (!validAuthorityDeclaration(item)) {
+  for (const item of authority) {
+    const declaration = normalizedAuthorityDeclaration(item);
+    if (declaration === undefined) {
       invalidCount += 1;
-      return;
+      continue;
     }
-    declarations.push({
-      source_id: item.source_id,
-      document_version_id: item.document_version_id,
-      document_hash: item.document_hash,
-    });
-  });
+    declarations.push(declaration);
+  }
   declarations.sort(compareDeclarations);
   return { declarations, invalidCount };
 }
@@ -143,6 +199,17 @@ export function resolveSourceVersion(
   sourceId: string,
   documentVersionId: string,
 ): SourceVersionResolution {
+  const invalidIdentityFields = (
+    [
+      ["source_id", sourceId],
+      ["document_version_id", documentVersionId],
+    ] as const
+  )
+    .filter(([, value]) => !isWellFormedUnicode(value))
+    .map(([field]) => field);
+  if (invalidIdentityFields.length > 0) {
+    return { status: "invalid_identity", matches: [], fields: invalidIdentityFields };
+  }
   const normalized = normalizedAuthority(authority);
   if (normalized.invalidCount > 0) {
     return {
@@ -162,17 +229,17 @@ export function resolveSourceVersion(
   return { status: "resolved", source: exact[0]!, matches: exact };
 }
 
-/** Build the complete byte-sensitive identity signature for anchored text. */
-export function evidencePassageSignature(
-  reference: AnchoredTextEvidenceReference,
-): PassageSignature {
+/** Build the complete byte-sensitive signature for one declared reference. */
+export function evidencePassageSignature(reference: DeclaredTextReference): PassageSignature {
+  const normalized = normalizedReference(reference);
+  if (normalized === undefined) throw new DeclaredReferenceInputError();
   return {
-    source_id: reference.source_id,
-    document_version_id: reference.document_version_id,
-    locator: reference.locator,
-    quote: reference.quote,
-    passage_hash: reference.passage_hash,
-    document_hash: reference.document_hash,
+    source_id: normalized.source_id,
+    document_version_id: normalized.document_version_id,
+    locator: normalized.locator,
+    quote: normalized.quote,
+    passage_hash: normalized.passage_hash,
+    document_hash: normalized.document_hash,
   };
 }
 
@@ -181,6 +248,14 @@ export function evidencePassageSignature(
  * Property order is constructed here; quote bytes remain distinct.
  */
 export function passageSignatureKey(signature: PassageSignature): string {
+  for (const [field, value] of [
+    ["source_id", signature.source_id],
+    ["document_version_id", signature.document_version_id],
+    ["locator", signature.locator],
+    ["quote", signature.quote],
+  ] as const) {
+    assertWellFormedUnicode(value, field);
+  }
   return JSON.stringify({
     source_id: signature.source_id,
     document_version_id: signature.document_version_id,
@@ -196,6 +271,8 @@ function sortOccurrences<T>(
 ): LogicalPassageOccurrence<T>[] {
   const occurrenceIds = new Map<string, Set<string>>();
   for (const occurrence of occurrences) {
+    assertLogicalIdentity("passageId", occurrence.passageId);
+    assertLogicalIdentity("occurrenceId", occurrence.occurrenceId);
     const ids = occurrenceIds.get(occurrence.passageId) ?? new Set<string>();
     if (ids.has(occurrence.occurrenceId)) {
       throw new LogicalPassageOccurrenceError(occurrence.passageId, occurrence.occurrenceId);
@@ -216,10 +293,17 @@ export function resolveLogicalPassage<T>(
   occurrences: readonly LogicalPassageOccurrence<T>[],
   passageId: string,
 ): LogicalPassageResolution<T> {
+  assertLogicalIdentity("passageId", passageId);
   const matching = sortOccurrences(occurrences).filter(
     (occurrence) => occurrence.passageId === passageId,
   );
   return resolutionFromOccurrences(passageId, matching);
+}
+
+function assertLogicalIdentity(field: "passageId" | "occurrenceId", value: string): void {
+  if (typeof value !== "string" || !isWellFormedUnicode(value)) {
+    throw new LogicalPassageIdentityError(field, value);
+  }
 }
 
 function resolutionFromOccurrences<T>(
@@ -253,9 +337,9 @@ export function logicalPassageConflicts<T>(
     .filter((resolution) => resolution.status === "conflict");
 }
 
-function validReference(value: unknown): value is AnchoredTextEvidenceReference {
-  if (value === null || typeof value !== "object") return false;
-  const reference = value as Record<string, unknown>;
+function normalizedReference(value: unknown): DeclaredTextReference | undefined {
+  if (value === null || typeof value !== "object") return undefined;
+  const projection: Partial<Record<keyof DeclaredTextReference, string>> = {};
   for (const key of [
     "source_id",
     "document_version_id",
@@ -265,47 +349,39 @@ function validReference(value: unknown): value is AnchoredTextEvidenceReference 
     "passage_hash",
     "document_hash",
   ] as const) {
-    if (typeof reference[key] !== "string" || reference[key].length === 0) return false;
+    const item = ownDataProperty(value, key);
+    if (typeof item !== "string" || item.length === 0 || !isWellFormedUnicode(item)) {
+      return undefined;
+    }
+    projection[key] = item;
   }
   if (!(
-    SHA256_PATTERN.test(reference.passage_hash as string) &&
-    SHA256_PATTERN.test(reference.document_hash as string)
+    SHA256_PATTERN.test(projection.passage_hash!) && SHA256_PATTERN.test(projection.document_hash!)
   )) {
-    return false;
+    return undefined;
   }
-  try {
-    sha256Utf8Text(reference.quote as string);
-    return true;
-  } catch {
-    return false;
-  }
+  return projection as DeclaredTextReference;
 }
 
 function passageIdOf(value: unknown): string {
   if (value !== null && typeof value === "object") {
-    const passageId = (value as Record<string, unknown>).passage_id;
-    if (typeof passageId === "string") return passageId;
+    const passageId = ownDataProperty(value, "passage_id");
+    if (typeof passageId === "string" && isWellFormedUnicode(passageId)) return passageId;
   }
   return "";
 }
 
 function sourceDiagnostics(
-  reference: AnchoredTextEvidenceReference,
-  authority: readonly unknown[],
+  reference: DeclaredTextReference,
+  authority: readonly SourceVersionDeclaration[],
 ): ProvenanceDiagnostic[] {
   const resolution = resolveSourceVersion(
     authority,
     reference.source_id,
     reference.document_version_id,
   );
-  if (resolution.status === "invalid_authority") {
-    return [
-      {
-        code: "PROVENANCE_AUTHORITY_INVALID",
-        passage_id: reference.passage_id,
-        message: `Caller source authority contains ${resolution.invalidCount} malformed declaration${resolution.invalidCount === 1 ? "" : "s"}.`,
-      },
-    ];
+  if (resolution.status === "invalid_authority" || resolution.status === "invalid_identity") {
+    throw new Error("normalized declared-reference inputs must resolve without validation errors");
   }
   if (resolution.status === "missing_source") {
     return [
@@ -358,20 +434,30 @@ function sortDiagnostics(diagnostics: readonly ProvenanceDiagnostic[]): Provenan
 }
 
 /**
- * Verify each anchored-text reference against caller-supplied authority. The
+ * Verify declared fields and hashes against caller-supplied authority. The
  * input array does not establish a passage namespace; callers invoke
  * `logicalPassageConflicts` with an explicit scope for that policy. This
  * function does not decide whether the caller was authorized to supply those
- * declarations.
+ * declarations. It also does not inspect a document or prove that `quote`
+ * occurs at `locator`; callers must establish that grounding separately.
  */
 export function verifyEvidenceReferences(
   references: readonly unknown[],
   authority: readonly unknown[],
 ): ProvenanceDiagnostic[] {
   const diagnostics: ProvenanceDiagnostic[] = [];
+  const normalized = normalizedAuthority(authority);
+  if (normalized.invalidCount > 0) {
+    diagnostics.push({
+      code: "PROVENANCE_AUTHORITY_INVALID",
+      passage_id: "",
+      message: `Caller source authority contains ${normalized.invalidCount} malformed declaration${normalized.invalidCount === 1 ? "" : "s"}.`,
+    });
+  }
 
   for (const value of references) {
-    if (!validReference(value)) {
+    const reference = normalizedReference(value);
+    if (reference === undefined) {
       diagnostics.push({
         code: "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
         passage_id: passageIdOf(value),
@@ -380,13 +466,15 @@ export function verifyEvidenceReferences(
       });
       continue;
     }
-    diagnostics.push(...sourceDiagnostics(value, authority));
-    const actualPassageHash = sha256Utf8Text(value.quote);
-    if (actualPassageHash !== value.passage_hash) {
+    if (normalized.invalidCount === 0) {
+      diagnostics.push(...sourceDiagnostics(reference, normalized.declarations));
+    }
+    const actualPassageHash = sha256Utf8Text(reference.quote);
+    if (actualPassageHash !== reference.passage_hash) {
       diagnostics.push({
         code: "PROVENANCE_PASSAGE_HASH_MISMATCH",
-        passage_id: value.passage_id,
-        message: `Evidence passage ${value.passage_id} hashes to ${actualPassageHash}, not ${value.passage_hash}.`,
+        passage_id: reference.passage_id,
+        message: `Evidence passage ${reference.passage_id} hashes to ${actualPassageHash}, not ${reference.passage_hash}.`,
       });
     }
   }

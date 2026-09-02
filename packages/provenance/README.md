@@ -1,13 +1,14 @@
 # `@writ/provenance`
 
 `@writ/provenance` is Writ's portable mechanical provenance kernel. It implements **Writ
-Canonical JSON v1**, content-addressed SHA-256, exact UTF-8 anchored-text hashing, exact
-source/document-version resolution against caller-supplied authority, per-reference integrity
+Canonical JSON v1**, content-addressed SHA-256, exact UTF-8 text hashing, exact
+source/document-version resolution against caller-supplied authority, declared-reference integrity
 verification, and byte-sensitive conflict detection within an explicit caller-defined logical
 passage scope.
 
 The package supports Node.js 22 or newer and Bun 1.3 or newer. Its built ESM and declarations are
-published through the package root export. It has no runtime dependencies beyond `node:crypto`.
+available through the package root export in a packed tarball. The package remains private; remote
+publication is outside this boundary. It has no runtime dependencies beyond `node:crypto`.
 
 ## Public surface
 
@@ -16,27 +17,33 @@ Runtime exports:
 - `canonicalJson`, `CanonicalJsonError`, and `sha256Canonical`;
 - `sha256Utf8Text` and `IllFormedUnicodeError`;
 - `resolveSourceVersion` and `verifyEvidenceReferences`;
-- `evidencePassageSignature` and `passageSignatureKey`;
-- `resolveLogicalPassage`, `logicalPassageConflicts`, and `LogicalPassageOccurrenceError`.
+- `evidencePassageSignature`, `passageSignatureKey`, and `DeclaredReferenceInputError`;
+- `resolveLogicalPassage`, `logicalPassageConflicts`, `LogicalPassageOccurrenceError`, and
+  `LogicalPassageIdentityError`.
 
 Type-only exports:
 
 - `CanonicalOptions` and `HashOptions`;
-- `AnchoredTextEvidenceReference` and `SourceVersionDeclaration`;
+- `DeclaredTextReference` and `SourceVersionDeclaration`;
 - `SourceVersionResolution`, `ProvenanceDiagnostic`, and `ProvenanceDiagnosticCode`;
 - `PassageSignature`, `LogicalPassageOccurrence`, and `LogicalPassageResolution`.
 
-`AnchoredTextEvidenceReference` names what the seven-field contract actually proves: one quotation
-anchored by source, document version, passage ID, locator, and exact hashes. Consumer-specific
-fields such as Writ assertion basis or Aldera lineage role may extend that shape without becoming
-kernel semantics. The type does not model table cells, dataset rows, spreadsheets, images,
-attachments, maps, machine outputs, or documented negative searches.
+`DeclaredTextReference` names the seven-field declaration without claiming document grounding. The
+kernel proves that the quote matches its declared passage hash and that the declared source,
+document version, and document hash match caller-supplied authority. It does **not** open the
+referenced document, interpret the locator, or prove that the quote bytes occur there. The caller
+must prove the document-to-locator-to-quote transition separately. Consumer-specific fields such as
+Writ assertion basis or Aldera lineage role may extend the shape without becoming kernel semantics.
+The type does not model extraction, table cells, dataset rows, spreadsheets, images, attachments,
+maps, machine outputs, or documented negative searches.
 
 The authority passed to `resolveSourceVersion` or `verifyEvidenceReferences` is authoritative only
 because the caller supplied it. Every declaration must have non-empty exact source/version IDs and
 a lowercase SHA-256 document hash; one malformed declaration makes the complete authority input
-invalid rather than being silently filtered. Extension fields are allowed and ignored. The package
-does not decide corpus routing, source authorization, review state, family semantics, or lineage.
+invalid rather than being silently filtered, including when no valid reference reaches resolution.
+Required fields must be own data properties; accessors are invalid and are never invoked. Extension
+fields are allowed and ignored. The package does not decide corpus routing, authority legitimacy,
+source authorization, review state, family semantics, or lineage.
 
 `verifyEvidenceReferences` checks each supplied reference independently. It deliberately does not
 declare its input array to be a passage namespace. A caller defines a logical-passage scope by
@@ -70,7 +77,8 @@ Consequently, Writ Canonical JSON v1 is deterministic but is **not** complete RF
 conformance and must not be labelled as plain JCS.
 
 The accepted in-memory domain is `null`, booleans, finite numbers, strings, ordinary arrays, and
-plain objects (including null-prototype objects). Runtime objects such as Date, Map, Set, RegExp,
+plain objects (including null-prototype objects). `undefined`, including an undefined-valued object
+property, is rejected rather than silently omitted. Runtime objects such as Date, Map, Set, RegExp,
 boxed primitives, class instances, and custom-prototype objects are not JSON data and throw
 `CanonicalJsonError`. Symbol, non-enumerable, accessor, sparse-array, and named-array properties are
 also outside the plain-data contract; cycles and nesting beyond 512 levels throw that bounded typed
@@ -84,18 +92,29 @@ with `/decision` omitted can intentionally equal an object that never had `decis
 must use one specified omission profile consistently. Any change to unaffected historical bytes or
 hashes requires a new profile identity and an explicit hash-migration decision.
 
-Anchored-text identity is separate: `sha256Utf8Text` hashes exact valid UTF-8 text. It does not call
+Numbers retain Writ v1's in-memory ECMAScript `number` semantics. JSON integer spellings beyond the
+IEEE-754 safe-integer range can parse to the same in-memory number and therefore the same canonical
+identity. Consumers that require exact quantities must use an explicit exact representation, not
+assume that `sha256Canonical` preserves the spelling or arbitrary precision of source JSON.
+`sha256Canonical` identifies the in-memory Writ value under a selected Writ identity profile. It
+must not substitute for hashing the raw bytes of a PDF, HTML page, source JSON file, or other source
+document.
+
+Exact-text identity is separate: `sha256Utf8Text` hashes exact valid UTF-8 text. It does not call
 `canonicalJson`, normalize Unicode, trim whitespace, replace NBSP, normalize line endings, or
 normalize quotation marks. Because JavaScript UTF-8 encoders otherwise replace lone surrogates,
 ill-formed UTF-16 strings throw `IllFormedUnicodeError`; a valid literal U+FFFD remains hashable.
 
-Source IDs, document-version IDs, locators, and quotes are sovereign caller/source identifiers and
-remain exact strings. Writ Canonical JSON normalizes object string values, so equality of two
-`sha256Canonical` results must never be used as an identifier-equivalence oracle.
+Source IDs, document-version IDs, passage IDs, locators, logical passage IDs, occurrence IDs, and
+quotes remain exact strings. The portable identity contracts reject lone surrogates but do not
+normalize valid strings; NFC and NFD spellings therefore remain distinct. Writ Canonical JSON
+normalizes object string values, so equality of two `sha256Canonical` results must never be used as
+an identifier-equivalence oracle.
 
-These mechanics establish neither evidentiary support nor truth. A valid document and anchored-text
-hash does not decide whether a passage supports a claim, an inference is defensible, a relationship
-is accepted, or a decision was warranted. Those judgments belong to consumer layers above this
-package.
+These mechanics establish neither document grounding, evidentiary support, nor truth. A valid
+declared-reference result does not prove that quoted bytes occur at the locator. Even separately
+grounded text does not decide whether a passage supports a claim, an inference is defensible, a
+relationship is accepted, or a decision was warranted. Those proofs and judgments belong to caller
+layers above this package.
 
 Keep public APIs small, versioned, and covered by deterministic golden tests.

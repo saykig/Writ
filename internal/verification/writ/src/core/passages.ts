@@ -3,7 +3,7 @@ import {
   logicalPassageConflicts as portablePassageConflicts,
   passageSignatureKey,
   resolveLogicalPassage as resolvePortablePassage,
-  type AnchoredTextEvidenceReference,
+  type DeclaredTextReference,
   type LogicalPassageOccurrence as PortablePassageOccurrence,
   type LogicalPassageResolution as PortablePassageResolution,
   type PassageSignature,
@@ -39,7 +39,7 @@ export interface LogicalPassageIndex {
   currentNativeConflicts(): LogicalPassageResolution[];
 }
 
-export function corePassageSignature(evidence: AnchoredTextEvidenceReference): PassageSignature {
+export function corePassageSignature(evidence: DeclaredTextReference): PassageSignature {
   return evidencePassageSignature(evidence);
 }
 

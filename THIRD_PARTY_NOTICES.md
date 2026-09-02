@@ -29,6 +29,22 @@ sources.
 Published G7 and G20 ratings and judgments are source-reported data. Their representation in Writ
 does not transfer ownership or relicense the publishers' reports or analytical judgments.
 
+## UCDP-derived provenance golden vectors
+
+`packages/provenance/test/fixtures/aldera-ucdp-holdout.json` contains short normalized text vectors
+derived from the UCDP Battle-related Deaths Dataset Codebook version 26.1 and the UCDP Dataset
+Download Center. Attribution: Uppsala Conflict Data Program (UCDP), Uppsala University. UCDP's
+tracked source metadata declares these materials licensed under
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+The fixture preserves UCDP citations present in the derived text; reuse must retain appropriate
+attribution and comply with that license.
+
+The vectors were derived by Aldera from local PDF and HTML artifacts and a generated receipt under
+its ignored `data/local/` tree. Those raw local artifacts and receipt are not committed at Aldera
+commit `9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4`. Writ freezes only the derived vectors, their
+artifact hashes, and paths to Aldera's tracked manifest, source registry, and source metadata; this
+does not imply UCDP or Aldera endorsement.
+
 ## Software dependencies and copied components
 
 JavaScript and Python dependencies are not relicensed under Apache-2.0. Their own license files and

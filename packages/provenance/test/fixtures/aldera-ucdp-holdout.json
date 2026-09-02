@@ -4,7 +4,15 @@
     "commit": "9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4",
     "manifest": "fixtures/real/ucdp-lineage-26.1/brd-dyadic.object.json",
     "registry": "fixtures/real/ucdp-lineage-26.1/source-registry.json",
-    "generated_receipt": "data/local/lineage/ucdp-26.1/output/brd-dyadic.receipt.json"
+    "tracked_source_metadata": "fixtures/real/ucdp-lineage-26.1/source-metadata.json",
+    "untracked_generated_receipt": "data/local/lineage/ucdp-26.1/output/brd-dyadic.receipt.json",
+    "untracked_artifacts": [
+      "data/local/lineage/ucdp-26.1/artifacts/ucdp-brd-codebook-261.pdf",
+      "data/local/lineage/ucdp-26.1/artifacts/ucdp-downloads-2026-08-31.html"
+    ],
+    "attribution": "Uppsala Conflict Data Program (UCDP), Uppsala University",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
   },
   "sources": [
     {

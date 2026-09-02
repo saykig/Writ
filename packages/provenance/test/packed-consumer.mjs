@@ -78,6 +78,7 @@ execFileSync("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", t
 const installedPackage = realpathSync(join(temporaryRoot, "node_modules/@writ/provenance"));
 assert.equal(installedPackage.startsWith(realpathSync(workspaceRoot)), false);
 const installedManifest = JSON.parse(readFileSync(join(installedPackage, "package.json"), "utf8"));
+assert.equal(installedManifest.private, true);
 assert.equal(installedManifest.dependencies, undefined);
 assert.equal(JSON.stringify(installedManifest).includes("workspace:"), false);
 
@@ -106,7 +107,9 @@ const consumerSource = `
 
   const expectedExports = [
     "CanonicalJsonError",
+    "DeclaredReferenceInputError",
     "IllFormedUnicodeError",
+    "LogicalPassageIdentityError",
     "LogicalPassageOccurrenceError",
     "canonicalJson",
     "evidencePassageSignature",
@@ -164,7 +167,7 @@ assert.equal(runtimeResult.internalBlocked, true);
 const typeConsumerSource = `
   import {
     verifyEvidenceReferences,
-    type AnchoredTextEvidenceReference,
+    type DeclaredTextReference,
     type SourceVersionDeclaration,
   } from "@writ/provenance";
 
@@ -173,7 +176,7 @@ const typeConsumerSource = `
     document_version_id: "source.v1",
     document_hash: "sha256:${"1".repeat(64)}",
   }];
-  const reference: AnchoredTextEvidenceReference = {
+  const reference: DeclaredTextReference = {
     source_id: "source",
     document_version_id: "source.v1",
     passage_id: "passage",

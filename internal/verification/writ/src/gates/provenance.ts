@@ -3,7 +3,7 @@ import {
   IllFormedUnicodeError,
   sha256Utf8Text,
   verifyEvidenceReferences,
-  type AnchoredTextEvidenceReference,
+  type DeclaredTextReference,
   type SourceVersionDeclaration,
 } from "@writ/provenance";
 
@@ -139,7 +139,7 @@ function citationSourceIssues(
 
 function pushPassageHashIssue(
   issues: ReturnType<typeof issue>[],
-  evidence: AnchoredTextEvidenceReference,
+  evidence: DeclaredTextReference,
   context: { corpus_id: string; object_id: string; file: string },
 ): void {
   let actualPassageHash: string;

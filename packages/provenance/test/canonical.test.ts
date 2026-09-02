@@ -168,8 +168,19 @@ test("-0 and 0 hash identically", () => {
   expect(canonicalJson({ n: -0 })).toBe('{"n":0}');
 });
 
-test("undefined-valued object properties are omitted (JSON semantics)", () => {
-  expect(canonicalJson({ a: 1, b: undefined, c: 3 })).toBe('{"a":1,"c":3}');
+test("undefined-valued object properties fail closed", () => {
+  expect(() => canonicalJson({ a: 1, b: undefined, c: 3 })).toThrow(CanonicalJsonError);
+  expect(() => sha256Canonical({ x: undefined })).toThrow(/JSON has no undefined/);
+});
+
+test("pins the IEEE-754 parser boundary beyond safe integer precision", () => {
+  const first = JSON.parse('{"n":9007199254740992}') as unknown;
+  const rounded = JSON.parse('{"n":9007199254740993}') as unknown;
+
+  expect(first).toEqual(rounded);
+  expect(canonicalJson(first)).toBe(canonicalJson(rounded));
+  expect(sha256Canonical(first)).toBe(sha256Canonical(rounded));
+  expect('{"n":9007199254740992}').not.toBe('{"n":9007199254740993}');
 });
 
 describe("dropFields", () => {

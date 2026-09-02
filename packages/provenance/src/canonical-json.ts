@@ -18,8 +18,8 @@
  * string, ordinary array, and plain object. Any other runtime type or object
  * (`undefined`, bigint, function, symbol, Date, Map, Set, RegExp, boxed
  * primitive, class instance, or custom-prototype object) is rejected with
- * {@link CanonicalJsonError}; `undefined`-valued object properties are omitted,
- * matching JSON semantics.
+ * {@link CanonicalJsonError}. This includes `undefined`-valued object
+ * properties: omission is not an accepted implicit identity transform.
  */
 
 /** Error thrown for any value that cannot be represented in canonical JSON. */
@@ -241,8 +241,11 @@ function serializeObject(
       throw new CanonicalJsonError(`object property at ${childPointer} must be a data property`);
     }
     const propertyValue = descriptor.value;
-    // Omit undefined-valued properties, matching JSON.stringify semantics.
-    if (propertyValue === undefined) continue;
+    if (propertyValue === undefined) {
+      throw new CanonicalJsonError(
+        `object property at ${childPointer} is undefined; JSON has no undefined`,
+      );
+    }
     if (seen.has(normKey)) {
       throw new CanonicalJsonError(
         `duplicate object key after NFC normalization: ${JSON.stringify(normKey)}`,

@@ -15,25 +15,29 @@ export type HashOptions = CanonicalOptions;
 
 const PREFIX = "sha256:";
 
-/** Error thrown when an exact-text hash receives an ill-formed UTF-16 string. */
+/** Error thrown when a portable string contract receives ill-formed Unicode. */
 export class IllFormedUnicodeError extends Error {
-  constructor(index: number) {
-    super(`cannot hash ill-formed Unicode text: unpaired surrogate at UTF-16 index ${index}`);
+  constructor(
+    readonly index: number,
+    readonly field = "text",
+  ) {
+    super(`ill-formed Unicode in ${field}: unpaired surrogate at UTF-16 index ${index}`);
     this.name = "IllFormedUnicodeError";
   }
 }
 
-function assertWellFormedUnicode(value: string): void {
+/** Reject unpaired UTF-16 surrogate code units without changing valid text. */
+export function assertWellFormedUnicode(value: string, field = "text"): void {
   for (let index = 0; index < value.length; index += 1) {
     const unit = value.charCodeAt(index);
     if (unit >= 0xd800 && unit <= 0xdbff) {
       const next = value.charCodeAt(index + 1);
       if (index + 1 >= value.length || next < 0xdc00 || next > 0xdfff) {
-        throw new IllFormedUnicodeError(index);
+        throw new IllFormedUnicodeError(index, field);
       }
       index += 1;
     } else if (unit >= 0xdc00 && unit <= 0xdfff) {
-      throw new IllFormedUnicodeError(index);
+      throw new IllFormedUnicodeError(index, field);
     }
   }
 }
@@ -43,7 +47,7 @@ function assertWellFormedUnicode(value: string): void {
  * normalization. This is the identity operation for quoted passage text.
  */
 export function sha256Utf8Text(value: string): string {
-  assertWellFormedUnicode(value);
+  assertWellFormedUnicode(value, "text");
   return PREFIX + createHash("sha256").update(value, "utf8").digest("hex");
 }
 
@@ -52,6 +56,8 @@ export function sha256Utf8Text(value: string): string {
  * as `"sha256:<64 lowercase hex>"`. Existing Writ hashes are pinned to this
  * profile, including NFC normalization and optional pre-canonicalization field
  * omission; this function does not claim complete RFC 8785 conformance.
+ * The result identifies the in-memory Writ value/profile, not the bytes of a
+ * source document or arbitrary serialized input.
  */
 export function sha256Canonical(value: unknown, options?: HashOptions): string {
   const canonical = canonicalJson(value, options);

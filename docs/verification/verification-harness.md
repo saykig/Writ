@@ -110,6 +110,9 @@ for the citing corpus does the adapter supply its source ID, document-version ID
 to the package. The package therefore answers whether a reference exactly matches caller-supplied
 authority; it does not answer whether a corpus is allowed to cite that authority. The complete audit
 and package boundary are recorded in `docs/verification/portable-provenance-kernel.md`.
+It also does not open the referenced document or prove that the declared quote occurs at the
+declared locator. That document-to-locator grounding transition is a separate caller/repository
+obligation; the portable package verifies declared-reference integrity only.
 
 For compiled native records, the harness reconstructs evidence passages from each record's compiled
 Core evidence envelope and loads manifest-routed structured source declarations independently from
