@@ -19,7 +19,7 @@ Runtime exports:
 - `resolveSourceVersion` and `verifyEvidenceReferences`;
 - `evidencePassageSignature`, `passageSignatureKey`, and `DeclaredReferenceInputError`;
 - `resolveLogicalPassage`, `logicalPassageConflicts`, `LogicalPassageOccurrenceError`, and
-  `LogicalPassageIdentityError`.
+  `LogicalPassageIdentityError`, and `LogicalPassageSignatureError`.
 
 Type-only exports:
 
@@ -48,8 +48,11 @@ source authorization, review state, family semantics, or lineage.
 `verifyEvidenceReferences` checks each supplied reference independently. It deliberately does not
 declare its input array to be a passage namespace. A caller defines a logical-passage scope by
 supplying occurrences to `resolveLogicalPassage` or `logicalPassageConflicts`; occurrence IDs must
-be unique within each passage ID. This keeps Writ's repository-specific native/compatibility scope
-in Writ's adapter and leaves the repository-global external passage namespace unresolved.
+be non-empty and unique within each non-empty passage ID. Passage signatures require non-empty
+source/version/locator/quote fields and lowercase SHA-256 passage/document hashes; malformed or
+accessor-backed required fields fail with a typed error and can never resolve. This keeps Writ's
+repository-specific native/compatibility scope in Writ's adapter and leaves the repository-global
+external passage namespace unresolved.
 
 ## Writ Canonical JSON v1
 
@@ -57,7 +60,9 @@ The profile accepts the package's existing in-memory JSON value domain and appli
 
 1. Omit any fields declared through `dropFields`, using RFC 6901 JSON Pointer paths (with the
    existing bare-top-level-key convenience). Pointers address Writ's NFC-normalized key space, so
-   `/café` also addresses an input key spelled `cafe\u0301`.
+   `/café` also addresses an input key spelled `cafe\u0301`. Leading-slash pointers must use valid
+   `~0` and `~1` escapes; malformed escapes fail closed. The empty RFC root pointer is rejected
+   because the profile cannot omit its complete input, while `/` addresses a top-level empty key.
 2. NFC-normalize every string value and object key. Reject object keys that collide after NFC
    normalization.
 3. Serialize without whitespace. Preserve array order and sort normalized object keys by UTF-16

@@ -108,8 +108,18 @@ export class LogicalPassageIdentityError extends Error {
     readonly field: "passageId" | "occurrenceId",
     readonly value: string,
   ) {
-    super(`${field} must be a well-formed Unicode string`);
+    super(`${field} must be a non-empty well-formed Unicode string`);
     this.name = "LogicalPassageIdentityError";
+  }
+}
+
+/** Error thrown when a logical-passage signature is structurally invalid. */
+export class LogicalPassageSignatureError extends Error {
+  readonly code = "PROVENANCE_PASSAGE_SIGNATURE_INVALID";
+
+  constructor() {
+    super("passage signature is malformed");
+    this.name = "LogicalPassageSignatureError";
   }
 }
 
@@ -205,7 +215,9 @@ export function resolveSourceVersion(
       ["document_version_id", documentVersionId],
     ] as const
   )
-    .filter(([, value]) => !isWellFormedUnicode(value))
+    .filter(
+      ([, value]) => typeof value !== "string" || value.length === 0 || !isWellFormedUnicode(value),
+    )
     .map(([field]) => field);
   if (invalidIdentityFields.length > 0) {
     return { status: "invalid_identity", matches: [], fields: invalidIdentityFields };
@@ -248,22 +260,47 @@ export function evidencePassageSignature(reference: DeclaredTextReference): Pass
  * Property order is constructed here; quote bytes remain distinct.
  */
 export function passageSignatureKey(signature: PassageSignature): string {
+  const normalized = normalizedPassageSignature(signature);
+  if (normalized === undefined) throw new LogicalPassageSignatureError();
   for (const [field, value] of [
-    ["source_id", signature.source_id],
-    ["document_version_id", signature.document_version_id],
-    ["locator", signature.locator],
-    ["quote", signature.quote],
+    ["source_id", normalized.source_id],
+    ["document_version_id", normalized.document_version_id],
+    ["locator", normalized.locator],
+    ["quote", normalized.quote],
   ] as const) {
     assertWellFormedUnicode(value, field);
   }
   return JSON.stringify({
-    source_id: signature.source_id,
-    document_version_id: signature.document_version_id,
-    locator: signature.locator,
-    quote: signature.quote,
-    passage_hash: signature.passage_hash,
-    document_hash: signature.document_hash,
+    source_id: normalized.source_id,
+    document_version_id: normalized.document_version_id,
+    locator: normalized.locator,
+    quote: normalized.quote,
+    passage_hash: normalized.passage_hash,
+    document_hash: normalized.document_hash,
   });
+}
+
+function normalizedPassageSignature(value: unknown): PassageSignature | undefined {
+  if (value === null || typeof value !== "object") return undefined;
+  const projection: Partial<Record<keyof PassageSignature, string>> = {};
+  for (const key of [
+    "source_id",
+    "document_version_id",
+    "locator",
+    "quote",
+    "passage_hash",
+    "document_hash",
+  ] as const) {
+    const item = ownDataProperty(value, key);
+    if (typeof item !== "string" || item.length === 0) return undefined;
+    projection[key] = item;
+  }
+  if (!(
+    SHA256_PATTERN.test(projection.passage_hash!) && SHA256_PATTERN.test(projection.document_hash!)
+  )) {
+    return undefined;
+  }
+  return projection as PassageSignature;
 }
 
 function sortOccurrences<T>(
@@ -301,7 +338,7 @@ export function resolveLogicalPassage<T>(
 }
 
 function assertLogicalIdentity(field: "passageId" | "occurrenceId", value: string): void {
-  if (typeof value !== "string" || !isWellFormedUnicode(value)) {
+  if (typeof value !== "string" || value.length === 0 || !isWellFormedUnicode(value)) {
     throw new LogicalPassageIdentityError(field, value);
   }
 }

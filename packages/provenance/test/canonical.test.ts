@@ -195,6 +195,28 @@ describe("dropFields", () => {
     expect(canonicalJson(value, { dropFields: ["/a/secret"] })).toBe('{"a":{"keep":1},"b":2}');
   });
 
+  test("implements RFC 6901 tilde and slash escaping", () => {
+    const value = { "a~b": 1, "a/b": 2, keep: true };
+    expect(canonicalJson(value, { dropFields: ["/a~0b"] })).toBe('{"a/b":2,"keep":true}');
+    expect(canonicalJson(value, { dropFields: ["/a~1b"] })).toBe('{"a~b":1,"keep":true}');
+  });
+
+  test("rejects malformed RFC 6901 escapes", () => {
+    for (const pointer of ["/a~2b", "/a~"]) {
+      expect(() => canonicalJson({ "a~2b": 1 }, { dropFields: [pointer] })).toThrow(
+        CanonicalJsonError,
+      );
+      expect(() => sha256Canonical({ "a~2b": 1 }, { dropFields: [pointer] })).toThrow(
+        /malformed JSON Pointer/,
+      );
+    }
+  });
+
+  test("rejects the root pointer and preserves slash as the empty-key pointer", () => {
+    expect(() => canonicalJson({ keep: true }, { dropFields: [""] })).toThrow(/root JSON Pointer/);
+    expect(canonicalJson({ "": "drop", keep: true }, { dropFields: ["/"] })).toBe('{"keep":true}');
+  });
+
   test("addresses fields in the NFC-normalized key space", () => {
     const composed = { "caf\u00e9": "drop", keep: true };
     const decomposed = { "cafe\u0301": "drop", keep: true };
@@ -207,6 +229,15 @@ describe("dropFields", () => {
     expect(canonicalJson(nested, { dropFields: ["/caf\u00e9/r\u00e9sum\u00e9"] })).toBe(
       '{"caf\u00e9":{"keep":true}}',
     );
+  });
+
+  test("addresses NFC and NFD keys containing slash and tilde", () => {
+    const composed = { "caf\u00e9/~": "drop", keep: true };
+    const decomposed = { "cafe\u0301/~": "drop", keep: true };
+    for (const value of [composed, decomposed]) {
+      expect(canonicalJson(value, { dropFields: ["/caf\u00e9~1~0"] })).toBe('{"keep":true}');
+      expect(canonicalJson(value, { dropFields: ["/cafe\u0301~1~0"] })).toBe('{"keep":true}');
+    }
   });
 
   test("drops every colliding NFC spelling when the normalized path is omitted", () => {

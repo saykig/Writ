@@ -15,6 +15,7 @@ export {
   DeclaredReferenceInputError,
   LogicalPassageIdentityError,
   LogicalPassageOccurrenceError,
+  LogicalPassageSignatureError,
   type DeclaredTextReference,
   type LogicalPassageOccurrence,
   type LogicalPassageResolution,

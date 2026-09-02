@@ -111,6 +111,7 @@ const consumerSource = `
     "IllFormedUnicodeError",
     "LogicalPassageIdentityError",
     "LogicalPassageOccurrenceError",
+    "LogicalPassageSignatureError",
     "canonicalJson",
     "evidencePassageSignature",
     "logicalPassageConflicts",

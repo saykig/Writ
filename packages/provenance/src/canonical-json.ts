@@ -39,8 +39,11 @@ export interface CanonicalOptions {
    * Each entry is an RFC 6901 JSON Pointer, e.g. `"/signature"` or
    * `"/dependencies/methodology_bundle_hash"`. As a convenience, a bare token
    * without a leading `/` is treated as a top-level key, so `"signature"` is
-   * equivalent to `"/signature"`. Pointers address Writ's NFC-normalized key
-   * space rather than the original pre-normalization spelling.
+   * equivalent to `"/signature"`. Leading-slash entries must use valid `~0`
+   * and `~1` escaping. The empty root pointer is rejected because omitting the
+   * complete input has no canonical JSON value; `"/"` addresses an empty key.
+   * Pointers address Writ's NFC-normalized key space rather than the original
+   * pre-normalization spelling.
    */
   dropFields?: Iterable<string>;
 }
@@ -53,6 +56,26 @@ function encodePointerToken(token: string): string {
   return token.replace(/~/g, "~0").replace(/\//g, "~1");
 }
 
+function normalizeDropPointer(field: string): string {
+  if (field === "") {
+    throw new CanonicalJsonError("dropFields cannot omit the root JSON Pointer");
+  }
+  if (!field.startsWith("/")) {
+    return "/" + encodePointerToken(field.normalize("NFC"));
+  }
+  for (let index = 0; index < field.length; index += 1) {
+    if (field[index] !== "~") continue;
+    const escaped = field[index + 1];
+    if (escaped !== "0" && escaped !== "1") {
+      throw new CanonicalJsonError(
+        `malformed JSON Pointer escape in dropFields entry ${JSON.stringify(field)}`,
+      );
+    }
+    index += 1;
+  }
+  return field.normalize("NFC");
+}
+
 function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<string> {
   if (fields === undefined) return EMPTY_DROP_SET;
   const set = new Set<string>();
@@ -63,11 +86,7 @@ function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<str
     // Omission is defined over the same NFC-normalized key space that Writ v1
     // serializes. A composed pointer therefore addresses a decomposed input
     // key (and vice versa).
-    set.add(
-      field.startsWith("/")
-        ? field.normalize("NFC")
-        : "/" + encodePointerToken(field.normalize("NFC")),
-    );
+    set.add(normalizeDropPointer(field));
   }
   return set;
 }

@@ -145,6 +145,24 @@ describe("caller-supplied source and document-version authority", () => {
     });
   });
 
+  test("rejects empty source-resolution query identities", () => {
+    expect(resolveSourceVersion(authority, "", reference.document_version_id)).toEqual({
+      status: "invalid_identity",
+      matches: [],
+      fields: ["source_id"],
+    });
+    expect(resolveSourceVersion(authority, reference.source_id, "")).toEqual({
+      status: "invalid_identity",
+      matches: [],
+      fields: ["document_version_id"],
+    });
+    expect(resolveSourceVersion(authority, "", "")).toEqual({
+      status: "invalid_identity",
+      matches: [],
+      fields: ["source_id", "document_version_id"],
+    });
+  });
+
   test("fails closed on every malformed authority shape", () => {
     const valid = fixture.sources[0]!;
     const malformed = [
@@ -397,6 +415,70 @@ describe("portable logical passage resolution", () => {
         LogicalPassageOccurrenceError,
       );
       expect(() => logicalPassageConflicts(input)).toThrow(LogicalPassageOccurrenceError);
+    }
+  });
+
+  test("rejects empty logical passage and occurrence identities", () => {
+    expect(() => resolveLogicalPassage([], "")).toThrow(LogicalPassageIdentityError);
+    expect(() =>
+      resolveLogicalPassage(
+        [{ ...occurrence("occurrence", reference, null), passageId: "" }],
+        reference.passage_id,
+      ),
+    ).toThrow(LogicalPassageIdentityError);
+    expect(() =>
+      logicalPassageConflicts([{ ...occurrence("", reference, null), occurrenceId: "" }]),
+    ).toThrow(LogicalPassageIdentityError);
+  });
+
+  test("never resolves a structurally invalid passage signature", () => {
+    const signature = evidencePassageSignature(reference);
+    const invalid = [
+      { ...signature, source_id: "" },
+      { ...signature, document_version_id: "" },
+      { ...signature, locator: "" },
+      { ...signature, quote: "" },
+      { ...signature, passage_hash: "not-a-hash" },
+      { ...signature, document_hash: "not-a-hash" },
+      { ...signature, passage_hash: signature.passage_hash.toUpperCase() },
+      { ...signature, document_hash: signature.document_hash.toUpperCase() },
+    ];
+
+    for (const value of invalid) {
+      expect(() => passageSignatureKey(value)).toThrow(/passage signature is malformed/);
+      expect(() =>
+        resolveLogicalPassage(
+          [{ ...occurrence("occurrence", reference, null), signature: value }],
+          reference.passage_id,
+        ),
+      ).toThrow(/passage signature is malformed/);
+    }
+  });
+
+  test("does not invoke getter-backed required passage-signature fields", () => {
+    const signature = evidencePassageSignature(reference);
+    for (const field of [
+      "source_id",
+      "document_version_id",
+      "locator",
+      "quote",
+      "passage_hash",
+      "document_hash",
+    ] as const) {
+      const value = { ...signature };
+      Object.defineProperty(value, field, {
+        enumerable: true,
+        get: () => {
+          throw new Error(`must not invoke signature ${field}`);
+        },
+      });
+      expect(() => passageSignatureKey(value)).toThrow(/passage signature is malformed/);
+      expect(() =>
+        resolveLogicalPassage(
+          [{ ...occurrence("occurrence", reference, null), signature: value }],
+          reference.passage_id,
+        ),
+      ).toThrow(/passage signature is malformed/);
     }
   });
 });
