@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: STRUCTURED-DOCUMENT-GROUNDING-001
     title: Promote bounded internal eCFR XML paragraph grounding
-    status: in_progress
+    status: review
     dependencies:
       - KERNEL-NATIVE-PROVENANCE-001
     research_basis: https://github.com/saykig/Writ/pull/37

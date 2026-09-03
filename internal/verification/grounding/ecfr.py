@@ -46,9 +46,8 @@ class GroundingResult:
     source_id: str
     document_version_id: str
     declared_document_hash: str
-    document_hash: (
-        str | None
-    )  # Verified hash only; absent when declared identity fails.
+    # Verified hash only; absent when declared identity fails.
+    document_hash: str | None
     observed_document_hash: str
     media_type: str
     selector: EcfrParagraphSelector
@@ -102,21 +101,25 @@ def ground_ecfr(
         evidence: str | None = None,
     ) -> GroundingResult:
         return GroundingResult(
-            source_id,
-            document_version_id,
-            document_hash,
-            verified,
-            observed,
-            media_type,
-            selector,
-            extraction_profile,
-            status,
-            candidates,
-            candidates[0] if len(candidates) == 1 and raw is not None else None,
-            raw,
-            transformations,
-            evidence,
-            _sha256(evidence.encode("utf-8")) if evidence is not None else None,
+            source_id=source_id,
+            document_version_id=document_version_id,
+            declared_document_hash=document_hash,
+            document_hash=verified,
+            observed_document_hash=observed,
+            media_type=media_type,
+            selector=selector,
+            extraction_profile=extraction_profile,
+            status=status,
+            candidate_elements=candidates,
+            selected_element=candidates[0]
+            if len(candidates) == 1 and raw is not None
+            else None,
+            raw_extracted_text=raw,
+            transformations=transformations,
+            evidence_text=evidence,
+            passage_hash=_sha256(evidence.encode("utf-8"))
+            if evidence is not None
+            else None,
         )
 
     # All checks precede parsing; a hash failure cannot expose even a candidate passage.
