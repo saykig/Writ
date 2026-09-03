@@ -23,6 +23,49 @@ statuses:
   - blocked
 
 tasks:
+  - id: STRUCTURED-DOCUMENT-GROUNDING-001
+    title: Promote bounded internal eCFR XML paragraph grounding
+    status: in_progress
+    dependencies:
+      - KERNEL-NATIVE-PROVENANCE-001
+    research_basis: https://github.com/saykig/Writ/pull/37
+    scope:
+      - Verify frozen bytes against caller-declared source/version/hash identity before XML extraction.
+      - Resolve one explicit eCFR structural paragraph selector and apply one explicit marker-removal profile.
+      - Preserve structural selection, raw text, transformation, exact UTF-8 evidence, and passage hash.
+      - Carry forward the deferred Handbook competence human-review task without performing it.
+    exclusions:
+      - Experiment A runner, reports, result JSON, PDF extraction, and universal locators.
+      - Corpus, judgment, source capture, schema, grammar, public API, provenance-package, and existing verifier changes.
+    acceptance:
+      - Unique, absent, wrong, and ambiguous selectors are distinguished without returning neighboring text.
+      - Document hash failure prevents parsing and extraction.
+      - Both reviewed eCFR passages reproduce exact stored bytes and hashes without quotation input.
+      - Repetition and changed regression oracles leave grounding unchanged; transformations stay explicit.
+      - Formatting, lint, typecheck, tests, data checks, Writ verification, Python checks, build, and integrity pass.
+      - Open a separate PR from current main and stop without merging.
+    outputs:
+      - internal/verification/grounding
+      - TASKS.yaml
+      - MANIFEST.sha256
+
+  - id: NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001
+    title: Human-review Handbook competence evidence and approved dependents
+    status: ready
+    research_basis: https://github.com/saykig/Writ/pull/37
+    execution_gate: Deferred human-review follow-up; do not perform in the structured grounding PR.
+    scope:
+      - Human-review the existing nist.handbook_150.competence evidence against frozen Handbook clause 1.3.5.
+      - Trace and human-review dependent approved records and dependent judgments.
+      - Review STORED_QUOTE_SOURCE_MISMATCH separately from PASSAGE_EXTENT_UNSPECIFIED.
+      - Preserve the finding that the frozen PDF says based on evaluation while the approved quote says based on the evaluation; a better locator cannot repair this wording difference.
+    exclusions:
+      - Silently rewriting approved evidence, records, or judgments.
+      - Automatic acceptance or dispute resolution.
+    acceptance:
+      - A human reviewer records the disposition of the evidence passage and each affected dependent.
+      - Any eventual correction uses the existing human-review and supersession process, preserving prior approved versions and provenance.
+
   - id: RESET-001
     title: Audit and freeze the pre-reset repository
     status: done
