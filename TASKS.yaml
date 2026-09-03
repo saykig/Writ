@@ -23,6 +23,34 @@ statuses:
   - blocked
 
 tasks:
+  - id: EXPERIMENT-DOCUMENT-PASSAGE-GROUNDING-A
+    title: Falsify locator-only passage grounding against frozen NIST XML and PDF
+    status: in_progress
+    dependencies:
+      - KERNEL-NATIVE-PROVENANCE-001
+    baseline: 7c1ff7cf881236beacb40181a83f320e88d9b4f1
+    scope:
+      - Resolve frozen eCFR XML and Handbook PDF passages from document, media type, and locator alone.
+      - Verify capture bytes against source, evidence, and capture-manifest hashes before extraction.
+      - Compare independently extracted text with reviewed quotes and hashes only after extraction.
+      - Record raw text, explicit profiles, ambiguity, reproducibility, and source-mismatch controls.
+    exclusions:
+      - Changes to corpora, captures, schemas, grammar, provenance package, or decision semantics.
+      - Network acquisition, public APIs, new evidence families, and promotion to production.
+    acceptance:
+      - At least two existing reviewed references per frozen source format are tested.
+      - Missing and ambiguous locators, repeated runs, altered oracles, and altered bytes are covered.
+      - PDF whitespace, page boundaries, hyphenation, and substantive quote differences remain visible.
+      - The report is reproduced offline with the declared extraction engine and settings.
+      - Experiment tests, formatting, lint, typecheck, tests, data checks, verification, build, and integrity pass.
+      - Open an independent PR from the requested baseline and stop without merging.
+    outputs:
+      - internal/verification/experiments/document_passage_grounding
+      - docs/verification/document-passage-grounding.md
+      - docs/verification/document-passage-grounding-results.json
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: RESET-001
     title: Audit and freeze the pre-reset repository
     status: done

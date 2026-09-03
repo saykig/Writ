@@ -1,0 +1,770 @@
+{
+  "experiment": "A",
+  "baseline": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+  "overall_conclusion": "CURRENT_LOCATOR_MODEL_INSUFFICIENT",
+  "sources": [
+    {
+      "source_id": "ecfr.title15_cfr_part_285",
+      "document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+      "uri": "https://www.ecfr.gov/api/versioner/v1/full/2026-08-01/title-15.xml?part=285",
+      "media_type": "application/xml",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "source_title": "15 CFR Part 285 — National Voluntary Laboratory Accreditation Program",
+      "source_version": "effective-2026-08-01",
+      "source_date": "2026-08-01",
+      "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+      "capture": "ecfr-15-cfr-part-285.xml"
+    },
+    {
+      "source_id": "nist.handbook_150",
+      "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+      "uri": "https://nvlpubs.nist.gov/nistpubs/hb/2020/NIST.HB.150-2020-upd1.pdf",
+      "media_type": "application/pdf",
+      "retrieved_at": "2026-08-05T00:00:00-04:00",
+      "source_title": "NIST Handbook 150:2020, NVLAP Procedures and General Requirements",
+      "source_version": "2020-update-1",
+      "source_date": "2020-01-01",
+      "document_version_id": "nist.handbook_150.v2020_update_1",
+      "capture": "nist-handbook-150-2020-update-1.pdf"
+    }
+  ],
+  "reviewed_cases": [
+    {
+      "passage_id": "ecfr.title15_cfr_part_285.section_285_9_a",
+      "grounding": {
+        "source_id": "ecfr.title15_cfr_part_285",
+        "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+        "document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_a:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_d:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/xml",
+        "locator": "15 CFR § 285.9(a)",
+        "status": "resolved",
+        "diagnostic": "DPG_ONE_CANDIDATE",
+        "engine": "Python stdlib ElementTree; itertext in document order",
+        "extraction_profile": "ecfr-subsection-marker-v1",
+        "candidate_count": 1,
+        "candidates": [
+          {
+            "selection": "/DIV5[@N='285']/DIV8[@N='285.9']/P[1]",
+            "pages": [],
+            "raw_text": "(a) The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation.",
+            "raw_passage_hash": "sha256:b1b49cacba9359a57e5d02d5515c82709696dbfb87b1a5b68a2cdcc91aa9d419",
+            "steps": [
+              {
+                "transformation": "Remove exact locator marker '(a) '; retain all other text",
+                "text": "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation.",
+                "passage_hash": "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation.",
+        "passage_hash": "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7"
+      },
+      "comparison": {
+        "classification": "DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED",
+        "stored_quote": "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation.",
+        "stored_passage_hash": "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7",
+        "stored_quote_self_hash_matches": true,
+        "raw_utf8_equals_stored_quote": false,
+        "raw_hash_equals_stored_hash": false,
+        "profiled_utf8_equals_stored_quote": true,
+        "profiled_hash_equals_stored_hash": true,
+        "first_differing_utf8_byte": null,
+        "stored_quote_is_proper_prefix_of_profiled_passage": false
+      },
+      "repeat_count": 3,
+      "repeated_results_identical": true,
+      "altered_oracle_control": {
+        "grounding_unchanged": true,
+        "comparison": {
+          "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+          "stored_quote": "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation. [altered after extraction]",
+          "stored_passage_hash": "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7",
+          "stored_quote_self_hash_matches": false,
+          "raw_utf8_equals_stored_quote": false,
+          "raw_hash_equals_stored_hash": false,
+          "profiled_utf8_equals_stored_quote": false,
+          "profiled_hash_equals_stored_hash": true,
+          "first_differing_utf8_byte": 159,
+          "stored_quote_is_proper_prefix_of_profiled_passage": false
+        }
+      }
+    },
+    {
+      "passage_id": "ecfr.title15_cfr_part_285.section_285_9_d",
+      "grounding": {
+        "source_id": "ecfr.title15_cfr_part_285",
+        "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+        "document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_a:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_d:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/xml",
+        "locator": "15 CFR § 285.9(d)",
+        "status": "resolved",
+        "diagnostic": "DPG_ONE_CANDIDATE",
+        "engine": "Python stdlib ElementTree; itertext in document order",
+        "extraction_profile": "ecfr-subsection-marker-v1",
+        "candidate_count": 1,
+        "candidates": [
+          {
+            "selection": "/DIV5[@N='285']/DIV8[@N='285.9']/P[4]",
+            "pages": [],
+            "raw_text": "(d) When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation,",
+            "raw_passage_hash": "sha256:e101763923d418d7ef77b299961ffb9947da0ceac9aadc35b60c386671d08610",
+            "steps": [
+              {
+                "transformation": "Remove exact locator marker '(d) '; retain all other text",
+                "text": "When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation,",
+                "passage_hash": "sha256:0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": "When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation,",
+        "passage_hash": "sha256:0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e"
+      },
+      "comparison": {
+        "classification": "DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED",
+        "stored_quote": "When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation,",
+        "stored_passage_hash": "sha256:0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e",
+        "stored_quote_self_hash_matches": true,
+        "raw_utf8_equals_stored_quote": false,
+        "raw_hash_equals_stored_hash": false,
+        "profiled_utf8_equals_stored_quote": true,
+        "profiled_hash_equals_stored_hash": true,
+        "first_differing_utf8_byte": null,
+        "stored_quote_is_proper_prefix_of_profiled_passage": false
+      },
+      "repeat_count": 3,
+      "repeated_results_identical": true,
+      "altered_oracle_control": {
+        "grounding_unchanged": true,
+        "comparison": {
+          "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+          "stored_quote": "When accreditation is granted, NVLAP shall provide to the laboratory a Certificate of Accreditation and a Scope of Accreditation, [altered after extraction]",
+          "stored_passage_hash": "sha256:0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e",
+          "stored_quote_self_hash_matches": false,
+          "raw_utf8_equals_stored_quote": false,
+          "raw_hash_equals_stored_hash": false,
+          "profiled_utf8_equals_stored_quote": false,
+          "profiled_hash_equals_stored_hash": true,
+          "first_differing_utf8_byte": 129,
+          "stored_quote_is_proper_prefix_of_profiled_passage": false
+        }
+      }
+    },
+    {
+      "passage_id": "nist.handbook_150.accreditation_decision",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 3.5.3",
+        "status": "resolved",
+        "diagnostic": "DPG_ONE_CANDIDATE",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 1,
+        "candidates": [
+          {
+            "selection": "numeric marker 3.5.3; character interval [61915, 62467)",
+            "pages": [
+              26
+            ],
+            "raw_text": "3.5.3 \nBased on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). \n",
+            "raw_passage_hash": "sha256:b37f70c44f0c2f83faa7b855716a1b6f8a32b4130e8a6975787fdb46377d9156",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "\nBased on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). \n",
+                "passage_hash": "sha256:498f4937be7af4aeb38c492cd8743fc173f54687fe5526c59dacdd18eda0823a"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If the evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP informs the laboratory in writing of the nonconformities. The laboratory shall respond as specified in 3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. NOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal that decision (see 3.13).",
+                "passage_hash": "sha256:2ae01bbe6b23bd82be976d75ce5caf5dc73a5c1f11967eb9385ff90eafc8f20b"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If the evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP informs the laboratory in writing of the nonconformities. The laboratory shall respond as specified in 3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. NOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal that decision (see 3.13).",
+        "passage_hash": "sha256:2ae01bbe6b23bd82be976d75ce5caf5dc73a5c1f11967eb9385ff90eafc8f20b"
+      },
+      "comparison": {
+        "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+        "stored_quote": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory.",
+        "stored_passage_hash": "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1",
+        "stored_quote_self_hash_matches": true,
+        "raw_utf8_equals_stored_quote": false,
+        "raw_hash_equals_stored_hash": false,
+        "profiled_utf8_equals_stored_quote": false,
+        "profiled_hash_equals_stored_hash": false,
+        "first_differing_utf8_byte": 93,
+        "stored_quote_is_proper_prefix_of_profiled_passage": true
+      },
+      "repeat_count": 3,
+      "repeated_results_identical": true,
+      "altered_oracle_control": {
+        "grounding_unchanged": true,
+        "comparison": {
+          "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+          "stored_quote": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. [altered after extraction]",
+          "stored_passage_hash": "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1",
+          "stored_quote_self_hash_matches": false,
+          "raw_utf8_equals_stored_quote": false,
+          "raw_hash_equals_stored_hash": false,
+          "profiled_utf8_equals_stored_quote": false,
+          "profiled_hash_equals_stored_hash": false,
+          "first_differing_utf8_byte": 94,
+          "stored_quote_is_proper_prefix_of_profiled_passage": false
+        }
+      }
+    },
+    {
+      "passage_id": "nist.handbook_150.competence",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 1.3.5",
+        "status": "resolved",
+        "diagnostic": "DPG_ONE_CANDIDATE",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 1,
+        "candidates": [
+          {
+            "selection": "numeric marker 1.3.5; character interval [18045, 18585)",
+            "pages": [
+              10
+            ],
+            "raw_text": "1.3.5 \nNVLAP accreditation is based on evaluation of a laboratory’s management and technical \ncompetence for conducting specific tests or calibrations. Accreditation is granted only after thorough \nevaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment \nof requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of \nAccreditation, which details the specific test methods, calibration parameters, or services for which a \nlaboratory has been accredited. \n",
+            "raw_passage_hash": "sha256:502a16a334d6dc4ac3719359661c53330f91f8c3e66bd3ce91b2af1437ef45be",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "\nNVLAP accreditation is based on evaluation of a laboratory’s management and technical \ncompetence for conducting specific tests or calibrations. Accreditation is granted only after thorough \nevaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment \nof requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of \nAccreditation, which details the specific test methods, calibration parameters, or services for which a \nlaboratory has been accredited. \n",
+                "passage_hash": "sha256:0f07dc677707b442f61e12dc577a8a7f9393c6c51e212ca4453344b9053601de"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "NVLAP accreditation is based on evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment of requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of Accreditation, which details the specific test methods, calibration parameters, or services for which a laboratory has been accredited.",
+                "passage_hash": "sha256:2e70cc37b645dc6d9004f7b831c7188c9b1b8cdb1da751706e29677f5f78b4a6"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": "NVLAP accreditation is based on evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment of requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of Accreditation, which details the specific test methods, calibration parameters, or services for which a laboratory has been accredited.",
+        "passage_hash": "sha256:2e70cc37b645dc6d9004f7b831c7188c9b1b8cdb1da751706e29677f5f78b4a6"
+      },
+      "comparison": {
+        "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+        "stored_quote": "NVLAP accreditation is based on the evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled.",
+        "stored_passage_hash": "sha256:f6263b3ae31de22e2ba0f486d2092bb154179287ad0a38001a0cf8e3ef054700",
+        "stored_quote_self_hash_matches": true,
+        "raw_utf8_equals_stored_quote": false,
+        "raw_hash_equals_stored_hash": false,
+        "profiled_utf8_equals_stored_quote": false,
+        "profiled_hash_equals_stored_hash": false,
+        "first_differing_utf8_byte": 32,
+        "stored_quote_is_proper_prefix_of_profiled_passage": false
+      },
+      "repeat_count": 3,
+      "repeated_results_identical": true,
+      "altered_oracle_control": {
+        "grounding_unchanged": true,
+        "comparison": {
+          "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+          "stored_quote": "NVLAP accreditation is based on the evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. [altered after extraction]",
+          "stored_passage_hash": "sha256:f6263b3ae31de22e2ba0f486d2092bb154179287ad0a38001a0cf8e3ef054700",
+          "stored_quote_self_hash_matches": false,
+          "raw_utf8_equals_stored_quote": false,
+          "raw_hash_equals_stored_hash": false,
+          "profiled_utf8_equals_stored_quote": false,
+          "profiled_hash_equals_stored_hash": false,
+          "first_differing_utf8_byte": 32,
+          "stored_quote_is_proper_prefix_of_profiled_passage": false
+        }
+      }
+    }
+  ],
+  "controls": [
+    {
+      "case": "xml_nonexistent_neighbor",
+      "grounding": {
+        "source_id": "ecfr.title15_cfr_part_285",
+        "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+        "document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_a:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_d:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/xml",
+        "locator": "15 CFR § 285.9(e)",
+        "status": "no_candidate",
+        "diagnostic": "DPG_NO_CANDIDATE",
+        "engine": "Python stdlib ElementTree; itertext in document order",
+        "extraction_profile": "ecfr-subsection-marker-v1",
+        "candidate_count": 0,
+        "candidates": [],
+        "extracted_passage": null,
+        "passage_hash": null
+      },
+      "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+      "classification_scope": "Modified locator probe; no reviewed quote/hash oracle. This is not a claim that valid absence is a resolver defect.",
+      "stored_quote": null,
+      "stored_passage_hash": null,
+      "repeat_count": 3,
+      "repeated_results_identical": true
+    },
+    {
+      "case": "pdf_nonexistent_neighbor",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 1.3.99",
+        "status": "no_candidate",
+        "diagnostic": "DPG_NO_CANDIDATE",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 0,
+        "candidates": [],
+        "extracted_passage": null,
+        "passage_hash": null
+      },
+      "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+      "classification_scope": "Modified locator probe; no reviewed quote/hash oracle. This is not a claim that valid absence is a resolver defect.",
+      "stored_quote": null,
+      "stored_passage_hash": null,
+      "repeat_count": 3,
+      "repeated_results_identical": true
+    },
+    {
+      "case": "pdf_contents_body_ambiguity",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 3.5",
+        "status": "ambiguous",
+        "diagnostic": "DPG_AMBIGUOUS",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 2,
+        "candidates": [
+          {
+            "selection": "numeric marker 3.5; character interval [5839, 5985)",
+            "pages": [
+              4
+            ],
+            "raw_text": "3.5 Accreditation decision .................................................................................................................. 18 \n",
+            "raw_passage_hash": "sha256:f56e6a92958651d93483db854210a452abc029855ae0995ba5317265a0ceeaf4",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "Accreditation decision .................................................................................................................. 18 \n",
+                "passage_hash": "sha256:ce232b2ea23d63ba20fc4e6625a92636912e3ab97228de6d8098ebbdbc2866df"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "Accreditation decision .................................................................................................................. 18",
+                "passage_hash": "sha256:1479971018279b72f0a1bd6b2b650a98bbc12446838bdfd052473880970b51e8"
+              }
+            ]
+          },
+          {
+            "selection": "numeric marker 3.5; character interval [61382, 62467)",
+            "pages": [
+              26
+            ],
+            "raw_text": "3.5 \nAccreditation decision \n3.5.1 \nThe Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, \nrenewing, suspending, and revoking any NVLAP accreditation. \n3.5.2 \nNVLAP evaluates the information gathered during the accreditation process, including: \na) \ninformation provided on the application; \nb) \nresults of management system documentation review; \nc) \non-site assessment reports; \nd) \nactions taken by the laboratory to correct nonconformities; \ne) \nresults of proficiency testing, if required. \n3.5.3 \nBased on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). \n",
+            "raw_passage_hash": "sha256:9284b702f05db4c4453467825cd49a150ff0c4fb4f4563b68ff83a4e9f2f19ca",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "\nAccreditation decision \n3.5.1 \nThe Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, \nrenewing, suspending, and revoking any NVLAP accreditation. \n3.5.2 \nNVLAP evaluates the information gathered during the accreditation process, including: \na) \ninformation provided on the application; \nb) \nresults of management system documentation review; \nc) \non-site assessment reports; \nd) \nactions taken by the laboratory to correct nonconformities; \ne) \nresults of proficiency testing, if required. \n3.5.3 \nBased on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). \n",
+                "passage_hash": "sha256:ec8127a231824125ba4b119836c403c5ab61cc5a2dcdf8d9531566697135458c"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "Accreditation decision 3.5.1 The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, renewing, suspending, and revoking any NVLAP accreditation. 3.5.2 NVLAP evaluates the information gathered during the accreditation process, including: a) information provided on the application; b) results of management system documentation review; c) on-site assessment reports; d) actions taken by the laboratory to correct nonconformities; e) results of proficiency testing, if required. 3.5.3 Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If the evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP informs the laboratory in writing of the nonconformities. The laboratory shall respond as specified in 3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. NOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal that decision (see 3.13).",
+                "passage_hash": "sha256:33dfab425ca77de9587879f6bfe0eda9c45b7aff3b50290c72168f86e4e46f29"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": null,
+        "passage_hash": null
+      },
+      "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+      "classification_scope": "Modified locator probe; no reviewed quote/hash oracle. This is not a claim that valid absence is a resolver defect.",
+      "stored_quote": null,
+      "stored_passage_hash": null,
+      "repeat_count": 3,
+      "repeated_results_identical": true
+    },
+    {
+      "case": "pdf_cross_page_probe",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 1.3.2",
+        "status": "resolved",
+        "diagnostic": "DPG_ONE_CANDIDATE",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 1,
+        "candidates": [
+          {
+            "selection": "numeric marker 1.3.2; character interval [16476, 17055)",
+            "pages": [
+              9,
+              10
+            ],
+            "raw_text": "1.3.2 \nNVLAP is a voluntary system that provides a mechanism for the recognition of testing and \ncalibration laboratories based on internationally accepted standards. It identifies competent laboratories \n\f \nNIST Handbook 150:2020 update 1 \n2 \nThis publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1\nfor use by regulatory agencies, purchasing authorities, and product certification systems, and promotes the \nacceptance of test and calibration results among economies and accreditors to support trade facilitation \nactivities worldwide. \n",
+            "raw_passage_hash": "sha256:58dfedd3f224a292fb96c12da471ef19fc90ca2d39d9b84e6f9082c0223f46e1",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "\nNVLAP is a voluntary system that provides a mechanism for the recognition of testing and \ncalibration laboratories based on internationally accepted standards. It identifies competent laboratories \n\f \nNIST Handbook 150:2020 update 1 \n2 \nThis publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1\nfor use by regulatory agencies, purchasing authorities, and product certification systems, and promotes the \nacceptance of test and calibration results among economies and accreditors to support trade facilitation \nactivities worldwide. \n",
+                "passage_hash": "sha256:060525da84d88e7db61d1ed783724c36c852284d0161f7dca8b03ee910edf873"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "NVLAP is a voluntary system that provides a mechanism for the recognition of testing and calibration laboratories based on internationally accepted standards. It identifies competent laboratories \f NIST Handbook 150:2020 update 1 2 This publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1 for use by regulatory agencies, purchasing authorities, and product certification systems, and promotes the acceptance of test and calibration results among economies and accreditors to support trade facilitation activities worldwide.",
+                "passage_hash": "sha256:67604c707cef03e435773fb2998b954f6fc76fa5c57414425a668dd6607a451f"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": "NVLAP is a voluntary system that provides a mechanism for the recognition of testing and calibration laboratories based on internationally accepted standards. It identifies competent laboratories \f NIST Handbook 150:2020 update 1 2 This publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1 for use by regulatory agencies, purchasing authorities, and product certification systems, and promotes the acceptance of test and calibration results among economies and accreditors to support trade facilitation activities worldwide.",
+        "passage_hash": "sha256:67604c707cef03e435773fb2998b954f6fc76fa5c57414425a668dd6607a451f"
+      },
+      "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+      "classification_scope": "Modified locator probe; no reviewed quote/hash oracle. This is not a claim that valid absence is a resolver defect.",
+      "stored_quote": null,
+      "stored_passage_hash": null,
+      "repeat_count": 3,
+      "repeated_results_identical": true
+    },
+    {
+      "case": "pdf_hyphenation_and_ambiguity_probe",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": true,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 1.12",
+        "status": "ambiguous",
+        "diagnostic": "DPG_AMBIGUOUS",
+        "engine": "PyMuPDF 1.28.0; MuPDF 1.29.0; get_text(text, sort=False)",
+        "extraction_profile": "handbook-numeric-clause-ascii-whitespace-v1",
+        "candidate_count": 2,
+        "candidates": [
+          {
+            "selection": "numeric marker 1.12; character interval [4132, 4414)",
+            "pages": [
+              4
+            ],
+            "raw_text": "1.12 Complaints ................................................................................................................................... 10 \n2 \nLAP establishment, development and implementation ........................................................................ 11 \n",
+            "raw_passage_hash": "sha256:f6cd4c060d4fbd7b954184230363c127734459e574c5a50e9f218bcb656bc533",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "Complaints ................................................................................................................................... 10 \n2 \nLAP establishment, development and implementation ........................................................................ 11 \n",
+                "passage_hash": "sha256:2c38eb3f4a6b6cc4dc685afcdf7b346e4fc7de45b3199d53e23833fb86c310a6"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "Complaints ................................................................................................................................... 10 2 LAP establishment, development and implementation ........................................................................ 11",
+                "passage_hash": "sha256:ccf79e0d748b91539ca272bd0a8172aa13a85fbef6b517027a9b86806682495b"
+              }
+            ]
+          },
+          {
+            "selection": "numeric marker 1.12; character interval [39953, 40711)",
+            "pages": [
+              18,
+              19
+            ],
+            "raw_text": "1.12 \nComplaints \nNVLAP employs a formal system to address 1.12, which includes procedures for determining the validity \nof complaints, taking appropriate and effective actions, responding to complainants, and record-keeping. \nAny person or organization may lodge a complaint regarding the activities of NVLAP or of a NVLAP-\n\f \nNIST Handbook 150:2020 update 1 \n11 \nThis publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1\naccredited laboratory by sending a description of the complaint and supporting documentation to NVLAP. \nA complaint concerning a NVLAP-accredited laboratory should first be addressed by the laboratory \nagainst which the complaint is lodged. \n2 \nLAP establishment, development and implementation \n",
+            "raw_passage_hash": "sha256:63071534d8c7010cb77c41e07aaf99c8b89d43d27724e905e8fe3d8e7c542749",
+            "steps": [
+              {
+                "transformation": "Remove numeric locator marker and its following spaces/tabs",
+                "text": "\nComplaints \nNVLAP employs a formal system to address 1.12, which includes procedures for determining the validity \nof complaints, taking appropriate and effective actions, responding to complainants, and record-keeping. \nAny person or organization may lodge a complaint regarding the activities of NVLAP or of a NVLAP-\n\f \nNIST Handbook 150:2020 update 1 \n11 \nThis publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1\naccredited laboratory by sending a description of the complaint and supporting documentation to NVLAP. \nA complaint concerning a NVLAP-accredited laboratory should first be addressed by the laboratory \nagainst which the complaint is lodged. \n2 \nLAP establishment, development and implementation \n",
+                "passage_hash": "sha256:2d4b51c4186ced0eff91bb19c5a45e428f3d92e21d2d8fb2a99d57963855cd9d"
+              },
+              {
+                "transformation": "Replace runs of ASCII space/tab/CR/LF with one space; trim edge spaces; retain form feeds, headers, footers, punctuation, and hyphens",
+                "text": "Complaints NVLAP employs a formal system to address 1.12, which includes procedures for determining the validity of complaints, taking appropriate and effective actions, responding to complainants, and record-keeping. Any person or organization may lodge a complaint regarding the activities of NVLAP or of a NVLAP- \f NIST Handbook 150:2020 update 1 11 This publication is available free of charge from: https://doi.org/10.6028/NIST.HB.150-2020-upd1 accredited laboratory by sending a description of the complaint and supporting documentation to NVLAP. A complaint concerning a NVLAP-accredited laboratory should first be addressed by the laboratory against which the complaint is lodged. 2 LAP establishment, development and implementation",
+                "passage_hash": "sha256:c6855d67f711095694d61d53053e611424dcf708365c04c1568d1458f215287a"
+              }
+            ]
+          }
+        ],
+        "extracted_passage": null,
+        "passage_hash": null
+      },
+      "classification": "LOCATOR_CONTRACT_INSUFFICIENT",
+      "classification_scope": "Modified locator probe; no reviewed quote/hash oracle. This is not a claim that valid absence is a resolver defect.",
+      "stored_quote": null,
+      "stored_passage_hash": null,
+      "repeat_count": 3,
+      "repeated_results_identical": true
+    },
+    {
+      "case": "ecfr.title15_cfr_part_285:altered_document_bytes",
+      "mutation": "Replace byte zero with ASCII !; retain all declared hashes and versions",
+      "original_document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+      "classification": "SOURCE_CAPTURE_MISMATCH",
+      "grounding": {
+        "source_id": "ecfr.title15_cfr_part_285",
+        "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+        "document_hash": "sha256:62b21087167b0fb7bff27ed4b3d519fc89c998693e720bb3269a58128ae11954",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_a:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ],
+          [
+            "ecfr.title15_cfr_part_285.section_285_9_d:document_hash",
+            "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919"
+          ]
+        ],
+        "identity_verified": false,
+        "media_type": "application/xml",
+        "locator": "15 CFR § 285.9(a)",
+        "status": "source_capture_mismatch",
+        "diagnostic": "DPG_SOURCE_CAPTURE_MISMATCH",
+        "engine": null,
+        "extraction_profile": null,
+        "candidate_count": 0,
+        "candidates": [],
+        "extracted_passage": null,
+        "passage_hash": null
+      }
+    },
+    {
+      "case": "nist.handbook_150:altered_document_bytes",
+      "mutation": "Replace byte zero with ASCII !; retain all declared hashes and versions",
+      "original_document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+      "classification": "SOURCE_CAPTURE_MISMATCH",
+      "grounding": {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "document_hash": "sha256:885498488a0cb5b5cd72d1d9d170034c40b8c10ad441057bf7b11aed4fb89dda",
+        "declared_hashes": [
+          [
+            "sources.writ",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "sources/MANIFEST.sha256",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.accreditation_decision:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ],
+          [
+            "nist.handbook_150.competence:document_hash",
+            "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e"
+          ]
+        ],
+        "identity_verified": false,
+        "media_type": "application/pdf",
+        "locator": "NIST Handbook 150:2020, clause 1.3.5",
+        "status": "source_capture_mismatch",
+        "diagnostic": "DPG_SOURCE_CAPTURE_MISMATCH",
+        "engine": null,
+        "extraction_profile": null,
+        "candidate_count": 0,
+        "candidates": [],
+        "extracted_passage": null,
+        "passage_hash": null
+      }
+    }
+  ],
+  "promotion": "Keep both resolvers internal. XML merits a bounded follow-up; PDF needs explicit passage extent and an extraction contract. No public primitive promoted."
+}
