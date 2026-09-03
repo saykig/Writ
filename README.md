@@ -30,25 +30,6 @@ The system is designed around several principles:
 
 Writ also contains a small portable mechanical provenance kernel and bounded internal grounding tools for cases where evidence can be reproducibly derived from frozen structured sources.
 
-## Current proving ground
-
-NIST is Writ's sole active development proving ground.
-
-The institutional corpus tests whether Writ can represent source-grounded facts such as:
-
-- identity;
-- placement;
-- relationship;
-- mission;
-- mandate;
-- function;
-- decision right;
-- operational capacity.
-
-Evidence for one kind of fact does not automatically establish another.
-
-For example, evidence that an institution performs a function does not by itself establish that the institution has a legal mandate or demonstrated operational capacity.
-
 ## What Writ is not
 
 Writ is not currently:
@@ -84,7 +65,7 @@ That capability does not exist in Writ yet.
 
 Current research stress cases are used to discover which additional primitives are genuinely necessary. They do not automatically become canonical corpora or production features. New capabilities must earn their way into the core through demonstrated need.
 
-## Why Writ
+## Why Writ?
 
 The goal is not to automate political judgment.
 
