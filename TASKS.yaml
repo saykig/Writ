@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: EXPERIMENT-DOCUMENT-PASSAGE-GROUNDING-A
     title: Falsify locator-only passage grounding against frozen NIST XML and PDF
-    status: in_progress
+    status: review
     dependencies:
       - KERNEL-NATIVE-PROVENANCE-001
     baseline: 7c1ff7cf881236beacb40181a83f320e88d9b4f1

@@ -192,10 +192,30 @@ of the stored competence wording through the existing human review process. Neit
 grounding primitive nor a universal locator model is justified by this experiment. No change to
 `@writ/provenance`, schemas, grammar, corpus content, reviews, or decision semantics is made.
 
+## Acceptance checks
+
+The local acceptance gate passed with the recorded engine:
+
+- Experiment: 11 tests pass; the report reproduces byte-for-byte in a separate invocation.
+- Repository Python suite: 64 tests pass, including the experiment; Ruff, mypy, pack validation,
+  and source-registry drift checks pass. PyMuPDF emits five upstream SWIG deprecation warnings.
+- `bun run format`, `bun run lint`, `bun run typecheck`, `bun run test`, `bun run data:check`,
+  and `bun run build` pass.
+- The standalone experiment TypeScript adapter also passes direct ESLint and strict TypeScript
+  checking; it is outside the existing workspace tsconfig include paths.
+- `bun run verify:writ` passes ontology, interoperability, provenance, and integrity with zero
+  errors or warnings. The tracked-tree checksum manifest is refreshed.
+- `git diff` against the specified baseline confirms no changes under `corpora`, `schemas`,
+  `protocols`, `packages/language`, or `packages/provenance`.
+
+These checks validate the experiment and preservation of existing behavior. Human review remains
+the gate; no merge or promotion is authorized by their success.
+
 ## Exact file inventory
 
 | Action | File | Purpose |
 | --- | --- | --- |
+| Add | `internal/verification/experiments/document_passage_grounding/__init__.py` | Private package marker for repository pytest collection |
 | Add | `internal/verification/experiments/document_passage_grounding/ground.py` | Quote-free internal resolver and typed results |
 | Add | `internal/verification/experiments/document_passage_grounding/oracle.ts` | Existing parser/source adapter reads approved Writ oracles |
 | Add | `internal/verification/experiments/document_passage_grounding/run.py` | Offline orchestration, post-extraction comparison, and report checking |

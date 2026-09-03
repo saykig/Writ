@@ -7,11 +7,11 @@ from unittest.mock import patch
 
 import pytest
 
-from internal.verification.experiments.document_passage_grounding.ground import (
+from .ground import (
     ground,
     text_hash,
 )
-from internal.verification.experiments.document_passage_grounding.run import (
+from .run import (
     REPORT,
     compare,
     documents,
@@ -129,7 +129,7 @@ def test_altered_bytes_or_declarations_fail_before_any_parser(
         replace(document, evidence_versions=("different-version",)),
         replace(document, declared_hashes=()),
     ]
-    module = "internal.verification.experiments.document_passage_grounding.ground"
+    module = ground.__module__
     with (
         patch(module + ".xml_candidates", side_effect=AssertionError("parser called")),
         patch(module + ".pdf_candidates", side_effect=AssertionError("parser called")),
@@ -182,7 +182,7 @@ def test_wrong_title_and_unsupported_locator_do_not_fall_back(docs):
 
 
 def test_parser_failure_is_explicit_and_returns_no_passage(docs):
-    module = "internal.verification.experiments.document_passage_grounding.ground"
+    module = ground.__module__
     with patch(module + ".xml_candidates", side_effect=ValueError("failed extraction")):
         result = ground(
             docs["ecfr.title15_cfr_part_285"], "application/xml", "15 CFR § 285.9(a)"
