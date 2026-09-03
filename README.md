@@ -65,5 +65,4 @@ Current research stress cases are used to discover which additional primitives a
 
 **Writ should make it harder for consequential reasoning to lose its provenance.**
 
-
 Copyright 2026 Sara Kim
