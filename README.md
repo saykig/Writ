@@ -1,91 +1,95 @@
 # Writ
 
-Writ is an open protocol for making political knowledge more inspectable, reviewable, and easier for humans to reason from.
+Writ is an open protocol for making consequential institutional knowledge inspectable, reviewable, and provenance-preserving.
 
-Political and institutional work often preserves conclusions better than the path that produced them. Evidence is spread across reports, laws, institutional pages, notes, and other sources. Along the way, it can become difficult to tell what a source directly establishes, what an analyst inferred, what remains uncertain, and why a particular representation was accepted.
+Political and institutional decisions are usually easier to observe than the fragmented evidence, judgments, uncertainty, authority, and constraints that produced them. Writ is building the substrate needed to preserve those pieces without replacing human judgment.
 
-Writ keeps those pieces connected:
+## Current system
+
+Writ's present boundary is deliberately narrow:
 
 ```text
-source → passage → typed record → human review → provenance
+source
+→ passage
+→ typed record
+→ human review
+→ provenance
 ```
 
-The goal is not for Writ to reason for the user. The goal is to make the available evidence and human judgment easier to inspect, challenge, verify, and inherit.
+A Writ record preserves what a source supports, how that support is interpreted, what remains uncertain, and how the record was reviewed or superseded.
+
+The system is designed around several principles:
+
+- evidence and interpretation remain distinguishable;
+- unknown does not silently become false;
+- inferred support is not treated as direct support;
+- different kinds of institutional facts remain distinct;
+- accepted material is superseded rather than silently rewritten;
+- provenance is deterministic over frozen inputs;
+- human review controls acceptance.
+
+Writ also contains a small portable mechanical provenance kernel and bounded internal grounding tools for cases where evidence can be reproducibly derived from frozen structured sources.
 
 ## Current proving ground
 
-Writ is currently focused on one narrow problem: representing institutional knowledge about the U.S. National Institute of Standards and Technology (NIST).
+NIST is Writ's sole active development proving ground.
 
-A source passage may establish different kinds of institutional facts:
+The institutional corpus tests whether Writ can represent source-grounded facts such as:
 
-- identity
-- placement
-- relationship
-- mission
-- mandate
-- function
-- decision right
-- operational capacity
+- identity;
+- placement;
+- relationship;
+- mission;
+- mandate;
+- function;
+- decision right;
+- operational capacity.
 
-Writ tests whether these distinctions can be represented precisely without turning evidence for one kind of fact into an unsupported claim about another.
+Evidence for one kind of fact does not automatically establish another.
 
-For example, evidence that an institution performs a function does not by itself establish a legal mandate or operational capacity.
+For example, evidence that an institution performs a function does not by itself establish that the institution has a legal mandate or demonstrated operational capacity.
 
-## What Writ does
-
-For each record, Writ preserves:
-
-- the source;
-- the exact supporting passage;
-- the typed claim being made;
-- whether the support is direct or inferred;
-- explicit uncertainty;
-- human review and revision history;
-- provenance back to the underlying evidence.
-
-This lets a researcher inspect why a record exists and reach their own conclusions from the underlying material.
-
-## What Writ does not do
+## What Writ is not
 
 Writ is not currently:
 
-- a compliance engine;
-- a question or query modeller;
 - a policy reasoning engine;
-- an AI decision-maker;
 - a recommendation system;
+- an AI decision-maker;
+- a compliance engine;
+- a scenario simulator;
+- a question-answering system;
 - a general-purpose political knowledge graph.
 
-Those are not current product goals.
+Questions, analyses, models, and conclusions may use Writ records, but they are not the source of truth for those records.
 
-## Why a language?
+## Research direction
 
-Writ currently uses a small domain-specific language to encode source-grounded records and judgments.
+The longer-term research question is whether this substrate can support **decision provenance**.
 
-That is an implementation hypothesis, not a goal in itself.
-
-The current experiment is whether a small, typed grammar can make institutional knowledge more precise, reviewable, and mechanically checkable than ordinary structured files such as YAML or JSON.
-
-If it cannot, Writ should become simpler.
-
-## Current scope
-
-The NIST institutional corpus is the sole active proving ground.
-
-No additional corpus should be added until the institutional model has demonstrated that it can reliably preserve:
+Given a consequential decision that happened, could a reviewer reconstruct the smallest defensible chain showing:
 
 ```text
-evidence
-+ meaning
-+ uncertainty
-+ human review
-+ provenance
+evidence / intelligence
+→ uncertainty and competing interpretations
+→ institutional authority and constraints
+→ decision
+→ material implementation
+→ observed consequences
 ```
 
-without overclaiming.
+without turning government claims into facts, analyst interpretations into evidence, temporal sequence into causation, or missing information into invented certainty?
 
-## North star
+That capability does not exist in Writ yet.
 
-**Make political knowledge easier to inspect, verify, inherit, and reason from without replacing human judgment.**
+Current research stress cases are used to discover which additional primitives are genuinely necessary. They do not automatically become canonical corpora or production features. New capabilities must earn their way into the core through demonstrated need.
+
+## Why Writ
+
+The goal is not to automate political judgment.
+
+The goal is to make the path from evidence to institutional knowledge—and eventually from institutional knowledge to consequential decisions—easier to inspect, challenge, verify, and inherit.
+
+**Writ should make it harder for consequential reasoning to lose its provenance.**
 
 Copyright 2026 Sara Kim
