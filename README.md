@@ -16,8 +16,6 @@ source
 → provenance
 ```
 
-A Writ record preserves what a source supports, how that support is interpreted, what remains uncertain, and how the record was reviewed or superseded.
-
 The system is designed around several principles:
 
 - evidence and interpretation remain distinguishable;
@@ -65,12 +63,7 @@ That capability does not exist in Writ yet.
 
 Current research stress cases are used to discover which additional primitives are genuinely necessary. They do not automatically become canonical corpora or production features. New capabilities must earn their way into the core through demonstrated need.
 
-## Why Writ?
-
-The goal is not to automate political judgment.
-
-The goal is to make the path from evidence to institutional knowledge—and eventually from institutional knowledge to consequential decisions—easier to inspect, challenge, verify, and inherit.
-
 **Writ should make it harder for consequential reasoning to lose its provenance.**
+
 
 Copyright 2026 Sara Kim
