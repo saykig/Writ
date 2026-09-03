@@ -2,6 +2,7 @@
   "experiment": "A",
   "baseline": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
   "overall_conclusion": "CURRENT_LOCATOR_MODEL_INSUFFICIENT",
+  "interpretation_scope": "Comparison classifications retain the experiment outcome labels; reviewed-case findings distinguish the failure causes. A stored-quote/source mismatch is not repaired by a better locator or a specified passage extent.",
   "sources": [
     {
       "source_id": "ecfr.title15_cfr_part_285",
@@ -91,6 +92,7 @@
         "first_differing_utf8_byte": null,
         "stored_quote_is_proper_prefix_of_profiled_passage": false
       },
+      "findings": [],
       "repeat_count": 3,
       "repeated_results_identical": true,
       "altered_oracle_control": {
@@ -171,6 +173,7 @@
         "first_differing_utf8_byte": null,
         "stored_quote_is_proper_prefix_of_profiled_passage": false
       },
+      "findings": [],
       "repeat_count": 3,
       "repeated_results_identical": true,
       "altered_oracle_control": {
@@ -258,6 +261,12 @@
         "first_differing_utf8_byte": 93,
         "stored_quote_is_proper_prefix_of_profiled_passage": true
       },
+      "findings": [
+        {
+          "code": "PASSAGE_EXTENT_UNSPECIFIED",
+          "description": "The stored quote is an exact first-sentence excerpt after the explicit whitespace profile, while the locator identifies the entire clause."
+        }
+      ],
       "repeat_count": 3,
       "repeated_results_identical": true,
       "altered_oracle_control": {
@@ -345,6 +354,16 @@
         "first_differing_utf8_byte": 32,
         "stored_quote_is_proper_prefix_of_profiled_passage": false
       },
+      "findings": [
+        {
+          "code": "STORED_QUOTE_SOURCE_MISMATCH",
+          "description": "The frozen PDF says \"based on evaluation\"; the approved Writ quote says \"based on the evaluation\". A better locator cannot repair this difference."
+        },
+        {
+          "code": "PASSAGE_EXTENT_UNSPECIFIED",
+          "description": "The stored quote also stops before the complete clause ends, omitting the final sentence beginning \"Fulfillment of requirements\". The locator does not specify that excerpt boundary."
+        }
+      ],
       "repeat_count": 3,
       "repeated_results_identical": true,
       "altered_oracle_control": {
@@ -766,5 +785,11 @@
       }
     }
   ],
+  "architectural_lesson": "A reproducible grounding record will likely need to preserve document identity, selector/location, passage extent, extraction engine/profile, and explicit transformations -> resulting passage hash. No new primitive is implemented.",
+  "deferred_follow_up": {
+    "task_id": "NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001",
+    "performed_in_pr_37": false,
+    "scope": "Human-review the existing nist.handbook_150.competence evidence and any approved record/judgment depending on it. Do not silently rewrite approved material."
+  },
   "promotion": "Keep both resolvers internal. XML merits a bounded follow-up; PDF needs explicit passage extent and an extraction contract. No public primitive promoted."
 }

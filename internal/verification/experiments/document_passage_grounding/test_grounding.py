@@ -54,6 +54,7 @@ def test_xml_profile_and_pdf_falsification_are_not_test_success_claims(report):
         comparison = case["comparison"]
         assert not comparison["raw_utf8_equals_stored_quote"]
         if case["passage_id"].startswith("ecfr."):
+            assert case["findings"] == []
             assert (
                 comparison["classification"]
                 == "DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED"
@@ -74,9 +75,17 @@ def test_pdf_wording_extent_and_line_wrapping_remain_visible(report):
     assert "based on the evaluation" in competence["comparison"]["stored_quote"]
     assert "\ncompetence" in competence["grounding"]["candidates"][0]["raw_text"]
     assert "Fulfillment" in competence["grounding"]["extracted_passage"]
+    assert [finding["code"] for finding in competence["findings"]] == [
+        "STORED_QUOTE_SOURCE_MISMATCH",
+        "PASSAGE_EXTENT_UNSPECIFIED",
+    ]
+    assert "A better locator cannot repair" in competence["findings"][0]["description"]
     decision = cases["nist.handbook_150.accreditation_decision"]
     assert decision["comparison"]["stored_quote_is_proper_prefix_of_profiled_passage"]
     assert "NOTE" in decision["grounding"]["extracted_passage"]
+    assert [finding["code"] for finding in decision["findings"]] == [
+        "PASSAGE_EXTENT_UNSPECIFIED",
+    ]
 
 
 def test_absence_ambiguity_and_page_boundaries(report):
@@ -153,6 +162,9 @@ def test_changed_quotes_and_hashes_cannot_influence_extraction(inputs, report):
     ):
         assert before["grounding"] == after["grounding"]
         assert not after["comparison"]["profiled_utf8_equals_stored_quote"]
+        assert (
+            after["findings"] == []
+        )  # Frozen-case explanations must not describe altered oracles.
         assert before["altered_oracle_control"]["grounding_unchanged"]
 
 

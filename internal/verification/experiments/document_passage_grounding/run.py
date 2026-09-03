@@ -106,6 +106,50 @@ def compare(result: Grounding, oracle: dict, reproducible: bool = True) -> dict:
     }
 
 
+def reviewed_findings(
+    passage_id: str, result: Grounding, comparison: dict
+) -> list[dict]:
+    """Case-specific interpretation after extraction, not general resolver diagnostics."""
+    extracted = result.extracted_passage
+    if extracted is None:
+        return []
+    quote = comparison["stored_quote"]
+    findings = []
+    if passage_id == "nist.handbook_150.competence":
+        if "based on evaluation" in extracted and "based on the evaluation" in quote:
+            findings.append(
+                {
+                    "code": "STORED_QUOTE_SOURCE_MISMATCH",
+                    "description": 'The frozen PDF says "based on evaluation"; the approved Writ '
+                    'quote says "based on the evaluation". A better locator cannot repair this difference.',
+                }
+            )
+        if quote.endswith("all NVLAP requirements have been fulfilled.") and (
+            "all NVLAP requirements have been fulfilled. Fulfillment of requirements"
+            in extracted
+        ):
+            findings.append(
+                {
+                    "code": "PASSAGE_EXTENT_UNSPECIFIED",
+                    "description": "The stored quote also stops before the complete clause ends, "
+                    'omitting the final sentence beginning "Fulfillment of requirements". '
+                    "The locator does not specify that excerpt boundary.",
+                }
+            )
+    elif passage_id == "nist.handbook_150.accreditation_decision" and (
+        comparison["stored_quote_is_proper_prefix_of_profiled_passage"]
+        and extracted.partition(". ")[0] + "." == quote
+    ):
+        findings.append(
+            {
+                "code": "PASSAGE_EXTENT_UNSPECIFIED",
+                "description": "The stored quote is an exact first-sentence excerpt after the explicit "
+                "whitespace profile, while the locator identifies the entire clause.",
+            }
+        )
+    return findings
+
+
 def make_report(inputs: dict) -> dict:
     docs = documents(inputs)
     media = {source["source_id"]: source["media_type"] for source in inputs["sources"]}
@@ -138,6 +182,7 @@ def make_report(inputs: dict) -> dict:
                 "passage_id": oracle["passage_id"],
                 "grounding": before,
                 "comparison": comparison,
+                "findings": reviewed_findings(oracle["passage_id"], result, comparison),
                 "repeat_count": len(repeated),
                 "repeated_results_identical": stable,
                 "altered_oracle_control": {
@@ -203,9 +248,21 @@ def make_report(inputs: dict) -> dict:
         "experiment": "A",
         "baseline": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
         "overall_conclusion": conclusion,
+        "interpretation_scope": "Comparison classifications retain the experiment outcome labels; "
+        "reviewed-case findings distinguish the failure causes. A stored-quote/source mismatch "
+        "is not repaired by a better locator or a specified passage extent.",
         "sources": inputs["sources"],
         "reviewed_cases": cases,
         "controls": controls,
+        "architectural_lesson": "A reproducible grounding record will likely need to preserve "
+        "document identity, selector/location, passage extent, extraction engine/profile, and "
+        "explicit transformations -> resulting passage hash. No new primitive is implemented.",
+        "deferred_follow_up": {
+            "task_id": "NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001",
+            "performed_in_pr_37": False,
+            "scope": "Human-review the existing nist.handbook_150.competence evidence and any "
+            "approved record/judgment depending on it. Do not silently rewrite approved material.",
+        },
         "promotion": "Keep both resolvers internal. XML merits a bounded follow-up; PDF needs "
         "explicit passage extent and an extraction contract. No public primitive promoted.",
     }

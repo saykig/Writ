@@ -34,6 +34,7 @@ tasks:
       - Verify capture bytes against source, evidence, and capture-manifest hashes before extraction.
       - Compare independently extracted text with reviewed quotes and hashes only after extraction.
       - Record raw text, explicit profiles, ambiguity, reproducibility, and source-mismatch controls.
+      - Distinguish stored-quote/source mismatch from unspecified passage extent in the final interpretation.
     exclusions:
       - Changes to corpora, captures, schemas, grammar, provenance package, or decision semantics.
       - Network acquisition, public APIs, new evidence families, and promotion to production.
@@ -50,6 +51,24 @@ tasks:
       - docs/verification/document-passage-grounding-results.json
       - TASKS.yaml
       - MANIFEST.sha256
+
+  - id: NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001
+    title: Human-review Handbook competence evidence and approved dependents
+    status: ready
+    dependencies:
+      - EXPERIMENT-DOCUMENT-PASSAGE-GROUNDING-A
+    execution_gate: Deferred follow-up only; do not perform in PR 37.
+    scope:
+      - Human-review the existing nist.handbook_150.competence evidence against the frozen Handbook clause 1.3.5.
+      - Trace and human-review any approved record or judgment depending on that evidence.
+      - Review the stored-quote/source wording mismatch separately from the unspecified passage extent.
+    exclusions:
+      - Silently rewriting approved evidence, records, or judgments.
+      - Automatic acceptance, dispute resolution, or implementation of a new grounding primitive.
+    acceptance:
+      - A human reviewer explicitly records the disposition of the competence evidence and each affected approved dependent.
+      - Any approved material requiring correction follows the existing supersession and review process, preserving prior versions and provenance.
+      - The findings and dependency review remain inspectable without silently editing approved material in place.
 
   - id: RESET-001
     title: Audit and freeze the pre-reset repository

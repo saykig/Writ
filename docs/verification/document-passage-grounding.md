@@ -5,13 +5,16 @@
 From baseline `7c1ff7cf881236beacb40181a83f320e88d9b4f1`, the two reviewed eCFR
 references reproduce exactly after explicitly removing their subsection markers. The two reviewed
 Handbook locators each identify one numeric clause range, but neither reproduces its reviewed quote.
-The competence quote also contains a word absent from the frozen PDF. Passing experiment tests
-confirm these observations; they do not establish grounding success or accept evidence.
+The competence quote has both `STORED_QUOTE_SOURCE_MISMATCH` and `PASSAGE_EXTENT_UNSPECIFIED`;
+the accreditation-decision quote has `PASSAGE_EXTENT_UNSPECIFIED`. These are separate failure causes:
+a better locator cannot repair words in an approved quote that differ from the frozen source.
+Passing experiment tests confirm these observations; they do not establish grounding success or
+accept evidence.
 
 The complete, machine-readable observations are in
 [`document-passage-grounding-results.json`](document-passage-grounding-results.json).
 It contains every raw candidate, selection, physical page, transformation intermediate and hash,
-stored quote/hash, exact UTF-8 comparison, source declaration, and control result. JSON strings
+stored quote/hash, exact UTF-8 comparison, distinct case findings, source declaration, and control result. JSON strings
 preserve trailing spaces, `\n` line breaks, and `\f` page boundaries. No raw text is silently trimmed.
 
 ## Inputs and identity checks
@@ -79,13 +82,18 @@ the stored quote.
 All four stored quotes pass their own stored passage hashes. Each locator produces one candidate.
 Raw text equals none of the four stored quotations; explicit profiles reproduce only the two XML
 quotations. “Equal” below requires both exact UTF-8 byte equality and equality with the stored hash.
+The existing `comparison.classification` values remain aggregate experiment outcome labels. They
+do not identify the sole cause of failure. The new `reviewed_cases[].findings` entries explicitly
+separate the causes for the two reviewed PDF cases; they are post-extraction interpretations of
+these observed cases, not a new resolver or general diagnostic primitive. Altered-oracle controls
+do not inherit these explanations.
 
-| Reviewed passage | Locator | Selection | Raw equal | Profiled equal | Classification |
-| --- | --- | --- | --- | --- | --- |
-| `ecfr.title15_cfr_part_285.section_285_9_a` | `15 CFR § 285.9(a)` | `/DIV5[@N='285']/DIV8[@N='285.9']/P[1]` | No | Yes | `DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED` |
-| `ecfr.title15_cfr_part_285.section_285_9_d` | `15 CFR § 285.9(d)` | `/DIV5[@N='285']/DIV8[@N='285.9']/P[4]` | No | Yes | `DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED` |
-| `nist.handbook_150.competence` | `NIST Handbook 150:2020, clause 1.3.5` | Physical PDF page 10 / printed page 2 | No | No | `LOCATOR_CONTRACT_INSUFFICIENT` |
-| `nist.handbook_150.accreditation_decision` | `NIST Handbook 150:2020, clause 3.5.3` | Physical PDF page 26 / printed page 18 | No | No | `LOCATOR_CONTRACT_INSUFFICIENT` |
+| Reviewed passage | Locator | Selection | Raw equal | Profiled equal | Experiment classification | Distinct failure causes |
+| --- | --- | --- | --- | --- | --- | --- |
+| `ecfr.title15_cfr_part_285.section_285_9_a` | `15 CFR § 285.9(a)` | `/DIV5[@N='285']/DIV8[@N='285.9']/P[1]` | No | Yes | `DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED` | None |
+| `ecfr.title15_cfr_part_285.section_285_9_d` | `15 CFR § 285.9(d)` | `/DIV5[@N='285']/DIV8[@N='285.9']/P[4]` | No | Yes | `DETERMINISTIC_EXTRACTION_PROFILE_REQUIRED` | None |
+| `nist.handbook_150.competence` | `NIST Handbook 150:2020, clause 1.3.5` | Physical PDF page 10 / printed page 2 | No | No | `LOCATOR_CONTRACT_INSUFFICIENT` | `STORED_QUOTE_SOURCE_MISMATCH`; `PASSAGE_EXTENT_UNSPECIFIED` |
+| `nist.handbook_150.accreditation_decision` | `NIST Handbook 150:2020, clause 3.5.3` | Physical PDF page 26 / printed page 18 | No | No | `LOCATOR_CONTRACT_INSUFFICIENT` | `PASSAGE_EXTENT_UNSPECIFIED` |
 
 Exact hashes (all values have the `sha256:` prefix in the JSON report):
 
@@ -122,13 +130,18 @@ These JSON string literals preserve line endings and trailing spaces exactly:
 "3.5.3 \nBased on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). \n"
 ```
 
-In 1.3.5, the stored quote begins “NVLAP accreditation is based on **the** evaluation”. The frozen
-PDF says “NVLAP accreditation is based on evaluation”. The rendered page confirms the missing
-“the”; this is not a line-wrap artifact. The stored quote also stops before the third sentence,
-beginning “Fulfillment of requirements”. The locator supplies neither that sentence boundary nor
-permission to add a word. Even a future sentence-range locator would not resolve the wording mismatch.
+In 1.3.5, **`STORED_QUOTE_SOURCE_MISMATCH`** records that the frozen PDF says “based on evaluation”
+while the approved Writ quote says “based on the evaluation”. The rendered page confirms the
+difference; this is not a line-wrap artifact. A better locator cannot repair this difference.
+It is distinct from `SOURCE_CAPTURE_MISMATCH`: the captured bytes match their declared identity.
 
-In 3.5.3, the stored quote is exactly the first sentence after the whitespace profile. The actual
+The same 1.3.5 case also has **`PASSAGE_EXTENT_UNSPECIFIED`**: the stored quote stops before the
+complete clause ends, omitting the third sentence beginning “Fulfillment of requirements”. The
+locator does not specify that excerpt boundary. Recording the missing extent would still leave
+the stored-quote/source wording mismatch unresolved.
+
+In 3.5.3, **`PASSAGE_EXTENT_UNSPECIFIED`** records that the stored quote is an exact first-sentence
+excerpt after the explicit whitespace profile, while the locator identifies the entire clause. The actual
 clause continues with nonconformity requirements and a note about appeal. The locator names the
 whole clause without specifying a first-sentence excerpt. Selecting the prefix because it equals
 Writ's quotation would violate the experiment. No first-sentence-only profile was invented.
@@ -166,6 +179,30 @@ the resolver does not claim this ambiguous candidate is a correctly delimited pa
 The hyphenated `NVLAP-` crosses a page boundary. The profile preserves the hyphen, form feed, and page
 furniture instead of deciding whether or how to join the word. No hyphenation transformation is
 claimed to reproduce a reviewed quotation.
+
+## Architectural lesson and deferred human review
+
+A reproducible grounding record will likely need to preserve:
+
+- document identity;
+- selector/location;
+- passage extent;
+- extraction engine/profile;
+- explicit transformations;
+- the resulting passage hash.
+
+The relationship is **document identity + selector/location + passage extent + extraction
+engine/profile + explicit transformations → resulting passage hash**. Location and extent answer
+different questions: identifying clause 3.5.3 does not specify its first sentence as the passage.
+Preserving this derivation also makes a wording mismatch visible; it does not authorize altering
+an approved quotation. This is an architectural lesson from the experiment. No new grounding
+primitive, schema, or public API is implemented in PR #37.
+
+Follow-up task `NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001` is recorded in
+[`TASKS.yaml`](../../TASKS.yaml), deferred and **not performed in PR #37**. It requires human review
+of the existing `nist.handbook_150.competence` evidence and any approved record or judgment depending
+on it. Approved material must not be silently rewritten. Any correction must follow the existing
+human-review and supersession process while preserving prior versions and provenance.
 
 ## Reproduction, scope, and promotion recommendation
 
@@ -207,9 +244,15 @@ The local acceptance gate passed with the recorded engine:
   errors or warnings. The tracked-tree checksum manifest is refreshed.
 - `git diff` against the specified baseline confirms no changes under `corpora`, `schemas`,
   `protocols`, `packages/language`, or `packages/provenance`.
+- The interpretation correction preserves every prior extraction, comparison, control, and
+  conclusion value from PR commit `05c1a88`. The resolver and oracle adapter are unchanged.
 
 These checks validate the experiment and preservation of existing behavior. Human review remains
 the gate; no merge or promotion is authorized by their success.
+
+**Maintainer merge recommendation:** PR #37 is recommended for maintainer merge as an internal
+experiment with the corrected interpretation. The competence evidence review remains a separate,
+unperformed follow-up, and no new grounding primitive is implemented or promoted.
 
 ## Exact file inventory
 
@@ -222,5 +265,5 @@ the gate; no merge or promotion is authorized by their success.
 | Add | `internal/verification/experiments/document_passage_grounding/test_grounding.py` | Frozen-source, independence, identity, ambiguity, and reproducibility tests |
 | Add | `docs/verification/document-passage-grounding-results.json` | Complete deterministic raw and transformed observations |
 | Add | `docs/verification/document-passage-grounding.md` | This report, limitations, and promotion recommendation |
-| Change | `TASKS.yaml` | One scoped experiment task and its acceptance gate |
+| Change | `TASKS.yaml` | Scoped experiment task, acceptance gate, and deferred competence human-review task |
 | Change | `MANIFEST.sha256` | Tracked-tree checksum entries for this change |
