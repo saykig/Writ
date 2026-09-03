@@ -99,10 +99,8 @@ def test_retained_passage_is_grounded_without_quote_input(retained, subsection):
     oracle = next(
         ref for ref in oracles if ref["locator"] == f"15 CFR § 285.9({subsection})"
     )
-    assert result.evidence_bytes == oracle["quote"].encode("utf-8")
-    assert (
-        result.passage_hash == oracle["passage_hash"] == digest(result.evidence_bytes)
-    )
+    assert result.evidence_utf8 == oracle["quote"].encode("utf-8")
+    assert result.passage_hash == oracle["passage_hash"] == digest(result.evidence_utf8)
     changed_oracle = {**oracle, "quote": "Changed after extraction"}
     assert changed_oracle["quote"] != result.evidence_text
     for _ in range(3):
@@ -130,7 +128,7 @@ def test_wrong_selector_never_returns_neighboring_text(retained, selector, statu
     )
     assert result.status == status
     assert result.raw_extracted_text is None
-    assert result.evidence_bytes is None and result.passage_hash is None
+    assert result.evidence_utf8 is None and result.passage_hash is None
 
 
 @pytest.mark.parametrize(
@@ -215,15 +213,15 @@ def test_duplicate_structural_matches_are_ambiguous_even_with_identical_text(
     assert result.status == "AMBIGUOUS" and result.candidate_count == 2
     assert result.candidate_elements == paths
     assert result.selected_element is None and result.raw_extracted_text is None
-    assert result.evidence_bytes is None and result.passage_hash is None
+    assert result.evidence_utf8 is None and result.passage_hash is None
     assert result.transformations == ()
 
 
 def test_profile_preserves_text_nodes_entities_and_whitespace():
     result = from_fixture(synthetic("<P>(a) A <I>word</I> &amp;\n  another. </P>"))
     assert result.raw_extracted_text == "(a) A word &\n  another. "
-    assert result.evidence_bytes == b"A word &\n  another. "
-    assert result.passage_hash == digest(result.evidence_bytes)
+    assert result.evidence_utf8 == b"A word &\n  another. "
+    assert result.passage_hash == digest(result.evidence_utf8)
 
 
 @pytest.mark.parametrize(

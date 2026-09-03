@@ -31,8 +31,8 @@ tasks:
     research_basis: https://github.com/saykig/Writ/pull/37
     scope:
       - Verify frozen bytes against caller-declared source/version/hash identity before XML extraction.
-      - Resolve one explicit eCFR structural paragraph selector and apply one explicit marker-removal profile.
-      - Preserve structural selection, raw text, transformation, exact UTF-8 evidence, and passage hash.
+      - Resolve part/section structurally and select one direct P by its exact textual subsection marker under an explicit extraction profile.
+      - Preserve structured-source selection, parsed selected text before transformation, derived evidence text, its UTF-8 representation, and passage hash.
       - Carry forward the deferred Handbook competence human-review task without performing it.
     exclusions:
       - Experiment A runner, reports, result JSON, PDF extraction, and universal locators.
@@ -40,7 +40,7 @@ tasks:
     acceptance:
       - Unique, absent, wrong, and ambiguous selectors are distinguished without returning neighboring text.
       - Document hash failure prevents parsing and extraction.
-      - Both reviewed eCFR passages reproduce exact stored bytes and hashes without quotation input.
+      - Both reviewed eCFR passages reproduce the stored quotes' UTF-8 representation and hashes without quotation input; no literal source byte span is claimed.
       - Repetition and changed regression oracles leave grounding unchanged; transformations stay explicit.
       - Formatting, lint, typecheck, tests, data checks, Writ verification, Python checks, build, and integrity pass.
       - Open a separate PR from current main and stop without merging.

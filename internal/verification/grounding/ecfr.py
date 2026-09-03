@@ -14,6 +14,8 @@ PROFILE = "ecfr-paragraph-remove-marker-v1"
 
 @dataclass(frozen=True)
 class EcfrParagraphSelector:
+    """Part/section structure plus a direct P's exact textual subsection marker."""
+
     title: int
     part: str
     section: str
@@ -55,6 +57,7 @@ class GroundingResult:
     status: Status
     candidate_elements: tuple[str, ...]
     selected_element: str | None
+    # Parsed, selected element text before marker removal; not source artifact bytes.
     raw_extracted_text: str | None
     transformations: tuple[Transformation, ...]
     evidence_text: str | None
@@ -65,7 +68,8 @@ class GroundingResult:
         return len(self.candidate_elements)
 
     @property
-    def evidence_bytes(self) -> bytes | None:
+    def evidence_utf8(self) -> bytes | None:
+        """UTF-8 encoding of derived evidence_text, not a byte slice of the XML artifact."""
         return (
             self.evidence_text.encode("utf-8")
             if self.evidence_text is not None
@@ -87,7 +91,10 @@ def ground_ecfr(
     selector: EcfrParagraphSelector,
     extraction_profile: str,
 ) -> GroundingResult:
-    """Select one complete direct P element; never accept a quotation or free-form locator."""
+    """Resolve part/section structure and one direct P by its textual subsection marker.
+
+    Derive evidence text under the declared profile; no quotation or free-form locator input.
+    """
     observed = _sha256(document)
     identity_valid = bool(source_id.strip() and document_version_id.strip())
     verified = observed if identity_valid and observed == document_hash else None
