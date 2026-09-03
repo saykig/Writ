@@ -55,6 +55,83 @@ describe("rejected inputs throw CanonicalJsonError", () => {
   }
 });
 
+describe("the accepted runtime domain is plain in-memory JSON", () => {
+  class Instance {
+    value = 1;
+  }
+
+  const customPrototype = Object.create({ inherited: true }) as Record<string, unknown>;
+  customPrototype.value = 1;
+  const customArray = [1, 2];
+  Object.setPrototypeOf(customArray, null);
+
+  const unsupported = [
+    new Date(0),
+    new Map([["value", 1]]),
+    new Set([1]),
+    /value/u,
+    new Number(1),
+    new String("value"),
+    new Boolean(true),
+    new Instance(),
+    customPrototype,
+    customArray,
+  ];
+
+  test("rejects runtime objects that would otherwise collapse to JSON identities", () => {
+    for (const value of unsupported) {
+      expect(() => canonicalJson(value)).toThrow(CanonicalJsonError);
+      expect(() => sha256Canonical(value)).toThrow(CanonicalJsonError);
+    }
+  });
+
+  test("rejects non-data properties that JSON serialization would hide or execute", () => {
+    const symbolObject = { value: 1, [Symbol("hidden")]: 2 };
+    const hiddenObject = { value: 1 };
+    Object.defineProperty(hiddenObject, "hidden", { value: 2 });
+    const accessorObject = Object.defineProperty({}, "value", {
+      enumerable: true,
+      get: () => 1,
+    });
+    const namedArray = [1, 2] as number[] & { named?: number };
+    namedArray.named = 3;
+    const accessorArray = [1];
+    Object.defineProperty(accessorArray, "0", { enumerable: true, get: () => 1 });
+    for (const value of [symbolObject, hiddenObject, accessorObject, namedArray, accessorArray]) {
+      expect(() => canonicalJson(value)).toThrow(CanonicalJsonError);
+    }
+  });
+
+  test("accepts a null-prototype plain record", () => {
+    const value = Object.create(null) as Record<string, unknown>;
+    value.b = 2;
+    value.a = 1;
+    expect(canonicalJson(value)).toBe('{"a":1,"b":2}');
+  });
+
+  test("rejects cyclic objects and arrays with bounded typed errors", () => {
+    const object: Record<string, unknown> = {};
+    object.self = object;
+    const array: unknown[] = [];
+    array.push(array);
+    for (const value of [object, array]) {
+      expect(() => canonicalJson(value)).toThrow(CanonicalJsonError);
+      expect(() => canonicalJson(value)).toThrow(/cyclic value/);
+    }
+  });
+
+  test("bounds hostile nesting while preserving values at the guard", () => {
+    const nested = (depth: number): unknown => {
+      let value: unknown = 0;
+      for (let index = 0; index < depth; index += 1) value = { value };
+      return value;
+    };
+    expect(() => canonicalJson(nested(512))).not.toThrow();
+    expect(() => canonicalJson(nested(513))).toThrow(CanonicalJsonError);
+    expect(() => canonicalJson(nested(513))).toThrow(/nesting exceeds 512/);
+  });
+});
+
 test("insignificant whitespace in the source JSON text does not change bytes or hash", () => {
   const compact = '{"b":1,"a":[1,2,3],"c":{"y":2,"x":1}}';
   const spaced = `{
@@ -91,8 +168,19 @@ test("-0 and 0 hash identically", () => {
   expect(canonicalJson({ n: -0 })).toBe('{"n":0}');
 });
 
-test("undefined-valued object properties are omitted (JSON semantics)", () => {
-  expect(canonicalJson({ a: 1, b: undefined, c: 3 })).toBe('{"a":1,"c":3}');
+test("undefined-valued object properties fail closed", () => {
+  expect(() => canonicalJson({ a: 1, b: undefined, c: 3 })).toThrow(CanonicalJsonError);
+  expect(() => sha256Canonical({ x: undefined })).toThrow(/JSON has no undefined/);
+});
+
+test("pins the IEEE-754 parser boundary beyond safe integer precision", () => {
+  const first = JSON.parse('{"n":9007199254740992}') as unknown;
+  const rounded = JSON.parse('{"n":9007199254740993}') as unknown;
+
+  expect(first).toEqual(rounded);
+  expect(canonicalJson(first)).toBe(canonicalJson(rounded));
+  expect(sha256Canonical(first)).toBe(sha256Canonical(rounded));
+  expect('{"n":9007199254740992}').not.toBe('{"n":9007199254740993}');
 });
 
 describe("dropFields", () => {
@@ -107,6 +195,57 @@ describe("dropFields", () => {
     expect(canonicalJson(value, { dropFields: ["/a/secret"] })).toBe('{"a":{"keep":1},"b":2}');
   });
 
+  test("implements RFC 6901 tilde and slash escaping", () => {
+    const value = { "a~b": 1, "a/b": 2, keep: true };
+    expect(canonicalJson(value, { dropFields: ["/a~0b"] })).toBe('{"a/b":2,"keep":true}');
+    expect(canonicalJson(value, { dropFields: ["/a~1b"] })).toBe('{"a~b":1,"keep":true}');
+  });
+
+  test("rejects malformed RFC 6901 escapes", () => {
+    for (const pointer of ["/a~2b", "/a~"]) {
+      expect(() => canonicalJson({ "a~2b": 1 }, { dropFields: [pointer] })).toThrow(
+        CanonicalJsonError,
+      );
+      expect(() => sha256Canonical({ "a~2b": 1 }, { dropFields: [pointer] })).toThrow(
+        /malformed JSON Pointer/,
+      );
+    }
+  });
+
+  test("rejects the root pointer and preserves slash as the empty-key pointer", () => {
+    expect(() => canonicalJson({ keep: true }, { dropFields: [""] })).toThrow(/root JSON Pointer/);
+    expect(canonicalJson({ "": "drop", keep: true }, { dropFields: ["/"] })).toBe('{"keep":true}');
+  });
+
+  test("addresses fields in the NFC-normalized key space", () => {
+    const composed = { "caf\u00e9": "drop", keep: true };
+    const decomposed = { "cafe\u0301": "drop", keep: true };
+    const options = { dropFields: ["/caf\u00e9"] };
+    expect(canonicalJson(composed, options)).toBe('{"keep":true}');
+    expect(canonicalJson(decomposed, options)).toBe('{"keep":true}');
+    expect(sha256Canonical(composed, options)).toBe(sha256Canonical(decomposed, options));
+
+    const nested = { "cafe\u0301": { "re\u0301sume\u0301": "drop", keep: true } };
+    expect(canonicalJson(nested, { dropFields: ["/caf\u00e9/r\u00e9sum\u00e9"] })).toBe(
+      '{"caf\u00e9":{"keep":true}}',
+    );
+  });
+
+  test("addresses NFC and NFD keys containing slash and tilde", () => {
+    const composed = { "caf\u00e9/~": "drop", keep: true };
+    const decomposed = { "cafe\u0301/~": "drop", keep: true };
+    for (const value of [composed, decomposed]) {
+      expect(canonicalJson(value, { dropFields: ["/caf\u00e9~1~0"] })).toBe('{"keep":true}');
+      expect(canonicalJson(value, { dropFields: ["/cafe\u0301~1~0"] })).toBe('{"keep":true}');
+    }
+  });
+
+  test("drops every colliding NFC spelling when the normalized path is omitted", () => {
+    const value = { "caf\u00e9": 1, "cafe\u0301": 2, keep: true };
+    expect(canonicalJson(value, { dropFields: ["/cafe\u0301"] })).toBe('{"keep":true}');
+    expect(() => canonicalJson(value)).toThrow(/duplicate object key/);
+  });
+
   test("dropping a field changes the hash; the field's value does not once dropped", () => {
     const base = { id: "x", volatile: "one" };
     const changed = { id: "x", volatile: "two" };
@@ -115,5 +254,14 @@ describe("dropFields", () => {
     // With the field dropped, both hash identically.
     const opts = { dropFields: ["/volatile"] };
     expect(sha256Canonical(base, opts)).toBe(sha256Canonical(changed, opts));
+  });
+
+  test("is an explicit Writ identity profile, not generic object equality", () => {
+    const profiled = sha256Canonical(
+      { id: "x", decision: "approve" },
+      { dropFields: ["/decision"] },
+    );
+    expect(profiled).toBe(sha256Canonical({ id: "x" }));
+    expect(sha256Canonical({ id: "x", decision: "approve" })).not.toBe(profiled);
   });
 });

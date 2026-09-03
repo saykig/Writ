@@ -106,6 +106,11 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
     authority: meta("Mechanical reference resolution"),
   },
   {
+    code: "PROVENANCE_EVIDENCE_REFERENCE_INVALID",
+    gate: "provenance",
+    authority: schema("schemas/core/record.schema.json", "0.2.0", "evidenceReference"),
+  },
+  {
     code: "PROVENANCE_AUTHORITY_SOURCE_NOT_EVIDENCED",
     gate: "provenance",
     authority: schema(

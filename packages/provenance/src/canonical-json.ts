@@ -15,9 +15,11 @@
  *
  * The serializer operates on an in-memory JSON value (the result of
  * `JSON.parse` or an equivalent plain structure): `null`, boolean, number,
- * string, array, and plain object. Any other runtime type (`undefined`,
- * `bigint`, function, symbol) is rejected with {@link CanonicalJsonError};
- * `undefined`-valued object properties are omitted, matching JSON semantics.
+ * string, ordinary array, and plain object. Any other runtime type or object
+ * (`undefined`, bigint, function, symbol, Date, Map, Set, RegExp, boxed
+ * primitive, class instance, or custom-prototype object) is rejected with
+ * {@link CanonicalJsonError}. This includes `undefined`-valued object
+ * properties: omission is not an accepted implicit identity transform.
  */
 
 /** Error thrown for any value that cannot be represented in canonical JSON. */
@@ -37,16 +39,41 @@ export interface CanonicalOptions {
    * Each entry is an RFC 6901 JSON Pointer, e.g. `"/signature"` or
    * `"/dependencies/methodology_bundle_hash"`. As a convenience, a bare token
    * without a leading `/` is treated as a top-level key, so `"signature"` is
-   * equivalent to `"/signature"`.
+   * equivalent to `"/signature"`. Leading-slash entries must use valid `~0`
+   * and `~1` escaping. The empty root pointer is rejected because omitting the
+   * complete input has no canonical JSON value; `"/"` addresses an empty key.
+   * Pointers address Writ's NFC-normalized key space rather than the original
+   * pre-normalization spelling.
    */
   dropFields?: Iterable<string>;
 }
 
 const EMPTY_DROP_SET: ReadonlySet<string> = new Set<string>();
+const MAX_CANONICAL_DEPTH = 512;
 
 /** Escape a single key/token into an RFC 6901 JSON Pointer reference token. */
 function encodePointerToken(token: string): string {
   return token.replace(/~/g, "~0").replace(/\//g, "~1");
+}
+
+function normalizeDropPointer(field: string): string {
+  if (field === "") {
+    throw new CanonicalJsonError("dropFields cannot omit the root JSON Pointer");
+  }
+  if (!field.startsWith("/")) {
+    return "/" + encodePointerToken(field.normalize("NFC"));
+  }
+  for (let index = 0; index < field.length; index += 1) {
+    if (field[index] !== "~") continue;
+    const escaped = field[index + 1];
+    if (escaped !== "0" && escaped !== "1") {
+      throw new CanonicalJsonError(
+        `malformed JSON Pointer escape in dropFields entry ${JSON.stringify(field)}`,
+      );
+    }
+    index += 1;
+  }
+  return field.normalize("NFC");
 }
 
 function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<string> {
@@ -56,7 +83,10 @@ function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<str
     if (typeof field !== "string") {
       throw new CanonicalJsonError("dropFields entries must be strings");
     }
-    set.add(field.startsWith("/") ? field : "/" + encodePointerToken(field));
+    // Omission is defined over the same NFC-normalized key space that Writ v1
+    // serializes. A composed pointer therefore addresses a decomposed input
+    // key (and vice versa).
+    set.add(normalizeDropPointer(field));
   }
   return set;
 }
@@ -67,10 +97,22 @@ function normalizeDropSet(fields: Iterable<string> | undefined): ReadonlySet<str
  */
 export function canonicalJson(value: unknown, options?: CanonicalOptions): string {
   const drops = normalizeDropSet(options?.dropFields);
-  return serialize(value, "", drops);
+  return serialize(value, "", drops, 0, new WeakSet<object>());
 }
 
-function serialize(value: unknown, pointer: string, drops: ReadonlySet<string>): string {
+function serialize(
+  value: unknown,
+  pointer: string,
+  drops: ReadonlySet<string>,
+  depth: number,
+  active: WeakSet<object>,
+): string {
+  if (depth > MAX_CANONICAL_DEPTH) {
+    throw new CanonicalJsonError(
+      `canonical JSON nesting exceeds ${MAX_CANONICAL_DEPTH}` +
+        (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
   if (value === null) return "null";
   switch (typeof value) {
     case "string":
@@ -79,10 +121,22 @@ function serialize(value: unknown, pointer: string, drops: ReadonlySet<string>):
       return serializeNumber(value);
     case "boolean":
       return value ? "true" : "false";
-    case "object":
-      return Array.isArray(value)
-        ? serializeArray(value, pointer, drops)
-        : serializeObject(value as Record<string, unknown>, pointer, drops);
+    case "object": {
+      if (active.has(value)) {
+        throw new CanonicalJsonError(
+          `cyclic value is not permitted in canonical JSON` +
+            (pointer === "" ? "" : ` at ${pointer}`),
+        );
+      }
+      active.add(value);
+      try {
+        return Array.isArray(value)
+          ? serializeArray(value, pointer, drops, depth, active)
+          : serializeObject(value as Record<string, unknown>, pointer, drops, depth, active);
+      } finally {
+        active.delete(value);
+      }
+    }
     default:
       // undefined, bigint, function, symbol
       throw new CanonicalJsonError(
@@ -114,18 +168,51 @@ function serializeNumber(value: number): string {
   return value.toString();
 }
 
-function serializeArray(value: unknown[], pointer: string, drops: ReadonlySet<string>): string {
+function serializeArray(
+  value: unknown[],
+  pointer: string,
+  drops: ReadonlySet<string>,
+  depth: number,
+  active: WeakSet<object>,
+): string {
+  if (Object.getPrototypeOf(value) !== Array.prototype) {
+    throw new CanonicalJsonError(
+      `unsupported array prototype` + (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
+  if (Object.getOwnPropertySymbols(value).length > 0) {
+    throw new CanonicalJsonError(
+      `symbol properties are not permitted on canonical JSON arrays` +
+        (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
+  const propertyNames = Object.getOwnPropertyNames(value);
+  if (
+    propertyNames.length !== value.length + 1 ||
+    !propertyNames.includes("length") ||
+    Array.from({ length: value.length }, (_, index) => String(index)).some(
+      (index) => !propertyNames.includes(index),
+    )
+  ) {
+    throw new CanonicalJsonError(
+      `canonical JSON arrays must be dense and have no named properties` +
+        (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
   const parts: string[] = [];
   for (let i = 0; i < value.length; i++) {
     const childPointer = `${pointer}/${i}`;
     if (drops.has(childPointer)) continue;
-    const element = value[i];
-    if (element === undefined) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, String(i));
+    if (descriptor === undefined || !("value" in descriptor)) {
+      throw new CanonicalJsonError(`array element at ${childPointer} must be a data property`);
+    }
+    if (descriptor.value === undefined) {
       throw new CanonicalJsonError(
         `array element at ${childPointer} is undefined; JSON has no undefined`,
       );
     }
-    parts.push(serialize(element, childPointer, drops));
+    parts.push(serialize(descriptor.value, childPointer, drops, depth + 1, active));
   }
   return `[${parts.join(",")}]`;
 }
@@ -140,16 +227,44 @@ function serializeObject(
   value: Record<string, unknown>,
   pointer: string,
   drops: ReadonlySet<string>,
+  depth: number,
+  active: WeakSet<object>,
 ): string {
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new CanonicalJsonError(
+      `unsupported object prototype` + (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
+  if (Object.getOwnPropertySymbols(value).length > 0) {
+    throw new CanonicalJsonError(
+      `symbol properties are not permitted on canonical JSON objects` +
+        (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
+  const keys = Object.keys(value);
+  if (Object.getOwnPropertyNames(value).length !== keys.length) {
+    throw new CanonicalJsonError(
+      `non-enumerable properties are not permitted on canonical JSON objects` +
+        (pointer === "" ? "" : ` at ${pointer}`),
+    );
+  }
   const entries: ObjectEntry[] = [];
   const seen = new Set<string>();
-  for (const origKey of Object.keys(value)) {
-    const childPointer = `${pointer}/${encodePointerToken(origKey)}`;
-    if (drops.has(childPointer)) continue;
-    const propertyValue = value[origKey];
-    // Omit undefined-valued properties, matching JSON.stringify semantics.
-    if (propertyValue === undefined) continue;
+  for (const origKey of keys) {
     const normKey = origKey.normalize("NFC");
+    const childPointer = `${pointer}/${encodePointerToken(normKey)}`;
+    if (drops.has(childPointer)) continue;
+    const descriptor = Object.getOwnPropertyDescriptor(value, origKey);
+    if (descriptor === undefined || !("value" in descriptor)) {
+      throw new CanonicalJsonError(`object property at ${childPointer} must be a data property`);
+    }
+    const propertyValue = descriptor.value;
+    if (propertyValue === undefined) {
+      throw new CanonicalJsonError(
+        `object property at ${childPointer} is undefined; JSON has no undefined`,
+      );
+    }
     if (seen.has(normKey)) {
       throw new CanonicalJsonError(
         `duplicate object key after NFC normalization: ${JSON.stringify(normKey)}`,
@@ -165,8 +280,10 @@ function serializeObject(
 
   const parts: string[] = [];
   for (const entry of entries) {
-    const childPointer = `${pointer}/${encodePointerToken(entry.origKey)}`;
-    parts.push(`${serializeString(entry.normKey)}:${serialize(entry.value, childPointer, drops)}`);
+    const childPointer = `${pointer}/${encodePointerToken(entry.normKey)}`;
+    parts.push(
+      `${serializeString(entry.normKey)}:${serialize(entry.value, childPointer, drops, depth + 1, active)}`,
+    );
   }
   return `{${parts.join(",")}}`;
 }

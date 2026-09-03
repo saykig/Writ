@@ -1,16 +1,19 @@
-import type { WritRecord } from "@writ/domain";
+import {
+  evidencePassageSignature,
+  logicalPassageConflicts as portablePassageConflicts,
+  passageSignatureKey,
+  resolveLogicalPassage as resolvePortablePassage,
+  type DeclaredTextReference,
+  type LogicalPassageOccurrence as PortablePassageOccurrence,
+  type LogicalPassageResolution as PortablePassageResolution,
+  type PassageSignature,
+} from "@writ/provenance";
 
 import type { IndexedObject, RepositorySnapshot } from "../types.js";
 import { resolveRoutedSource } from "./sources.js";
 
-export interface PassageSignature {
-  source_id: string;
-  document_version_id: string;
-  locator: string;
-  quote: string;
-  passage_hash: string;
-  document_hash: string;
-}
+export type { PassageSignature } from "@writ/provenance";
+export { passageSignatureKey } from "@writ/provenance";
 
 export interface LogicalPassageOccurrence {
   passageId: string;
@@ -36,21 +39,8 @@ export interface LogicalPassageIndex {
   currentNativeConflicts(): LogicalPassageResolution[];
 }
 
-type Evidence = WritRecord["evidence"][number];
-
-export function corePassageSignature(evidence: Evidence): PassageSignature {
-  return {
-    source_id: evidence.source_id,
-    document_version_id: evidence.document_version_id,
-    locator: evidence.locator,
-    quote: evidence.quote,
-    passage_hash: evidence.passage_hash,
-    document_hash: evidence.document_hash,
-  };
-}
-
-export function passageSignatureKey(signature: PassageSignature): string {
-  return JSON.stringify(signature);
+export function corePassageSignature(evidence: DeclaredTextReference): PassageSignature {
+  return evidencePassageSignature(evidence);
 }
 
 function sourceHash(value: Record<string, unknown>): string | undefined {
@@ -177,53 +167,50 @@ export function logicalPassageOccurrences(
   });
 }
 
-function resolution(
-  passageId: string,
-  occurrences: LogicalPassageOccurrence[],
-): LogicalPassageResolution {
-  const signatureKeys = [...new Set(occurrences.map(({ signatureKey }) => signatureKey))].sort();
-  return {
-    status:
-      occurrences.length === 0 ? "missing" : signatureKeys.length === 1 ? "resolved" : "conflict",
-    passageId,
-    occurrences,
-    signatureKeys,
-  };
+function portableOccurrences(
+  occurrences: readonly LogicalPassageOccurrence[],
+): Array<PortablePassageOccurrence<LogicalPassageOccurrence>> {
+  const counts = new Map<string, Map<string, number>>();
+  return occurrences.flatMap((occurrence) =>
+    [occurrence.passageId, ...occurrence.aliases].map((passageId) => {
+      const baseId = `${occurrence.corpusId}\0${occurrence.objectId}\0${occurrence.file}`;
+      const passageCounts = counts.get(passageId) ?? new Map<string, number>();
+      const ordinal = passageCounts.get(baseId) ?? 0;
+      passageCounts.set(baseId, ordinal + 1);
+      counts.set(passageId, passageCounts);
+      return {
+        passageId,
+        signature: occurrence.signature,
+        occurrenceId: `${baseId}\0${ordinal}`,
+        context: occurrence,
+      };
+    }),
+  );
 }
 
-function addOccurrence(
-  index: Map<string, LogicalPassageOccurrence[]>,
-  identifier: string,
-  occurrence: LogicalPassageOccurrence,
-): void {
-  const current = index.get(identifier);
-  if (current) current.push(occurrence);
-  else index.set(identifier, [occurrence]);
+function repositoryResolution(
+  resolution: PortablePassageResolution<LogicalPassageOccurrence>,
+): LogicalPassageResolution {
+  return {
+    ...resolution,
+    occurrences: resolution.occurrences.map(({ context }) => context),
+  };
 }
 
 /** Build one deterministic passage index for all lookups performed by a gate. */
 export function buildLogicalPassageIndex(snapshot: RepositorySnapshot): LogicalPassageIndex {
   const occurrences = logicalPassageOccurrences(snapshot);
-  const all = new Map<string, LogicalPassageOccurrence[]>();
-  const currentNative = new Map<string, LogicalPassageOccurrence[]>();
-  for (const occurrence of occurrences) {
-    for (const identifier of [occurrence.passageId, ...occurrence.aliases]) {
-      addOccurrence(all, identifier, occurrence);
-      if (occurrence.adapterKind === "current_native_core") {
-        addOccurrence(currentNative, identifier, occurrence);
-      }
-    }
-  }
+  const all = portableOccurrences(occurrences);
+  const currentNative = portableOccurrences(
+    occurrences.filter(({ adapterKind }) => adapterKind === "current_native_core"),
+  );
   return {
     occurrences,
     resolve(passageId) {
-      return resolution(passageId, all.get(passageId) ?? []);
+      return repositoryResolution(resolvePortablePassage(all, passageId));
     },
     currentNativeConflicts() {
-      return [...currentNative]
-        .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
-        .map(([passageId, matches]) => resolution(passageId, matches))
-        .filter(({ status }) => status === "conflict");
+      return portablePassageConflicts(currentNative).map(repositoryResolution);
     },
   };
 }

@@ -103,6 +103,17 @@ valid or invalid. No semantic-version compatibility is inferred.
 
 ## Native-source boundary
 
+The domain-neutral reference checks live in the independently packable `@writ/provenance` package.
+The Writ adapter retains repository loading, exact contract selection, manifest source routing,
+compatibility identities and diagnostic context. Only after a structured declaration is authorized
+for the citing corpus does the adapter supply its source ID, document-version ID and document hash
+to the package. The package therefore answers whether a reference exactly matches caller-supplied
+authority; it does not answer whether a corpus is allowed to cite that authority. The complete audit
+and package boundary are recorded in `docs/verification/portable-provenance-kernel.md`.
+It also does not open the referenced document or prove that the declared quote occurs at the
+declared locator. That document-to-locator grounding transition is a separate caller/repository
+obligation; the portable package verifies declared-reference integrity only.
+
 For compiled native records, the harness reconstructs evidence passages from each record's compiled
 Core evidence envelope and loads manifest-routed structured source declarations independently from
 the record. Every current native record, regardless of family, must resolve its declared source
