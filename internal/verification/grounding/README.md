@@ -94,8 +94,11 @@ This materially adds the previously missing profile-derived passage check for th
 case. It should remain internal until additional sources and callers justify a wider contract.
 Nothing here establishes evidentiary sufficiency or corrects approved material.
 
-`NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001` is carried forward in `TASKS.yaml`, ready but deferred.
-The approved competence quotation says “based on the evaluation”; the frozen PDF says “based on
-evaluation”. Human review must address that mismatch, the unspecified excerpt extent, dependent
-approved records, and dependent judgments. This PR performs none of that review. Eventual corrections
-must use the existing review/supersession process; approved material is not silently rewritten.
+PR #38 deferred `NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001`. Its frozen PDF says “based on
+evaluation”; the earlier approved quotation said “based on the evaluation” and omitted a sentence
+without specifying that extent. The maintainer's separate human disposition on 2026-09-04 approved
+the complete clause 1.3.5 and only sentence 1 of clause 3.5.3, affirming the unchanged scoped NVLAP
+decision right. The successor uses new passage identities and preserves the old record, passages
+and approval as superseded history. The disposition and extraction evidence are recorded in
+`docs/migrations/nist-handbook-competence/`. This follow-up does not add PDF grounding to this
+XML helper or change its verification boundary.

@@ -1,0 +1,19 @@
+# The human-approved evidence correction supersedes the earlier record.
+# Historical evidence and review attribution remain on the superseded record.
+schema_version: 1.0.0
+link_id: nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right
+owning_corpus_id: us.institutions.nist
+source_id: nist_nvlap_lab_decision_right_v2
+source_kind: record
+target_id: nist_nvlap_lab_decision_right
+target_kind: record
+relation_type: supersedes
+basis: direct
+evidence_refs:
+  - nist.handbook_150.competence_clause_1_3_5
+  - nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1
+uncertainties: []
+provenance:
+  created_by: OpenAI Codex implementation of explicit human disposition
+  created_at: 2026-09-04
+review_state: approved

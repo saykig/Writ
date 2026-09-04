@@ -53,6 +53,31 @@ follow_up_review:
       supersession_link: nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity
       rationale: The passages establish a Division and its stated work but do not establish
         operational capacity; the successor records only the atomic directly supported function.
+handbook_evidence_review:
+  status: completed_human_review
+  reviewer: Writ maintainer (explicit human disposition)
+  reviewed_at: 2026-09-04
+  base_commit: 9a20df062fb6065dec8ce0ec83cd2dd1eb3339d1
+  human_review_artifact: docs/migrations/nist-handbook-competence/human-review.yaml
+  extraction_evidence: docs/migrations/nist-handbook-competence/extraction.json
+  superseded_record: nist_nvlap_lab_decision_right
+  approved_successor: nist_nvlap_lab_decision_right_v2
+  supersession_link: nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right
+  superseded_judgment: judgment_nist_nvlap_lab_decision_right_stage_b
+  accepted_successor_judgment: judgment_nist_nvlap_lab_decision_right_v2_human_review
+  rationale: >-
+    The maintainer approved the complete three-sentence text of Handbook clause 1.3.5 and
+    only sentence 1 of clause 3.5.3. Together with 15 CFR 285.9(a), these continue to support
+    the unchanged, narrowly scoped NVLAP decision-right assertion. The competence wording
+    mismatch and both unspecified excerpt extents are corrected under new passage identities.
+    Source/version identities, old evidence and review contents remain preserved. Only
+    explicit retirement metadata changes on the old record and judgment; the base commit
+    preserves their complete earlier approved state. The assertion is not withdrawn.
+  passage_revisions:
+    - historical_passage_id: nist.handbook_150.competence
+      approved_passage_id: nist.handbook_150.competence_clause_1_3_5
+    - historical_passage_id: nist.handbook_150.accreditation_decision
+      approved_passage_id: nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record
@@ -121,10 +146,14 @@ entries:
   - previous_object: null
     previous_form: none
     final_object: nist_nvlap_lab_decision_right
-    final_form: native v0.2 atomic decision-right record
-    final_review_state: approved
+    final_form: native v0.2 atomic decision-right record retained as history
+    final_review_state: superseded
     identity_preserved: false
-    note: Automated Stage B proposal subsequently approved by human review; not migrated from a Stage A placeholder.
+    note: Automated Stage B proposal subsequently approved by human review; not migrated from a
+      Stage A placeholder. The 2026-09-04 human disposition preserves its substantive assertion
+      in a successor while correcting Handbook quotation wording and explicit excerpt extents.
+      This record's original passages, assertion, payload, uncertainties and provenance remain
+      unchanged; its original approval is preserved as superseded judgment history.
   - previous_object: null
     previous_form: none
     final_object: nist_ai_standards_group_identity
@@ -241,6 +270,23 @@ entries:
     final_review_state: approved
     identity_preserved: false
     note: Directed from the atomic function record to the preserved historical capacity record.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_nvlap_lab_decision_right_v2
+    final_form: native v0.2 atomic decision-right record with corrected evidence
+    final_review_state: approved
+    identity_preserved: false
+    note: The successor preserves the scoped assertion, fact payload text, uncertainty and source
+      version. New passage identities record the complete clause 1.3.5 and sentence 1 of clause
+      3.5.3. The prior record and approval remain historical objects with their original evidence.
+  - previous_object: null
+    previous_form: none
+    final_object: nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right
+    final_form: standalone Core record link, relation_type supersedes
+    final_review_state: approved
+    identity_preserved: false
+    note: The explicit human disposition directs this successor-to-predecessor relationship;
+      the link has its own accepted disposition judgment.
 preserved_evidence:
   sources_file_sha256: sha256:55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee
   sources:

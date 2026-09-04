@@ -169,6 +169,7 @@ describe("corpus contract and status", () => {
         LINK_FILES.part_of,
         "relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
         LINK_FILES.supersedes,
+        "relationships/nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right.yaml",
       ],
       judgments: ["judgments.writ"],
       migration: ["migration.yaml"],

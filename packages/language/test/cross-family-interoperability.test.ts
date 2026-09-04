@@ -367,17 +367,17 @@ describe("mapping queue and preservation gates", () => {
       superseded_disposition_judgments: 8,
     });
     expect(nist.record_counts).toMatchObject({
-      institutional_records: 19,
-      record_links: 6,
-      disposition_judgments: 25,
+      institutional_records: 20,
+      record_links: 7,
+      disposition_judgments: 27,
     });
     expect(nist.review_counts).toMatchObject({
       approved_records: 14,
-      superseded_records: 5,
-      approved_record_links: 6,
-      accepted_disposition_judgments: 21,
+      superseded_records: 6,
+      approved_record_links: 7,
+      accepted_disposition_judgments: 22,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 4,
+      superseded_disposition_judgments: 5,
     });
   });
 
@@ -387,11 +387,15 @@ describe("mapping queue and preservation gates", () => {
     expect(treeHash(legalPolicyFiles)).toBe(
       "362adc02793a0dd125ce9adf9bf15a5e37c00c648797bc4b01210b577820c72e",
     );
+    // The NIST byte baseline includes the explicit 2026-09-04 Handbook review
+    // documented in docs/migrations/nist-handbook-competence/human-review.yaml.
+    // nist-handbook-correction.test.ts separately pins the original record and
+    // judgment, allowing only their retirement metadata to change.
     expect(fileHash(join(NIST, "records.writ"))).toBe(
-      "eaac05647504763ff1098e06bc840fb8e4efa43598cac4b1dd6738f6698eb31f",
+      "5d0ab18f33bd59460bb9398b6290319e88208cd9dd4679b77622e71a9c546010",
     );
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
-      "a2c63c4be16836edcddc66cdc353c6975cad211936a6107c52d3e317a9a50e21",
+      "40b7da6097711914e5840d7cbb3355d67122e5f557a1a67bd5e88dbd794d4a65",
     );
     expect(fileHash(join(EC, "records.writ"))).toBe(
       "05cd96bb274e27d8eb455ab4aea3d37368088a56591144fc7bf3227331d36a11",

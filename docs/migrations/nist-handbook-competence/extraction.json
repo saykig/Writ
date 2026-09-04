@@ -1,0 +1,54 @@
+{
+  "profile": "track-b-pdf-clause-ascii-whitespace-v1",
+  "purpose": "Retained extraction evidence for the separately supplied human disposition; no new runtime or locator contract.",
+  "baseline_commit": "9a20df062fb6065dec8ce0ec83cd2dd1eb3339d1",
+  "source_id": "nist.handbook_150",
+  "document_version_id": "nist.handbook_150.v2020_update_1",
+  "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+  "media_type": "application/pdf",
+  "engine_versions": {
+    "pdfplumber": "0.11.9",
+    "pdfminer.six": "20251230",
+    "pypdf": "6.10.0"
+  },
+  "visual_confirmation": "Poppler 26.05.0 rendering, physical pages 10 and 26; both pages inspected during Track B.",
+  "transformations": [
+    "Select unique marker 1.3.5 at line start on PDF page 10 through before unique next marker 1.3.6.",
+    "Remove numeric marker and following ASCII space/tab/CR/LF.",
+    "Collapse runs of ASCII space/tab/CR/LF to one U+0020; trim U+0020 at edges.",
+    "For clause 3.5.3 select only its first complete sentence; retain the remaining clause and note in raw extraction for inspection.",
+    "Preserve all remaining Unicode and punctuation; encode exact output as UTF-8 without normalization.",
+    "Derived text bytes are not a literal PDF byte span."
+  ],
+  "passages": [
+    {
+      "passage_id": "nist.handbook_150.competence_clause_1_3_5",
+      "pdf_page": 10,
+      "printed_page": 2,
+      "clause": "1.3.5",
+      "extent": "complete three-sentence body, excluding numeric marker",
+      "raw_views": {
+        "pdfplumber": "1.3.5 NVLAP accreditation is based on evaluation of a laboratory’s management and technical\ncompetence for conducting specific tests or calibrations. Accreditation is granted only after thorough\nevaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment\nof requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of\nAccreditation, which details the specific test methods, calibration parameters, or services for which a\nlaboratory has been accredited.\n",
+        "pypdf": "1.3.5 NVLAP accreditation is based on evaluation of a laboratory’s management and technical \ncompetence for conducting specific tests or calibrations. Accreditation is granted only after thorough \nevaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment \nof requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of \nAccreditation, which details the specific test methods, calibration parameters, or services for which a \nlaboratory has been accredited. \n"
+      },
+      "quote": "NVLAP accreditation is based on evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment of requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of Accreditation, which details the specific test methods, calibration parameters, or services for which a laboratory has been accredited.",
+      "utf8_hex": "4e564c41502061636372656469746174696f6e206973206261736564206f6e206576616c756174696f6e206f662061206c61626f7261746f7279e2809973206d616e6167656d656e7420616e6420746563686e6963616c20636f6d706574656e636520666f7220636f6e64756374696e67207370656369666963207465737473206f722063616c6962726174696f6e732e2041636372656469746174696f6e206973206772616e746564206f6e6c792061667465722074686f726f756768206576616c756174696f6e206f6620616e206170706c6963616e74206861732064656d6f6e73747261746564207468617420616c6c204e564c415020726571756972656d656e74732068617665206265656e2066756c66696c6c65642e2046756c66696c6c6d656e74206f6620726571756972656d656e74732069732061636b6e6f776c6564676564206279207468652069737375616e6365206f662061204365727469666963617465206f662041636372656469746174696f6e20616e6420612053636f7065206f662041636372656469746174696f6e2c2077686963682064657461696c73207468652073706563696669632074657374206d6574686f64732c2063616c6962726174696f6e20706172616d65746572732c206f7220736572766963657320666f722077686963682061206c61626f7261746f727920686173206265656e20616363726564697465642e",
+      "passage_hash": "sha256:2e70cc37b645dc6d9004f7b831c7188c9b1b8cdb1da751706e29677f5f78b4a6"
+    },
+    {
+      "passage_id": "nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1",
+      "pdf_page": 26,
+      "printed_page": 18,
+      "clause": "3.5.3",
+      "extent": "sentence 1 only; excludes remaining nonconformity sentences and appeal note",
+      "raw_views_after_marker": {
+        "pdfplumber": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If\nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP\ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in\n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted.\nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal\nthat decision (see 3.13).",
+        "pypdf": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. If \nthe evaluation reveals nonconformities beyond those identified in the assessment process, NVLAP \ninforms the laboratory in writing of the nonconformities. The laboratory shall respond as specified in \n3.3.4. All nonconformities must be resolved to NVLAP’s satisfaction before accreditation can be granted. \nNOTE In the event that NVLAP determines accreditation cannot be granted, the laboratory has the right to appeal \nthat decision (see 3.13). "
+      },
+      "quote": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory.",
+      "utf8_hex": "4261736564206f6e2074686973206576616c756174696f6e2c204e564c4150206d616b657320746865206465636973696f6e2077686574686572206f72206e6f7420746f20616363726564697420746865206c61626f7261746f72792e",
+      "passage_hash": "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1"
+    }
+  ],
+  "independence": "Extraction was performed from frozen PDF bytes and explicit numeric selectors before comparison with stored Writ quotations. Both independent engines agree after the declared transformations. Changed stored-quote/hash oracles did not affect extraction."
+}

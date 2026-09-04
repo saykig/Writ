@@ -1,0 +1,114 @@
+{
+  "captured_from_commit": "9a20df062fb6065dec8ce0ec83cd2dd1eb3339d1",
+  "purpose": "Frozen pre-correction human-reviewed state. The defective quotation is deliberately preserved as historical evidence, not a current quotation oracle.",
+  "record": {
+    "schema_version": "0.2.0",
+    "record_id": "nist_nvlap_lab_decision_right",
+    "corpus_id": "us.institutions.nist",
+    "record_version": "0.2.0",
+    "family": "institutional",
+    "title": "NVLAP laboratory-accreditation decision right",
+    "subjects": [
+      {
+        "subject_id": "nist",
+        "subject_type": "institution",
+        "role": "accreditation decision maker"
+      }
+    ],
+    "assertion": {
+      "mode": "authorizes",
+      "text": "NIST, through the National Voluntary Laboratory Accreditation Program, determines whether a testing or calibration laboratory has demonstrated the competence required for accreditation within a specified scope."
+    },
+    "topics": ["laboratory_accreditation"],
+    "scope": {
+      "jurisdictions": ["United States"],
+      "institutional_scope": ["nist"],
+      "temporal_scope": {},
+      "conditions": ["Laboratory accreditation through NVLAP within a specified scope"]
+    },
+    "evidence": [
+      {
+        "source_id": "ecfr.title15_cfr_part_285",
+        "document_version_id": "ecfr.title15_cfr_part_285.v2026_08_01",
+        "passage_id": "ecfr.title15_cfr_part_285.section_285_9_a",
+        "locator": "15 CFR § 285.9(a)",
+        "quote": "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation.",
+        "passage_hash": "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7",
+        "document_hash": "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919",
+        "basis": "direct"
+      },
+      {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "passage_id": "nist.handbook_150.competence",
+        "locator": "NIST Handbook 150:2020, clause 1.3.5",
+        "quote": "NVLAP accreditation is based on the evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled.",
+        "passage_hash": "sha256:f6263b3ae31de22e2ba0f486d2092bb154179287ad0a38001a0cf8e3ef054700",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "basis": "direct"
+      },
+      {
+        "source_id": "nist.handbook_150",
+        "document_version_id": "nist.handbook_150.v2020_update_1",
+        "passage_id": "nist.handbook_150.accreditation_decision",
+        "locator": "NIST Handbook 150:2020, clause 3.5.3",
+        "quote": "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory.",
+        "passage_hash": "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1",
+        "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+        "basis": "direct"
+      }
+    ],
+    "uncertainties": [
+      {
+        "type": "unknown",
+        "description": "This decision right is limited to laboratory accreditation through NVLAP. It does not establish general regulatory authority, authority over every laboratory, product certification or authority to make unrelated NIST guidance legally binding."
+      }
+    ],
+    "provenance": {
+      "created_by": "OpenAI Codex automated proposal",
+      "created_at": "2026-08-05"
+    },
+    "review_state": "approved",
+    "institution_id": "nist",
+    "institutional_fact_type": "decision_right",
+    "decision_right": {
+      "status": "established",
+      "text": "Determine whether a laboratory has demonstrated competence for NVLAP accreditation within a specified scope.",
+      "authority_source_ids": ["ecfr.title15_cfr_part_285", "nist.handbook_150"],
+      "evidence_refs": [
+        "ecfr.title15_cfr_part_285.section_285_9_a",
+        "nist.handbook_150.competence",
+        "nist.handbook_150.accreditation_decision"
+      ]
+    }
+  },
+  "judgment": {
+    "schema_version": "0.2.0",
+    "judgment_id": "judgment_nist_nvlap_lab_decision_right_stage_b",
+    "judgment_type": "review_disposition",
+    "value": "approved",
+    "rationale": "Human review approves the automated Stage B proposal mapping the accreditation determination as a decision right scoped to NVLAP. It is not general regulatory authority, product certification or power to make unrelated guidance binding.",
+    "evidence_refs": [
+      "ecfr.title15_cfr_part_285.section_285_9_a",
+      "nist.handbook_150.competence",
+      "nist.handbook_150.accreditation_decision"
+    ],
+    "reviewer": "Sara Kim",
+    "status": "accepted",
+    "created_at": "2026-08-08",
+    "family_context": "institutional",
+    "target_kind": "record",
+    "target_id": "nist_nvlap_lab_decision_right"
+  },
+  "source": {
+    "source_id": "nist.handbook_150",
+    "document_hash": "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e",
+    "uri": "https://nvlpubs.nist.gov/nistpubs/hb/2020/NIST.HB.150-2020-upd1.pdf",
+    "media_type": "application/pdf",
+    "retrieved_at": "2026-08-05T00:00:00-04:00",
+    "source_title": "NIST Handbook 150:2020, NVLAP Procedures and General Requirements",
+    "source_version": "2020-update-1",
+    "source_date": "2020-01-01",
+    "document_version_id": "nist.handbook_150.v2020_update_1"
+  }
+}

@@ -228,12 +228,14 @@ const NIST_FOLLOW_UP_SUCCESSOR_IDS = [
   "nist_ai_standards_group_placement_v2",
   "nist_aml_facility_capacity_v2",
   "nist_ai_measurement_function",
+  "nist_nvlap_lab_decision_right_v2",
 ] as const;
 const NIST_FOLLOW_UP_LINK_IDS = [
   "nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity",
   "nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement",
   "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
   "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
+  "nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right",
 ] as const;
 const COMMISSION_FOLLOW_UP_SUCCESSOR_IDS = [
   "european_commission_identity_v2",
@@ -322,23 +324,23 @@ describe("Stage B production inventories", () => {
   });
 
   test("NIST preserves six Stage A and nine Stage B records plus reviewed successors", () => {
-    expect(nist.records).toHaveLength(19);
+    expect(nist.records).toHaveLength(20);
     expect(NIST_STAGE_B_IDS.every((id) => byId.has(id))).toBe(true);
     expect(new Set(NIST_STAGE_B_IDS).size).toBe(9);
     expect(NIST_FOLLOW_UP_SUCCESSOR_IDS.every((id) => byId.has(id))).toBe(true);
     expect(manifest(NIST).record_counts).toEqual({
-      institutional_records: 19,
-      record_links: 6,
-      disposition_judgments: 25,
+      institutional_records: 20,
+      record_links: 7,
+      disposition_judgments: 27,
     });
     expect(manifest(NIST).review_counts).toEqual({
       approved_records: 14,
-      superseded_records: 5,
+      superseded_records: 6,
       draft_records: 0,
-      approved_record_links: 6,
-      accepted_disposition_judgments: 21,
+      approved_record_links: 7,
+      accepted_disposition_judgments: 22,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 4,
+      superseded_disposition_judgments: 5,
     });
   });
 
@@ -640,7 +642,7 @@ describe("Stage B production inventories", () => {
 describe("atomic institutional distinctions", () => {
   const expected = new Map<string, string>([
     ["nist_national_measurement_standards_mandate", "mandate"],
-    ["nist_nvlap_lab_decision_right", "decision_right"],
+    ["nist_nvlap_lab_decision_right_v2", "decision_right"],
     ["nist_ai_standards_group_identity", "identity"],
     ["nist_ai_standards_group_placement_v2", "placement"],
     ["nist_ai_measurement_function", "function"],
@@ -693,7 +695,7 @@ describe("atomic institutional distinctions", () => {
 
   test("decision rights attach directly to an institution without holder hierarchy", () => {
     const rights = allRecords.filter((item) => item.institutional_fact_type === "decision_right");
-    expect(rights).toHaveLength(4);
+    expect(rights).toHaveLength(5);
     for (const target of rights) {
       expect(target.institution_id).toBeTruthy();
       expect(target).not.toHaveProperty("holder_id");
@@ -738,8 +740,8 @@ describe("atomic institutional distinctions", () => {
   });
 
   test("the NVLAP determination and program machinery remain separate", () => {
-    expect(record("nist_nvlap_lab_decision_right").decision_right).toBeDefined();
-    expect(record("nist_nvlap_lab_decision_right").operational_capacity).toBeUndefined();
+    expect(record("nist_nvlap_lab_decision_right_v2").decision_right).toBeDefined();
+    expect(record("nist_nvlap_lab_decision_right_v2").operational_capacity).toBeUndefined();
     expect(record("nist_nvlap_accred_capacity").operational_capacity).toBeDefined();
     expect(record("nist_nvlap_accred_capacity").decision_right).toBeUndefined();
   });
@@ -924,7 +926,7 @@ describe("review preservation, judgments, links, and migrations", () => {
   });
 
   test("judgments preserve all superseded decisions and approve each reviewed successor", () => {
-    expect(nistJudgments).toHaveLength(25);
+    expect(nistJudgments).toHaveLength(27);
     expect(commissionJudgments).toHaveLength(30);
     const commissionLinkIds = [
       "eu_ai_office_european_commission_relationship",
@@ -1116,6 +1118,10 @@ describe("review preservation, judgments, links, and migrations", () => {
     );
     chainJudgments.add(historicalRootLinkJudgment.judgment_id);
     chainJudgments.add(currentRootLinkJudgment.judgment_id);
+    // The later Handbook evidence review has its own dated human disposition and
+    // immutable-history checks in nist-handbook-correction.test.ts.
+    chainJudgments.add("judgment_nist_nvlap_lab_decision_right_stage_b");
+    chainJudgments.add("judgment_nist_nvlap_lab_decision_right_v2_human_review");
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
       if (chainJudgments.has(judgment.judgment_id)) continue;
       expect(judgment).not.toHaveProperty("supersedes_judgment_ids");
@@ -1123,7 +1129,7 @@ describe("review preservation, judgments, links, and migrations", () => {
     }
 
     const stageA = nistJudgments.slice(0, 8);
-    const originalStageB = nistJudgments.slice(8, 17);
+    const originalStageB = nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b"));
     expect(stageA).toHaveLength(8);
     expect(stageA.every((item) => item.status === "accepted")).toBe(true);
     expect(stageA.every((item) => item.reviewer === "Sara Kim")).toBe(true);
@@ -1131,8 +1137,8 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(originalStageB.every((item) => item.value === "approved")).toBe(true);
     expect(originalStageB.every((item) => item.reviewer === "Sara Kim")).toBe(true);
     expect(originalStageB.every((item) => item.created_at === "2026-08-08")).toBe(true);
-    expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(5);
-    expect(originalStageB.filter((item) => item.status === "superseded")).toHaveLength(4);
+    expect(originalStageB.filter((item) => item.status === "accepted")).toHaveLength(4);
+    expect(originalStageB.filter((item) => item.status === "superseded")).toHaveLength(5);
     const originalCommissionReview = commissionJudgments.filter(
       (item) => item.created_at === "2026-08-08",
     );
@@ -1200,7 +1206,7 @@ describe("review preservation, judgments, links, and migrations", () => {
 
   test("migration ledgers cover all additions without rewriting Stage A entries", () => {
     const nistMigration = yaml<MigrationLedger>(NIST, "migration.yaml");
-    expect(nistMigration.entries).toHaveLength(25);
+    expect(nistMigration.entries).toHaveLength(27);
     expect(nistMigration.entries.slice(8, 17).map((item) => item.final_object)).toEqual([
       ...NIST_STAGE_B_IDS,
     ]);
@@ -1216,6 +1222,8 @@ describe("review preservation, judgments, links, and migrations", () => {
       "nist_aml_facility_capacity_v2_supersedes_nist_aml_facility_capacity",
       "nist_ai_measurement_function",
       "nist_ai_measurement_function_supersedes_nist_ai_measurement_capacity",
+      "nist_nvlap_lab_decision_right_v2",
+      "nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right",
     ]);
     const ecMigration = yaml<MigrationLedger>(EC, "migration.yaml");
     expect(ecMigration.entries).toHaveLength(31);
@@ -1251,9 +1259,10 @@ describe("review preservation, judgments, links, and migrations", () => {
     expect(items).toHaveLength(30);
     expect(new Set(items.map((item) => item.judgment_id))).toEqual(
       new Set(
-        [...nistJudgments.slice(8, 17), ...originalCommissionJudgments].map(
-          (item) => item.judgment_id,
-        ),
+        [
+          ...nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b")),
+          ...originalCommissionJudgments,
+        ].map((item) => item.judgment_id),
       ),
     );
     expect(
@@ -1262,9 +1271,10 @@ describe("review preservation, judgments, links, and migrations", () => {
       ),
     ).toEqual(
       new Set(
-        [...nistJudgments.slice(8, 17), ...originalCommissionJudgments].map(
-          (item) => item.target_id,
-        ),
+        [
+          ...nistJudgments.filter((item) => item.judgment_id.endsWith("_stage_b")),
+          ...originalCommissionJudgments,
+        ].map((item) => item.target_id),
       ),
     );
     expect(

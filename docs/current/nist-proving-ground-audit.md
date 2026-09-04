@@ -9,15 +9,18 @@ NIST is the development proving ground; retained secondary corpora were not used
 semantics.
 
 The follow-up human review completed on 2026-08-29 adds four reviewed successors, four directed
-supersession links and eight judgments. The current inventory is 19 records, 6 links and 25
-judgments.
+supersession links and eight judgments. The separate Handbook evidence review on 2026-09-04
+adds one successor, one directed supersession link and two judgments. The current inventory is
+20 records, 7 links and 27 judgments. The exact maintainer disposition is retained in
+`docs/migrations/nist-handbook-competence/human-review.yaml`.
 
 ## Result
 
-Fourteen records are active and approved. Five records are intentionally retained as superseded
+Fourteen records are active and approved. Six records are intentionally retained as superseded
 history. All fourteen approved records are clearly supported at their present fact type and
 evidence basis after human review resolved the three remaining direct-versus-inferred and capacity
-boundaries. The unsupported modifier **principal** remains visible only in the superseded
+boundaries and the maintainer affirmed the scoped NVLAP assertion with corrected Handbook
+evidence. The unsupported modifier **principal** remains visible only in the superseded
 `nist_lab_network_capacity`; the active `nist_lab_network_capacity_v2` removes it. The superseded
 `nist_measurement_science_function` remains a preserved example of a category error, not an active
 fact.
@@ -25,11 +28,13 @@ fact.
 The human-review rationale is explicit: “The cited passage establishes six NIST labs and user
 facilities but does not establish that they are NIST’s principal or primary facilities.”
 
-Every evidence quotation reproduces its declared passage hash: 27 evidence occurrences covering
-18 unique passages from 10 sources. Both retained non-HTML captures reproduce their document
-hashes. All 19 records have explicit uncertainty and provenance. Every active record has an
-accepted human-review judgment by Sara Kim; the four replaced approval judgments are retained as
-superseded history. All six links also have accepted review judgments.
+Every evidence quotation reproduces its declared passage hash: 30 evidence occurrences covering
+20 unique passages from 10 sources. Hash consistency alone does not establish source wording: the
+old competence quotation remains intact only in superseded history. Both retained non-HTML captures
+reproduce their document hashes. All 20 records have explicit uncertainty and provenance. Every
+active record has an accepted human-review judgment: thirteen by Sara Kim and the NVLAP successor
+by the maintainer supplying the 2026-09-04 disposition. Five replaced approval judgments remain
+superseded history. All seven links also have accepted review judgments.
 
 The structured evidence is sufficient to inspect why each record exists without restoring raw
 HTML. It does not make Writ an offline web archive: for retired HTML captures, a reviewer cannot
@@ -50,7 +55,8 @@ ledger below. `Links` lists only stored supporting relationships; an empty entry
 | `nist_ai_standards_development_function` | function / approved | The passage directly describes activity led by the group; it does not establish mandate or binding power. | `nist.ai_standards_group` / `nist.ai_standards_group.standards` / direct | Explicitly excludes mandate, external authority, regulatory power and capacity. Automated draft; accepted human judgment. | — | Clear. |
 | `nist_ai_technical_guidance_function` | function / approved | The passage directly describes development of resources and guidelines. | `nist.ai_standards_group` / `nist.ai_standards_group.guidance` / direct | Explicitly excludes legal force, external authority and capacity. Automated draft; accepted human judgment. | — | Clear. |
 | `nist_national_measurement_standards_mandate` | mandate / approved | The statute assigns a narrow responsibility to NIST; mandate is the stronger classification warranted by this authority source. | `us_code.title15_usc_272` / `us_code.title15_usc_272.b_2` / direct | Currency is bounded to laws in effect on 2026-08-07; general regulatory authority is excluded. Automated proposal; accepted human judgment. | — | Clear. |
-| `nist_nvlap_lab_decision_right` | decision right / approved | Regulation assigns accreditation actions to the NVLAP chief and the handbook says NVLAP decides accreditation. This establishes a scoped decision right, not implementation capacity. | `ecfr.title15_cfr_part_285` / `section_285_9_a`; `nist.handbook_150` / `competence`, `accreditation_decision` / direct | Scope is limited to NVLAP laboratory accreditation; unrelated authority is excluded. Automated proposal; accepted human judgment. | — | Clear. |
+| `nist_nvlap_lab_decision_right` | decision right / superseded | Scoped assertion retained, but the competence quote inserts “the” and both Handbook excerpt extents were unspecified. | Original eCFR §285.9(a), Handbook `competence` and `accreditation_decision` passages remain byte-identical / direct | Original automated provenance, uncertainty and Sara Kim’s approval content preserved; explicit retirement metadata. | Target of the NVLAP v2 supersession link. | Evidence representation corrected through a successor; historical wording is not source-exact. |
+| `nist_nvlap_lab_decision_right_v2` | decision right / approved | Same scoped assertion; the human disposition confirms that the three selected passages continue to support it. | eCFR §285.9(a); Handbook `competence_clause_1_3_5` (all three sentences), `accreditation_decision_clause_3_5_3_sentence_1` (sentence 1) / direct | Same scope and uncertainty; implementation of explicit human disposition; accepted maintainer judgment. | Source of the NVLAP v2 supersession link. | Corrected quotation and explicit extents; source/version unchanged. |
 | `nist_ai_standards_group_identity` | identity / approved | The passage names the group carrying out division efforts. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.groups` / direct | Explicitly excludes legal personality, mandate, independent rights and capacity. Automated proposal; accepted human judgment. | — | Clear. |
 | `nist_ai_standards_group_placement` | placement / superseded | Two passages establish the division's ITL placement and say its efforts are carried out by the group, but the preserved evidence incorrectly labels the composed placement direct. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.itl_placement`, `nist.ai_division.groups` / both marked direct | Excludes mandate, rights and capacity. Automated proposal; its earlier approval judgment is superseded. | Target of `nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement`. | Defensible placement with an incorrect basis, now inactive and retained as history. |
 | `nist_ai_standards_group_placement_v2` | placement / approved | Retains the placement while making its composition from the two selected passages explicit. | `nist.ai_research_measurement_standards_division` / `nist.ai_division.itl_placement`, `nist.ai_division.groups` / inferred | Preserves the same uncertainty boundaries. Human-review implementation; accepted human judgment. | Source of `nist_ai_standards_group_placement_v2_supersedes_nist_ai_standards_group_placement`. | Clear. |
@@ -66,7 +72,9 @@ ledger below. `Links` lists only stored supporting relationships; an empty entry
 ## Exact selected passage ledger
 
 Repeated use of one passage must preserve the same source, document version, locator, quotation,
-passage hash and document hash. The current NIST corpus does so.
+passage hash and document hash. The current NIST corpus does so. The old Handbook passage IDs
+below remain historical representations, including the defective competence wording. New IDs
+carry the human-approved corrected extents without changing those historical signatures.
 
 | Passage ID | Exact selected passage |
 | --- | --- |
@@ -78,6 +86,8 @@ passage hash and document hash. The current NIST corpus does so.
 | `ecfr.title15_cfr_part_285.section_285_9_a` | The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation. |
 | `nist.handbook_150.competence` | NVLAP accreditation is based on the evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. |
 | `nist.handbook_150.accreditation_decision` | Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. |
+| `nist.handbook_150.competence_clause_1_3_5` | NVLAP accreditation is based on evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment of requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of Accreditation, which details the specific test methods, calibration parameters, or services for which a laboratory has been accredited. |
+| `nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1` | Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory. |
 | `nist.ai_division.itl_placement` | The AI Research, Measurement, and Standards Division is one of six technical divisions in the Information Technology Laboratory (ITL). The Division leads and coordinates the ITL AI Program. |
 | `nist.ai_division.groups` | The AI Research, Measurement, and Standards Division’s efforts are carried out by the AI Standards and Guidelines Group and the Applied AI Research Group. |
 | `nist.laboratories.six_labs` | Researchers at NIST—including five Nobel Prize winners—have been at the forefront of science in the nation’s premier measurement institute for more than 120 years. Their groundbreaking research happens in six labs (listed below) and user facilities. |
@@ -177,6 +187,11 @@ boundary.
 
 ### Corpus/content
 
+- The explicit 2026-09-04 human disposition is implemented through
+  `nist_nvlap_lab_decision_right_v2`. It retains the assertion with exact, explicitly bounded
+  Handbook evidence and unchanged source/version identity. The original record, passage identities
+  and approval remain superseded history; extraction evidence and the disposition are retained
+  together under `docs/migrations/nist-handbook-competence/`.
 - The approved human decision has been implemented through `nist_lab_network_capacity_v2`. The
   original record and judgment remain superseded history, and the Core link records the replacement
   direction without a record-level supersession field.

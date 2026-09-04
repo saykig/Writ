@@ -149,27 +149,27 @@ const compatibilityPassage = {
 describe("Writ data bundle membership", () => {
   test("exports every manifest-routed record without approval filtering", () => {
     expect(bundle.corpora).toHaveLength(16);
-    expect(bundle.records).toHaveLength(80);
-    expect(bundle.recordLinks).toHaveLength(15);
-    expect(bundle.recordJudgments).toHaveLength(61);
+    expect(bundle.records).toHaveLength(81);
+    expect(bundle.recordLinks).toHaveLength(16);
+    expect(bundle.recordJudgments).toHaveLength(63);
 
     expect(countBy(bundle.records.map((record) => record.reviewState ?? "none"))).toEqual({
       accepted: 32,
       none: 2,
       draft: 3,
       approved: 34,
-      superseded: 9,
+      superseded: 10,
     });
     expect(countBy(bundle.records.map((record) => record.recordType))).toEqual({
       political_claim: 32,
       political_entity: 2,
       legal_policy: 3,
-      institutional: 43,
+      institutional: 44,
     });
   });
 
   test("uses globally unique stable keys and preserves corpus membership", () => {
-    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(80);
+    expect(new Set(bundle.records.map((record) => record.recordKey)).size).toBe(81);
     for (const record of bundle.records) {
       expect(record.recordKey).toBe(`${record.corpusId}::${record.recordId}`);
       expect(bundle.corpora.some((corpus) => corpus.corpusId === record.corpusId)).toBe(true);
@@ -404,7 +404,7 @@ describe("canonical source and provenance", () => {
 
   test("exports every NIST fact with complete portable structured evidence", () => {
     const records = bundle.records.filter((record) => record.corpusId === "us.institutions.nist");
-    expect(records).toHaveLength(19);
+    expect(records).toHaveLength(20);
     for (const record of records) {
       expect(record.recordKey).toBe(`us.institutions.nist::${record.recordId}`);
       expect(record.evidence.length, record.recordId).toBeGreaterThan(0);
@@ -488,14 +488,14 @@ describe("canonical source and provenance", () => {
 });
 
 describe("deterministic neutral contract", () => {
-  test("preserves every pre-repair semantic projection at a fixed commit identity", () => {
+  test("matches the human-reviewed semantic projections at a fixed commit identity", () => {
     expect(bundle.metadata.sectionHashes).toEqual({
       catalog: "sha256:144f343a1234b167fa84db89ec20216c47162d796b3131a9eaf8eeaa4275ad4d",
-      corpora: "sha256:637d6421b7ce3d090213ff2f18d5bf7e6fd81edb8790a888bdf900ba5d12b516",
-      resources: "sha256:ba723705aece6153cde99eafb92de547644e51f46dcfaa3f80e09eb81b1a0822",
-      records: "sha256:34d5a3f01b0366383e270179b0356be5f10f6ff54557dde9fffd097d676df507",
-      recordLinks: "sha256:2c39be2785f6094a70d671872a85b00b38623635c6fff36c325c8b87e9d06672",
-      recordJudgments: "sha256:27e57f803214fa58d7b332a8cff415a0ca1aa5b6b51f15931d3dd7314b347253",
+      corpora: "sha256:60269711c48f8bf6b2f7788365b7bbbd7b88999cc7d3b80f64b3b18115972e92",
+      resources: "sha256:47b7cff5d6ebe2a1d3523a06685891a4fc5a9d0cbf789c241e4ad02e9a6d766d",
+      records: "sha256:9434e3aba7664876dcd5fe075b074209b5275bcf242f1dd66aa9377505b77ab2",
+      recordLinks: "sha256:34852b10c260f587d8caa6b1c25377b99e584dad4d1fe36375c863d69672968c",
+      recordJudgments: "sha256:4ac247bd8a2330d9109f8ec2d41e2a753803e9a19e2998dcd24a1d6b8cc40e73",
     });
   });
 

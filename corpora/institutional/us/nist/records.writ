@@ -209,11 +209,34 @@ record nist_nvlap_lab_decision_right : institutional {
   }
   uncertainty { item unknown "This decision right is limited to laboratory accreditation through NVLAP. It does not establish general regulatory authority, authority over every laboratory, product certification or authority to make unrelated NIST guidance legally binding."; }
   provenance { created_by "OpenAI Codex automated proposal"; created_at 2026-08-05; }
-  review_state approved;
+  review_state superseded;
   institutional {
     institution_id nist;
     fact_type decision_right;
     decision_right { status established; text "Determine whether a laboratory has demonstrated competence for NVLAP accreditation within a specified scope."; authority_source_ids { ecfr.title15_cfr_part_285, nist.handbook_150 }; evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence, nist.handbook_150.accreditation_decision }; }
+  }
+}
+
+record nist_nvlap_lab_decision_right_v2 : institutional {
+  corpus us.institutions.nist;
+  version "0.2.1";
+  title "NVLAP laboratory-accreditation decision right";
+  subjects { subject nist type institution role "accreditation decision maker"; };
+  assertion authorizes "NIST, through the National Voluntary Laboratory Accreditation Program, determines whether a testing or calibration laboratory has demonstrated the competence required for accreditation within a specified scope.";
+  topics { laboratory_accreditation };
+  scope { jurisdictions { "United States" }; institutional_scope { nist }; temporal_scope {} conditions { "Laboratory accreditation through NVLAP within a specified scope" }; }
+  evidence {
+    support ecfr.title15_cfr_part_285 document_version ecfr.title15_cfr_part_285.v2026_08_01 passage ecfr.title15_cfr_part_285.section_285_9_a locator "15 CFR § 285.9(a)" quote "The Chief of NVLAP is responsible for all NVLAP accreditation actions, including granting, denying, renewing, suspending, and revoking any NVLAP accreditation." passage_hash "sha256:bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7" document_hash "sha256:b4c06f92e650ea7762d3687419eeb51fc9a8ec506f199e1a39d15772de3e2919" basis direct;
+    support nist.handbook_150 document_version nist.handbook_150.v2020_update_1 passage nist.handbook_150.competence_clause_1_3_5 locator "NIST Handbook 150:2020 update 1; PDF page 10 (printed page 2); clause 1.3.5; complete clause body (three sentences), excluding clause number; extraction profile track-b-pdf-clause-ascii-whitespace-v1 (pdfplumber 0.11.9); PDF line wraps joined with U+0020" quote "NVLAP accreditation is based on evaluation of a laboratory’s management and technical competence for conducting specific tests or calibrations. Accreditation is granted only after thorough evaluation of an applicant has demonstrated that all NVLAP requirements have been fulfilled. Fulfillment of requirements is acknowledged by the issuance of a Certificate of Accreditation and a Scope of Accreditation, which details the specific test methods, calibration parameters, or services for which a laboratory has been accredited." passage_hash "sha256:2e70cc37b645dc6d9004f7b831c7188c9b1b8cdb1da751706e29677f5f78b4a6" document_hash "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e" basis direct;
+    support nist.handbook_150 document_version nist.handbook_150.v2020_update_1 passage nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 locator "NIST Handbook 150:2020 update 1; physical PDF page 26 (printed page 18); clause 3.5.3; sentence 1 only, excluding clause number; excludes remainder on nonconformities and the appeal NOTE; extraction profile track-b-pdf-clause-ascii-whitespace-v1 (pdfplumber 0.11.9)" quote "Based on this evaluation, NVLAP makes the decision whether or not to accredit the laboratory." passage_hash "sha256:cc833bd19e3e1ba753395046a518a87828e00834e22bb72e2e7146dfa79e6ba1" document_hash "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e" basis direct;
+  }
+  uncertainty { item unknown "This decision right is limited to laboratory accreditation through NVLAP. It does not establish general regulatory authority, authority over every laboratory, product certification or authority to make unrelated NIST guidance legally binding."; }
+  provenance { created_by "OpenAI Codex implementation of explicit human disposition"; created_at 2026-09-04; }
+  review_state approved;
+  institutional {
+    institution_id nist;
+    fact_type decision_right;
+    decision_right { status established; text "Determine whether a laboratory has demonstrated competence for NVLAP accreditation within a specified scope."; authority_source_ids { ecfr.title15_cfr_part_285, nist.handbook_150 }; evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; }
   }
 }
 

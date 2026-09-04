@@ -1,7 +1,7 @@
 # NIST institutional corpus
 
-This draft corpus contains 19 atomic, source-grounded NIST institutional records. Fourteen records
-are approved and five records remain superseded review history. Record approval does not publish
+This draft corpus contains 20 atomic NIST institutional records. Fourteen records
+are approved and six records remain superseded review history. Record approval does not publish
 the corpus.
 
 Stage A preserved identity, organizational placement, NIST’s source-reported mission, and two AI
@@ -40,6 +40,14 @@ webpage captures are not tracked; Writ preserves the structured evidence contrac
 serving as a web archive. The two Stage A source identities and their document hashes were not
 replaced or mutated.
 
+The maintainer's explicit human disposition on 2026-09-04 approves
+`nist_nvlap_lab_decision_right_v2` with the same scoped assertion and corrected Handbook evidence:
+the complete three-sentence clause 1.3.5 and only sentence 1 of clause 3.5.3. New passage identities
+preserve the approved extents; the old record, passage representations and Sara Kim's original
+approval remain superseded history. The frozen PDF and its source/version identities are unchanged.
+The exact disposition and extraction evidence are retained in
+`docs/migrations/nist-handbook-competence/`.
+
 Workforce, budget, AI-budget, degraded-facility, generic operating-status, AI-group mission, and
 Director decision-right proposals were intentionally not added. Their absence is not a false value.
 External consortium resources remain external and are never represented as NIST-owned resources.
@@ -49,5 +57,5 @@ effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are 
 prior annual-edition capture; the pinned document hash and original retrieval transport are
 recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml` and
 `docs/migrations/institutional-stage-b/human-review.yaml`; accepted human dispositions are in
-`judgments.writ`. The six Core links are stored only in their authoritative direction, and
+`judgments.writ`. The seven Core links are stored only in their authoritative direction, and
 inverse links are derived rather than stored.
