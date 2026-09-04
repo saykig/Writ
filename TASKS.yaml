@@ -49,7 +49,7 @@ tasks:
       - Hash, path, missing-file, file-type, alias, supersession, and portable reload boundaries have synthetic regression coverage.
       - Existing unbound judgments remain valid without implying any reviewer identity or origin.
       - Grammar, compiler, schema, domain, repository gates, and ordinary export agree on the new binding.
-      - Every exported native judgment is canonically equal across compiled projection, governed fragment and routed whole resource before complete-set supersession validation.
+      - Every exported native judgment is exactly structurally equal across compiled projection, governed fragment and routed whole resource before complete-set supersession validation; string identity is not Unicode-normalized.
       - Required project checks pass; PR 40 preserves the generic experiment and applies only the separately authorized two-judgment binding lineage.
       - The human gate is satisfied by the recorded 2026-09-04 disposition; complete only after authorized application checks, without merging.
     outputs:

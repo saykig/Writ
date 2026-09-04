@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { isDeepStrictEqual } from "node:util";
 
 import _Ajv2020 from "ajv/dist/2020.js";
 import _addFormats from "ajv-formats";
@@ -10,7 +11,7 @@ import {
   type SupersessionCandidate,
 } from "@writ/domain";
 import { compileSource } from "@writ/language";
-import { canonicalJson, verifyReviewArtifact } from "@writ/provenance";
+import { verifyReviewArtifact } from "@writ/provenance";
 
 import type {
   BundleRecordJudgment,
@@ -120,13 +121,13 @@ function supportedJudgmentContract(judgment: BundleRecordJudgment): SupportedJud
   throw new Error(`${judgment.judgmentKey}: unsupported native judgment contract`);
 }
 
-function assertCanonicalJudgmentEquality(
+function assertExactJudgmentEquality(
   judgmentKey: string,
   expected: JsonObject,
   actual: JsonObject,
   actualLabel: string,
 ): void {
-  if (canonicalJson(expected) !== canonicalJson(actual)) {
+  if (!isDeepStrictEqual(expected, actual)) {
     throw new Error(`${judgmentKey}: compiled judgment disagrees with ${actualLabel}`);
   }
 }
@@ -213,7 +214,7 @@ export function assertNativeJudgmentIntegrity(bundle: WritDataBundle): void {
       throw new Error(`${judgment.judgmentKey}: invalid stored judgment fragment`);
     }
     const fragmentDeclaration = sourceCompilation.judgments[0]! as unknown as JsonObject;
-    assertCanonicalJudgmentEquality(
+    assertExactJudgmentEquality(
       judgment.judgmentKey,
       compiled,
       fragmentDeclaration,
@@ -233,7 +234,7 @@ export function assertNativeJudgmentIntegrity(bundle: WritDataBundle): void {
       throw new Error(`${judgment.judgmentKey}: judgment requires one routed whole resource`);
     }
     const wholeDeclaration = wholeDeclarations[0]! as unknown as JsonObject;
-    assertCanonicalJudgmentEquality(
+    assertExactJudgmentEquality(
       judgment.judgmentKey,
       compiled,
       wholeDeclaration,

@@ -41,8 +41,9 @@ file, without decoding, Unicode normalization or line-ending conversion. Multipl
 carry the same artifact bytes while preserving their separate identities, targets and lineages.
 
 `validateWritDataBundle` recompiles every supported native judgment fragment under its governing
-dialect and contract, locates its unique routed whole source resource, and requires canonical
-equality of the complete judgment across compiled projection, fragment and whole resource. It then
+dialect and contract, locates its unique routed whole source resource, and requires exact structural
+equality of the complete judgment across compiled projection, fragment and whole resource. Object
+property order is ignored, arrays remain ordered, and strings are not Unicode-normalized. It then
 applies the authoritative supersession validator to the complete reconstructed judgment set. For
 bound judgments it also checks decoded bytes with the same pure verifier. Refreshing outer bundle
 checksums therefore cannot conceal one-copy changes to judgment semantics or changed artifact bytes

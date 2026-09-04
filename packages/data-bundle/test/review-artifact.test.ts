@@ -484,19 +484,88 @@ describe("portable exact review-artifact content association", () => {
       const first = bundle.recordJudgments[0]!;
       const composedPath = input.artifactPath.replace("review.bin", "caf\u00e9.yaml");
       const decomposedPath = input.artifactPath.replace("review.bin", "cafe\u0301.yaml");
-      const mismatched = changedJudgment(bundle, {
+      const composedFragment = first.storedSource.content.replace(input.artifactPath, composedPath);
+      const mismatchedProjection = changedJudgment(bundle, {
         compiledJudgment: {
           ...first.compiledJudgment,
           review_artifact: { path: decomposedPath, content_hash: input.contentHash },
         },
         storedSource: {
           ...first.storedSource,
-          content: first.storedSource.content.replace(input.artifactPath, composedPath),
+          content: composedFragment,
+          sha256: rawHash(composedFragment),
         },
       });
+      const mismatched = replaceWholeFragment(
+        mismatchedProjection,
+        first.storedSource.path,
+        first.storedSource.content,
+        composedFragment,
+      );
       expect(composedPath).not.toBe(decomposedPath);
+      expect(composedPath.normalize("NFD")).toBe(decomposedPath);
+      expect(mismatched.recordJudgments[0]!.reviewArtifact).toEqual(first.reviewArtifact);
       expect(() => validateWritDataBundle(mismatched)).toThrow(
-        /compiled judgment disagrees with routed whole judgment resource/,
+        /compiled judgment disagrees with stored judgment fragment/,
+      );
+
+      const exactCompiled = Object.fromEntries(
+        Object.entries({
+          ...first.compiledJudgment,
+          review_artifact: Object.fromEntries(
+            Object.entries({ path: composedPath, content_hash: input.contentHash }).reverse(),
+          ),
+        }).reverse(),
+      );
+      const exactProjection = changedJudgment(bundle, {
+        compiledJudgment: exactCompiled,
+        storedSource: {
+          ...first.storedSource,
+          content: composedFragment,
+          sha256: rawHash(composedFragment),
+        },
+      });
+      const exact = replaceWholeFragment(
+        exactProjection,
+        first.storedSource.path,
+        first.storedSource.content,
+        composedFragment,
+      );
+      expect(() => validateWritDataBundle(exact)).not.toThrow();
+    } finally {
+      input.cleanup();
+    }
+  });
+
+  test("compares exact Unicode spelling in the grammar-supported reviewer identity", () => {
+    const input = fixture();
+    try {
+      const bundle = input.generate();
+      const first = bundle.recordJudgments[0]!;
+      const composedReviewer = "Reviewer Jos\u00e9";
+      const decomposedReviewer = "Reviewer Jose\u0301";
+      const composedFragment = first.storedSource.content.replace(
+        'reviewer "Synthetic test reviewer label";',
+        `reviewer "${composedReviewer}";`,
+      );
+      const mismatchedProjection = changedJudgment(bundle, {
+        compiledJudgment: { ...first.compiledJudgment, reviewer: decomposedReviewer },
+        storedSource: {
+          ...first.storedSource,
+          content: composedFragment,
+          sha256: rawHash(composedFragment),
+        },
+      });
+      const mismatched = replaceWholeFragment(
+        mismatchedProjection,
+        first.storedSource.path,
+        first.storedSource.content,
+        composedFragment,
+      );
+      expect(composedReviewer).not.toBe(decomposedReviewer);
+      expect(composedReviewer.normalize("NFD")).toBe(decomposedReviewer);
+      expect(() => validateWritDataBundle(mismatched)).toThrow(
+        /compiled judgment disagrees with stored judgment fragment/,
       );
     } finally {
       input.cleanup();
