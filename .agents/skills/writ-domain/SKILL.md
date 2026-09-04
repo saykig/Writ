@@ -1,6 +1,6 @@
 ---
 name: writ-domain
-summary: Domain rules for implementing Writ's source-grounded political-knowledge records, human review, and provenance.
+description: Apply Writ's domain rules when implementing or reviewing source-grounded political-knowledge records, human review, and provenance.
 ---
 
 # Writ Domain Skill

@@ -107,3 +107,8 @@ Review in this order:
 8. source-reported judgments presented as Writ facts;
 9. missing tests;
 10. maintainability.
+
+For bounded cross-layer consistency discovery, use the repository-local
+`.agents/skills/writ-track-b/SKILL.md` role contracts. Promote durable knowledge in the order
+test > invariant > ADR/current doc > role reminder; do not turn individual review cases into
+persistent personalities.

@@ -23,6 +23,33 @@ statuses:
   - blocked
 
 tasks:
+  - id: TRACK-B-CROSS-LAYER-CONSISTENCY-001
+    title: Run a bounded cross-layer consistency discovery experiment
+    status: in_progress
+    dependencies:
+      - REVIEW-ARTIFACT-BINDING-001
+    baseline_commit: 681016a24f734438895ae1758f0caf5c0bd9e5a7
+    scope:
+      - Persist four provisional correctness-review role contracts as one small repository-local Codex Skill.
+      - Reuse production entry points to compare supported parser, compiler, schema, verifier, export and reload behavior on local synthetic cases.
+      - Independently confirm and classify unexplained cross-layer differences before repair.
+      - Repair at most the first two high-confidence generic correctness defects within existing Writ boundaries.
+    exclusions:
+      - New decision semantics, scientific transfer cases, Ukraine, external systems, security testing, and unrelated refactors.
+      - A second Writ implementation or a fifth persistent role.
+    acceptance:
+      - Role contracts and their outcome log remain concise, auditable and evidence-driven.
+      - The differential harness calls production entry points and keeps synthetic mutations disposable.
+      - Every retained repair has an independently confirmed counterexample and a decisive regression.
+      - Required project checks, clean export/reload and CI pass before the draft PR is handed off.
+    outputs:
+      - .agents/skills/writ-track-b/SKILL.md
+      - .agents/skills/writ-track-b/references
+      - docs/current/agent-role-outcomes.md
+      - docs/experiments/track-b-cross-layer-consistency.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: REVIEW-ARTIFACT-BINDING-001
     title: Bind native judgments to exact review-artifact bytes
     status: done
