@@ -25,6 +25,8 @@ import {
   RAW_COMPATIBILITY_SCHEMAS,
   RAW_CORPUS_COMPATIBILITY_CONTRACTS,
   RAW_SCHEMAS,
+  RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA,
+  REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
   SCHEMA_IDS,
   SCHEMA_KINDS,
   type CompatibilitySchemaKind,
@@ -98,6 +100,9 @@ for (const kind of CORPUS_COMPATIBILITY_CONTRACT_KINDS) {
   ajv.addSchema(schema, String(schema.$id));
 }
 
+ajv.addSchema(RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA, REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID);
+const reviewArtifactJudgmentValidator = ajv.compile(RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA);
+
 const validators: Record<SchemaKind, ValidateFunction> = Object.fromEntries(
   SCHEMA_KINDS.map((kind) => [kind, ajv.compile(RAW_SCHEMAS[kind])]),
 ) as Record<SchemaKind, ValidateFunction>;
@@ -119,6 +124,14 @@ function validationResult(validator: ValidateFunction, data: unknown): Validatio
  */
 export function validate(kind: SchemaKind, data: unknown): ValidationResult {
   if (
+    kind === "record-judgment" &&
+    data !== null &&
+    typeof data === "object" &&
+    (data as { schema_version?: unknown }).schema_version === "0.3.0"
+  ) {
+    return validationResult(reviewArtifactJudgmentValidator, data);
+  }
+  if (
     data !== null &&
     typeof data === "object" &&
     (data as { schema_version?: unknown }).schema_version === "0.1.0" &&
@@ -135,6 +148,9 @@ export function validateVersion(
   data: unknown,
   schemaVersion: string,
 ): ValidationResult {
+  if (kind === "record-judgment" && schemaVersion === "0.3.0") {
+    return validationResult(reviewArtifactJudgmentValidator, data);
+  }
   if (
     schemaVersion === "0.1.0" &&
     (COMPATIBILITY_SCHEMA_KINDS as readonly string[]).includes(kind)

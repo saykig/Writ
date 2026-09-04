@@ -104,6 +104,8 @@ export interface CorpusManifest extends Mapping {
 }
 
 export interface NativeCorpus {
+  /** Filesystem input context supplied by projection; never part of exported corpus identity. */
+  readonly root?: string;
   readonly entry: CatalogEntry;
   readonly manifest: CorpusManifest;
   readonly manifestSource: BundleSource;
@@ -112,6 +114,8 @@ export interface NativeCorpus {
 }
 
 export interface NativeRepository {
+  /** Selected repository boundary. Omission retains the package's current repository default. */
+  readonly root?: string;
   readonly catalog: Mapping;
   readonly catalogSource: BundleSource;
   readonly corpora: readonly NativeCorpus[];
@@ -163,9 +167,9 @@ function languageFor(path: string): BundleSource["language"] {
   return "yaml";
 }
 
-export function source(path: string, content?: string): BundleSource {
+export function source(path: string, content?: string, root = repositoryRoot): BundleSource {
   if (isAbsolute(path)) throw new Error(`Bundle source path must be relative: ${path}`);
-  const bytes = content ?? readFileSync(join(repositoryRoot, path), "utf8");
+  const bytes = content ?? readFileSync(join(root, path), "utf8");
   return {
     path,
     fragment: null,
@@ -324,6 +328,7 @@ export function readNativeRepository(): NativeRepository {
   });
 
   return {
+    root: repositoryRoot,
     catalog,
     catalogSource,
     corpora,

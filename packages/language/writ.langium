@@ -10,7 +10,7 @@ entry Model:
 Declaration: Source | ConceptDeclaration | RecordDeclaration | JudgmentDeclaration;
 
 Source:
-    'source' name=ID '{' properties+=SourceProperty* '}';
+    'source' name=Identifier '{' properties+=SourceProperty* '}';
 SourceProperty:
       {infer SourceUri} 'uri' value=STRING ';'
     | {infer SourceMediaType} 'media_type' value=STRING ';'
@@ -18,13 +18,13 @@ SourceProperty:
     | {infer SourceSha} 'sha256' value=STRING ';';
 
 ConceptDeclaration:
-    'concept' name=ID (':' base=QualifiedName)? '{' properties+=ConceptProperty* '}';
+    'concept' name=Identifier (':' base=QualifiedName)? '{' properties+=ConceptProperty* '}';
 ConceptProperty:
-    name=ID value=(STRING | NUMBER | DATE | QualifiedName) ';';
+    name=Identifier value=(STRING | NUMBER | DATE | QualifiedName) ';';
 
 RecordDeclaration:
-    'record' name=ID ':' family=RecordFamily '{' members+=RecordMember* '}';
-RecordFamily returns string: ID | 'legal_policy' | 'institutional';
+    'record' name=Identifier ':' family=RecordFamily '{' members+=RecordMember* '}';
+RecordFamily returns string: Identifier | 'legal_policy' | 'institutional';
 RecordMember:
       {infer RecordCorpus} 'corpus' value=QualifiedName ';'
     | {infer RecordVersion} 'version' value=STRING ';'
@@ -197,7 +197,7 @@ InstitutionalRelationship: 'relation' type=InstitutionalRelationType target=Qual
 InstitutionalRelationType returns string: 'part_of' | 'oversees' | 'supports' | 'advises' | 'coordinates_with' | 'reports_to' | 'implements_for';
 ApplicablePeriodProperty: 'applicable_period' '{' ('from' from=DATE ';')? ('until' until=DATE ';')? '}';
 
-JudgmentDeclaration: 'judgment' name=ID '{' members+=JudgmentMember* '}';
+JudgmentDeclaration: 'judgment' name=Identifier '{' members+=JudgmentMember* '}';
 JudgmentMember:
       {infer JudgmentTarget} 'target' (kind=JudgmentTargetKind)? value=QualifiedName ';'
     | {infer JudgmentTypeProperty} 'type' value=JudgmentType ';'
@@ -211,7 +211,10 @@ JudgmentMember:
     | {infer JudgmentSupersedes} 'supersedes' value=QualifiedName ';'
     | {infer JudgmentSupersedesIds} 'supersedes_judgment_ids' values=IdentifierList ';'
     | {infer JudgmentSupersededBy} 'superseded_by_judgment_id' value=QualifiedName ';'
+    | JudgmentReviewArtifact
     | {infer RelatedJudgments} 'related_judgment_ids' values=IdentifierList ';';
+JudgmentReviewArtifact:
+    'review_artifact' '{' 'path' path=STRING ';' 'content_hash' contentHash=STRING ';' '}';
 JudgmentType returns string: 'passage_selection' | 'record_family_classification' | 'subject_identification' | 'scope_interpretation' | 'topic_classification' | 'legal_status_determination' | 'institutional_role_determination' | 'operational_capacity_determination' | 'direct_or_inferred' | 'disagreement' | 'adjudication' | 'review_disposition' | 'record_link_disposition';
 JudgmentStatus returns string: 'proposed' | 'accepted' | 'contested' | 'superseded';
 JudgmentTargetKind returns string: 'record' | 'record_link';
@@ -229,9 +232,11 @@ Literal returns Literal:
     | {infer TruthLiteral} value=('unknown' | 'contested')
     | {infer DateLiteral} value=DATE;
 
+// New v0.3 keywords remain usable at every pre-existing identifier position.
+Identifier returns string: ID | 'review_artifact' | 'path' | 'content_hash';
 QualifiedName returns string: NamePart ('.' NamePart)*;
 NamePart returns string:
-    ID | 'writ' | 'record' | 'judgment' | 'legal_policy' | 'institutional' | 'corpus'
+    Identifier | 'writ' | 'record' | 'judgment' | 'legal_policy' | 'institutional' | 'corpus'
     | 'version' | 'title' | 'subjects' | 'assertion' | 'topics' | 'scope' | 'evidence'
     | 'uncertainty' | 'provenance' | 'review_state' | 'support' | 'document_version'
     | 'passage' | 'locator' | 'quote' | 'passage_hash' | 'document_hash' | 'basis'

@@ -60,6 +60,7 @@ export type WritKeywordNames =
   | "conditions"
   | "constitution"
   | "constitutional_amendment"
+  | "content_hash"
   | "contested"
   | "contractual"
   | "coordinates_with"
@@ -171,6 +172,7 @@ export type WritKeywordNames =
   | "passage"
   | "passage_hash"
   | "passage_selection"
+  | "path"
   | "performs"
   | "permits"
   | "placement"
@@ -205,6 +207,7 @@ export type WritKeywordNames =
   | "responsible_authorities"
   | "retired"
   | "retrieved"
+  | "review_artifact"
   | "review_disposition"
   | "review_state"
   | "reviewed"
@@ -460,7 +463,7 @@ export interface ConceptDeclaration extends langium.AstNode {
   readonly $container: Model;
   readonly $type: "ConceptDeclaration";
   base?: QualifiedName;
-  name: string;
+  name: Identifier;
   properties: Array<ConceptProperty>;
 }
 
@@ -478,7 +481,7 @@ export function isConceptDeclaration(item: unknown): item is ConceptDeclaration 
 export interface ConceptProperty extends langium.AstNode {
   readonly $container: ConceptDeclaration;
   readonly $type: "ConceptProperty";
-  name: string;
+  name: Identifier;
   value: QualifiedName | number | string;
 }
 
@@ -709,6 +712,17 @@ export const FunctionsProperty = {
 
 export function isFunctionsProperty(item: unknown): item is FunctionsProperty {
   return reflection.isInstance(item, FunctionsProperty.$type);
+}
+
+export type Identifier = "content_hash" | "path" | "review_artifact" | string;
+
+export function isIdentifier(item: unknown): item is Identifier {
+  return (
+    item === "review_artifact" ||
+    item === "path" ||
+    item === "content_hash" ||
+    (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
+  );
 }
 
 export interface IdentifierList extends langium.AstNode {
@@ -1094,7 +1108,7 @@ export interface JudgmentDeclaration extends langium.AstNode {
   readonly $container: Model;
   readonly $type: "JudgmentDeclaration";
   members: Array<JudgmentMember>;
-  name: string;
+  name: Identifier;
 }
 
 export const JudgmentDeclaration = {
@@ -1142,6 +1156,7 @@ export type JudgmentMember =
   | JudgmentEvidenceRefs
   | JudgmentFamilyContext
   | JudgmentRationale
+  | JudgmentReviewArtifact
   | JudgmentReviewer
   | JudgmentStatusProperty
   | JudgmentSupersededBy
@@ -1173,6 +1188,23 @@ export const JudgmentRationale = {
 
 export function isJudgmentRationale(item: unknown): item is JudgmentRationale {
   return reflection.isInstance(item, JudgmentRationale.$type);
+}
+
+export interface JudgmentReviewArtifact extends langium.AstNode {
+  readonly $container: JudgmentDeclaration;
+  readonly $type: "JudgmentReviewArtifact";
+  contentHash: string;
+  path: string;
+}
+
+export const JudgmentReviewArtifact = {
+  $type: "JudgmentReviewArtifact",
+  contentHash: "contentHash",
+  path: "path",
+} as const;
+
+export function isJudgmentReviewArtifact(item: unknown): item is JudgmentReviewArtifact {
+  return reflection.isInstance(item, JudgmentReviewArtifact.$type);
 }
 
 export interface JudgmentReviewer extends langium.AstNode {
@@ -1775,10 +1807,11 @@ export type NamePart =
   | "voluntary"
   | "withdrawn"
   | "writ"
-  | string;
+  | Identifier;
 
 export function isNamePart(item: unknown): item is NamePart {
   return (
+    isIdentifier(item) ||
     item === "writ" ||
     item === "record" ||
     item === "judgment" ||
@@ -2005,8 +2038,7 @@ export function isNamePart(item: unknown): item is NamePart {
     item === "applies_to" ||
     item === "supersedes_judgment_ids" ||
     item === "superseded_by_judgment_id" ||
-    item === "supersedes" ||
-    (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
+    item === "supersedes"
   );
 }
 
@@ -2195,7 +2227,7 @@ export interface RecordDeclaration extends langium.AstNode {
   readonly $type: "RecordDeclaration";
   family: RecordFamily;
   members: Array<RecordMember>;
-  name: string;
+  name: Identifier;
 }
 
 export const RecordDeclaration = {
@@ -2253,14 +2285,10 @@ export function isRecordEvidenceReference(item: unknown): item is RecordEvidence
   return reflection.isInstance(item, RecordEvidenceReference.$type);
 }
 
-export type RecordFamily = "institutional" | "legal_policy" | string;
+export type RecordFamily = "institutional" | "legal_policy" | Identifier;
 
 export function isRecordFamily(item: unknown): item is RecordFamily {
-  return (
-    item === "legal_policy" ||
-    item === "institutional" ||
-    (typeof item === "string" && /[_a-zA-Z][\w-]*/.test(item))
-  );
+  return isIdentifier(item) || item === "legal_policy" || item === "institutional";
 }
 
 export type RecordLinkRelationType =
@@ -2581,7 +2609,7 @@ export function isReviewState(item: unknown): item is ReviewState {
 export interface Source extends langium.AstNode {
   readonly $container: Model;
   readonly $type: "Source";
-  name: string;
+  name: Identifier;
   properties: Array<SourceProperty>;
 }
 
@@ -2842,6 +2870,7 @@ export type WritAstType = {
   JudgmentFamilyContext: JudgmentFamilyContext;
   JudgmentMember: JudgmentMember;
   JudgmentRationale: JudgmentRationale;
+  JudgmentReviewArtifact: JudgmentReviewArtifact;
   JudgmentReviewer: JudgmentReviewer;
   JudgmentStatusProperty: JudgmentStatusProperty;
   JudgmentSupersededBy: JudgmentSupersededBy;
@@ -3319,6 +3348,18 @@ export class WritAstReflection extends langium.AbstractAstReflection {
       properties: {
         value: {
           name: JudgmentRationale.value,
+        },
+      },
+      superTypes: [JudgmentMember.$type],
+    },
+    JudgmentReviewArtifact: {
+      name: JudgmentReviewArtifact.$type,
+      properties: {
+        contentHash: {
+          name: JudgmentReviewArtifact.contentHash,
+        },
+        path: {
+          name: JudgmentReviewArtifact.path,
         },
       },
       superTypes: [JudgmentMember.$type],

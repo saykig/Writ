@@ -360,6 +360,14 @@ function printJudgment(judgment: JudgmentDeclaration): string {
       case "JudgmentSupersededBy":
         lines.push(`${INDENT}superseded_by_judgment_id ${member.value};`);
         break;
+      case "JudgmentReviewArtifact":
+        lines.push(
+          `${INDENT}review_artifact {`,
+          `${INDENT.repeat(2)}path ${quote(member.path)};`,
+          `${INDENT.repeat(2)}content_hash ${quote(member.contentHash)};`,
+          `${INDENT}}`,
+        );
+        break;
       case "RelatedJudgments":
         lines.push(`${INDENT}related_judgment_ids ${identifiers(member.values.values)};`);
         break;

@@ -120,14 +120,16 @@ judgment judgment_nist_nvlap_lab_decision_right_stage_b {
 judgment judgment_nist_nvlap_lab_decision_right_v2_human_review {
   target record nist_nvlap_lab_decision_right_v2; type review_disposition; value "approved";
   rationale "The explicit human disposition in docs/migrations/nist-handbook-competence/human-review.yaml approves the full three-sentence body of Handbook clause 1.3.5 and sentence 1 only of clause 3.5.3, affirms the unchanged decision-right assertion scoped to NVLAP, and supersedes the prior record and approval while preserving their evidence and review history. The competence quotation is corrected to based on evaluation; the clause 3.5.3 quotation is unchanged and its extent is now explicit. Neither the source document version nor the substantive assertion changes.";
-  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human disposition)"; status accepted; created_at 2026-09-04; family_context institutional;
+  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human disposition)"; status superseded; created_at 2026-09-04; family_context institutional;
   supersedes_judgment_ids { judgment_nist_nvlap_lab_decision_right_stage_b };
+  superseded_by_judgment_id judgment_nist_nvlap_lab_decision_right_v2_bound_review;
 }
 
 judgment judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review {
   target record_link nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right; type record_link_disposition; value "approved";
   rationale "The explicit human disposition in docs/migrations/nist-handbook-competence/human-review.yaml approves superseding the old NVLAP decision-right record with its evidence-corrected successor. This Core link records that direction while retaining the old record and its review provenance; its approval is recorded separately from the successor record disposition.";
-  evidence_refs { nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human disposition)"; status accepted; created_at 2026-09-04; family_context institutional;
+  evidence_refs { nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human disposition)"; status superseded; created_at 2026-09-04; family_context institutional;
+  superseded_by_judgment_id judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review;
 }
 
 judgment judgment_nist_ai_standards_group_identity_stage_b {

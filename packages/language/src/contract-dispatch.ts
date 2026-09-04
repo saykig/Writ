@@ -1,16 +1,17 @@
 import {
   RAW_COMPATIBILITY_SCHEMAS,
   SCHEMA_IDS,
+  REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
   type RecordJudgment,
   type WritRecord,
 } from "@writ/domain";
 
-export type SupportedWritDialect = "0.1" | "0.2";
+export type SupportedWritDialect = "0.1" | "0.2" | "0.3";
 export type CompiledSchemaVersion = WritRecord["schema_version"];
 
-export interface ArtifactContract {
+export interface ArtifactContract<Version extends string = CompiledSchemaVersion> {
   readonly id: string;
-  readonly schemaVersion: CompiledSchemaVersion;
+  readonly schemaVersion: Version;
 }
 
 export interface WritDialectContracts {
@@ -20,9 +21,7 @@ export interface WritDialectContracts {
     readonly legal_policy: ArtifactContract;
     readonly institutional: ArtifactContract;
   };
-  readonly judgment: ArtifactContract & {
-    readonly schemaVersion: RecordJudgment["schema_version"];
-  };
+  readonly judgment: ArtifactContract<RecordJudgment["schema_version"]>;
 }
 
 const compatibilityId = (kind: keyof typeof RAW_COMPATIBILITY_SCHEMAS): string =>
@@ -74,6 +73,24 @@ export const WRIT_DIALECT_CONTRACTS: Readonly<Record<SupportedWritDialect, WritD
         schemaVersion: "0.2.0",
       }),
     }),
+    "0.3": Object.freeze({
+      dialect: "0.3",
+      records: Object.freeze({
+        base: Object.freeze({ id: SCHEMA_IDS.record, schemaVersion: "0.2.0" }),
+        legal_policy: Object.freeze({
+          id: SCHEMA_IDS["legal-policy-record"],
+          schemaVersion: "0.2.0",
+        }),
+        institutional: Object.freeze({
+          id: SCHEMA_IDS["institutional-record"],
+          schemaVersion: "0.2.0",
+        }),
+      }),
+      judgment: Object.freeze({
+        id: REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
+        schemaVersion: "0.3.0",
+      }),
+    }),
   });
 
 export function resolveWritDialect(dialect: string): WritDialectContracts | undefined {
@@ -82,6 +99,8 @@ export function resolveWritDialect(dialect: string): WritDialectContracts | unde
       return WRIT_DIALECT_CONTRACTS["0.1"];
     case "0.2":
       return WRIT_DIALECT_CONTRACTS["0.2"];
+    case "0.3":
+      return WRIT_DIALECT_CONTRACTS["0.3"];
     default:
       return undefined;
   }

@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import type { AtomicInstitutionalRecord, CurrentRecordJudgment, RecordLink } from "@writ/domain";
+import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID } from "@writ/domain";
 import { compileSource, isConceptDeclaration, isSource, parseDocument } from "@writ/language";
 
 import { loadAuthorityIndex, renderSchemaErrors, type AuthorityIndex } from "./authority.js";
@@ -795,7 +796,9 @@ export function loadRepository(root: string): LoadRepositoryResult {
                 loadIssues.push(
                   ...validateDocument(
                     authority,
-                    RECORD_JUDGMENT_SCHEMA,
+                    judgment.schema_version === "0.3.0"
+                      ? REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID
+                      : RECORD_JUDGMENT_SCHEMA,
                     judgment,
                     "INTEGRITY_CONTRACT_INVALID",
                     physical,

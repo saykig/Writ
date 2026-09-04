@@ -396,10 +396,16 @@ function lowerJudgment(
   const supersedesIds = find("JudgmentSupersedesIds");
   const supersededBy = find("JudgmentSupersededBy");
   const related = find("RelatedJudgments");
+  const reviewArtifact = find("JudgmentReviewArtifact");
   const span = spanOf(judgment);
   if (span) sourceMap.push({ key: `judgment:${judgment.name}`, span });
   const targetKind = target?.$type === "JudgmentTarget" ? target.kind : undefined;
   const common = {
+    ...(reviewArtifact?.$type === "JudgmentReviewArtifact"
+      ? {
+          review_artifact: { path: reviewArtifact.path, content_hash: reviewArtifact.contentHash },
+        }
+      : {}),
     schema_version: schemaVersion,
     judgment_id: judgment.name,
     judgment_type: type?.$type === "JudgmentTypeProperty" ? type.value : "disagreement",
@@ -468,5 +474,22 @@ export function compileModel(model: Model, _options: CompileOptions = {}): Compi
         declaration.$type === "JudgmentDeclaration",
     )
     .map((judgment) => lowerJudgment(judgment, contracts.judgment.schemaVersion, sourceMap));
-  return { records, judgments, diagnostics: [], sourceMap };
+  const diagnostics: LanguageDiagnostic[] = [];
+  for (const declaration of model.declarations) {
+    if (declaration.$type !== "JudgmentDeclaration") continue;
+    const bindings = declaration.members.filter(
+      (member) => member.$type === "JudgmentReviewArtifact",
+    );
+    if (bindings.length > 1) {
+      const span = spanOf(bindings[1]!);
+      diagnostics.push({
+        code: "WRT-JUDGMENT-REVIEW-ARTIFACT-DUPLICATE",
+        severity: "error",
+        message: "A judgment may declare only one review artifact binding.",
+        objectId: declaration.name,
+        ...(span ? { span } : {}),
+      });
+    }
+  }
+  return { records, judgments, diagnostics, sourceMap };
 }

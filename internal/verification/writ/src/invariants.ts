@@ -26,6 +26,35 @@ const meta = (section: string): InvariantAuthority => ({
 });
 
 export const INVARIANTS: readonly InvariantDefinition[] = [
+  ...[
+    "PROVENANCE_REVIEW_ARTIFACT_BINDING_INVALID",
+    "PROVENANCE_REVIEW_ARTIFACT_PATH_INVALID",
+    "PROVENANCE_REVIEW_ARTIFACT_HASH_INVALID",
+    "PROVENANCE_REVIEW_ARTIFACT_BYTES_UNAVAILABLE",
+    "PROVENANCE_REVIEW_ARTIFACT_BYTES_INVALID",
+    "PROVENANCE_REVIEW_ARTIFACT_HASH_MISMATCH",
+    "PROVENANCE_REVIEW_ARTIFACT_NOT_FOUND",
+    "PROVENANCE_REVIEW_ARTIFACT_NOT_REGULAR_FILE",
+    "PROVENANCE_REVIEW_ARTIFACT_PATH_ALIAS",
+    "PROVENANCE_REVIEW_ARTIFACT_SELF_REFERENCE",
+    "PROVENANCE_REVIEW_ARTIFACT_READ_FAILED",
+  ].map((code): InvariantDefinition => ({
+    code,
+    gate: "provenance",
+    authority: schema(
+      "schemas/analysis/record-judgment-v0.3.schema.json",
+      "0.3.0",
+      "review_artifact exact byte association and repository resolution",
+    ),
+  })),
+  ...[
+    "PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED",
+    "PROVENANCE_REVIEW_ARTIFACT_INVENTORY_UNAVAILABLE",
+  ].map((code): InvariantDefinition => ({
+    code,
+    gate: "provenance",
+    authority: meta("Mechanical tracked-file inventory and declared review-artifact closure"),
+  })),
   {
     code: "VERIFIER_UNSUPPORTED_CONTRACT",
     gate: "integrity",

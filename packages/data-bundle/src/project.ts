@@ -4,6 +4,8 @@ import {
   isSource,
   parseDocument as parseWritDocument,
 } from "@writ/language";
+import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID } from "@writ/domain";
+import { readRepositoryReviewArtifact } from "@writ/provenance/repository";
 
 import type {
   BundleEvidenceSource,
@@ -25,6 +27,7 @@ import {
   object,
   parsedResource,
   rawHash,
+  repositoryRoot,
   source,
   strings,
   text,
@@ -48,7 +51,7 @@ function yamlCollections(
 ): Mapping[] {
   return corpus.resources[category].flatMap((path) => {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) return [];
-    const document = object(parsedResource(source(path)), path);
+    const document = object(parsedResource(source(path, undefined, corpus.root)), path);
     const value = document[key];
     if (value === undefined) return [];
     if (!Array.isArray(value)) throw new TypeError(`${path}.${key} must be an array`);
@@ -191,7 +194,7 @@ function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
   assertCompatibilityEvidenceIdentities(corpus);
   for (const path of corpus.resources.records) {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) continue;
-    const wholeSource = source(path);
+    const wholeSource = source(path, undefined, corpus.root);
     const document = object(parsedResource(wholeSource), path);
     validateAgainstContract(corpus.manifest.record_contract.id, document, path);
     for (const collectionKey of ["claims", "entities"]) {
@@ -273,7 +276,7 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
     }
   >();
   for (const path of corpus.resources.sources) {
-    const resource = source(path);
+    const resource = source(path, undefined, corpus.root);
     if (resource.language === "yaml") {
       const parsed = object(parsedResource(resource), path);
       if (!Array.isArray(parsed.sources)) continue;
@@ -519,7 +522,7 @@ function projectWritRecords(
   const records: BundleRecord[] = [];
   for (const path of corpus.resources.records) {
     if (!path.endsWith(".writ")) continue;
-    const whole = source(path);
+    const whole = source(path, undefined, corpus.root);
     const exact = extractWritDeclarations(whole.content, path);
     const compiled = compileClean(path, whole.content);
     for (const recordValue of compiled.records) {
@@ -561,7 +564,7 @@ export function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
   if (corpus.manifest.record_contract.kind === "compatibility") return links;
   for (const path of corpus.resources.relationships) {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) continue;
-    const whole = source(path);
+    const whole = source(path, undefined, corpus.root);
     const value = asJsonObject(parsedResource(whole), path);
     validateAgainstContract(RECORD_LINK_CONTRACT, value, path);
     const id = text(value.link_id, `${path}.link_id`);
@@ -589,14 +592,29 @@ function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
   if (corpus.manifest.record_contract.kind === "compatibility") return judgments;
   for (const path of corpus.resources.judgments) {
     if (!path.endsWith(".writ")) continue;
-    const whole = source(path);
+    const whole = source(path, undefined, corpus.root);
     const exact = extractWritDeclarations(whole.content, path);
     const compiled = compileClean(path, whole.content);
     for (const value of compiled.judgments) {
       const judgment = value as unknown as Mapping;
-      validateAgainstContract(RECORD_JUDGMENT_CONTRACT, judgment, `${path}.${value.judgment_id}`);
+      const contractId =
+        judgment.schema_version === "0.3.0"
+          ? REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID
+          : RECORD_JUDGMENT_CONTRACT;
+      validateAgainstContract(contractId, judgment, `${path}.${value.judgment_id}`);
       const exactSource = exact.judgments.get(value.judgment_id);
       if (!exactSource) throw new Error(`${path}: missing CST source for ${value.judgment_id}`);
+      const artifact =
+        judgment.review_artifact === undefined
+          ? undefined
+          : readRepositoryReviewArtifact(corpus.root ?? repositoryRoot, judgment.review_artifact, {
+              judgmentPath: path,
+            });
+      if (artifact !== undefined && artifact.status !== "verified") {
+        throw new Error(
+          `${path}.${value.judgment_id}: ${artifact.diagnostics.map((item) => `${item.code}: ${item.message}`).join("; ")}`,
+        );
+      }
       judgments.push({
         judgmentKey: `${corpus.entry.corpus_id}::${value.judgment_id}`,
         corpusId: corpus.entry.corpus_id,
@@ -604,9 +622,17 @@ function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
         targetKind: text(judgment.target_kind, `${value.judgment_id}.target_kind`),
         targetId: text(judgment.target_id, `${value.judgment_id}.target_id`),
         status: text(judgment.status, `${value.judgment_id}.status`),
-        contractId: RECORD_JUDGMENT_CONTRACT,
+        contractId,
         storedSource: sourceForRecord(path, value.judgment_id, exactSource),
         compiledJudgment: asJsonObject(judgment, `${path}.${value.judgment_id}`),
+        ...(artifact?.status === "verified"
+          ? {
+              reviewArtifact: {
+                encoding: "base64" as const,
+                content: Buffer.from(artifact.bytes).toString("base64"),
+              },
+            }
+          : {}),
       });
     }
   }
@@ -626,10 +652,14 @@ export function projectCanonicalObjects(repository: NativeRepository): {
   readonly recordLinks: readonly BundleRecordLink[];
   readonly recordJudgments: readonly BundleRecordJudgment[];
 } {
-  for (const corpus of repository.corpora) {
+  const corpora = repository.corpora.map((corpus) => ({
+    ...corpus,
+    root: repository.root ?? corpus.root ?? repositoryRoot,
+  }));
+  for (const corpus of corpora) {
     assertSupportedRecordContract(corpus.manifest.record_contract, corpus.entry.manifest);
   }
-  const records = repository.corpora.flatMap((corpus) => {
+  const records = corpora.flatMap((corpus) => {
     const extensions = new Set(
       corpus.resources.records.map((path) =>
         path.endsWith(".writ")
@@ -660,9 +690,9 @@ export function projectCanonicalObjects(repository: NativeRepository): {
     }
     return projected;
   });
-  const recordLinks = repository.corpora.flatMap(projectRecordLinks);
-  const recordJudgments = repository.corpora.flatMap(projectJudgments);
-  for (const corpus of repository.corpora) {
+  const recordLinks = corpora.flatMap(projectRecordLinks);
+  const recordJudgments = corpora.flatMap(projectJudgments);
+  for (const corpus of corpora) {
     const expectedLinks = Number(corpus.manifest.record_counts.record_links ?? 0);
     const expectedJudgments = Number(corpus.manifest.record_counts.disposition_judgments ?? 0);
     const actualLinks = recordLinks.filter(

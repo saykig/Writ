@@ -1,0 +1,24 @@
+language writ "0.3"
+package us.institutions.nist.review_binding_judgments version "0.3.0";
+
+judgment judgment_nist_nvlap_lab_decision_right_v2_bound_review {
+  target record nist_nvlap_lab_decision_right_v2; type review_disposition; value "approved";
+  rationale "The explicit 2026-09-04 binding disposition in docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml authorizes this successor judgment and its separate supersession lineage. It retains the predecessor target, approval value and evidence references, and binds the exact existing human-review artifact bytes. This is content association only; it does not authenticate a reviewer or automatically establish semantic agreement, evidence sufficiency or truth. The substantive NVLAP assertion, approved excerpt extents and record-supersession direction are unchanged.";
+  evidence_refs { ecfr.title15_cfr_part_285.section_285_9_a, nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human binding disposition)"; status accepted; created_at 2026-09-04; family_context institutional;
+  supersedes_judgment_ids { judgment_nist_nvlap_lab_decision_right_v2_human_review };
+  review_artifact {
+    path "docs/migrations/nist-handbook-competence/human-review.yaml";
+    content_hash "sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713";
+  }
+}
+
+judgment judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review {
+  target record_link nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right; type record_link_disposition; value "approved";
+  rationale "The explicit 2026-09-04 binding disposition in docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml authorizes this successor judgment and its separate supersession lineage. It retains the predecessor target, approval value and evidence references, and binds the exact existing human-review artifact bytes. This is content association only; it does not authenticate a reviewer or automatically establish semantic agreement, evidence sufficiency or truth. The substantive NVLAP assertion, approved excerpt extents and record-supersession direction are unchanged.";
+  evidence_refs { nist.handbook_150.competence_clause_1_3_5, nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1 }; reviewer "Writ maintainer (explicit human binding disposition)"; status accepted; created_at 2026-09-04; family_context institutional;
+  supersedes_judgment_ids { judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review };
+  review_artifact {
+    path "docs/migrations/nist-handbook-competence/human-review.yaml";
+    content_hash "sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713";
+  }
+}

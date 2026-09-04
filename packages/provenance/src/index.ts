@@ -28,7 +28,17 @@ export {
 
 export {
   IllFormedUnicodeError,
+  sha256Bytes,
   sha256Canonical,
   sha256Utf8Text,
   type HashOptions,
 } from "./hash.js";
+
+export {
+  isReviewArtifactPath,
+  verifyReviewArtifact,
+  type ReviewArtifactBinding,
+  type ReviewArtifactDiagnostic,
+  type ReviewArtifactDiagnosticCode,
+  type ReviewArtifactVerification,
+} from "./review-artifact.js";

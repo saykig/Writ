@@ -151,7 +151,7 @@ describe("Writ data bundle membership", () => {
     expect(bundle.corpora).toHaveLength(16);
     expect(bundle.records).toHaveLength(81);
     expect(bundle.recordLinks).toHaveLength(16);
-    expect(bundle.recordJudgments).toHaveLength(63);
+    expect(bundle.recordJudgments).toHaveLength(65);
 
     expect(countBy(bundle.records.map((record) => record.reviewState ?? "none"))).toEqual({
       accepted: 32,
@@ -491,12 +491,35 @@ describe("deterministic neutral contract", () => {
   test("matches the human-reviewed semantic projections at a fixed commit identity", () => {
     expect(bundle.metadata.sectionHashes).toEqual({
       catalog: "sha256:144f343a1234b167fa84db89ec20216c47162d796b3131a9eaf8eeaa4275ad4d",
-      corpora: "sha256:60269711c48f8bf6b2f7788365b7bbbd7b88999cc7d3b80f64b3b18115972e92",
-      resources: "sha256:47b7cff5d6ebe2a1d3523a06685891a4fc5a9d0cbf789c241e4ad02e9a6d766d",
+      corpora: "sha256:dcc673a2143e57e5b76690980ff810ac406c560a701667ade4944d3320842d9d",
+      resources: "sha256:a38e63a5cc23cd5545a1fec5ad2eaa9827b5619f498f431e6cc5fd53fb7b7b6d",
       records: "sha256:9434e3aba7664876dcd5fe075b074209b5275bcf242f1dd66aa9377505b77ab2",
       recordLinks: "sha256:34852b10c260f587d8caa6b1c25377b99e584dad4d1fe36375c863d69672968c",
-      recordJudgments: "sha256:4ac247bd8a2330d9109f8ec2d41e2a753803e9a19e2998dcd24a1d6b8cc40e73",
+      recordJudgments: "sha256:74b0af33d521d948fa5472f559c0ca0faacd78b6582d5d4af5a845e0bd0a02ca",
     });
+  });
+
+  test("exports both approved NIST bindings with exact reloadable bytes and distinct lineages", () => {
+    expect(bundle.metadata.bundleFormatVersion).toBe("1.1.0");
+    const artifact = readFileSync(
+      `${repositoryRoot}/docs/migrations/nist-handbook-competence/human-review.yaml`,
+    );
+    const ids = [
+      "judgment_nist_nvlap_lab_decision_right_v2_bound_review",
+      "judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review",
+    ];
+    const entries = bundle.recordJudgments.filter((entry) => ids.includes(entry.judgmentId));
+    expect(entries).toHaveLength(2);
+    expect(new Set(entries.map((entry) => entry.compiledJudgment!.target_id)).size).toBe(2);
+    for (const entry of entries) {
+      expect(entry.reviewArtifact?.encoding).toBe("base64");
+      expect(Buffer.from(entry.reviewArtifact!.content, "base64")).toEqual(artifact);
+      expect(entry.compiledJudgment!.review_artifact).toEqual({
+        path: "docs/migrations/nist-handbook-competence/human-review.yaml",
+        content_hash: "sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713",
+      });
+    }
+    expect(() => validateWritDataBundle(JSON.parse(serializeBundle(bundle)))).not.toThrow();
   });
 
   test("rejects a known record contract with an unsupported exact version", () => {

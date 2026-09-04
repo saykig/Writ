@@ -369,7 +369,7 @@ describe("mapping queue and preservation gates", () => {
     expect(nist.record_counts).toMatchObject({
       institutional_records: 20,
       record_links: 7,
-      disposition_judgments: 27,
+      disposition_judgments: 29,
     });
     expect(nist.review_counts).toMatchObject({
       approved_records: 14,
@@ -377,7 +377,7 @@ describe("mapping queue and preservation gates", () => {
       approved_record_links: 7,
       accepted_disposition_judgments: 22,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 5,
+      superseded_disposition_judgments: 7,
     });
   });
 
@@ -395,7 +395,7 @@ describe("mapping queue and preservation gates", () => {
       "5d0ab18f33bd59460bb9398b6290319e88208cd9dd4679b77622e71a9c546010",
     );
     expect(fileHash(join(NIST, "judgments.writ"))).toBe(
-      "40b7da6097711914e5840d7cbb3355d67122e5f557a1a67bd5e88dbd794d4a65",
+      "f01e4fc15261b6104f0208612a9560aab944f32418a13605c78ffd36049e355d",
     );
     expect(fileHash(join(EC, "records.writ"))).toBe(
       "05cd96bb274e27d8eb455ab4aea3d37368088a56591144fc7bf3227331d36a11",
