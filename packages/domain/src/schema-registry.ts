@@ -8,6 +8,8 @@ import {
   COMPATIBILITY_SCHEMA_KINDS,
   RAW_COMPATIBILITY_SCHEMAS,
   RAW_SCHEMAS,
+  RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA,
+  REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
   SCHEMA_IDS,
   SCHEMA_KINDS,
   type CompatibilitySchemaKind,
@@ -104,6 +106,16 @@ export const SCHEMA_REGISTRY: Readonly<Record<SchemaKind, SchemaRegistryEntry>> 
         versions: Object.freeze({
           ...(legacyEntry ? { "0.1.0": Object.freeze(legacyEntry) } : {}),
           [schemaVersion]: Object.freeze(entry),
+          ...(kind === "record-judgment"
+            ? {
+                "0.3.0": Object.freeze({
+                  kind,
+                  schemaVersion: "0.3.0",
+                  schemaId: REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
+                  title: String(RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA.title),
+                }),
+              }
+            : {}),
         }),
       };
       return [kind, Object.freeze(registryEntry)];

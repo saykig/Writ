@@ -11,6 +11,7 @@ import {
   EMBEDDED_COMPATIBILITY_SCHEMA_TEXT,
   EMBEDDED_CORPUS_COMPATIBILITY_CONTRACT_TEXT,
   EMBEDDED_SCHEMA_TEXT,
+  EMBEDDED_REVIEW_ARTIFACT_JUDGMENT_SCHEMA_TEXT,
 } from "./schemas.embedded.js";
 
 /** The canonical set of schema kinds, ordered. */
@@ -151,3 +152,9 @@ export const VENDORED_SCHEMAS_DIR = SCHEMAS_DIR;
 export function isSchemaKind(value: string): value is SchemaKind {
   return (SCHEMA_KINDS as readonly string[]).includes(value);
 }
+
+/** Additive opt-in v0.3 contract. The existing current v0.2 schema and ID stay frozen. */
+export const RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA: JsonSchema = Object.freeze(
+  JSON.parse(EMBEDDED_REVIEW_ARTIFACT_JUDGMENT_SCHEMA_TEXT) as JsonSchema,
+);
+export const REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID = String(RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA.$id);

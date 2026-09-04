@@ -1,4 +1,5 @@
 import { validateJudgmentSupersession } from "@writ/domain";
+import { readRepositoryReviewArtifact } from "@writ/provenance/repository";
 import {
   IllFormedUnicodeError,
   sha256Utf8Text,
@@ -238,6 +239,21 @@ function establishesDirectedPath(
 /** Check judgment evidence, targets, supersession, and native ID migration history. */
 export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGateResult {
   const issues = [];
+  for (const loaded of snapshot.judgments) {
+    if (loaded.value.review_artifact === undefined) continue;
+    const verification = readRepositoryReviewArtifact(snapshot.root, loaded.value.review_artifact, {
+      judgmentPath: loaded.file,
+    });
+    for (const diagnostic of verification.diagnostics) {
+      issues.push(
+        issue("provenance", diagnostic.code, diagnostic.message, {
+          corpus_id: loaded.corpus_id,
+          object_id: loaded.value.judgment_id,
+          file: loaded.file,
+        }),
+      );
+    }
+  }
   const passageIndex = buildLogicalPassageIndex(snapshot);
   const judgmentIds = new Set(snapshot.judgments.map(({ value }) => value.judgment_id));
   const historicalMigrationIds = new Set(

@@ -4,6 +4,8 @@ import {
   isSource,
   parseDocument as parseWritDocument,
 } from "@writ/language";
+import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID } from "@writ/domain";
+import { readRepositoryReviewArtifact } from "@writ/provenance/repository";
 
 import type {
   BundleEvidenceSource,
@@ -25,6 +27,7 @@ import {
   object,
   parsedResource,
   rawHash,
+  repositoryRoot,
   source,
   strings,
   text,
@@ -594,9 +597,24 @@ function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
     const compiled = compileClean(path, whole.content);
     for (const value of compiled.judgments) {
       const judgment = value as unknown as Mapping;
-      validateAgainstContract(RECORD_JUDGMENT_CONTRACT, judgment, `${path}.${value.judgment_id}`);
+      const contractId =
+        judgment.schema_version === "0.3.0"
+          ? REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID
+          : RECORD_JUDGMENT_CONTRACT;
+      validateAgainstContract(contractId, judgment, `${path}.${value.judgment_id}`);
       const exactSource = exact.judgments.get(value.judgment_id);
       if (!exactSource) throw new Error(`${path}: missing CST source for ${value.judgment_id}`);
+      const artifact =
+        judgment.review_artifact === undefined
+          ? undefined
+          : readRepositoryReviewArtifact(repositoryRoot, judgment.review_artifact, {
+              judgmentPath: path,
+            });
+      if (artifact !== undefined && artifact.status !== "verified") {
+        throw new Error(
+          `${path}.${value.judgment_id}: ${artifact.diagnostics.map((item) => `${item.code}: ${item.message}`).join("; ")}`,
+        );
+      }
       judgments.push({
         judgmentKey: `${corpus.entry.corpus_id}::${value.judgment_id}`,
         corpusId: corpus.entry.corpus_id,
@@ -604,9 +622,17 @@ function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
         targetKind: text(judgment.target_kind, `${value.judgment_id}.target_kind`),
         targetId: text(judgment.target_id, `${value.judgment_id}.target_id`),
         status: text(judgment.status, `${value.judgment_id}.status`),
-        contractId: RECORD_JUDGMENT_CONTRACT,
+        contractId,
         storedSource: sourceForRecord(path, value.judgment_id, exactSource),
         compiledJudgment: asJsonObject(judgment, `${path}.${value.judgment_id}`),
+        ...(artifact?.status === "verified"
+          ? {
+              reviewArtifact: {
+                encoding: "base64" as const,
+                content: Buffer.from(artifact.bytes).toString("base64"),
+              },
+            }
+          : {}),
       });
     }
   }

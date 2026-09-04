@@ -15,6 +15,13 @@ export type HashOptions = CanonicalOptions;
 
 const PREFIX = "sha256:";
 
+/** Hash exact binary bytes without decoding, normalization, or canonicalization. */
+export function sha256Bytes(value: Uint8Array): string {
+  if (!ArrayBuffer.isView(value) || !(value instanceof Uint8Array))
+    throw new TypeError("Exact byte hashing requires Uint8Array.");
+  return PREFIX + createHash("sha256").update(value).digest("hex");
+}
+
 /** Error thrown when a portable string contract receives ill-formed Unicode. */
 export class IllFormedUnicodeError extends Error {
   constructor(

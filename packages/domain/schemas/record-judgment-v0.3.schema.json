@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/record-judgment-v0.3.schema.json",
+  "title": "Writ Record or Record-Link Judgment with Optional Review Artifact Binding",
+  "description": "An independent judgment about a record or a record link. A judgment carries its own `status` vocabulary (`proposed`, `accepted`, `contested`, `superseded`) which is distinct from the `review_state` of the record or record link it targets (`draft`, `reviewed`, `approved`, `superseded`, `withdrawn`). Accepting a judgment never changes the workflow state of its target. Version 0.3.0 optionally declares an exact review-artifact content association. It does not authenticate authorship, establish semantic agreement, judge evidence sufficiency, or change review status or target workflow. Absence declares no exact artifact binding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "judgment_id",
+    "target_kind",
+    "target_id",
+    "judgment_type",
+    "value",
+    "rationale",
+    "evidence_refs",
+    "reviewer",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.3.0"
+    },
+    "judgment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_kind": {
+      "enum": [
+        "record",
+        "record_link"
+      ]
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "judgment_type": {
+      "$ref": "#/$defs/judgmentType"
+    },
+    "value": {},
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "accepted",
+        "contested",
+        "superseded"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "family_context": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"
+    },
+    "supersedes_judgment_ids": {
+      "description": "Older judgments this judgment replaces. Only a judgment that was accepted can have replaced anything, so this is allowed when `status` is `accepted`, and retained when that judgment has itself since been `superseded`. A `proposed` or `contested` judgment has not replaced anything.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "superseded_by_judgment_id": {
+      "description": "The newer judgment that replaced this one. Required when `status` is `superseded`.",
+      "type": "string",
+      "minLength": 1
+    },
+    "related_judgment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "review_artifact": {
+      "$ref": "#/$defs/reviewArtifactBinding"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "superseded_by_judgment_id"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "superseded_by_judgment_id"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "supersedes_judgment_ids"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "enum": [
+              "accepted",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    }
+  ],
+  "$comment": "Self-supersession and longer supersession cycles are cross-instance properties of a judgment set, not of a single document, so they are enforced by `validateJudgmentSupersession` in `@writ/domain` rather than by this schema.",
+  "$defs": {
+    "judgmentType": {
+      "enum": [
+        "passage_selection",
+        "record_family_classification",
+        "subject_identification",
+        "scope_interpretation",
+        "topic_classification",
+        "legal_status_determination",
+        "institutional_role_determination",
+        "operational_capacity_determination",
+        "direct_or_inferred",
+        "disagreement",
+        "adjudication",
+        "review_disposition",
+        "record_link_disposition"
+      ]
+    },
+    "reviewArtifactBinding": {
+      "description": "Optional singular content association. The path is a canonical repository-relative POSIX locator, separate from exact content identity. Filesystem resolution must reject symlinks, aliases, directories, missing files, repository escape, and the judgment source file itself. Empty bytes remain valid if their hash matches. Artifact semantics require human review.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "content_hash"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![\\s\\S]*[\\u0000-\\u001f\\u007f\\ud800-\\udfff])(?!/)(?![\\s\\S]*(?:^|/)\\.{1,2}(?:/|$))[^/\\\\:%]+(?:/[^/\\\\:%]+)*$",
+          "description": "Canonical repository-relative POSIX path. No absolute paths, empty/dot/dot-dot segments, backslashes, control characters, unpaired Unicode surrogates, colons, or percent-encoded aliases. The exact locator must remain distinct from the content hash."
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "SHA-256 of the complete, unmodified artifact bytes; no newline, whitespace, encoding, or Unicode normalization.",
+          "minLength": 71,
+          "maxLength": 71
+        }
+      }
+    }
+  }
+}

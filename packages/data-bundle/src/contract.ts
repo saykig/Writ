@@ -1,4 +1,5 @@
 export const WRIT_DATA_BUNDLE_FORMAT_VERSION = "1.0.0" as const;
+export const REVIEW_ARTIFACT_BUNDLE_FORMAT_VERSION = "1.1.0" as const;
 
 export type JsonObject = Readonly<Record<string, unknown>>;
 export type BundleSourceLanguage = "json" | "writ" | "yaml";
@@ -122,11 +123,17 @@ export interface BundleRecordJudgment {
   readonly contractId: string;
   readonly storedSource: BundleSource;
   readonly compiledJudgment: JsonObject;
+  /** Exact bytes for the separate compiledJudgment.review_artifact binding, when declared. */
+  readonly reviewArtifact?: {
+    readonly encoding: "base64";
+    readonly content: string;
+  };
 }
 
 export interface WritDataBundle {
   readonly metadata: {
-    readonly bundleFormatVersion: typeof WRIT_DATA_BUNDLE_FORMAT_VERSION;
+    readonly bundleFormatVersion:
+      typeof WRIT_DATA_BUNDLE_FORMAT_VERSION | typeof REVIEW_ARTIFACT_BUNDLE_FORMAT_VERSION;
     readonly writVersion: string;
     readonly writCommit: string;
     readonly repository: string;

@@ -2,10 +2,20 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import type { BundleCatalog, BundleCorpus, WritDataBundle } from "./contract.js";
-import { WRIT_DATA_BUNDLE_FORMAT_VERSION } from "./contract.js";
+import {
+  REVIEW_ARTIFACT_BUNDLE_FORMAT_VERSION,
+  WRIT_DATA_BUNDLE_FORMAT_VERSION,
+} from "./contract.js";
 import { hashCanonical } from "./hashing.js";
 import { projectCanonicalObjects } from "./project.js";
-import { asJsonObject, readNativeRepository, repositoryRoot, strings, text } from "./repository.js";
+import {
+  asJsonObject,
+  readNativeRepository,
+  repositoryRoot,
+  strings,
+  text,
+  type NativeRepository,
+} from "./repository.js";
 
 function gitOutput(args: readonly string[], label: string): string {
   const result = Bun.spawnSync(["git", ...args], { cwd: repositoryRoot });
@@ -78,11 +88,13 @@ function writVersion(): string {
   return packageJson.version;
 }
 
-export function generateWritDataBundleForCommit(writCommit: string): WritDataBundle {
+export function generateWritDataBundleForCommit(
+  writCommit: string,
+  repository: NativeRepository = readNativeRepository(),
+): WritDataBundle {
   if (!/^[0-9a-f]{40}$/.test(writCommit)) {
     throw new Error(`Invalid Writ commit identity: ${writCommit}`);
   }
-  const repository = readNativeRepository();
   const projected = projectCanonicalObjects(repository);
   const catalogValue = repository.catalog;
   const nativeCorpora = repository.corpora.map(({ entry }) => ({
@@ -149,7 +161,11 @@ export function generateWritDataBundleForCommit(writCommit: string): WritDataBun
     ].sort(([left], [right]) => left.localeCompare(right)),
   );
   const metadataWithoutBundleHash = {
-    bundleFormatVersion: WRIT_DATA_BUNDLE_FORMAT_VERSION,
+    bundleFormatVersion: projected.recordJudgments.some(
+      (judgment) => judgment.compiledJudgment.schema_version === "0.3.0",
+    )
+      ? REVIEW_ARTIFACT_BUNDLE_FORMAT_VERSION
+      : WRIT_DATA_BUNDLE_FORMAT_VERSION,
     writVersion: writVersion(),
     writCommit,
     repository: "https://github.com/saykig/Writ",

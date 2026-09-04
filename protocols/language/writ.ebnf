@@ -72,7 +72,15 @@ JudgmentMember   = "target", [ "record" | "record_link" ], QName, ";"
                  | "created_at", Date, ";"
                  | "family_context", RecordFamily, ";"
                  | ( "supersedes" | "superseded_by_judgment_id" ), QName, ";"
+                 | ReviewArtifactBinding
                  | ( "supersedes_judgment_ids" | "related_judgment_ids" ), IdentifierList, ";" ;
+
+(* Opt-in dialect 0.3 maps judgments to schema 0.3.0; records remain 0.2.0.
+   Dialects 0.1 and 0.2 retain their existing contract meanings. A judgment may
+   contain only one review_artifact; duplicates are a compilation error.
+   The binding associates exact bytes, not reviewer identity or semantic truth. *)
+ReviewArtifactBinding = "review_artifact", "{", "path", String, ";",
+                        "content_hash", String, ";", "}" ;
 
 Literal          = String | Number | Date | "true" | "false" | "unknown" | "contested" ;
 IdentifierList   = "{", [ QName, { ",", QName }, [ "," ] ], "}" ;

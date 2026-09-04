@@ -8,14 +8,17 @@ passage scope.
 
 The package supports Node.js 22 or newer and Bun 1.3 or newer. Its built ESM and declarations are
 available through the package root export in a packed tarball. The package remains private; remote
-publication is outside this boundary. It has no runtime dependencies beyond `node:crypto`.
+publication is outside this boundary. The root export has no runtime dependencies beyond `node:crypto`.
+Version 0.2.0 adds exact review-artifact byte association and the separate, opt-in
+`@writ/provenance/repository` filesystem adapter, which also uses `node:fs` and `node:path`.
 
 ## Public surface
 
 Runtime exports:
 
 - `canonicalJson`, `CanonicalJsonError`, and `sha256Canonical`;
-- `sha256Utf8Text` and `IllFormedUnicodeError`;
+- `sha256Utf8Text`, `sha256Bytes`, and `IllFormedUnicodeError`;
+- `isReviewArtifactPath` and `verifyReviewArtifact`;
 - `resolveSourceVersion` and `verifyEvidenceReferences`;
 - `evidencePassageSignature`, `passageSignatureKey`, and `DeclaredReferenceInputError`;
 - `resolveLogicalPassage`, `logicalPassageConflicts`, `LogicalPassageOccurrenceError`, and
@@ -27,6 +30,39 @@ Type-only exports:
 - `DeclaredTextReference` and `SourceVersionDeclaration`;
 - `SourceVersionResolution`, `ProvenanceDiagnostic`, and `ProvenanceDiagnosticCode`;
 - `PassageSignature`, `LogicalPassageOccurrence`, and `LogicalPassageResolution`.
+- `ReviewArtifactBinding`, `ReviewArtifactDiagnostic`, `ReviewArtifactDiagnosticCode`, and
+  `ReviewArtifactVerification`.
+
+## Exact review-artifact association
+
+`verifyReviewArtifact({ path, content_hash }, bytes?)` checks one declared canonical
+repository-relative locator and a `sha256:<64 lowercase hex>` identity against caller-supplied
+`Uint8Array` bytes. It returns `verified`, `invalid` with stable diagnostics, or `unavailable` when
+the caller supplies no bytes. Hashing never decodes text, canonicalizes JSON, or normalizes Unicode
+or line endings. Empty bytes are valid content when their hash matches; this does not establish
+that the artifact contains a review. A missing binding declares no association and does not imply
+that a judgment is fabricated, invalid, machine-generated, or non-human.
+
+The binding is one exact plain object with only `path` and `content_hash`. Absolute paths, empty,
+`.` and `..` segments, repeated separators, backslashes, percent signs, colons and ASCII controls
+are invalid instead of being normalized. The path remains independent of its content hash. A copy
+at another valid declared repository path is a different locator with potentially identical bytes.
+The kernel makes no authorization decision about the content of that path.
+
+The opt-in `readRepositoryReviewArtifact(root, binding, { judgmentPath })` adapter reads a regular
+file only at its exact stored repository path. It rejects missing files, all symlink components,
+case/path aliases, escapes and a locator equal to the judgment's own containing source path.
+It returns exact bytes only after the same pure checker verifies their hash. The selected root is
+the whole governed location. Repository verification and ordinary export call this same adapter;
+portable consumers call the pure checker on decoded exported bytes. Filesystem reads assume frozen
+inputs, as the rest of deterministic repository verification does.
+
+These operations establish content association only. They do not authenticate authorship, compare
+the judgment with the artifact's meaning, determine evidentiary sufficiency, approve a judgment,
+or alter its target. Another review, an extraction report or even an empty file can have valid byte
+identity. Human review remains responsible for choosing the appropriate artifact and comparing
+semantics. Self-reference rejection requires the repository caller's source-path context; the pure
+byte checker cannot infer where its input judgment was stored.
 
 `DeclaredTextReference` names the seven-field declaration without claiming document grounding. The
 kernel proves that the quote matches its declared passage hash and that the declared source,

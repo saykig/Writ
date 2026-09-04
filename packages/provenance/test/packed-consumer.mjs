@@ -38,7 +38,7 @@ function pack(destination) {
 
 const packResult = pack(temporaryRoot);
 assert.equal(packResult.name, "@writ/provenance");
-assert.equal(packResult.version, "0.1.0");
+assert.equal(packResult.version, "0.2.0");
 const packedPaths = packResult.files.map(({ path }) => path).sort();
 assert.deepEqual(packedPaths, [
   "README.md",
@@ -54,6 +54,12 @@ assert.deepEqual(packedPaths, [
   "dist/index.d.ts",
   "dist/index.js",
   "dist/index.js.map",
+  "dist/repository-review-artifact.d.ts",
+  "dist/repository-review-artifact.js",
+  "dist/repository-review-artifact.js.map",
+  "dist/review-artifact.d.ts",
+  "dist/review-artifact.js",
+  "dist/review-artifact.js.map",
   "package.json",
 ]);
 
@@ -115,12 +121,15 @@ const consumerSource = `
     "canonicalJson",
     "evidencePassageSignature",
     "logicalPassageConflicts",
+    "isReviewArtifactPath",
     "passageSignatureKey",
     "resolveLogicalPassage",
     "resolveSourceVersion",
     "sha256Canonical",
+    "sha256Bytes",
     "sha256Utf8Text",
     "verifyEvidenceReferences",
+    "verifyReviewArtifact",
   ];
   assert.deepEqual(Object.keys(provenance).sort(), expectedExports.sort());
   assert.equal(
@@ -146,6 +155,12 @@ const consumerSource = `
     role: "dependency",
   };
   assert.deepEqual(provenance.verifyEvidenceReferences([reference], [source]), []);
+  const bytes = new Uint8Array([0, 255, 128]);
+  const binding = { path: "review.bin", content_hash: provenance.sha256Bytes(bytes) };
+  assert.equal(provenance.verifyReviewArtifact(binding, bytes).status, "verified");
+  assert.equal(provenance.verifyReviewArtifact(binding).status, "unavailable");
+  const repository = await import("@writ/provenance/repository");
+  assert.equal(typeof repository.readRepositoryReviewArtifact, "function");
   let internalBlocked = false;
   try {
     await import("@writ/provenance/src/index.ts");

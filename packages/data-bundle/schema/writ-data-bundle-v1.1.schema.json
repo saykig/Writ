@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/packages/data-bundle/writ-data-bundle-v1.1.schema.json",
+  "title": "Writ deterministic data bundle with exact review-artifact bytes",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "catalog",
+    "corpora",
+    "resources",
+    "records",
+    "recordLinks",
+    "recordJudgments"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "catalog": {
+      "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/catalog"
+    },
+    "corpora": {
+      "type": "array",
+      "items": {
+        "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/corpus"
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/resource"
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/record"
+      }
+    },
+    "recordLinks": {
+      "type": "array",
+      "items": {
+        "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/recordLink"
+      }
+    },
+    "recordJudgments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recordJudgment"
+      }
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundleFormatVersion",
+        "writVersion",
+        "writCommit",
+        "repository",
+        "softwareLicense",
+        "softwareLicenseFile",
+        "softwareLicenseText",
+        "copyrightNotice",
+        "thirdPartyNoticesFile",
+        "thirdPartyNoticesText",
+        "schemaVersions",
+        "sectionHashes",
+        "bundleHash"
+      ],
+      "properties": {
+        "bundleFormatVersion": {
+          "const": "1.1.0"
+        },
+        "writVersion": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "writCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri"
+        },
+        "softwareLicense": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nullableString"
+        },
+        "softwareLicenseFile": {
+          "oneOf": [
+            {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/relativePath"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "softwareLicenseText": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nullableString"
+        },
+        "copyrightNotice": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nullableString"
+        },
+        "thirdPartyNoticesFile": {
+          "oneOf": [
+            {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/relativePath"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "thirdPartyNoticesText": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nullableString"
+        },
+        "schemaVersions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["corpusCatalog", "corpusManifests", "recordContracts"],
+          "properties": {
+            "corpusCatalog": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+            },
+            "corpusManifests": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/stringArray"
+            },
+            "recordContracts": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+              }
+            }
+          }
+        },
+        "sectionHashes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "catalog",
+            "corpora",
+            "resources",
+            "records",
+            "recordLinks",
+            "recordJudgments"
+          ],
+          "properties": {
+            "catalog": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            },
+            "corpora": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            },
+            "resources": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            },
+            "records": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            },
+            "recordLinks": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            },
+            "recordJudgments": {
+              "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+            }
+          }
+        },
+        "bundleHash": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/hash"
+        }
+      }
+    },
+    "recordJudgment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "judgmentKey",
+        "corpusId",
+        "judgmentId",
+        "targetKind",
+        "targetId",
+        "status",
+        "contractId",
+        "storedSource",
+        "compiledJudgment"
+      ],
+      "properties": {
+        "judgmentKey": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "corpusId": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "judgmentId": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "targetKind": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "targetId": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "status": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/nonEmptyString"
+        },
+        "contractId": {
+          "type": "string",
+          "format": "uri"
+        },
+        "storedSource": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/source"
+        },
+        "compiledJudgment": {
+          "$ref": "https://writ.example/packages/data-bundle/writ-data-bundle.schema.json#/$defs/jsonObject"
+        },
+        "reviewArtifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["encoding", "content"],
+          "properties": {
+            "encoding": {
+              "const": "base64"
+            },
+            "content": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

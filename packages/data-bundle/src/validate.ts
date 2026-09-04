@@ -3,6 +3,9 @@ import { fileURLToPath } from "node:url";
 
 import _Ajv2020 from "ajv/dist/2020.js";
 import _addFormats from "ajv-formats";
+import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID, validateContract } from "@writ/domain";
+import { compileSource } from "@writ/language";
+import { verifyReviewArtifact } from "@writ/provenance";
 
 import type { WritDataBundle } from "./contract.js";
 import { hashCanonical } from "./hashing.js";
@@ -10,6 +13,9 @@ import { repositoryRoot } from "./repository.js";
 
 const schemaPath = fileURLToPath(
   new URL("../schema/writ-data-bundle.schema.json", import.meta.url),
+);
+const reviewArtifactSchemaPath = fileURLToPath(
+  new URL("../schema/writ-data-bundle-v1.1.schema.json", import.meta.url),
 );
 
 type DefaultExport<T> = T extends { default: infer D } ? D : T;
@@ -84,10 +90,125 @@ export function assertSourceFragments(bundle: WritDataBundle): void {
   }
 }
 
+/** Check content association using only exported bytes; no repository lookup is performed. */
+export function assertReviewArtifacts(bundle: WritDataBundle): void {
+  const artifactHashes = new Map<string, string>();
+  const judgmentCounts = new Map<string, number>();
+  for (const judgment of bundle.recordJudgments) {
+    judgmentCounts.set(judgment.judgmentKey, (judgmentCounts.get(judgment.judgmentKey) ?? 0) + 1);
+  }
+  for (const judgment of bundle.recordJudgments) {
+    const compiled = judgment.compiledJudgment;
+    const binding = compiled.review_artifact;
+    const artifact = judgment.reviewArtifact;
+    // Read the new field even when the advertised version was downgraded. A
+    // format change cannot erase a binding still declared by the stored source.
+    const sourceCompilation = compileSource(
+      `language writ "0.3"\npackage exported.review_binding version "0.3.0";\n${judgment.storedSource.content}`,
+      { fileName: judgment.storedSource.path },
+    );
+    if (compiled.schema_version !== "0.3.0") {
+      if (
+        binding !== undefined ||
+        artifact !== undefined ||
+        judgment.contractId === REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID ||
+        sourceCompilation.judgments.some((item) => "review_artifact" in item)
+      ) {
+        throw new Error(`${judgment.judgmentKey}: review binding requires judgment schema 0.3.0`);
+      }
+      continue;
+    }
+    if (bundle.metadata.bundleFormatVersion !== "1.1.0") {
+      throw new Error(
+        `${judgment.judgmentKey}: judgment schema 0.3.0 requires bundle format 1.1.0`,
+      );
+    }
+    if (judgmentCounts.get(judgment.judgmentKey) !== 1) {
+      throw new Error(`${judgment.judgmentKey}: duplicate binding-capable judgment identity`);
+    }
+    if (judgment.contractId !== REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID) {
+      throw new Error(`${judgment.judgmentKey}: wrong review-artifact judgment contract`);
+    }
+    const validation = validateContract(judgment.contractId, compiled);
+    if (!validation.valid) {
+      throw new Error(
+        `${judgment.judgmentKey}: invalid judgment: ${validation.errors.map((issue) => issue.message).join("; ")}`,
+      );
+    }
+    for (const [projected, native] of [
+      ["judgmentId", "judgment_id"],
+      ["targetKind", "target_kind"],
+      ["targetId", "target_id"],
+      ["status", "status"],
+    ] as const) {
+      if (judgment[projected] !== compiled[native]) {
+        throw new Error(`${judgment.judgmentKey}: ${projected} disagrees with compiled judgment`);
+      }
+    }
+    if (judgment.judgmentKey !== `${judgment.corpusId}::${judgment.judgmentId}`) {
+      throw new Error(`${judgment.judgmentKey}: judgment key disagrees with judgment identity`);
+    }
+    if (
+      judgment.storedSource.language !== "writ" ||
+      !sourceCompilation.schemaValid ||
+      sourceCompilation.diagnostics.some((diagnostic) => diagnostic.severity === "error") ||
+      sourceCompilation.judgments.length !== 1 ||
+      sourceCompilation.judgments[0]!.judgment_id !== judgment.judgmentId
+    ) {
+      throw new Error(`${judgment.judgmentKey}: invalid stored judgment source for review binding`);
+    }
+    const declared = sourceCompilation.judgments[0]! as unknown as {
+      review_artifact?: { path: string; content_hash: string };
+    };
+    const supplied = binding as { path: string; content_hash: string } | undefined;
+    if (
+      declared.review_artifact?.path !== supplied?.path ||
+      declared.review_artifact?.content_hash !== supplied?.content_hash
+    ) {
+      throw new Error(
+        `${judgment.judgmentKey}: review binding disagrees with stored judgment source`,
+      );
+    }
+    if (binding === undefined) {
+      if (artifact !== undefined) {
+        throw new Error(`${judgment.judgmentKey}: artifact bytes have no declared binding`);
+      }
+      continue;
+    }
+    if (artifact === undefined) {
+      throw new Error(`${judgment.judgmentKey}: bound review artifact bytes are unavailable`);
+    }
+    const bytes = Buffer.from(artifact.content, "base64");
+    if (artifact.encoding !== "base64" || bytes.toString("base64") !== artifact.content) {
+      throw new Error(`${judgment.judgmentKey}: review artifact must use canonical base64`);
+    }
+    const result = verifyReviewArtifact(binding, bytes);
+    if (result.status !== "verified") {
+      throw new Error(
+        `${judgment.judgmentKey}: ${result.diagnostics.map((item) => `${item.code}: ${item.message}`).join("; ")}`,
+      );
+    }
+    const { path, content_hash: contentHash } = result.binding;
+    if (path === judgment.storedSource.path) {
+      throw new Error(`${judgment.judgmentKey}: review artifact cannot be its own judgment source`);
+    }
+    const previousHash = artifactHashes.get(path);
+    if (previousHash !== undefined && previousHash !== contentHash) {
+      throw new Error(`${judgment.judgmentKey}: contradictory review artifact bytes for ${path}`);
+    }
+    artifactHashes.set(path, contentHash);
+  }
+}
+
 export function validateWritDataBundle(bundle: WritDataBundle): void {
   const ajv = new Ajv2020({ allErrors: true, strict: true, allowUnionTypes: true });
   addFormats(ajv);
-  const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
+  const legacySchema = JSON.parse(readFileSync(schemaPath, "utf8"));
+  const schema =
+    bundle.metadata.bundleFormatVersion === "1.1.0"
+      ? JSON.parse(readFileSync(reviewArtifactSchemaPath, "utf8"))
+      : legacySchema;
+  if (schema !== legacySchema) ajv.addSchema(legacySchema);
   const validate = ajv.compile(schema);
   if (!validate(bundle)) {
     throw new Error(
@@ -100,5 +221,6 @@ export function validateWritDataBundle(bundle: WritDataBundle): void {
       throw new Error(`metadata.${forbidden} is a generation timestamp`);
   }
   assertSourceFragments(bundle);
+  assertReviewArtifacts(bundle);
   assertPortable(bundle);
 }

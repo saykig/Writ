@@ -284,8 +284,7 @@ export interface LegacyRecordJudgment {
   related_judgment_ids?: string[];
 }
 
-export interface CurrentRecordJudgment {
-  schema_version: "0.2.0";
+interface CurrentRecordJudgmentBase {
   judgment_id: string;
   target_kind: "record" | "record_link";
   target_id: string;
@@ -303,6 +302,19 @@ export interface CurrentRecordJudgment {
   superseded_by_judgment_id?: string;
   related_judgment_ids?: string[];
 }
+
+/** Exact content association only; independent of reviewer, evidence, and review status. */
+export interface ReviewArtifactBinding {
+  path: string;
+  content_hash: string;
+}
+
+/** v0.2 remains unchanged; the optional binding requires the exact v0.3 contract. */
+export type CurrentRecordJudgment = CurrentRecordJudgmentBase &
+  (
+    | { schema_version: "0.2.0"; review_artifact?: never }
+    | { schema_version: "0.3.0"; review_artifact?: ReviewArtifactBinding }
+  );
 
 export type RecordJudgment = LegacyRecordJudgment | CurrentRecordJudgment;
 
