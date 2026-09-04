@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: TRACK-B-CROSS-LAYER-CONSISTENCY-001
     title: Run a bounded cross-layer consistency discovery experiment
-    status: in_progress
+    status: review
     dependencies:
       - REVIEW-ARTIFACT-BINDING-001
     baseline_commit: 681016a24f734438895ae1758f0caf5c0bd9e5a7

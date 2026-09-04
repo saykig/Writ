@@ -109,10 +109,20 @@ as defects.
 
 ## Acceptance status
 
-Targeted domain and data-bundle regressions pass. Full repository checks, clean export/reload and CI
-are recorded at final handoff after the documentation commit.
+The full local acceptance gate passed on the completed implementation and report:
 
-Subject to those acceptance checks, the two independently confirmed generic defects are minimally
-repaired. The substrate should not begin the bounded scientific transfer test until one focused follow-
-up independently classifies the remaining historical-target scoping observation; no scientific case
-was selected or implemented here.
+- formatting, lint, all workspace typechecks and the full Bun suite;
+- clean deterministic export/reload: 81 records, 16 links and 65 judgments, byte-identical at
+  `sha256:dafd4d65e3fd0626f36fae349080708cda32f528485a0e1e068aa6adb75796a5`;
+- Writ ontology, interoperability, provenance and integrity verification with zero errors and zero
+  warnings; and
+- all workspace builds.
+
+The focused data-bundle suite passed 50 tests with 913 expectations, and both independent post-fix
+reviewers reported no remaining blocker in the repaired boundaries. Draft-PR CI is recorded at final
+handoff.
+
+The two independently confirmed generic defects are minimally repaired. The substrate should not
+begin the bounded scientific transfer test until one focused follow-up independently classifies the
+remaining historical-target scoping observation; no scientific case was selected or implemented
+here.
