@@ -36,6 +36,7 @@ tasks:
       - Implement the smallest versioned native binding with shared deterministic byte verification and portable export.
       - Preserve existing unbound judgment contracts, historical objects, and old bundle support.
       - Prepare exact proposed NVLAP binding lineage for a separate human disposition.
+      - Close demonstrated local-artifact and exported-binding consistency defects from the final bounded wedge at PR head 5e9882387c2f83ddafe9fac0d6a30f81a70665b7.
     exclusions:
       - Reviewer authentication, semantic agreement, evidence sufficiency, or review execution.
       - Changes to accepted NIST judgments, review-artifact bytes, assertions, excerpts, or source identities.
@@ -53,6 +54,7 @@ tasks:
       - docs/current/review-artifact-binding.md
       - docs/migrations/review-artifact-binding/human-review-packet.md
       - docs/migrations/review-artifact-binding/experiment-report.md
+      - docs/migrations/review-artifact-binding/serendipity-report.md
       - TASKS.yaml
       - MANIFEST.sha256
 

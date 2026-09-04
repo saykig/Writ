@@ -75,3 +75,12 @@ fails verification, even after ordinary checksums are refreshed. Changing both j
 and artifact can form a different structurally valid association; authorization and semantic
 agreement still require human/Git review. This ADR does not add a review engine or change any
 evidence-basis, truth, target-workflow, or reviewer-identity rule.
+
+## Final bounded wedge
+
+An ignored, untracked artifact was shown to pass verification and clean export while disappearing
+from another checkout of the same commit. The repository adapter therefore requires Git tracking,
+reusing the existing candidate index and integrity manifest boundary rather than introducing a
+registry. A separate exported-copy attack requires the new binding to agree with both its native
+fragment and routed whole source. Neither correction adds semantic review machinery. Bundle
+`1.1.0` transport duplication remains a documented limitation; the inline representation is unchanged.

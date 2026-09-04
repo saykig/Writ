@@ -38,6 +38,11 @@ missing files, paths outside the repository, and the judgment's own source file.
 resolution does not authorize an artifact outside that root. Locator spelling is never silently
 normalized to rescue an invalid binding.
 
+The artifact must also be Git-tracked in the repository's candidate index. Matching untracked or
+ignored local files cannot supply provenance for the governed snapshot. Existing repository
+integrity checks cover the tracked `MANIFEST.sha256` inventory; ordinary export additionally
+requires a clean committed tree. No separate artifact registry is introduced.
+
 The shared pure verifier compares supplied bytes with the declared identity; the explicit
 repository adapter supplies bytes under the same governed path rules for repository verification
 and export. No network, inference, random value, clock read, or mutation is involved in checking
@@ -66,14 +71,22 @@ judgment must not acquire an implied binding from a transport envelope. Old form
 supported, and the existing entirely unbound repository retains its original export representation.
 
 Reload also compares the new binding with its stored native judgment fragment using exact path
-and hash strings. Changing the advertised format or contract cannot strip a binding still declared
-by that source. This scoped check does not establish complete source/projection equivalence for
+and hash strings, and with the matching judgment in its routed whole native resource. Changing
+the advertised format or contract cannot strip a binding still declared by that source. This
+scoped check does not establish complete source/projection equivalence for
 unrelated fields or older contracts.
 
 A standalone judgment may declare a hash when bytes have not been supplied to the consumer.
 That consumer may report the declared association and unavailable bytes, but cannot claim content
 verification. File access is an explicit adapter capability, not an implicit action by the pure
 portable API.
+
+Bundle `1.1.0` duplicates the embedded base64 bytes for each bound judgment. The artifact transport
+alone costs `N × 4⌈B/3⌉` bytes for `N` judgments and a `B`-byte artifact, before JSON and judgment
+metadata. A measured 1 MiB artifact bound by 100 synthetic judgments produced approximately
+140 MB of serialized JSON. Large artifacts with large fanout therefore have material transport
+and memory costs. This is a declared transport limitation, not a change to the native binding;
+any future deduplication should be confined to a separately versioned transport contract.
 
 ## History and remaining human responsibility
 

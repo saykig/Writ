@@ -33,15 +33,16 @@ readable. The original `1.0.0` schema is unchanged.
 
 For each declared binding, ordinary export uses the same repository byte resolver as Writ
 verification. It rejects missing files, incorrect hashes, noncanonical paths, path aliases,
-symlinks and a judgment binding its own source. Each bound judgment carries a `reviewArtifact`
+symlinks, artifacts absent from the selected repository's Git index and a judgment binding its own
+source. Each bound judgment carries a `reviewArtifact`
 envelope with `encoding: "base64"` and `content`; the locator and expected SHA-256 remain in the
 native `compiledJudgment.review_artifact`. Base64 preserves arbitrary bytes, including an empty
 file, without decoding, Unicode normalization or line-ending conversion. Multiple judgments may
 carry the same artifact bytes while preserving their separate identities, targets and lineages.
 
 `validateWritDataBundle` checks the native binding against these decoded bytes using the same pure
-verifier and recompiles each `0.3.0` stored judgment fragment to confirm its declared binding agrees
-with the exported compiler output. Refreshing outer bundle checksums cannot conceal changed artifact bytes while leaving
+verifier and recompiles each `0.3.0` stored judgment fragment and its unique routed whole source
+resource to confirm their declared bindings agree with the exported compiler output. Refreshing outer bundle checksums cannot conceal changed artifact bytes while leaving
 the binding unchanged. Bound bytes must be present: a locator and hash alone are not verified
 content. The pure `@writ/provenance` API reports `unavailable` when only a binding is supplied.
 An absent binding on an old or new judgment means only that no exact association is declared.

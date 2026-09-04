@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import {
   closeSync,
   constants,
@@ -36,7 +37,8 @@ function invalid(
 /**
  * Explicit read-only filesystem adapter shared by repository verification and
  * export. The selected root is the whole governed location. Every path segment
- * must use its exact stored spelling and must not be a symlink. The caller names
+ * must use its exact stored spelling and must not be a symlink. The artifact must
+ * be tracked in the selected repository's Git index. The caller names
  * the judgment's containing source to exclude self-referential hashing.
  */
 export function readRepositoryReviewArtifact(
@@ -88,6 +90,32 @@ export function readRepositoryReviewArtifact(
       return invalid(
         "PROVENANCE_REVIEW_ARTIFACT_PATH_ALIAS",
         "Review artifact path does not resolve to its exact governed repository location.",
+      );
+    }
+    const tracked = spawnSync(
+      "git",
+      [
+        "--literal-pathspecs",
+        "-C",
+        physicalRoot,
+        "ls-files",
+        "-z",
+        "--error-unmatch",
+        "--",
+        binding.path,
+      ],
+      { encoding: "utf8", env: { ...process.env, GIT_OPTIONAL_LOCKS: "0" } },
+    );
+    if (tracked.error || (tracked.status !== 0 && tracked.status !== 1)) {
+      return invalid(
+        "PROVENANCE_REVIEW_ARTIFACT_INVENTORY_UNAVAILABLE",
+        "The selected repository's Git tracked-file inventory could not be read.",
+      );
+    }
+    if (tracked.status !== 0 || tracked.stdout !== `${binding.path}\0`) {
+      return invalid(
+        "PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED",
+        "Review artifact must be an exact tracked file in the selected repository's Git index.",
       );
     }
     descriptor = openSync(physical, constants.O_RDONLY | constants.O_NOFOLLOW);

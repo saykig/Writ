@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { execFileSync } from "node:child_process";
 import {
   cpSync,
   mkdirSync,
@@ -117,6 +118,8 @@ function workspace(run: (root: string) => void): void {
       },
     }),
   );
+  execFileSync("git", ["-C", root, "init", "--quiet"], { stdio: "pipe" });
+  execFileSync("git", ["-C", root, "add", "--", ARTIFACT], { stdio: "pipe" });
   try {
     run(root);
   } finally {
@@ -206,11 +209,27 @@ describe("native review-artifact binding across repository verification", () => 
         "Synthetic extraction output, with no disposition or authenticated author.",
       );
       writeFileSync(join(root, "docs/reviews/extraction.json"), extraction);
+      execFileSync("git", ["-C", root, "add", "--", "docs/reviews/extraction.json"], {
+        stdio: "pipe",
+      });
       writeFileSync(
         join(root, JUDGMENTS),
         judgmentSource("docs/reviews/extraction.json", sha256Bytes(extraction)),
       );
       expect(verify(root).passed).toBe(true);
+    });
+  });
+
+  test("matching untracked or ignored artifact bytes cannot pass repository verification", () => {
+    workspace((root) => {
+      writeFileSync(join(root, ".gitignore"), "dist/\n");
+      mkdirSync(join(root, "dist"));
+      for (const path of ["docs/reviews/untracked.yaml", "dist/ignored-review.yaml"]) {
+        writeFileSync(join(root, path), BYTES);
+        writeFileSync(join(root, JUDGMENTS), judgmentSource(path));
+        expect(diagnosticCodes(root)).toEqual(["PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED"]);
+        expect(verify(root).passed).toBe(false);
+      }
     });
   });
 

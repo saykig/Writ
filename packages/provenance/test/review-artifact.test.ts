@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -11,6 +12,9 @@ const binding = { path: "reviews/decision.yaml", content_hash: sha256Bytes(bytes
 const context = { judgmentPath: "corpora/test/judgments.writ" };
 const codes = (value: { diagnostics: { code: string }[] }): string[] =>
   value.diagnostics.map(({ code }) => code);
+const git = (root: string, ...args: string[]): void => {
+  execFileSync("git", ["-C", root, ...args], { stdio: "pipe" });
+};
 
 describe("exact review-artifact content association", () => {
   test("exact bytes verify; a declaration without bytes is unavailable", () => {
@@ -143,6 +147,8 @@ describe("governed repository artifact resolution", () => {
     writeFileSync(join(root, binding.path), bytes);
     const outside = join(parent, "outside.yaml");
     writeFileSync(outside, bytes);
+    git(root, "init", "--quiet");
+    git(root, "add", "--", binding.path);
     try {
       run(root, outside);
     } finally {
@@ -156,6 +162,7 @@ describe("governed repository artifact resolution", () => {
       writeFileSync(join(root, "unrelated.txt"), "Unrelated change");
       expect(readRepositoryReviewArtifact(root, binding, context).status).toBe("verified");
       writeFileSync(join(root, "reviews/copy.yaml"), bytes);
+      git(root, "add", "--", "reviews/copy.yaml");
       const copy = readRepositoryReviewArtifact(
         root,
         { ...binding, path: "reviews/copy.yaml" },
@@ -211,6 +218,7 @@ describe("governed repository artifact resolution", () => {
         codes(readRepositoryReviewArtifact(root, binding, { judgmentPath: binding.path })),
       ).toEqual(["PROVENANCE_REVIEW_ARTIFACT_SELF_REFERENCE"]);
       writeFileSync(join(root, "reviews/empty"), new Uint8Array());
+      git(root, "add", "--", "reviews/empty");
       expect(
         readRepositoryReviewArtifact(
           root,
@@ -218,6 +226,68 @@ describe("governed repository artifact resolution", () => {
           context,
         ).status,
       ).toBe("verified");
+    });
+  });
+
+  test("untracked and ignored bytes cannot supply a declared repository artifact", () => {
+    withRepository((root) => {
+      writeFileSync(join(root, "reviews/untracked.yaml"), bytes);
+      writeFileSync(join(root, ".gitignore"), "dist/\n");
+      mkdirSync(join(root, "dist"));
+      writeFileSync(join(root, "dist/ignored.yaml"), bytes);
+      for (const path of ["reviews/untracked.yaml", "dist/ignored.yaml"]) {
+        expect(codes(readRepositoryReviewArtifact(root, { ...binding, path }, context))).toEqual([
+          "PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED",
+        ]);
+      }
+      writeFileSync(join(root, "reviews/match-one.yaml"), bytes);
+      git(root, "add", "--", "reviews/match-one.yaml");
+      writeFileSync(join(root, "reviews/match-*.yaml"), bytes);
+      expect(
+        codes(
+          readRepositoryReviewArtifact(root, { ...binding, path: "reviews/match-*.yaml" }, context),
+        ),
+      ).toEqual(["PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED"]);
+    });
+  });
+
+  test("tracked artifact bytes survive a clean clone while ignored local bytes remain invalid", () => {
+    withRepository((root) => {
+      writeFileSync(join(root, ".gitignore"), "dist/\n");
+      git(root, "add", "--", ".gitignore");
+      git(
+        root,
+        "-c",
+        "user.name=Synthetic fixture",
+        "-c",
+        "user.email=fixture@example.test",
+        "-c",
+        "commit.gpgsign=false",
+        "commit",
+        "--quiet",
+        "-m",
+        "Synthetic tracked artifact fixture",
+      );
+      mkdirSync(join(root, "dist"));
+      writeFileSync(join(root, "dist/ignored.yaml"), bytes);
+      const clone = join(root, "..", "clean-clone");
+      git(root, "clone", "--quiet", "--no-local", root, clone);
+      expect(readRepositoryReviewArtifact(root, binding, context).status).toBe("verified");
+      expect(readRepositoryReviewArtifact(clone, binding, context).status).toBe("verified");
+      expect(
+        codes(
+          readRepositoryReviewArtifact(root, { ...binding, path: "dist/ignored.yaml" }, context),
+        ),
+      ).toEqual(["PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED"]);
+      expect(
+        codes(
+          readRepositoryReviewArtifact(clone, { ...binding, path: "dist/ignored.yaml" }, context),
+        ),
+      ).toEqual(["PROVENANCE_REVIEW_ARTIFACT_NOT_FOUND"]);
+      rmSync(join(root, ".git"), { recursive: true, force: true });
+      expect(codes(readRepositoryReviewArtifact(root, binding, context))).toEqual([
+        "PROVENANCE_REVIEW_ARTIFACT_INVENTORY_UNAVAILABLE",
+      ]);
     });
   });
 });

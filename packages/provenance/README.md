@@ -10,7 +10,8 @@ The package supports Node.js 22 or newer and Bun 1.3 or newer. Its built ESM and
 available through the package root export in a packed tarball. The package remains private; remote
 publication is outside this boundary. The root export has no runtime dependencies beyond `node:crypto`.
 Version 0.2.0 adds exact review-artifact byte association and the separate, opt-in
-`@writ/provenance/repository` filesystem adapter, which also uses `node:fs` and `node:path`.
+`@writ/provenance/repository` filesystem adapter, which also uses `node:fs`, `node:path`,
+`node:child_process`, and the local Git executable for read-only index membership.
 
 ## Public surface
 
@@ -52,8 +53,15 @@ The kernel makes no authorization decision about the content of that path.
 The opt-in `readRepositoryReviewArtifact(root, binding, { judgmentPath })` adapter reads a regular
 file only at its exact stored repository path. It rejects missing files, all symlink components,
 case/path aliases, escapes and a locator equal to the judgment's own containing source path.
+It additionally requires exact membership in the selected repository's Git tracked-file index;
+untracked and ignored local files cannot supply a declared artifact. Literal pathspecs prevent
+wildcard matching from substituting a different tracked path. If the inventory cannot be read,
+the adapter fails closed. This uses the existing tracked-file integrity boundary, not a separate
+binding registry. Working-tree candidates may use newly staged artifacts; ordinary clean export
+also requires the committed snapshot, so their bytes survive a fresh checkout.
+
 It returns exact bytes only after the same pure checker verifies their hash. The selected root is
-the whole governed location. Repository verification and ordinary export call this same adapter;
+the governed repository. Repository verification and ordinary export call this same adapter;
 portable consumers call the pure checker on decoded exported bytes. Filesystem reads assume frozen
 inputs, as the rest of deterministic repository verification does.
 

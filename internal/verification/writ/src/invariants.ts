@@ -47,6 +47,14 @@ export const INVARIANTS: readonly InvariantDefinition[] = [
       "review_artifact exact byte association and repository resolution",
     ),
   })),
+  ...[
+    "PROVENANCE_REVIEW_ARTIFACT_NOT_TRACKED",
+    "PROVENANCE_REVIEW_ARTIFACT_INVENTORY_UNAVAILABLE",
+  ].map((code): InvariantDefinition => ({
+    code,
+    gate: "provenance",
+    authority: meta("Mechanical tracked-file inventory and declared review-artifact closure"),
+  })),
   {
     code: "VERIFIER_UNSUPPORTED_CONTRACT",
     gate: "integrity",

@@ -7,7 +7,7 @@ import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID, validateContract } from "@writ/doma
 import { compileSource } from "@writ/language";
 import { verifyReviewArtifact } from "@writ/provenance";
 
-import type { WritDataBundle } from "./contract.js";
+import type { BundleResource, WritDataBundle } from "./contract.js";
 import { hashCanonical } from "./hashing.js";
 import { repositoryRoot } from "./repository.js";
 
@@ -93,6 +93,23 @@ export function assertSourceFragments(bundle: WritDataBundle): void {
 /** Check content association using only exported bytes; no repository lookup is performed. */
 export function assertReviewArtifacts(bundle: WritDataBundle): void {
   const artifactHashes = new Map<string, string>();
+  const wholeResources = new Map<
+    string,
+    Array<{ source: BundleResource; compiled: ReturnType<typeof compileSource> }>
+  >();
+  const resourcesAt = (path: string) => {
+    let matches = wholeResources.get(path);
+    if (matches === undefined) {
+      matches = bundle.resources
+        .filter((resource) => resource.path === path)
+        .map((source) => ({
+          source,
+          compiled: compileSource(source.content, { fileName: path }),
+        }));
+      wholeResources.set(path, matches);
+    }
+    return matches;
+  };
   const judgmentCounts = new Map<string, number>();
   for (const judgment of bundle.recordJudgments) {
     judgmentCounts.set(judgment.judgmentKey, (judgmentCounts.get(judgment.judgmentKey) ?? 0) + 1);
@@ -107,12 +124,17 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
       `language writ "0.3"\npackage exported.review_binding version "0.3.0";\n${judgment.storedSource.content}`,
       { fileName: judgment.storedSource.path },
     );
+    const sourceResources = resourcesAt(judgment.storedSource.path);
+    const wholeDeclarations = sourceResources.flatMap(({ compiled: module }) =>
+      module.judgments.filter((item) => item.judgment_id === judgment.judgmentId),
+    );
     if (compiled.schema_version !== "0.3.0") {
       if (
         binding !== undefined ||
         artifact !== undefined ||
         judgment.contractId === REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID ||
-        sourceCompilation.judgments.some((item) => "review_artifact" in item)
+        sourceCompilation.judgments.some((item) => "review_artifact" in item) ||
+        wholeDeclarations.some((item) => "review_artifact" in item)
       ) {
         throw new Error(`${judgment.judgmentKey}: review binding requires judgment schema 0.3.0`);
       }
@@ -167,6 +189,32 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
     ) {
       throw new Error(
         `${judgment.judgmentKey}: review binding disagrees with stored judgment source`,
+      );
+    }
+    const owner = bundle.corpora.find((corpus) => corpus.corpusId === judgment.corpusId);
+    const wholeResource = sourceResources[0];
+    if (
+      !owner?.resources.judgments.includes(judgment.storedSource.path) ||
+      sourceResources.length !== 1 ||
+      wholeResource?.source.language !== "writ" ||
+      wholeResource.source.fragment !== null ||
+      !wholeResource.compiled.schemaValid ||
+      wholeResource.compiled.diagnostics.some((diagnostic) => diagnostic.severity === "error") ||
+      wholeDeclarations.length !== 1
+    ) {
+      throw new Error(
+        `${judgment.judgmentKey}: review binding requires one routed whole judgment resource`,
+      );
+    }
+    const wholeDeclaration = wholeDeclarations[0]! as unknown as {
+      review_artifact?: { path: string; content_hash: string };
+    };
+    if (
+      wholeDeclaration.review_artifact?.path !== supplied?.path ||
+      wholeDeclaration.review_artifact?.content_hash !== supplied?.content_hash
+    ) {
+      throw new Error(
+        `${judgment.judgmentKey}: review binding disagrees with whole judgment resource`,
       );
     }
     if (binding === undefined) {
