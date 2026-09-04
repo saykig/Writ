@@ -25,10 +25,11 @@ statuses:
 tasks:
   - id: REVIEW-ARTIFACT-BINDING-001
     title: Bind native judgments to exact review-artifact bytes
-    status: in_progress
+    status: review
     dependencies:
       - NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001
     baseline_commit: 97ab97de2735116ba3a69a0916507a7bc8d943c4
+    draft_pr: https://github.com/saykig/Writ/pull/40
     scope:
       - Reproduce unchanged accepted judgments surviving material review-artifact substitution.
       - Compare inline binding, companion receipt, and repository registry at the required boundaries.
