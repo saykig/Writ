@@ -122,3 +122,17 @@ carry the exact original artifact bytes.
 
 This application completes the previously gated scope after validation. It does not authorize a
 merge, reviewer authentication, automatic semantic agreement, evidence sufficiency or truth.
+
+Application validation passed: all 535 Bun tests (21 database-dependent tests skipped locally),
+all 74 Python tests, formatting, lint, typecheck, pack/source-registry checks, Ruff, mypy, the
+packed external consumer, all four verification gates and build. Ordinary clean export and
+`data:check` passed at application commit `c462930`; independent inspection confirmed exactly
+two accepted bound judgment entries, their distinct record/link targets and embedded bytes
+identical to the approved artifact. Independent review confirmed prior content preservation.
+`REVIEW-ARTIFACT-BINDING-001` is complete; merge remains a separate action.
+
+Necessary application-scope adjustments beyond the packet's anticipated files were limited to
+two test fixtures (`packages/data-bundle/test/review-artifact.test.ts` for explicit legacy unbound
+coverage, and `packages/language/test/native-compile.test.ts` for the reviewed retirement-metadata
+snapshot) and the current binding documentation's application status. These were reported during
+implementation; they change no production mechanism or accepted evidence.

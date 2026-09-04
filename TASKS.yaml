@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: REVIEW-ARTIFACT-BINDING-001
     title: Bind native judgments to exact review-artifact bytes
-    status: review
+    status: done
     dependencies:
       - NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001
     baseline_commit: 97ab97de2735116ba3a69a0916507a7bc8d943c4
