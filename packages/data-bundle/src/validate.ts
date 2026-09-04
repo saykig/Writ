@@ -14,13 +14,32 @@ import { compileSource } from "@writ/language";
 import { verifyReviewArtifact } from "@writ/provenance";
 
 import type {
+  BundleCorpus,
   BundleRecordJudgment,
   BundleResource,
+  BundleSource,
   JsonObject,
   WritDataBundle,
 } from "./contract.js";
 import { hashCanonical } from "./hashing.js";
-import { RECORD_JUDGMENT_CONTRACT, repositoryRoot } from "./repository.js";
+import {
+  assertUniqueCanonicalObjectKeys,
+  projectCorpusRecords,
+  projectRecordLinks,
+} from "./project.js";
+import {
+  CATALOG_CONTRACT,
+  MANIFEST_CATEGORIES,
+  RECORD_JUDGMENT_CONTRACT,
+  asJsonObject,
+  rawHash,
+  repositoryRoot,
+  strings,
+  text,
+  type CatalogEntry,
+  type CorpusManifest,
+  type NativeCorpus,
+} from "./repository.js";
 
 const schemaPath = fileURLToPath(
   new URL("../schema/writ-data-bundle.schema.json", import.meta.url),
@@ -83,6 +102,190 @@ function assertPortable(value: unknown, path = "$"): void {
     for (const [childKey, child] of Object.entries(value)) {
       assertPortable(child, `${path}.${childKey}`);
     }
+  }
+}
+
+function parseStructuredSource(source: BundleSource): JsonObject {
+  if (source.language === "writ") {
+    throw new Error(`${source.path}: expected a structured source`);
+  }
+  const parsed =
+    source.language === "json" ? JSON.parse(source.content) : Bun.YAML.parse(source.content);
+  return asJsonObject(parsed, source.path);
+}
+
+function assertCatalogIntegrity(bundle: WritDataBundle): void {
+  if (bundle.catalog.source.fragment !== null) {
+    throw new Error("catalog source must not select a fragment");
+  }
+  const catalog = parseStructuredSource(bundle.catalog.source);
+  const validation = validateContract(CATALOG_CONTRACT, catalog);
+  if (!validation.valid) {
+    throw new Error(
+      `invalid catalog source: ${validation.errors.map((issue) => issue.message).join("; ")}`,
+    );
+  }
+  const expected = {
+    source: bundle.catalog.source,
+    schemaVersion: text(catalog.schema_version, "catalog.schema_version"),
+    implementedNativeFamilies: strings(
+      catalog.implemented_native_families,
+      "catalog.implemented_native_families",
+    ),
+    nativeCorpora: (catalog.native_corpora as readonly JsonObject[]).map((entry, index) => ({
+      corpusId: text(entry.corpus_id, `catalog.native_corpora[${index}].corpus_id`),
+      family: text(entry.family, `catalog.native_corpora[${index}].family`),
+      jurisdiction: text(entry.jurisdiction, `catalog.native_corpora[${index}].jurisdiction`),
+      status: text(entry.status, `catalog.native_corpora[${index}].status`),
+      path: text(entry.path, `catalog.native_corpora[${index}].path`),
+      manifestPath: text(entry.manifest, `catalog.native_corpora[${index}].manifest`),
+    })),
+    retiredCorpusMigrations: (catalog.retired_corpus_migrations as readonly unknown[]).map(
+      (entry, index) => asJsonObject(entry, `catalog.retired_corpus_migrations[${index}]`),
+    ),
+  };
+  if (!isDeepStrictEqual(bundle.catalog, expected)) {
+    throw new Error("catalog projection disagrees with stored catalog source");
+  }
+  const corpusEntries = bundle.corpora.map((corpus) => ({
+    corpusId: corpus.corpusId,
+    family: corpus.family,
+    jurisdiction: corpus.jurisdiction,
+    status: corpus.status,
+    path: corpus.path,
+    manifestPath: corpus.manifestPath,
+  }));
+  if (!isDeepStrictEqual(bundle.catalog.nativeCorpora, corpusEntries)) {
+    throw new Error("bundle corpora disagree with catalog projection");
+  }
+}
+
+function assertExactSourceHashes(bundle: WritDataBundle): void {
+  const sources: Array<readonly [string, BundleSource]> = [
+    ["catalog source", bundle.catalog.source],
+    ...bundle.corpora.map(
+      (corpus) => [`${corpus.corpusId} manifest source`, corpus.manifestSource] as const,
+    ),
+    ...bundle.resources.map((source) => [source.path, source] as const),
+    ...bundle.records.map(
+      (record) => [`${record.recordKey} stored source`, record.storedSource] as const,
+    ),
+    ...bundle.recordLinks.map(
+      (link) => [`${link.linkKey} stored source`, link.storedSource] as const,
+    ),
+    ...bundle.recordJudgments.map(
+      (judgment) => [`${judgment.judgmentKey} stored source`, judgment.storedSource] as const,
+    ),
+  ];
+  for (const [label, source] of sources) {
+    if (source.sha256 !== rawHash(source.content)) {
+      throw new Error(`${label}: source content hash mismatch`);
+    }
+  }
+}
+
+function nativeCorpus(corpus: BundleCorpus): NativeCorpus {
+  if (
+    corpus.manifestSource.path !== corpus.manifestPath ||
+    corpus.manifestSource.fragment !== null
+  ) {
+    throw new Error(`${corpus.corpusId}: manifest source disagrees with manifest path`);
+  }
+  const manifest = parseStructuredSource(corpus.manifestSource) as CorpusManifest;
+  if (!isDeepStrictEqual(manifest, corpus.manifest)) {
+    throw new Error(`${corpus.corpusId}: manifest disagrees with stored manifest source`);
+  }
+  for (const [projected, native] of [
+    ["corpusId", "corpus_id"],
+    ["family", "family"],
+    ["jurisdiction", "jurisdiction"],
+    ["status", "status"],
+  ] as const) {
+    if (corpus[projected] !== manifest[native]) {
+      throw new Error(`${corpus.corpusId}: ${projected} disagrees with manifest`);
+    }
+  }
+  if (!isDeepStrictEqual(corpus.recordContract, manifest.record_contract)) {
+    throw new Error(`${corpus.corpusId}: record contract disagrees with manifest`);
+  }
+  const entry: CatalogEntry = {
+    corpus_id: corpus.corpusId,
+    family: corpus.family,
+    jurisdiction: corpus.jurisdiction,
+    status: corpus.status,
+    path: corpus.path,
+    manifest: corpus.manifestPath,
+  };
+  return {
+    entry,
+    manifest,
+    manifestSource: corpus.manifestSource,
+    canonicalIdentity: corpus.canonicalIdentity,
+    resources: corpus.resources,
+  };
+}
+
+/**
+ * Replay the production record/link projection using only bundle-contained
+ * native resources, then require exact agreement with the portable sections.
+ */
+export function assertNativeRecordAndLinkIntegrity(bundle: WritDataBundle): void {
+  assertCatalogIntegrity(bundle);
+  const corpusIds = new Set<string>();
+  for (const corpus of bundle.corpora) {
+    if (corpusIds.has(corpus.corpusId)) {
+      throw new Error(`Duplicate corpus identity: ${corpus.corpusId}`);
+    }
+    corpusIds.add(corpus.corpusId);
+  }
+  assertUniqueCanonicalObjectKeys(bundle);
+  const resourceMap = new Map<string, BundleResource>();
+  for (const resource of bundle.resources) {
+    if (resource.fragment !== null) {
+      throw new Error(`${resource.path}: routed whole resource must not select a fragment`);
+    }
+    if (resourceMap.has(resource.path)) {
+      throw new Error(`${resource.path}: duplicate routed resource`);
+    }
+    resourceMap.set(resource.path, resource);
+  }
+  const routedPaths = new Set<string>();
+  const corpora = bundle.corpora.map((corpus) => {
+    for (const category of MANIFEST_CATEGORIES) {
+      for (const path of corpus.resources[category]) {
+        routedPaths.add(path);
+        if (!resourceMap.has(path)) {
+          throw new Error(`${corpus.corpusId}: missing routed resource ${path}`);
+        }
+      }
+    }
+    return nativeCorpus(corpus);
+  });
+  for (const path of resourceMap.keys()) {
+    if (!routedPaths.has(path)) throw new Error(`${path}: resource is not routed by a corpus`);
+  }
+
+  const readResource = (path: string): BundleResource => {
+    const resource = resourceMap.get(path);
+    if (!resource) throw new Error(`Missing routed resource ${path}`);
+    return resource;
+  };
+  const expectedRecords = corpora.flatMap((corpus) => projectCorpusRecords(corpus, readResource));
+  const expectedLinks = corpora.flatMap((corpus) => {
+    const links = projectRecordLinks(corpus, readResource);
+    const expected = Number(corpus.manifest.record_counts.record_links ?? 0);
+    if (links.length !== expected) {
+      throw new Error(
+        `${corpus.entry.corpus_id}: manifest declares ${expected} record links, exported ${links.length}`,
+      );
+    }
+    return links;
+  });
+  if (!isDeepStrictEqual(bundle.records, expectedRecords)) {
+    throw new Error("records disagree with routed native resource projection");
+  }
+  if (!isDeepStrictEqual(bundle.recordLinks, expectedLinks)) {
+    throw new Error("record links disagree with routed native resource projection");
   }
 }
 
@@ -309,5 +512,7 @@ export function validateWritDataBundle(bundle: WritDataBundle): void {
   }
   assertSourceFragments(bundle);
   assertNativeJudgmentIntegrity(bundle);
+  assertNativeRecordAndLinkIntegrity(bundle);
+  assertExactSourceHashes(bundle);
   assertPortable(bundle);
 }
