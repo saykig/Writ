@@ -32,6 +32,7 @@ import {
   type CompatibilitySchemaKind,
   type SchemaKind,
 } from "./schemas.js";
+import { resolveSchemaVersion } from "./schema-registry.js";
 import type { SchemaTypeMap } from "./types.js";
 
 /** A single validation failure, with the JSON path to the offending value. */
@@ -65,6 +66,20 @@ export class SchemaValidationError extends Error {
     this.name = "SchemaValidationError";
     this.kind = kind;
     this.issues = issues;
+  }
+}
+
+/** Thrown when explicit version validation names no registered exact contract. */
+export class UnsupportedSchemaVersionError extends Error {
+  readonly code = "DOMAIN_SCHEMA_VERSION_UNSUPPORTED";
+  readonly kind: SchemaKind;
+  readonly schemaVersion: string;
+
+  constructor(kind: SchemaKind, schemaVersion: string) {
+    super(`Unsupported schema version for ${kind}: ${schemaVersion}`);
+    this.name = "UnsupportedSchemaVersionError";
+    this.kind = kind;
+    this.schemaVersion = schemaVersion;
   }
 }
 
@@ -148,16 +163,11 @@ export function validateVersion(
   data: unknown,
   schemaVersion: string,
 ): ValidationResult {
-  if (kind === "record-judgment" && schemaVersion === "0.3.0") {
-    return validationResult(reviewArtifactJudgmentValidator, data);
-  }
-  if (
-    schemaVersion === "0.1.0" &&
-    (COMPATIBILITY_SCHEMA_KINDS as readonly string[]).includes(kind)
-  ) {
-    return validationResult(compatibilityValidators[kind as CompatibilitySchemaKind], data);
-  }
-  return validationResult(validators[kind], data);
+  const contract = resolveSchemaVersion(kind, schemaVersion);
+  if (!contract) throw new UnsupportedSchemaVersionError(kind, schemaVersion);
+  const validator = ajv.getSchema(contract.schemaId);
+  if (!validator) throw new Error(`Registered schema is unavailable: ${contract.schemaId}`);
+  return validationResult(validator, data);
 }
 
 /**
