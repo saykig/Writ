@@ -401,6 +401,16 @@ def test_family_source_files_and_workflow_states_remain_separate() -> None:
     assert nist.count('created_by "OpenAI Codex implementation of explicit human disposition";') == 1
     # `accepted` is a judgment status, never a record or record-link review state.
     assert "review_state accepted" not in nist
+    nist_manifest = manifest(by_id["us.institutions.nist"])
+    assert nist_manifest["locations"]["judgments"] == ["judgments.writ", "review-binding-judgments.writ"]
+    assert nist_manifest["record_counts"]["disposition_judgments"] == 29
+    assert nist_manifest["review_counts"]["accepted_disposition_judgments"] == 22
+    assert nist_manifest["review_counts"]["superseded_disposition_judgments"] == 7
+    bound_judgments = (institutional_nist / "review-binding-judgments.writ").read_text(encoding="utf-8")
+    assert bound_judgments.count("\njudgment ") == 2
+    assert bound_judgments.count("review_artifact {") == 2
+    artifact = ROOT / "docs/migrations/nist-handbook-competence/human-review.yaml"
+    assert hashlib.sha256(artifact.read_bytes()).hexdigest() == "75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713"
 
 
 def test_constitutional_bytes_match_inventory_and_nist_identities_survive_stage_a() -> None:

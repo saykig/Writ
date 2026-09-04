@@ -23,7 +23,7 @@ const COMMIT = "0123456789abcdef0123456789abcdef01234567";
 const RECORD_FIXTURE = "internal/verification/writ/test/fixtures/native-legal-policy";
 const bytes = new TextEncoder().encode("Synthetic review: retain the bounded assertion.\n");
 
-function fixture(content: Uint8Array = bytes, bound = true) {
+function fixture(content: Uint8Array = bytes, bound = true, dialect = "0.3") {
   const directory = mkdtempSync(join(tmpdir(), "writ-bundle-binding-"));
   const corpusPath = "corpora/test/native-legal-policy";
   const artifactPath = "docs/reviews/review.bin";
@@ -75,7 +75,7 @@ function fixture(content: Uint8Array = bytes, bound = true) {
 }`;
   writeFileSync(
     join(directory, judgmentPath),
-    `language writ "0.3"\npackage test.binding version "0.3.0";\n${declaration("synthetic_review_one", "review_disposition", "record synthetic_native_legal_policy_record")}\n${declaration("synthetic_review_two", "record_link_disposition", "record_link synthetic_supersession_link")}\n`,
+    `language writ "${dialect}"\npackage test.binding version "${dialect}.0";\n${declaration("synthetic_review_one", "review_disposition", "record synthetic_native_legal_policy_record")}\n${declaration("synthetic_review_two", "record_link_disposition", "record_link synthetic_supersession_link")}\n`,
   );
   const entry = {
     corpus_id: "test.native_legal_policy",
@@ -194,12 +194,17 @@ function replaceWholeFragment(
 
 describe("portable exact review-artifact content association", () => {
   test("keeps ordinary unbound 0.2 judgments in the original 1.0 bundle contract", () => {
-    const bundle = generateWritDataBundleForCommit(COMMIT);
-    expect(bundle.metadata.bundleFormatVersion).toBe("1.0.0");
-    expect(bundle.recordJudgments.every((judgment) => judgment.reviewArtifact === undefined)).toBe(
-      true,
-    );
-    validateWritDataBundle(JSON.parse(serializeBundle(bundle)) as WritDataBundle);
+    const input = fixture(bytes, false, "0.2");
+    try {
+      const bundle = input.generate();
+      expect(bundle.metadata.bundleFormatVersion).toBe("1.0.0");
+      expect(
+        bundle.recordJudgments.every((judgment) => judgment.reviewArtifact === undefined),
+      ).toBe(true);
+      validateWritDataBundle(JSON.parse(serializeBundle(bundle)) as WritDataBundle);
+    } finally {
+      input.cleanup();
+    }
   });
 
   test("compiles, exports, validates and reloads two distinct judgments sharing exact artifact bytes", () => {

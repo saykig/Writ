@@ -146,9 +146,13 @@ function checkFile(file: string, contract: string): string[] {
     contract === RECORD_JUDGMENT ? compiled.judgments : compiled.records;
   for (const object of objects) {
     failures.push(
-      ...validateContract(contract, object).errors.map(
-        (issue) => `${label} ${issue.instancePath}: ${issue.message}`,
-      ),
+      ...validateContract(
+        contract === RECORD_JUDGMENT &&
+          (object as { schema_version?: string }).schema_version === "0.3.0"
+          ? "https://writ.example/schemas/analysis/record-judgment-v0.3.schema.json"
+          : contract,
+        object,
+      ).errors.map((issue) => `${label} ${issue.instancePath}: ${issue.message}`),
     );
   }
   return failures;
@@ -191,7 +195,7 @@ describe("every catalogued manifest declares the contract its record files satis
     // Three constitutional drafts, twenty NIST records, and twenty-four stored Commission records.
     expect(writRecords).toBe(47);
     // Existing judgments, preserved superseded decisions, and accepted human dispositions.
-    expect(writJudgments).toBe(63);
+    expect(writJudgments).toBe(65);
   });
 
   for (const { entry, manifest } of corpora) {
@@ -252,6 +256,7 @@ describe("every catalogued manifest declares the contract its record files satis
       "corpora/institutional/us/nist/relationships/nist_lab_network_capacity_v2_supersedes_nist_lab_network_capacity.yaml",
       "corpora/institutional/us/nist/relationships/nist_mission_supersedes_nist_measurement_science_function.yaml",
       "corpora/institutional/us/nist/relationships/nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right.yaml",
+      "corpora/institutional/us/nist/review-binding-judgments.writ",
     ]);
 
     // Routing is what makes this correct. A record link is not an institutional

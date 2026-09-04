@@ -2,8 +2,9 @@
 
 The `REVIEW-ARTIFACT-BINDING-001` implementation candidate declares an association between a
 native judgment and exact artifact bytes. It does not verify human identity, approval, semantic
-agreement, evidentiary sufficiency, or truth. The NIST application awaits a separate human
-disposition; the currently accepted NIST judgments remain unbound and valid.
+agreement, evidentiary sufficiency, or truth. The explicit 2026-09-04 human disposition authorizes
+the two NIST bound successor judgments. Their prior unbound judgments remain preserved as
+superseded history; the original review artifact bytes are unchanged.
 
 ## Representation and versions
 
@@ -68,7 +69,8 @@ Ordinary export resolves and verifies the binding before producing the bundle. R
 the transport encoding and recomputes the content hash; refreshing bundle section hashes cannot
 repair substituted artifact bytes. A bound export must include its artifact bytes. An unbound
 judgment must not acquire an implied binding from a transport envelope. Old format `1.0.0` remains
-supported, and the existing entirely unbound repository retains its original export representation.
+supported, and entirely unbound repositories retain their original export representation. The
+authorized NIST application selects format `1.1.0` for the current repository.
 
 Reload also compares the new binding with its stored native judgment fragment using exact path
 and hash strings, and with the matching judgment in its routed whole native resource. Changing

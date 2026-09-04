@@ -78,6 +78,29 @@ handbook_evidence_review:
       approved_passage_id: nist.handbook_150.competence_clause_1_3_5
     - historical_passage_id: nist.handbook_150.accreditation_decision
       approved_passage_id: nist.handbook_150.accreditation_decision_clause_3_5_3_sentence_1
+review_artifact_binding_application:
+  status: completed_human_review
+  reviewer: Writ maintainer (explicit human binding disposition)
+  reviewed_at: 2026-09-04
+  base_commit: e2be990aa94c70c380094fb20f19e6ef38657d71
+  human_disposition: docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml
+  bound_artifact:
+    path: docs/migrations/nist-handbook-competence/human-review.yaml
+    content_hash: sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713
+  lineages:
+    - superseded_judgment: judgment_nist_nvlap_lab_decision_right_v2_human_review
+      accepted_successor_judgment: judgment_nist_nvlap_lab_decision_right_v2_bound_review
+      target_kind: record
+      target_id: nist_nvlap_lab_decision_right_v2
+    - superseded_judgment: judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review
+      accepted_successor_judgment: judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review
+      target_kind: record_link
+      target_id: nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right
+  boundary: >-
+    Exact content association only. Prior judgments retain their content with superseded status
+    and successor pointers. Earlier lineage, substantive assertion, approved excerpts, source and
+    passage identities, evidence and record-supersession direction remain unchanged.
+
 entries:
   - previous_object: nist_identity
     previous_form: v0.1 compatibility institutional record

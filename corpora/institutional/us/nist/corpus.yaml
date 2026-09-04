@@ -17,7 +17,7 @@ root_institution_id: nist
 record_counts:
   institutional_records: 20
   record_links: 7
-  disposition_judgments: 27
+  disposition_judgments: 29
 review_counts:
   approved_records: 14
   superseded_records: 6
@@ -25,7 +25,7 @@ review_counts:
   approved_record_links: 7
   accepted_disposition_judgments: 22
   proposed_disposition_judgments: 0
-  superseded_disposition_judgments: 5
+  superseded_disposition_judgments: 7
 unresolved_evidence_count: 0
 locations:
   sources:
@@ -46,5 +46,6 @@ locations:
     - relationships/nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right.yaml
   judgments:
     - judgments.writ
+    - review-binding-judgments.writ
   migration:
     - migration.yaml

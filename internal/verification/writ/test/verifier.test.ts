@@ -282,7 +282,7 @@ describe("retained corpus repository with NIST as the development proving ground
     );
     expect(baseline.records).toHaveLength(47);
     expect(baseline.links).toHaveLength(16);
-    expect(baseline.judgments).toHaveLength(63);
+    expect(baseline.judgments).toHaveLength(65);
     expect(baseline.workflowStates).toEqual({});
     expect(baseline.loadIssues).toEqual([]);
   });

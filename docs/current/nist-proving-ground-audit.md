@@ -11,7 +11,7 @@ semantics.
 The follow-up human review completed on 2026-08-29 adds four reviewed successors, four directed
 supersession links and eight judgments. The separate Handbook evidence review on 2026-09-04
 adds one successor, one directed supersession link and two judgments. The current inventory is
-20 records, 7 links and 27 judgments. The exact maintainer disposition is retained in
+20 records, 7 links and 29 judgments. The exact maintainer disposition is retained in
 `docs/migrations/nist-handbook-competence/human-review.yaml`.
 
 ## Result
@@ -33,8 +33,16 @@ Every evidence quotation reproduces its declared passage hash: 30 evidence occur
 old competence quotation remains intact only in superseded history. Both retained non-HTML captures
 reproduce their document hashes. All 20 records have explicit uncertainty and provenance. Every
 active record has an accepted human-review judgment: thirteen by Sara Kim and the NVLAP successor
-by the maintainer supplying the 2026-09-04 disposition. Five replaced approval judgments remain
+by the maintainer supplying the 2026-09-04 disposition. Seven replaced approval judgments remain
 superseded history. All seven links also have accepted review judgments.
+
+The separately authorized binding application adds two `0.3.0` successor judgments in
+`review-binding-judgments.writ`, one for the NVLAP record and one for its directed link. Both bind
+the unchanged original human-review artifact at SHA-256
+`75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713`. Their two unbound predecessors
+retain all content with retirement metadata; the earlier Sara Kim lineage is unchanged. The new
+authorization is recorded in `docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml`.
+This establishes content association without authenticating a reviewer or automating semantic review.
 
 The structured evidence is sufficient to inspect why each record exists without restoring raw
 HTML. It does not make Writ an offline web archive: for retired HTML captures, a reviewer cannot

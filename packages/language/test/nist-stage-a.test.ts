@@ -171,7 +171,7 @@ describe("corpus contract and status", () => {
         LINK_FILES.supersedes,
         "relationships/nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right.yaml",
       ],
-      judgments: ["judgments.writ"],
+      judgments: ["judgments.writ", "review-binding-judgments.writ"],
       migration: ["migration.yaml"],
     });
   });

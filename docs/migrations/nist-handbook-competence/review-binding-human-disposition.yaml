@@ -1,0 +1,46 @@
+schema_version: 1.0.0
+review_id: nist-review-artifact-binding-human-disposition-2026-09-04
+task_id: REVIEW-ARTIFACT-BINDING-001
+reviewer: Writ maintainer (explicit human binding disposition)
+review_type: human
+review_date: 2026-09-04
+review_channel: Codex conversation 01a06af2-1d6e-7f90-9456-cffe2f5997c2
+base_commit: e2be990aa94c70c380094fb20f19e6ef38657d71
+status: complete
+human_disposition: |-
+  Human disposition — 2026-09-04
+
+  I approve the two proposed bound successor judgments and their separate supersession lineages described in the PR #40 human-review packet.
+
+  Each successor may bind the existing NIST human-review artifact:
+
+  docs/migrations/nist-handbook-competence/human-review\.yaml
+
+  at exact SHA-256:
+
+  sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713
+
+  Preserve the prior accepted judgments and all earlier review history as superseded history. Do not edit those accepted judgments in place.
+
+  The substantive NVLAP assertion, the approved three-sentence §1.3.5 excerpt, sentence 1 of §3.5.3, §285.9(a), source/version identities, passage identities, evidence, and record-supersession direction remain unchanged.
+
+  This disposition authorizes only the exact review-artifact binding application described in the packet. It does not assert reviewer authentication, automatic semantic agreement, evidentiary sufficiency, or truth beyond the human review already recorded.
+artifact_binding:
+  path: docs/migrations/nist-handbook-competence/human-review.yaml
+  content_hash: sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713
+locator_interpretation: >-
+  The supplied text preserves the Markdown escape before the filename's dot verbatim above.
+  The binding uses the existing packet path human-review.yaml, confirmed by its exact approved hash.
+lineages:
+  - historical_judgment_id: judgment_nist_nvlap_lab_decision_right_v2_human_review
+    accepted_successor_judgment_id: judgment_nist_nvlap_lab_decision_right_v2_bound_review
+    target_kind: record
+    target_id: nist_nvlap_lab_decision_right_v2
+  - historical_judgment_id: judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review
+    accepted_successor_judgment_id: judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review
+    target_kind: record_link
+    target_id: nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right
+implementation_boundary: >-
+  Codex implements only the explicitly authorized packet. The bound artifact retains its original
+  bytes and records the earlier substantive review. This separate disposition authorizes the new
+  binding lineage. Historical judgments retain their content with retirement metadata only.

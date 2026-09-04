@@ -1,5 +1,9 @@
 # Review-artifact binding experiment
 
+**Current application status:** The explicit 2026-09-04 human disposition authorizes the two
+bound successors described in the preserved packet. The following experiment sections describe
+the pre-application gate; the application is recorded at the end of this report.
+
 Task: `REVIEW-ARTIFACT-BINDING-001`. Baseline: `97ab97de2735116ba3a69a0916507a7bc8d943c4`.
 Draft PR: [#40](https://github.com/saykig/Writ/pull/40).
 Implementation branch: `codex/review-artifact-binding`; main and accepted NIST data are unchanged.
@@ -100,3 +104,21 @@ Verdict: `INLINE_JUDGMENT_BINDING_SUPPORTED`.
 
 Next action: supply one explicit human disposition on the two proposed bound successors in the
 packet.
+
+## Human-authorized application — 2026-09-04
+
+The supplied disposition is preserved verbatim in
+`docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml`. The escaped dot
+in its filename is retained in that transcript; the native binding uses the exact existing packet
+path and the approved hash. The artifact bytes are unchanged.
+
+Two new accepted native `0.3.0` judgments independently supersede the prior unbound record and
+record-link judgments. Their targets, approval values and evidence references are preserved.
+Each predecessor retains its identity and content with superseded status and its new successor
+pointer; the earlier Sara Kim judgment and pointer are untouched. No record, link, passage, source
+or substantive assertion changes. NIST now has 29 judgments (22 accepted, seven superseded),
+20 records and seven links. The ordinary bundle now uses 1.1 and has 65 judgments; both new entries
+carry the exact original artifact bytes.
+
+This application completes the previously gated scope after validation. It does not authorize a
+merge, reviewer authentication, automatic semantic agreement, evidence sufficiency or truth.

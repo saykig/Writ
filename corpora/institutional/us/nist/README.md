@@ -57,5 +57,18 @@ effect on August 7, 2026. The exact § 272(b)(2) quotation and passage hash are 
 prior annual-edition capture; the pinned document hash and original retrieval transport are
 recorded in `migration.yaml`. The complete Stage A and Stage B history is in `migration.yaml` and
 `docs/migrations/institutional-stage-b/human-review.yaml`; accepted human dispositions are in
-`judgments.writ`. The seven Core links are stored only in their authoritative direction, and
+`judgments.writ` and `review-binding-judgments.writ`. The seven Core links are stored only in their authoritative direction, and
 inverse links are derived rather than stored.
+
+## Authorized review-artifact binding
+
+The separate human disposition dated 2026-09-04 authorizes two `0.3.0` bound successor judgments:
+one targets `nist_nvlap_lab_decision_right_v2`, and the other targets its existing supersession
+link. Each independently supersedes its unbound predecessor and binds the original human-review
+artifact at `sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713`.
+
+The inventory is 20 records, seven links and 29 judgments: 22 accepted and seven superseded.
+Historical judgment content, original artifact bytes, all evidence and the substantive assertion
+remain preserved. The supplied authorization is retained verbatim in
+`docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml`. The binding
+establishes exact content association only.

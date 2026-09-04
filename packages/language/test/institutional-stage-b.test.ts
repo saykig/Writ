@@ -23,7 +23,9 @@ const compile = (root: string, path: string) =>
 
 const nist = compile(NIST, "records.writ");
 const commission = compile(EC, "records.writ");
-const nistJudgments = compile(NIST, "judgments.writ").judgments as CurrentRecordJudgment[];
+const nistJudgments = ["judgments.writ", "review-binding-judgments.writ"].flatMap(
+  (path) => compile(NIST, path).judgments,
+) as CurrentRecordJudgment[];
 const commissionJudgments = compile(EC, "judgments.writ").judgments as CurrentRecordJudgment[];
 interface TestRecord extends WritRecord {
   [key: string]: unknown;
@@ -331,7 +333,7 @@ describe("Stage B production inventories", () => {
     expect(manifest(NIST).record_counts).toEqual({
       institutional_records: 20,
       record_links: 7,
-      disposition_judgments: 27,
+      disposition_judgments: 29,
     });
     expect(manifest(NIST).review_counts).toEqual({
       approved_records: 14,
@@ -340,7 +342,7 @@ describe("Stage B production inventories", () => {
       approved_record_links: 7,
       accepted_disposition_judgments: 22,
       proposed_disposition_judgments: 0,
-      superseded_disposition_judgments: 5,
+      superseded_disposition_judgments: 7,
     });
   });
 
@@ -926,7 +928,7 @@ describe("review preservation, judgments, links, and migrations", () => {
   });
 
   test("judgments preserve all superseded decisions and approve each reviewed successor", () => {
-    expect(nistJudgments).toHaveLength(27);
+    expect(nistJudgments).toHaveLength(29);
     expect(commissionJudgments).toHaveLength(30);
     const commissionLinkIds = [
       "eu_ai_office_european_commission_relationship",
@@ -1122,6 +1124,9 @@ describe("review preservation, judgments, links, and migrations", () => {
     // immutable-history checks in nist-handbook-correction.test.ts.
     chainJudgments.add("judgment_nist_nvlap_lab_decision_right_stage_b");
     chainJudgments.add("judgment_nist_nvlap_lab_decision_right_v2_human_review");
+    chainJudgments.add("judgment_nist_nvlap_lab_decision_right_v2_bound_review");
+    chainJudgments.add("judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review");
+    chainJudgments.add("judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review");
     for (const judgment of [...nistJudgments, ...commissionJudgments]) {
       if (chainJudgments.has(judgment.judgment_id)) continue;
       expect(judgment).not.toHaveProperty("supersedes_judgment_ids");

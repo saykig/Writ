@@ -30,25 +30,26 @@ tasks:
       - NIST-HANDBOOK-COMPETENCE-HUMAN-REVIEW-001
     baseline_commit: 97ab97de2735116ba3a69a0916507a7bc8d943c4
     draft_pr: https://github.com/saykig/Writ/pull/40
+    human_disposition: docs/migrations/nist-handbook-competence/review-binding-human-disposition.yaml
     scope:
       - Reproduce unchanged accepted judgments surviving material review-artifact substitution.
       - Compare inline binding, companion receipt, and repository registry at the required boundaries.
       - Implement the smallest versioned native binding with shared deterministic byte verification and portable export.
       - Preserve existing unbound judgment contracts, historical objects, and old bundle support.
-      - Prepare exact proposed NVLAP binding lineage for a separate human disposition.
+      - Prepare exact proposed NVLAP binding lineage and apply its two successors under the explicit 2026-09-04 human disposition.
       - Close demonstrated local-artifact and exported-binding consistency defects from the final bounded wedge at PR head 5e9882387c2f83ddafe9fac0d6a30f81a70665b7.
     exclusions:
       - Reviewer authentication, semantic agreement, evidence sufficiency, or review execution.
-      - Changes to accepted NIST judgments, review-artifact bytes, assertions, excerpts, or source identities.
+      - In-place content changes to historical NIST judgments, original review-artifact bytes, assertions, excerpts, or source identities.
       - Unrelated verifier/projector disagreements, a review engine, and new reasoning concepts.
-      - Direct changes to main, merging, or accepting proposed NIST binding lineage.
+      - Direct changes to main, merging, or accepting any lineage beyond the exact 2026-09-04 human disposition.
     acceptance:
       - Exact artifact substitution fails declared binding verification after repository checksums are refreshed.
       - Hash, path, missing-file, file-type, alias, supersession, and portable reload boundaries have synthetic regression coverage.
       - Existing unbound judgments remain valid without implying any reviewer identity or origin.
       - Grammar, compiler, schema, domain, repository gates, and ordinary export agree on the new binding.
-      - Required project checks pass and a draft PR contains the generic mechanism and human-review packet only.
-      - Stop at AWAITING_REVIEW_BINDING_HUMAN_DISPOSITION with this task incomplete.
+      - Required project checks pass; PR 40 preserves the generic experiment and applies only the separately authorized two-judgment binding lineage.
+      - The human gate is satisfied by the recorded 2026-09-04 disposition; complete only after authorized application checks, without merging.
     outputs:
       - adr/0025-exact-review-artifact-binding.md
       - docs/current/review-artifact-binding.md

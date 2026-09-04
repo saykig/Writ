@@ -21,6 +21,8 @@ const OLD_JUDGMENT = "judgment_nist_nvlap_lab_decision_right_stage_b";
 const NEW_JUDGMENT = "judgment_nist_nvlap_lab_decision_right_v2_human_review";
 const LINK = "nist_nvlap_lab_decision_right_v2_supersedes_nist_nvlap_lab_decision_right";
 const LINK_JUDGMENT = "judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review";
+const BOUND_JUDGMENT = "judgment_nist_nvlap_lab_decision_right_v2_bound_review";
+const BOUND_LINK_JUDGMENT = "judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review";
 const SOURCE = "nist.handbook_150";
 const VERSION = "nist.handbook_150.v2020_update_1";
 const DOCUMENT_HASH = "sha256:7105b9f201a580599b1871fcb7dd9cb5c09b0dcc46bb7e9bd654a960cae65f7e";
@@ -228,7 +230,7 @@ describe("human-approved Handbook evidence correction", () => {
       value: "approved",
       evidence_refs: record(NEW_RECORD).evidence.map((item) => item.passage_id),
       reviewer: REVIEWER,
-      status: "accepted",
+      status: "superseded",
       created_at: "2026-09-04",
       supersedes_judgment_ids: [OLD_JUDGMENT],
     });
@@ -255,13 +257,70 @@ describe("human-approved Handbook evidence correction", () => {
       value: "approved",
       evidence_refs: NEW_PASSAGES,
       reviewer: REVIEWER,
-      status: "accepted",
+      status: "superseded",
       created_at: "2026-09-04",
     });
     expect(judgment(LINK_JUDGMENT)).not.toHaveProperty("supersedes_judgment_ids");
     expect(validateJudgmentSupersession(snapshot.judgments.map((item) => item.value)).valid).toBe(
       true,
     );
+  });
+
+  test("applies the approved exact-byte binding with separate preserved judgment lineages", () => {
+    const artifact = readFileSync(join(ROOT, REVIEW_PATH));
+    const content_hash = "sha256:75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713";
+    expect(`sha256:${createHash("sha256").update(artifact).digest("hex")}`).toBe(content_hash);
+    // These hashes pin all compiled predecessor content at PR #40 e2be990,
+    // before this separately authorized application. Only retirement metadata changes.
+    for (const [predecessorId, successorId, preservedHash] of [
+      [
+        NEW_JUDGMENT,
+        BOUND_JUDGMENT,
+        "cb800f242dd7e220f594749a7bd1977a4246f0b6ce000e1718c56dca22c39fef",
+      ],
+      [
+        LINK_JUDGMENT,
+        BOUND_LINK_JUDGMENT,
+        "0f4c760226022fb15bcdfeed8c08f2fbb529a7e98c9b74ffc07990991f6eee9c",
+      ],
+    ] as const) {
+      const predecessor = judgment(predecessorId);
+      const restored = { ...predecessor, status: "accepted" };
+      delete restored.superseded_by_judgment_id;
+      expect(createHash("sha256").update(JSON.stringify(restored)).digest("hex")).toBe(
+        preservedHash,
+      );
+      expect(predecessor.status).toBe("superseded");
+      expect(predecessor.superseded_by_judgment_id).toBe(successorId);
+      expect(predecessor).not.toHaveProperty("review_artifact");
+      const successor = judgment(successorId);
+      expect(successor).toMatchObject({
+        schema_version: "0.3.0",
+        status: "accepted",
+        reviewer: "Writ maintainer (explicit human binding disposition)",
+        created_at: "2026-09-04",
+        target_kind: predecessor.target_kind,
+        target_id: predecessor.target_id,
+        judgment_type: predecessor.judgment_type,
+        value: predecessor.value,
+        evidence_refs: predecessor.evidence_refs,
+        supersedes_judgment_ids: [predecessorId],
+        review_artifact: { path: REVIEW_PATH, content_hash },
+      });
+      expect(successor).not.toHaveProperty("superseded_by_judgment_id");
+      expect(
+        snapshot.judgments
+          .filter(
+            ({ value }) => value.status === "accepted" && value.target_id === predecessor.target_id,
+          )
+          .map(({ value }) => value.judgment_id),
+      ).toEqual([successorId]);
+    }
+    const nistJudgments = snapshot.judgments.filter((item) => item.corpus_id === CORPUS);
+    expect(nistJudgments).toHaveLength(29);
+    expect(nistJudgments.filter(({ value }) => value.status === "accepted")).toHaveLength(22);
+    expect(nistJudgments.filter(({ value }) => value.status === "superseded")).toHaveLength(7);
+    expect(validateJudgmentSupersession(nistJudgments.map(({ value }) => value)).valid).toBe(true);
   });
 
   test("has one current successor and no approved consumer of either retired passage identity", () => {
