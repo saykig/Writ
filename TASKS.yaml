@@ -38,6 +38,7 @@ tasks:
       - Preserve existing unbound judgment contracts, historical objects, and old bundle support.
       - Prepare exact proposed NVLAP binding lineage and apply its two successors under the explicit 2026-09-04 human disposition.
       - Close demonstrated local-artifact and exported-binding consistency defects from the final bounded wedge at PR head 5e9882387c2f83ddafe9fac0d6a30f81a70665b7.
+      - Close the final full-judgment projection, fragment, whole-resource and supersession reload disagreement found at PR head 98e9f69bd3ce0ea56d11242e4833c3626e3803a1.
     exclusions:
       - Reviewer authentication, semantic agreement, evidence sufficiency, or review execution.
       - In-place content changes to historical NIST judgments, original review-artifact bytes, assertions, excerpts, or source identities.
@@ -48,6 +49,7 @@ tasks:
       - Hash, path, missing-file, file-type, alias, supersession, and portable reload boundaries have synthetic regression coverage.
       - Existing unbound judgments remain valid without implying any reviewer identity or origin.
       - Grammar, compiler, schema, domain, repository gates, and ordinary export agree on the new binding.
+      - Every exported native judgment is canonically equal across compiled projection, governed fragment and routed whole resource before complete-set supersession validation.
       - Required project checks pass; PR 40 preserves the generic experiment and applies only the separately authorized two-judgment binding lineage.
       - The human gate is satisfied by the recorded 2026-09-04 disposition; complete only after authorized application checks, without merging.
     outputs:

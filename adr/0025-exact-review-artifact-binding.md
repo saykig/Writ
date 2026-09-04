@@ -81,6 +81,8 @@ evidence-basis, truth, target-workflow, or reviewer-identity rule.
 An ignored, untracked artifact was shown to pass verification and clean export while disappearing
 from another checkout of the same commit. The repository adapter therefore requires Git tracking,
 reusing the existing candidate index and integrity manifest boundary rather than introducing a
-registry. A separate exported-copy attack requires the new binding to agree with both its native
-fragment and routed whole source. Neither correction adds semantic review machinery. Bundle
+registry. Separate exported-copy attacks require every supported native judgment to be canonically
+equal across its compiled projection, contract-compiled fragment and routed whole source, followed
+by authoritative validation of the complete supersession graph. The exact binding and exported
+bytes remain additional `0.3.0` checks. Neither correction adds semantic review machinery. Bundle
 `1.1.0` transport duplication remains a documented limitation; the inline representation is unchanged.

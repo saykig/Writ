@@ -3,13 +3,23 @@ import { fileURLToPath } from "node:url";
 
 import _Ajv2020 from "ajv/dist/2020.js";
 import _addFormats from "ajv-formats";
-import { REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID, validateContract } from "@writ/domain";
+import {
+  REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
+  validateContract,
+  validateJudgmentSupersession,
+  type SupersessionCandidate,
+} from "@writ/domain";
 import { compileSource } from "@writ/language";
-import { verifyReviewArtifact } from "@writ/provenance";
+import { canonicalJson, verifyReviewArtifact } from "@writ/provenance";
 
-import type { BundleResource, WritDataBundle } from "./contract.js";
+import type {
+  BundleRecordJudgment,
+  BundleResource,
+  JsonObject,
+  WritDataBundle,
+} from "./contract.js";
 import { hashCanonical } from "./hashing.js";
-import { repositoryRoot } from "./repository.js";
+import { RECORD_JUDGMENT_CONTRACT, repositoryRoot } from "./repository.js";
 
 const schemaPath = fileURLToPath(
   new URL("../schema/writ-data-bundle.schema.json", import.meta.url),
@@ -90,8 +100,43 @@ export function assertSourceFragments(bundle: WritDataBundle): void {
   }
 }
 
-/** Check content association using only exported bytes; no repository lookup is performed. */
-export function assertReviewArtifacts(bundle: WritDataBundle): void {
+interface SupportedJudgmentContract {
+  readonly contractId: string;
+  readonly dialect: "0.2" | "0.3";
+  readonly schemaVersion: "0.2.0" | "0.3.0";
+}
+
+function supportedJudgmentContract(judgment: BundleRecordJudgment): SupportedJudgmentContract {
+  if (judgment.contractId === RECORD_JUDGMENT_CONTRACT) {
+    return { contractId: RECORD_JUDGMENT_CONTRACT, dialect: "0.2", schemaVersion: "0.2.0" };
+  }
+  if (judgment.contractId === REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID) {
+    return {
+      contractId: REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
+      dialect: "0.3",
+      schemaVersion: "0.3.0",
+    };
+  }
+  throw new Error(`${judgment.judgmentKey}: unsupported native judgment contract`);
+}
+
+function assertCanonicalJudgmentEquality(
+  judgmentKey: string,
+  expected: JsonObject,
+  actual: JsonObject,
+  actualLabel: string,
+): void {
+  if (canonicalJson(expected) !== canonicalJson(actual)) {
+    throw new Error(`${judgmentKey}: compiled judgment disagrees with ${actualLabel}`);
+  }
+}
+
+/**
+ * Reconstruct every exported native judgment from both retained source forms,
+ * require full semantic equivalence, and then verify any exported artifact bytes.
+ * No repository lookup is performed.
+ */
+export function assertNativeJudgmentIntegrity(bundle: WritDataBundle): void {
   const artifactHashes = new Map<string, string>();
   const wholeResources = new Map<
     string,
@@ -111,47 +156,35 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
     return matches;
   };
   const judgmentCounts = new Map<string, number>();
+  const reconstructedJudgments: SupersessionCandidate[] = [];
   for (const judgment of bundle.recordJudgments) {
     judgmentCounts.set(judgment.judgmentKey, (judgmentCounts.get(judgment.judgmentKey) ?? 0) + 1);
   }
   for (const judgment of bundle.recordJudgments) {
     const compiled = judgment.compiledJudgment;
+    const contract = supportedJudgmentContract(judgment);
     const binding = compiled.review_artifact;
     const artifact = judgment.reviewArtifact;
-    // Read the new field even when the advertised version was downgraded. A
-    // format change cannot erase a binding still declared by the stored source.
     const sourceCompilation = compileSource(
-      `language writ "0.3"\npackage exported.review_binding version "0.3.0";\n${judgment.storedSource.content}`,
+      `language writ "${contract.dialect}"\npackage exported.judgment version "${contract.schemaVersion}";\n${judgment.storedSource.content}`,
       { fileName: judgment.storedSource.path },
     );
     const sourceResources = resourcesAt(judgment.storedSource.path);
     const wholeDeclarations = sourceResources.flatMap(({ compiled: module }) =>
       module.judgments.filter((item) => item.judgment_id === judgment.judgmentId),
     );
-    if (compiled.schema_version !== "0.3.0") {
-      if (
-        binding !== undefined ||
-        artifact !== undefined ||
-        judgment.contractId === REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID ||
-        sourceCompilation.judgments.some((item) => "review_artifact" in item) ||
-        wholeDeclarations.some((item) => "review_artifact" in item)
-      ) {
-        throw new Error(`${judgment.judgmentKey}: review binding requires judgment schema 0.3.0`);
-      }
-      continue;
+    if (compiled.schema_version !== contract.schemaVersion) {
+      throw new Error(`${judgment.judgmentKey}: judgment schema disagrees with its contract`);
     }
-    if (bundle.metadata.bundleFormatVersion !== "1.1.0") {
+    if (contract.schemaVersion === "0.3.0" && bundle.metadata.bundleFormatVersion !== "1.1.0") {
       throw new Error(
         `${judgment.judgmentKey}: judgment schema 0.3.0 requires bundle format 1.1.0`,
       );
     }
     if (judgmentCounts.get(judgment.judgmentKey) !== 1) {
-      throw new Error(`${judgment.judgmentKey}: duplicate binding-capable judgment identity`);
+      throw new Error(`${judgment.judgmentKey}: duplicate judgment identity`);
     }
-    if (judgment.contractId !== REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID) {
-      throw new Error(`${judgment.judgmentKey}: wrong review-artifact judgment contract`);
-    }
-    const validation = validateContract(judgment.contractId, compiled);
+    const validation = validateContract(contract.contractId, compiled);
     if (!validation.valid) {
       throw new Error(
         `${judgment.judgmentKey}: invalid judgment: ${validation.errors.map((issue) => issue.message).join("; ")}`,
@@ -177,20 +210,15 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
       sourceCompilation.judgments.length !== 1 ||
       sourceCompilation.judgments[0]!.judgment_id !== judgment.judgmentId
     ) {
-      throw new Error(`${judgment.judgmentKey}: invalid stored judgment source for review binding`);
+      throw new Error(`${judgment.judgmentKey}: invalid stored judgment fragment`);
     }
-    const declared = sourceCompilation.judgments[0]! as unknown as {
-      review_artifact?: { path: string; content_hash: string };
-    };
-    const supplied = binding as { path: string; content_hash: string } | undefined;
-    if (
-      declared.review_artifact?.path !== supplied?.path ||
-      declared.review_artifact?.content_hash !== supplied?.content_hash
-    ) {
-      throw new Error(
-        `${judgment.judgmentKey}: review binding disagrees with stored judgment source`,
-      );
-    }
+    const fragmentDeclaration = sourceCompilation.judgments[0]! as unknown as JsonObject;
+    assertCanonicalJudgmentEquality(
+      judgment.judgmentKey,
+      compiled,
+      fragmentDeclaration,
+      "stored judgment fragment",
+    );
     const owner = bundle.corpora.find((corpus) => corpus.corpusId === judgment.corpusId);
     const wholeResource = sourceResources[0];
     if (
@@ -202,20 +230,22 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
       wholeResource.compiled.diagnostics.some((diagnostic) => diagnostic.severity === "error") ||
       wholeDeclarations.length !== 1
     ) {
-      throw new Error(
-        `${judgment.judgmentKey}: review binding requires one routed whole judgment resource`,
-      );
+      throw new Error(`${judgment.judgmentKey}: judgment requires one routed whole resource`);
     }
-    const wholeDeclaration = wholeDeclarations[0]! as unknown as {
-      review_artifact?: { path: string; content_hash: string };
-    };
-    if (
-      wholeDeclaration.review_artifact?.path !== supplied?.path ||
-      wholeDeclaration.review_artifact?.content_hash !== supplied?.content_hash
-    ) {
-      throw new Error(
-        `${judgment.judgmentKey}: review binding disagrees with whole judgment resource`,
-      );
+    const wholeDeclaration = wholeDeclarations[0]! as unknown as JsonObject;
+    assertCanonicalJudgmentEquality(
+      judgment.judgmentKey,
+      compiled,
+      wholeDeclaration,
+      "routed whole judgment resource",
+    );
+    reconstructedJudgments.push(compiled as unknown as SupersessionCandidate);
+
+    if (contract.schemaVersion !== "0.3.0") {
+      if (binding !== undefined || artifact !== undefined) {
+        throw new Error(`${judgment.judgmentKey}: review binding requires judgment schema 0.3.0`);
+      }
+      continue;
     }
     if (binding === undefined) {
       if (artifact !== undefined) {
@@ -246,6 +276,14 @@ export function assertReviewArtifacts(bundle: WritDataBundle): void {
     }
     artifactHashes.set(path, contentHash);
   }
+  const supersession = validateJudgmentSupersession(reconstructedJudgments);
+  if (!supersession.valid) {
+    throw new Error(
+      `Invalid exported judgment supersession: ${supersession.issues
+        .map((issue) => `${issue.code} [${issue.judgmentId}]: ${issue.message}`)
+        .join("; ")}`,
+    );
+  }
 }
 
 export function validateWritDataBundle(bundle: WritDataBundle): void {
@@ -269,6 +307,6 @@ export function validateWritDataBundle(bundle: WritDataBundle): void {
       throw new Error(`metadata.${forbidden} is a generation timestamp`);
   }
   assertSourceFragments(bundle);
-  assertReviewArtifacts(bundle);
+  assertNativeJudgmentIntegrity(bundle);
   assertPortable(bundle);
 }

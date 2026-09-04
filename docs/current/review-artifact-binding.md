@@ -72,11 +72,14 @@ judgment must not acquire an implied binding from a transport envelope. Old form
 supported, and entirely unbound repositories retain their original export representation. The
 authorized NIST application selects format `1.1.0` for the current repository.
 
-Reload also compares the new binding with its stored native judgment fragment using exact path
-and hash strings, and with the matching judgment in its routed whole native resource. Changing
-the advertised format or contract cannot strip a binding still declared by that source. This
-scoped check does not establish complete source/projection equivalence for
-unrelated fields or older contracts.
+Reload compiles every supported native judgment fragment under its exact governing dialect and
+contract, locates its one routed whole native judgment resource, and requires canonical equality
+of the complete compiled judgment across the projection, fragment and whole resource. This applies
+to both `0.2.0` and `0.3.0`; selected projection fields remain explicit checks but are not the
+integrity boundary. The reconstructed complete judgment set must also pass the authoritative
+supersession validator. Refreshing outer hashes therefore cannot conceal changes to status,
+disposition, rationale, evidence, lineage or binding in only one representation. Changing the
+advertised format or contract cannot strip a binding still declared by source.
 
 A standalone judgment may declare a hash when bytes have not been supplied to the consumer.
 That consumer may report the declared association and unavailable bytes, but cannot claim content

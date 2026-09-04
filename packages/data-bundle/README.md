@@ -40,14 +40,17 @@ native `compiledJudgment.review_artifact`. Base64 preserves arbitrary bytes, inc
 file, without decoding, Unicode normalization or line-ending conversion. Multiple judgments may
 carry the same artifact bytes while preserving their separate identities, targets and lineages.
 
-`validateWritDataBundle` checks the native binding against these decoded bytes using the same pure
-verifier and recompiles each `0.3.0` stored judgment fragment and its unique routed whole source
-resource to confirm their declared bindings agree with the exported compiler output. Refreshing outer bundle checksums cannot conceal changed artifact bytes while leaving
-the binding unchanged. Bound bytes must be present: a locator and hash alone are not verified
-content. The pure `@writ/provenance` API reports `unavailable` when only a binding is supplied.
-An absent binding on an old or new judgment means only that no exact association is declared.
-Advertising an older contract or bundle format cannot erase a binding still declared in stored
-judgment source. Binding paths are compared exactly, including their Unicode spelling.
+`validateWritDataBundle` recompiles every supported native judgment fragment under its governing
+dialect and contract, locates its unique routed whole source resource, and requires canonical
+equality of the complete judgment across compiled projection, fragment and whole resource. It then
+applies the authoritative supersession validator to the complete reconstructed judgment set. For
+bound judgments it also checks decoded bytes with the same pure verifier. Refreshing outer bundle
+checksums therefore cannot conceal one-copy changes to judgment semantics or changed artifact bytes
+while leaving the binding unchanged. Bound bytes must be present: a locator and hash alone are not
+verified content. The pure `@writ/provenance` API reports `unavailable` when only a binding is
+supplied. An absent binding on an old or new judgment means only that no exact association is
+declared. Advertising an older contract or bundle format cannot erase a binding still declared in
+stored judgment source. Binding paths are compared exactly, including their Unicode spelling.
 
 This establishes content association only. Correct bytes do not authenticate a reviewer, prove
 authorship, establish evidentiary sufficiency or show that the judgment implements the disposition.

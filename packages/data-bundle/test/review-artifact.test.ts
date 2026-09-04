@@ -176,6 +176,69 @@ function changedJudgment(bundle: WritDataBundle, change: Record<string, unknown>
   });
 }
 
+function changedJudgmentById(
+  bundle: WritDataBundle,
+  judgmentId: string,
+  change: Record<string, unknown>,
+): WritDataBundle {
+  return rehash({
+    ...bundle,
+    recordJudgments: bundle.recordJudgments.map((judgment) =>
+      judgment.judgmentId === judgmentId
+        ? (Object.fromEntries(
+            Object.entries({ ...judgment, ...change }).filter(([, value]) => value !== undefined),
+          ) as unknown as WritDataBundle["recordJudgments"][number])
+        : judgment,
+    ),
+  });
+}
+
+function replaceRequired(content: string, before: string, after: string): string {
+  if (!content.includes(before)) throw new Error(`Expected source text: ${before}`);
+  return content.replace(before, after);
+}
+
+function changedJudgmentEverywhere(
+  bundle: WritDataBundle,
+  judgmentId: string,
+  change: {
+    readonly compiled: Record<string, unknown>;
+    readonly source: (content: string) => string;
+    readonly projected?: Record<string, unknown>;
+  },
+): WritDataBundle {
+  const original = bundle.recordJudgments.find((judgment) => judgment.judgmentId === judgmentId);
+  if (!original) throw new Error(`Missing judgment ${judgmentId}`);
+  const fragment = change.source(original.storedSource.content);
+  const compiled = Object.fromEntries(
+    Object.entries({ ...original.compiledJudgment, ...change.compiled }).filter(
+      ([, value]) => value !== undefined,
+    ),
+  );
+  return rehash({
+    ...bundle,
+    resources: bundle.resources.map((resource) => {
+      if (resource.path !== original.storedSource.path) return resource;
+      const content = replaceRequired(resource.content, original.storedSource.content, fragment);
+      return { ...resource, content, sha256: rawHash(content) };
+    }),
+    recordJudgments: bundle.recordJudgments.map((judgment) =>
+      judgment.judgmentId === judgmentId
+        ? ({
+            ...judgment,
+            ...change.projected,
+            compiledJudgment: compiled,
+            storedSource: {
+              ...judgment.storedSource,
+              content: fragment,
+              sha256: rawHash(fragment),
+            },
+          } as WritDataBundle["recordJudgments"][number])
+        : judgment,
+    ),
+  });
+}
+
 function replaceWholeFragment(
   bundle: WritDataBundle,
   path: string,
@@ -380,7 +443,7 @@ describe("portable exact review-artifact content association", () => {
       });
       expect(substituted.recordJudgments[0]!.storedSource).toEqual(first.storedSource);
       expect(() => validateWritDataBundle(substituted)).toThrow(
-        /binding disagrees with stored judgment source/,
+        /compiled judgment disagrees with stored judgment fragment/,
       );
     } finally {
       input.cleanup();
@@ -408,9 +471,7 @@ describe("portable exact review-artifact content association", () => {
       expect(downgraded.recordJudgments.map((judgment) => judgment.storedSource)).toEqual(
         bundle.recordJudgments.map((judgment) => judgment.storedSource),
       );
-      expect(() => validateWritDataBundle(downgraded)).toThrow(
-        /binding requires judgment schema 0.3.0/,
-      );
+      expect(() => validateWritDataBundle(downgraded)).toThrow(/invalid stored judgment fragment/);
     } finally {
       input.cleanup();
     }
@@ -435,7 +496,7 @@ describe("portable exact review-artifact content association", () => {
       });
       expect(composedPath).not.toBe(decomposedPath);
       expect(() => validateWritDataBundle(mismatched)).toThrow(
-        /binding disagrees with stored judgment source/,
+        /compiled judgment disagrees with routed whole judgment resource/,
       );
     } finally {
       input.cleanup();
@@ -466,7 +527,7 @@ describe("portable exact review-artifact content association", () => {
       });
       expect(substituted.resources).toEqual(bundle.resources);
       expect(() => validateWritDataBundle(substituted)).toThrow(
-        /binding disagrees with whole judgment resource/,
+        /compiled judgment disagrees with routed whole judgment resource/,
       );
       const consistent = replaceWholeFragment(
         substituted,
@@ -484,11 +545,11 @@ describe("portable exact review-artifact content association", () => {
             ),
           }),
         ),
-      ).toThrow(/one routed whole judgment resource/);
+      ).toThrow(/one routed whole resource/);
       const resource = bundle.resources.find((item) => item.path === first.storedSource.path)!;
       expect(() =>
         validateWritDataBundle(rehash({ ...bundle, resources: [...bundle.resources, resource] })),
-      ).toThrow(/one routed whole judgment resource/);
+      ).toThrow(/one routed whole resource/);
     } finally {
       input.cleanup();
     }
@@ -519,7 +580,7 @@ describe("portable exact review-artifact content association", () => {
       });
       expect(downgraded.resources).toEqual(bundle.resources);
       expect(() => validateWritDataBundle(downgraded)).toThrow(
-        /binding requires judgment schema 0.3.0/,
+        /compiled judgment disagrees with routed whole judgment resource/,
       );
     } finally {
       input.cleanup();
@@ -555,11 +616,129 @@ describe("portable exact review-artifact content association", () => {
         ...bundle,
         recordJudgments: [...bundle.recordJudgments, duplicate],
       });
-      expect(() => validateWritDataBundle(contradicted)).toThrow(
-        /duplicate binding-capable judgment identity/,
-      );
+      expect(() => validateWritDataBundle(contradicted)).toThrow(/duplicate judgment identity/);
     } finally {
       input.cleanup();
     }
+  });
+});
+
+const NIST_SUCCESSOR = "judgment_nist_nvlap_lab_decision_right_v2_bound_review";
+const NIST_LINK_SUCCESSOR = "judgment_nist_nvlap_lab_decision_right_v2_supersession_bound_review";
+const NIST_PREDECESSOR = "judgment_nist_nvlap_lab_decision_right_v2_human_review";
+const NIST_LINK_PREDECESSOR = "judgment_nist_nvlap_lab_decision_right_v2_supersession_human_review";
+const nistBundle = generateWritDataBundleForCommit(COMMIT);
+
+function nistJudgment(judgmentId: string) {
+  const judgment = nistBundle.recordJudgments.find((item) => item.judgmentId === judgmentId);
+  if (!judgment) throw new Error(`Missing NIST judgment ${judgmentId}`);
+  return judgment;
+}
+
+describe("full native judgment equivalence on portable reload", () => {
+  test("rejects Sol's rehashed successor-lineage substitution", () => {
+    const original = nistJudgment(NIST_SUCCESSOR);
+    const attacked = changedJudgmentById(nistBundle, NIST_SUCCESSOR, {
+      compiledJudgment: {
+        ...original.compiledJudgment,
+        supersedes_judgment_ids: [NIST_LINK_PREDECESSOR],
+      },
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/stored judgment fragment/);
+  });
+
+  test("rejects Sol's rehashed stored-fragment lineage substitution", () => {
+    const original = nistJudgment(NIST_SUCCESSOR);
+    const content = replaceRequired(
+      original.storedSource.content,
+      NIST_PREDECESSOR,
+      NIST_LINK_PREDECESSOR,
+    );
+    const attacked = changedJudgmentById(nistBundle, NIST_SUCCESSOR, {
+      storedSource: { ...original.storedSource, content, sha256: rawHash(content) },
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/stored judgment fragment/);
+  });
+
+  test("rejects Sol's rehashed accepted-successor status substitution", () => {
+    const original = nistJudgment(NIST_SUCCESSOR);
+    const attacked = changedJudgmentById(nistBundle, NIST_SUCCESSOR, {
+      status: "superseded",
+      compiledJudgment: {
+        ...original.compiledJudgment,
+        status: "superseded",
+        superseded_by_judgment_id: NIST_LINK_SUCCESSOR,
+      },
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/stored judgment fragment/);
+  });
+
+  test("rejects Sol's rehashed superseded-predecessor reactivation", () => {
+    const original = nistJudgment(NIST_PREDECESSOR);
+    const { superseded_by_judgment_id: _removed, ...compiled } = original.compiledJudgment;
+    const attacked = changedJudgmentById(nistBundle, NIST_PREDECESSOR, {
+      status: "accepted",
+      compiledJudgment: { ...compiled, status: "accepted" },
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/stored judgment fragment/);
+  });
+
+  test("rejects Sol's rehashed disposition, rationale and evidence substitution", () => {
+    const original = nistJudgment(NIST_SUCCESSOR);
+    const attacked = changedJudgmentById(nistBundle, NIST_SUCCESSOR, {
+      compiledJudgment: {
+        ...original.compiledJudgment,
+        value: "withdrawn",
+        rationale: "Substituted disposition.",
+        evidence_refs: ["nist.about.identity"],
+      },
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/stored judgment fragment/);
+  });
+});
+
+describe("authoritative exported judgment supersession", () => {
+  test("rejects reciprocal disagreement and competing successors after all copies agree", () => {
+    const attacked = changedJudgmentEverywhere(nistBundle, NIST_LINK_SUCCESSOR, {
+      compiled: { supersedes_judgment_ids: [NIST_PREDECESSOR] },
+      source: (content) => replaceRequired(content, NIST_LINK_PREDECESSOR, NIST_PREDECESSOR),
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/DISAGREEING_DIRECTION/);
+  });
+
+  test("rejects self-supersession after all copies agree", () => {
+    const attacked = changedJudgmentEverywhere(nistBundle, NIST_SUCCESSOR, {
+      compiled: { supersedes_judgment_ids: [NIST_SUCCESSOR] },
+      source: (content) => replaceRequired(content, NIST_PREDECESSOR, NIST_SUCCESSOR),
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/SELF_SUPERSESSION/);
+  });
+
+  test("rejects a supersession cycle after all copies agree", () => {
+    const attacked = changedJudgmentEverywhere(nistBundle, NIST_SUCCESSOR, {
+      compiled: { status: "superseded", superseded_by_judgment_id: NIST_PREDECESSOR },
+      projected: { status: "superseded" },
+      source: (content) =>
+        replaceRequired(
+          replaceRequired(content, "status accepted;", "status superseded;"),
+          `supersedes_judgment_ids { ${NIST_PREDECESSOR} };`,
+          `supersedes_judgment_ids { ${NIST_PREDECESSOR} };\n  superseded_by_judgment_id ${NIST_PREDECESSOR};`,
+        ),
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/SUPERSESSION_CYCLE/);
+  });
+
+  test("rejects predecessor reactivation inconsistent with its exported successor", () => {
+    const attacked = changedJudgmentEverywhere(nistBundle, NIST_PREDECESSOR, {
+      compiled: { status: "accepted", superseded_by_judgment_id: undefined },
+      projected: { status: "accepted" },
+      source: (content) =>
+        replaceRequired(
+          replaceRequired(content, "status superseded;", "status accepted;"),
+          `  superseded_by_judgment_id ${NIST_SUCCESSOR};\n`,
+          "",
+        ),
+    });
+    expect(() => validateWritDataBundle(attacked)).toThrow(/DISAGREEING_DIRECTION/);
   });
 });
