@@ -148,6 +148,31 @@ function addSyntheticPartOfLink(
   snapshot.links.push(loaded);
 }
 
+function addSyntheticHistoricalJudgment(
+  snapshot: RepositorySnapshot,
+  corpusId: string,
+  successorId: string,
+  historicalId: string,
+  targetKind: "record" | "record_link",
+  targetId: string,
+): void {
+  const successor = snapshot.judgments.find(
+    ({ corpus_id, value }) =>
+      corpus_id === corpusId && value.judgment_id === successorId && value.status === "accepted",
+  )!;
+  const historical = structuredClone(successor);
+  historical.file = `synthetic/${historicalId}.writ`;
+  historical.value.judgment_id = historicalId;
+  historical.value.target_kind = targetKind;
+  historical.value.target_id = targetId;
+  historical.value.status = "superseded";
+  historical.value.superseded_by_judgment_id = successor.value.judgment_id;
+  delete historical.value.supersedes_judgment_ids;
+  delete historical.value.review_artifact;
+  successor.value.supersedes_judgment_ids = [historicalId];
+  snapshot.judgments.push(historical);
+}
+
 function candidateWorkspace(prefix: string): string {
   const root = mkdtempSync(join(tmpdir(), prefix));
   cpSync(join(ROOT, "schemas"), join(root, "schemas"), { recursive: true });
@@ -773,6 +798,87 @@ describe("focused negative fixtures", () => {
     )!;
     link.value.supporting_record_ids = [migration.previous_id];
     expect(codes(verifyProvenance(snapshot))).toContain("PROVENANCE_ACTIVE_LEGACY_ID");
+  });
+
+  test("permits an absent historical record target justified by its corpus migration", () => {
+    const snapshot = clone();
+    const migration = snapshot.migrations.find(
+      ({ previous_id }) => previous_id === "eu_ai_office_technical_documentation_receipt",
+    )!;
+    expect(
+      snapshot.records.some(
+        ({ corpus_id, value }) =>
+          corpus_id === migration.corpus_id && value.record_id === migration.previous_id,
+      ),
+    ).toBe(false);
+    const historicalId = "synthetic_legitimate_historical_record_judgment";
+    addSyntheticHistoricalJudgment(
+      snapshot,
+      migration.corpus_id,
+      "judgment_eu_ai_office_technical_documentation_receipt_review",
+      historicalId,
+      "record",
+      migration.previous_id,
+    );
+
+    const provenance = verifySnapshot(snapshot, "all", { runExternalChecks: false }).gates.find(
+      ({ gate }) => gate === "provenance",
+    )!;
+    expect(
+      provenance.issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND" && object_id === historicalId,
+      ),
+    ).toBe(false);
+  });
+
+  test("does not borrow another corpus migration for an absent historical record target", () => {
+    const snapshot = clone();
+    const migration = snapshot.migrations.find(
+      ({ previous_id }) => previous_id === "eu_ai_office_technical_documentation_receipt",
+    )!;
+    const historicalId = "synthetic_cross_corpus_historical_record_judgment";
+    addSyntheticHistoricalJudgment(
+      snapshot,
+      "us.institutions.nist",
+      "judgment_nist_identity_stage_a",
+      historicalId,
+      "record",
+      migration.previous_id,
+    );
+
+    const provenance = verifySnapshot(snapshot, "all", { runExternalChecks: false }).gates.find(
+      ({ gate }) => gate === "provenance",
+    )!;
+    expect(
+      provenance.issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND" && object_id === historicalId,
+      ),
+    ).toBe(true);
+  });
+
+  test("does not treat record migration history as a historical record-link target", () => {
+    const snapshot = clone();
+    const migration = snapshot.migrations.find(
+      ({ previous_id }) => previous_id === "eu_ai_office_technical_documentation_receipt",
+    )!;
+    const historicalId = "synthetic_wrong_kind_historical_record_link_judgment";
+    addSyntheticHistoricalJudgment(
+      snapshot,
+      migration.corpus_id,
+      "judgment_eu_ai_office_technical_documentation_receipt_review",
+      historicalId,
+      "record_link",
+      migration.previous_id,
+    );
+
+    expect(
+      verifyProvenance(snapshot).issues.some(
+        ({ code, object_id }) =>
+          code === "PROVENANCE_JUDGMENT_TARGET_NOT_FOUND" && object_id === historicalId,
+      ),
+    ).toBe(true);
   });
 
   test("reports ambiguous judgment targets", () => {

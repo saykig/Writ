@@ -256,9 +256,12 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
   }
   const passageIndex = buildLogicalPassageIndex(snapshot);
   const judgmentIds = new Set(snapshot.judgments.map(({ value }) => value.judgment_id));
-  const historicalMigrationIds = new Set(
-    snapshot.migrations.map((migration) => migration.previous_id),
-  );
+  const historicalRecordIdsByCorpus = new Map<string, Set<string>>();
+  for (const migration of snapshot.migrations) {
+    const corpusIds = historicalRecordIdsByCorpus.get(migration.corpus_id) ?? new Set<string>();
+    corpusIds.add(migration.previous_id);
+    historicalRecordIdsByCorpus.set(migration.corpus_id, corpusIds);
+  }
 
   for (const passage of reviewedCompatibilityPassageObjects(snapshot)) {
     const sourceId = passage.value.source_machine_id;
@@ -497,7 +500,9 @@ export function verifyProvenance(snapshot: RepositorySnapshot): VerificationGate
         ? snapshot.links.filter(({ value }) => value.link_id === judgment.target_id)
         : snapshot.records.filter(({ value }) => value.record_id === judgment.target_id);
     const historicalMigratedTarget =
-      judgment.status === "superseded" && historicalMigrationIds.has(judgment.target_id);
+      judgment.status === "superseded" &&
+      judgment.target_kind === "record" &&
+      historicalRecordIdsByCorpus.get(loaded.corpus_id)?.has(judgment.target_id) === true;
     if (targetMatches.length === 0 && !historicalMigratedTarget) {
       issues.push(
         issue(
