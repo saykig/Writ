@@ -23,6 +23,30 @@ statuses:
   - blocked
 
 tasks:
+  - id: TRACK-B-HISTORICAL-JUDGMENT-TARGET-SCOPE-001
+    title: Scope historical judgment targets to their governing record migration
+    status: in_progress
+    dependencies:
+      - TRACK-B-CROSS-LAYER-CONSISTENCY-001
+    baseline_commit: d6bf03349d578d295549cf95dbd1dde23e47efd0
+    scope:
+      - Determine whether absent superseded-judgment targets are justified only by record migrations in the judgment's own corpus.
+      - Reproduce same-corpus record history, cross-corpus identity reuse, and record-link target-kind differentials through authoritative verification.
+      - If confirmed, apply the smallest corpus- and target-kind-scoped correction with decisive regressions.
+    exclusions:
+      - Reopening the Track B Gauntlet, adding persistent roles, or revisiting the PR 41 repairs.
+      - New migration or historical-target objects, science cases, Ukraine, decision semantics, and ontology expansion.
+    acceptance:
+      - A superseded record judgment may target an absent previous ID only when its own corpus declares that record migration.
+      - A migration in another corpus and a record migration presented as record-link history do not excuse missing judgment targets.
+      - Required project verification, export/reload checks, and CI pass in a separate small PR.
+    outputs:
+      - internal/verification/writ/src/gates/provenance.ts
+      - internal/verification/writ/test/verifier.test.ts
+      - docs/current/agent-role-outcomes.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: TRACK-B-CROSS-LAYER-CONSISTENCY-001
     title: Run a bounded cross-layer consistency discovery experiment
     status: review
