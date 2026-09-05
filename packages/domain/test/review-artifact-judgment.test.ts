@@ -5,6 +5,7 @@ import {
   RAW_REVIEW_ARTIFACT_JUDGMENT_SCHEMA,
   REVIEW_ARTIFACT_JUDGMENT_SCHEMA_ID,
   SCHEMA_IDS,
+  UnsupportedSchemaVersionError,
   resolveSchemaVersion,
   validate,
   validateContract,
@@ -32,6 +33,19 @@ const base = {
 const bound = { ...base, schema_version: "0.3.0", review_artifact: binding };
 
 describe("additive review-artifact judgment contract", () => {
+  test("explicit version validation rejects unsupported versions before inspecting shape", () => {
+    const unbound = { ...base, schema_version: "0.2.0" };
+    expect(validateVersion("record-judgment", unbound, "0.2.0").valid).toBe(true);
+    for (const version of ["", "0.2.1", "9.9.9"]) {
+      expect(() => validateVersion("record-judgment", unbound, version)).toThrow(
+        UnsupportedSchemaVersionError,
+      );
+      expect(() => validateVersion("record-judgment", bound, version)).toThrow(
+        UnsupportedSchemaVersionError,
+      );
+    }
+  });
+
   test("keeps old unbound contracts valid without reinterpreting absence", () => {
     expect(validate("record-judgment", { ...base, schema_version: "0.2.0" }).valid).toBe(true);
     expect(validate("record-judgment", { ...base, schema_version: "0.3.0" }).valid).toBe(true);

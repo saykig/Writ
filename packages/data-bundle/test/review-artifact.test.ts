@@ -108,10 +108,18 @@ function fixture(content: Uint8Array = bytes, bound = true, dialect = "0.3") {
     review_counts: {},
     unresolved_evidence_count: 0,
   };
+  const catalog = {
+    schema_version: "1.0.0",
+    implemented_native_families: ["legal_policy", "institutional"],
+    native_corpora: [entry],
+    retired_corpus_migrations: [],
+  };
   const baseline = readNativeRepository();
   const repository: NativeRepository = {
     ...baseline,
     root: directory,
+    catalog,
+    catalogSource: source("corpora/catalog.yaml", Bun.YAML.stringify(catalog)),
     corpora: [
       {
         entry,
@@ -252,6 +260,27 @@ function replaceWholeFragment(
       const content = resource.content.replace(before, after);
       return { ...resource, content, sha256: rawHash(content) };
     }),
+  });
+}
+
+function changedFirstRecord(
+  bundle: WritDataBundle,
+  change: Record<string, unknown>,
+): WritDataBundle {
+  return rehash({
+    ...bundle,
+    records: bundle.records.map((record, index) =>
+      index === 0 ? ({ ...record, ...change } as typeof record) : record,
+    ),
+  });
+}
+
+function changedFirstLink(bundle: WritDataBundle, change: Record<string, unknown>): WritDataBundle {
+  return rehash({
+    ...bundle,
+    recordLinks: bundle.recordLinks.map((link, index) =>
+      index === 0 ? ({ ...link, ...change } as typeof link) : link,
+    ),
   });
 }
 
@@ -686,6 +715,169 @@ describe("portable exact review-artifact content association", () => {
         recordJudgments: [...bundle.recordJudgments, duplicate],
       });
       expect(() => validateWritDataBundle(contradicted)).toThrow(/duplicate judgment identity/);
+    } finally {
+      input.cleanup();
+    }
+  });
+});
+
+describe("full native record and link equivalence on portable reload", () => {
+  test("rejects independently rehashed record projections, compiled values and retained sources", () => {
+    const input = fixture(bytes, false, "0.2");
+    try {
+      const bundle = input.generate();
+      const record = bundle.records[0]!;
+      const compiled = record.compiledRecord!;
+      const fragment = replaceRequired(
+        record.storedSource.content,
+        "review_state draft;",
+        "review_state approved;",
+      );
+      const routed = bundle.resources.find(
+        (resource) => resource.path === record.storedSource.path,
+      )!;
+      const routedContent = replaceRequired(routed.content, record.storedSource.content, fragment);
+      const evidence = compiled.evidence as readonly Record<string, unknown>[];
+      const attacks = [
+        changedFirstRecord(bundle, { reviewState: "approved" }),
+        changedFirstRecord(bundle, {
+          compiledRecord: { ...compiled, review_state: "approved" },
+        }),
+        changedFirstRecord(bundle, {
+          compiledRecord: {
+            ...compiled,
+            evidence: [{ ...evidence[0], quote: "A substituted exact quote." }],
+          },
+        }),
+        changedFirstRecord(bundle, {
+          storedSource: { ...record.storedSource, content: fragment, sha256: rawHash(fragment) },
+        }),
+        rehash({
+          ...bundle,
+          resources: bundle.resources.map((resource) =>
+            resource.path === routed.path
+              ? { ...resource, content: routedContent, sha256: rawHash(routedContent) }
+              : resource,
+          ),
+        }),
+      ];
+      for (const attacked of attacks) {
+        expect(() => validateWritDataBundle(attacked)).toThrow(
+          /records disagree with routed native resource projection/,
+        );
+      }
+      expect(() => validateWritDataBundle(bundle)).not.toThrow();
+    } finally {
+      input.cleanup();
+    }
+  });
+
+  test("rejects independently rehashed link projections, values and retained sources", () => {
+    const input = fixture(bytes, false, "0.2");
+    try {
+      const bundle = input.generate();
+      const link = bundle.recordLinks[0]!;
+      const content = replaceRequired(
+        link.storedSource.content,
+        "review_state: draft",
+        "review_state: reviewed",
+      );
+      const attacks = [
+        changedFirstLink(bundle, { reviewState: "reviewed" }),
+        changedFirstLink(bundle, { value: { ...link.value, review_state: "reviewed" } }),
+        changedFirstLink(bundle, {
+          storedSource: { ...link.storedSource, content, sha256: rawHash(content) },
+        }),
+        rehash({
+          ...bundle,
+          resources: bundle.resources.map((resource) =>
+            resource.path === link.storedSource.path
+              ? { ...resource, content, sha256: rawHash(content) }
+              : resource,
+          ),
+        }),
+      ];
+      for (const attacked of attacks) {
+        expect(() => validateWritDataBundle(attacked)).toThrow(
+          /record links disagree with routed native resource projection/,
+        );
+      }
+      expect(() => validateWritDataBundle(bundle)).not.toThrow();
+    } finally {
+      input.cleanup();
+    }
+  });
+
+  test("rejects a routed source-version change that no longer resolves record evidence", () => {
+    const input = fixture(bytes, false, "0.2");
+    try {
+      const bundle = input.generate();
+      const sourcePath = bundle.corpora[0]!.resources.sources[0]!;
+      const attacked = rehash({
+        ...bundle,
+        resources: bundle.resources.map((resource) => {
+          if (resource.path !== sourcePath) return resource;
+          const content = replaceRequired(
+            resource.content,
+            "document_version_id synthetic.policy.source.v1;",
+            "document_version_id synthetic.policy.source.v2;",
+          );
+          return { ...resource, content, sha256: rawHash(content) };
+        }),
+      });
+      expect(() => validateWritDataBundle(attacked)).toThrow(/document version/);
+      expect(() => validateWritDataBundle(bundle)).not.toThrow();
+    } finally {
+      input.cleanup();
+    }
+  });
+
+  test("rejects false source hashes, stale catalog projections and coherent duplicate corpora", () => {
+    const input = fixture(bytes, false, "0.2");
+    try {
+      const bundle = input.generate();
+      const falseHash = rehash({
+        ...bundle,
+        resources: bundle.resources.map((resource, index) =>
+          index === 0 ? { ...resource, sha256: `sha256:${"0".repeat(64)}` } : resource,
+        ),
+      });
+      expect(() => validateWritDataBundle(falseHash)).toThrow(/source content hash mismatch/);
+
+      const catalogEntry = bundle.catalog.nativeCorpora[0]!;
+      const staleCatalog = rehash({
+        ...bundle,
+        catalog: {
+          ...bundle.catalog,
+          nativeCorpora: [{ ...catalogEntry, family: "institutional" }],
+        },
+      });
+      expect(() => validateWritDataBundle(staleCatalog)).toThrow(/catalog projection disagrees/);
+
+      const parsedCatalog = Bun.YAML.parse(bundle.catalog.source.content) as {
+        native_corpora: unknown[];
+      };
+      const catalogContent = Bun.YAML.stringify({
+        ...parsedCatalog,
+        native_corpora: [...parsedCatalog.native_corpora, parsedCatalog.native_corpora[0]],
+      });
+      const duplicateCorpus = rehash({
+        ...bundle,
+        catalog: {
+          ...bundle.catalog,
+          source: {
+            ...bundle.catalog.source,
+            content: catalogContent,
+            sha256: rawHash(catalogContent),
+          },
+          nativeCorpora: [...bundle.catalog.nativeCorpora, catalogEntry],
+        },
+        corpora: [...bundle.corpora, bundle.corpora[0]!],
+        records: [...bundle.records, ...bundle.records],
+        recordLinks: [...bundle.recordLinks, ...bundle.recordLinks],
+      });
+      expect(() => validateWritDataBundle(duplicateCorpus)).toThrow(/Duplicate corpus identity/);
+      expect(() => validateWritDataBundle(bundle)).not.toThrow();
     } finally {
       input.cleanup();
     }

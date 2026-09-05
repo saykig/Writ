@@ -59,3 +59,21 @@ The repository path is a locator within this snapshot, not a portable claim abou
 machine's filesystem. Consumers inspect the embedded bytes without resolving that path locally.
 Human review remains responsible for semantic agreement and acceptance; adding a binding to an
 accepted judgment requires approved successor lineage rather than editing accepted content.
+
+## Portable native record and link agreement
+
+Reload also runs the production record and record-link projectors against the bundle's routed whole
+native resources, without consulting the checkout. The complete reconstructed record and link arrays
+must exactly equal their portable projections. This makes projected fields, compiled or stored record
+values, retained source fragments, routed whole sources, and evidence resolved through routed source
+metadata one integrity boundary. Object property insertion order is irrelevant, while array order and
+string spelling remain exact. The same replay applies to supported bundle `1.0.0` and `1.1.0`
+snapshots and to their supported native and compatibility record contracts.
+
+Reload also requires the stored catalog projection, corpus entries, and manifests to agree, preserves
+the exporter's global corpus/record/link/judgment identity uniqueness, and recomputes every embedded
+source envelope's SHA-256 from its exact content.
+
+The check proves agreement within the exported snapshot. It does not authenticate a bundle whose
+ordinary outer hashes were all recomputed, prove completeness against a Git tree, or reconstruct
+unreferenced raw captures that the bundle contract deliberately excludes.

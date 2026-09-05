@@ -40,6 +40,7 @@ export {
   assertValid,
   getAjv,
   SchemaValidationError,
+  UnsupportedSchemaVersionError,
   type ValidationIssue,
   type ValidationResult,
 } from "./validation.js";

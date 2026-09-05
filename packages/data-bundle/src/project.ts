@@ -44,14 +44,22 @@ interface SourceRegistryEntry extends BundleEvidenceSource {
   readonly documentVersionIds: readonly string[];
 }
 
+export type BundleResourceReader = (path: string) => BundleSource;
+
+const filesystemResourceReader =
+  (corpus: NativeCorpus): BundleResourceReader =>
+  (path) =>
+    source(path, undefined, corpus.root);
+
 function yamlCollections(
   corpus: NativeCorpus,
   category: keyof NativeCorpus["resources"],
   key: string,
+  readResource: BundleResourceReader = filesystemResourceReader(corpus),
 ): Mapping[] {
   return corpus.resources[category].flatMap((path) => {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) return [];
-    const document = object(parsedResource(source(path, undefined, corpus.root)), path);
+    const document = object(parsedResource(readResource(path)), path);
     const value = document[key];
     if (value === undefined) return [];
     if (!Array.isArray(value)) throw new TypeError(`${path}.${key} must be an array`);
@@ -92,9 +100,20 @@ function uniqueCompatibilityIdentities(
   return canonical;
 }
 
-function assertCompatibilityEvidenceIdentities(corpus: NativeCorpus): void {
-  uniqueCompatibilityIdentities(yamlCollections(corpus, "sources", "sources"), "source", true);
-  uniqueCompatibilityIdentities(yamlCollections(corpus, "passages", "passages"), "passage", false);
+function assertCompatibilityEvidenceIdentities(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader,
+): void {
+  uniqueCompatibilityIdentities(
+    yamlCollections(corpus, "sources", "sources", readResource),
+    "source",
+    true,
+  );
+  uniqueCompatibilityIdentities(
+    yamlCollections(corpus, "passages", "passages", readResource),
+    "passage",
+    false,
+  );
 }
 
 function legalSource(value: Mapping): BundleEvidenceSource {
@@ -114,13 +133,14 @@ function legalSource(value: Mapping): BundleEvidenceSource {
 export function projectCompatibilityEvidence(
   corpus: NativeCorpus,
   record: Mapping,
+  readResource: BundleResourceReader = filesystemResourceReader(corpus),
 ): BundleEvidenceSupport[] {
   if (record.record_type !== "political_claim") return [];
   const recordId = text(record.machine_id, "claim.machine_id");
-  const relationships = yamlCollections(corpus, "relationships", "relationships");
-  const passages = yamlCollections(corpus, "passages", "passages");
-  const unresolved = yamlCollections(corpus, "passages", "unresolved");
-  const sources = yamlCollections(corpus, "sources", "sources");
+  const relationships = yamlCollections(corpus, "relationships", "relationships", readResource);
+  const passages = yamlCollections(corpus, "passages", "passages", readResource);
+  const unresolved = yamlCollections(corpus, "passages", "unresolved", readResource);
+  const sources = yamlCollections(corpus, "sources", "sources", readResource);
   const passagesById = uniqueCompatibilityIdentities(passages, "passage", false);
   const sourcesById = uniqueCompatibilityIdentities(sources, "source", true);
   const result: BundleEvidenceSupport[] = [];
@@ -189,12 +209,15 @@ function sourceForRecord(path: string, fragment: string, content: string): Bundl
   };
 }
 
-function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
+function projectCompatibilityRecords(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader,
+): BundleRecord[] {
   const records: BundleRecord[] = [];
-  assertCompatibilityEvidenceIdentities(corpus);
+  assertCompatibilityEvidenceIdentities(corpus, readResource);
   for (const path of corpus.resources.records) {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) continue;
-    const wholeSource = source(path, undefined, corpus.root);
+    const wholeSource = readResource(path);
     const document = object(parsedResource(wholeSource), path);
     validateAgainstContract(corpus.manifest.record_contract.id, document, path);
     for (const collectionKey of ["claims", "entities"]) {
@@ -221,7 +244,7 @@ function projectCompatibilityRecords(corpus: NativeCorpus): BundleRecord[] {
           legacyRefs: strings(exact.value.legacy_refs ?? [], `${path}.${recordId}.legacy_refs`),
           reference: optionalText(exact.value.ref),
           contract: corpus.manifest.record_contract,
-          evidence: projectCompatibilityEvidence(corpus, exact.value),
+          evidence: projectCompatibilityEvidence(corpus, exact.value, readResource),
           uncertainties: Array.isArray(exact.value.uncertainties) ? exact.value.uncertainties : [],
           storedSource: sourceForRecord(path, recordId, exact.source),
           storedRecord: asJsonObject(exact.value, `${path}.${recordId}`),
@@ -264,9 +287,16 @@ function registerSource(
 }
 
 /** Build source identity only from the current corpus's manifest-routed source modules. */
-function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, SourceRegistryEntry> {
+function sourceRegistryForCorpus(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader,
+): ReadonlyMap<string, SourceRegistryEntry> {
   const registry = new Map<string, SourceRegistryEntry>();
-  uniqueCompatibilityIdentities(yamlCollections(corpus, "sources", "sources"), "source", true);
+  uniqueCompatibilityIdentities(
+    yamlCollections(corpus, "sources", "sources", readResource),
+    "source",
+    true,
+  );
   const compatibilityMappings = new Map<
     string,
     {
@@ -276,7 +306,7 @@ function sourceRegistryForCorpus(corpus: NativeCorpus): ReadonlyMap<string, Sour
     }
   >();
   for (const path of corpus.resources.sources) {
-    const resource = source(path, undefined, corpus.root);
+    const resource = readResource(path);
     if (resource.language === "yaml") {
       const parsed = object(parsedResource(resource), path);
       if (!Array.isArray(parsed.sources)) continue;
@@ -518,11 +548,12 @@ function compileClean(path: string, content: string) {
 function projectWritRecords(
   corpus: NativeCorpus,
   registry: ReadonlyMap<string, SourceRegistryEntry>,
+  readResource: BundleResourceReader,
 ): BundleRecord[] {
   const records: BundleRecord[] = [];
   for (const path of corpus.resources.records) {
     if (!path.endsWith(".writ")) continue;
-    const whole = source(path, undefined, corpus.root);
+    const whole = readResource(path);
     const exact = extractWritDeclarations(whole.content, path);
     const compiled = compileClean(path, whole.content);
     for (const recordValue of compiled.records) {
@@ -559,12 +590,15 @@ function projectWritRecords(
   return records;
 }
 
-export function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
+export function projectRecordLinks(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader = filesystemResourceReader(corpus),
+): BundleRecordLink[] {
   const links: BundleRecordLink[] = [];
   if (corpus.manifest.record_contract.kind === "compatibility") return links;
   for (const path of corpus.resources.relationships) {
     if (!path.endsWith(".yaml") && !path.endsWith(".yml")) continue;
-    const whole = source(path, undefined, corpus.root);
+    const whole = readResource(path);
     const value = asJsonObject(parsedResource(whole), path);
     validateAgainstContract(RECORD_LINK_CONTRACT, value, path);
     const id = text(value.link_id, `${path}.link_id`);
@@ -587,12 +621,15 @@ export function projectRecordLinks(corpus: NativeCorpus): BundleRecordLink[] {
   return links;
 }
 
-function projectJudgments(corpus: NativeCorpus): BundleRecordJudgment[] {
+function projectJudgments(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader = filesystemResourceReader(corpus),
+): BundleRecordJudgment[] {
   const judgments: BundleRecordJudgment[] = [];
   if (corpus.manifest.record_contract.kind === "compatibility") return judgments;
   for (const path of corpus.resources.judgments) {
     if (!path.endsWith(".writ")) continue;
-    const whole = source(path, undefined, corpus.root);
+    const whole = readResource(path);
     const exact = extractWritDeclarations(whole.content, path);
     const compiled = compileClean(path, whole.content);
     for (const value of compiled.judgments) {
@@ -647,6 +684,66 @@ function assertUnique(values: readonly string[], label: string): void {
   }
 }
 
+export function assertUniqueCanonicalObjectKeys(objects: {
+  readonly records: readonly BundleRecord[];
+  readonly recordLinks: readonly BundleRecordLink[];
+  readonly recordJudgments: readonly BundleRecordJudgment[];
+}): void {
+  assertUnique(
+    objects.records.map((item) => item.recordKey),
+    "record key",
+  );
+  assertUnique(
+    objects.recordLinks.map((item) => item.linkKey),
+    "record-link key",
+  );
+  assertUnique(
+    objects.recordJudgments.map((item) => item.judgmentKey),
+    "judgment key",
+  );
+}
+
+/**
+ * Reconstruct one corpus's portable record projection from its routed native
+ * resources. Supplying a reader lets bundle reload use the embedded resources
+ * rather than consulting the checkout.
+ */
+export function projectCorpusRecords(
+  corpus: NativeCorpus,
+  readResource: BundleResourceReader = filesystemResourceReader(corpus),
+): BundleRecord[] {
+  assertSupportedRecordContract(corpus.manifest.record_contract, corpus.entry.manifest);
+  const extensions = new Set(
+    corpus.resources.records.map((path) =>
+      path.endsWith(".writ")
+        ? "writ"
+        : path.endsWith(".yaml") || path.endsWith(".yml")
+          ? "yaml"
+          : "unsupported",
+    ),
+  );
+  if (extensions.has("unsupported") || extensions.size !== 1) {
+    throw new Error(
+      `${corpus.entry.corpus_id}: record locations must use one supported canonical representation`,
+    );
+  }
+  const projected = extensions.has("writ")
+    ? projectWritRecords(corpus, sourceRegistryForCorpus(corpus, readResource), readResource)
+    : projectCompatibilityRecords(corpus, readResource);
+  const counts = corpus.manifest.record_counts;
+  const expected =
+    Number(counts.claims ?? 0) +
+    Number(counts.entities ?? 0) +
+    Number(counts.legal_policy_records ?? 0) +
+    Number(counts.institutional_records ?? 0);
+  if (projected.length !== expected) {
+    throw new Error(
+      `${corpus.entry.corpus_id}: manifest declares ${expected} records, exported ${projected.length}`,
+    );
+  }
+  return projected;
+}
+
 export function projectCanonicalObjects(repository: NativeRepository): {
   readonly records: readonly BundleRecord[];
   readonly recordLinks: readonly BundleRecordLink[];
@@ -659,39 +756,9 @@ export function projectCanonicalObjects(repository: NativeRepository): {
   for (const corpus of corpora) {
     assertSupportedRecordContract(corpus.manifest.record_contract, corpus.entry.manifest);
   }
-  const records = corpora.flatMap((corpus) => {
-    const extensions = new Set(
-      corpus.resources.records.map((path) =>
-        path.endsWith(".writ")
-          ? "writ"
-          : path.endsWith(".yaml") || path.endsWith(".yml")
-            ? "yaml"
-            : "unsupported",
-      ),
-    );
-    if (extensions.has("unsupported") || extensions.size !== 1) {
-      throw new Error(
-        `${corpus.entry.corpus_id}: record locations must use one supported canonical representation`,
-      );
-    }
-    const projected = extensions.has("writ")
-      ? projectWritRecords(corpus, sourceRegistryForCorpus(corpus))
-      : projectCompatibilityRecords(corpus);
-    const counts = corpus.manifest.record_counts;
-    const expected =
-      Number(counts.claims ?? 0) +
-      Number(counts.entities ?? 0) +
-      Number(counts.legal_policy_records ?? 0) +
-      Number(counts.institutional_records ?? 0);
-    if (projected.length !== expected) {
-      throw new Error(
-        `${corpus.entry.corpus_id}: manifest declares ${expected} records, exported ${projected.length}`,
-      );
-    }
-    return projected;
-  });
-  const recordLinks = corpora.flatMap(projectRecordLinks);
-  const recordJudgments = corpora.flatMap(projectJudgments);
+  const records = corpora.flatMap((corpus) => projectCorpusRecords(corpus));
+  const recordLinks = corpora.flatMap((corpus) => projectRecordLinks(corpus));
+  const recordJudgments = corpora.flatMap((corpus) => projectJudgments(corpus));
   for (const corpus of corpora) {
     const expectedLinks = Number(corpus.manifest.record_counts.record_links ?? 0);
     const expectedJudgments = Number(corpus.manifest.record_counts.disposition_judgments ?? 0);
@@ -707,17 +774,6 @@ export function projectCanonicalObjects(repository: NativeRepository): {
       );
     }
   }
-  assertUnique(
-    records.map((item) => item.recordKey),
-    "record key",
-  );
-  assertUnique(
-    recordLinks.map((item) => item.linkKey),
-    "record-link key",
-  );
-  assertUnique(
-    recordJudgments.map((item) => item.judgmentKey),
-    "judgment key",
-  );
+  assertUniqueCanonicalObjectKeys({ records, recordLinks, recordJudgments });
   return { records, recordLinks, recordJudgments };
 }

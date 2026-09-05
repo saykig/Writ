@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { validate } from "../src/index.js";
+import { UnsupportedSchemaVersionError, validate, validateVersion } from "../src/index.js";
 
 const hash = `sha256:${"a".repeat(64)}`;
 const base = {
@@ -177,6 +177,15 @@ describe("legal-policy record schema", () => {
 });
 
 describe("institutional record schema", () => {
+  test("explicit version validation rejects unsupported versions instead of using current", () => {
+    expect(validateVersion("institutional-record", atomicFunction, "0.2.0").valid).toBe(true);
+    for (const version of ["", "0.2.1", "9.9.9"]) {
+      expect(() => validateVersion("institutional-record", atomicFunction, version)).toThrow(
+        UnsupportedSchemaVersionError,
+      );
+    }
+  });
+
   test("valid NIST-shaped record with unknown capacity passes", () =>
     expect(validate("institutional-record", institutional).valid).toBe(true));
   test("the extension constrains family and inherits the base contract", () => {
