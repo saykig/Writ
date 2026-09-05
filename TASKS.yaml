@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: TRACK-B-HISTORICAL-JUDGMENT-TARGET-SCOPE-001
     title: Scope historical judgment targets to their governing record migration
-    status: in_progress
+    status: review
     dependencies:
       - TRACK-B-CROSS-LAYER-CONSISTENCY-001
     baseline_commit: d6bf03349d578d295549cf95dbd1dde23e47efd0
