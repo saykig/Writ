@@ -39,13 +39,7 @@ import {
 } from "../src/verified-engine-source.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const CASE_PATH = join(
-  ROOT,
-  "examples",
-  "decision-cases",
-  "failure-choice",
-  "case.json",
-);
+const CASE_PATH = join(ROOT, "examples", "decision-cases", "failure-choice", "case.json");
 const CASE_BYTES = readFileSync(CASE_PATH);
 type DefaultExport<T> = T extends { default: infer D } ? D : T;
 const Ajv2020 = ((_Ajv2020 as { default?: unknown }).default ?? _Ajv2020) as DefaultExport<
