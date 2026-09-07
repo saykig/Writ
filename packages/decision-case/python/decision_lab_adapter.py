@@ -37,6 +37,18 @@ def _unavailable(reason: str) -> int:
     return 69
 
 
+def _verify_repository_module_origins(source_root: Path) -> None:
+    for name, module in sys.modules.items():
+        if name != "writ_decision_lab" and not name.startswith("writ_decision_lab."):
+            continue
+        origin = getattr(module, "__file__", None)
+        if not isinstance(origin, str):
+            raise RuntimeError("repository_module_origin_unavailable")
+        resolved = Path(origin).resolve(strict=True)
+        if resolved.suffix != ".py" or not resolved.is_relative_to(source_root):
+            raise RuntimeError("repository_module_origin_outside_verified_source")
+
+
 def main() -> int:
     if len(sys.argv) != 3 or sys.argv[1] not in {"solve", "check"}:
         raise ValueError("unsupported_adapter_command")
@@ -47,8 +59,8 @@ def main() -> int:
     source_root = Path(sys.argv[2]).resolve(strict=True)
     if not source_root.is_dir():
         return _unavailable("pinned_source_root_unavailable")
-    # The caller hashes the complete repository-owned import closure before launch. Isolated mode
-    # ignores ambient PYTHONPATH/user-site settings; this exact verified source is inserted by code.
+    # The caller constructs this private source-only tree from the exact bytes it hashed. Isolated
+    # mode ignores ambient import paths; repository module origins are checked after import.
     sys.path.insert(0, str(source_root))
     payload = json.loads(sys.stdin.buffer.read().decode("utf-8"))
     problem = _decode(payload.get("problem"), "problem")
@@ -61,6 +73,7 @@ def main() -> int:
             return _unavailable("pinned_solver_import_unavailable")
         if scipy_version != "1.17.0":
             return _unavailable(f"unsupported_scipy_runtime:{scipy_version}")
+        _verify_repository_module_origins(source_root)
         _write(produce(problem, query))
         return 0
 
@@ -68,6 +81,7 @@ def main() -> int:
         from writ_decision_lab.build2.checker import check
     except ImportError:
         return _unavailable("pinned_checker_import_unavailable")
+    _verify_repository_module_origins(source_root)
     candidate = json.loads(_decode(payload.get("candidate_result"), "candidate_result").decode("utf-8"))
     checked = check(candidate, problem, query)
     _write(

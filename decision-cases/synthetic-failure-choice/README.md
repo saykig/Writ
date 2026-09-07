@@ -29,10 +29,13 @@ bun packages/decision-case/bin/writ-decision-case.ts run \
   --python /path/to/python3.13 --out /tmp/revision-0.execution.json
 ```
 
-The runner verifies the complete repository-owned engine import closure, invokes a fixed Writ-owned adapter, obtains a
-candidate, and invokes the upstream exact checker separately. A recipient must still call
-`consume`, which reopens the portable case and freshly checks the candidate again. Neither a stored
-status nor the prior check authorizes reuse.
+The runner verifies the complete repository-owned engine import closure, copies those exact verified
+source buffers into a private source-only snapshot, and invokes a fixed Writ-owned adapter from that
+snapshot. Caller caches and extra files are not copied, repository module origins must remain inside
+the snapshot, and the snapshot is removed after each invocation. The adapter obtains a candidate and
+invokes the upstream exact checker separately. A recipient must still call `consume`, which reopens
+the portable case and freshly checks the candidate again. Neither a stored status nor the prior check
+authorizes reuse.
 
 Run the mandatory real-engine acceptance suite with the same prerequisites:
 

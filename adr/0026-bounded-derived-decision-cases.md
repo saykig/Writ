@@ -63,15 +63,20 @@ canonical JSON profile is unchanged; raw mathematical bytes and identifiers are 
 its number or Unicode normalization rules.
 
 Only the explicitly invoked runner owns process execution. It verifies the complete
-repository-owned Python import closure used by the pinned adapter, starts the fixed bridge in Python
-isolated mode, and verifies the declared CPython implementation and major/minor before inserting the
-verified source path. It obtains an untrusted candidate through the upstream producer and invokes the
-upstream exact checker separately against independently supplied intended bytes. A recipient invokes
-the checker again after reload. The interpreter, standard library, OS and installed SciPy
-distribution remain trusted prerequisites; this boundary does not claim to sandbox an arbitrary
-trusted executable. Missing backends, pin drift, malformed candidates, absent/invalid certificates,
-unsupported semantics or operations, stale subjects, and unsupported uses fail closed. An upstream
-`unresolved` stays non-functional and is not translated into incompatibility or model dependence.
+repository-owned Python import closure used by the pinned adapter and copies the same verified source
+buffers into a private source-only execution snapshot. The snapshot contains only the allowlisted
+`.py` files and their package layout, not caller caches or neighboring files. The runner starts the
+fixed bridge in Python isolated, no-bytecode mode; the bridge verifies the declared CPython
+implementation and major/minor and requires every loaded `writ_decision_lab` module origin to be a
+source file inside that snapshot. The runner removes the snapshot on success or failure without
+mutating the supplied engine directory. It obtains an untrusted candidate through the upstream
+producer and invokes the upstream exact checker separately against independently supplied intended
+bytes. A recipient invokes the checker again after reload. The interpreter, standard library, OS and
+installed SciPy distribution remain trusted prerequisites; this boundary does not claim to sandbox
+an arbitrary trusted executable. Missing backends, pin drift, malformed candidates, absent/invalid
+certificates, unsupported semantics or operations, stale subjects, and unsupported uses fail closed.
+An upstream `unresolved` stays non-functional and is not translated into incompatibility or model
+dependence.
 
 Every execution keeps three meanings separate:
 

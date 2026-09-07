@@ -4,11 +4,14 @@ import {
   cpSync,
   existsSync,
   mkdtempSync,
+  mkdirSync,
   readFileSync,
+  readdirSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { sha256Bytes } from "@writ/provenance";
@@ -29,6 +32,11 @@ import {
   type DecisionCase,
   type DecisionExecution,
 } from "../src/index.js";
+import {
+  createVerifiedEngineSourceSnapshot,
+  PINNED_ENGINE_SOURCE_PATHS,
+  VERIFIED_ENGINE_SNAPSHOT_PREFIX,
+} from "../src/verified-engine-source.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CASE_PATH = join(
@@ -59,6 +67,32 @@ function expectCode(action: () => unknown, code: DecisionCaseError["code"]): voi
     expect(error).toBeInstanceOf(DecisionCaseError);
     expect((error as DecisionCaseError).code).toBe(code);
   }
+}
+
+function relativeTree(root: string): string[] {
+  const entries: string[] = [];
+  const visit = (directory: string, prefix: string): void => {
+    for (const entry of readdirSync(directory, { withFileTypes: true }).sort((left, right) =>
+      left.name.localeCompare(right.name),
+    )) {
+      const relative = prefix.length === 0 ? entry.name : posix.join(prefix, entry.name);
+      const absolute = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        entries.push(`directory:${relative}`);
+        visit(absolute, relative);
+      } else {
+        entries.push(`file:${relative}:${sha256Bytes(readFileSync(absolute))}`);
+      }
+    }
+  };
+  visit(root, "");
+  return entries.sort();
+}
+
+function activeVerifiedSourceSnapshots(): string[] {
+  return readdirSync(tmpdir())
+    .filter((name) => name.startsWith(VERIFIED_ENGINE_SNAPSHOT_PREFIX))
+    .sort();
 }
 
 describe("portable decision case", () => {
@@ -449,6 +483,82 @@ if (integrationRequired && (engineRoot === undefined || pythonExecutable === und
 const integration = engineRoot !== undefined && pythonExecutable !== undefined ? test : test.skip;
 
 describe("pinned Decision Lab integration", () => {
+  integration("executes only a temporary snapshot of the verified source bytes", () => {
+    const caseFile = openDecisionCase(CASE_BYTES);
+    const artifactRoot = mkdtempSync(join(tmpdir(), "writ-engine-artifacts-"));
+    try {
+      cpSync(join(engineRoot!, "src"), join(artifactRoot, "src"), { recursive: true });
+      const packageRoot = join(artifactRoot, "src", "writ_decision_lab");
+      rmSync(join(packageRoot, "__pycache__"), { recursive: true, force: true });
+      rmSync(join(packageRoot, "build2", "__pycache__"), { recursive: true, force: true });
+      mkdirSync(join(packageRoot, "__pycache__"), { recursive: true });
+      mkdirSync(join(packageRoot, "build2", "__pycache__"), { recursive: true });
+      writeFileSync(join(packageRoot, "__pycache__", "unused.cpython-313.pyc"), "inert\n");
+      writeFileSync(join(packageRoot, "unrelated.py"), "UNUSED = True\n");
+      writeFileSync(join(packageRoot, "unrelated.cache"), "inert\n");
+      const externalTree = relativeTree(artifactRoot);
+
+      const inspectedSnapshot = createVerifiedEngineSourceSnapshot(artifactRoot);
+      const inspectedRoot = inspectedSnapshot.root;
+      try {
+        const stagedTree = relativeTree(inspectedRoot);
+        const stagedFiles = stagedTree.filter((entry) => entry.startsWith("file:"));
+        const expectedFiles = PINNED_ENGINE_SOURCE_PATHS.map(
+          (relative) =>
+            `file:${relative}:${sha256Bytes(readFileSync(join(artifactRoot, relative)))}`,
+        ).sort();
+        expect(stagedFiles).toEqual(expectedFiles);
+        expect(stagedTree.filter((entry) => entry.startsWith("directory:"))).toEqual([
+          "directory:src",
+          "directory:src/writ_decision_lab",
+          "directory:src/writ_decision_lab/build2",
+        ]);
+        expect(stagedTree.some((entry) => entry.includes("__pycache__"))).toBe(false);
+        expect(stagedTree.some((entry) => entry.includes("unrelated"))).toBe(false);
+      } finally {
+        inspectedSnapshot.dispose();
+      }
+      expect(existsSync(inspectedRoot)).toBe(false);
+
+      const snapshotsBeforeSuccess = activeVerifiedSourceSnapshots();
+      const execution = runDecisionCase(caseFile, "revision-0", {
+        engineRoot: artifactRoot,
+        pythonExecutable: pythonExecutable!,
+      });
+      expect(execution.mathematical_check.result.status).toBe("uniformly_strictly_optimal");
+      expect(activeVerifiedSourceSnapshots()).toEqual(snapshotsBeforeSuccess);
+      expect(relativeTree(artifactRoot)).toEqual(externalTree);
+
+      const unsupportedRuntime = Bun.spawnSync(
+        [
+          "/usr/bin/python3",
+          "-I",
+          "-c",
+          "import platform,sys;print(f'{platform.python_implementation()}:{sys.version_info.major}.{sys.version_info.minor}')",
+        ],
+        { stdout: "pipe", stderr: "pipe" },
+      );
+      expect(unsupportedRuntime.exitCode).toBe(0);
+      expect(new TextDecoder().decode(unsupportedRuntime.stdout).trim()).not.toBe("CPython:3.13");
+      const snapshotsBeforeFailure = activeVerifiedSourceSnapshots();
+      try {
+        runDecisionCase(caseFile, "revision-0", {
+          engineRoot: artifactRoot,
+          pythonExecutable: "/usr/bin/python3",
+        });
+        throw new Error("Expected unsupported Python runtime rejection.");
+      } catch (error) {
+        expect(error).toBeInstanceOf(DecisionCaseError);
+        expect((error as DecisionCaseError).code).toBe("DECISION_CASE_ENGINE_UNAVAILABLE");
+        expect((error as Error).message).toContain("unsupported_python_runtime:");
+      }
+      expect(activeVerifiedSourceSnapshots()).toEqual(snapshotsBeforeFailure);
+      expect(relativeTree(artifactRoot)).toEqual(externalTree);
+    } finally {
+      rmSync(artifactRoot, { recursive: true, force: true });
+    }
+  });
+
   integration(
     "checks exact outcomes, stale reuse, forged evidence, and relocated consumption",
     () => {
@@ -653,70 +763,80 @@ describe("pinned Decision Lab integration", () => {
       }
 
       const parentDriftRoot = mkdtempSync(join(tmpdir(), "writ-parent-drift-"));
-      cpSync(join(engineRoot!, "src"), join(parentDriftRoot, "src"), { recursive: true });
-      const sentinel = join(parentDriftRoot, "parent-initializer-executed");
-      appendFileSync(
-        join(parentDriftRoot, "src", "writ_decision_lab", "__init__.py"),
-        `\nopen(${JSON.stringify(sentinel)}, "w", encoding="utf-8").write("executed")\n`,
-        "utf8",
-      );
-      expectCode(
-        () =>
-          runDecisionCase(caseFile, "revision-0", {
-            engineRoot: parentDriftRoot,
-            pythonExecutable: pythonExecutable!,
-          }),
-        "DECISION_CASE_ENGINE_PIN_MISMATCH",
-      );
-      expect(existsSync(sentinel)).toBe(false);
+      try {
+        cpSync(join(engineRoot!, "src"), join(parentDriftRoot, "src"), { recursive: true });
+        appendFileSync(
+          join(parentDriftRoot, "src", "writ_decision_lab", "__init__.py"),
+          "\n# harmless pin-drift marker\n",
+          "utf8",
+        );
+        expectCode(
+          () =>
+            runDecisionCase(caseFile, "revision-0", {
+              engineRoot: parentDriftRoot,
+              pythonExecutable: pythonExecutable!,
+            }),
+          "DECISION_CASE_ENGINE_PIN_MISMATCH",
+        );
+      } finally {
+        rmSync(parentDriftRoot, { recursive: true, force: true });
+      }
 
       const build2DriftRoot = mkdtempSync(join(tmpdir(), "writ-build2-drift-"));
-      cpSync(join(engineRoot!, "src"), join(build2DriftRoot, "src"), { recursive: true });
-      appendFileSync(
-        join(build2DriftRoot, "src", "writ_decision_lab", "build2", "checker.py"),
-        "\n# harmless pin-drift marker\n",
-        "utf8",
-      );
-      expectCode(
-        () =>
-          runDecisionCase(caseFile, "revision-0", {
-            engineRoot: build2DriftRoot,
-            pythonExecutable: pythonExecutable!,
-          }),
-        "DECISION_CASE_ENGINE_PIN_MISMATCH",
-      );
+      try {
+        cpSync(join(engineRoot!, "src"), join(build2DriftRoot, "src"), { recursive: true });
+        appendFileSync(
+          join(build2DriftRoot, "src", "writ_decision_lab", "build2", "checker.py"),
+          "\n# harmless pin-drift marker\n",
+          "utf8",
+        );
+        expectCode(
+          () =>
+            runDecisionCase(caseFile, "revision-0", {
+              engineRoot: build2DriftRoot,
+              pythonExecutable: pythonExecutable!,
+            }),
+          "DECISION_CASE_ENGINE_PIN_MISMATCH",
+        );
+      } finally {
+        rmSync(build2DriftRoot, { recursive: true, force: true });
+      }
 
       const relocated = mkdtempSync(join(tmpdir(), "writ-recipient-"));
-      const relocatedCase = join(relocated, "case.json");
-      const relocatedExecution = join(relocated, "execution.json");
-      writeFileSync(relocatedCase, exportDecisionCase(caseFile));
-      writeFileSync(relocatedExecution, executionBytes(executions.get("revision-1")!));
-      const cli = join(ROOT, "packages", "decision-case", "bin", "writ-decision-case.ts");
-      const consumed = Bun.spawnSync(
-        [
-          process.execPath,
-          cli,
-          "consume",
-          "--case",
-          relocatedCase,
-          "--execution",
-          relocatedExecution,
-          "--analysis",
-          "revision-1",
-          "--use",
-          "static_expected_loss_decision",
-          "--engine-root",
-          engineRoot!,
-          "--python",
-          pythonExecutable!,
-        ],
-        { cwd: relocated, stdout: "pipe", stderr: "pipe" },
-      );
-      expect(consumed.exitCode).toBe(0);
-      expect(new TextDecoder().decode(consumed.stdout)).toContain(
-        '"mathematical_status": "model_dependent"',
-      );
-      expect(new TextDecoder().decode(consumed.stdout)).toContain('"human_review": {');
+      try {
+        const relocatedCase = join(relocated, "case.json");
+        const relocatedExecution = join(relocated, "execution.json");
+        writeFileSync(relocatedCase, exportDecisionCase(caseFile));
+        writeFileSync(relocatedExecution, executionBytes(executions.get("revision-1")!));
+        const cli = join(ROOT, "packages", "decision-case", "bin", "writ-decision-case.ts");
+        const consumed = Bun.spawnSync(
+          [
+            process.execPath,
+            cli,
+            "consume",
+            "--case",
+            relocatedCase,
+            "--execution",
+            relocatedExecution,
+            "--analysis",
+            "revision-1",
+            "--use",
+            "static_expected_loss_decision",
+            "--engine-root",
+            engineRoot!,
+            "--python",
+            pythonExecutable!,
+          ],
+          { cwd: relocated, stdout: "pipe", stderr: "pipe" },
+        );
+        expect(consumed.exitCode).toBe(0);
+        expect(new TextDecoder().decode(consumed.stdout)).toContain(
+          '"mathematical_status": "model_dependent"',
+        );
+        expect(new TextDecoder().decode(consumed.stdout)).toContain('"human_review": {');
+      } finally {
+        rmSync(relocated, { recursive: true, force: true });
+      }
 
       const parsed = parseExecution(executionBytes(executions.get("revision-2")!));
       expect(Object.isFrozen(parsed)).toBe(true);

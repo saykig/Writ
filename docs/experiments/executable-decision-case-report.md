@@ -95,25 +95,42 @@ case title remains harmless. A human-disposition-only advance does not invalidat
 theorem; consumption returns the current declared disposition while still freshly checking the
 candidate.
 
-Before launching Python, Writ now verifies all 16 repository-owned modules in the actual import
-closure: eight Build 2 files plus the parent initializer and the seven Build 1 modules it imports.
-The fixed bridge runs with Python isolated mode, inserts only the verified source root, and checks
-the CPython implementation and 3.13 major/minor. A disposable-copy test changed the parent
-initializer to write a sentinel; Writ returned `DECISION_CASE_ENGINE_PIN_MISMATCH` and the sentinel
-was never created. A separate Build 2 checker drift was also rejected. The remaining trusted runtime
-boundary is CPython and its standard library, the OS/process environment, and the installed
-`scipy==1.17.0` distribution used for candidate search; checking itself remains exact and does not
-need SciPy.
+Before launching Python, Writ verifies all 16 repository-owned modules in the actual import closure:
+eight Build 2 files plus the parent initializer and the seven Build 1 modules it imports. The
+verified-source repair began from PR head
+`6c897dd3fa457e2a33150920f3f19a5c65212ca9`. It reads and hashes each allowlisted file once, then
+writes those same verified buffers into a private source-only execution snapshot. The original
+caller directory is no longer an import root. The snapshot contains only the 16 `.py` files and
+their three required package directories; unrelated source, cache-named files, `.pyc` files and
+`__pycache__` directories are not copied. Python runs with `-I -B`, and the bridge requires every
+loaded `writ_decision_lab` module origin to be a `.py` file inside the snapshot. The runner removes
+the snapshot on success or failure without mutating the supplied engine directory.
+
+A full relocated copy of the pinned engine source supplied the integration fixture. Its added inert
+cache directory, unrelated cache file and unrelated Python module were absent from an inspected
+snapshot, while all 16 staged source hashes matched their caller inputs. The public runner returned
+the unchanged revision-0 `uniformly_strictly_optimal` result and passed the runtime-origin assertion.
+The fixture tree was byte- and path-identical before and after both the successful call and a
+deliberately unsupported-runtime call, and no execution snapshot remained after either call. Harmless
+comment-only drift in the parent initializer and Build 2 checker still returned
+`DECISION_CASE_ENGINE_PIN_MISMATCH` before process execution. CPython 3.9.6 at `/usr/bin/python3`
+still returned `DECISION_CASE_ENGINE_UNAVAILABLE` with `unsupported_python_runtime`; no alternate
+payload or executable cache was constructed for this reproducibility repair.
+
+The remaining trusted runtime boundary is the selected CPython executable and its standard library,
+the OS/process environment, and the installed `scipy==1.17.0` distribution used for candidate
+search; checking itself remains exact and does not need SciPy.
 
 `bun run test:decision-integration` is the explicit no-skip acceptance command. With both
 prerequisites absent it exited 1 with a named prerequisite error (0 passed, 1 failed, 1 loader
-error). Against the pinned source and `/tmp` virtual environment it ran on CPython 3.13.15 with
-`scipy==1.17.0`: 15 passed, 0 failed, 132 expectations. That run included all four mathematical
-subjects, relocated recipient checking, stale inputs, changed support/mapping/unit, false and missing
-certificates, both pin-drift controls, unsupported use, and a nonfunctional unresolved result. The
-local adapter boundary separately rejected `/usr/bin/python3` (CPython 3.9) with
+error). Against the pinned source and disposable local virtual environment it ran on CPython 3.13.15
+with `scipy==1.17.0`: 16 passed, 0 failed, 146 expectations. That run included verified-source
+staging and cleanup plus all four mathematical subjects, relocated recipient checking, stale inputs,
+changed support/mapping/unit, false and missing certificates, both pin-drift controls, unsupported
+use, and a nonfunctional unresolved result. The local adapter boundary separately rejected
+`/usr/bin/python3` (CPython 3.9.6) with
 `DECISION_CASE_ENGINE_UNAVAILABLE` and `unsupported_python_runtime:CPython:3.9`. The offline package
-run remained explicit: 14 passed, 0 failed, 1 integration skip, 88 expectations. The same pinned
+run remained explicit: 14 passed, 0 failed, 2 integration skips, 88 expectations. The same pinned
 environment reran the direct baseline for revisions 0–2 and reproduced the original three statuses.
 No checked-in execution artifact was rewritten.
 

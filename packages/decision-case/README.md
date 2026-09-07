@@ -12,8 +12,12 @@ The explicitly invoked runner is the only process-owning component. It accepts a
 root for Decision Lab commit `7215b53096bc487756f94f4ca87390716a14f2ee`, verifies the exact
 SHA-256 of the complete repository-owned Python import closure used by the Build 2 interface, and
 calls a fixed Writ-owned Python bridge in isolated mode. The bridge verifies CPython 3.13 before
-inserting the verified source path. The bridge first obtains an untrusted candidate with `produce`;
-a separate invocation of the upstream exact `check` must succeed before Writ records a mathematical
+importing the package. For each call, Writ copies the exact buffers that passed those hashes into a
+private source-only snapshot and imports from that snapshot rather than the supplied directory.
+Caller caches, extra modules and other neighboring files are excluded; Python receives `-B`, loaded
+`writ_decision_lab` module origins must resolve to `.py` files inside the snapshot, and the snapshot
+is removed on success or failure. The bridge first obtains an untrusted candidate with `produce`; a
+separate invocation of the upstream exact `check` must succeed before Writ records a mathematical
 check. `consumeDecision` checks the candidate yet again against the independently reopened intended
 problem/query bytes. The interpreter, its standard library, OS and installed `scipy==1.17.0`
 distribution remain trusted runtime prerequisites; this is not an arbitrary-executable sandbox.

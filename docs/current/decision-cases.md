@@ -27,9 +27,14 @@ The first adapter is closed to Decision Lab commit
 `finite-linear-uncertainty.v1`, CPython 3.13 and `scipy==1.17.0`. Its only enabled operations are
 `decision` and `compatibility`. Unknown versions and operations are errors, not aliases to a nearby
 calculation. Before process launch, Writ hashes the complete repository-owned Python import closure
-that the adapter executes. Python runs in isolated mode; the fixed bridge verifies the CPython
-implementation and 3.13 major/minor before inserting the verified source root. The interpreter,
-standard library, OS and installed SciPy distribution remain trusted prerequisites.
+that the adapter executes, then copies those same verified buffers into a private source-only
+snapshot. Only the allowlisted `.py` files and required package directories enter that snapshot;
+caller caches, neighboring modules and other engine-directory artifacts are not copied. Python runs
+from the snapshot in isolated, no-bytecode mode. The fixed bridge verifies the CPython implementation
+and 3.13 major/minor and confirms that every loaded `writ_decision_lab` module origin is a `.py` file
+inside the snapshot. Each invocation removes its snapshot on success or failure without mutating the
+supplied engine directory. The interpreter, standard library, OS and installed SciPy distribution
+remain trusted prerequisites.
 
 ## Identity and checking
 
