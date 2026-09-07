@@ -21,6 +21,16 @@ source from a label or date, infer numbers from prose, infer statistical depende
 or treat a stored checked flag as authoritative. Derived inspections and revision impacts are
 reconstructed rather than serialized as a second history.
 
-The comparison-base implementation deliberately raises `SHARED_ANALYSIS_NOT_IMPLEMENTED`; its
-fixtures and acceptance tests define observable candidate behavior before either implementation
-lane begins.
+Recipient replay uses the exact stored candidate and the pinned checker; it does not rerun the
+producer and substitute a new result. Archives must use the authoritative JSON Schema and the
+deterministic exact-JSON byte representation. The local lineage index is reconstructed from native
+dependencies and is never portable authority.
+
+The public recipient command is:
+
+```bash
+bun packages/shared-analysis/bin/writ-shared-analysis.ts replay \
+  --archive /path/to/shared-analysis.json \
+  --engine-root /path/to/pinned/writ-decision-lab \
+  --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
+```

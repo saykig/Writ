@@ -20,6 +20,7 @@ TASKS.yaml
 
 # Portable decision-case subjects and exact engine artifacts retain raw byte identities.
 examples/decision-cases/**/case.json
+examples/decision-cases/**/*.case.json
 examples/decision-cases/**/executions/*.json
 
 # Generated embed outputs (regenerated on build)

@@ -57,6 +57,12 @@ Items requiring particular attention when distributing Writ or bundled artifacts
   or an Artifex commercial license;
 - JavaScript packages recorded in `bun.lock` retain their upstream licenses and notices.
 
+`packages/shared-analysis/src/lineage-index.ts` adapts the content-conflict, deterministic traversal,
+complete path enumeration, and cycle-detection mechanics from Aldera's `src/lineage-graph.ts` at
+commit `9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4`. Aldera is licensed under the Apache License 2.0.
+Writ's adaptation is narrower: it indexes scoped decision-case dependencies and deliberately omits
+Aldera's dataset, entity, activity, and store authority model.
+
 These dependencies do not change the license of original Writ source files, but a distributed
 combined application may carry additional source, notice, attribution, or commercial-license
 obligations. Dependency licenses must be reviewed again against the resolved versions before a

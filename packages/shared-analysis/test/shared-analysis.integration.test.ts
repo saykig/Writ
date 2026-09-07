@@ -179,6 +179,18 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
   try {
     const archivePath = join(recipientRoot, "shared-analysis.json");
     writeFileSync(archivePath, archive);
+    const checkOnlyPython = join(recipientRoot, "check-only-python");
+    writeFileSync(
+      checkOnlyPython,
+      '#!/bin/sh\nif [ "$4" = "solve" ]; then echo "replay attempted solve" >&2; exit 97; fi\nexec "$WRIT_DECISION_LAB_PYTHON" "$@"\n',
+      { mode: 0o700 },
+    );
+    expect(
+      replaySharedAnalysis(archive, {
+        engineRoot: engineRoot!,
+        pythonExecutable: checkOnlyPython,
+      }).freshly_checked,
+    ).toEqual(replay.freshly_checked);
     const result = Bun.spawnSync(
       [
         process.execPath,

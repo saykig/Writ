@@ -153,6 +153,24 @@ describe("shared-analysis behavioral contract", () => {
       }),
       context_sha256: sha256({ scope: "synthetic shared failure decision" }),
     };
+    expectCode(
+      () => reassessApplicability(revised, { ...assessment, source_bindings: [] }),
+      "SHARED_ANALYSIS_REASSESSMENT_STALE",
+    );
+    expectCode(
+      () =>
+        reassessApplicability(revised, {
+          ...assessment,
+          source_bindings: [
+            {
+              source_id: "writ.source.not-supplied",
+              document_version_id: "not-supplied.v1",
+              sha256: `sha256:${"0".repeat(64)}`,
+            },
+          ],
+        }),
+      "SHARED_ANALYSIS_REFERENCE_UNRESOLVED",
+    );
     const reassessed = reassessApplicability(revised, assessment);
     expect(reassessed.value.applicability_assessments).toContainEqual(assessment);
     expectCode(
@@ -302,5 +320,22 @@ describe("shared-analysis behavioral contract", () => {
     expect(json).not.toHaveProperty("graph");
     expect(json).not.toHaveProperty("revision_impacts");
     expect(json).not.toHaveProperty("shared_sources");
+
+    expectCode(
+      () => openSharedAnalysis(new TextEncoder().encode(`${new TextDecoder().decode(raw)}\n`)),
+      "SHARED_ANALYSIS_INVALID",
+    );
+    expectCode(
+      () => openSharedAnalysis(exactJsonBytes({ ...workspace.value, unexpected: true })),
+      "SHARED_ANALYSIS_INVALID",
+    );
+    expectCode(
+      () =>
+        inspectSharedAnalyses({
+          ...workspace,
+          archive_sha256: `sha256:${"0".repeat(64)}`,
+        }),
+      "SHARED_ANALYSIS_INVALID",
+    );
   });
 });

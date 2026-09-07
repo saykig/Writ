@@ -55,10 +55,12 @@ justify adoption for this bounded operation.
 ## Proposed decision
 
 Use a separate `@writ/shared-analysis` package and a versioned
-`shared-analysis-revision-v0.1.schema.json` portable archive. Select the smallest candidate that
-passes the frozen lifecycle contract; when the reuse-oriented candidate remains comparably small,
-prefer its separately tested deterministic lineage mechanism while declining its dataset/store
-semantics. Record the exact selected candidate in the implementation report before review.
+`shared-analysis-revision-v0.1.schema.json` portable archive. Use the native candidate's smaller
+public lifecycle and validation shape, together with the reuse candidate's separately tested
+deterministic lineage mechanism for declaration conflicts, complete lexical path enumeration, and
+cycle refusal. Decline Aldera's dataset/store authority model and the reuse candidate's larger
+parallel contract implementation. The implementation report records the exact common, candidate,
+and consolidated commits.
 
 The archive contains only exact imported case bytes, selected local analysis IDs, bounded inventory
 declarations, supplemental source bytes, explicit revision events, scope-bound applicability

@@ -89,15 +89,7 @@ export const betaImport = completeImport("beta");
 export const unaffectedImport: BundleImport = {
   bundle_id: "unaffected",
   case_bytes: new Uint8Array(
-    readFileSync(
-      join(
-        ROOT,
-        "examples",
-        "decision-cases",
-        "failure-choice",
-        "case.json",
-      ),
-    ),
+    readFileSync(join(ROOT, "examples", "decision-cases", "failure-choice", "case.json")),
   ),
   selected_analysis_ids: ["revision-0"],
   inventory: {

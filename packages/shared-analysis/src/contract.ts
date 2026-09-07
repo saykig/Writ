@@ -1,12 +1,15 @@
 import {
+  analysisBindingHash,
   analysisById,
   assessReuse,
   encodedBytes,
   exactJsonBytes,
   exactJsonKey,
   executionBytes,
+  mathematicalBytes,
   openDecisionCase,
   parseExecution,
+  recheckDecisionExecution,
   runDecisionCase,
   verifyEncodedBytes,
   type CaseSourceDocument,
@@ -38,6 +41,8 @@ import type {
   SourceIdentity,
 } from "./types.js";
 
+const MAX_ARCHIVE_BYTES = 8 * 1024 * 1024;
+
 function compare(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
 }
@@ -48,6 +53,10 @@ function deepFreeze<T>(value: T): T {
     for (const child of Object.values(value)) deepFreeze(child);
   }
   return value;
+}
+
+function bytesEqual(left: Uint8Array, right: Uint8Array): boolean {
+  return left.length === right.length && left.every((byte, index) => byte === right[index]);
 }
 
 function sourceIdentity(source: CaseSourceDocument): SourceIdentity {
@@ -89,6 +98,12 @@ function snapshot(value: SharedAnalysisArchive): LoadedSharedAnalysis {
   return deepFreeze({ value: deepFreeze(value), archive_sha256: sha256Bytes(bytes) });
 }
 
+function validatedSnapshot(value: SharedAnalysisArchive): LoadedSharedAnalysis {
+  const workspace = snapshot(value);
+  validateArchive(workspace);
+  return workspace;
+}
+
 function decodeCase(bundle: PortableBundleImport): LoadedDecisionCase {
   return openDecisionCase(verifyEncodedBytes(bundle.case_file, `${bundle.bundle_id}.case_file`));
 }
@@ -122,15 +137,44 @@ function analysisEntry(
 }
 
 function portableBundle(input: BundleImport): PortableBundleImport {
+  if (input.bundle_id.length === 0 || input.selected_analysis_ids.length === 0) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "Every bundle needs a non-empty ID and at least one selected analysis.",
+    );
+  }
   const caseFile = openDecisionCase(new Uint8Array(input.case_bytes));
-  for (const analysisId of input.selected_analysis_ids) analysisById(caseFile, analysisId);
+  const selectedAnalysisIds = [...input.selected_analysis_ids].sort(compare);
+  if (new Set(selectedAnalysisIds).size !== selectedAnalysisIds.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      `Bundle ${input.bundle_id} repeats a selected analysis.`,
+    );
+  }
+  for (const analysisId of selectedAnalysisIds) analysisById(caseFile, analysisId);
   for (const source of input.supplemental_sources ?? []) {
     verifyEncodedBytes(source, `${input.bundle_id}.supplemental_source`);
+  }
+  const routeIds = input.inventory.support_routes.map(({ route_id }) => route_id);
+  if (new Set(routeIds).size !== routeIds.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      `Bundle ${input.bundle_id} repeats a support route.`,
+    );
+  }
+  if (
+    new Set(input.inventory.unresolved_references).size !==
+    input.inventory.unresolved_references.length
+  ) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      `Bundle ${input.bundle_id} repeats an unresolved reference.`,
+    );
   }
   return {
     bundle_id: input.bundle_id,
     case_file: encodedBytes(new Uint8Array(input.case_bytes)),
-    selected_analysis_ids: [...input.selected_analysis_ids].sort(compare),
+    selected_analysis_ids: selectedAnalysisIds,
     inventory: {
       ...input.inventory,
       unresolved_references: [...input.inventory.unresolved_references].sort(compare),
@@ -151,8 +195,10 @@ function portableBundle(input: BundleImport): PortableBundleImport {
 
 function validateSources(bundles: readonly PortableBundleImport[]): void {
   const hashes = new Map<string, string>();
+  const routeOwners = new Map<string, string>();
   for (const bundle of bundles) {
     const caseFile = decodeCase(bundle);
+    const localSources = new Set<string>();
     for (const source of [...caseFile.value.source_documents, ...bundle.supplemental_sources]) {
       verifyEncodedBytes(source, `${bundle.bundle_id}.source`);
       const key = sourceVersionKey(source);
@@ -164,8 +210,60 @@ function validateSources(bundles: readonly PortableBundleImport[]): void {
         );
       }
       hashes.set(key, source.sha256);
+      localSources.add(sourceKey(sourceIdentity(source)));
+    }
+    for (const route of bundle.inventory.support_routes) {
+      const owner = routeOwners.get(route.route_id);
+      if (owner !== undefined && owner !== bundle.bundle_id) {
+        throw new SharedAnalysisError(
+          "SHARED_ANALYSIS_BUNDLE_CONFLICT",
+          `Support route ${route.route_id} is ambiguous across bundles ${owner} and ${bundle.bundle_id}.`,
+        );
+      }
+      routeOwners.set(route.route_id, bundle.bundle_id);
+      if (
+        route.premise_sources.length === 0 ||
+        route.premise_sources.some((source) => !localSources.has(sourceKey(source)))
+      ) {
+        throw new SharedAnalysisError(
+          "SHARED_ANALYSIS_REFERENCE_UNRESOLVED",
+          `Support route ${route.route_id} does not resolve every premise to exact bundle source bytes.`,
+        );
+      }
     }
   }
+}
+
+function validateBundles(bundles: readonly PortableBundleImport[]): void {
+  const ids = bundles.map(({ bundle_id }) => bundle_id);
+  if (new Set(ids).size !== ids.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_BUNDLE_CONFLICT",
+      "The archive repeats a bundle ID.",
+    );
+  }
+  if (ids.join("\0") !== [...ids].sort(compare).join("\0")) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "Bundles are not in deterministic lexical order.",
+    );
+  }
+  for (const bundle of bundles) {
+    const normalized = portableBundle({
+      bundle_id: bundle.bundle_id,
+      case_bytes: verifyEncodedBytes(bundle.case_file, `${bundle.bundle_id}.case_file`),
+      selected_analysis_ids: bundle.selected_analysis_ids,
+      inventory: bundle.inventory,
+      supplemental_sources: bundle.supplemental_sources,
+    });
+    if (exactJsonKey(normalized) !== exactJsonKey(bundle)) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_INVALID",
+        `Bundle ${bundle.bundle_id} is not in deterministic portable form.`,
+      );
+    }
+  }
+  validateSources(bundles);
 }
 
 /** Import exact native case bundles without promoting their local IDs to global identity. */
@@ -194,8 +292,8 @@ export function importSharedAnalyses(
   const bundles = [...byId.values()].sort((left, right) =>
     compare(left.bundle_id, right.bundle_id),
   );
-  validateSources(bundles);
-  return snapshot({
+  validateBundles(bundles);
+  return validatedSnapshot({
     schema_version: "0.1.0",
     archive_kind: "shared_analysis_revision",
     workspace_id: workspaceId,
@@ -223,8 +321,58 @@ function selected(workspace: LoadedSharedAnalysis): Array<{
   });
 }
 
+function baseSourceKeys(workspace: LoadedSharedAnalysis): Set<string> {
+  const keys = new Set<string>();
+  for (const bundle of workspace.value.bundles) {
+    const caseFile = decodeCase(bundle);
+    for (const source of [...caseFile.value.source_documents, ...bundle.supplemental_sources]) {
+      keys.add(sourceKey(sourceIdentity(source)));
+    }
+  }
+  return keys;
+}
+
+function authoritySourceKeys(workspace: LoadedSharedAnalysis): Set<string> {
+  const keys = new Set<string>();
+  const versions = new Map<string, string>();
+  const add = (source: CaseSourceDocument): void => {
+    verifyEncodedBytes(source, `${source.source_id}/${source.document_version_id}`);
+    const version = sourceVersionKey(source);
+    const prior = versions.get(version);
+    if (prior !== undefined && prior !== source.sha256) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_SOURCE_CONFLICT",
+        `Source ${source.source_id}/${source.document_version_id} has conflicting exact bytes.`,
+      );
+    }
+    versions.set(version, source.sha256);
+    keys.add(sourceKey(sourceIdentity(source)));
+  };
+  for (const bundle of workspace.value.bundles) {
+    const caseFile = decodeCase(bundle);
+    for (const source of [...caseFile.value.source_documents, ...bundle.supplemental_sources]) {
+      add(source);
+    }
+  }
+  for (const revision of workspace.value.revisions) {
+    for (const replacement of revision.source_replacements) {
+      add(replacement.to);
+    }
+    for (const transition of revision.transitions) {
+      const successor = openDecisionCase(
+        verifyEncodedBytes(transition.successor_case, `${revision.revision_id}.successor_case`),
+      );
+      for (const source of successor.value.source_documents) {
+        add(source);
+      }
+    }
+  }
+  return keys;
+}
+
 /** Derive shared source identity and model disagreement from the portable evidence. */
 export function inspectSharedAnalyses(workspace: LoadedSharedAnalysis): SharedAnalysisInspection {
+  assertLoaded(workspace);
   const entries = selected(workspace);
   const sourceBundles = new Map<string, { identity: SourceIdentity; bundles: Set<string> }>();
   for (const entry of entries) {
@@ -310,9 +458,28 @@ function validateRevision(workspace: LoadedSharedAnalysis, revision: RevisionDec
       "Revision ID must be non-empty.",
     );
   }
+  const baseSources = baseSourceKeys(workspace);
+  const replacements = new Set<string>();
   for (const replacement of revision.source_replacements) {
     verifyEncodedBytes(replacement.to, `${revision.revision_id}.source_replacement`);
+    const from = sourceKey(replacement.from);
+    if (!baseSources.has(from) || replacements.has(from)) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Revision ${revision.revision_id} repeats or cannot resolve an exact source replacement.`,
+      );
+    }
+    replacements.add(from);
   }
+  for (const source of revision.withdrawn_sources) {
+    if (!baseSources.has(sourceKey(source))) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Revision ${revision.revision_id} withdraws unavailable exact source bytes.`,
+      );
+    }
+  }
+  const withdrawnDependencies = new Set<string>();
   for (const dependency of revision.withdrawn_dependencies) {
     const entry = analysisEntry(workspace, dependency);
     if (
@@ -325,6 +492,25 @@ function validateRevision(workspace: LoadedSharedAnalysis, revision: RevisionDec
         `Revision names missing dependency ${dependency.dependency_id}.`,
       );
     }
+    const key = dependencyKey(dependency);
+    if (withdrawnDependencies.has(key)) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Revision repeats withdrawn dependency ${dependency.dependency_id}.`,
+      );
+    }
+    withdrawnDependencies.add(key);
+  }
+  const routes = new Set(
+    workspace.value.bundles.flatMap(({ inventory }) =>
+      inventory.support_routes.map(({ route_id }) => route_id),
+    ),
+  );
+  if (revision.withdrawn_routes.some((routeId) => !routes.has(routeId))) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      `Revision ${revision.revision_id} withdraws an unknown support route.`,
+    );
   }
   const transitions = new Set<string>();
   for (const transition of revision.transitions) {
@@ -343,6 +529,15 @@ function validateRevision(workspace: LoadedSharedAnalysis, revision: RevisionDec
       verifyEncodedBytes(transition.successor_case, `${revision.revision_id}.successor_case`),
     );
     analysisById(next, transition.successor_analysis_id);
+    const priorBundle = workspace.value.bundles.find(
+      ({ bundle_id }) => bundle_id === transition.prior.bundle_id,
+    );
+    if (priorBundle !== undefined && next.value.case_id !== decodeCase(priorBundle).value.case_id) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Revision ${revision.revision_id} changes native case identity.`,
+      );
+    }
   }
 }
 
@@ -351,6 +546,7 @@ export function recordRevision(
   workspace: LoadedSharedAnalysis,
   revision: RevisionDeclaration,
 ): LoadedSharedAnalysis {
+  assertLoaded(workspace);
   validateRevision(workspace, revision);
   const prior = workspace.value.revisions.find(
     ({ revision_id }) => revision_id === revision.revision_id,
@@ -362,7 +558,7 @@ export function recordRevision(
       `Revision ${revision.revision_id} has conflicting declarations.`,
     );
   }
-  return snapshot({
+  return validatedSnapshot({
     ...workspace.value,
     revisions: [...workspace.value.revisions, revision].sort((left, right) =>
       compare(left.revision_id, right.revision_id),
@@ -408,11 +604,7 @@ function referencedSourceDependencies(
     .map(({ dependency_id }) => dependency_id);
 }
 
-/** Explain direct and downstream effects under the declared bounded inventory. */
-export function assessRevision(
-  workspace: LoadedSharedAnalysis,
-  revisionId: string,
-): RevisionImpact {
+function revisionImpact(workspace: LoadedSharedAnalysis, revisionId: string): RevisionImpact {
   const revision = workspace.value.revisions.find(({ revision_id }) => revision_id === revisionId);
   if (revision === undefined) {
     throw new SharedAnalysisError(
@@ -449,7 +641,14 @@ export function assessRevision(
       .filter(({ route_id }) => !withdrawnRoutes.includes(route_id))
       .map(({ route_id }) => route_id)
       .sort(compare);
-    const affected = direct.size > 0 || transition !== undefined || withdrawnRoutes.length > 0;
+    const visibleConflicts = revision.conflicting_premises.filter(
+      ({ statement_scope }) => statement_scope === entry.bundle.inventory.scope,
+    );
+    const affected =
+      direct.size > 0 ||
+      transition !== undefined ||
+      withdrawnRoutes.length > 0 ||
+      visibleConflicts.length > 0;
     const status = affected
       ? ("affected" as const)
       : entry.bundle.inventory.completeness === "complete"
@@ -466,13 +665,24 @@ export function assessRevision(
         next,
         transition.successor_analysis_id,
       ).mathematical_check_reusable;
+    } else if (
+      revision.withdrawn_dependencies.some(
+        (dependency) =>
+          addressKey(dependency) === addressKey(entry.address) &&
+          (lineage.reaches(dependency.dependency_id, "subject.problem") ||
+            lineage.reaches(dependency.dependency_id, "subject.query")),
+      )
+    ) {
+      mathematicalCheckReusable = false;
     }
-    const derivationPaths: DerivationPath[] = [...direct].sort(compare).flatMap((dependencyId) =>
-      lineage.paths(dependencyId, "use.checked").map((nodes) => ({
-        analysis: entry.address,
-        nodes,
-      })),
-    );
+    const derivationPaths: DerivationPath[] = [...direct]
+      .sort(compare)
+      .flatMap((dependencyId) =>
+        (lineage.paths(dependencyId, "use.checked").length > 0
+          ? lineage.paths(dependencyId, "use.checked")
+          : [[dependencyId]]
+        ).map((nodes) => ({ analysis: entry.address, nodes })),
+      );
     return {
       analysis: entry.address,
       status,
@@ -484,7 +694,7 @@ export function assessRevision(
         revision.kind !== "metadata_change" && status !== "unaffected",
       surviving_support_routes: survivingRoutes,
       withdrawn_support_routes: withdrawnRoutes,
-      visible_conflicts: [...revision.conflicting_premises],
+      visible_conflicts: visibleConflicts,
       unresolved_references: [...entry.bundle.inventory.unresolved_references],
     };
   });
@@ -503,19 +713,204 @@ export function assessRevision(
   });
 }
 
-/** Record a declaration bound to the exact revision, sources, mappings and context. */
-export function reassessApplicability(
+function validateAssessment(
   workspace: LoadedSharedAnalysis,
   assessment: ApplicabilityAssessmentDeclaration,
-): LoadedSharedAnalysis {
-  analysisEntry(workspace, assessment.analysis);
-  const impact = assessRevision(workspace, assessment.revision_id);
+): void {
+  const entry = analysisEntry(workspace, assessment.analysis);
+  const impact = revisionImpact(workspace, assessment.revision_id);
   if (assessment.basis_sha256 !== impact.basis_sha256) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_REASSESSMENT_STALE",
       `Assessment ${assessment.assessment_id} is not bound to the current revision impact.`,
     );
   }
+  const scopedImpact = impact.impacts.find(
+    ({ analysis }) => addressKey(analysis) === addressKey(assessment.analysis),
+  );
+  if (scopedImpact === undefined || scopedImpact.status === "unaffected") {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      `Assessment ${assessment.assessment_id} is not scoped to an affected or unresolved analysis.`,
+    );
+  }
+  const authority = authoritySourceKeys(workspace);
+  const bindings = assessment.source_bindings.map(sourceKey);
+  if (
+    new Set(bindings).size !== bindings.length ||
+    bindings.some((binding) => !authority.has(binding))
+  ) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REFERENCE_UNRESOLVED",
+      `Assessment ${assessment.assessment_id} repeats or binds unavailable exact source bytes.`,
+    );
+  }
+  const dependencies = assessment.assumption_dependencies.map(dependencyKey);
+  if (new Set(dependencies).size !== dependencies.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      `Assessment ${assessment.assessment_id} repeats an assumption dependency.`,
+    );
+  }
+  for (const dependency of assessment.assumption_dependencies) {
+    const dependencyEntry = analysisEntry(workspace, dependency);
+    if (
+      !dependencyEntry.analysis.dependencies.some(
+        ({ dependency_id }) => dependency_id === dependency.dependency_id,
+      )
+    ) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Assessment ${assessment.assessment_id} names a missing assumption dependency.`,
+      );
+    }
+  }
+  const revision = workspace.value.revisions.find(
+    ({ revision_id }) => revision_id === assessment.revision_id,
+  )!;
+  const requiredSuccessors = revision.source_replacements
+    .filter(
+      ({ from }) => referencedSourceDependencies(entry.caseFile, entry.analysis, [from]).length > 0,
+    )
+    .map(({ to }) => sourceKey(sourceIdentity(to)));
+  const bound = new Set(bindings);
+  if (requiredSuccessors.some((successor) => !bound.has(successor))) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REASSESSMENT_STALE",
+      `Assessment ${assessment.assessment_id} omits a revised exact source binding.`,
+    );
+  }
+}
+
+function caseAndAnalysisForExecution(
+  workspace: LoadedSharedAnalysis,
+  portable: SharedAnalysisArchive["executions"][number],
+): { caseFile: LoadedDecisionCase; analysis: DecisionAnalysis } {
+  if (portable.revision_id === null) {
+    const entry = analysisEntry(workspace, portable.analysis);
+    return { caseFile: entry.caseFile, analysis: entry.analysis };
+  }
+  const revision = workspace.value.revisions.find(
+    ({ revision_id }) => revision_id === portable.revision_id,
+  );
+  const transition = revision?.transitions.find(
+    ({ prior }) => addressKey(prior) === addressKey(portable.analysis),
+  );
+  if (transition === undefined) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      "Portable execution has no declared successor subject.",
+    );
+  }
+  const caseFile = openDecisionCase(
+    verifyEncodedBytes(transition.successor_case, `${portable.revision_id}.successor_case`),
+  );
+  return { caseFile, analysis: analysisById(caseFile, transition.successor_analysis_id) };
+}
+
+function validateExecution(
+  workspace: LoadedSharedAnalysis,
+  portable: SharedAnalysisArchive["executions"][number],
+): void {
+  const { caseFile, analysis } = caseAndAnalysisForExecution(workspace, portable);
+  const execution = parseExecution(verifyEncodedBytes(portable.execution, "execution"));
+  const subject = mathematicalBytes(analysis);
+  if (
+    execution.case_id !== caseFile.value.case_id ||
+    execution.case_sha256 !== caseFile.case_sha256 ||
+    execution.analysis_id !== analysis.analysis_id ||
+    execution.analysis_sha256 !== analysisBindingHash(caseFile, analysis) ||
+    execution.problem_sha256 !== sha256Bytes(subject.problem) ||
+    execution.query_sha256 !== sha256Bytes(subject.query) ||
+    exactJsonKey(execution.engine) !== exactJsonKey(caseFile.value.engine)
+  ) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      "Stored execution is not bound to its declared exact analysis subject.",
+    );
+  }
+  if (portable.revision_id !== null) {
+    const impact = revisionImpact(workspace, portable.revision_id);
+    const supported = workspace.value.applicability_assessments.some(
+      (assessment) =>
+        assessment.revision_id === portable.revision_id &&
+        addressKey(assessment.analysis) === addressKey(portable.analysis) &&
+        assessment.basis_sha256 === impact.basis_sha256 &&
+        assessment.status === "supported",
+    );
+    if (!supported) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REASSESSMENT_REQUIRED",
+        "Stored recomputation lacks a current supported applicability assessment.",
+      );
+    }
+  }
+}
+
+function validateArchive(workspace: LoadedSharedAnalysis): void {
+  validateBundles(workspace.value.bundles);
+  authoritySourceKeys(workspace);
+  const revisionIds = workspace.value.revisions.map(({ revision_id }) => revision_id);
+  if (new Set(revisionIds).size !== revisionIds.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      "The archive repeats a revision ID.",
+    );
+  }
+  for (const revision of workspace.value.revisions) validateRevision(workspace, revision);
+  const assessmentIds = workspace.value.applicability_assessments.map(
+    ({ assessment_id }) => assessment_id,
+  );
+  if (new Set(assessmentIds).size !== assessmentIds.length) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "The archive repeats an applicability assessment ID.",
+    );
+  }
+  for (const assessment of workspace.value.applicability_assessments) {
+    validateAssessment(workspace, assessment);
+  }
+  const executions = new Set<string>();
+  for (const execution of workspace.value.executions) {
+    const key = revisionExecutionKey(execution);
+    if (executions.has(key)) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_INVALID",
+        "The archive repeats an execution for one analysis revision.",
+      );
+    }
+    executions.add(key);
+    validateExecution(workspace, execution);
+  }
+}
+
+function assertLoaded(workspace: LoadedSharedAnalysis): void {
+  assertArchive(workspace.value);
+  if (workspace.archive_sha256 !== sha256Bytes(exactJsonBytes(workspace.value))) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "Loaded archive identity does not match its exact portable value.",
+    );
+  }
+  validateArchive(workspace);
+}
+
+/** Explain direct and downstream effects under the declared bounded inventory. */
+export function assessRevision(
+  workspace: LoadedSharedAnalysis,
+  revisionId: string,
+): RevisionImpact {
+  assertLoaded(workspace);
+  return revisionImpact(workspace, revisionId);
+}
+
+/** Record a declaration bound to the exact revision, sources, mappings and context. */
+export function reassessApplicability(
+  workspace: LoadedSharedAnalysis,
+  assessment: ApplicabilityAssessmentDeclaration,
+): LoadedSharedAnalysis {
+  assertLoaded(workspace);
+  validateAssessment(workspace, assessment);
   const prior = workspace.value.applicability_assessments.find(
     ({ assessment_id }) => assessment_id === assessment.assessment_id,
   );
@@ -526,7 +921,7 @@ export function reassessApplicability(
       `Assessment ${assessment.assessment_id} has conflicting declarations.`,
     );
   }
-  return snapshot({
+  return validatedSnapshot({
     ...workspace.value,
     applicability_assessments: [...workspace.value.applicability_assessments, assessment].sort(
       (left, right) => compare(left.assessment_id, right.assessment_id),
@@ -540,6 +935,7 @@ export function recomputeAnalysis(
   request: RecomputeRequest,
   options: EngineOptions,
 ): RecomputedAnalysis {
+  assertLoaded(workspace);
   const revision = workspace.value.revisions.find(
     ({ revision_id }) => revision_id === request.revision_id,
   );
@@ -598,7 +994,7 @@ export function recomputeAnalysis(
   }
   byKey.set(key, portable);
   return {
-    workspace: snapshot({
+    workspace: validatedSnapshot({
       ...workspace.value,
       executions: [...byKey.values()].sort(
         (left, right) =>
@@ -613,11 +1009,18 @@ export function recomputeAnalysis(
 
 /** Exact portable bytes containing evidence and declarations, never a cached derived graph. */
 export function exportSharedAnalysis(workspace: LoadedSharedAnalysis): Uint8Array {
+  assertLoaded(workspace);
   return exactJsonBytes(workspace.value);
 }
 
 /** Open and fully validate an exported shared-analysis archive. */
 export function openSharedAnalysis(bytes: Uint8Array): LoadedSharedAnalysis {
+  if (bytes.length === 0 || bytes.length > MAX_ARCHIVE_BYTES) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      `Archive must contain 1 to ${MAX_ARCHIVE_BYTES} bytes.`,
+    );
+  }
   let parsed: unknown;
   try {
     parsed = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(bytes)));
@@ -625,42 +1028,37 @@ export function openSharedAnalysis(bytes: Uint8Array): LoadedSharedAnalysis {
     throw new SharedAnalysisError("SHARED_ANALYSIS_INVALID", "Archive is not valid UTF-8 JSON.");
   }
   assertArchive(parsed);
-  const workspace = snapshot(parsed);
-  validateSources(workspace.value.bundles);
-  for (const bundle of workspace.value.bundles) decodeCase(bundle);
-  for (const revision of workspace.value.revisions) validateRevision(workspace, revision);
-  for (const execution of workspace.value.executions) {
-    parseExecution(verifyEncodedBytes(execution.execution, "execution"));
+  let canonical: Uint8Array;
+  try {
+    canonical = exactJsonBytes(parsed);
+  } catch {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "Archive cannot be represented as deterministic exact JSON.",
+    );
   }
-  return workspace;
+  if (!bytesEqual(canonical, bytes)) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_INVALID",
+      "Archive is not the deterministic exact-JSON representation.",
+    );
+  }
+  return validatedSnapshot(parsed);
 }
 
-/** Reconstruct revision effects and freshly solve/check every stored numerical subject. */
+/** Reconstruct revision effects and freshly check each preserved candidate against exact bytes. */
 export function replaySharedAnalysis(bytes: Uint8Array, options: EngineOptions): RecipientReplay {
   const workspace = openSharedAnalysis(bytes);
   const revisionImpacts = workspace.value.revisions.map(({ revision_id }) =>
-    assessRevision(workspace, revision_id),
+    revisionImpact(workspace, revision_id),
   );
   const freshlyChecked = workspace.value.executions.map((portable) => {
-    const revision = workspace.value.revisions.find(
-      ({ revision_id }) => revision_id === portable.revision_id,
-    );
-    const transition = revision?.transitions.find(
-      ({ prior }) => addressKey(prior) === addressKey(portable.analysis),
-    );
-    if (transition === undefined) {
-      throw new SharedAnalysisError(
-        "SHARED_ANALYSIS_REVISION_INVALID",
-        "Portable execution has no declared successor subject.",
-      );
-    }
-    const successor = openDecisionCase(
-      verifyEncodedBytes(transition.successor_case, "successor_case"),
-    );
-    const execution = runDecisionCase(successor, transition.successor_analysis_id, options);
+    const { caseFile, analysis } = caseAndAnalysisForExecution(workspace, portable);
+    const execution = parseExecution(verifyEncodedBytes(portable.execution, "execution"));
+    const checked = recheckDecisionExecution(caseFile, execution, analysis.analysis_id, options);
     return {
       analysis: portable.analysis,
-      mathematical_status: execution.mathematical_check.result.status,
+      mathematical_status: checked.status,
     };
   });
   return deepFreeze({

@@ -11,8 +11,8 @@ import {
   type DecisionAnalysis,
   type DecisionCase,
   type ModelMapping,
-} from "../../packages/decision-case/src/index.js";
-import { sha256Bytes, sha256Utf8Text } from "../../packages/provenance/src/index.js";
+} from "../../../packages/decision-case/src/index.js";
+import { sha256Bytes, sha256Utf8Text } from "../../../packages/provenance/src/index.js";
 
 const directory = dirname(fileURLToPath(import.meta.url));
 const ENGINE: DecisionCase["engine"] = {
