@@ -30,8 +30,15 @@ statuses:
 tasks:
   - id: ROOT-HYGIENE-HISTORY-SNAPSHOTS-001
     title: Simplify the root layout and preserve historical snapshots in Git
-    status: in_progress
+    status: done
     baseline_commit: ba385418c61e597d818331940b15d5b8439773b5
+    completion_note: >-
+      The synthetic decision fixture now lives under examples with byte-identical case and saved
+      execution artifacts. The tracked archive root and its obsolete inventory script are retired.
+      Three pushed lightweight tags recover the exact EU-US, G7, and G20 trees at the file counts
+      and SHA-256 digests recorded in docs/history/snapshots.md. The corpora Git tree remains
+      identical to the baseline, and all standard TypeScript, Python, data, Writ verification,
+      build, and pinned no-skip Decision Lab integration checks pass.
     dependencies:
       - RETIRE-LEGACY-DATABASE-PERSISTENCE-001
     scope:
