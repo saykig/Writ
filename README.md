@@ -1,74 +1,82 @@
 # Writ
 
-Writ is an open protocol for making consequential institutional knowledge inspectable, reviewable, and provenance-preserving.
+Writ is infrastructure for making consequential decision-making more **inspectable, cumulative, and
+correctable**.
 
-Political and institutional decisions are usually easier to observe than the fragmented evidence, judgments, uncertainty, authority, and constraints that produced them. Writ is building the substrate needed to preserve those pieces without replacing human judgment.
+It preserves the source and review trail behind institutional knowledge, and it is beginning to
+preserve a separate class of derived mathematical decision results together with the exact models,
+questions, assumptions, checks, applicability, and revisions that make those results usable.
 
 ## Current system
 
-Writ's present boundary is deliberately narrow:
+Writ has two deliberately separate surfaces.
+
+### Source-grounded knowledge
 
 ```text
 source
-→ passage
-→ typed record
-→ human review
-→ provenance
+-> passage
+-> typed record
+-> human review
+-> provenance
 ```
 
-The system is designed around several principles:
+### Derived decision cases
+
+```text
+question / model / assumptions
+-> exact mathematical subject
+-> candidate calculation
+-> independent check
+-> applicability + human disposition
+-> revision / reuse
+```
+
+The second surface does not turn an analysis into a source fact. A mathematical result can be
+correct for its exact premises while being unsupported or inapplicable in a real decision context.
+Writ preserves that distinction.
+
+The first bounded implementation is the `derived_decision_case` integration merged in PR #43. It
+uses a pinned Decision Lab checker for one finite-linear-uncertainty profile. It is a first stable
+capability, not a general reasoning engine or final architecture.
+
+## Bellman
+
+Bellman is the mathematical research programme behind the decision semantics Writ will progressively
+make executable. Bellman establishes objects, assumptions, operations, guarantees, composition
+rules, failure boundaries, and provenance. Writ encodes and checks stable slices of that mathematics
+and preserves how they are reused and corrected.
+
+The current Python/TypeScript stack is a reference implementation, not a permanent language
+commitment.
+
+## Principles
 
 - evidence and interpretation remain distinguishable;
-- unknown does not silently become false;
-- inferred support is not treated as direct support;
-- different kinds of institutional facts remain distinct;
-- accepted material is superseded rather than silently rewritten;
+- modelling choices are explicit rather than smuggled in as source facts;
+- unknown, incompatible, unresolved, and tied are different states;
+- exact results remain bound to the model, question, units, and information context that justify
+  them;
+- mathematical checking, evidentiary applicability, human review, and authority to act are separate;
+- accepted records and derived case revisions remain historical snapshots rather than being silently
+  rewritten;
 - provenance is deterministic over frozen inputs;
-- human review controls acceptance.
-
-Writ also contains a small portable mechanical provenance kernel and bounded internal grounding tools for cases where evidence can be reproducibly derived from frozen structured sources. A proposed,
-separate derived decision-case layer can preserve one explicit mathematical problem, its modelling
-choices, exact checked execution, revision dependencies, applicability and human disposition without
-making that analysis a political-knowledge record.
+- new mathematical capabilities earn their way into Writ through bounded, tested interfaces.
 
 ## What Writ is not
 
-Writ is not currently:
+Writ is not currently an autonomous policy decision-maker, general recommendation engine, universal
+political ontology, scenario simulator, causal inference engine, or authority system. It does not
+invent probabilities, source reliabilities, preferences, or permission to act.
 
-- a policy reasoning engine;
-- a recommendation system;
-- an AI decision-maker;
-- a compliance engine;
-- a scenario simulator;
-- a question-answering system;
-- a general-purpose political knowledge graph.
+## Roadmap
 
-The bounded decision-case candidate is not a general reasoning or recommendation engine. Its exact
-calculation remains conditional on explicitly supplied synthetic premises and never authorizes action.
+The current roadmap is [`docs/current/roadmap.md`](./docs/current/roadmap.md). Its North Star is:
 
-Questions, analyses, models, and conclusions may use Writ records, but they are not the source of truth for those records.
+> **Make consequential decision-making mathematically inspectable, cumulative, and correctable.**
 
-## Research direction
-
-The longer-term research question is whether this substrate can support **decision provenance**.
-
-Given a consequential decision that happened, could a reviewer reconstruct the smallest defensible chain showing:
-
-```text
-evidence / intelligence
-→ uncertainty and competing interpretations
-→ institutional authority and constraints
-→ decision
-→ material implementation
-→ observed consequences
-```
-
-without turning government claims into facts, analyst interpretations into evidence, temporal sequence into causation, or missing information into invented certainty?
-
-That capability does not exist in Writ yet.
-
-Current research stress cases are used to discover which additional primitives are genuinely necessary. They do not automatically become canonical corpora or production features. New capabilities must earn their way into the core through demonstrated need.
-
-**Writ should make it harder for consequential reasoning to lose its provenance.**
+The long-term proving arena may include war, security strategy, intelligence, biosecurity, AI
+governance, and other consequential domains. Those domains test the substrate; they do not define
+its core abstraction.
 
 Copyright 2026 Sara Kim

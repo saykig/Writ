@@ -1,97 +1,117 @@
 # Current product definition
 
-Writ makes political knowledge more inspectable, reviewable, provenance-preserving, and easier for
-humans to reason from without replacing human judgment. Its current proving ground is the NIST
-institutional corpus.
+Writ is infrastructure for making consequential decision-making more **inspectable, cumulative, and
+correctable** while keeping evidence, mathematics, interpretation, and human authority distinct.
 
-The immediate political-knowledge boundary is:
+Its long-term objective is not to formalize all political judgment or to produce one universal
+decision calculus. It is to preserve enough structure that a later human or machine can determine
+what was known, what was assumed, what followed mathematically, what remained uncertain, what was
+decided, and what changed afterward.
 
-source -> passage -> typed record -> human review -> provenance
+## Current architecture
 
-Writ may also carry a separate, versioned derived decision-case layer for explicit mathematical
-problems, modelling choices, supported executions, checks, dependencies, and revisions. That layer
-does not turn questions or analyses into source records and does not replace human reasoning.
+Writ currently has two separate layers.
 
-## Governing invariants
+### 1. Source-grounded knowledge
 
-1. Corpora and records exist independently of questions, comparisons, analyses, and presentation
-   layers.
-2. Human reasoning remains external to Writ. Questions are not first-class knowledge records. A
-   derived decision case may state an intended question without governing corpus or record identity.
-3. Institutional records keep identity, placement, mission, mandate, function, decision right, and
-   operational capacity distinct. Evidence for one does not establish another.
-4. The core schema does not require commitments, obligations, or scores.
-5. External ratings are source-reported judgments.
-6. Unknown and contested values remain explicit.
-7. Visualizations and memos are views, not sources of truth.
-8. The implemented native families are `legal_policy` and `institutional`; the shared record base
-   remains extensible for future family profiles.
-9. A checked mathematical result remains conditional on its exact problem, query and premises. Its
-   mathematical status, evidentiary applicability, human disposition and authority to act are
-   separate meanings.
+```text
+source
+-> passage
+-> typed record
+-> human review
+-> provenance
+```
 
-## Technical strengths
+This layer preserves institutional and legal-policy knowledge without making downstream analyses or
+questions the source of truth for those records. NIST remains its active institutional proving
+ground.
 
-- Compilation and verification are deterministic over frozen inputs and perform no network access, model inference,
-  randomness, wall-clock reads, or mutation.
-- Unknown and contested states remain explicit; unknown never silently becomes false.
-- Content-addressed provenance makes source versions, passages, records, and exported bundles
-  reproducible and tamper-evident.
-- Human review controls acceptance. Models may propose candidates but do not accept evidence,
-  resolve disputes, waive diagnostics, or publish derived results.
-- Accepted records are superseded instead of silently rewritten.
-- Stable diagnostics make semantic and provenance failures reviewable across versions.
-- Pure decision-case validation, identity and dependency checks remain deterministic and do not
-  execute external processes. Only an explicitly invoked runner may call a fixed pinned adapter;
-  case content cannot supply a command.
+### 2. Derived decision cases
 
-## Knowledge and human-reasoning boundary
+```text
+explicit question / requested operation
++ supplied content and modelling assumptions
++ exact mathematical problem/query bytes
+-> candidate execution
+-> independent mathematical check
+-> applicability
+-> human disposition
+-> revision / reuse
+```
 
-Corpora hold reviewed knowledge records. Research questions, comparisons, analyses, and answers do
-not govern corpus or record identity. A separate derived decision-case namespace may preserve an
-explicit intended question and conditional mathematical work, while Writ preserves the evidence,
-modelling, checking, applicability, revision and review distinctions that humans may reason from.
+This layer is separate from native records. It can preserve an explicit question because a
+mathematical guarantee is meaningless without its query, model, assumptions, information context,
+units, and permitted operation. It does not turn that question or answer into a source fact.
 
-The first derived profile is deliberately narrow: portable synthetic finite rational decision cases
-checked through the pinned `finite-linear-uncertainty.v1` producer/checker boundary. It is not a new
-record family, corpus type, acceptance workflow, empirical estimator, or general-purpose reasoning
-language. Its proposed architectural authority is ADR 0026, which remains proposed until human
-acceptance of the change.
+The first implementation is the bounded `derived_decision_case` package merged in PR #43. It uses a
+pinned Decision Lab checker for `finite-linear-uncertainty.v1`. ADR 0026 still records that
+architecture as **Proposed** until its status is explicitly resolved; merged implementation is not
+itself evidence that every future decision capability should use the same adapter or shape.
 
-The shared core provides a small provenance and revision envelope. The implemented institutional
-and legal-policy family profiles keep fields appropriate to their subject matter, and future family
-profiles may do the same. A legal-policy record may need legal force and applicability; neither
-field is universal merely because one family needs it.
+## Bellman and Writ
 
-External scores and ratings remain statements made by their identified sources. They are not Writ
-facts merely because the repository can preserve them.
+Bellman develops and assembles the mathematical foundations for consequential decision-making:
+objects, assumptions, operations, guarantees, composition rules, failure boundaries, and
+provenance. Writ turns stable portions of those semantics into executable, versioned infrastructure.
 
-## Current material
+The intended relationship is:
 
-- The NIST institutional corpus is the current proving ground for typed records that distinguish
-  identity, placement, mission, mandate, function, decision right, and operational capacity.
-- NIST is the sole active development proving ground. Existing reviewed European Commission and
-  legal-policy corpora remain catalogued, inspectable secondary material; they do not define the
-  current development roadmap.
-- Source-specific compatibility runtimes and archived benchmark consumers are not required merely
-  because reviewed secondary corpora remain available. Generic catalog, bundle, schema, and
-  verification support continues to preserve those corpora.
+```text
+Bellman mathematics
+-> executable producer / solver where useful
+-> independently checkable certificate or result
+-> Writ binding, versioning, applicability, reuse and correction
+```
 
-## Explicit non-goals
+Engineering does not determine the mathematics, and today's Python/TypeScript implementation does
+not define tomorrow's mathematical ceiling.
 
-Writ is not a general question modeller, compliance engine, scoring engine, scenario engine, policy
-reasoning engine, or autonomous answer-generating system. The bounded decision-case layer does not
-infer problems from prose, choose empirical premises, invent model weights, accept evidence, or
-authorize action. This definition does not design a complete political-science ontology or add new
-country or constitutional corpora, political-psychology data, a chatbot, a graph database, or a
-vector database.
+## Governing separations
 
-## Recovery and future capability
+Writ must keep separate:
 
-The obsolete compliance-product and methodology-candidate planning directories were removed in the
-foundation reset. They remain recoverable from Git history and the annotated
-`pre-foundation-reset-2026-08-22` tag rather than as tracked archives on `main`.
+- source evidence from interpretation;
+- source support from a modelling choice;
+- one exact model from a set or outer enclosure of models;
+- mathematical correctness from empirical model adequacy;
+- a checked result from applicability to a revised case;
+- a common optimal action from a complete pointwise minimizing set;
+- uncertainty or nonidentification from exact ties;
+- human review from mathematical checking;
+- recommendation or optimality from institutional authority to act.
 
-Further analysis or interoperability capabilities must earn their way into the active architecture
-through demonstrated need and an accepted decision. The bounded decision-case candidate does not
-silently restore the retired compliance runtime or authorize a broader workspace.
+Historical results remain valid under the premises they actually had. Revisions should suspend,
+narrow, transport, tighten, or replace current reuse with explicit justification rather than erase
+the old result.
+
+## Current proving grounds
+
+- **NIST institutional corpus:** source grounding, typed institutional facts, review, provenance,
+  supersession, and source/version integrity.
+- **Synthetic derived decision cases:** exact mathematical binding, checking, revision, applicability,
+  and portable handoff. These cases are tests of infrastructure, not product ontologies or empirical
+  claims about the world.
+
+Other reviewed corpora remain preserved and inspectable. They do not have to drive current
+development merely because they exist.
+
+## Current non-goals
+
+Writ is not presently:
+
+- an autonomous policy decision-maker;
+- a general recommendation or question-answering system;
+- a universal political ontology or knowledge graph;
+- a general scenario or game-theory engine;
+- an empirical probability estimator that invents priors or source reliabilities;
+- a system that infers causal effects from provenance;
+- an authority or approval system that turns mathematical optimality into permission to act.
+
+Future causal, sequential, strategic, robust, or information-acquisition capabilities should enter
+only when Bellman supplies the relevant semantics and a bounded Writ integration demonstrates the
+need.
+
+## Direction
+
+The current sequencing and exit gates live in [`roadmap.md`](./roadmap.md). The roadmap may evolve
+as evidence accumulates. Accepted ADRs and schemas remain the authority for durable contracts.
