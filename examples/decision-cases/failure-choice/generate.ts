@@ -10,8 +10,8 @@ import {
   type DecisionAnalysis,
   type DecisionCase,
   type ModelMapping,
-} from "../../packages/decision-case/src/index.js";
-import { sha256Bytes, sha256Utf8Text } from "../../packages/provenance/src/index.js";
+} from "../../../packages/decision-case/src/index.js";
+import { sha256Bytes, sha256Utf8Text } from "../../../packages/provenance/src/index.js";
 
 const directory = dirname(fileURLToPath(import.meta.url));
 const sourceText =
@@ -396,4 +396,4 @@ const caseFile: DecisionCase = {
 };
 
 mkdirSync(directory, { recursive: true });
-writeFileSync(join(directory, "synthetic-failure-choice.case.json"), exactJsonBytes(caseFile));
+writeFileSync(join(directory, "case.json"), exactJsonBytes(caseFile));

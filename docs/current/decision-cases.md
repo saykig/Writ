@@ -72,7 +72,7 @@ separate fields. The supplied fixture remains `unreviewed`; no reviewer is inven
 
 ## Runnable fixture
 
-`decision-cases/synthetic-failure-choice/synthetic-failure-choice.case.json` is one self-contained
+`examples/decision-cases/failure-choice/case.json` is one self-contained
 portable fixture with three static revisions and an interpretation control. It is synthetic supplied
 mathematics, not NIST data or an empirical estimate. Its directory README gives the local commands.
 
