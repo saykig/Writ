@@ -44,13 +44,20 @@ or Bellman's mathematics.
 
 Application- and package-owned tests remain colocated with their implementations where practical.
 
-## Retained surfaces pending separate decisions
+## Confirmed retirement target
 
-`apps/api/` currently contains retained Postgres persistence primitives, and `internal/infrastructure/`
-contains their database migrations/registry material. Writ has no active long-running HTTP service.
-The database surface is therefore a legitimate future retirement candidate, but deletion requires a
-bounded consumer/dependency audit because it remains a tested workspace package with migrations and
-local/CI wiring.
+The completed consumer audit confirms that `apps/api/` is legacy Postgres/Neon persistence
+infrastructure and is not required by current Writ functionality. The compiler, verifier,
+decision-case layer, corpus authority, language package, provenance layer, and repository-native
+workflow do not depend on it as runtime authority.
+
+The remaining legacy surface includes the API connection and repository code, SQL migrations and
+database tests, `internal/tooling/scripts/publish_corpus.ts`, optional Python online publication
+through `apps/ingest/src/writ_ingest/corpus/online_store.py` and `psycopg`, and Docker/database
+environment wiring. Preserve that complete surface in this governance PR and retire it coherently in
+a separate bounded cleanup PR.
+
+## Retained supporting surfaces
 
 `apps/ingest/` remains active because repository source-registry/tooling code still imports its
 source/registry primitives.

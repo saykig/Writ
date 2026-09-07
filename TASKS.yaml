@@ -1,10 +1,14 @@
 version: 2
 project: writ
 governing_definition: >-
-  Writ makes political knowledge more inspectable, reviewable, provenance-preserving, and easier
-  for humans to reason from without replacing human judgment. Its current proving ground is the
-  NIST institutional corpus. The immediate system boundary is source -> passage -> typed record ->
-  human review -> provenance.
+  Writ makes consequential decision-making more inspectable, cumulative, and correctable without
+  replacing human or institutional judgment. It has two deliberately separate surfaces: a
+  source-grounded knowledge layer from source through reviewed record and provenance, with NIST as
+  its active institutional proving ground; and bounded derived mathematical/decision work from an
+  explicit question, supplied content and modelling assumptions through exact execution,
+  independent checking, applicability, human disposition, and revision/reuse. Neither surface may
+  silently supply evidence, assumptions, mathematical guarantees, authority, or empirical truth
+  required by the other.
 
 execution_policy:
   one_task_per_change: true
@@ -13,7 +17,8 @@ execution_policy:
   required_reading:
     - AGENTS.md
     - docs/current/product-definition.md
-    - docs/migrations/repository-reset/01-audit.md
+    - docs/current/roadmap.md
+    - docs/current/repository-structure.md
 
 statuses:
   - ready
@@ -25,7 +30,12 @@ statuses:
 tasks:
   - id: EXECUTABLE-DECISION-CASE-001
     title: Add one bounded executable decision-case layer
-    status: review
+    status: done
+    implementation_pr: https://github.com/saykig/Writ/pull/43
+    architecture_status: proposed
+    architecture_note: >-
+      The bounded implementation is merged on main. ADR 0026 remains Proposed pending explicit
+      human architectural disposition; implementation does not constitute that acceptance.
     baseline_commit: 20f0473afa62ed3c6e0433a21b189d1d9d1712d6
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
@@ -48,7 +58,7 @@ tasks:
       - Reuse assessment detects structured support, mapping and use-context changes without collapsing human review into applicability.
       - The complete repository-owned engine import closure and declared CPython runtime are verified; an explicit no-skip integration command passes.
       - Existing NIST, canonical identity, bundle export/reload and required repository gates remain unchanged and pass.
-      - The proposed ADR, current instructions, compact execution/comparison record and exact external pins are reviewable in one unmerged PR.
+      - The implementation, current instructions, compact execution/comparison record and exact external pins are present on main through PR #43; ADR 0026 remains Proposed pending explicit human architectural disposition.
     outputs:
       - adr/0026-bounded-derived-decision-cases.md
       - packages/decision-case
@@ -64,7 +74,10 @@ tasks:
 
   - id: TRACK-B-HISTORICAL-JUDGMENT-TARGET-SCOPE-001
     title: Scope historical judgment targets to their governing record migration
-    status: review
+    status: done
+    completion_note: >-
+      The correction is complete. Its durable protection remains in verifier logic and regression
+      tests; the provisional Track B reviewer-role infrastructure is retired from current use.
     dependencies:
       - TRACK-B-CROSS-LAYER-CONSISTENCY-001
     baseline_commit: d6bf03349d578d295549cf95dbd1dde23e47efd0
@@ -82,18 +95,21 @@ tasks:
     outputs:
       - internal/verification/writ/src/gates/provenance.ts
       - internal/verification/writ/test/verifier.test.ts
-      - docs/current/agent-role-outcomes.md
       - TASKS.yaml
       - MANIFEST.sha256
 
   - id: TRACK-B-CROSS-LAYER-CONSISTENCY-001
     title: Run a bounded cross-layer consistency discovery experiment
-    status: review
+    status: done
+    completion_note: >-
+      The bounded experiment is complete. Git history and its experiment report preserve the
+      historical role evidence; durable findings now live in tests, diagnostics, verification
+      logic, and governing invariants rather than persistent reviewer personas.
     dependencies:
       - REVIEW-ARTIFACT-BINDING-001
     baseline_commit: 681016a24f734438895ae1758f0caf5c0bd9e5a7
     scope:
-      - Persist four provisional correctness-review role contracts as one small repository-local Codex Skill.
+      - Exercise four provisional correctness-review roles as one bounded repository-local experiment.
       - Reuse production entry points to compare supported parser, compiler, schema, verifier, export and reload behavior on local synthetic cases.
       - Independently confirm and classify unexplained cross-layer differences before repair.
       - Repair at most the first two high-confidence generic correctness defects within existing Writ boundaries.
@@ -101,14 +117,11 @@ tasks:
       - New decision semantics, scientific transfer cases, Ukraine, external systems, security testing, and unrelated refactors.
       - A second Writ implementation or a fifth persistent role.
     acceptance:
-      - Role contracts and their outcome log remain concise, auditable and evidence-driven.
+      - The provisional role evidence remains auditable in Git history and the experiment report after the live role files are retired.
       - The differential harness calls production entry points and keeps synthetic mutations disposable.
       - Every retained repair has an independently confirmed counterexample and a decisive regression.
       - Required project checks, clean export/reload and CI pass before the draft PR is handed off.
     outputs:
-      - .agents/skills/writ-track-b/SKILL.md
-      - .agents/skills/writ-track-b/references
-      - docs/current/agent-role-outcomes.md
       - docs/experiments/track-b-cross-layer-consistency.md
       - TASKS.yaml
       - MANIFEST.sha256
