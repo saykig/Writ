@@ -31,6 +31,7 @@ tasks:
   - id: SHARED-ANALYSIS-REVISION-001
     title: Import shared analyses and process explicit source revisions
     status: review
+    implementation_pr: https://github.com/saykig/Writ/pull/47
     architecture_status: proposed
     completion_note: >-
       The selected consolidation retains the smaller native lifecycle, adapts Aldera's deterministic
