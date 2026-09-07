@@ -10,10 +10,18 @@ mathematical subject and its evidentiary applicability.
 
 The explicitly invoked runner is the only process-owning component. It accepts a caller-supplied
 root for Decision Lab commit `7215b53096bc487756f94f4ca87390716a14f2ee`, verifies the exact
-SHA-256 of the Build 2 interface files, and calls a fixed Writ-owned Python bridge. The bridge first
-obtains an untrusted candidate with `produce`; a separate invocation of the upstream exact `check`
-must succeed before Writ records a mathematical check. `consumeDecision` checks the candidate yet
-again against the independently reopened intended problem/query bytes.
+SHA-256 of the complete repository-owned Python import closure used by the Build 2 interface, and
+calls a fixed Writ-owned Python bridge in isolated mode. The bridge verifies CPython 3.13 before
+inserting the verified source path. The bridge first obtains an untrusted candidate with `produce`;
+a separate invocation of the upstream exact `check` must succeed before Writ records a mathematical
+check. `consumeDecision` checks the candidate yet again against the independently reopened intended
+problem/query bytes. The interpreter, its standard library, OS and installed `scipy==1.17.0`
+distribution remain trusted runtime prerequisites; this is not an arbitrary-executable sandbox.
+
+Public case and execution decoding compiles the authoritative analysis schemas directly. Duplicate
+outer JSON keys, excessive envelope size/depth, missing or wrongly typed required values, invalid
+enums and undeclared fields fail before semantic cross-reference and exact-byte checks. Embedded
+mathematical bytes are never reserialized.
 
 The supported semantics and operations are deliberately closed:
 
@@ -29,3 +37,12 @@ reuse, and applicability needing reassessment all fail closed with stable diagno
 The three statuses remain separate in every execution: exact mathematical check status for the
 selected bytes, applicability of the source-to-model mapping, and human review disposition. A
 fresh exact calculation does not supply empirical premises, human acceptance, or authority to act.
+
+The offline unit suite may skip the real engine. The explicit acceptance command never converts a
+missing engine or Python prerequisite into a pass:
+
+```bash
+WRIT_DECISION_LAB_ROOT=/path/to/pinned/writ-decision-lab \
+WRIT_DECISION_LAB_PYTHON=/path/to/python3.13 \
+bun run test:decision-integration
+```

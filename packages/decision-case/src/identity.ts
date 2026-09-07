@@ -62,6 +62,11 @@ export function exactJsonBytes(value: unknown): Uint8Array {
   return new TextEncoder().encode(`${exactJson(value as JsonValue)}\n`);
 }
 
+/** Collision-free string key for structured JSON values without Unicode normalization. */
+export function exactJsonKey(value: unknown): string {
+  return Buffer.from(exactJsonBytes(value)).toString("base64");
+}
+
 export function encodedBytes(bytes: Uint8Array): {
   encoding: "base64";
   content: string;

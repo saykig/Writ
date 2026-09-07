@@ -7,11 +7,11 @@ import {
 } from "@writ/provenance";
 
 import { DecisionCaseError } from "./errors.js";
-import { decodeBase64Exact, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
+import { decodeBase64Exact, exactJsonBytes, exactJsonKey, verifyEncodedBytes } from "./identity.js";
+import { assertDecisionCaseSchema, parseGovernedJson } from "./schema-validation.js";
 import type {
   CaseDependency,
   DecisionAnalysis,
-  DecisionCase,
   LoadedDecisionCase,
   MathematicalOperation,
   ReuseAssessment,
@@ -19,6 +19,10 @@ import type {
 
 const EXPECTED_COMMIT = "7215b53096bc487756f94f4ca87390716a14f2ee";
 const OPERATIONS = new Set<MathematicalOperation>(["compatibility", "decision"]);
+
+function sourceVersionKey(sourceId: string, documentVersionId: string): string {
+  return exactJsonKey([sourceId, documentVersionId]);
+}
 
 function object(value: unknown, field: string): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
@@ -43,12 +47,7 @@ function array(value: unknown, field: string): unknown[] {
 }
 
 function jsonObject(bytes: Uint8Array, field: string): Record<string, unknown> {
-  try {
-    return object(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)), field);
-  } catch (error) {
-    if (error instanceof DecisionCaseError) throw error;
-    throw new DecisionCaseError("DECISION_CASE_INVALID", `${field} is not valid UTF-8 JSON.`);
-  }
+  return object(parseGovernedJson(bytes, field), field);
 }
 
 function uniqueIds(values: readonly string[], field: string): void {
@@ -259,27 +258,8 @@ function deepFreeze<T>(value: T): T {
 
 function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
   const snapshot = new Uint8Array(rawBytes);
-  const value = jsonObject(snapshot, "case") as unknown as DecisionCase;
-  if (
-    value.engine === null ||
-    typeof value.engine !== "object" ||
-    Array.isArray(value.engine) ||
-    !Array.isArray(value.engine.supported_operations) ||
-    !Array.isArray(value.source_documents) ||
-    value.source_documents.length === 0 ||
-    !Array.isArray(value.source_references) ||
-    value.source_references.length === 0 ||
-    !Array.isArray(value.analyses) ||
-    value.analyses.length === 0 ||
-    value.interpretation_control === null ||
-    typeof value.interpretation_control !== "object" ||
-    !Array.isArray(value.interpretation_control.alternative_scenarios)
-  ) {
-    throw new DecisionCaseError(
-      "DECISION_CASE_INVALID",
-      "Decision case is missing a required portable runtime structure.",
-    );
-  }
+  const value = parseGovernedJson(snapshot, "case");
+  assertDecisionCaseSchema(value);
   if (
     value.schema_version !== "0.1.0" ||
     value.case_kind !== "derived_decision_case" ||
@@ -318,7 +298,7 @@ function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
       `source_documents[${index}].document_version_id`,
     );
     const bytes = verifyEncodedBytes(source, `source_documents[${index}]`);
-    const key = `${sourceId}\u0000${versionId}`;
+    const key = sourceVersionKey(sourceId, versionId);
     sourceIds.push(key);
     sourceByKey.set(key, bytes);
     authority.push({
@@ -340,7 +320,9 @@ function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
       );
     }
     referenceIds.add(referenceId);
-    const bytes = sourceByKey.get(`${reference.source_id}\u0000${reference.document_version_id}`);
+    const bytes = sourceByKey.get(
+      sourceVersionKey(reference.source_id, reference.document_version_id),
+    );
     if (bytes === undefined || reference.document_hash !== sha256Bytes(bytes)) {
       throw new DecisionCaseError(
         "DECISION_CASE_EVIDENCE_SOURCE_MISMATCH",
@@ -390,9 +372,7 @@ function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
         `Analysis ${analysis.analysis_id} has a missing predecessor.`,
       );
     }
-    const dependencyIds = new Set(
-      analysis.dependencies.map(({ dependency_id }: CaseDependency): string => dependency_id),
-    );
+    const dependencyIds = new Set(analysis.dependencies.map(({ dependency_id }) => dependency_id));
     for (const changed of [
       ...analysis.change.changed_dependencies,
       ...analysis.applicability.changed_dependencies,
@@ -474,18 +454,18 @@ export function analysisBindingHash(
     .filter(({ reference_id }) => referenceIds.has(reference_id))
     .sort((left, right) => compare(left.reference_id, right.reference_id));
   const sourceKeys = new Set(
-    references.map(
-      ({ source_id, document_version_id }) => `${source_id}\u0000${document_version_id}`,
+    references.map(({ source_id, document_version_id }) =>
+      sourceVersionKey(source_id, document_version_id),
     ),
   );
   const sources = caseFile.value.source_documents
     .filter(({ source_id, document_version_id }) =>
-      sourceKeys.has(`${source_id}\u0000${document_version_id}`),
+      sourceKeys.has(sourceVersionKey(source_id, document_version_id)),
     )
     .sort((left, right) =>
       compare(
-        `${left.source_id}\u0000${left.document_version_id}`,
-        `${right.source_id}\u0000${right.document_version_id}`,
+        sourceVersionKey(left.source_id, left.document_version_id),
+        sourceVersionKey(right.source_id, right.document_version_id),
       ),
     );
   return sha256Bytes(
@@ -508,15 +488,7 @@ export function assessReuse(
     const reference = caseFile.value.source_references.find(
       ({ reference_id }) => reference_id === referenceId,
     )!;
-    return [
-      reference.reference_id,
-      reference.source_id,
-      reference.document_version_id,
-      reference.document_hash,
-      reference.passage_hash,
-      String(reference.byte_span.start),
-      String(reference.byte_span.end),
-    ].join("\u0000");
+    return exactJsonKey(reference);
   };
   const applicabilityFingerprints = (
     caseFile: LoadedDecisionCase,
@@ -527,26 +499,54 @@ export function assessReuse(
         .filter(({ role }) => role !== "checked_mathematical_use")
         .map((dependency) => [
           dependency.dependency_id,
-          [
-            dependency.role,
-            dependency.kind,
-            dependency.description,
-            dependency.rationale,
-            ...dependency.depends_on.slice().sort(),
-            ...dependency.reference_ids.map((id) => referenceFingerprint(caseFile, id)).sort(),
-          ].join("\u0001"),
+          exactJsonKey({
+            ...dependency,
+            references: dependency.reference_ids.map((id) => referenceFingerprint(caseFile, id)),
+          }),
         ]),
     );
   const priorSupport = applicabilityFingerprints(priorCase, prior);
   const nextSupport = applicabilityFingerprints(nextCase, next);
-  const applicabilityChanged =
+  const supportChanged =
     priorSupport.size !== nextSupport.size ||
     [...priorSupport.keys()].some((id) => priorSupport.get(id) !== nextSupport.get(id));
   const changedSupportDependencies = [...new Set([...priorSupport.keys(), ...nextSupport.keys()])]
     .filter((id) => priorSupport.get(id) !== nextSupport.get(id))
     .sort();
+  const mappingFingerprints = (analysis: DecisionAnalysis): Map<string, string> =>
+    new Map(analysis.model_mappings.map((mapping) => [mapping.target, exactJsonKey(mapping)]));
+  const priorMappings = mappingFingerprints(prior);
+  const nextMappings = mappingFingerprints(next);
+  const changedMappings = [...new Set([...priorMappings.keys(), ...nextMappings.keys()])]
+    .filter((target) => priorMappings.get(target) !== nextMappings.get(target))
+    .sort();
+  const context = (analysis: DecisionAnalysis): Readonly<Record<string, unknown>> => ({
+    applicability: analysis.applicability,
+    change: analysis.change,
+    dependency_order: analysis.dependencies.map(({ dependency_id }) => dependency_id),
+    intended_use: analysis.intended_use,
+    kind: analysis.kind,
+    model_mapping_order: analysis.model_mappings.map(({ target }) => target),
+    previous_analysis_id: analysis.previous_analysis_id,
+    prohibited_uses: analysis.prohibited_uses,
+    question: analysis.question,
+    unit: analysis.unit,
+  });
+  const priorContext = context(prior);
+  const nextContext = context(next);
+  const changedContextFields = [
+    ...new Set([...Object.keys(priorContext), ...Object.keys(nextContext)]),
+  ]
+    .filter((field) => exactJsonKey(priorContext[field]) !== exactJsonKey(nextContext[field]))
+    .sort();
+  const mappingsChanged = changedMappings.length > 0;
+  const contextChanged = changedContextFields.length > 0;
+  const applicabilityChanged = supportChanged || mappingsChanged || contextChanged;
+  const humanReviewChanged = exactJsonKey(prior.human_review) !== exactJsonKey(next.human_review);
+  const declaredChangedDependencies =
+    priorAnalysisId !== nextAnalysisId || subjectChanged ? next.change.changed_dependencies : [];
   const changedDependencies = [
-    ...new Set([...next.change.changed_dependencies, ...changedSupportDependencies]),
+    ...new Set([...declaredChangedDependencies, ...changedSupportDependencies]),
   ].sort();
   return deepFreeze({
     prior_analysis_id: priorAnalysisId,
@@ -554,6 +554,9 @@ export function assessReuse(
     mathematical_subject_changed: subjectChanged,
     applicability_changed: applicabilityChanged,
     changed_dependencies: changedDependencies,
+    changed_mappings: changedMappings,
+    changed_context_fields: changedContextFields,
+    human_review_changed: humanReviewChanged,
     mathematical_check_reusable: !subjectChanged,
     applicability_requires_reassessment:
       applicabilityChanged || next.applicability.status !== "supported",

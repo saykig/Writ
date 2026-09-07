@@ -62,10 +62,14 @@ graph. Derivation edges never imply statistical independence or causality. Writ'
 canonical JSON profile is unchanged; raw mathematical bytes and identifiers are not passed through
 its number or Unicode normalization rules.
 
-Only the explicitly invoked runner owns process execution. It verifies the pinned adapter source
-hashes, obtains an untrusted candidate through the upstream producer, and invokes the upstream exact
-checker separately against independently supplied intended bytes. A recipient invokes the checker
-again after reload. Missing backends, pin drift, malformed candidates, absent/invalid certificates,
+Only the explicitly invoked runner owns process execution. It verifies the complete
+repository-owned Python import closure used by the pinned adapter, starts the fixed bridge in Python
+isolated mode, and verifies the declared CPython implementation and major/minor before inserting the
+verified source path. It obtains an untrusted candidate through the upstream producer and invokes the
+upstream exact checker separately against independently supplied intended bytes. A recipient invokes
+the checker again after reload. The interpreter, standard library, OS and installed SciPy
+distribution remain trusted prerequisites; this boundary does not claim to sandbox an arbitrary
+trusted executable. Missing backends, pin drift, malformed candidates, absent/invalid certificates,
 unsupported semantics or operations, stale subjects, and unsupported uses fail closed. An upstream
 `unresolved` stays non-functional and is not translated into incompatibility or model dependence.
 

@@ -19,11 +19,17 @@ accept evidence, approve a review, select an authority, or authorize action.
 - `@writ/decision-case` provides the corresponding pure validation/identity/revision interface and
   the explicitly invoked runner/consumer interface.
 
+The public loaders enforce those authoritative schemas directly before semantic validation. They
+also bound envelope size/depth and reject duplicate JSON keys before parsing can collapse them.
+
 The first adapter is closed to Decision Lab commit
 `7215b53096bc487756f94f4ca87390716a14f2ee`,
 `finite-linear-uncertainty.v1`, CPython 3.13 and `scipy==1.17.0`. Its only enabled operations are
 `decision` and `compatibility`. Unknown versions and operations are errors, not aliases to a nearby
-calculation.
+calculation. Before process launch, Writ hashes the complete repository-owned Python import closure
+that the adapter executes. Python runs in isolated mode; the fixed bridge verifies the CPython
+implementation and 3.13 major/minor before inserting the verified source root. The interpreter,
+standard library, OS and installed SciPy distribution remain trusted prerequisites.
 
 ## Identity and checking
 
@@ -49,11 +55,12 @@ action loss row has an explicit dependency mapping. Dependencies distinguish `so
 `model_construction` and `checked_mathematical_use`; their bounded graph must be acyclic. These edges
 mean “used by this derivation,” never statistical dependence, independence or causality.
 
-`assessReuse` compares exact problem/query hashes separately from the source-reference fingerprints
-used by an analysis. A loss, constraint or query change prevents reuse of the prior mathematical
-check. A source-only change can leave the old mathematical statement correct for its old bytes while
-requiring reassessment of applicability. Unrelated case content does not change a mathematical
-subject hash.
+`assessReuse` compares exact problem/query hashes separately from collision-free structured
+identities for referenced support, model mappings and the declared use/unit context. It reports
+human-disposition changes separately. A loss, constraint or query change prevents reuse of the prior
+mathematical check. A source-, mapping-, or use-context-only change can leave the old mathematical
+statement correct for its old bytes while requiring reassessment of applicability. Unrelated case
+content does not change a mathematical subject hash.
 
 Execution and consumption always report mathematical status, applicability and human disposition as
 separate fields. The supplied fixture remains `unreviewed`; no reviewer is invented.

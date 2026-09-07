@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping
 import json
+import platform
 import sys
+from collections.abc import Mapping
+from pathlib import Path
 
 
 def _decode(value: object, field: str) -> bytes:
     if not isinstance(value, str):
-        raise ValueError(f"{field}_must_be_base64")
+        raise TypeError(f"{field}_must_be_base64")
     return base64.b64decode(value, validate=True)
 
 
@@ -30,9 +32,24 @@ def _write(value: object) -> None:
     )
 
 
+def _unavailable(reason: str) -> int:
+    sys.stderr.write(reason + "\n")
+    return 69
+
+
 def main() -> int:
-    if len(sys.argv) != 2 or sys.argv[1] not in {"solve", "check"}:
+    if len(sys.argv) != 3 or sys.argv[1] not in {"solve", "check"}:
         raise ValueError("unsupported_adapter_command")
+    if platform.python_implementation() != "CPython" or sys.version_info[:2] != (3, 13):
+        return _unavailable(
+            f"unsupported_python_runtime:{platform.python_implementation()}:{sys.version_info.major}.{sys.version_info.minor}"
+        )
+    source_root = Path(sys.argv[2]).resolve(strict=True)
+    if not source_root.is_dir():
+        return _unavailable("pinned_source_root_unavailable")
+    # The caller hashes the complete repository-owned import closure before launch. Isolated mode
+    # ignores ambient PYTHONPATH/user-site settings; this exact verified source is inserted by code.
+    sys.path.insert(0, str(source_root))
     payload = json.loads(sys.stdin.buffer.read().decode("utf-8"))
     problem = _decode(payload.get("problem"), "problem")
     query = _decode(payload.get("query"), "query")
@@ -41,16 +58,16 @@ def main() -> int:
             from scipy import __version__ as scipy_version
             from writ_decision_lab.build2.engine import produce
         except ImportError:
-            return 69
+            return _unavailable("pinned_solver_import_unavailable")
         if scipy_version != "1.17.0":
-            return 69
+            return _unavailable(f"unsupported_scipy_runtime:{scipy_version}")
         _write(produce(problem, query))
         return 0
 
     try:
         from writ_decision_lab.build2.checker import check
     except ImportError:
-        return 69
+        return _unavailable("pinned_checker_import_unavailable")
     candidate = json.loads(_decode(payload.get("candidate_result"), "candidate_result").decode("utf-8"))
     checked = check(candidate, problem, query)
     _write(
@@ -69,6 +86,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except Exception:
+    except Exception:  # noqa: BLE001 - collapse untrusted adapter failures at the protocol boundary
         sys.stderr.write("Pinned Decision Lab adapter rejected the request.\n")
         raise SystemExit(65)

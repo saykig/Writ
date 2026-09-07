@@ -135,7 +135,14 @@
       "properties": {
         "disposition": { "enum": ["unreviewed", "proposed", "accepted", "rejected"] },
         "reviewer": { "type": ["string", "null"], "minLength": 1 }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "disposition": { "const": "accepted" } } },
+          "then": { "properties": { "reviewer": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "reviewer": { "type": "null" } } }
+        }
+      ]
     }
   }
 }

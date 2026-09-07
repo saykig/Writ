@@ -143,6 +143,9 @@ export interface ReuseAssessment {
   readonly mathematical_subject_changed: boolean;
   readonly applicability_changed: boolean;
   readonly changed_dependencies: readonly string[];
+  readonly changed_mappings: readonly string[];
+  readonly changed_context_fields: readonly string[];
+  readonly human_review_changed: boolean;
   readonly mathematical_check_reusable: boolean;
   readonly applicability_requires_reassessment: boolean;
 }

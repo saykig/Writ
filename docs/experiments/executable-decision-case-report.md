@@ -71,6 +71,52 @@ A source-only fixture revision left the raw mathematical bytes unchanged. The re
 kept the old mathematical check reusable for its exact subject while separately reporting the
 changed source-support dependencies and requiring applicability reassessment.
 
+## PR 43 targeted hardening evidence
+
+Hardening began from clean local and remote PR head
+`42a960d7efdf0f0f8db27d469ea6681276abab9f`, whose merge base and then-current GitHub `main` were
+both `20f0473afa62ed3c6e0433a21b189d1d9d1712d6`. The real public package reproduced the review
+findings before repair: it accepted a missing analysis `kind`, a numeric accepted reviewer, an
+unknown case property and a partial execution; it also missed mapping-only, unit-only and U+0001
+delimiter-collision changes in reuse assessment. The full analysis binding already rejected the
+changed mapping at consumption, so this was inconsistent reuse advice rather than a false
+mathematical-certificate acceptance.
+
+The repaired public loaders compile the authoritative case and execution schemas directly, reject
+duplicate outer JSON keys and bound raw envelope size/depth before recursive validation. Existing
+byte-hash, source-span, cross-reference, dependency-DAG, operation/use and exact-check rules remain
+separate. A structurally valid reviewer declaration is still not reviewer authentication.
+
+Reuse assessment now compares collision-free structured source/reference/dependency identities,
+complete mappings, and semantic context including question, unit and intended/prohibited use. It
+reports human-disposition changes separately. Identical raw mathematics can remain mathematically
+reusable while changed support, mapping or context requires applicability reassessment. An unrelated
+case title remains harmless. A human-disposition-only advance does not invalidate the old checked
+theorem; consumption returns the current declared disposition while still freshly checking the
+candidate.
+
+Before launching Python, Writ now verifies all 16 repository-owned modules in the actual import
+closure: eight Build 2 files plus the parent initializer and the seven Build 1 modules it imports.
+The fixed bridge runs with Python isolated mode, inserts only the verified source root, and checks
+the CPython implementation and 3.13 major/minor. A disposable-copy test changed the parent
+initializer to write a sentinel; Writ returned `DECISION_CASE_ENGINE_PIN_MISMATCH` and the sentinel
+was never created. A separate Build 2 checker drift was also rejected. The remaining trusted runtime
+boundary is CPython and its standard library, the OS/process environment, and the installed
+`scipy==1.17.0` distribution used for candidate search; checking itself remains exact and does not
+need SciPy.
+
+`bun run test:decision-integration` is the explicit no-skip acceptance command. With both
+prerequisites absent it exited 1 with a named prerequisite error (0 passed, 1 failed, 1 loader
+error). Against the pinned source and `/tmp` virtual environment it ran on CPython 3.13.15 with
+`scipy==1.17.0`: 15 passed, 0 failed, 132 expectations. That run included all four mathematical
+subjects, relocated recipient checking, stale inputs, changed support/mapping/unit, false and missing
+certificates, both pin-drift controls, unsupported use, and a nonfunctional unresolved result. The
+local adapter boundary separately rejected `/usr/bin/python3` (CPython 3.9) with
+`DECISION_CASE_ENGINE_UNAVAILABLE` and `unsupported_python_runtime:CPython:3.9`. The offline package
+run remained explicit: 14 passed, 0 failed, 1 integration skip, 88 expectations. The same pinned
+environment reran the direct baseline for revisions 0–2 and reproduced the original three statuses.
+No checked-in execution artifact was rewritten.
+
 ## Equal-assurance direct comparison
 
 `direct_baseline.py` received the same portable case, selected revision, pinned engine source and
@@ -97,7 +143,7 @@ Focused commands run successfully during implementation:
 
 - package typecheck and lint;
 - package unit tests without an external engine (integration test explicitly skipped);
-- package tests with the exact pinned engine/runtime (12 passed, 0 failed);
+- explicit package integration with the exact pinned engine/runtime (15 passed, 0 failed);
 - four CLI `run` invocations and a relocated CLI `consume`;
 - direct baseline for revisions 0, 1 and 2;
 - Writ verification after the first implementation commit.

@@ -29,7 +29,18 @@ bun packages/decision-case/bin/writ-decision-case.ts run \
   --python /path/to/python3.13 --out /tmp/revision-0.execution.json
 ```
 
-The runner verifies critical engine source hashes, invokes a fixed Writ-owned adapter, obtains a
+The runner verifies the complete repository-owned engine import closure, invokes a fixed Writ-owned adapter, obtains a
 candidate, and invokes the upstream exact checker separately. A recipient must still call
 `consume`, which reopens the portable case and freshly checks the candidate again. Neither a stored
 status nor the prior check authorizes reuse.
+
+Run the mandatory real-engine acceptance suite with the same prerequisites:
+
+```bash
+WRIT_DECISION_LAB_ROOT=/path/to/pinned/writ-decision-lab \
+WRIT_DECISION_LAB_PYTHON=/path/to/python3.13 \
+bun run test:decision-integration
+```
+
+Unlike the default offline tests, this command exits unsuccessfully when either prerequisite is
+missing; it cannot report a pass by skipping the integration.

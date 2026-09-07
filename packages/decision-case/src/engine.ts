@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { sha256Bytes } from "@writ/provenance";
@@ -7,6 +7,7 @@ import { sha256Bytes } from "@writ/provenance";
 import { analysisBindingHash, analysisById, mathematicalBytes } from "./case.js";
 import { DecisionCaseError } from "./errors.js";
 import { encodedBytes, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
+import { assertDecisionExecutionSchema, parseGovernedJson } from "./schema-validation.js";
 import type {
   CheckedProjection,
   ConsumedDecision,
@@ -17,6 +18,22 @@ import type {
 } from "./types.js";
 
 const ENGINE_FILES: Readonly<Record<string, string>> = {
+  "src/writ_decision_lab/__init__.py":
+    "sha256:fec4b7269d86b96269e8a30d2b4cc79c7ca83873fd6b49979c1f0442494edd36",
+  "src/writ_decision_lab/checker.py":
+    "sha256:84a511de331c7a0c834c1a0c691409af309f72bc5df8808da0a01b473ad59867",
+  "src/writ_decision_lab/consumer.py":
+    "sha256:3ffd71e16c803538f382e72d9f73a74ddf10ead2de5a722e359bd95a4084b665",
+  "src/writ_decision_lab/decode.py":
+    "sha256:4c1df7eb782878bb6689cad7e04e7ba890f660987fde1a42f355bd7c31685061",
+  "src/writ_decision_lab/errors.py":
+    "sha256:df1e265fb690ccfb5022b43ff8dcceed2dd485bbba70905a40a71d4dc37bf060",
+  "src/writ_decision_lab/identity.py":
+    "sha256:ce94c91047475ab201447a5c8d0d31895b06c17e25094e5e43cb5acfe6000440",
+  "src/writ_decision_lab/solver.py":
+    "sha256:033c8da77caa5176b713103b33cdf443051c84585e362ac2e7886149a9bf23ec",
+  "src/writ_decision_lab/types.py":
+    "sha256:57808d0eef3c9d65849d3a9cc7aebd736240a0d5962a0aeb7976d74fcc9a21b9",
   "src/writ_decision_lab/build2/__init__.py":
     "sha256:8cfc1091f474dcccde373b2837129c3807a9afa5ab5518882bd12b6de8361df7",
   "src/writ_decision_lab/build2/backend.py":
@@ -70,19 +87,23 @@ function protocolCall(
   payload: Record<string, unknown>,
   options: EngineOptions,
 ): Uint8Array {
-  verifyEngineRoot(options.engineRoot);
+  const engineRoot = resolve(options.engineRoot);
+  verifyEngineRoot(engineRoot);
   const python = options.pythonExecutable ?? "python3";
-  const processResult = Bun.spawnSync([python, PYTHON_ADAPTER, command], {
-    cwd: options.engineRoot,
-    env: {
-      ...process.env,
-      PYTHONDONTWRITEBYTECODE: "1",
-      PYTHONPATH: join(options.engineRoot, "src"),
+  const processResult = Bun.spawnSync(
+    [python, "-I", PYTHON_ADAPTER, command, join(engineRoot, "src")],
+    {
+      cwd: engineRoot,
+      env: {
+        ...process.env,
+        PYTHONDONTWRITEBYTECODE: "1",
+        PYTHONNOUSERSITE: "1",
+      },
+      stdin: exactJsonBytes(payload),
+      stdout: "pipe",
+      stderr: "pipe",
     },
-    stdin: exactJsonBytes(payload),
-    stdout: "pipe",
-    stderr: "pipe",
-  });
+  );
   if (processResult.exitCode !== 0) {
     const message = new TextDecoder().decode(processResult.stderr).trim();
     throw new DecisionCaseError(
@@ -209,44 +230,10 @@ export function runDecisionCase(
 }
 
 export function parseExecution(raw: Uint8Array): DecisionExecution {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(raw));
-  } catch {
-    throw new DecisionCaseError(
-      "DECISION_CASE_INVALID",
-      "Decision execution is not valid UTF-8 JSON.",
-    );
-  }
-  try {
-    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
-      throw new DecisionCaseError("DECISION_CASE_INVALID", "Unsupported decision execution.");
-    }
-    const value = parsed as DecisionExecution;
-    const sha256 = /^sha256:[0-9a-f]{64}$/;
-    if (
-      value.schema_version !== "0.1.0" ||
-      typeof value.case_id !== "string" ||
-      value.case_id.length === 0 ||
-      typeof value.analysis_id !== "string" ||
-      value.analysis_id.length === 0 ||
-      !sha256.test(value.case_sha256) ||
-      !sha256.test(value.analysis_sha256) ||
-      !sha256.test(value.problem_sha256) ||
-      !sha256.test(value.query_sha256) ||
-      value.mathematical_check?.status !== "freshly_checked"
-    ) {
-      throw new DecisionCaseError("DECISION_CASE_INVALID", "Unsupported decision execution.");
-    }
-    verifyEncodedBytes(value.candidate_result, "candidate_result");
-    return deepFreeze(value);
-  } catch (error) {
-    if (error instanceof DecisionCaseError) throw error;
-    throw new DecisionCaseError(
-      "DECISION_CASE_INVALID",
-      "Decision execution does not satisfy the portable runtime contract.",
-    );
-  }
+  const value = parseGovernedJson(new Uint8Array(raw), "decision execution");
+  assertDecisionExecutionSchema(value);
+  verifyEncodedBytes(value.candidate_result, "candidate_result");
+  return deepFreeze(value);
 }
 
 export function executionBytes(execution: DecisionExecution): Uint8Array {
@@ -279,20 +266,26 @@ export function consumeDecision(
     );
   }
   if (execution.analysis_sha256 !== analysisBindingHash(caseFile, analysis)) {
-    const { problem, query } = mathematicalBytes(analysis);
-    if (
-      execution.problem_sha256 === sha256Bytes(problem) &&
-      execution.query_sha256 === sha256Bytes(query)
-    ) {
+    const priorHumanReviewBinding = analysisBindingHash(caseFile, {
+      ...analysis,
+      human_review: execution.human_review,
+    });
+    if (execution.analysis_sha256 !== priorHumanReviewBinding) {
+      const { problem, query } = mathematicalBytes(analysis);
+      if (
+        execution.problem_sha256 === sha256Bytes(problem) &&
+        execution.query_sha256 === sha256Bytes(query)
+      ) {
+        throw new DecisionCaseError(
+          "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
+          `Analysis ${analysisId} has changed support or modelling dependencies.`,
+        );
+      }
       throw new DecisionCaseError(
-        "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
-        `Analysis ${analysisId} has changed support or modelling dependencies.`,
+        "DECISION_CASE_STALE_SUBJECT_BINDING",
+        "Execution is not bound to the selected analysis subject.",
       );
     }
-    throw new DecisionCaseError(
-      "DECISION_CASE_STALE_SUBJECT_BINDING",
-      "Execution is not bound to the selected analysis subject.",
-    );
   }
   if (analysis.applicability.status !== "supported") {
     throw new DecisionCaseError(

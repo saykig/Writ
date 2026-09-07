@@ -63,8 +63,6 @@
       },
       "dependencies": {
         "@writ/provenance": "workspace:*",
-      },
-      "devDependencies": {
         "ajv": "^8.20.0",
       },
     },

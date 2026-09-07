@@ -44,6 +44,9 @@ tasks:
       - Base, penalty and A-bound revisions freshly check to the exact supplied ranges and warranted action statuses.
       - Stale subjects, forged or missing certificates, source-span mismatch, undeclared inputs and unsupported semantics fail closed.
       - A relocated recipient process freshly checks before use and cannot reinterpret the result outside the static contract.
+      - Public loaders enforce the complete authoritative case and execution schemas before semantic validation.
+      - Reuse assessment detects structured support, mapping and use-context changes without collapsing human review into applicability.
+      - The complete repository-owned engine import closure and declared CPython runtime are verified; an explicit no-skip integration command passes.
       - Existing NIST, canonical identity, bundle export/reload and required repository gates remain unchanged and pass.
       - The proposed ADR, current instructions, compact execution/comparison record and exact external pins are reviewable in one unmerged PR.
     outputs:

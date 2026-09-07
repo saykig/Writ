@@ -1,5 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  appendFileSync,
+  cpSync,
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,6 +20,7 @@ import {
   DecisionCaseError,
   encodedBytes,
   exactJsonBytes,
+  exactJsonKey,
   executionBytes,
   exportDecisionCase,
   openDecisionCase,
@@ -261,10 +269,183 @@ describe("portable decision case", () => {
       "hex";
     expectCode(() => parseExecution(exactJsonBytes(execution)), "DECISION_CASE_INVALID");
   });
+
+  test("enforces the complete authoritative case schema at the public loader", () => {
+    const mutations: Array<(value: DecisionCase) => void> = [
+      (value) => {
+        delete (value.analyses[0] as unknown as { kind?: string }).kind;
+      },
+      (value) => {
+        delete (value.analyses[0] as unknown as { prohibited_uses?: string[] }).prohibited_uses;
+      },
+      (value) => {
+        (value.analyses[0] as unknown as { human_review: unknown }).human_review = {
+          disposition: "accepted",
+          reviewer: 7,
+        };
+      },
+      (value) => {
+        (value.analyses[0] as unknown as { human_review: unknown }).human_review = {
+          disposition: "invented_status",
+          reviewer: null,
+        };
+      },
+      (value) => {
+        (value as unknown as { undeclared: boolean }).undeclared = true;
+      },
+      (value) => {
+        (value.source_references[0] as unknown as { byte_span: unknown }).byte_span = null;
+      },
+      (value) => {
+        (value as unknown as { source_documents: unknown }).source_documents = null;
+      },
+    ];
+    for (const mutate of mutations) {
+      const value = mutableCase();
+      mutate(value);
+      expectCode(() => reopen(value), "DECISION_CASE_INVALID");
+    }
+
+    const text = readFileSync(CASE_PATH, "utf8");
+    const duplicateKey = new TextEncoder().encode(`{"case\\u005fid":"duplicate",${text.slice(1)}`);
+    expectCode(() => openDecisionCase(duplicateKey), "DECISION_CASE_INVALID");
+    const tooDeep = new TextEncoder().encode(`${"[".repeat(65)}null${"]".repeat(65)}`);
+    expectCode(() => openDecisionCase(tooDeep), "DECISION_CASE_INVALID");
+    expectCode(
+      () => openDecisionCase(new Uint8Array(8 * 1024 * 1024 + 1)),
+      "DECISION_CASE_INVALID",
+    );
+  });
+
+  test("enforces the complete execution schema at the public parser", () => {
+    const executionPath = join(
+      ROOT,
+      "decision-cases",
+      "synthetic-failure-choice",
+      "executions",
+      "revision-0.execution.json",
+    );
+    const valid = JSON.parse(readFileSync(executionPath, "utf8")) as DecisionExecution;
+    expect(parseExecution(exactJsonBytes(valid)).analysis_id).toBe("revision-0");
+    const mutations: Array<(value: DecisionExecution) => void> = [
+      (value) => {
+        delete (value as unknown as { engine?: unknown }).engine;
+      },
+      (value) => {
+        (value as unknown as { human_review: unknown }).human_review = {
+          disposition: "accepted",
+          reviewer: 7,
+        };
+      },
+      (value) => {
+        (value as unknown as { human_review: unknown }).human_review = {
+          disposition: "proposed",
+          reviewer: "not-an-authentication-claim",
+        };
+      },
+      (value) => {
+        (value as unknown as { undeclared: boolean }).undeclared = true;
+      },
+      (value) => {
+        (value.mathematical_check.result as unknown as { status: string }).status =
+          "invented_status";
+      },
+      (value) => {
+        delete (value.mathematical_check as unknown as { result?: unknown }).result;
+      },
+    ];
+    for (const mutate of mutations) {
+      const value = JSON.parse(readFileSync(executionPath, "utf8")) as DecisionExecution;
+      mutate(value);
+      expectCode(() => parseExecution(exactJsonBytes(value)), "DECISION_CASE_INVALID");
+    }
+  });
+
+  test("compares mappings and semantic context with collision-free structured identities", () => {
+    expect(exactJsonKey(["a\u0000b", "c"])).not.toBe(exactJsonKey(["a", "b\u0000c"]));
+    const base = openDecisionCase(CASE_BYTES);
+    const unchanged = assessReuse(base, "revision-0", base, "revision-0");
+    expect(unchanged).toMatchObject({
+      mathematical_subject_changed: false,
+      applicability_changed: false,
+      changed_dependencies: [],
+      changed_mappings: [],
+      changed_context_fields: [],
+      human_review_changed: false,
+      mathematical_check_reusable: true,
+      applicability_requires_reassessment: false,
+    });
+
+    const mappingValue = mutableCase();
+    const mapping = mappingValue.analyses[0]!.model_mappings.find(({ target }) =>
+      target.startsWith("query.action:"),
+    )! as unknown as { target: string; dependency_ids: string[] };
+    mapping.dependency_ids = ["source.synthetic"];
+    const mappingAssessment = assessReuse(base, "revision-0", reopen(mappingValue), "revision-0");
+    expect(mappingAssessment.mathematical_check_reusable).toBe(true);
+    expect(mappingAssessment.applicability_changed).toBe(true);
+    expect(mappingAssessment.applicability_requires_reassessment).toBe(true);
+    expect(mappingAssessment.changed_mappings).toEqual([mapping.target]);
+
+    const oldCollision = mutableCase();
+    const nextCollision = mutableCase();
+    const oldDependency = oldCollision.analyses[0]!.dependencies[0]! as unknown as {
+      description: string;
+      rationale: string;
+    };
+    const nextDependency = nextCollision.analyses[0]!.dependencies[0]! as unknown as {
+      description: string;
+      rationale: string;
+    };
+    oldDependency.description = "a\u0001b";
+    oldDependency.rationale = "c";
+    nextDependency.description = "a";
+    nextDependency.rationale = "b\u0001c";
+    const collisionAssessment = assessReuse(
+      reopen(oldCollision),
+      "revision-0",
+      reopen(nextCollision),
+      "revision-0",
+    );
+    expect(collisionAssessment.applicability_changed).toBe(true);
+    expect(collisionAssessment.changed_dependencies).toContain("source.synthetic");
+
+    const unitValue = mutableCase();
+    (unitValue.analyses[0] as unknown as { unit: string }).unit = "other fictional unit";
+    const unitAssessment = assessReuse(base, "revision-0", reopen(unitValue), "revision-0");
+    expect(unitAssessment.mathematical_check_reusable).toBe(true);
+    expect(unitAssessment.applicability_requires_reassessment).toBe(true);
+    expect(unitAssessment.changed_context_fields).toContain("unit");
+
+    const titleValue = mutableCase();
+    (titleValue as unknown as { title: string }).title = "Unrelated display title";
+    expect(assessReuse(base, "revision-0", reopen(titleValue), "revision-0")).toMatchObject({
+      applicability_changed: false,
+      human_review_changed: false,
+      mathematical_check_reusable: true,
+    });
+
+    const reviewValue = mutableCase();
+    (reviewValue.analyses[0] as unknown as { human_review: unknown }).human_review = {
+      disposition: "proposed",
+      reviewer: null,
+    };
+    expect(assessReuse(base, "revision-0", reopen(reviewValue), "revision-0")).toMatchObject({
+      applicability_changed: false,
+      human_review_changed: true,
+      mathematical_check_reusable: true,
+    });
+  });
 });
 
 const engineRoot = process.env.WRIT_DECISION_LAB_ROOT;
 const pythonExecutable = process.env.WRIT_DECISION_LAB_PYTHON;
+const integrationRequired = process.env.WRIT_REQUIRE_DECISION_LAB_INTEGRATION === "1";
+if (integrationRequired && (engineRoot === undefined || pythonExecutable === undefined)) {
+  throw new Error(
+    "Decision Lab integration prerequisites are required: set WRIT_DECISION_LAB_ROOT and WRIT_DECISION_LAB_PYTHON.",
+  );
+}
 const integration = engineRoot !== undefined && pythonExecutable !== undefined ? test : test.skip;
 
 describe("pinned Decision Lab integration", () => {
@@ -273,6 +454,17 @@ describe("pinned Decision Lab integration", () => {
     () => {
       const caseFile = openDecisionCase(CASE_BYTES);
       const options = { engineRoot: engineRoot!, pythonExecutable: pythonExecutable! };
+      const runtime = Bun.spawnSync(
+        [
+          pythonExecutable!,
+          "-I",
+          "-c",
+          "import platform,sys;print(f'{platform.python_implementation()} {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')",
+        ],
+        { stdout: "pipe", stderr: "pipe" },
+      );
+      expect(runtime.exitCode).toBe(0);
+      expect(new TextDecoder().decode(runtime.stdout).trim()).toMatch(/^CPython 3\.13\.[0-9]+$/);
       const executions = new Map(
         caseFile.value.analyses.map((analysis) => [
           analysis.analysis_id,
@@ -352,6 +544,52 @@ describe("pinned Decision Lab integration", () => {
         "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
       );
 
+      const changedMappingValue = mutableCase();
+      const changedMapping = changedMappingValue.analyses[0]!.model_mappings.find(({ target }) =>
+        target.startsWith("query.action:"),
+      )! as unknown as { dependency_ids: string[] };
+      changedMapping.dependency_ids = ["source.synthetic"];
+      expectCode(
+        () =>
+          consumeDecision(
+            reopen(changedMappingValue),
+            executions.get("revision-0")!,
+            "revision-0",
+            "static_expected_loss_decision",
+            options,
+          ),
+        "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
+      );
+
+      const changedUnitValue = mutableCase();
+      (changedUnitValue.analyses[0] as unknown as { unit: string }).unit = "other fictional unit";
+      expectCode(
+        () =>
+          consumeDecision(
+            reopen(changedUnitValue),
+            executions.get("revision-0")!,
+            "revision-0",
+            "static_expected_loss_decision",
+            options,
+          ),
+        "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
+      );
+
+      const changedReviewValue = mutableCase();
+      (changedReviewValue.analyses[0] as unknown as { human_review: unknown }).human_review = {
+        disposition: "proposed",
+        reviewer: null,
+      };
+      expect(
+        consumeDecision(
+          reopen(changedReviewValue),
+          executions.get("revision-0")!,
+          "revision-0",
+          "static_expected_loss_decision",
+          options,
+        ).human_review.disposition,
+      ).toBe("proposed");
+
       const unresolved = JSON.parse(
         new TextDecoder().decode(executionBytes(executions.get("revision-0")!)),
       ) as DecisionExecution;
@@ -413,6 +651,40 @@ describe("pinned Decision Lab integration", () => {
           "DECISION_CASE_MATHEMATICAL_CHECK_FAILED",
         );
       }
+
+      const parentDriftRoot = mkdtempSync(join(tmpdir(), "writ-parent-drift-"));
+      cpSync(join(engineRoot!, "src"), join(parentDriftRoot, "src"), { recursive: true });
+      const sentinel = join(parentDriftRoot, "parent-initializer-executed");
+      appendFileSync(
+        join(parentDriftRoot, "src", "writ_decision_lab", "__init__.py"),
+        `\nopen(${JSON.stringify(sentinel)}, "w", encoding="utf-8").write("executed")\n`,
+        "utf8",
+      );
+      expectCode(
+        () =>
+          runDecisionCase(caseFile, "revision-0", {
+            engineRoot: parentDriftRoot,
+            pythonExecutable: pythonExecutable!,
+          }),
+        "DECISION_CASE_ENGINE_PIN_MISMATCH",
+      );
+      expect(existsSync(sentinel)).toBe(false);
+
+      const build2DriftRoot = mkdtempSync(join(tmpdir(), "writ-build2-drift-"));
+      cpSync(join(engineRoot!, "src"), join(build2DriftRoot, "src"), { recursive: true });
+      appendFileSync(
+        join(build2DriftRoot, "src", "writ_decision_lab", "build2", "checker.py"),
+        "\n# harmless pin-drift marker\n",
+        "utf8",
+      );
+      expectCode(
+        () =>
+          runDecisionCase(caseFile, "revision-0", {
+            engineRoot: build2DriftRoot,
+            pythonExecutable: pythonExecutable!,
+          }),
+        "DECISION_CASE_ENGINE_PIN_MISMATCH",
+      );
 
       const relocated = mkdtempSync(join(tmpdir(), "writ-recipient-"));
       const relocatedCase = join(relocated, "case.json");
