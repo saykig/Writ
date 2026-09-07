@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/decision-case-v0.1.schema.json",
+  "title": "Writ derived decision case v0.1",
+  "description": "A portable derived decision case. It is separate from corpora and records; mathematical checking, evidentiary applicability, and human disposition remain distinct.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "title",
+    "case_kind",
+    "engine",
+    "source_documents",
+    "source_references",
+    "analyses",
+    "interpretation_control"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "case_id": { "$ref": "#/$defs/nonEmptyString" },
+    "title": { "$ref": "#/$defs/nonEmptyString" },
+    "case_kind": { "const": "derived_decision_case" },
+    "engine": { "$ref": "#/$defs/engine" },
+    "source_documents": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/sourceDocument" }
+    },
+    "source_references": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/sourceReference" }
+    },
+    "analyses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/analysis" }
+    },
+    "interpretation_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alternative_scenarios", "simultaneous_constraints"],
+      "properties": {
+        "alternative_scenarios": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "simultaneous_constraints": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "encodedBytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "content", "sha256"],
+      "properties": {
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter",
+        "repository",
+        "commit",
+        "semantics",
+        "supported_operations",
+        "runtime",
+        "dependency"
+      ],
+      "properties": {
+        "adapter": { "const": "writ-decision-lab-python.v1" },
+        "repository": { "const": "https://github.com/saykig/writ-decision-lab" },
+        "commit": { "const": "7215b53096bc487756f94f4ca87390716a14f2ee" },
+        "semantics": { "const": "finite-linear-uncertainty.v1" },
+        "supported_operations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["compatibility", "decision"] }
+        },
+        "runtime": { "const": "CPython 3.13" },
+        "dependency": { "const": "scipy==1.17.0" }
+      }
+    },
+    "sourceDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "document_version_id",
+        "media_type",
+        "encoding",
+        "content",
+        "sha256"
+      ],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "media_type": { "const": "text/plain" },
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "source_id",
+        "document_version_id",
+        "passage_id",
+        "locator",
+        "quote",
+        "passage_hash",
+        "document_hash",
+        "byte_span"
+      ],
+      "properties": {
+        "reference_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "passage_id": { "$ref": "#/$defs/nonEmptyString" },
+        "locator": { "$ref": "#/$defs/nonEmptyString" },
+        "quote": { "$ref": "#/$defs/nonEmptyString" },
+        "passage_hash": { "$ref": "#/$defs/sha256" },
+        "document_hash": { "$ref": "#/$defs/sha256" },
+        "byte_span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "integer", "minimum": 0 },
+            "end": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependency_id",
+        "role",
+        "kind",
+        "description",
+        "rationale",
+        "depends_on",
+        "reference_ids"
+      ],
+      "properties": {
+        "dependency_id": { "$ref": "#/$defs/nonEmptyString" },
+        "role": {
+          "enum": ["source_support", "model_construction", "checked_mathematical_use"]
+        },
+        "kind": {
+          "enum": [
+            "synthetic_supplied_value",
+            "deterministic_transformation",
+            "modelling_choice",
+            "mathematical_subject",
+            "checked_use"
+          ]
+        },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "depends_on": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "reference_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "modelMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "dependency_ids"],
+      "properties": {
+        "target": { "$ref": "#/$defs/nonEmptyString" },
+        "dependency_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "rationale", "changed_dependencies"],
+      "properties": {
+        "status": { "enum": ["supported", "needs_reassessment", "unknown", "contested"] },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "changed_dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "humanReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "reviewer"],
+      "properties": {
+        "disposition": { "enum": ["unreviewed", "proposed", "accepted", "rejected"] },
+        "reviewer": { "type": ["string", "null"], "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "disposition": { "const": "accepted" } } },
+          "then": { "properties": { "reviewer": { "type": "string", "minLength": 1 } } },
+          "else": { "properties": { "reviewer": { "type": "null" } } }
+        }
+      ]
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analysis_id",
+        "kind",
+        "previous_analysis_id",
+        "question",
+        "intended_use",
+        "prohibited_uses",
+        "unit",
+        "mathematical_subject",
+        "dependencies",
+        "model_mappings",
+        "change",
+        "applicability",
+        "human_review"
+      ],
+      "properties": {
+        "analysis_id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["revision", "interpretation_control"] },
+        "previous_analysis_id": {
+          "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }]
+        },
+        "question": { "$ref": "#/$defs/nonEmptyString" },
+        "intended_use": { "enum": ["static_expected_loss_decision", "compatibility_check"] },
+        "prohibited_uses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "unit": { "$ref": "#/$defs/nonEmptyString" },
+        "mathematical_subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["problem", "query"],
+          "properties": {
+            "problem": { "$ref": "#/$defs/encodedBytes" },
+            "query": { "$ref": "#/$defs/encodedBytes" }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/dependency" }
+        },
+        "model_mappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/modelMapping" }
+        },
+        "change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["summary", "changed_dependencies"],
+          "properties": {
+            "summary": { "$ref": "#/$defs/nonEmptyString" },
+            "changed_dependencies": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        },
+        "applicability": { "$ref": "#/$defs/applicability" },
+        "human_review": { "$ref": "#/$defs/humanReview" }
+      }
+    }
+  }
+}

@@ -19,6 +19,10 @@ MANIFEST.sha256
 AGENTS.md
 TASKS.yaml
 
+# Portable decision-case subjects and exact engine artifacts retain raw byte identities.
+decision-cases/**/*.case.json
+decision-cases/**/executions/*.json
+
 # Generated canonical corpora, emitted by the Python adapters via
 # canonical_json_bytes. Their emitters are asserted to be byte-for-byte
 # reproducible, so reformatting them here would break those tests.

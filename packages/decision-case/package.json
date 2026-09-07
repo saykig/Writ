@@ -1,0 +1,26 @@
+{
+  "name": "@writ/decision-case",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test",
+    "test:integration": "WRIT_REQUIRE_DECISION_LAB_INTEGRATION=1 bun test test/decision-case.test.ts",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "case": "bun bin/writ-decision-case.ts"
+  },
+  "bin": {
+    "writ-decision-case": "./bin/writ-decision-case.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@writ/provenance": "workspace:*",
+    "ajv": "^8.20.0"
+  }
+}
