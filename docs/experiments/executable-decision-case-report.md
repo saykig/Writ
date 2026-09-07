@@ -134,6 +134,13 @@ run remained explicit: 14 passed, 0 failed, 2 integration skips, 88 expectations
 environment reran the direct baseline for revisions 0–2 and reproduced the original three statuses.
 No checked-in execution artifact was rewritten.
 
+The clean verified implementation commit was
+`b5bbc7a54f21043f739a46315db7e4f5860dd4e6`. Its exported `catalog`, `corpora`, `resources`,
+`records`, `recordLinks` and `recordJudgments` sections were byte-identical to the pre-repair export
+from `6c897dd3fa457e2a33150920f3f19a5c65212ca9`; all six section hashes and the counts of 16 corpora,
+81 records, 16 links and 65 judgments were unchanged. The whole envelope differed only in the
+expected commit-bound `writCommit` and resulting `bundleHash` metadata.
+
 ## Equal-assurance direct comparison
 
 `direct_baseline.py` received the same portable case, selected revision, pinned engine source and
