@@ -390,7 +390,9 @@ function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
         `Analysis ${analysis.analysis_id} has a missing predecessor.`,
       );
     }
-    const dependencyIds = new Set(analysis.dependencies.map(({ dependency_id }) => dependency_id));
+    const dependencyIds = new Set(
+      analysis.dependencies.map(({ dependency_id }: CaseDependency): string => dependency_id),
+    );
     for (const changed of [
       ...analysis.change.changed_dependencies,
       ...analysis.applicability.changed_dependencies,
