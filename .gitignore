@@ -7,5 +7,7 @@ coverage/
 __pycache__/
 .pytest_cache/
 .venv/
+*.egg-info/
+apps/ingest/build/
 *.pyc
 .DS_Store
