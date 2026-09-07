@@ -17,6 +17,7 @@ import {
 import { sha256Bytes } from "@writ/provenance";
 
 import { SharedAnalysisError } from "./errors.js";
+import { ScopedLineageIndex } from "./lineage-index.js";
 import { assertArchive } from "./schema-validation.js";
 import type {
   AnalysisAddress,
@@ -369,34 +370,18 @@ export function recordRevision(
   });
 }
 
-function paths(analysis: DecisionAnalysis, from: string, to: string): string[][] {
-  const outgoing = new Map<string, Set<string>>();
+function lineageIndex(analysis: DecisionAnalysis): ScopedLineageIndex {
+  const index = new ScopedLineageIndex();
   for (const dependency of analysis.dependencies) {
-    outgoing.set(dependency.dependency_id, outgoing.get(dependency.dependency_id) ?? new Set());
+    index.addNode(dependency.dependency_id, dependency);
+  }
+  for (const dependency of analysis.dependencies) {
     for (const parent of dependency.depends_on) {
-      const children = outgoing.get(parent) ?? new Set<string>();
-      children.add(dependency.dependency_id);
-      outgoing.set(parent, children);
+      index.addEdge(parent, dependency.dependency_id);
     }
   }
-  const found: string[][] = [];
-  const walk = (node: string, path: string[], active: Set<string>): void => {
-    if (node === to) {
-      found.push(path);
-      return;
-    }
-    for (const next of [...(outgoing.get(node) ?? [])].sort(compare)) {
-      if (active.has(next)) {
-        throw new SharedAnalysisError(
-          "SHARED_ANALYSIS_DEPENDENCY_CYCLE",
-          `Dependency lineage contains a cycle at ${next}.`,
-        );
-      }
-      walk(next, [...path, next], new Set([...active, next]));
-    }
-  };
-  walk(from, [from], new Set([from]));
-  return found;
+  index.assertAcyclic();
+  return index;
 }
 
 function referencedSourceDependencies(
@@ -440,6 +425,7 @@ export function assessRevision(
     ...revision.withdrawn_sources,
   ];
   const impactsWithoutBasis: AnalysisRevisionImpact[] = selected(workspace).map((entry) => {
+    const lineage = lineageIndex(entry.analysis);
     const transition = revision.transitions.find(
       ({ prior }) => addressKey(prior) === addressKey(entry.address),
     );
@@ -482,7 +468,7 @@ export function assessRevision(
       ).mathematical_check_reusable;
     }
     const derivationPaths: DerivationPath[] = [...direct].sort(compare).flatMap((dependencyId) =>
-      paths(entry.analysis, dependencyId, "use.checked").map((nodes) => ({
+      lineage.paths(dependencyId, "use.checked").map((nodes) => ({
         analysis: entry.address,
         nodes,
       })),
