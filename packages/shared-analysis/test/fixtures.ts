@@ -13,7 +13,7 @@ import { sha256Bytes } from "@writ/provenance";
 import type { BundleImport, RevisionDeclaration, SourceIdentity } from "../src/index.js";
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-export const FIXTURE_ROOT = join(ROOT, "decision-cases", "shared-analysis-revision");
+export const FIXTURE_ROOT = join(ROOT, "examples", "decision-cases", "shared-analysis-revision");
 
 export function fixture(relativePath: string): Uint8Array {
   return new Uint8Array(readFileSync(join(FIXTURE_ROOT, relativePath)));
@@ -92,9 +92,10 @@ export const unaffectedImport: BundleImport = {
     readFileSync(
       join(
         ROOT,
+        "examples",
         "decision-cases",
-        "synthetic-failure-choice",
-        "synthetic-failure-choice.case.json",
+        "failure-choice",
+        "case.json",
       ),
     ),
   ),

@@ -13,7 +13,9 @@
 - [`current/nist-proving-ground-audit.md`](./current/nist-proving-ground-audit.md) records the current
   NIST reference audit.
 - [`current/data-model.mmd`](./current/data-model.mmd) diagrams the source-grounded record model.
+- [`history/snapshots.md`](./history/snapshots.md) indexes retired historical snapshots, Git tags,
+  exact digests, and recovery commands.
 - [`migrations/`](./migrations/) records completed repository, data, and governance migrations.
 
 Accepted architecture decisions live in the root [`adr/`](../adr/) directory. Historical planning
-and pilot material lives under [`archive/`](../archive/) and is non-normative.
+and pilot material is preserved through the tagged snapshots and migration records above.

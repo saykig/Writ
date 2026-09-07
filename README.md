@@ -1,82 +1,44 @@
 # Writ
 
-Writ is infrastructure for making consequential decision-making more **inspectable, cumulative, and
-correctable**.
+Writ is an open, reviewable protocol for **decision provenance**.
 
-It preserves the source and review trail behind institutional knowledge, and it is beginning to
-preserve a separate class of derived mathematical decision results together with the exact models,
-questions, assumptions, checks, applicability, and revisions that make those results usable.
+Consequential decisions are often easier to see than the evidence, assumptions, uncertainty, review,
+and revisions that produced them. Writ is building a durable way to preserve that chain so a later
+human or machine can inspect what was known, what was assumed, what followed, and what needs to be
+reconsidered when the underlying basis changes.
 
-## Current system
-
-Writ has two deliberately separate surfaces.
-
-### Source-grounded knowledge
-
-```text
-source
--> passage
--> typed record
--> human review
--> provenance
+```mermaid
+flowchart LR
+  S[Sources & evidence] --> K[Reviewed knowledge]
+  K --> Q[Question & assumptions]
+  Q --> C[Checked result]
+  C --> H[Human disposition]
+  H --> D[Decision]
+  D --> I[Implementation]
+  I --> O[Observed consequences]
+  O --> R[Revision & reuse]
+  R --> K
+  R --> Q
 ```
 
-### Derived decision cases
+## Current focus
 
-```text
-question / model / assumptions
--> exact mathematical subject
--> candidate calculation
--> independent check
--> applicability + human disposition
--> revision / reuse
-```
+Writ currently connects two separate surfaces:
 
-The second surface does not turn an analysis into a source fact. A mathematical result can be
-correct for its exact premises while being unsupported or inapplicable in a real decision context.
-Writ preserves that distinction.
+- **Source-grounded knowledge:** source → passage → typed record → human review → provenance.
+- **Bounded decision work:** question + assumptions → checked result → applicability → human
+  disposition → revision and reuse.
 
-The first bounded implementation is the `derived_decision_case` integration merged in PR #43. It
-uses a pinned Decision Lab checker for one finite-linear-uncertainty profile. It is a first stable
-capability, not a general reasoning engine or final architecture.
+They can connect, but one does not silently become the other. Evidence remains distinct from
+interpretation, results remain bound to the basis that justifies them, and revision preserves
+history instead of overwriting it.
 
-## Bellman
-
-Bellman is the mathematical research programme behind the decision semantics Writ will progressively
-make executable. Bellman establishes objects, assumptions, operations, guarantees, composition
-rules, failure boundaries, and provenance. Writ encodes and checks stable slices of that mathematics
-and preserves how they are reused and corrected.
-
-The current Python/TypeScript stack is a reference implementation, not a permanent language
-commitment.
-
-## Principles
-
-- evidence and interpretation remain distinguishable;
-- modelling choices are explicit rather than smuggled in as source facts;
-- unknown, incompatible, unresolved, and tied are different states;
-- exact results remain bound to the model, question, units, and information context that justify
-  them;
-- mathematical checking, evidentiary applicability, human review, and authority to act are separate;
-- accepted records and derived case revisions remain historical snapshots rather than being silently
-  rewritten;
-- provenance is deterministic over frozen inputs;
-- new mathematical capabilities earn their way into Writ through bounded, tested interfaces.
-
-## What Writ is not
-
-Writ is not currently an autonomous policy decision-maker, general recommendation engine, universal
-political ontology, scenario simulator, causal inference engine, or authority system. It does not
-invent probabilities, source reliabilities, preferences, or permission to act.
+The immediate engineering goal is to make these pieces portable, checkable, reusable, and
+correctable across more than one bounded case without hard-coding a single problem or domain.
 
 ## Roadmap
 
-The current roadmap is [`docs/current/roadmap.md`](./docs/current/roadmap.md). Its North Star is:
-
-> **Make consequential decision-making mathematically inspectable, cumulative, and correctable.**
-
-The long-term proving arena may include war, security strategy, intelligence, biosecurity, AI
-governance, and other consequential domains. Those domains test the substrate; they do not define
-its core abstraction.
+See [`docs/current/roadmap.md`](./docs/current/roadmap.md) for the current Now / Next / Later roadmap,
+architecture gates, and longer-term direction.
 
 Copyright 2026 Sara Kim

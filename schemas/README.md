@@ -4,10 +4,10 @@
 Schema 2020-12. Files under `packages/domain/schemas/` are generated, drift-guarded vendor copies
 for runtime packaging; they are not a second authority.
 
-The frozen EU-US pilot keeps three local schemas under
-`archive/pilots/eu-us-ai-evaluation-v1/original/schemas/`. Those contracts are
-`archived pilot-local`: they govern only that preserved pilot and are not active global Writ
-schemas.
+The Git-tagged EU-US pilot snapshot keeps three local schemas in its historical tree. Those
+contracts are `historical pilot-local`: they govern only that preserved snapshot and are not active
+global Writ schemas. Its exact tag, path, and recovery command are indexed in
+[`docs/history/snapshots.md`](../docs/history/snapshots.md).
 
 ## Dependency direction
 
@@ -125,13 +125,12 @@ generic ingestion utilities have not yet been redesigned. Retaining those contra
 their former corpus or execution semantics active architecture. Their retirement or
 generalization requires a separate decision.
 
-## Pilot-local schemas
+## Historical pilot-local schemas
 
-| Schema                                                                                  | Classification       |
-| --------------------------------------------------------------------------------------- | -------------------- |
-| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/reviewed_dataset.schema.json`   | archived pilot-local |
-| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/normalized_claim.schema.json`   | archived pilot-local |
-| `archive/pilots/eu-us-ai-evaluation-v1/original/schemas/headline_judgments.schema.json` | archived pilot-local |
+The `snapshot/eu-us-ai-evaluation-v1` tag preserves `reviewed_dataset.schema.json`,
+`normalized_claim.schema.json`, and `headline_judgments.schema.json` beneath the snapshot's
+`original/schemas/` path. They are historical pilot-local contracts and are absent from the active
+schema tree.
 
 ## Layer ownership
 

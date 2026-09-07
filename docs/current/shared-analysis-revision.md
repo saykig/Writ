@@ -68,7 +68,7 @@ routes can begin only from source identities, so circular self-support is not ex
 
 The checked-in alpha and beta cases are synthetic. Alpha explicitly assumes independence and beta
 does not. Shared bytes do not create that assumption. The full fixture and its exact expected
-mathematics are documented in `decision-cases/shared-analysis-revision/README.md`.
+mathematics are documented in `examples/decision-cases/shared-analysis-revision/README.md`.
 
 The profile remains limited to the existing `finite-linear-uncertainty.v1` decision and
 compatibility operations. It adds no conditional, causal, sequential, strategic, safety, or
