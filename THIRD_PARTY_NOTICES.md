@@ -55,7 +55,6 @@ Items requiring particular attention when distributing Writ or bundled artifacts
 
 - PyMuPDF, a direct Python dependency, declares a choice of GNU Affero General Public License 3.0
   or an Artifex commercial license;
-- Psycopg and its binary and pool packages declare LGPL-3.0-only;
 - JavaScript packages recorded in `bun.lock` retain their upstream licenses and notices.
 
 These dependencies do not change the license of original Writ source files, but a distributed

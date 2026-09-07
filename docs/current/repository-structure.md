@@ -16,7 +16,7 @@ map, not a universal knowledge model.
 | `packages/decision-case/` | validation, identity, revision, runner and fresh-checking consumer boundary for the currently supported decision profile | general optimization, empirical modelling, or a solver registry |
 | `packages/language/` and data/export packages | deterministic authoring/lowering/export tooling | reviewed political data |
 | `internal/verification/` | Writ verification gates, grounding checks, fixtures, and integration/schema suites | source or mathematical authority |
-| `internal/tooling/` | repository maintenance, source-registry, migration, publication, and reproduction commands | current product semantics |
+| `internal/tooling/` | repository maintenance, source-registry, acquisition, migration, and reproduction commands | current product semantics or evidence acceptance |
 | `docs/current/` | governing product guidance, roadmap, and current technical documentation | historical migration evidence |
 
 `adr/` preserves architecture decisions. A later decision supersedes earlier active wiring without
@@ -44,23 +44,21 @@ or Bellman's mathematics.
 
 Application- and package-owned tests remain colocated with their implementations where practical.
 
-## Confirmed retirement target
-
-The completed consumer audit confirms that `apps/api/` is legacy Postgres/Neon persistence
-infrastructure and is not required by current Writ functionality. The compiler, verifier,
-decision-case layer, corpus authority, language package, provenance layer, and repository-native
-workflow do not depend on it as runtime authority.
-
-The remaining legacy surface includes the API connection and repository code, SQL migrations and
-database tests, `internal/tooling/scripts/publish_corpus.ts`, optional Python online publication
-through `apps/ingest/src/writ_ingest/corpus/online_store.py` and `psycopg`, and Docker/database
-environment wiring. Preserve that complete surface in this governance PR and retire it coherently in
-a separate bounded cleanup PR.
-
 ## Retained supporting surfaces
 
 `apps/ingest/` remains active because repository source-registry/tooling code still imports its
-source/registry primitives.
+registry, URL-policy, acquisition, manifest, validation, vocabulary, and review-queue primitives.
+`internal/infrastructure/` contains the reviewed source-registry/vocabulary configuration and its
+deterministic generated registry projection.
+
+Source acquisition is caller-controlled. `internal/tooling/scripts/fetch_sources.py` plans by
+default and writes exact acquired bytes only to an explicit output path. It reports SHA-256 and
+acquisition provenance without modifying a reviewed corpus or conferring evidence acceptance.
+
+Writ has no current database package, migration runner, hosted persistence dependency, corpus
+publication service, or long-running HTTP application. Repository and Git artifacts remain the
+authority for current corpora, reviews, provenance, and derived decision cases. ADR 0027 records the
+implemented persistence retirement as Proposed pending explicit human architectural disposition.
 
 `TASKS.yaml` remains the execution ledger. The human-facing development sequence belongs in
 `docs/current/roadmap.md`; completed task history should not silently regain product authority.

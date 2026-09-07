@@ -15,7 +15,7 @@ REGISTRY_SCHEMA_RELATIVE_PATH = Path(
     "schemas/compatibility/compliance-corpus-v2/source_registry_config.schema.json"
 )
 
-LEGACY_ENTRY_KEYS = {
+REGISTRY_PROJECTION_KEYS = {
     "id",
     "name",
     "publisher",
@@ -193,11 +193,13 @@ def validate_source_url(source: dict[str, Any], url: str) -> str:
     return request_url
 
 
-def project_legacy_registry(registry: dict[str, Any]) -> dict[str, Any]:
-    """Project the canonical YAML into the existing API seed contract."""
+def project_source_registry(registry: dict[str, Any]) -> dict[str, Any]:
+    """Project canonical YAML into the deterministic JSON registry contract."""
     entries: list[dict[str, Any]] = []
     for source in registry["sources"]:
-        entries.append({key: source[key] for key in source if key in LEGACY_ENTRY_KEYS})
+        entries.append(
+            {key: source[key] for key in source if key in REGISTRY_PROJECTION_KEYS}
+        )
     return {"schema_version": "1.0.0", "entries": entries}
 
 

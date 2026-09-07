@@ -1,33 +1,47 @@
 #!/usr/bin/env python3
-"""Plan, import, or explicitly execute one registry-governed fetch."""
+"""Plan or explicitly acquire one registry-governed source to a caller-owned file."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-import os
 from pathlib import Path
 
-import psycopg
 from writ_ingest.corpus.fetch import fetch_live_bytes, plan_seed_fetch
-from writ_ingest.corpus.online_store import (
-    prepare_online_artifact,
-    publish_online_artifact,
-)
 from writ_ingest.corpus.registry import get_source, load_registry, validate_source_url
+
+
+def sha256_id(payload: bytes) -> str:
+    return f"sha256:{hashlib.sha256(payload).hexdigest()}"
+
+
+def write_exact_output(path: Path, payload: bytes) -> None:
+    try:
+        with path.open("xb") as output:
+            output.write(payload)
+    except FileExistsError as exc:
+        raise ValueError(f"refusing to overwrite existing output: {path}") from exc
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-id", required=True)
-    parser.add_argument("--summit-slug", required=True)
-    parser.add_argument("--document-id", required=True)
     parser.add_argument("--source-url")
     parser.add_argument("--registry", type=Path)
+    parser.add_argument("--output", type=Path)
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--supplied-file", type=Path)
     modes.add_argument("--approved-live-access", action="store_true")
     args = parser.parse_args()
+
+    acquiring = args.supplied_file is not None or args.approved_live_access
+    if acquiring and args.output is None:
+        parser.error("--output is required when acquiring source bytes")
+    if args.output is not None and args.output.exists():
+        parser.error(f"refusing to overwrite existing output: {args.output}")
+    if args.output is not None and not args.output.parent.is_dir():
+        parser.error(f"output directory does not exist: {args.output.parent}")
 
     source = get_source(load_registry(args.registry), args.source_id)
     source_url = args.source_url or source["discovery"]["seed_url"]
@@ -59,39 +73,29 @@ def main() -> int:
     else:
         result = {
             **plan_seed_fetch(source),
-            "document_id": args.document_id,
-            "summit_slug": args.summit_slug,
             "mode": "dry_run",
-            "corpus_objects_written": False,
+            "bytes_acquired": False,
+            "output_written": False,
         }
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
 
-    database_url = os.environ.get("DATABASE_URL")
-    if not database_url:
-        parser.error("DATABASE_URL is required for online corpus publication")
-    artifact = prepare_online_artifact(
-        logical_id=(
-            f"corpus.{args.source_id}.raw.{args.summit_slug}.{args.document_id}"
-        ),
-        source_id=args.source_id,
-        object_kind="raw_source",
-        content=payload,
-        media_type=media_type,
-        summit_slug=args.summit_slug,
-        provenance=provenance,
-    )
-    with psycopg.connect(database_url) as connection:
-        result = publish_online_artifact(connection, artifact)
-    result.update(
-        {
-            "source_id": args.source_id,
-            "document_id": args.document_id,
-            "summit_slug": args.summit_slug,
-            "byte_size": artifact.byte_size,
-            "media_type": artifact.media_type,
-        }
-    )
+    assert args.output is not None
+    try:
+        write_exact_output(args.output, payload)
+    except ValueError as exc:
+        parser.error(str(exc))
+    result = {
+        "source_id": args.source_id,
+        "mode": "acquired",
+        "output_path": str(args.output),
+        "sha256": sha256_id(payload),
+        "byte_size": len(payload),
+        "media_type": media_type,
+        "acquisition_provenance": provenance,
+        "corpus_objects_written": False,
+        "evidence_accepted": False,
+    }
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 

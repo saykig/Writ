@@ -47,6 +47,6 @@ bun run verify:writ
 - Keep Bun and Python versions pinned through `.bun-version` and `.python-version`.
 - Commit `bun.lock` and the Python lockfile when one is introduced.
 - Merge automated dependency updates only after the complete verification and migration tests pass.
-- Require deliberate review for parser, canonicalization, cryptography, database-driver, PDF-parser,
+- Require deliberate review for parser, canonicalization, cryptography, PDF-parser,
   browser-automation, and solver upgrades.
 - Record semantic changes in an ADR and bump the affected language, schema, or compiler version.

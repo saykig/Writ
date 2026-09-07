@@ -2,7 +2,7 @@
 
 **Status:** current directional roadmap  
 **Observation cutoff:** 7 September 2026  
-**Baseline:** `main` after PR #43 (`99c7e4f31bbd3a405e19176b13cd776f4b16a0db`)
+**Baseline:** `main` after PR #44 (`6ce8d6333a3b6b2c0e4e5150bd686d1677acf97a`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
@@ -59,11 +59,6 @@ flowchart LR
 4. **Align repository governance with the current direction.** Current docs and agent instructions
    should describe both source-grounded knowledge and derived mathematical work. Retire one-off agent
    experiments once their durable lessons live in tests and invariants.
-5. **Retire the confirmed legacy database/API surface in a separate cleanup PR.** The completed
-   consumer audit found that current Writ functionality does not require `apps/api` as runtime
-   authority. Remove the API package, database publication paths, migrations, dependencies, and
-   environment wiring together only after their exact cleanup boundary is reviewed in that PR.
-
 **Exit gate from Now:** a clean second-case handoff, explicit ADR 0026 disposition, and no unresolved
 semantic disagreement between the roadmap, product definition, schemas, and executable behavior.
 
@@ -117,11 +112,11 @@ served.
 **Keep for now:** `archive/` and `docs/migrations/` as historical evidence; `apps/ingest` because
 current source-registry/tooling still consumes it; `TASKS.yaml` as the execution ledger.
 
-**Confirmed separate retirement target:** `apps/api` and its legacy Postgres/Neon persistence
-surface are not required by the current compiler, verifier, decision-case layer, corpus authority,
-language package, provenance layer, or repository-native workflow. Keep the API package, SQL
-migrations, database tests, publication paths, Docker/environment wiring, and Python database
-dependencies intact in this governance PR; remove them together in the next bounded cleanup PR.
+**Retired in the database cleanup:** the legacy Postgres/Neon persistence package, migrations,
+database publication paths, Docker/environment wiring, database CI, and database-specific
+dependencies. Generic source discovery and acquisition remain, with acquired bytes written only to
+an explicit caller-owned output path. ADR 0027 records this implemented architecture as Proposed
+pending explicit human disposition.
 
 **Future cleanup:** split or compact completed historical entries in `TASKS.yaml` if the execution
 ledger itself begins obscuring active work. Do not delete accepted ADRs merely because their active
