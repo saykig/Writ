@@ -1,61 +1,75 @@
 # Repository structure and ownership
 
-This document explains the present tree after the staged repository reset. It is a retention and
-authority map, not a new knowledge model.
+This document explains the active tree and authority boundaries. It is a retention and ownership
+map, not a universal knowledge model.
 
 ## Active authorities
 
 | Path | Owns | Does not own |
 | --- | --- | --- |
-| `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | questions or execution methodologies |
-| `schemas/` | all active JSON Schema contracts | language protocol definitions |
-| `protocols/` | Writ language EBNF contract | corpus records |
-| `packages/` | domain contracts, native compiler, provenance, CLI, data export, and test tooling | reviewed political data |
-| `apps/` | retained database and ingestion tooling | schema or corpus authority |
-| `docs/current/` | current product and technical guidance | historical migration evidence |
+| `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | downstream questions, mathematical models, or recommendations |
+| `decision-cases/` | bounded portable derived decision fixtures and immutable case/execution artifacts | source truth, empirical premise validity, or authority to act |
+| `schemas/` | active JSON Schema interchange contracts, including analysis-layer decision-case contracts | mathematical theorem authority |
+| `protocols/` | Writ language protocol definitions | corpus or Bellman mathematical authority |
+| `packages/domain/` | native record/link/judgment contracts | derived mathematical semantics |
+| `packages/provenance/` | portable mechanical provenance primitives | domain truth or mathematical proof |
+| `packages/decision-case/` | validation, identity, revision, runner and fresh-checking consumer boundary for the currently supported decision profile | general optimization, empirical modelling, or a solver registry |
+| `packages/language/` and data/export packages | deterministic authoring/lowering/export tooling | reviewed political data |
+| `internal/verification/` | Writ verification gates, grounding checks, fixtures, and integration/schema suites | source or mathematical authority |
+| `internal/tooling/` | repository maintenance, source-registry, migration, publication, and reproduction commands | current product semantics |
+| `docs/current/` | governing product guidance, roadmap, and current technical documentation | historical migration evidence |
 
-`adr/` holds accepted architecture decisions. When an earlier decision describes superseded
-implementation wiring, a later ADR records the change rather than rewriting history.
+`adr/` preserves architecture decisions. A later decision supersedes earlier active wiring without
+rewriting historical ADR text.
+
+## External mathematical authority
+
+Bellman is developed in a separate repository. Its mature mathematical artifacts define the
+semantics and guarantees that Writ may progressively implement. Writ should pin and reference those
+semantics at an interface rather than duplicate a parallel mathematical archive.
+
+Decision Lab is also separate. The current derived-decision adapter pins one specific Decision Lab
+commit and checker profile. That is a replaceable backend boundary, not ownership of Writ's corpus
+or Bellman's mathematics.
 
 ## Supporting and historical areas
 
-- `internal/verification/` owns native fixtures, the Writ Verification Harness, and root-level
-  integration/schema suites.
-- `internal/tooling/` contains repository-maintenance, migration, validation, publication, and
-  reproduction commands.
-- `internal/infrastructure/` contains operational registry inputs, deterministic generated
-  compatibility projections, and database migrations.
-- `archive/` contains non-normative historical material. Active code and verification do not
-  require it; reviewed catalogued corpora remain under `corpora/`, not `archive/`.
-- `docs/migrations/` preserves completed reset path maps and verification handoffs.
+- `archive/` contains non-normative historical pilots and compatibility material. Active runtime
+  behavior must not depend on it unless an explicit compatibility test says otherwise.
+- `docs/migrations/` preserves completed resets, review dispositions, migrations, and governance
+  transitions.
+- `.agents/` contains only current reusable agent skills. One-off reviewer-role experiments should
+  be retired after their durable lessons are promoted into tests or governing documents.
+- `.github/` remains at the root for CI and repository integration.
 
-Application- and package-owned tests and generators remain colocated under `apps/*` and
-`packages/*`. `.github/` and `.agents/` remain at the root because their external consumers require
-those conventional discovery paths. `adr/` remains because corpus identity metadata resolves to
-stable accepted-decision paths.
+Application- and package-owned tests remain colocated with their implementations where practical.
 
-## Final-hygiene decisions
+## Confirmed retirement target
 
-- Historical reset reports moved from `docs/current/` to `docs/migrations/repository-reset/`.
-- The general data-model diagram moved into current technical documentation.
-- Obsolete compliance and methodology planning was removed from the tracked tree and remains
-  recoverable from Git history and the `pre-foundation-reset-2026-08-22` tag.
-- The obsolete evaluator, analyzer, benchmark, and compliance conformance packages were retired
-  after native record lowering was proven independent.
-- An editor-specific launch file and a redundant generated source-registry summary were removed;
-  neither had a consumer.
-- Developer-only root machinery was consolidated under `internal/`; the complete path map is in
-  `docs/migrations/internal-repository-support.md`.
+The completed consumer audit confirms that `apps/api/` is legacy Postgres/Neon persistence
+infrastructure and is not required by current Writ functionality. The compiler, verifier,
+decision-case layer, corpus authority, language package, provenance layer, and repository-native
+workflow do not depend on it as runtime authority.
 
-All deleted material remains recoverable from Git history. The cleanup does not rewrite the
-Covenant-to-Writ development history. Corpora and records exist independently of questions,
-comparisons, analyses, and presentation layers.
+The remaining legacy surface includes the API connection and repository code, SQL migrations and
+database tests, `internal/tooling/scripts/publish_corpus.ts`, optional Python online publication
+through `apps/ingest/src/writ_ingest/corpus/online_store.py` and `psycopg`, and Docker/database
+environment wiring. Preserve that complete surface in this governance PR and retire it coherently in
+a separate bounded cleanup PR.
+
+## Retained supporting surfaces
+
+`apps/ingest/` remains active because repository source-registry/tooling code still imports its
+source/registry primitives.
+
+`TASKS.yaml` remains the execution ledger. The human-facing development sequence belongs in
+`docs/current/roadmap.md`; completed task history should not silently regain product authority.
 
 ## Preservation gate
 
-Structural cleanup does not change NIST, European Commission, or legal-policy corpus bytes or
-substantive semantics. NIST is the sole active development proving ground, while the other reviewed
-catalogued corpora remain secondary material. Validation continues to enforce declared contracts,
-catalog-to-manifest routes, evidence resolution, source checksums, migration history, deterministic
-bundle output, and the repository checksum inventory. Historical archive material is not an active
-verification input.
+Repository cleanup must not rewrite reviewed corpus bytes, accepted historical records, prior
+execution artifacts, or accepted ADR history merely to make the present tree look simpler. Remove a
+surface only when its current consumers and replacement/retention obligations are established.
+
+Current cleanup should optimize for a tree where active files describe active capabilities, while
+Git history and migration records preserve how Writ reached them.

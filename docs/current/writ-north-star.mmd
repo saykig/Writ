@@ -1,0 +1,23 @@
+flowchart LR
+  subgraph K[Source-grounded knowledge]
+    S[Sources & evidence] --> R[Reviewed records & provenance]
+  end
+
+  subgraph B[Bellman]
+    M[Math objects, assumptions & guarantees] --> C[Checkable mathematical semantics]
+  end
+
+  subgraph D[Derived decision work]
+    Q[Question, model & assumptions] --> X[Execution / certificate]
+    X --> V[Independent check]
+    V --> A[Applicability & human disposition]
+  end
+
+  R --> Q
+  C --> X
+  A --> E[Decision record]
+  E --> I[Implementation]
+  I --> O[Observed consequences]
+  O --> U[Revision, correction & reuse]
+  U --> R
+  U --> Q

@@ -2,57 +2,78 @@
 
 ## Mission
 
-Build Writ as a source-grounded knowledge system that makes political knowledge more inspectable,
-reviewable, provenance-preserving, and easier for humans to reason from without replacing human
-judgment. The current proving ground is the NIST institutional corpus, and the immediate knowledge
-boundary is source -> passage -> typed record -> human review -> provenance. A separate derived
-decision-case layer may preserve explicit mathematical problems and checked computations without
-turning them into source records or human decisions.
+Build Writ as infrastructure for making consequential decision-making more inspectable, cumulative,
+and correctable without replacing human or institutional judgment.
 
-Optimize for semantic correctness, reproducibility, provenance, and reviewability before UI polish
-or automation volume.
+Writ currently has two deliberately separate surfaces:
+
+1. a source-grounded knowledge layer: source -> passage -> typed record -> human review -> provenance;
+2. a bounded derived decision layer: explicit problem/question + assumptions/model + exact execution ->
+   independent check -> applicability -> human disposition -> revision/reuse.
+
+The first surface preserves what is known and why. The second preserves what follows from an explicit
+mathematical subject and when that result may be reused. Neither surface may silently supply the
+premises, authority, or empirical truth required by the other.
+
+Bellman is the mathematical research programme that establishes the semantics and guarantees Writ
+will progressively make executable. Writ should implement stable Bellman slices without turning the
+current implementation language, backend, or first synthetic cases into the mathematical ceiling.
+
+Optimize for semantic correctness, reproducibility, provenance, explicit uncertainty, and
+reviewability before UI polish or automation volume.
 
 ## Read first
 
 Before changing core behavior, read:
 
 - `docs/current/product-definition.md`;
+- `docs/current/roadmap.md`;
 - relevant current JSON Schemas;
 - accepted ADRs that govern the affected behavior;
-- the selected task in `TASKS.yaml`
+- the selected task in `TASKS.yaml` when one exists.
 
-Documents under `archive/` are historical evidence, never current instructions.
+Documents under `archive/` and `docs/migrations/` are historical evidence, not current instructions.
 
 ## Architectural invariants
 
-1. Corpora and records exist independently of questions, comparisons, analyses, and presentation
-   layers.
-2. Human reasoning remains external to Writ. Questions are not first-class knowledge records; an
-   explicitly separate derived decision case may state its intended question without governing
-   corpus, source, passage, record, or review identity.
-3. The immediate system boundary is source -> passage -> typed record -> human review ->
-   provenance.
-4. Institutional records distinguish identity, placement, mission, mandate, function, decision
-   right, and operational capacity without inferring one from another.
-5. The core schema does not require commitments, obligations, or scores.
-6. External ratings are source-reported judgments.
-7. Unknown and contested values remain explicit; unknown is never silently treated as false.
-8. Visualizations and memos are views, not sources of truth.
-9. The implemented native families are `legal_policy` and `institutional`; future family
-   identifiers remain extensible at the shared record base.
-10. NIST is the sole active development proving ground. Other reviewed catalogued corpora remain
-    secondary material and do not set the current product direction.
-11. Deterministic compilation, identity, and pure verification perform no network access, model
-    inference, randomness, wall-clock reads, mutation, or external process execution. Only an
-    explicitly invoked runner may execute a fixed, pinned adapter; case data never supplies a
-    command.
-12. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
-    or publish derived results.
-13. Accepted records are superseded, not edited in place.
-14. Exact decimals and explicit units are required for money and quantities.
-15. Stable diagnostic codes are never silently repurposed.
-16. A computation's conditional mathematical correctness is separate from evidentiary
-    applicability, human acceptance, and authority to act.
+1. Sources, passages, reviewed records, and corpus identity do not derive their truth or identity from
+   a downstream question, model, analysis, visualization, or recommendation.
+2. Derived decision cases may be first-class Writ artifacts, but they remain separate from native
+   political-knowledge records and cannot rewrite their evidence or review status.
+3. Preserve the distinction among source evidence, interpretation, modelling assumptions,
+   mathematical subject, computed result, independent check, applicability, human disposition, and
+   authority to act.
+4. A checked mathematical result is conditional on the exact model/problem, query, information
+   access, policy/action class, units, assumptions, and guarantee type that justify it.
+5. A result may be historically correct under old premises while becoming inapplicable after a
+   revision. Preserve the old statement and record the changed dependency rather than rewriting
+   history.
+6. Compatible, incompatible, and compatibility-not-established/unresolved are distinct states.
+   Unknown is never silently treated as false; nonidentification is not a tie.
+7. Bellman mathematical semantics govern mature decision primitives. Writ may encode, compute,
+   check, version, compose, reuse, and correct them, but must not weaken their assumptions or invent
+   missing mathematics at an interface.
+8. NIST remains the active proving ground for the source-grounded institutional-knowledge layer.
+   Synthetic decision cases are a separate engineering proving ground for mathematical integration;
+   NIST does not define the entire Writ roadmap.
+9. The implemented native record families are `legal_policy` and `institutional`; family-specific
+   semantics remain outside the shared provenance envelope.
+10. External ratings and source-reported judgments remain statements of their identified sources,
+    not Writ facts merely because Writ preserves them.
+11. Accepted native records are superseded, not edited in place. Derived case revisions and checked
+    executions likewise remain immutable historical snapshots.
+12. Pure compilation, identity, validation, and verification are deterministic over frozen inputs.
+    External process execution belongs only to explicit runners with fixed, validated boundaries;
+    data never supplies arbitrary executable commands.
+13. Models and solvers may produce candidates. They do not accept evidence, resolve disputes, invent
+    authority, waive diagnostics, or turn a mathematical optimum into permission to act.
+14. Exact quantities retain explicit units and exact representations where the governed mathematics
+    requires them. Do not silently round exact mathematical inputs through JavaScript numbers.
+15. The current Python/TypeScript implementation is a reference implementation, not a permanent
+    language commitment. Revisit Julia/optimization backends, Rust exact checking, or Lean formal
+    proof only when the concrete capability reaches the corresponding need.
+16. Do not introduce a universal ontology, graph database, workflow platform, vector database,
+    general solver registry, or autonomous policy system without measured need and an accepted ADR.
 
 ## Source of truth order
 
@@ -61,11 +82,12 @@ When specifications conflict:
 1. this file's invariants;
 2. `docs/current/product-definition.md`;
 3. accepted ADRs and current JSON Schemas;
-4. current protocol and language specifications;
-5. current product documentation;
-6. examples and compatibility material.
+4. `docs/current/roadmap.md` for current sequencing, never as permission to bypass an ADR;
+5. current protocol, language, and technical documentation;
+6. examples, experiments, compatibility material, and historical records.
 
-Open an ADR for any deliberate change to this order or the invariants.
+A roadmap item is a direction, not authorization to change an accepted semantic contract. Open or
+update an ADR when a durable architectural decision needs to supersede an earlier accepted one.
 
 ## Commands
 
@@ -79,44 +101,48 @@ bun run verify:writ
 bun run build
 ```
 
-Do not change command names without updating this file and CI.
+Run additional package-specific or integration gates required by the affected capability. Do not
+report an integration as passing when its real backend check was skipped.
 
 ## Implementation rules
 
-- Keep packages small and dependency direction one-way: domain and schemas -> language/provenance/data export -> API/UI.
-- Do not let API or database types become native record types.
-- Use JSON Schema 2020-12 as interchange authority.
-- Keep the shared provenance envelope small and put family-specific fields in family contracts.
-- Do not force obligations, commitments, legal force, or scores onto every record.
-- Keep source-reported judgments distinct from Writ records.
-- Add tests for every behavior change and diagnostic.
-- Prefer pure functions in compilation, canonicalization, validation, and verification code.
-- Return typed errors and stable diagnostic codes.
-- Do not add arbitrary JavaScript execution to the DSL.
-- Do not introduce a graph database, workflow platform, or vector database without measured need and an ADR.
-- Do not fetch live sites in normal unit tests.
+- Keep packages small and dependency direction explicit.
+- Do not let API/database types become native knowledge or decision-case authority.
+- Use JSON Schema 2020-12 as interchange authority where a JSON contract is declared.
+- Keep source grounding, modelling, mathematical checking, applicability, review, and authority
+  separable in code as well as documentation.
+- Preserve exact source bytes and mathematical bytes at the boundary that claims to bind them.
+- Add decisive positive and negative tests for every semantic behavior change.
+- Prefer pure functions for compilation, canonicalization, validation, identity, and checking.
+- Return typed failures and stable diagnostic codes.
+- Do not add arbitrary JavaScript execution to the Writ language.
+- Do not fetch live sites in normal deterministic tests.
 - Redact secrets and restricted source content from logs and fixtures.
+- Do not duplicate Bellman proofs into Writ merely to make them look native; implement stable
+  semantics through a narrow, checkable interface.
 
 ## Task discipline
 
-Work on one task from `TASKS.yaml` at a time. Confirm dependencies, implement the smallest coherent slice, run its acceptance checks, update task status, and stop at the gate.
+Use `docs/current/roadmap.md` to understand direction. Use `TASKS.yaml` as an execution ledger, not as
+an eternal product roadmap. Work on the smallest coherent task that advances a current roadmap gate,
+confirm dependencies, run its acceptance checks, update durable documentation only when the result
+changes current understanding, and stop at the gate.
 
 ## Review priorities
 
 Review in this order:
 
-1. silent semantic change;
-2. unknown-to-false collapse;
-3. non-determinism;
-4. incomplete proof dependencies;
-5. schema drift;
-6. authorization or provenance bypass;
-7. record or corpus identity coupled to a question, comparison, analysis, or presentation;
-8. source-reported judgments presented as Writ facts;
-9. missing tests;
-10. maintainability.
+1. silent semantic change or invalid mathematical composition;
+2. result reuse outside its assumptions, information context, units, or intended query;
+3. source/evidence/model/analysis conflation;
+4. unknown-to-false, unresolved-to-incompatible, or interval-overlap-to-tie collapse;
+5. stale or incomplete dependency/revision handling;
+6. non-determinism or unchecked executed code at a claimed pinned boundary;
+7. schema or protocol drift;
+8. authorization, human-review, or provenance bypass;
+9. corpus/record identity coupled to a downstream analysis;
+10. missing decisive tests and maintainability.
 
-For bounded cross-layer consistency discovery, use the repository-local
-`.agents/skills/writ-track-b/SKILL.md` role contracts. Promote durable knowledge in the order
-test > invariant > ADR/current doc > role reminder; do not turn individual review cases into
-persistent personalities.
+Promote durable knowledge in the order test > invariant > accepted ADR/current doc > local reminder.
+Do not preserve one-off reviewer personas or experimental agent roles after their lessons have been
+captured by stronger repository protections.
