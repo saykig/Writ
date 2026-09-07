@@ -39,7 +39,11 @@ tasks:
       checker. Separate alpha/beta imports, explicit source and assumption revisions, scoped
       applicability, selected recomputation, portable export, and recipient replay pass the frozen
       contract and pinned no-skip integrations. PR 46 is integrated with byte-identical original
-      decision fixtures under examples; all repository gates pass and ADR 0028 remains Proposed.
+      decision fixtures under examples. PR 47 hardening now derives an exact analysis-scoped
+      reassessment basis, scopes routes to bundles/analyses/statements, uses typed lineage roles,
+      rejects substantive metadata relabelling, and distinguishes preserved subjects, stored
+      candidates, and fresh recipient checks; all repository gates pass and ADR 0028 remains
+      Proposed.
     baseline_commit: a65b4f70e54b7020c6a480c2a39b6735f9151b9d
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee

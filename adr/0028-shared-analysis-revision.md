@@ -67,7 +67,9 @@ declarations, supplemental source bytes, explicit revision events, scope-bound a
 declarations, and exact execution bytes. Derived graphs, shared-source inspection, revision impacts,
 and stored success flags are not portable authority; recipients reconstruct them.
 
-Case-local IDs are addressed by `(bundle_id, local_id)`. A shared source version exists only when
+Case-local IDs are addressed by `(bundle_id, local_id)`. Support routes likewise use
+`(bundle_id, route_id)`, explicitly name the selected local analyses they support, and retain their
+statement ID and scope in impact output. A shared source version exists only when
 `source_id`, `document_version_id`, and exact SHA-256 all match. Equal labels and equal bytes under
 different declared identities do not prove sameness or independence. Conflicting bytes for one
 declared source/version fail closed.
@@ -80,19 +82,28 @@ inside one route are conjunctive; complete routes for the identical statement an
 alternatives. One surviving route provides conditional support but does not erase a current
 contradictory premise.
 
-Every revision is a supplied event. Writ never selects a source version from a title or date and
-never extracts a probability from prose. Impact reporting keeps these separate:
+Every revision is a supplied event. Metadata events are structurally restricted to metadata-only
+content and cannot suppress reassessment for a substantive event. Writ never selects a source
+version from a title or date and never extracts a probability from prose. Impact reporting keeps
+these separate:
 
-1. the prior check remains valid for its original exact subject;
-2. a successor with changed problem/query bytes needs a new calculation;
+1. the prior exact subject remains preserved, without implying that check evidence exists;
+2. stored candidate evidence remains unverified until recipient replay, and a declared successor
+   is classified as an identical, changed, unestablished, or inapplicable subject;
 3. changed source, assumption, mapping, or context basis needs a new applicability declaration;
 4. human disposition remains the immutable native case declaration.
 
-An applicability declaration binds the exact revision-impact basis, sources, assumptions, mappings,
-and context. It is not authenticated review or proof of empirical truth. `recomputeAnalysis`
+The public basis derivation binds an applicability declaration to its exact selected prior and any
+declared successor: mathematical subject, intended use, unit, exact source/reference material,
+full assumptions, mappings, derivation declarations, relevant route scopes, revision effect, and
+inventory coverage. Human disposition, display metadata, workspace labels, and unrelated analyses
+are excluded. The declaration carries that derived identity plus exact source and assumption
+addresses; it has no caller-invented mapping/context digest fields. It is not authenticated review
+or proof of empirical truth. `recomputeAnalysis`
 requires that declaration and then uses ADR 0026's pinned runner. Recalculation cannot manufacture
 applicability. Recipient replay parses the archive, reconstructs every impact, and freshly checks
-each stored numerical candidate through the existing adapter.
+each stored numerical candidate through the existing adapter. Its result identifies the revision,
+execution, case, analysis, problem, query, and candidate hashes rather than relying on array order.
 
 ## Consequences and limits
 

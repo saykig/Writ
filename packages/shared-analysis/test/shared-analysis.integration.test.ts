@@ -7,6 +7,7 @@ import { openDecisionCase, runDecisionCase } from "@writ/decision-case";
 
 import {
   assessRevision,
+  deriveReassessmentBasis,
   exportSharedAnalysis,
   importSharedAnalyses,
   reassessApplicability,
@@ -23,8 +24,6 @@ import {
   fixture,
   quantitativeRevision,
   ROOT,
-  sha256,
-  V3_X_HALF,
   withdrawalRevision,
 } from "./fixtures.js";
 
@@ -46,25 +45,17 @@ function assessment(
   revisionId: string,
   analysis: AnalysisAddress,
 ): ApplicabilityAssessmentDeclaration {
-  const impact = assessRevision(workspace, revisionId);
+  const basis = deriveReassessmentBasis(workspace, revisionId, analysis);
   return {
     assessment_id: `assessment.${revisionId}.${analysis.bundle_id}`,
     revision_id: revisionId,
     analysis,
-    basis_sha256: impact.basis_sha256,
+    basis_sha256: basis.basis_sha256,
     status: "supported",
     rationale:
       "The exact synthetic successor basis is explicitly declared applicable for this bounded test.",
-    source_bindings: [
-      {
-        source_id: V3_X_HALF.source_id,
-        document_version_id: V3_X_HALF.document_version_id,
-        sha256: V3_X_HALF.sha256,
-      },
-    ],
-    assumption_dependencies: [],
-    mapping_sha256: sha256({ analysis, kind: "mappings" }),
-    context_sha256: sha256({ analysis, scope: "synthetic shared failure decision" }),
+    source_bindings: basis.source_bindings,
+    assumption_dependencies: basis.assumption_dependencies,
   };
 }
 
@@ -162,18 +153,40 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
   workspace = withdrawn.workspace;
   expect(withdrawn.execution.mathematical_check.result.status).toBe("model_dependent");
 
+  const quantitativeAlphaImpact = assessRevision(workspace, "revision.x-half-v3").impacts.find(
+    ({ analysis }) => analysis.bundle_id === "alpha",
+  )!;
+  expect(quantitativeAlphaImpact.original_check_evidence).toEqual({
+    status: "absent",
+    execution_sha256: null,
+  });
+  expect(quantitativeAlphaImpact.successor_check_evidence).toEqual({
+    status: "stored_candidate_unverified",
+    execution_sha256: workspace.value.executions.find(
+      ({ analysis, revision_id }) =>
+        analysis.bundle_id === "alpha" && revision_id === "revision.x-half-v3",
+    )!.execution.sha256,
+  });
+
   const archive = exportSharedAnalysis(workspace);
   const replay = replaySharedAnalysis(archive, options);
-  expect(
-    replay.freshly_checked.map(({ analysis, mathematical_status }) => ({
-      bundle: analysis.bundle_id,
-      status: mathematical_status,
+  const expectedExecutions = [withdrawn.execution, alpha.execution, beta.execution];
+  expect(replay.freshly_checked).toEqual(
+    expectedExecutions.map((execution, index) => ({
+      analysis: {
+        bundle_id: index < 2 ? "alpha" : "beta",
+        analysis_id: "analysis-base",
+      },
+      revision_id: index === 0 ? "revision.alpha-withdraw-independence" : "revision.x-half-v3",
+      execution_sha256: workspace.value.executions[index]!.execution.sha256,
+      case_sha256: execution.case_sha256,
+      analysis_sha256: execution.analysis_sha256,
+      problem_sha256: execution.problem_sha256,
+      query_sha256: execution.query_sha256,
+      candidate_sha256: execution.candidate_result.sha256,
+      mathematical_status: execution.mathematical_check.result.status,
     })),
-  ).toEqual([
-    { bundle: "alpha", status: "model_dependent" },
-    { bundle: "alpha", status: "uniformly_strictly_optimal" },
-    { bundle: "beta", status: "model_dependent" },
-  ]);
+  );
 
   const recipientRoot = mkdtempSync(join(tmpdir(), "writ-shared-recipient-"));
   try {

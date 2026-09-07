@@ -19,17 +19,25 @@ The library path is:
 1. `importSharedAnalyses(workspaceId, bundles)` validates each complete native case and exact source
    bytes, scopes local IDs, deduplicates exact repeat imports, and refuses bundle or source/version
    conflicts.
-2. `inspectSharedAnalyses(workspace)` derives shared exact sources and explicit assumption/model
-   differences. It reports unmapped comparisons as `not_established`.
+2. `inspectSharedAnalyses(workspace)` derives shared exact sources and compares exact assumption,
+   model, subject, intended-use, and unit declarations. Matching local labels alone establish
+   nothing; comparisons without a shared exact source remain `not_established`.
 3. `recordRevision(workspace, declaration)` appends one explicit source, withdrawal, assumption, or
    metadata event. Prose and version labels never create an event.
-4. `assessRevision(workspace, revisionId)` reconstructs direct/downstream paths and reports prior
-   mathematical validity, successor-check reuse, current applicability, alternative routes,
-   conflicts, and inventory limits separately.
-5. `reassessApplicability(workspace, declaration)` records a declaration bound to the exact impact
-   basis. `recomputeAnalysis(...)` refuses to run a successor without it, then uses the existing
-   pinned Decision Lab runner and preserves the checked execution bytes.
-6. `exportSharedAnalysis(workspace)` emits exact portable JSON. `openSharedAnalysis(bytes)` validates
+4. `assessRevision(workspace, revisionId)` reconstructs direct/downstream paths and reports the
+   preserved original subject, available historical candidate evidence, successor-subject status,
+   current applicability, statement-scoped alternative routes, conflicts, and inventory limits
+   separately. Semantic dependency roles, not fixture ID spellings, identify subject/check nodes.
+5. `deriveReassessmentBasis(workspace, revisionId, analysis)` derives the exact reviewable basis from
+   the selected prior and any declared successor. It covers subject hashes, intended use, unit,
+   relevant exact source/reference declarations, assumption addresses and contents, mappings,
+   derivation declarations, route scope, revision effect, and inventory completeness. It excludes
+   human disposition, display title, workspace label, and unrelated analyses.
+6. `reassessApplicability(workspace, declaration)` records a declaration whose basis, exact source
+   bindings, and assumption addresses must equal that derived basis. `recomputeAnalysis(...)`
+   refuses to run a successor without it, then uses the existing pinned Decision Lab runner and
+   preserves the checked execution bytes.
+7. `exportSharedAnalysis(workspace)` emits exact portable JSON. `openSharedAnalysis(bytes)` validates
    it. `replaySharedAnalysis(bytes, engineOptions)` reconstructs impacts and freshly checks every
    preserved candidate.
 
@@ -53,16 +61,24 @@ source cases.
 - `unaffected` is available only when the bundle declares the bounded inventory complete and no
   path/change exists.
 - `not_established` means no path was observed but the supplied inventory is partial or unknown.
-- `original_mathematical_check_valid` says only that the old result remains about its old exact
-  bytes.
-- `mathematical_check_reusable` is true only when a declared successor has the same problem/query
-  bytes, or a metadata-only event changes no theorem.
-- `applicability_requires_reassessment` is independent of both fields above.
+- `original_subject_status: preserved` records history without claiming a check occurred.
+- original and successor check evidence is `absent` or `stored_candidate_unverified`; only explicit
+  recipient replay establishes a fresh check of exact candidate/subject bytes.
+- successor subject status is `identical_subject`, `changed_subject`, `not_established`, or
+  `not_applicable`. No transition defaults to `not_established` for an affected or incompletely
+  inventoried analysis, never optimistic reuse.
+- `applicability_requires_reassessment` remains independent of those statuses.
 
 Within a support route every source premise is required. Distinct complete routes for one identical
-statement and scope are alternatives. A surviving route remains conditional support; it cannot
+statement and scope are alternatives. Route identity is `(bundle_id, route_id)`, and each route
+explicitly names its selected local analyses. A route for another statement or analysis is not an
+alternative. A surviving route remains conditional support; it cannot
 silence contradictory current input. Native dependency graphs must be acyclic, and supplemental
 routes can begin only from source identities, so circular self-support is not expressible.
+
+A `metadata_change` event must contain no source replacement/withdrawal, assumption withdrawal,
+route withdrawal, conflicting premise, or successor transition. That makes its non-reassessment
+status structural rather than caller-label based.
 
 ## Proving ground and limits
 

@@ -1,5 +1,6 @@
 import type {
   CaseSourceDocument,
+  CaseSourceReference,
   DecisionExecution,
   EncodedBytes,
   EngineOptions,
@@ -24,9 +25,20 @@ export interface SourceIdentity {
 
 export interface SupportRoute {
   readonly route_id: string;
+  readonly analysis_ids: readonly string[];
   readonly statement_id: string;
   readonly statement_scope: string;
   readonly premise_sources: readonly SourceIdentity[];
+}
+
+export interface SupportRouteAddress {
+  readonly bundle_id: string;
+  readonly route_id: string;
+}
+
+export interface ScopedSupportRoute extends SupportRouteAddress {
+  readonly statement_id: string;
+  readonly statement_scope: string;
 }
 
 export interface DependencyInventoryDeclaration {
@@ -76,7 +88,7 @@ export interface RevisionDeclaration {
   }[];
   readonly withdrawn_sources: readonly SourceIdentity[];
   readonly withdrawn_dependencies: readonly DependencyAddress[];
-  readonly withdrawn_routes: readonly string[];
+  readonly withdrawn_routes: readonly SupportRouteAddress[];
   readonly conflicting_premises: readonly ConflictingPremise[];
   readonly transitions: readonly AnalysisTransition[];
 }
@@ -90,8 +102,6 @@ export interface ApplicabilityAssessmentDeclaration {
   readonly rationale: string;
   readonly source_bindings: readonly SourceIdentity[];
   readonly assumption_dependencies: readonly DependencyAddress[];
-  readonly mapping_sha256: string;
-  readonly context_sha256: string;
 }
 
 export interface PortableExecution {
@@ -126,6 +136,7 @@ export interface AnalysisDifference {
   readonly shared_sources: readonly SourceIdentity[];
   readonly distinct_assumptions: readonly DependencyAddress[];
   readonly mathematical_subject_equal: boolean;
+  readonly declared_context_equal: boolean;
   readonly status: "different_models" | "same_declared_model" | "not_established";
 }
 
@@ -141,23 +152,61 @@ export interface DerivationPath {
   readonly nodes: readonly string[];
 }
 
+export interface ReassessmentBasis {
+  readonly revision_id: string;
+  readonly analysis: AnalysisAddress;
+  readonly target: "original_analysis" | "declared_successor";
+  readonly target_analysis_id: string;
+  readonly dependency_scope: {
+    readonly scope: string;
+    readonly completeness: InventoryCompleteness;
+    readonly unresolved_references: readonly string[];
+  };
+  readonly mathematical_subject: {
+    readonly problem_sha256: string;
+    readonly query_sha256: string;
+  };
+  readonly intended_use: string;
+  readonly unit: string;
+  readonly source_bindings: readonly SourceIdentity[];
+  readonly source_references: readonly CaseSourceReference[];
+  readonly assumption_dependencies: readonly DependencyAddress[];
+  readonly support_routes: readonly ScopedSupportRoute[];
+  readonly prior_analysis_sha256: string;
+  readonly target_analysis_sha256: string;
+  readonly mapping_sha256: string;
+  readonly context_sha256: string;
+  readonly derivation_sha256: string;
+  readonly revision_effect_sha256: string;
+  readonly basis_sha256: string;
+}
+
+export interface StoredCheckEvidence {
+  readonly status: "absent" | "stored_candidate_unverified";
+  readonly execution_sha256: string | null;
+}
+
 export interface AnalysisRevisionImpact {
   readonly analysis: AnalysisAddress;
   readonly status: "affected" | "unaffected" | "not_established";
   readonly direct_dependencies: readonly string[];
   readonly derivation_paths: readonly DerivationPath[];
-  readonly original_mathematical_check_valid: boolean;
-  readonly mathematical_check_reusable: boolean;
+  readonly original_subject_status: "preserved";
+  readonly original_check_evidence: StoredCheckEvidence;
+  readonly successor_subject_status:
+    "not_applicable" | "identical_subject" | "changed_subject" | "not_established";
+  readonly successor_check_evidence: StoredCheckEvidence;
   readonly applicability_requires_reassessment: boolean;
-  readonly surviving_support_routes: readonly string[];
-  readonly withdrawn_support_routes: readonly string[];
+  readonly reassessment_basis_sha256: string;
+  readonly surviving_support_routes: readonly ScopedSupportRoute[];
+  readonly withdrawn_support_routes: readonly ScopedSupportRoute[];
   readonly visible_conflicts: readonly ConflictingPremise[];
   readonly unresolved_references: readonly string[];
 }
 
 export interface RevisionImpact {
   readonly revision_id: string;
-  readonly basis_sha256: string;
+  readonly impact_sha256: string;
   readonly inventory_scope: readonly {
     bundle_id: string;
     completeness: InventoryCompleteness;
@@ -182,6 +231,13 @@ export interface RecipientReplay {
   readonly revision_impacts: readonly RevisionImpact[];
   readonly freshly_checked: readonly {
     analysis: AnalysisAddress;
+    revision_id: string | null;
+    execution_sha256: string;
+    case_sha256: string;
+    analysis_sha256: string;
+    problem_sha256: string;
+    query_sha256: string;
+    candidate_sha256: string;
     mathematical_status: string;
   }[];
 }

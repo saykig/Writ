@@ -13,6 +13,8 @@ import {
   runDecisionCase,
   verifyEncodedBytes,
   type CaseSourceDocument,
+  type CaseDependency,
+  type CaseSourceReference,
   type DecisionAnalysis,
   type EngineOptions,
   type LoadedDecisionCase,
@@ -32,12 +34,14 @@ import type {
   LoadedSharedAnalysis,
   PortableBundleImport,
   RecipientReplay,
+  ReassessmentBasis,
   RecomputedAnalysis,
   RecomputeRequest,
   RevisionDeclaration,
   RevisionImpact,
   SharedAnalysisArchive,
   SharedAnalysisInspection,
+  ScopedSupportRoute,
   SourceIdentity,
 } from "./types.js";
 
@@ -83,6 +87,14 @@ function addressKey(address: AnalysisAddress): string {
 
 function dependencyKey(address: DependencyAddress): string {
   return exactJsonKey([address.bundle_id, address.analysis_id, address.dependency_id]);
+}
+
+function routeKey(address: { bundle_id: string; route_id: string }): string {
+  return exactJsonKey([address.bundle_id, address.route_id]);
+}
+
+function digest(value: unknown): string {
+  return sha256Bytes(exactJsonBytes(value));
 }
 
 function revisionExecutionKey(value: {
@@ -171,6 +183,18 @@ function portableBundle(input: BundleImport): PortableBundleImport {
       `Bundle ${input.bundle_id} repeats an unresolved reference.`,
     );
   }
+  for (const route of input.inventory.support_routes) {
+    if (
+      route.analysis_ids.length === 0 ||
+      new Set(route.analysis_ids).size !== route.analysis_ids.length ||
+      route.analysis_ids.some((analysisId) => !selectedAnalysisIds.includes(analysisId))
+    ) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REFERENCE_UNRESOLVED",
+        `Support route ${route.route_id} must name one or more selected analyses in bundle ${input.bundle_id}.`,
+      );
+    }
+  }
   return {
     bundle_id: input.bundle_id,
     case_file: encodedBytes(new Uint8Array(input.case_bytes)),
@@ -181,6 +205,7 @@ function portableBundle(input: BundleImport): PortableBundleImport {
       support_routes: [...input.inventory.support_routes]
         .map((route) => ({
           ...route,
+          analysis_ids: [...route.analysis_ids].sort(compare),
           premise_sources: [...route.premise_sources].sort((left, right) =>
             compare(sourceKey(left), sourceKey(right)),
           ),
@@ -195,7 +220,6 @@ function portableBundle(input: BundleImport): PortableBundleImport {
 
 function validateSources(bundles: readonly PortableBundleImport[]): void {
   const hashes = new Map<string, string>();
-  const routeOwners = new Map<string, string>();
   for (const bundle of bundles) {
     const caseFile = decodeCase(bundle);
     const localSources = new Set<string>();
@@ -213,14 +237,6 @@ function validateSources(bundles: readonly PortableBundleImport[]): void {
       localSources.add(sourceKey(sourceIdentity(source)));
     }
     for (const route of bundle.inventory.support_routes) {
-      const owner = routeOwners.get(route.route_id);
-      if (owner !== undefined && owner !== bundle.bundle_id) {
-        throw new SharedAnalysisError(
-          "SHARED_ANALYSIS_BUNDLE_CONFLICT",
-          `Support route ${route.route_id} is ambiguous across bundles ${owner} and ${bundle.bundle_id}.`,
-        );
-      }
-      routeOwners.set(route.route_id, bundle.bundle_id);
       if (
         route.premise_sources.length === 0 ||
         route.premise_sources.some((source) => !localSources.has(sourceKey(source)))
@@ -370,6 +386,110 @@ function authoritySourceKeys(workspace: LoadedSharedAnalysis): Set<string> {
   return keys;
 }
 
+function referencedMaterial(
+  caseFile: LoadedDecisionCase,
+  analysis: DecisionAnalysis,
+): { references: CaseSourceReference[]; sources: CaseSourceDocument[] } {
+  const referenceIds = new Set(analysis.dependencies.flatMap(({ reference_ids }) => reference_ids));
+  const references = caseFile.value.source_references
+    .filter(({ reference_id }) => referenceIds.has(reference_id))
+    .sort((left, right) => compare(left.reference_id, right.reference_id));
+  const versions = new Set(
+    references.map(({ source_id, document_version_id }) =>
+      sourceVersionKey({ source_id, document_version_id }),
+    ),
+  );
+  const sources = caseFile.value.source_documents
+    .filter((source) => versions.has(sourceVersionKey(source)))
+    .sort((left, right) =>
+      compare(sourceKey(sourceIdentity(left)), sourceKey(sourceIdentity(right))),
+    );
+  return { references, sources };
+}
+
+function analysisContext(analysis: DecisionAnalysis): Readonly<Record<string, unknown>> {
+  return {
+    analysis_id: analysis.analysis_id,
+    applicability: analysis.applicability,
+    change: analysis.change,
+    intended_use: analysis.intended_use,
+    kind: analysis.kind,
+    previous_analysis_id: analysis.previous_analysis_id,
+    prohibited_uses: analysis.prohibited_uses,
+    question: analysis.question,
+    unit: analysis.unit,
+  };
+}
+
+function analysisProjection(
+  caseFile: LoadedDecisionCase,
+  analysis: DecisionAnalysis,
+): Readonly<Record<string, unknown>> {
+  const material = referencedMaterial(caseFile, analysis);
+  return {
+    case_id: caseFile.value.case_id,
+    engine: caseFile.value.engine,
+    context: analysisContext(analysis),
+    mathematical_subject: analysis.mathematical_subject,
+    dependencies: analysis.dependencies,
+    model_mappings: analysis.model_mappings,
+    references: material.references,
+    sources: material.sources,
+  };
+}
+
+function comparisonProjection(
+  caseFile: LoadedDecisionCase,
+  analysis: DecisionAnalysis,
+): Readonly<Record<string, unknown>> {
+  const projection = analysisProjection(caseFile, analysis);
+  return {
+    engine: projection.engine,
+    context: projection.context,
+    mathematical_subject: projection.mathematical_subject,
+    dependencies: projection.dependencies,
+    model_mappings: projection.model_mappings,
+    references: projection.references,
+    sources: projection.sources,
+  };
+}
+
+function modellingChoices(analysis: DecisionAnalysis): CaseDependency[] {
+  return analysis.dependencies.filter(
+    ({ role, kind }) => role === "model_construction" && kind === "modelling_choice",
+  );
+}
+
+function mathematicalSubjects(analysis: DecisionAnalysis): CaseDependency[] {
+  return analysis.dependencies.filter(
+    ({ role, kind }) => role === "model_construction" && kind === "mathematical_subject",
+  );
+}
+
+function checkedUses(analysis: DecisionAnalysis): CaseDependency[] {
+  return analysis.dependencies.filter(
+    ({ role, kind }) => role === "checked_mathematical_use" && kind === "checked_use",
+  );
+}
+
+function assumptionFingerprint(caseFile: LoadedDecisionCase, dependency: CaseDependency): string {
+  const referenceIds = new Set(dependency.reference_ids);
+  const references = caseFile.value.source_references
+    .filter(({ reference_id }) => referenceIds.has(reference_id))
+    .sort((left, right) => compare(left.reference_id, right.reference_id));
+  const versions = new Set(
+    references.map(({ source_id, document_version_id }) =>
+      sourceVersionKey({ source_id, document_version_id }),
+    ),
+  );
+  const sources = caseFile.value.source_documents
+    .filter((source) => versions.has(sourceVersionKey(source)))
+    .sort((left, right) =>
+      compare(sourceKey(sourceIdentity(left)), sourceKey(sourceIdentity(right))),
+    );
+  return exactJsonKey({ dependency, references, sources });
+}
+
 /** Derive shared source identity and model disagreement from the portable evidence. */
 export function inspectSharedAnalyses(workspace: LoadedSharedAnalysis): SharedAnalysisInspection {
   assertLoaded(workspace);
@@ -403,36 +523,45 @@ export function inspectSharedAnalyses(workspace: LoadedSharedAnalysis): SharedAn
         .map(sourceIdentity)
         .filter((identity) => leftSources.has(sourceKey(identity)))
         .sort((a, b) => compare(sourceKey(a), sourceKey(b)));
-      const assumptions = (entry: typeof left): DependencyAddress[] =>
-        entry.analysis.dependencies
-          .filter(
-            ({ kind, dependency_id }) =>
-              kind === "modelling_choice" && dependency_id !== "choice.exact-family",
-          )
-          .map(({ dependency_id }) => ({ ...entry.address, dependency_id }));
+      const assumptions = (entry: typeof left) =>
+        modellingChoices(entry.analysis).map((dependency) => ({
+          address: { ...entry.address, dependency_id: dependency.dependency_id },
+          fingerprint: assumptionFingerprint(entry.caseFile, dependency),
+        }));
       const leftAssumptions = assumptions(left);
       const rightAssumptions = assumptions(right);
-      const leftIds = new Set(leftAssumptions.map(({ dependency_id }) => dependency_id));
-      const rightIds = new Set(rightAssumptions.map(({ dependency_id }) => dependency_id));
+      const leftFingerprints = new Set(leftAssumptions.map(({ fingerprint }) => fingerprint));
+      const rightFingerprints = new Set(rightAssumptions.map(({ fingerprint }) => fingerprint));
       const distinct = [
-        ...leftAssumptions.filter(({ dependency_id }) => !rightIds.has(dependency_id)),
-        ...rightAssumptions.filter(({ dependency_id }) => !leftIds.has(dependency_id)),
+        ...leftAssumptions
+          .filter(({ fingerprint }) => !rightFingerprints.has(fingerprint))
+          .map(({ address }) => address),
+        ...rightAssumptions
+          .filter(({ fingerprint }) => !leftFingerprints.has(fingerprint))
+          .map(({ address }) => address),
       ].sort((a, b) => compare(dependencyKey(a), dependencyKey(b)));
       const subjectEqual =
         left.analysis.mathematical_subject.problem.sha256 ===
           right.analysis.mathematical_subject.problem.sha256 &&
         left.analysis.mathematical_subject.query.sha256 ===
           right.analysis.mathematical_subject.query.sha256;
+      const contextEqual =
+        exactJsonKey(analysisContext(left.analysis)) ===
+        exactJsonKey(analysisContext(right.analysis));
+      const declaredModelEqual =
+        exactJsonKey(comparisonProjection(left.caseFile, left.analysis)) ===
+        exactJsonKey(comparisonProjection(right.caseFile, right.analysis));
       differences.push({
         left: left.address,
         right: right.address,
         shared_sources: common,
         distinct_assumptions: distinct,
         mathematical_subject_equal: subjectEqual,
+        declared_context_equal: contextEqual,
         status:
           common.length === 0
             ? ("not_established" as const)
-            : distinct.length === 0 && subjectEqual
+            : declaredModelEqual
               ? ("same_declared_model" as const)
               : ("different_models" as const),
       });
@@ -456,6 +585,24 @@ function validateRevision(workspace: LoadedSharedAnalysis, revision: RevisionDec
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_REVISION_INVALID",
       "Revision ID must be non-empty.",
+    );
+  }
+  const substantiveCount =
+    revision.source_replacements.length +
+    revision.withdrawn_sources.length +
+    revision.withdrawn_dependencies.length +
+    revision.withdrawn_routes.length +
+    revision.conflicting_premises.length +
+    revision.transitions.length;
+  if (
+    (revision.kind === "metadata_change" && substantiveCount !== 0) ||
+    (revision.kind !== "metadata_change" && substantiveCount === 0)
+  ) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      revision.kind === "metadata_change"
+        ? `Metadata revision ${revision.revision_id} cannot declare substantive source, dependency, route, conflict, or subject changes.`
+        : `Substantive revision ${revision.revision_id} must declare at least one exact change.`,
     );
   }
   const baseSources = baseSourceKeys(workspace);
@@ -501,16 +648,21 @@ function validateRevision(workspace: LoadedSharedAnalysis, revision: RevisionDec
     }
     withdrawnDependencies.add(key);
   }
-  const routes = new Set(
-    workspace.value.bundles.flatMap(({ inventory }) =>
-      inventory.support_routes.map(({ route_id }) => route_id),
-    ),
-  );
-  if (revision.withdrawn_routes.some((routeId) => !routes.has(routeId))) {
-    throw new SharedAnalysisError(
-      "SHARED_ANALYSIS_REVISION_INVALID",
-      `Revision ${revision.revision_id} withdraws an unknown support route.`,
-    );
+  const withdrawnRoutes = new Set<string>();
+  for (const route of revision.withdrawn_routes) {
+    const key = exactJsonKey([route.bundle_id, route.route_id]);
+    const bundle = workspace.value.bundles.find(({ bundle_id }) => bundle_id === route.bundle_id);
+    if (
+      bundle === undefined ||
+      !bundle.inventory.support_routes.some(({ route_id }) => route_id === route.route_id) ||
+      withdrawnRoutes.has(key)
+    ) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_REVISION_INVALID",
+        `Revision ${revision.revision_id} repeats or withdraws an unknown scoped support route.`,
+      );
+    }
+    withdrawnRoutes.add(key);
   }
   const transitions = new Set<string>();
   for (const transition of revision.transitions) {
@@ -604,6 +756,203 @@ function referencedSourceDependencies(
     .map(({ dependency_id }) => dependency_id);
 }
 
+function scopedRoute(
+  bundleId: string,
+  route: PortableBundleImport["inventory"]["support_routes"][number],
+): ScopedSupportRoute {
+  return {
+    bundle_id: bundleId,
+    route_id: route.route_id,
+    statement_id: route.statement_id,
+    statement_scope: route.statement_scope,
+  };
+}
+
+function relevantSupportRoutes(
+  bundle: PortableBundleImport,
+  analysisId: string,
+): PortableBundleImport["inventory"]["support_routes"] {
+  return bundle.inventory.support_routes.filter(({ analysis_ids }) =>
+    analysis_ids.includes(analysisId),
+  );
+}
+
+function storedCheckEvidence(
+  workspace: LoadedSharedAnalysis,
+  analysis: AnalysisAddress,
+  revisionId: string | null,
+): AnalysisRevisionImpact["original_check_evidence"] {
+  const portable = workspace.value.executions.find(
+    (candidate) =>
+      addressKey(candidate.analysis) === addressKey(analysis) &&
+      candidate.revision_id === revisionId,
+  );
+  return portable === undefined
+    ? { status: "absent", execution_sha256: null }
+    : {
+        status: "stored_candidate_unverified",
+        execution_sha256: portable.execution.sha256,
+      };
+}
+
+function reassessmentBasis(
+  workspace: LoadedSharedAnalysis,
+  revisionId: string,
+  address: AnalysisAddress,
+): ReassessmentBasis {
+  const revision = workspace.value.revisions.find(({ revision_id }) => revision_id === revisionId);
+  if (revision === undefined) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_NOT_FOUND",
+      `Unknown revision ${revisionId}.`,
+    );
+  }
+  const entry = analysisEntry(workspace, address);
+  const transition = revision.transitions.find(
+    ({ prior }) => addressKey(prior) === addressKey(address),
+  );
+  const targetCase =
+    transition === undefined
+      ? entry.caseFile
+      : openDecisionCase(
+          verifyEncodedBytes(transition.successor_case, `${revisionId}.successor_case`),
+        );
+  const targetAnalysis =
+    transition === undefined
+      ? entry.analysis
+      : analysisById(targetCase, transition.successor_analysis_id);
+  const priorMaterial = referencedMaterial(entry.caseFile, entry.analysis);
+  const targetMaterial = referencedMaterial(targetCase, targetAnalysis);
+  const routes = relevantSupportRoutes(entry.bundle, entry.analysis.analysis_id);
+  const explicitWithdrawals = new Set(revision.withdrawn_routes.map(routeKey));
+  const changedSourceKeys = new Set([
+    ...revision.source_replacements.map(({ from }) => sourceKey(from)),
+    ...revision.withdrawn_sources.map(sourceKey),
+  ]);
+  const removedRoutes = routes.filter(
+    (route) =>
+      explicitWithdrawals.has(
+        routeKey({ bundle_id: entry.bundle.bundle_id, route_id: route.route_id }),
+      ) || route.premise_sources.some((source) => changedSourceKeys.has(sourceKey(source))),
+  );
+  const removedRouteKeys = new Set(removedRoutes.map(({ route_id }) => route_id));
+  const survivingRoutes = routes.filter(({ route_id }) => !removedRouteKeys.has(route_id));
+  const priorSourceKeys = new Set([
+    ...priorMaterial.sources.map((source) => sourceKey(sourceIdentity(source))),
+    ...routes.flatMap(({ premise_sources }) => premise_sources.map(sourceKey)),
+  ]);
+  const relevantReplacements = revision.source_replacements.filter(({ from }) =>
+    priorSourceKeys.has(sourceKey(from)),
+  );
+  const relevantWithdrawals = revision.withdrawn_sources.filter((source) =>
+    priorSourceKeys.has(sourceKey(source)),
+  );
+  const relevantDependencies = revision.withdrawn_dependencies.filter(
+    (dependency) => addressKey(dependency) === addressKey(address),
+  );
+  const routeStatements = new Set(
+    routes.map(({ statement_id, statement_scope }) =>
+      exactJsonKey([statement_id, statement_scope]),
+    ),
+  );
+  const relevantConflicts = revision.conflicting_premises.filter(
+    ({ statement_id, statement_scope }) =>
+      routeStatements.has(exactJsonKey([statement_id, statement_scope])),
+  );
+  const sources = new Map<string, SourceIdentity>();
+  for (const source of targetMaterial.sources) {
+    const identity = sourceIdentity(source);
+    sources.set(sourceKey(identity), identity);
+  }
+  for (const route of survivingRoutes) {
+    for (const source of route.premise_sources) sources.set(sourceKey(source), source);
+  }
+  for (const replacement of relevantReplacements) {
+    sources.delete(sourceKey(replacement.from));
+    const identity = sourceIdentity(replacement.to);
+    sources.set(sourceKey(identity), identity);
+  }
+  for (const source of relevantWithdrawals) sources.delete(sourceKey(source));
+  const sourceBindings = [...sources.values()].sort((left, right) =>
+    compare(sourceKey(left), sourceKey(right)),
+  );
+  const withdrawnDependencyIds = new Set(
+    relevantDependencies.map(({ dependency_id }) => dependency_id),
+  );
+  const assumptionDependencies = modellingChoices(targetAnalysis)
+    .filter(({ dependency_id }) => !withdrawnDependencyIds.has(dependency_id))
+    .map(({ dependency_id }) => ({
+      bundle_id: address.bundle_id,
+      analysis_id: targetAnalysis.analysis_id,
+      dependency_id,
+    }))
+    .sort((left, right) => compare(dependencyKey(left), dependencyKey(right)));
+  const scopedRoutes = survivingRoutes
+    .map((route) => scopedRoute(address.bundle_id, route))
+    .sort((left, right) => compare(routeKey(left), routeKey(right)));
+  const priorProjection = analysisProjection(entry.caseFile, entry.analysis);
+  const targetProjection = analysisProjection(targetCase, targetAnalysis);
+  const revisionEffect = {
+    revision_id: revision.revision_id,
+    kind: revision.kind,
+    source_replacements: relevantReplacements,
+    withdrawn_sources: relevantWithdrawals,
+    withdrawn_dependencies: relevantDependencies,
+    withdrawn_routes: removedRoutes.map((route) => ({
+      bundle_id: address.bundle_id,
+      route_id: route.route_id,
+      statement_id: route.statement_id,
+      statement_scope: route.statement_scope,
+    })),
+    conflicting_premises: relevantConflicts,
+    transition:
+      transition === undefined
+        ? null
+        : {
+            prior: transition.prior,
+            successor_case_id: targetCase.value.case_id,
+            successor_analysis_id: transition.successor_analysis_id,
+            successor_analysis_sha256: digest(targetProjection),
+          },
+  };
+  const basisWithoutIdentity = {
+    revision_id: revision.revision_id,
+    analysis: address,
+    target:
+      transition === undefined ? ("original_analysis" as const) : ("declared_successor" as const),
+    target_analysis_id: targetAnalysis.analysis_id,
+    dependency_scope: {
+      scope: entry.bundle.inventory.scope,
+      completeness: entry.bundle.inventory.completeness,
+      unresolved_references: [...entry.bundle.inventory.unresolved_references],
+    },
+    mathematical_subject: {
+      problem_sha256: targetAnalysis.mathematical_subject.problem.sha256,
+      query_sha256: targetAnalysis.mathematical_subject.query.sha256,
+    },
+    intended_use: targetAnalysis.intended_use,
+    unit: targetAnalysis.unit,
+    source_bindings: sourceBindings,
+    source_references: targetMaterial.references,
+    assumption_dependencies: assumptionDependencies,
+    support_routes: scopedRoutes,
+    prior_analysis_sha256: digest(priorProjection),
+    target_analysis_sha256: digest(targetProjection),
+    mapping_sha256: digest(targetAnalysis.model_mappings),
+    context_sha256: digest(analysisContext(targetAnalysis)),
+    derivation_sha256: digest({
+      dependencies: targetAnalysis.dependencies,
+      model_mappings: targetAnalysis.model_mappings,
+      support_routes: scopedRoutes,
+    }),
+    revision_effect_sha256: digest(revisionEffect),
+  };
+  return deepFreeze({
+    ...basisWithoutIdentity,
+    basis_sha256: digest(basisWithoutIdentity),
+  });
+}
+
 function revisionImpact(workspace: LoadedSharedAnalysis, revisionId: string): RevisionImpact {
   const revision = workspace.value.revisions.find(({ revision_id }) => revision_id === revisionId);
   if (revision === undefined) {
@@ -616,7 +965,7 @@ function revisionImpact(workspace: LoadedSharedAnalysis, revisionId: string): Re
     ...revision.source_replacements.map(({ from }) => from),
     ...revision.withdrawn_sources,
   ];
-  const impactsWithoutBasis: AnalysisRevisionImpact[] = selected(workspace).map((entry) => {
+  const impacts: AnalysisRevisionImpact[] = selected(workspace).map((entry) => {
     const lineage = lineageIndex(entry.analysis);
     const transition = revision.transitions.find(
       ({ prior }) => addressKey(prior) === addressKey(entry.address),
@@ -628,70 +977,111 @@ function revisionImpact(workspace: LoadedSharedAnalysis, revisionId: string): Re
       if (addressKey(dependency) === addressKey(entry.address))
         direct.add(dependency.dependency_id);
     }
+    const relevantRoutes = relevantSupportRoutes(entry.bundle, entry.analysis.analysis_id);
     const withdrawnSourceKeys = new Set(changedSources.map(sourceKey));
-    const withdrawnRoutes = entry.bundle.inventory.support_routes
+    const explicitWithdrawals = new Set(revision.withdrawn_routes.map(routeKey));
+    const withdrawnRoutes = relevantRoutes
       .filter(
         (route) =>
-          revision.withdrawn_routes.includes(route.route_id) ||
-          route.premise_sources.some((source) => withdrawnSourceKeys.has(sourceKey(source))),
+          explicitWithdrawals.has(
+            routeKey({ bundle_id: entry.bundle.bundle_id, route_id: route.route_id }),
+          ) || route.premise_sources.some((source) => withdrawnSourceKeys.has(sourceKey(source))),
       )
-      .map(({ route_id }) => route_id)
-      .sort(compare);
-    const survivingRoutes = entry.bundle.inventory.support_routes
-      .filter(({ route_id }) => !withdrawnRoutes.includes(route_id))
-      .map(({ route_id }) => route_id)
-      .sort(compare);
+      .map((route) => scopedRoute(entry.bundle.bundle_id, route))
+      .sort((left, right) => compare(routeKey(left), routeKey(right)));
+    const withdrawnRouteKeys = new Set(withdrawnRoutes.map(routeKey));
+    const withdrawnStatements = new Set(
+      withdrawnRoutes.map(({ statement_id, statement_scope }) =>
+        exactJsonKey([statement_id, statement_scope]),
+      ),
+    );
+    const survivingRoutes = relevantRoutes
+      .filter(
+        (route) =>
+          !withdrawnRouteKeys.has(
+            routeKey({ bundle_id: entry.bundle.bundle_id, route_id: route.route_id }),
+          ) && withdrawnStatements.has(exactJsonKey([route.statement_id, route.statement_scope])),
+      )
+      .map((route) => scopedRoute(entry.bundle.bundle_id, route))
+      .sort((left, right) => compare(routeKey(left), routeKey(right)));
+    const relevantStatements = new Set(
+      relevantRoutes.map(({ statement_id, statement_scope }) =>
+        exactJsonKey([statement_id, statement_scope]),
+      ),
+    );
     const visibleConflicts = revision.conflicting_premises.filter(
-      ({ statement_scope }) => statement_scope === entry.bundle.inventory.scope,
+      ({ statement_id, statement_scope }) =>
+        relevantStatements.has(exactJsonKey([statement_id, statement_scope])),
     );
     const affected =
       direct.size > 0 ||
       transition !== undefined ||
       withdrawnRoutes.length > 0 ||
       visibleConflicts.length > 0;
-    const status = affected
-      ? ("affected" as const)
-      : entry.bundle.inventory.completeness === "complete"
+    const status =
+      revision.kind === "metadata_change"
         ? ("unaffected" as const)
-        : ("not_established" as const);
-    let mathematicalCheckReusable = true;
+        : affected
+          ? ("affected" as const)
+          : entry.bundle.inventory.completeness === "complete"
+            ? ("unaffected" as const)
+            : ("not_established" as const);
+    let successorSubjectStatus: AnalysisRevisionImpact["successor_subject_status"];
     if (transition !== undefined) {
       const next = openDecisionCase(
         verifyEncodedBytes(transition.successor_case, `${revisionId}.successor_case`),
       );
-      mathematicalCheckReusable = assessReuse(
+      successorSubjectStatus = assessReuse(
         entry.caseFile,
         entry.address.analysis_id,
         next,
         transition.successor_analysis_id,
-      ).mathematical_check_reusable;
-    } else if (
-      revision.withdrawn_dependencies.some(
-        (dependency) =>
-          addressKey(dependency) === addressKey(entry.address) &&
-          (lineage.reaches(dependency.dependency_id, "subject.problem") ||
-            lineage.reaches(dependency.dependency_id, "subject.query")),
-      )
-    ) {
-      mathematicalCheckReusable = false;
+      ).mathematical_subject_changed
+        ? "changed_subject"
+        : "identical_subject";
+    } else {
+      successorSubjectStatus =
+        status === "affected" || status === "not_established"
+          ? "not_established"
+          : "not_applicable";
     }
-    const derivationPaths: DerivationPath[] = [...direct]
-      .sort(compare)
-      .flatMap((dependencyId) =>
-        (lineage.paths(dependencyId, "use.checked").length > 0
-          ? lineage.paths(dependencyId, "use.checked")
-          : [[dependencyId]]
-        ).map((nodes) => ({ analysis: entry.address, nodes })),
+    const checkedUseIds = checkedUses(entry.analysis).map(({ dependency_id }) => dependency_id);
+    const subjectIds = mathematicalSubjects(entry.analysis).map(
+      ({ dependency_id }) => dependency_id,
+    );
+    const derivationPaths: DerivationPath[] = [...direct].sort(compare).flatMap((dependencyId) => {
+      const toCheckedUse = checkedUseIds.flatMap((checkedUseId) =>
+        lineage.paths(dependencyId, checkedUseId),
       );
+      const paths =
+        toCheckedUse.length > 0
+          ? toCheckedUse
+          : subjectIds.flatMap((subjectId) => lineage.paths(dependencyId, subjectId));
+      return (paths.length > 0 ? paths : [[dependencyId]]).map((nodes) => ({
+        analysis: entry.address,
+        nodes,
+      }));
+    });
+    const uniquePaths = new Map(
+      derivationPaths.map((path) => [exactJsonKey([path.analysis, path.nodes]), path]),
+    );
+    const basis = reassessmentBasis(workspace, revisionId, entry.address);
     return {
       analysis: entry.address,
       status,
       direct_dependencies: [...direct].sort(compare),
-      derivation_paths: derivationPaths,
-      original_mathematical_check_valid: true,
-      mathematical_check_reusable: mathematicalCheckReusable,
-      applicability_requires_reassessment:
-        revision.kind !== "metadata_change" && status !== "unaffected",
+      derivation_paths: [...uniquePaths.values()].sort((left, right) =>
+        compare(exactJsonKey(left.nodes), exactJsonKey(right.nodes)),
+      ),
+      original_subject_status: "preserved",
+      original_check_evidence: storedCheckEvidence(workspace, entry.address, null),
+      successor_subject_status: successorSubjectStatus,
+      successor_check_evidence:
+        transition === undefined
+          ? { status: "absent", execution_sha256: null }
+          : storedCheckEvidence(workspace, entry.address, revisionId),
+      applicability_requires_reassessment: status !== "unaffected",
+      reassessment_basis_sha256: basis.basis_sha256,
       surviving_support_routes: survivingRoutes,
       withdrawn_support_routes: withdrawnRoutes,
       visible_conflicts: visibleConflicts,
@@ -702,14 +1092,12 @@ function revisionImpact(workspace: LoadedSharedAnalysis, revisionId: string): Re
     bundle_id,
     completeness: inventory.completeness,
   }));
-  const basis = sha256Bytes(
-    exactJsonBytes({ revision, inventory_scope: inventoryScope, impacts: impactsWithoutBasis }),
-  );
+  const impactSha256 = digest({ revision, inventory_scope: inventoryScope, impacts });
   return deepFreeze({
     revision_id: revisionId,
-    basis_sha256: basis,
+    impact_sha256: impactSha256,
     inventory_scope: inventoryScope,
-    impacts: impactsWithoutBasis,
+    impacts,
   });
 }
 
@@ -717,9 +1105,9 @@ function validateAssessment(
   workspace: LoadedSharedAnalysis,
   assessment: ApplicabilityAssessmentDeclaration,
 ): void {
-  const entry = analysisEntry(workspace, assessment.analysis);
   const impact = revisionImpact(workspace, assessment.revision_id);
-  if (assessment.basis_sha256 !== impact.basis_sha256) {
+  const basis = reassessmentBasis(workspace, assessment.revision_id, assessment.analysis);
+  if (assessment.basis_sha256 !== basis.basis_sha256) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_REASSESSMENT_STALE",
       `Assessment ${assessment.assessment_id} is not bound to the current revision impact.`,
@@ -745,39 +1133,13 @@ function validateAssessment(
       `Assessment ${assessment.assessment_id} repeats or binds unavailable exact source bytes.`,
     );
   }
-  const dependencies = assessment.assumption_dependencies.map(dependencyKey);
-  if (new Set(dependencies).size !== dependencies.length) {
-    throw new SharedAnalysisError(
-      "SHARED_ANALYSIS_REVISION_INVALID",
-      `Assessment ${assessment.assessment_id} repeats an assumption dependency.`,
-    );
-  }
-  for (const dependency of assessment.assumption_dependencies) {
-    const dependencyEntry = analysisEntry(workspace, dependency);
-    if (
-      !dependencyEntry.analysis.dependencies.some(
-        ({ dependency_id }) => dependency_id === dependency.dependency_id,
-      )
-    ) {
-      throw new SharedAnalysisError(
-        "SHARED_ANALYSIS_REVISION_INVALID",
-        `Assessment ${assessment.assessment_id} names a missing assumption dependency.`,
-      );
-    }
-  }
-  const revision = workspace.value.revisions.find(
-    ({ revision_id }) => revision_id === assessment.revision_id,
-  )!;
-  const requiredSuccessors = revision.source_replacements
-    .filter(
-      ({ from }) => referencedSourceDependencies(entry.caseFile, entry.analysis, [from]).length > 0,
-    )
-    .map(({ to }) => sourceKey(sourceIdentity(to)));
-  const bound = new Set(bindings);
-  if (requiredSuccessors.some((successor) => !bound.has(successor))) {
+  if (
+    exactJsonKey(assessment.source_bindings) !== exactJsonKey(basis.source_bindings) ||
+    exactJsonKey(assessment.assumption_dependencies) !== exactJsonKey(basis.assumption_dependencies)
+  ) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_REASSESSMENT_STALE",
-      `Assessment ${assessment.assessment_id} omits a revised exact source binding.`,
+      `Assessment ${assessment.assessment_id} does not bind the exact derived source and assumption basis.`,
     );
   }
 }
@@ -830,12 +1192,12 @@ function validateExecution(
     );
   }
   if (portable.revision_id !== null) {
-    const impact = revisionImpact(workspace, portable.revision_id);
+    const basis = reassessmentBasis(workspace, portable.revision_id, portable.analysis);
     const supported = workspace.value.applicability_assessments.some(
       (assessment) =>
         assessment.revision_id === portable.revision_id &&
         addressKey(assessment.analysis) === addressKey(portable.analysis) &&
-        assessment.basis_sha256 === impact.basis_sha256 &&
+        assessment.basis_sha256 === basis.basis_sha256 &&
         assessment.status === "supported",
     );
     if (!supported) {
@@ -904,6 +1266,16 @@ export function assessRevision(
   return revisionImpact(workspace, revisionId);
 }
 
+/** Derive the exact, reviewable source/assumption/model basis for one reassessment. */
+export function deriveReassessmentBasis(
+  workspace: LoadedSharedAnalysis,
+  revisionId: string,
+  analysis: AnalysisAddress,
+): ReassessmentBasis {
+  assertLoaded(workspace);
+  return reassessmentBasis(workspace, revisionId, analysis);
+}
+
 /** Record a declaration bound to the exact revision, sources, mappings and context. */
 export function reassessApplicability(
   workspace: LoadedSharedAnalysis,
@@ -959,7 +1331,7 @@ export function recomputeAnalysis(
   const assessment = workspace.value.applicability_assessments.find(
     ({ assessment_id }) => assessment_id === request.applicability_assessment_id,
   );
-  const basis = assessRevision(workspace, request.revision_id).basis_sha256;
+  const basis = reassessmentBasis(workspace, request.revision_id, request.prior).basis_sha256;
   if (
     assessment === undefined ||
     assessment.revision_id !== request.revision_id ||
@@ -1058,6 +1430,13 @@ export function replaySharedAnalysis(bytes: Uint8Array, options: EngineOptions):
     const checked = recheckDecisionExecution(caseFile, execution, analysis.analysis_id, options);
     return {
       analysis: portable.analysis,
+      revision_id: portable.revision_id,
+      execution_sha256: portable.execution.sha256,
+      case_sha256: execution.case_sha256,
+      analysis_sha256: execution.analysis_sha256,
+      problem_sha256: execution.problem_sha256,
+      query_sha256: execution.query_sha256,
+      candidate_sha256: execution.candidate_result.sha256,
       mathematical_status: checked.status,
     };
   });

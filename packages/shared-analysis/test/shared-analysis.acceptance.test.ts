@@ -4,6 +4,7 @@ import { exactJsonBytes } from "@writ/decision-case";
 
 import {
   assessRevision,
+  deriveReassessmentBasis,
   exportSharedAnalysis,
   importSharedAnalyses,
   inspectSharedAnalyses,
@@ -18,7 +19,6 @@ import {
   conflictingCaseBytes,
   partialImport,
   quantitativeRevision,
-  sha256,
   sourceOnlyRevision,
   unaffectedImport,
   V1_SOURCE,
@@ -111,47 +111,33 @@ describe("shared-analysis behavioral contract", () => {
         expect.objectContaining({
           analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
           status: "affected",
-          original_mathematical_check_valid: true,
-          mathematical_check_reusable: true,
+          original_check_evidence: { status: "absent", execution_sha256: null },
+          successor_subject_status: "identical_subject",
           applicability_requires_reassessment: true,
         }),
         expect.objectContaining({
           analysis: { bundle_id: "beta", analysis_id: "analysis-base" },
           status: "affected",
-          original_mathematical_check_valid: true,
-          mathematical_check_reusable: true,
+          original_check_evidence: { status: "absent", execution_sha256: null },
+          successor_subject_status: "identical_subject",
           applicability_requires_reassessment: true,
         }),
       ]),
     );
+    const basis = deriveReassessmentBasis(revised, impact.revision_id, {
+      bundle_id: "alpha",
+      analysis_id: "analysis-base",
+    });
     const assessment = {
       assessment_id: "assessment.alpha.source-only-v2",
       revision_id: impact.revision_id,
       analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
-      basis_sha256: impact.basis_sha256,
+      basis_sha256: basis.basis_sha256,
       status: "supported" as const,
       rationale:
         "The supplied synthetic values remain applicable under the explicitly rebound v2 source.",
-      source_bindings: [
-        {
-          source_id: sourceOnlyRevision().source_replacements[0]!.to.source_id,
-          document_version_id: sourceOnlyRevision().source_replacements[0]!.to.document_version_id,
-          sha256: sourceOnlyRevision().source_replacements[0]!.to.sha256,
-        },
-      ],
-      assumption_dependencies: [
-        {
-          bundle_id: "alpha",
-          analysis_id: "analysis-base",
-          dependency_id: "choice.independence",
-        },
-      ],
-      mapping_sha256: sha256({
-        bundle_id: "alpha",
-        analysis_id: "analysis-base",
-        kind: "mappings",
-      }),
-      context_sha256: sha256({ scope: "synthetic shared failure decision" }),
+      source_bindings: basis.source_bindings,
+      assumption_dependencies: basis.assumption_dependencies,
     };
     expectCode(
       () => reassessApplicability(revised, { ...assessment, source_bindings: [] }),
@@ -186,8 +172,8 @@ describe("shared-analysis behavioral contract", () => {
     const impact = assessRevision(revised, "revision.x-half-v3");
     for (const item of impact.impacts) {
       expect(item.status).toBe("affected");
-      expect(item.original_mathematical_check_valid).toBe(true);
-      expect(item.mathematical_check_reusable).toBe(false);
+      expect(item.original_check_evidence).toEqual({ status: "absent", execution_sha256: null });
+      expect(item.successor_subject_status).toBe("changed_subject");
       expect(item.applicability_requires_reassessment).toBe(true);
       expect(item.direct_dependencies).toContain("source.marginals");
       expect(item.derivation_paths.some(({ nodes }) => nodes.includes("subject.problem"))).toBe(
@@ -205,8 +191,8 @@ describe("shared-analysis behavioral contract", () => {
     expect(alpha).toEqual(
       expect.objectContaining({
         status: "affected",
-        original_mathematical_check_valid: true,
-        mathematical_check_reusable: false,
+        original_check_evidence: { status: "absent", execution_sha256: null },
+        successor_subject_status: "changed_subject",
         applicability_requires_reassessment: true,
       }),
     );
@@ -223,10 +209,10 @@ describe("shared-analysis behavioral contract", () => {
       source_replacements: [],
       withdrawn_sources: [V1_SOURCE],
       withdrawn_dependencies: [],
-      withdrawn_routes: ["route-y-shared"],
+      withdrawn_routes: [{ bundle_id: "beta", route_id: "route-y-shared" }],
       conflicting_premises: [
         {
-          statement_id: "statement.y-third",
+          statement_id: "statement.y-quarter",
           statement_scope: "synthetic shared failure decision",
           description: "A separately supplied conflicting premise states P(Y=1)=1/3.",
           source: {
@@ -240,8 +226,22 @@ describe("shared-analysis behavioral contract", () => {
     });
     const impact = assessRevision(oneWithdrawn, "revision.route-one-withdrawn");
     const beta = impact.impacts.find(({ analysis }) => analysis.bundle_id === "beta")!;
-    expect(beta.surviving_support_routes).toEqual(["route-y-alternative"]);
-    expect(beta.withdrawn_support_routes).toEqual(["route-y-shared"]);
+    expect(beta.surviving_support_routes).toEqual([
+      {
+        bundle_id: "beta",
+        route_id: "route-y-alternative",
+        statement_id: "statement.y-quarter",
+        statement_scope: "synthetic shared failure decision",
+      },
+    ]);
+    expect(beta.withdrawn_support_routes).toEqual([
+      {
+        bundle_id: "beta",
+        route_id: "route-y-shared",
+        statement_id: "statement.y-quarter",
+        statement_scope: "synthetic shared failure decision",
+      },
+    ]);
     expect(beta.visible_conflicts).toHaveLength(1);
     expect(beta.applicability_requires_reassessment).toBe(true);
 
@@ -256,7 +256,10 @@ describe("shared-analysis behavioral contract", () => {
           sha256: "sha256:608f3918ec2ef93a371aea85d3be0b0a29a66617af4e879ffefa5be515123271",
         },
       ],
-      withdrawn_routes: ["route-y-shared", "route-y-alternative"],
+      withdrawn_routes: [
+        { bundle_id: "beta", route_id: "route-y-shared" },
+        { bundle_id: "beta", route_id: "route-y-alternative" },
+      ],
     });
     const noRoute = assessRevision(bothWithdrawn, "revision.both-routes-withdrawn").impacts.find(
       ({ analysis }) => analysis.bundle_id === "beta",
@@ -303,7 +306,7 @@ describe("shared-analysis behavioral contract", () => {
     expect(impact).toEqual(
       expect.objectContaining({
         status: "unaffected",
-        mathematical_check_reusable: true,
+        successor_subject_status: "not_applicable",
         applicability_requires_reassessment: false,
       }),
     );

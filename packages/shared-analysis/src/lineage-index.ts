@@ -1,3 +1,4 @@
+import { exactJsonKey } from "@writ/decision-case";
 import { sha256Canonical } from "@writ/provenance";
 
 import { SharedAnalysisError } from "./errors.js";
@@ -76,10 +77,12 @@ export class ScopedLineageIndex {
       }
     };
     walk(from, [from], new Set([from]));
-    const unique = new Map(paths.map((path) => [path.join("\0"), path]));
-    return [...unique.values()].sort((left, right) =>
-      left.join("\0").localeCompare(right.join("\0")),
-    );
+    const unique = new Map(paths.map((path) => [exactJsonKey(path), path]));
+    return [...unique.values()].sort((left, right) => {
+      const leftKey = exactJsonKey(left);
+      const rightKey = exactJsonKey(right);
+      return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+    });
   }
 
   reaches(from: string, to: string): boolean {

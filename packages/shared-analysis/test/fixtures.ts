@@ -60,12 +60,14 @@ function completeImport(bundleId: "alpha" | "beta"): BundleImport {
           ? [
               {
                 route_id: "route-y-shared",
+                analysis_ids: ["analysis-base"],
                 statement_id: "statement.y-quarter",
                 statement_scope: "synthetic shared failure decision",
                 premise_sources: [V1_SOURCE],
               },
               {
                 route_id: "route-y-alternative",
+                analysis_ids: ["analysis-base"],
                 statement_id: "statement.y-quarter",
                 statement_scope: "synthetic shared failure decision",
                 premise_sources: [

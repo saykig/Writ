@@ -9,14 +9,24 @@ analysis, dependency and reference IDs are addressed by `(bundle_id, local_id)` 
 promoted to global identity. Only the exact triple `(source_id, document_version_id, sha256)` can
 establish a shared source version.
 
-The public contract keeps four claims separate:
+The public contract keeps these claims separate:
 
-- the old calculation remains valid for its original exact problem/query bytes;
-- a calculation is or is not reusable for a successor mathematical subject;
+- the original mathematical subject remains preserved as history;
+- original or successor candidate bytes are absent or stored but not yet freshly verified;
+- a declared successor subject is identical, changed, not established, or not applicable;
 - current evidentiary applicability requires a scope-bound declaration after a changed basis;
 - human disposition stays in the underlying case and is not created by this package.
 
-Revision events are explicit caller-supplied declarations. The package does not select a newer
+`deriveReassessmentBasis(...)` is the ordinary authoring operation for that declaration. It derives
+one analysis-scoped exact identity from the selected prior and any declared successor: subject
+hashes, intended use and unit, full relevant dependencies and mappings, exact source references and
+source-version hashes, scoped support routes, the revision effect, and declared inventory coverage.
+Callers supply only that derived identity plus the reviewer's status and rationale; unchecked
+mapping/context hash fields are not part of the portable declaration.
+
+Support-route IDs remain local to their bundle and each route names the analyses and precise
+statement/scope it supports. Revision events are explicit caller-supplied declarations. A metadata
+event cannot carry a source, dependency, route, conflict, or subject transition. The package does not select a newer
 source from a label or date, infer numbers from prose, infer statistical dependence from lineage,
 or treat a stored checked flag as authoritative. Derived inspections and revision impacts are
 reconstructed rather than serialized as a second history.

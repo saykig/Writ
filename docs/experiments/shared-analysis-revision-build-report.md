@@ -170,3 +170,62 @@ are the Writ commit, embedded updated third-party notice, and resulting overall 
 - v0.1 does not make one analysis's output an implicit premise of another analysis. Cross-analysis
   interoperability here consists of exact shared evidence, explicit disagreement, scoped revision
   impact, and selected revalidation.
+
+## PR 47 semantic-hardening addendum
+
+Review of PR 47 found several boundary failures that shared four causes: applicability was bound to
+an impact summary rather than the actual selected model basis; semantic roles and one modelling
+choice were recognized by fixture IDs; support routes were not fully scoped; and optimistic
+booleans conflated preserved history with verified check evidence. The selected architecture did
+not need replacement. The repair keeps the native lifecycle and the small Aldera-derived index.
+
+- **R1 — reassessment scope:** replace caller-supplied component hashes with one public derived
+  basis and exact source/assumption equality checks.
+- **R2 — local identity and derivation scope:** use typed dependency roles, full exact assumption
+  declarations, structured path keys, and bundle/analysis/statement-scoped routes.
+- **R3 — event and check status:** reject substantive metadata events and replace optimistic reuse/
+  validity booleans with explicit subject and check-evidence statuses plus exact replay identities.
+
+The public `deriveReassessmentBasis` operation now derives one deterministic, reviewable identity
+for the selected prior and any declared successor. Its scope includes exact mathematical subject
+hashes, intended use and unit, relevant source documents/references, full modelling-choice
+declarations, actual model mappings and dependency declarations, scoped support routes, revision
+effect, and declared inventory coverage. Human disposition, case title, workspace label, and
+unrelated imported analyses are excluded. Applicability declarations must carry the derived basis
+and its exact source/assumption addresses. The two formerly caller-invented `mapping_sha256` and
+`context_sha256` declaration fields were removed from the proposed shared schema; the public basis
+still exposes mechanically derived mapping/context component hashes for inspection.
+
+Support routes now name their selected local analyses, route addresses are
+`(bundle_id, route_id)`, and impact output retains statement ID and scope. Only surviving routes for
+the same statement and scope are alternatives. Dependency impact locates mathematical-subject and
+checked-use nodes from native roles/kinds. Exact assumption fingerprints include the whole
+declaration and its referenced material; no fixture label is exempt. Lineage path deduplication now
+uses the existing exact structured key, preserving the two paths that collide under NUL-delimited
+concatenation.
+
+Metadata events are schema- and runtime-restricted to empty substantive fields. Impact reports a
+preserved original subject separately from absent or stored-but-unverified candidate evidence, and
+classifies the successor subject as identical, changed, not established, or not applicable. No
+solver runs during impact assessment. Recipient replay remains the authority for a fresh check and
+now reports revision plus execution, case, analysis, problem, query, and candidate SHA-256
+identities for every status.
+
+Focused regressions use actual valid case copies and the public import/open/record/assess/derive/
+reassess/recompute/export/replay lifecycle. They establish that mapping, unit, and same-ID
+assumption-content changes invalidate an old basis while a newly derived declaration passes;
+display/workspace/unrelated-bundle changes do not alter it; old unchecked fields are rejected by the
+public loader; consistently renamed dependency IDs preserve translated paths; same local assumption
+IDs do not hide different declarations; equal subject bytes with different units remain different
+models; colliding route IDs across bundles are valid and independently withdrawn; cross-statement
+routes are not alternatives; substantive metadata relabelling fails; and a case without execution
+cannot claim check evidence.
+
+Final hardening verification used Bun 1.3.12, CPython 3.13.15, and SciPy 1.17.0. The shared-analysis
+offline package suite reports 21 pass, 2 expected integration-gated skips, 0 fail, and 88
+assertions. With the integration gate enabled, shared analysis reports 2 pass, 0 skip, and 20
+assertions; decision-case reports 16 pass, 0 skip, and 147 assertions. The Python suite reports 75
+pass, and Ruff, pack validation, and source-registry drift checks pass. All seven repository gates
+(`format`, `lint`, `typecheck`, `test`, `data:check`, `verify:writ`, and `build`) pass on the final
+tree. The exact alpha/beta and revision outcomes listed above remain unchanged. ADR 0028 remains
+Proposed, and no Bellman, Decision Lab, or Aldera repository was modified.
