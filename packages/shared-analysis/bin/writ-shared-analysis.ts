@@ -1,8 +1,41 @@
 #!/usr/bin/env bun
 
-import { SharedAnalysisError } from "../src/index.js";
+import { readFileSync } from "node:fs";
 
-throw new SharedAnalysisError(
-  "SHARED_ANALYSIS_NOT_IMPLEMENTED",
-  "The common recipient CLI is intentionally unimplemented on the comparison base.",
-);
+import { replaySharedAnalysis, SharedAnalysisError } from "../src/index.js";
+
+function option(args: readonly string[], name: string): string {
+  const index = args.indexOf(name);
+  const value = index >= 0 ? args[index + 1] : undefined;
+  if (value === undefined || value.startsWith("--")) throw new Error(`Missing ${name}.`);
+  return value;
+}
+
+function main(args: readonly string[]): number {
+  if (args[0] !== "replay") {
+    throw new Error(
+      "Usage: writ-shared-analysis replay --archive <file> --engine-root <path> [--python <path>]",
+    );
+  }
+  const archive = readFileSync(option(args, "--archive"));
+  const engineRoot = option(args, "--engine-root");
+  const pythonIndex = args.indexOf("--python");
+  const pythonExecutable = pythonIndex >= 0 ? option(args, "--python") : undefined;
+  const options =
+    pythonExecutable === undefined ? { engineRoot } : { engineRoot, pythonExecutable };
+  console.log(JSON.stringify(replaySharedAnalysis(archive, options), null, 2));
+  return 0;
+}
+
+try {
+  process.exitCode = main(process.argv.slice(2));
+} catch (error) {
+  if (error instanceof SharedAnalysisError) {
+    console.error(
+      JSON.stringify({ code: error.code, message: error.message, detail: error.detail }),
+    );
+  } else {
+    console.error(error instanceof Error ? error.message : String(error));
+  }
+  process.exitCode = 2;
+}
