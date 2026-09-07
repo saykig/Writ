@@ -28,6 +28,64 @@ statuses:
   - blocked
 
 tasks:
+  - id: ROOT-HYGIENE-HISTORY-SNAPSHOTS-001
+    title: Simplify the root layout and preserve historical snapshots in Git
+    status: done
+    baseline_commit: ba385418c61e597d818331940b15d5b8439773b5
+    completion_note: >-
+      The synthetic decision fixture now lives under examples with byte-identical case and saved
+      execution artifacts. The tracked archive root and its obsolete inventory script are retired.
+      Three pushed lightweight tags recover the exact EU-US, G7, and G20 trees at the file counts
+      and SHA-256 digests recorded in docs/history/snapshots.md. The corpora Git tree remains
+      identical to the baseline, and all standard TypeScript, Python, data, Writ verification,
+      build, and pinned no-skip Decision Lab integration checks pass.
+    dependencies:
+      - RETIRE-LEGACY-DATABASE-PERSISTENCE-001
+    scope:
+      - Move the runnable synthetic decision fixture under examples without changing semantic identities or exact case/execution bytes.
+      - Replace the tracked archive root with lightweight Git snapshot tags and a digest-backed recovery ledger.
+      - Remove current tooling, registry notes, formatting rules, and documentation dependencies on the retired archive paths.
+      - Preserve corpora as the current reviewed authority and verify its tracked tree remains identical to the baseline.
+    exclusions:
+      - Corpus, reviewed knowledge, provenance, schema, language, decision-case, Bellman, or Decision Lab semantic changes.
+      - History rewriting, replacement storage, a renamed archive directory, or changes to accepted ADR and migration history.
+    snapshot_tags:
+      eu_us_ai_evaluation_v1:
+        tag: snapshot/eu-us-ai-evaluation-v1
+        commit: 60d5b5e023fb3578db323e424136f3100b561952
+        historical_path: archive/pilots/eu-us-ai-evaluation-v1
+        files: 29
+        sha256: 3ca03cc4bf3d0bb43d3c7cea9bdbac59c28a8615cb903139094e3ebecd122a33
+      g7_2025_ai_sme:
+        tag: snapshot/g7-2025-ai-sme
+        commit: 9cf9187e07cfa53f019bf33e363447047ca161a4
+        historical_path: corpora/multilateral/g7/2025-ai-sme
+        files: 12
+        sha256: f8ae684ae6dd8f0fda247abb73ed36e3ad46345dcf7cba89ed5d11501bb00dc7
+      g20_2024_rio:
+        tag: snapshot/g20-2024-rio
+        commit: 8c149002d0e371e4dc3f605bbbbed216f4297189
+        historical_path: corpora/multilateral/g20/2024-rio
+        files: 16
+        sha256: 462605d2c441beb5e7caaa82139b7ab5f9e02ae4ed772a1e82bfcade74bd5965
+    acceptance:
+      - The archive and former root decision-cases directories are absent; examples and the snapshot ledger are present.
+      - All three snapshot tags exist remotely and recover exact file counts and recorded tree digests.
+      - The moved case and saved executions remain byte-identical with all semantic identities unchanged.
+      - No current executable or configuration dependency requires the retired archive paths.
+      - The corpora tree, source bytes, reviewed records, review artifacts, and provenance remain unchanged.
+      - Standard TypeScript, Python, data, Writ verification, build, and real decision integration checks pass.
+    outputs:
+      - examples/README.md
+      - examples/decision-cases/README.md
+      - examples/decision-cases/failure-choice
+      - docs/history/README.md
+      - docs/history/snapshots.md
+      - docs/current/repository-structure.md
+      - docs/current/roadmap.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: RETIRE-LEGACY-DATABASE-PERSISTENCE-001
     title: Retire the legacy Postgres/Neon persistence architecture
     status: done

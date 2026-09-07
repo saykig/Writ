@@ -8,14 +8,14 @@ bytes, a bounded dependency DAG, three immutable static revisions, and one inter
 Generate the portable bundle deterministically:
 
 ```bash
-bun decision-cases/synthetic-failure-choice/generate.ts
+bun examples/decision-cases/failure-choice/generate.ts
 ```
 
 Inspect it without an engine:
 
 ```bash
 bun packages/decision-case/bin/writ-decision-case.ts summary \
-  --case decision-cases/synthetic-failure-choice/synthetic-failure-choice.case.json
+  --case examples/decision-cases/failure-choice/case.json
 ```
 
 To execute, obtain the exact Decision Lab commit
@@ -24,7 +24,7 @@ directory, install CPython 3.13 and `scipy==1.17.0`, then pass that extracted ro
 
 ```bash
 bun packages/decision-case/bin/writ-decision-case.ts run \
-  --case decision-cases/synthetic-failure-choice/synthetic-failure-choice.case.json \
+  --case examples/decision-cases/failure-choice/case.json \
   --analysis revision-0 --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/python3.13 --out /tmp/revision-0.execution.json
 ```
