@@ -257,9 +257,29 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
-export function openDecisionCase(rawBytes: Uint8Array): LoadedDecisionCase {
+function openDecisionCaseUnchecked(rawBytes: Uint8Array): LoadedDecisionCase {
   const snapshot = new Uint8Array(rawBytes);
   const value = jsonObject(snapshot, "case") as unknown as DecisionCase;
+  if (
+    value.engine === null ||
+    typeof value.engine !== "object" ||
+    Array.isArray(value.engine) ||
+    !Array.isArray(value.engine.supported_operations) ||
+    !Array.isArray(value.source_documents) ||
+    value.source_documents.length === 0 ||
+    !Array.isArray(value.source_references) ||
+    value.source_references.length === 0 ||
+    !Array.isArray(value.analyses) ||
+    value.analyses.length === 0 ||
+    value.interpretation_control === null ||
+    typeof value.interpretation_control !== "object" ||
+    !Array.isArray(value.interpretation_control.alternative_scenarios)
+  ) {
+    throw new DecisionCaseError(
+      "DECISION_CASE_INVALID",
+      "Decision case is missing a required portable runtime structure.",
+    );
+  }
   if (
     value.schema_version !== "0.1.0" ||
     value.case_kind !== "derived_decision_case" ||
@@ -400,6 +420,19 @@ export function openDecisionCase(rawBytes: Uint8Array): LoadedDecisionCase {
     raw_base64: Buffer.from(snapshot).toString("base64"),
     case_sha256: sha256Bytes(snapshot),
   });
+}
+
+/** Parse a portable case and collapse malformed runtime shapes into the stable invalid-case code. */
+export function openDecisionCase(rawBytes: Uint8Array): LoadedDecisionCase {
+  try {
+    return openDecisionCaseUnchecked(rawBytes);
+  } catch (error) {
+    if (error instanceof DecisionCaseError) throw error;
+    throw new DecisionCaseError(
+      "DECISION_CASE_INVALID",
+      "Decision case does not satisfy the portable runtime contract.",
+    );
+  }
 }
 
 export function exportDecisionCase(caseFile: LoadedDecisionCase): Uint8Array {

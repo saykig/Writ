@@ -234,6 +234,33 @@ describe("portable decision case", () => {
       "DECISION_CASE_ENGINE_UNAVAILABLE",
     );
   });
+
+  test("malformed runtime shapes return stable typed errors", () => {
+    expectCode(
+      () => openDecisionCase(exactJsonBytes({ schema_version: "0.1.0" })),
+      "DECISION_CASE_INVALID",
+    );
+    expectCode(
+      () => parseExecution(exactJsonBytes({ schema_version: "0.1.0" })),
+      "DECISION_CASE_INVALID",
+    );
+
+    const execution = JSON.parse(
+      readFileSync(
+        join(
+          ROOT,
+          "decision-cases",
+          "synthetic-failure-choice",
+          "executions",
+          "revision-0.execution.json",
+        ),
+        "utf8",
+      ),
+    ) as DecisionExecution;
+    (execution as unknown as { candidate_result: { encoding: string } }).candidate_result.encoding =
+      "hex";
+    expectCode(() => parseExecution(exactJsonBytes(execution)), "DECISION_CASE_INVALID");
+  });
 });
 
 const engineRoot = process.env.WRIT_DECISION_LAB_ROOT;

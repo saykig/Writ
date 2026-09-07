@@ -6,7 +6,7 @@ import { sha256Bytes } from "@writ/provenance";
 
 import { analysisBindingHash, analysisById, mathematicalBytes } from "./case.js";
 import { DecisionCaseError } from "./errors.js";
-import { decodeBase64Exact, encodedBytes, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
+import { encodedBytes, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
 import type {
   CheckedProjection,
   ConsumedDecision,
@@ -209,20 +209,44 @@ export function runDecisionCase(
 }
 
 export function parseExecution(raw: Uint8Array): DecisionExecution {
-  let value: DecisionExecution;
+  let parsed: unknown;
   try {
-    value = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(raw)) as DecisionExecution;
+    parsed = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(raw));
   } catch {
     throw new DecisionCaseError(
       "DECISION_CASE_INVALID",
       "Decision execution is not valid UTF-8 JSON.",
     );
   }
-  if (value.schema_version !== "0.1.0" || value.mathematical_check?.status !== "freshly_checked") {
-    throw new DecisionCaseError("DECISION_CASE_INVALID", "Unsupported decision execution.");
+  try {
+    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new DecisionCaseError("DECISION_CASE_INVALID", "Unsupported decision execution.");
+    }
+    const value = parsed as DecisionExecution;
+    const sha256 = /^sha256:[0-9a-f]{64}$/;
+    if (
+      value.schema_version !== "0.1.0" ||
+      typeof value.case_id !== "string" ||
+      value.case_id.length === 0 ||
+      typeof value.analysis_id !== "string" ||
+      value.analysis_id.length === 0 ||
+      !sha256.test(value.case_sha256) ||
+      !sha256.test(value.analysis_sha256) ||
+      !sha256.test(value.problem_sha256) ||
+      !sha256.test(value.query_sha256) ||
+      value.mathematical_check?.status !== "freshly_checked"
+    ) {
+      throw new DecisionCaseError("DECISION_CASE_INVALID", "Unsupported decision execution.");
+    }
+    verifyEncodedBytes(value.candidate_result, "candidate_result");
+    return deepFreeze(value);
+  } catch (error) {
+    if (error instanceof DecisionCaseError) throw error;
+    throw new DecisionCaseError(
+      "DECISION_CASE_INVALID",
+      "Decision execution does not satisfy the portable runtime contract.",
+    );
   }
-  verifyEncodedBytes(value.candidate_result, "candidate_result");
-  return deepFreeze(value);
 }
 
 export function executionBytes(execution: DecisionExecution): Uint8Array {
@@ -287,10 +311,7 @@ export function consumeDecision(
       "Execution problem/query hashes do not match the selected revision.",
     );
   }
-  const candidate = decodeBase64Exact(
-    execution.candidate_result.content,
-    "candidate_result.content",
-  );
+  const candidate = verifyEncodedBytes(execution.candidate_result, "candidate_result");
   const checked = checkCandidate(candidate, problem, query, options);
   const unresolved = checked.status === "unresolved";
   return deepFreeze({

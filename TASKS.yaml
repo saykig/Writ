@@ -25,7 +25,7 @@ statuses:
 tasks:
   - id: EXECUTABLE-DECISION-CASE-001
     title: Add one bounded executable decision-case layer
-    status: in_progress
+    status: review
     baseline_commit: 20f0473afa62ed3c6e0433a21b189d1d9d1712d6
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee

@@ -97,12 +97,28 @@ Focused commands run successfully during implementation:
 
 - package typecheck and lint;
 - package unit tests without an external engine (integration test explicitly skipped);
-- package tests with the exact pinned engine/runtime (11 passed, 0 failed);
+- package tests with the exact pinned engine/runtime (12 passed, 0 failed);
 - four CLI `run` invocations and a relocated CLI `consume`;
 - direct baseline for revisions 0, 1 and 2;
 - Writ verification after the first implementation commit.
 
-The final required repository command results are recorded in the PR after completion.
+The final required repository commands all passed locally on the review branch:
+
+| Required command | Result |
+| --- | --- |
+| `bun run format` | PASS |
+| `bun run lint` | PASS |
+| `bun run typecheck` | PASS |
+| `bun run test` | PASS |
+| `bun run data:check` | PASS; 81 records, 16 links, 65 judgments; byte-identical |
+| `bun run verify:writ` | PASS; ontology, interoperability, provenance and integrity |
+| `bun run build` | PASS |
+
+The first aggregate-test attempt used an artificially narrowed local `PATH` that hid `npm` from the
+existing provenance packed-package test. Repeating the same repository command with the normal
+local toolchain available passed. The first final verification run also correctly rejected two
+updated files until their tracked-tree checksums were refreshed; the repeated verification above is
+the passing final result.
 
 Limits inherited from the pinned engine include small finite rational linear families, at most 32
 states, bounded rows/actions/input size, candidate search through floating SciPy/HiGHS followed by
