@@ -187,6 +187,47 @@ export function executionBytes(execution: DecisionExecution): Uint8Array {
   return exactJsonBytes(execution);
 }
 
+/**
+ * Freshly check a preserved candidate against its exact original subject without authorizing use.
+ *
+ * Shared-analysis replay performs applicability gating in its own scope-bound record. This function
+ * therefore returns only the mathematical projection: it does not reinterpret intended use,
+ * current applicability, or human disposition.
+ */
+export function recheckDecisionExecution(
+  caseFile: LoadedDecisionCase,
+  execution: DecisionExecution,
+  analysisId: string,
+  options: EngineOptions,
+): CheckedProjection {
+  const analysis = analysisById(caseFile, analysisId);
+  if (
+    execution.case_id !== caseFile.value.case_id ||
+    execution.case_sha256 !== caseFile.case_sha256 ||
+    execution.analysis_id !== analysisId ||
+    execution.analysis_sha256 !== analysisBindingHash(caseFile, analysis) ||
+    sha256Bytes(exactJsonBytes(execution.engine)) !==
+      sha256Bytes(exactJsonBytes(caseFile.value.engine))
+  ) {
+    throw new DecisionCaseError(
+      "DECISION_CASE_STALE_SUBJECT_BINDING",
+      "Execution is not bound to the selected exact case and analysis revision.",
+    );
+  }
+  const { problem, query } = mathematicalBytes(analysis);
+  if (
+    execution.problem_sha256 !== sha256Bytes(problem) ||
+    execution.query_sha256 !== sha256Bytes(query)
+  ) {
+    throw new DecisionCaseError(
+      "DECISION_CASE_STALE_SUBJECT_BINDING",
+      "Execution problem/query hashes do not match the selected revision.",
+    );
+  }
+  const candidate = verifyEncodedBytes(execution.candidate_result, "candidate_result");
+  return deepFreeze(checkCandidate(candidate, problem, query, options));
+}
+
 export function consumeDecision(
   caseFile: LoadedDecisionCase,
   execution: DecisionExecution,
