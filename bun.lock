@@ -55,6 +55,16 @@
         "yaml": "^2.9.0",
       },
     },
+    "packages/decision-case": {
+      "name": "@writ/decision-case",
+      "version": "0.1.0",
+      "bin": {
+        "writ-decision-case": "./bin/writ-decision-case.ts",
+      },
+      "dependencies": {
+        "@writ/provenance": "workspace:*",
+      },
+    },
     "packages/domain": {
       "name": "@writ/domain",
       "version": "0.1.0",
@@ -157,6 +167,8 @@
     "@writ/cli": ["@writ/cli@workspace:packages/cli"],
 
     "@writ/data-bundle": ["@writ/data-bundle@workspace:packages/data-bundle"],
+
+    "@writ/decision-case": ["@writ/decision-case@workspace:packages/decision-case"],
 
     "@writ/domain": ["@writ/domain@workspace:packages/domain"],
 

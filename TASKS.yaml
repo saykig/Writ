@@ -23,6 +23,44 @@ statuses:
   - blocked
 
 tasks:
+  - id: EXECUTABLE-DECISION-CASE-001
+    title: Add one bounded executable decision-case layer
+    status: in_progress
+    dependencies:
+      - TRACK-B-HISTORICAL-JUDGMENT-TARGET-SCOPE-001
+    baseline_commit: 20f0473afa62ed3c6e0433a21b189d1d9d1712d6
+    external_pins:
+      decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
+      bellman: b1266137f824dc65e614722f1f0592846b915262
+    scope:
+      - Propose and implement a separate derived decision-case namespace without changing corpus or record identity.
+      - Reuse the pinned finite-linear-uncertainty.v1 producer/checker boundary through one fixed external-process adapter.
+      - Preserve exact problem, query and candidate bytes; distinguish mathematical check, applicability and human review.
+      - Demonstrate three immutable synthetic revisions, alternative-versus-conjunction semantics and portable fresh checking.
+      - Compare the Writ-owned boundary with an equal-assurance direct script using the same pinned checker.
+    exclusions:
+      - New Writ record families, NIST changes, empirical estimates, independence assumptions, model weights or minimax choice.
+      - Conditional, sequential, causal, safety or authority-to-act conclusions.
+      - A backend registry, dashboard, database, hosted service or changes to Decision Lab or Bellman.
+    acceptance:
+      - Base, penalty and A-bound revisions freshly check to the exact supplied ranges and warranted action statuses.
+      - Stale subjects, forged or missing certificates, source-span mismatch, undeclared inputs and unsupported semantics fail closed.
+      - A relocated recipient process freshly checks before use and cannot reinterpret the result outside the static contract.
+      - Existing NIST, canonical identity, bundle export/reload and required repository gates remain unchanged and pass.
+      - The proposed ADR, current instructions, compact execution/comparison record and exact external pins are reviewable in one unmerged PR.
+    outputs:
+      - adr/0026-bounded-derived-decision-cases.md
+      - packages/decision-case
+      - schemas/analysis/decision-case-v0.1.schema.json
+      - schemas/analysis/decision-execution-v0.1.schema.json
+      - decision-cases/synthetic-failure-choice
+      - docs/current/decision-cases.md
+      - docs/experiments/executable-decision-case-report.md
+      - AGENTS.md
+      - docs/current/product-definition.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: TRACK-B-HISTORICAL-JUDGMENT-TARGET-SCOPE-001
     title: Scope historical judgment targets to their governing record migration
     status: review
