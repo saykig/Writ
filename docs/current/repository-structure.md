@@ -3,12 +3,12 @@
 This document explains the active tree and authority boundaries. It is a retention and ownership
 map, not a universal knowledge model.
 
-## Active authorities
+## Active areas and authority boundaries
 
 | Path | Owns | Does not own |
 | --- | --- | --- |
 | `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | downstream questions, mathematical models, or recommendations |
-| `decision-cases/` | bounded portable derived decision fixtures and immutable case/execution artifacts | source truth, empirical premise validity, or authority to act |
+| `examples/` | runnable illustrative material, including bounded portable decision fixtures and immutable case/execution artifacts | source truth, normative contracts, empirical premise validity, or authority to act |
 | `schemas/` | active JSON Schema interchange contracts, including analysis-layer decision-case contracts | mathematical theorem authority |
 | `protocols/` | Writ language protocol definitions | corpus or Bellman mathematical authority |
 | `packages/domain/` | native record/link/judgment contracts | derived mathematical semantics |
@@ -34,10 +34,13 @@ or Bellman's mathematics.
 
 ## Supporting and historical areas
 
-- `archive/` contains non-normative historical pilots and compatibility material. Active runtime
-  behavior must not depend on it unless an explicit compatibility test says otherwise.
+- `docs/history/snapshots.md` indexes retired historical bodies by exact Git tag, historical path,
+  file count, digest, and recovery command. Those snapshots are absent from the current tree and are
+  not runtime authorities.
 - `docs/migrations/` preserves completed resets, review dispositions, migrations, and governance
   transitions.
+- `examples/` remains runnable illustrative material. Its portable case identities and exact
+  execution bytes are protected fixtures, not reviewed corpora or semantic authorities.
 - `.agents/` contains only current reusable agent skills. One-off reviewer-role experiments should
   be retired after their durable lessons are promoted into tests or governing documents.
 - `.github/` remains at the root for CI and repository integration.
@@ -56,9 +59,10 @@ default and writes exact acquired bytes only to an explicit output path. It repo
 acquisition provenance without modifying a reviewed corpus or conferring evidence acceptance.
 
 Writ has no current database package, migration runner, hosted persistence dependency, corpus
-publication service, or long-running HTTP application. Repository and Git artifacts remain the
-authority for current corpora, reviews, provenance, and derived decision cases. ADR 0027 records the
-implemented persistence retirement as Proposed pending explicit human architectural disposition.
+publication service, long-running HTTP application, or tracked archive root. Repository artifacts
+remain the authority for current corpora, reviews, provenance, and derived decision cases; Git tags
+preserve the retired historical snapshots. ADR 0027 records the implemented persistence retirement
+as Proposed pending explicit human architectural disposition.
 
 `TASKS.yaml` remains the execution ledger. The human-facing development sequence belongs in
 `docs/current/roadmap.md`; completed task history should not silently regain product authority.

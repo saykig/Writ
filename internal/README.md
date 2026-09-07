@@ -9,5 +9,5 @@
 - `infrastructure/` contains operational configuration and generated compatibility projections.
 
 Nothing here is a public corpus, normative schema, governing protocol, or user-facing example.
-Active political and research knowledge remains under `corpora/`; historical non-authoritative
-material remains under `archive/`.
+Active political and research knowledge remains under `corpora/`. Historical non-authoritative
+snapshots are indexed by `docs/history/snapshots.md` and preserved through Git tags.

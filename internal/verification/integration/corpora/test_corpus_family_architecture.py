@@ -486,8 +486,7 @@ def test_catalog_lists_only_native_family_governed_corpora() -> None:
     for entry in current["native_corpora"]:
         assert entry["family"] in {"legal_policy", "institutional"}
         assert entry["path"].startswith("corpora/")
-        assert not entry["path"].startswith("archive/")
-    # The archived compatibility datasets are not resolvable through the catalog.
+    # The retired G7 and G20 compatibility datasets are not resolvable through the catalog.
     text = CATALOG_PATH.read_text(encoding="utf-8")
     assert "g7" not in text
     assert "g20" not in text

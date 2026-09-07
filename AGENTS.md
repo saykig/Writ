@@ -32,7 +32,8 @@ Before changing core behavior, read:
 - accepted ADRs that govern the affected behavior;
 - the selected task in `TASKS.yaml` when one exists.
 
-Documents under `archive/` and `docs/migrations/` are historical evidence, not current instructions.
+Git-tagged snapshots indexed by `docs/history/snapshots.md` and documents under `docs/migrations/`
+are historical evidence, not current instructions.
 
 ## Architectural invariants
 

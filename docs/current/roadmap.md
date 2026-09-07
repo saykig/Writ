@@ -2,7 +2,8 @@
 
 **Status:** current directional roadmap  
 **Observation cutoff:** 7 September 2026  
-**Baseline:** `main` after PR #44 (`6ce8d6333a3b6b2c0e4e5150bd686d1677acf97a`)
+**Baseline:** `main` after PR #45 and the public README simplification
+(`ba385418c61e597d818331940b15d5b8439773b5`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
@@ -109,8 +110,14 @@ current-role outcome log. Their useful lessons have already been promoted into t
 and invariants; keeping reviewer personas active would preserve an experiment after its purpose was
 served.
 
-**Keep for now:** `archive/` and `docs/migrations/` as historical evidence; `apps/ingest` because
-current source-registry/tooling still consumes it; `TASKS.yaml` as the execution ledger.
+**Keep:** `docs/migrations/` as historical evidence; `apps/ingest` because current
+source-registry/tooling still consumes it; `TASKS.yaml` as the execution ledger.
+
+**Retired in the root-hygiene cleanup:** the tracked `archive/` root. Exact EU-US, G7, and G20
+snapshots remain recoverable through lightweight Git tags indexed in `docs/history/snapshots.md`.
+The first synthetic decision fixture lives under `examples/decision-cases/`, which makes its
+illustrative role explicit without changing its case, revision, execution, or mathematical
+identities.
 
 **Retired in the database cleanup:** the legacy Postgres/Neon persistence package, migrations,
 database publication paths, Docker/environment wiring, database CI, and database-specific
