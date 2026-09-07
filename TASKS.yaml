@@ -30,9 +30,16 @@ statuses:
 tasks:
   - id: RETIRE-LEGACY-DATABASE-PERSISTENCE-001
     title: Retire the legacy Postgres/Neon persistence architecture
-    status: review
+    status: done
     architecture_status: proposed
     baseline_commit: 6ce8d6333a3b6b2c0e4e5150bd686d1677acf97a
+    completion_note: >-
+      The complete current-consumer audit found no active Writ capability that required the legacy
+      database chain. The database package, migrations, publication paths, dependencies, service
+      wiring, environment configuration, and CI job are retired. Caller-controlled exact-byte
+      acquisition remains independent of corpus insertion or evidence acceptance. All standard
+      TypeScript, Python, data, provenance, build, and pinned no-skip Decision Lab integration
+      checks pass. ADR 0027 remains Proposed pending explicit human architectural disposition.
     dependencies:
       - FOUNDATION-CORPUS-RETIREMENT-001
     scope:
@@ -58,6 +65,7 @@ tasks:
       - .github/workflows/ci.yml
       - package.json
       - bun.lock
+      - packages/decision-case/package.json
       - TASKS.yaml
       - MANIFEST.sha256
 
