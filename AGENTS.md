@@ -129,6 +129,11 @@ an eternal product roadmap. Work on the smallest coherent task that advances a c
 confirm dependencies, run its acceptance checks, update durable documentation only when the result
 changes current understanding, and stop at the gate.
 
+Version history lives under `docs/history/releases/`. Meaningful releases summarize completed
+transitions and preserve failures and retirements as well as surviving work; do not release after
+every PR. Published version tags are immutable, and release publication requires explicit human
+authorization.
+
 ## Review priorities
 
 Review in this order:
