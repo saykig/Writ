@@ -64,10 +64,10 @@ extensions. The classification and dependency rules are recorded in
 
 ## Derived decision-case schemas
 
-| Schema                                         | Classification   | Responsibility                                                                                                   |
-| ---------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `analysis/decision-case-v0.1.schema.json`      | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.  |
-| `analysis/decision-execution-v0.1.schema.json` | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition. |
+| Schema                                               | Classification   | Responsibility                                                                                                                                               |
+| ---------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `analysis/decision-case-v0.1.schema.json`            | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.                                              |
+| `analysis/decision-execution-v0.1.schema.json`       | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                             |
 | `analysis/shared-analysis-revision-v0.1.schema.json` | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay. |
 
 The case and execution contracts implement the bounded candidate in proposed ADR 0026. The shared
