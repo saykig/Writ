@@ -30,7 +30,7 @@ statuses:
 tasks:
   - id: RETIRE-LEGACY-DATABASE-PERSISTENCE-001
     title: Retire the legacy Postgres/Neon persistence architecture
-    status: in_progress
+    status: review
     architecture_status: proposed
     baseline_commit: 6ce8d6333a3b6b2c0e4e5150bd686d1677acf97a
     dependencies:
