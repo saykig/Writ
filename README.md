@@ -26,7 +26,10 @@ The system is designed around several principles:
 - provenance is deterministic over frozen inputs;
 - human review controls acceptance.
 
-Writ also contains a small portable mechanical provenance kernel and bounded internal grounding tools for cases where evidence can be reproducibly derived from frozen structured sources.
+Writ also contains a small portable mechanical provenance kernel and bounded internal grounding tools for cases where evidence can be reproducibly derived from frozen structured sources. A proposed,
+separate derived decision-case layer can preserve one explicit mathematical problem, its modelling
+choices, exact checked execution, revision dependencies, applicability and human disposition without
+making that analysis a political-knowledge record.
 
 ## What Writ is not
 
@@ -39,6 +42,9 @@ Writ is not currently:
 - a scenario simulator;
 - a question-answering system;
 - a general-purpose political knowledge graph.
+
+The bounded decision-case candidate is not a general reasoning or recommendation engine. Its exact
+calculation remains conditional on explicitly supplied synthetic premises and never authorizes action.
 
 Questions, analyses, models, and conclusions may use Writ records, but they are not the source of truth for those records.
 

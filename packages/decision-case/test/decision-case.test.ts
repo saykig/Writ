@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { sha256Bytes } from "@writ/provenance";
+import _Ajv2020 from "ajv/dist/2020.js";
 
 import {
   assessReuse,
@@ -29,6 +30,10 @@ const CASE_PATH = join(
   "synthetic-failure-choice.case.json",
 );
 const CASE_BYTES = readFileSync(CASE_PATH);
+type DefaultExport<T> = T extends { default: infer D } ? D : T;
+const Ajv2020 = ((_Ajv2020 as { default?: unknown }).default ?? _Ajv2020) as DefaultExport<
+  typeof _Ajv2020
+>;
 
 function mutableCase(): DecisionCase {
   return JSON.parse(new TextDecoder().decode(CASE_BYTES)) as DecisionCase;
@@ -49,6 +54,42 @@ function expectCode(action: () => unknown, code: DecisionCaseError["code"]): voi
 }
 
 describe("portable decision case", () => {
+  test("the authoritative schemas accept the portable case and execution artifacts", () => {
+    const ajv = new Ajv2020({ strict: true, allowUnionTypes: true });
+    const caseSchema = JSON.parse(
+      readFileSync(join(ROOT, "schemas", "analysis", "decision-case-v0.1.schema.json"), "utf8"),
+    );
+    const executionSchema = JSON.parse(
+      readFileSync(
+        join(ROOT, "schemas", "analysis", "decision-execution-v0.1.schema.json"),
+        "utf8",
+      ),
+    );
+    const validateCase = ajv.compile(caseSchema);
+    const validateExecution = ajv.compile(executionSchema);
+    expect(validateCase(JSON.parse(new TextDecoder().decode(CASE_BYTES)))).toBe(true);
+    for (const name of [
+      "revision-0",
+      "revision-1",
+      "revision-2",
+      "control-simultaneous-a-bounds",
+    ]) {
+      const artifact = JSON.parse(
+        readFileSync(
+          join(
+            ROOT,
+            "decision-cases",
+            "synthetic-failure-choice",
+            "executions",
+            `${name}.execution.json`,
+          ),
+          "utf8",
+        ),
+      );
+      expect(validateExecution(artifact)).toBe(true);
+    }
+  });
+
   test("opens, exports, and reopens exact portable bytes", () => {
     const opened = openDecisionCase(CASE_BYTES);
     const exported = exportDecisionCase(opened);
@@ -254,6 +295,64 @@ describe("pinned Decision Lab integration", () => {
         "DECISION_CASE_UNSUPPORTED_USE",
       );
 
+      const unrelatedValue = mutableCase();
+      (unrelatedValue as unknown as { title: string }).title = "Changed unrelated display title";
+      const unrelatedCase = reopen(unrelatedValue);
+      expect(
+        consumeDecision(
+          unrelatedCase,
+          executions.get("revision-0")!,
+          "revision-0",
+          "static_expected_loss_decision",
+          options,
+        ).mathematical_status,
+      ).toBe("uniformly_strictly_optimal");
+
+      const changedChoiceValue = mutableCase();
+      const changedChoice = changedChoiceValue.analyses[0]!.dependencies.find(
+        ({ dependency_id }) => dependency_id === "choice.unrestricted-dependence",
+      )! as unknown as { rationale: string };
+      changedChoice.rationale = "Changed modelling rationale requiring explicit reassessment.";
+      expectCode(
+        () =>
+          consumeDecision(
+            reopen(changedChoiceValue),
+            executions.get("revision-0")!,
+            "revision-0",
+            "static_expected_loss_decision",
+            options,
+          ),
+        "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
+      );
+
+      const unresolved = JSON.parse(
+        new TextDecoder().decode(executionBytes(executions.get("revision-0")!)),
+      ) as DecisionExecution;
+      const unresolvedCandidate = exactJsonBytes({
+        schema: "finite-linear-uncertainty-result.v1",
+        operation: "decision",
+        model_sha256: unresolved.problem_sha256.slice("sha256:".length),
+        query_sha256: unresolved.query_sha256.slice("sha256:".length),
+        family_kind: "exact_family",
+        backend: "scipy-1.17.0-highs-candidate-search",
+        status: "unresolved",
+        reason: "absent_exact_action_certificate",
+        evidence: {},
+      });
+      (
+        unresolved as unknown as { candidate_result: ReturnType<typeof encodedBytes> }
+      ).candidate_result = encodedBytes(unresolvedCandidate);
+      const unresolvedUse = consumeDecision(
+        caseFile,
+        unresolved,
+        "revision-0",
+        "static_expected_loss_decision",
+        options,
+      );
+      expect(unresolvedUse.functional).toBe(false);
+      expect(unresolvedUse.mathematical_status).toBe("unresolved");
+      expect(unresolvedUse.conclusion).toBeNull();
+
       for (const mutation of ["wrong-objective", "missing-certificate"] as const) {
         const forged = JSON.parse(
           new TextDecoder().decode(executionBytes(executions.get("revision-0")!)),
@@ -284,7 +383,7 @@ describe("pinned Decision Lab integration", () => {
               "static_expected_loss_decision",
               options,
             ),
-          "DECISION_CASE_ENGINE_PROTOCOL_ERROR",
+          "DECISION_CASE_MATHEMATICAL_CHECK_FAILED",
         );
       }
 

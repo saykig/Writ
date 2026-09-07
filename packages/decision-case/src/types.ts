@@ -124,6 +124,7 @@ export interface DecisionExecution {
   readonly case_id: string;
   readonly case_sha256: string;
   readonly analysis_id: string;
+  readonly analysis_sha256: string;
   readonly engine: DecisionCase["engine"];
   readonly problem_sha256: string;
   readonly query_sha256: string;

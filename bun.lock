@@ -64,6 +64,9 @@
       "dependencies": {
         "@writ/provenance": "workspace:*",
       },
+      "devDependencies": {
+        "ajv": "^8.20.0",
+      },
     },
     "packages/domain": {
       "name": "@writ/domain",

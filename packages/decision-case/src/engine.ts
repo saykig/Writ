@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { sha256Bytes } from "@writ/provenance";
 
-import { analysisById, mathematicalBytes } from "./case.js";
+import { analysisBindingHash, analysisById, mathematicalBytes } from "./case.js";
 import { DecisionCaseError } from "./errors.js";
 import { decodeBase64Exact, encodedBytes, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
 import type {
@@ -88,7 +88,9 @@ function protocolCall(
     throw new DecisionCaseError(
       processResult.exitCode === 69
         ? "DECISION_CASE_ENGINE_UNAVAILABLE"
-        : "DECISION_CASE_ENGINE_PROTOCOL_ERROR",
+        : command === "check" && processResult.exitCode === 65
+          ? "DECISION_CASE_MATHEMATICAL_CHECK_FAILED"
+          : "DECISION_CASE_ENGINE_PROTOCOL_ERROR",
       message || `Pinned engine ${command} process failed with exit ${processResult.exitCode}.`,
     );
   }
@@ -195,6 +197,7 @@ export function runDecisionCase(
     case_id: caseFile.value.case_id,
     case_sha256: caseFile.case_sha256,
     analysis_id: analysisId,
+    analysis_sha256: analysisBindingHash(caseFile, analysis),
     engine: caseFile.value.engine,
     problem_sha256: sha256Bytes(problem),
     query_sha256: sha256Bytes(query),
@@ -236,9 +239,9 @@ export function consumeDecision(
   const analysis = analysisById(caseFile, analysisId);
   if (
     execution.case_id !== caseFile.value.case_id ||
-    execution.case_sha256 !== caseFile.case_sha256 ||
     execution.analysis_id !== analysisId ||
-    execution.engine.commit !== caseFile.value.engine.commit
+    sha256Bytes(exactJsonBytes(execution.engine)) !==
+      sha256Bytes(exactJsonBytes(caseFile.value.engine))
   ) {
     throw new DecisionCaseError(
       "DECISION_CASE_STALE_SUBJECT_BINDING",
@@ -249,6 +252,22 @@ export function consumeDecision(
     throw new DecisionCaseError(
       "DECISION_CASE_UNSUPPORTED_USE",
       `Analysis ${analysisId} cannot be reinterpreted as ${use}.`,
+    );
+  }
+  if (execution.analysis_sha256 !== analysisBindingHash(caseFile, analysis)) {
+    const { problem, query } = mathematicalBytes(analysis);
+    if (
+      execution.problem_sha256 === sha256Bytes(problem) &&
+      execution.query_sha256 === sha256Bytes(query)
+    ) {
+      throw new DecisionCaseError(
+        "DECISION_CASE_APPLICABILITY_REASSESSMENT_REQUIRED",
+        `Analysis ${analysisId} has changed support or modelling dependencies.`,
+      );
+    }
+    throw new DecisionCaseError(
+      "DECISION_CASE_STALE_SUBJECT_BINDING",
+      "Execution is not bound to the selected analysis subject.",
     );
   }
   if (analysis.applicability.status !== "supported") {

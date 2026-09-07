@@ -62,6 +62,18 @@ extensions. The classification and dependency rules are recorded in
 | -------------------------------------- | -------------- | -------------------------------------------------------- |
 | `analysis/record-judgment.schema.json` | human review   | Independent judgments targeting a record or record link. |
 
+## Derived decision-case schemas
+
+| Schema                                                     | Classification   | Responsibility                                                                                                    |
+| ---------------------------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `analysis/decision-case-v0.1.schema.json`                  | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.  |
+| `analysis/decision-execution-v0.1.schema.json`             | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition. |
+
+These contracts implement the bounded candidate in proposed ADR 0026. They are not Core or family
+record contracts, cannot appear as a corpus `record_contract`, and do not make a computation a source
+of truth. A recipient must freshly check an execution against independently reopened intended bytes;
+the execution schema does not turn its stored check status into authorization.
+
 ### Declared record contracts
 
 Every corpus manifest declares one `record_contract`:
@@ -133,6 +145,8 @@ generalization requires a separate decision.
 | review             | core; evidence review definition                                                                            |
 | corpus manifest    | core responsibility; legacy source manifests remain compatibility-only until migration                      |
 | published judgment | the relevant family extension plus core provenance; legacy score-shaped judgments remain compatibility-only |
+| decision case      | analysis; separate from corpora and records, under proposed ADR 0026                                      |
+| decision execution | analysis; an untrusted candidate and recorded check that must be freshly checked at use                     |
 
 ## Protocols and migration records
 

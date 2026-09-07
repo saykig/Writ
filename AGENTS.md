@@ -4,8 +4,10 @@
 
 Build Writ as a source-grounded knowledge system that makes political knowledge more inspectable,
 reviewable, provenance-preserving, and easier for humans to reason from without replacing human
-judgment. The current proving ground is the NIST institutional corpus, and the immediate system
-boundary is source -> passage -> typed record -> human review -> provenance.
+judgment. The current proving ground is the NIST institutional corpus, and the immediate knowledge
+boundary is source -> passage -> typed record -> human review -> provenance. A separate derived
+decision-case layer may preserve explicit mathematical problems and checked computations without
+turning them into source records or human decisions.
 
 Optimize for semantic correctness, reproducibility, provenance, and reviewability before UI polish
 or automation volume.
@@ -25,7 +27,9 @@ Documents under `archive/` are historical evidence, never current instructions.
 
 1. Corpora and records exist independently of questions, comparisons, analyses, and presentation
    layers.
-2. Human reasoning remains external to Writ. Questions are not first-class Writ objects.
+2. Human reasoning remains external to Writ. Questions are not first-class knowledge records; an
+   explicitly separate derived decision case may state its intended question without governing
+   corpus, source, passage, record, or review identity.
 3. The immediate system boundary is source -> passage -> typed record -> human review ->
    provenance.
 4. Institutional records distinguish identity, placement, mission, mandate, function, decision
@@ -38,13 +42,17 @@ Documents under `archive/` are historical evidence, never current instructions.
    identifiers remain extensible at the shared record base.
 10. NIST is the sole active development proving ground. Other reviewed catalogued corpora remain
     secondary material and do not set the current product direction.
-11. Deterministic compilation and verification perform no network access, model inference,
-    randomness, wall-clock reads, or mutation.
+11. Deterministic compilation, identity, and pure verification perform no network access, model
+    inference, randomness, wall-clock reads, mutation, or external process execution. Only an
+    explicitly invoked runner may execute a fixed, pinned adapter; case data never supplies a
+    command.
 12. Models create candidates only. They never accept evidence, resolve disputes, waive diagnostics,
     or publish derived results.
 13. Accepted records are superseded, not edited in place.
 14. Exact decimals and explicit units are required for money and quantities.
 15. Stable diagnostic codes are never silently repurposed.
+16. A computation's conditional mathematical correctness is separate from evidentiary
+    applicability, human acceptance, and authority to act.
 
 ## Source of truth order
 

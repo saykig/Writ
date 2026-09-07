@@ -7,7 +7,7 @@ import {
 } from "@writ/provenance";
 
 import { DecisionCaseError } from "./errors.js";
-import { decodeBase64Exact, verifyEncodedBytes } from "./identity.js";
+import { decodeBase64Exact, exactJsonBytes, verifyEncodedBytes } from "./identity.js";
 import type {
   CaseDependency,
   DecisionAnalysis,
@@ -427,6 +427,37 @@ export function mathematicalBytes(analysis: DecisionAnalysis): {
   };
 }
 
+/** Bind the selected analysis and its referenced sources without coupling it to unrelated case content. */
+export function analysisBindingHash(
+  caseFile: LoadedDecisionCase,
+  analysis: DecisionAnalysis,
+): string {
+  const referenceIds = new Set(analysis.dependencies.flatMap(({ reference_ids }) => reference_ids));
+  const compare = (left: string, right: string): number =>
+    left < right ? -1 : left > right ? 1 : 0;
+  const references = caseFile.value.source_references
+    .filter(({ reference_id }) => referenceIds.has(reference_id))
+    .sort((left, right) => compare(left.reference_id, right.reference_id));
+  const sourceKeys = new Set(
+    references.map(
+      ({ source_id, document_version_id }) => `${source_id}\u0000${document_version_id}`,
+    ),
+  );
+  const sources = caseFile.value.source_documents
+    .filter(({ source_id, document_version_id }) =>
+      sourceKeys.has(`${source_id}\u0000${document_version_id}`),
+    )
+    .sort((left, right) =>
+      compare(
+        `${left.source_id}\u0000${left.document_version_id}`,
+        `${right.source_id}\u0000${right.document_version_id}`,
+      ),
+    );
+  return sha256Bytes(
+    exactJsonBytes({ analysis, engine: caseFile.value.engine, references, sources }),
+  );
+}
+
 export function assessReuse(
   priorCase: LoadedDecisionCase,
   priorAnalysisId: string,
@@ -452,23 +483,27 @@ export function assessReuse(
       String(reference.byte_span.end),
     ].join("\u0000");
   };
-  const supportFingerprints = (
+  const applicabilityFingerprints = (
     caseFile: LoadedDecisionCase,
     analysis: DecisionAnalysis,
   ): Map<string, string> =>
     new Map(
       analysis.dependencies
-        .filter(({ role }) => role === "source_support")
+        .filter(({ role }) => role !== "checked_mathematical_use")
         .map((dependency) => [
           dependency.dependency_id,
-          dependency.reference_ids
-            .map((id) => referenceFingerprint(caseFile, id))
-            .sort()
-            .join("\u0001"),
+          [
+            dependency.role,
+            dependency.kind,
+            dependency.description,
+            dependency.rationale,
+            ...dependency.depends_on.slice().sort(),
+            ...dependency.reference_ids.map((id) => referenceFingerprint(caseFile, id)).sort(),
+          ].join("\u0001"),
         ]),
     );
-  const priorSupport = supportFingerprints(priorCase, prior);
-  const nextSupport = supportFingerprints(nextCase, next);
+  const priorSupport = applicabilityFingerprints(priorCase, prior);
+  const nextSupport = applicabilityFingerprints(nextCase, next);
   const applicabilityChanged =
     priorSupport.size !== nextSupport.size ||
     [...priorSupport.keys()].some((id) => priorSupport.get(id) !== nextSupport.get(id));
