@@ -3,8 +3,7 @@
  *
  * The Writ compiler front end: a Langium grammar and generated parser (with
  * error recovery), an idempotent formatter, and native record lowering.
- * Everything is pure and deterministic and
- * never imports `@writ/api` or touches a database.
+ * Everything is pure and deterministic and performs no persistence I/O.
  */
 
 import type { RecordJudgment, WritRecord } from "@writ/domain";

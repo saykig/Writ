@@ -28,6 +28,39 @@ statuses:
   - blocked
 
 tasks:
+  - id: RETIRE-LEGACY-DATABASE-PERSISTENCE-001
+    title: Retire the legacy Postgres/Neon persistence architecture
+    status: in_progress
+    architecture_status: proposed
+    baseline_commit: 6ce8d6333a3b6b2c0e4e5150bd686d1677acf97a
+    dependencies:
+      - FOUNDATION-CORPUS-RETIREMENT-001
+    scope:
+      - Remove the unused TypeScript database package, SQL migrations, database publication tooling, Docker/environment wiring, and database CI.
+      - Decouple generic source acquisition from online persistence while preserving gated fetch planning, exact acquired bytes, SHA-256, and acquisition provenance.
+      - Remove database-specific JavaScript and Python dependencies without introducing a replacement persistence architecture.
+      - Record the durable retirement in Proposed ADR 0027 and align current repository documentation with the resulting tree.
+    exclusions:
+      - Corpus, source, passage, record, review, decision-case, provenance, language, schema, Bellman, or Decision Lab semantic changes.
+      - A replacement database, object store, generic storage abstraction, ingestion redesign, or acceptance of ADR 0026 or ADR 0027.
+      - Rewriting accepted historical ADRs, migration records, archived compatibility artifacts, or reviewed corpus bytes.
+    acceptance:
+      - No current code, workspace dependency, command, environment variable, CI job, or documentation requires legacy database persistence.
+      - Generic registry generation, discovery, URL policy, acquisition planning, and explicit exact-byte file acquisition remain available without database access.
+      - Acquired bytes retain SHA-256 and provenance, require an explicit output path, refuse overwrite, and confer neither corpus insertion nor evidence acceptance.
+      - Native loading, NIST review/provenance verification, data export/reload, language, decision-case, Python, build, and repository-integrity checks pass.
+      - ADR 0027 remains Proposed pending explicit human architectural disposition.
+    outputs:
+      - adr/0027-retire-legacy-database-persistence.md
+      - apps/ingest
+      - internal/infrastructure
+      - internal/tooling
+      - .github/workflows/ci.yml
+      - package.json
+      - bun.lock
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: EXECUTABLE-DECISION-CASE-001
     title: Add one bounded executable decision-case layer
     status: done

@@ -58,7 +58,7 @@ def fetch_live_bytes(
     max_bytes: int = 25_000_000,
     resolver: Callable[[str], list[str]] = resolve_global_addresses,
 ) -> tuple[bytes, dict[str, Any]]:
-    """Fetch bytes without persisting them; the caller must publish online."""
+    """Fetch exact bytes without persisting or accepting them as evidence."""
     if not approved_live_access:
         raise FetchGateError("live fetching requires explicit approved_live_access")
     current_url = validate_source_url(source, source_url)

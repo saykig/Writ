@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: writ-ingest
+Version: 0.1.0
+License-Expression: Apache-2.0
+Requires-Python: >=3.12
+Requires-Dist: pydantic>=2
+Requires-Dist: PyYAML>=6
+Requires-Dist: jsonschema>=4.23
+Requires-Dist: httpx
+Requires-Dist: scrapy
+Requires-Dist: playwright
+Requires-Dist: trafilatura
+Requires-Dist: pymupdf
+Requires-Dist: docling
+Requires-Dist: tika
+Requires-Dist: warcio
+Requires-Dist: rapidfuzz
+Requires-Dist: python-dateutil
+Requires-Dist: structlog
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: respx; extra == "dev"
+Requires-Dist: types-PyYAML; extra == "dev"
+Requires-Dist: types-jsonschema; extra == "dev"

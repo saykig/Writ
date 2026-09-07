@@ -1,4 +1,4 @@
-.PHONY: bootstrap check test db-up db-down
+.PHONY: bootstrap check test
 
 bootstrap:
 	bun install
@@ -13,9 +13,3 @@ check:
 	. .venv/bin/activate && ruff check apps/ingest internal/tooling/scripts internal/verification && pytest apps/ingest internal/verification
 
 test: check
-
-db-up:
-	docker compose up -d postgres
-
-db-down:
-	docker compose down

@@ -40,11 +40,8 @@ enter the review queue. Score values are excluded from vocabulary mapping.
 
 No active corpus adapter consumes historical compatibility datasets. The generic source registry,
 vocabulary, and acquisition machinery remains available independently of those retired corpora.
-
-Corpus payloads are published to the append-only Neon artifact store created by
-`internal/infrastructure/database/migrations/0004_corpus_artifact_store.sql`. Connection strings are runtime
-secrets and must never be committed. The previously shared owner credential must be rotated before
-any further publication; tests may use only a local, ephemeral, or restricted database role.
+Acquired bytes are caller-controlled files produced only through an explicit output path; acquiring
+bytes does not insert them into a reviewed corpus or accept them as evidence.
 
 This is not a promise that all endpoints work. Before enabling a connector, verify:
 

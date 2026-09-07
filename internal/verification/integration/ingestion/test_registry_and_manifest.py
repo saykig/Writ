@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -17,7 +20,6 @@ from writ_ingest.corpus.manifest import (
     build_discovered_manifest,
     write_immutable_json,
 )
-from writ_ingest.corpus.online_store import OnlineStoreError, prepare_online_artifact
 from writ_ingest.corpus.registry import (
     RegistryNotFoundError,
     RegistryValidationError,
@@ -25,7 +27,7 @@ from writ_ingest.corpus.registry import (
     canonical_json_bytes,
     get_source,
     load_registry,
-    project_legacy_registry,
+    project_source_registry,
 )
 from writ_ingest.corpus.validation import validate_record
 
@@ -41,7 +43,7 @@ def test_registry_is_canonical_and_generated_json_is_synchronized() -> None:
     assert registry["sources"][0]["id"] == "g20_research_group"
     assert len(registry["sources"]) == 107
     assert registry["sources"][-1]["id"] == "writ.controlled_topics"
-    expected = canonical_json_bytes(project_legacy_registry(registry))
+    expected = canonical_json_bytes(project_source_registry(registry))
     assert (
         ROOT / "internal/infrastructure/generated/source-registry.json"
     ).read_bytes() == expected
@@ -120,46 +122,59 @@ def test_blocked_manifest_is_deterministic_and_immutable(tmp_path: Path) -> None
         write_immutable_json(path, changed)
 
 
-def test_online_raw_artifact_identity_is_content_addressed() -> None:
-    first = prepare_online_artifact(
-        logical_id="corpus.g20.synthetic.document",
-        source_id="g20_research_group",
-        object_kind="raw_source",
-        content=b"<html>synthetic one</html>",
-        media_type="text/html",
-        summit_slug="2024-rio",
-        provenance={"fixture": "synthetic"},
+def test_fetch_cli_writes_exact_bytes_only_to_an_explicit_output(tmp_path: Path) -> None:
+    payload = b"<html>synthetic source bytes\r\n</html>"
+    supplied = tmp_path / "supplied.html"
+    supplied.write_bytes(payload)
+    output = tmp_path / "acquired.html"
+    command = [
+        sys.executable,
+        str(ROOT / "internal/tooling/scripts/fetch_sources.py"),
+        "--source-id",
+        "g20_research_group",
+        "--supplied-file",
+        str(supplied),
+    ]
+
+    missing_output = subprocess.run(
+        command,
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
     )
-    second = prepare_online_artifact(
-        logical_id="corpus.g20.synthetic.document",
-        source_id="g20_research_group",
-        object_kind="raw_source",
-        content=b"<html>synthetic one</html>",
-        media_type="text/html",
-        summit_slug="2024-rio",
-        provenance={"fixture": "synthetic"},
+    assert missing_output.returncode == 2
+    assert "--output is required" in missing_output.stderr
+
+    acquired = subprocess.run(
+        [*command, "--output", str(output)],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
     )
-    assert first == second
-    changed = prepare_online_artifact(
-        logical_id="corpus.g20.synthetic.document",
-        source_id="g20_research_group",
-        object_kind="raw_source",
-        content=b"<html>synthetic two</html>",
-        media_type="text/html",
-        summit_slug="2024-rio",
-        provenance={"fixture": "synthetic"},
+    report = json.loads(acquired.stdout)
+    assert output.read_bytes() == payload
+    assert report["sha256"] == f"sha256:{hashlib.sha256(payload).hexdigest()}"
+    assert report["byte_size"] == len(payload)
+    assert report["acquisition_provenance"] == {
+        "acquisition_method": "user_supplied_file",
+        "source_url": "https://www.g20.utoronto.ca/analysis/index.html",
+        "live_fetch_authorized": False,
+    }
+    assert report["corpus_objects_written"] is False
+    assert report["evidence_accepted"] is False
+
+    overwrite = subprocess.run(
+        [*command, "--output", str(output)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
     )
-    assert changed.sha256 != first.sha256
-    assert changed.object_id != first.object_id
-    with pytest.raises(OnlineStoreError, match="non-empty"):
-        prepare_online_artifact(
-            logical_id="corpus.g20.synthetic.empty",
-            source_id="g20_research_group",
-            object_kind="raw_source",
-            content=b"",
-            media_type="text/html",
-            provenance={"fixture": "synthetic"},
-        )
+    assert overwrite.returncode == 2
+    assert "refusing to overwrite" in overwrite.stderr
+    assert output.read_bytes() == payload
 
 
 def test_synthetic_html_discovery_uses_registered_sections_only() -> None:

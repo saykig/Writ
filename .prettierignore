@@ -13,7 +13,6 @@ internal/infrastructure/generated/
 docs/
 adr/
 .agents/
-internal/infrastructure/database/
 internal/tooling/scripts/
 MANIFEST.sha256
 AGENTS.md

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate or check the legacy JSON projection of the canonical YAML registry."""
+"""Generate or check the JSON projection of the canonical YAML registry."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from writ_ingest.corpus.registry import (
     canonical_json_bytes,
     find_repo_root,
     load_registry,
-    project_legacy_registry,
+    project_source_registry,
 )
 
 
@@ -26,7 +26,7 @@ def main() -> int:
     registry_path = args.registry or root / REGISTRY_RELATIVE_PATH
     output_path = args.output or root / "internal/infrastructure/generated/source-registry.json"
     payload = canonical_json_bytes(
-        project_legacy_registry(load_registry(registry_path))
+        project_source_registry(load_registry(registry_path))
     )
     if args.check:
         if not output_path.is_file() or output_path.read_bytes() != payload:
