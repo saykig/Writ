@@ -28,6 +28,45 @@ statuses:
   - blocked
 
 tasks:
+  - id: SHARED-ANALYSIS-REVISION-001
+    title: Import shared analyses and process explicit source revisions
+    status: in_progress
+    architecture_status: proposed
+    baseline_commit: a65b4f70e54b7020c6a480c2a39b6735f9151b9d
+    external_pins:
+      decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
+      aldera: 9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4
+      bellman: b1266137f824dc65e614722f1f0592846b915262
+    dependencies:
+      - EXECUTABLE-DECISION-CASE-001
+    scope:
+      - Import separately authored exact decision cases while scoping every case-local identifier to its bundle.
+      - Inspect shared exact source identity and explicit model differences without inferring dependence or authority.
+      - Record supplied source and assumption revisions, trace bounded dependency effects, and keep mathematical validity separate from current applicability.
+      - Require scope-bound applicability reassessment before selected successor analyses can be recomputed and used.
+      - Export a portable evidence archive that a fresh recipient can reconstruct and check through the pinned Decision Lab adapter.
+      - Compare a native extension with a reuse-oriented deterministic lineage implementation before selecting one coherent implementation.
+    exclusions:
+      - Changes to Bellman, Decision Lab, Aldera, native record families, NIST evidence, or the finite-linear-uncertainty.v1 engine semantics.
+      - A universal decision ontology, source-version auto-selection, reviewer authentication, service, database, or model-driven inference.
+      - Treating shared evidence as statistical independence, treating revisions as disproof, or treating recomputation as applicability reassessment.
+    acceptance:
+      - Alpha and beta import separately, share only exact source identity, retain colliding local IDs safely, and freshly check to their different warranted results.
+      - Source-only, quantitative, and independence-withdrawal revisions preserve prior results while enforcing the correct reassessment or recomputation boundary.
+      - Complete alternative derivations remain disjunctive, cycles fail, contradictions remain visible, and missing ancestry never becomes unaffected.
+      - Import order, exact repeat import, byte conflicts, inventory completeness, unaffected analysis, and portable recipient replay controls pass deterministically.
+      - All required repository gates and explicit no-skip pinned Decision Lab integrations pass on the selected final implementation.
+      - The implementation comparison records exact candidate commits, adapted components and reasons for declined dependencies; the governing ADR remains Proposed.
+    outputs:
+      - adr/0028-shared-analysis-revision.md
+      - packages/shared-analysis
+      - schemas/analysis/shared-analysis-revision-v0.1.schema.json
+      - decision-cases/shared-analysis-revision
+      - docs/current/shared-analysis-revision.md
+      - docs/experiments/shared-analysis-revision-build-report.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: RETIRE-LEGACY-DATABASE-PERSISTENCE-001
     title: Retire the legacy Postgres/Neon persistence architecture
     status: done
