@@ -6,6 +6,8 @@
   Star map.
 - [`current/decision-cases.md`](./current/decision-cases.md) documents the bounded derived
   decision-case implementation.
+- [`current/shared-analysis-revision.md`](./current/shared-analysis-revision.md) documents the
+  proposed cross-analysis import, revision, reassessment, and replay lifecycle.
 - [`current/development.md`](./current/development.md) contains verification and version-change
   guidance.
 - [`current/repository-structure.md`](./current/repository-structure.md) documents active authorities

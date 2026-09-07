@@ -30,8 +30,15 @@ statuses:
 tasks:
   - id: SHARED-ANALYSIS-REVISION-001
     title: Import shared analyses and process explicit source revisions
-    status: in_progress
+    status: review
     architecture_status: proposed
+    completion_note: >-
+      The selected consolidation retains the smaller native lifecycle, adapts Aldera's deterministic
+      scoped lineage mechanics, and uses Writ's exact decision-case runner and fresh candidate
+      checker. Separate alpha/beta imports, explicit source and assumption revisions, scoped
+      applicability, selected recomputation, portable export, and recipient replay pass the frozen
+      contract and pinned no-skip integrations. PR 46 is integrated with byte-identical original
+      decision fixtures under examples; all repository gates pass and ADR 0028 remains Proposed.
     baseline_commit: a65b4f70e54b7020c6a480c2a39b6735f9151b9d
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
