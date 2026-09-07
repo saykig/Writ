@@ -8,8 +8,9 @@ Scripts are operational tooling, not sources of corpus truth.
   `internal/infrastructure/generated/` from reviewed configuration.
 - `corpus_family_inventory.ts` and `institutional_stage_b_inventory.ts` reproduce preservation
   inventories for retained reviewed corpora.
-- `publish_corpus.ts` is generic publication tooling; publishing a candidate never accepts it.
-- `discover_sources.py` and `fetch_sources.py` are generic acquisition tools; running them may
-  require explicit source access and does not automatically accept or publish records.
+- `discover_sources.py` builds a caller-reviewed source manifest without live discovery.
+- `fetch_sources.py` plans acquisition by default. Supplied-file or approved live acquisition
+  requires an explicit `--output`, writes exact bytes without overwrite, and reports SHA-256 and
+  acquisition provenance without inserting or accepting corpus records.
 
 Never treat a generated candidate as reviewed evidence merely because a script emitted it.

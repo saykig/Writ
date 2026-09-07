@@ -17,8 +17,6 @@ dependencies = [
   "warcio",
   "rapidfuzz",
   "python-dateutil",
-  "boto3",
-  "psycopg[binary,pool]",
   "structlog"
 ]
 
