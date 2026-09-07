@@ -22,6 +22,7 @@ TASKS.yaml
 examples/decision-cases/**/case.json
 examples/decision-cases/**/*.case.json
 examples/decision-cases/**/executions/*.json
+examples/decision-cases/shared-analysis-revision/fixture-hashes.json
 
 # Generated embed outputs (regenerated on build)
 **/schemas.embedded.ts
