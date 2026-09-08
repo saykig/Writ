@@ -55,13 +55,16 @@ function supportedAssessment(
     analysis,
     basis_sha256: basis.basis_sha256,
     status: "supported",
-    rationale: "The exact revised synthetic basis is explicitly accepted for this bounded integration test.",
+    rationale:
+      "The exact revised synthetic basis is explicitly accepted for this bounded integration test.",
     source_bindings: basis.source_bindings,
     assumption_dependencies: basis.assumption_dependencies,
   };
 }
 
-function transportRequest(changed = true): Uint8Array {
+function transportRequest(
+  change: "model" | "none" | "labels" = "model",
+): Uint8Array {
   const sourceSubject = {
     name: "transport-source",
     semantics: "finite-observable-history.v1",
@@ -80,23 +83,30 @@ function transportRequest(changed = true): Uint8Array {
       },
     ],
   };
-  const targetSubject = changed
-    ? {
-        ...sourceSubject,
-        name: "transport-target",
-        premises: ["explicitly revised target model"],
-        nodes: [
-          {
-            history: [],
-            terminal: "0",
-            actions: [
-              { label: "a", cost: "1", outcomes: [] },
-              { label: "b", cost: "0", outcomes: [] },
-            ],
-          },
-        ],
-      }
-    : sourceSubject;
+  const targetSubject =
+    change === "model"
+      ? {
+          ...sourceSubject,
+          name: "transport-target",
+          premises: ["explicitly revised target model"],
+          nodes: [
+            {
+              history: [],
+              terminal: "0",
+              actions: [
+                { label: "a", cost: "1", outcomes: [] },
+                { label: "b", cost: "0", outcomes: [] },
+              ],
+            },
+          ],
+        }
+      : change === "labels"
+        ? {
+            ...sourceSubject,
+            name: "renamed-target",
+            premises: ["different descriptive premise label only"],
+          }
+        : sourceSubject;
   const selectedPolicy = { choices: [{ history: [], action: "a" }] };
   return exactJsonBytes({
     schema: "certificate-transport-request.v1",
@@ -142,7 +152,38 @@ test("refuses transport before the shared-analysis applicability reassessment", 
   );
 });
 
-test("refuses a no-op transport even after a supported reassessment", () => {
+test("refuses no-op and label-only transports after a supported reassessment", () => {
+  let workspace = revisedWorkspace();
+  const analysis = { bundle_id: "alpha", analysis_id: "analysis-base" };
+  workspace = reassessApplicability(
+    workspace,
+    supportedAssessment(workspace, "revision.x-half-v3", analysis),
+  );
+  for (const request of [transportRequest("none"), transportRequest("labels")]) {
+    expect(() =>
+      createCertificateTransportRecord(
+        workspace,
+        {
+          revision_id: "revision.x-half-v3",
+          analysis,
+          applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+        },
+        {
+          changed_request_fields: ["$.target.subject.name"],
+          rationale: "A descriptive-only change must not count as a transported model revision.",
+        },
+        request,
+        { engineRoot: "/not-used" },
+      ),
+    ).toThrow(
+      expect.objectContaining<Partial<SharedAnalysisError>>({
+        code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
+      }),
+    );
+  }
+});
+
+test("requires every declared transport field to identify an actual source/target change", () => {
   let workspace = revisedWorkspace();
   const analysis = { bundle_id: "alpha", analysis_id: "analysis-base" };
   workspace = reassessApplicability(
@@ -158,10 +199,10 @@ test("refuses a no-op transport even after a supported reassessment", () => {
         applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
       },
       {
-        changed_request_fields: ["$.target.subject"],
-        rationale: "No-op transport should be refused by this integration story.",
+        changed_request_fields: ["$.target.subject.nodes[0].actions[0].cost"],
+        rationale: "This path is intentionally unchanged and must fail the binding check.",
       },
-      transportRequest(false),
+      transportRequest(),
       { engineRoot: "/not-used" },
     ),
   ).toThrow(
@@ -179,11 +220,7 @@ integration(
     const baseExecution = runDecisionCase(baseCase, "analysis-base", engineOptions);
 
     let workspace = importSharedAnalyses("certificate-transport-story", [alphaImport]);
-    workspace = attachDecisionExecution(
-      workspace,
-      analysis,
-      executionBytes(baseExecution),
-    );
+    workspace = attachDecisionExecution(workspace, analysis, executionBytes(baseExecution));
     workspace = recordRevision(workspace, quantitativeRevision());
 
     const impactBefore = assessRevision(workspace, "revision.x-half-v3").impacts[0]!;
@@ -201,7 +238,8 @@ integration(
         },
         {
           changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
-          rationale: "The revised synthetic model basis changes the declared target sequential cost.",
+          rationale:
+            "The revised synthetic model basis changes the declared target sequential cost.",
         },
         transportRequest(),
         engineOptions,
@@ -267,6 +305,13 @@ integration(
         },
       );
       expect(replay.historical_source_guarantee_preserved).toBe(true);
+      expect(replay.source_certificate_status).toBe("checked");
+      expect(replay.source_certificate_sha256).toBe(
+        transportRecord.value.binding.transport_source_certificate_sha256,
+      );
+      expect(replay.target_certificate_sha256).toBe(
+        transportRecord.value.binding.transport_target_certificate_sha256,
+      );
       expect(replay.fresh_check_matches_producer_check).toBe(true);
       expect(replay.mathematical_status).toBe("checked");
       expect(replay.target_certificate_status).toBe("checked");
