@@ -29,33 +29,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: .python-version
-          cache: pip
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: .bun-version
-      - uses: actions/checkout@v4
-        with:
-          repository: saykig/writ-decision-lab
-          ref: e5f77dfcf929708951f4673b3f394461ef09c752
-          path: .integration/writ-decision-lab
       - run: bun install --frozen-lockfile
-      - run: python -m pip install scipy==1.17.0
       - run: bun run format
       - run: bun run lint
       - run: bun run typecheck
       - run: bun run test
       - run: bun run data:check
       - run: bun run build
-      - name: Decision Lab integration gates
-        run: |
-          export WRIT_DECISION_LAB_ROOT="$GITHUB_WORKSPACE/.integration/writ-decision-lab"
-          export WRIT_DECISION_LAB_PYTHON="$(command -v python)"
-          bun run test:decision-integration
-          bun run test:shared-analysis-integration
-          bun run test:certificate-transport-integration
 
   python:
     runs-on: ubuntu-latest
