@@ -91,6 +91,18 @@ The build does not earn:
 
 ## Verification evidence
 
-Final repository, Python, no-skip Decision Lab integration and hosted CI results are recorded here
-after the branch reaches its exact PR head. The human gate should evaluate the semantic separation
-and the extra provenance value, not infer acceptance from green automation.
+PR [#53](https://github.com/saykig/Writ/pull/53) is the unmerged human architecture gate. Local
+verification on the proposed combined tree passed:
+
+- the seven repository gates: format, lint, typecheck, test, data check, Writ verification and
+  build;
+- pack validation, source-registry drift, Ruff and mypy;
+- 75 Python tests;
+- Decision Case 16/16, Shared Analysis 2/2, Certificate Transport 12/12 and Decision Episode 1/1,
+  all with zero integration skips; and
+- exact tree verification of all 204 files from Decision Lab commit
+  `e5f77dfcf929708951f4673b3f394461ef09c752`, using CPython 3.13.15 and SciPy 1.17.0.
+
+Hosted CI remains required on the final pushed head before handoff. The human gate should evaluate
+the semantic separation and extra provenance value, not infer architecture acceptance from green
+automation.

@@ -92,6 +92,7 @@ tasks:
   - id: DECISION-EPISODE-001
     title: Close one checked decision-to-consequence provenance loop
     status: in_progress
+    implementation_pr: https://github.com/saykig/Writ/pull/53
     architecture_status: proposed
     baseline_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
     dependencies:
