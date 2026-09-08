@@ -50,6 +50,8 @@ export interface CertificateTransportRevisionBinding {
   readonly revision_impact_sha256: string;
   readonly prior_analysis_sha256: string;
   readonly target_analysis_sha256: string;
+  readonly transport_source_certificate_sha256: string;
+  readonly transport_target_certificate_sha256: string;
 }
 
 export interface CertificateTransportRecord {
@@ -80,7 +82,10 @@ export interface CertificateTransportReplay {
   readonly analysis: AnalysisAddress;
   readonly revision_impact_sha256: string;
   readonly reassessment_basis_sha256: string;
+  readonly source_certificate_sha256: string;
+  readonly target_certificate_sha256: string;
   readonly historical_source_guarantee_preserved: true;
+  readonly source_certificate_status: "checked";
   readonly fresh_check_matches_producer_check: boolean;
   readonly target_certificate_status: TransportCheckProjection["target_certificate_status"];
   readonly transport_status: TransportCheckProjection["transport_status"];
