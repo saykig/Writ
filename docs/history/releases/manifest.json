@@ -3,7 +3,7 @@
   "repository": "saykig/Writ",
   "repository_root_commit": "3f639246d002b358c0ea6de09fefe03205590903",
   "repository_root_date": "2026-07-23T00:14:10-04:00",
-  "historical_cutoff_commit": "32207b8178f969da04e0133470b33f286c5512ad",
+  "historical_cutoff_commit": "8b5ec349e908fa70e0a13853f0ee977dd573b01f",
   "time_convention": "Human-readable periods use UTC; commit timestamps preserve their recorded numeric offsets.",
   "historical_checkpoint_tags": [
     {
@@ -282,6 +282,37 @@
         "snapshot_eu_us_sha256": "3ca03cc4bf3d0bb43d3c7cea9bdbac59c28a8615cb903139094e3ebecd122a33",
         "snapshot_g7_sha256": "f8ae684ae6dd8f0fda247abb73ed36e3ad46345dcf7cba89ed5d11501bb00dc7",
         "snapshot_g20_sha256": "462605d2c441beb5e7caaa82139b7ab5f9e02ae4ed772a1e82bfcade74bd5965"
+      }
+    },
+    {
+      "version": "v0.0.8",
+      "title": "Shared-analysis revision and replay",
+      "historical_start_commit": "0acabcd73c8d51e1c728d4d461841761f6ec1e49",
+      "historical_start_date": "2026-09-07T19:57:21-04:00",
+      "target_commit": "8b5ec349e908fa70e0a13853f0ee977dd573b01f",
+      "target_commit_date": "2026-09-07T21:06:37-04:00",
+      "tree_sha": "412caf120cbc05a285c3dcc7734b251c62062f38",
+      "release_note_path": "docs/history/releases/v0.0.8.md",
+      "release_note_sha256": "699afa6c76483e8020c310101caca207915d4b40a28d76c1d404a3ffcfdff911",
+      "important_adr_ids": [
+        "0025",
+        "0026",
+        "0027",
+        "0028"
+      ],
+      "important_merged_pr_numbers": [
+        48,
+        49,
+        47
+      ],
+      "existing_named_checkpoint_tags": [],
+      "root_manifest_sha256": "29c4b817ad50fe84a4d37ea3d8d28592c9cf1f8e876e578ac0b916f1139a81d1",
+      "other_historical_hashes": {
+        "bellman_reference_commit": "b1266137f824dc65e614722f1f0592846b915262",
+        "decision_lab_commit": "7215b53096bc487756f94f4ca87390716a14f2ee",
+        "corpora_tree_sha1": "5614653c836cfa63e905d533fb7729f78c03dc5c",
+        "original_decision_case_sha256": "232252f443a2c9f410f0271c83ba65fca5b575fc5aac6b15c20ad228b6374d84",
+        "shared_fixture_hashes_file_sha256": "12b61a9516260cd6c72cba8ad7eb6b70ba5f1b30204492b5a5ea6f98b7737167"
       }
     }
   ]
