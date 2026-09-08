@@ -1,14 +1,18 @@
 import { expect, test } from "bun:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, cpSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import {
+  encodedBytes,
   exactJsonBytes,
   executionBytes,
   openDecisionCase,
   runDecisionCase,
+  verifyEncodedBytes,
+  type EncodedBytes,
 } from "@writ/decision-case";
+import { sha256Bytes } from "@writ/provenance";
 
 import {
   assessRevision,
@@ -18,6 +22,8 @@ import {
   deriveReassessmentBasis,
   exportSharedAnalysis,
   importSharedAnalyses,
+  openCertificateTransportRecord,
+  produceCertificateTransport,
   reassessApplicability,
   recomputeAnalysis,
   recordRevision,
@@ -25,7 +31,9 @@ import {
   replaySharedAnalysis,
   type AnalysisAddress,
   type ApplicabilityAssessmentDeclaration,
+  type CertificateTransportRecord,
   type LoadedSharedAnalysis,
+  type LoadedCertificateTransportRecord,
 } from "../src/index.js";
 import { alphaImport, quantitativeRevision } from "./fixtures.js";
 
@@ -41,6 +49,83 @@ if (integrationRequired && (engineRoot === undefined || pythonExecutable === und
 
 const integration = engineRoot !== undefined && pythonExecutable !== undefined ? test : test.skip;
 const engineOptions = { engineRoot: engineRoot!, pythonExecutable: pythonExecutable! };
+const ZERO_SHA256 = `sha256:${"0".repeat(64)}`;
+
+type Mutable<T> = T extends readonly (infer Item)[]
+  ? Mutable<Item>[]
+  : T extends object
+    ? { -readonly [Key in keyof T]: Mutable<T[Key]> }
+    : T;
+
+interface TransportRequestFixture {
+  source: {
+    subject: TransportSubjectFixture;
+    certificate: { lower: string[]; upper: string[] };
+  };
+  target: { subject: TransportSubjectFixture };
+}
+
+interface TransportSubjectFixture {
+  criterion: string;
+  horizon: number;
+  unit: string;
+  nodes: Array<{
+    history: string[][];
+    terminal: string;
+    actions: Array<{
+      label: string;
+      cost: string;
+      outcomes: Array<{ observation: string; probability: string }>;
+    }>;
+  }>;
+}
+
+function mutableRecord(
+  record: LoadedCertificateTransportRecord,
+): Mutable<CertificateTransportRecord> {
+  return structuredClone(record.value) as Mutable<CertificateTransportRecord>;
+}
+
+function decodedObject(bytes: EncodedBytes): Record<string, unknown> {
+  return JSON.parse(new TextDecoder().decode(verifyEncodedBytes(bytes, "test fixture"))) as Record<
+    string,
+    unknown
+  >;
+}
+
+function corruptContent(bytes: Mutable<EncodedBytes>): void {
+  const raw = Buffer.from(bytes.content, "base64");
+  raw[0] = raw[0]! ^ 1;
+  bytes.content = raw.toString("base64");
+}
+
+function replaceEvidenceAndStoredCheck(
+  record: Mutable<CertificateTransportRecord>,
+  evidence: Record<string, unknown>,
+): void {
+  record.evidence = encodedBytes(exactJsonBytes(evidence));
+  const storedCheck = decodedObject(record.producer_check);
+  storedCheck.evidence_sha256 = record.evidence.sha256.slice("sha256:".length);
+  record.producer_check = encodedBytes(exactJsonBytes(storedCheck));
+}
+
+function replaceRequestAndStoredCheck(
+  record: Mutable<CertificateTransportRecord>,
+  request: Record<string, unknown>,
+): void {
+  record.request = encodedBytes(exactJsonBytes(request));
+  const storedCheck = decodedObject(record.producer_check);
+  storedCheck.request_sha256 = record.request.sha256.slice("sha256:".length);
+  record.producer_check = encodedBytes(exactJsonBytes(storedCheck));
+}
+
+function changedRequest(mutator: (request: TransportRequestFixture) => void): Uint8Array {
+  const request = JSON.parse(
+    new TextDecoder().decode(transportRequest()),
+  ) as TransportRequestFixture;
+  mutator(request);
+  return exactJsonBytes(request);
+}
 
 function supportedAssessment(
   workspace: LoadedSharedAnalysis,
@@ -122,6 +207,35 @@ function revisedWorkspace(): LoadedSharedAnalysis {
   return recordRevision(
     importSharedAnalyses("certificate-transport-story", [alphaImport]),
     quantitativeRevision(),
+  );
+}
+
+function assessedWorkspace(): LoadedSharedAnalysis {
+  const workspace = revisedWorkspace();
+  const analysis = { bundle_id: "alpha", analysis_id: "analysis-base" };
+  return reassessApplicability(
+    workspace,
+    supportedAssessment(workspace, "revision.x-half-v3", analysis),
+  );
+}
+
+function createValidTransportRecord(
+  workspace: LoadedSharedAnalysis = assessedWorkspace(),
+): LoadedCertificateTransportRecord {
+  return createCertificateTransportRecord(
+    workspace,
+    {
+      revision_id: "revision.x-half-v3",
+      analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+      applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+    },
+    {
+      changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
+      rationale:
+        "The supported revised model basis is explicitly mapped to the changed target sequential cost declaration.",
+    },
+    transportRequest(),
+    engineOptions,
   );
 }
 
@@ -209,6 +323,57 @@ test("requires every declared transport field to identify an actual source/targe
   );
 });
 
+test("refuses a descriptive field as the mapping for an otherwise substantive request", () => {
+  const workspace = assessedWorkspace();
+  expect(() =>
+    createCertificateTransportRecord(
+      workspace,
+      {
+        revision_id: "revision.x-half-v3",
+        analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+        applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+      },
+      {
+        changed_request_fields: ["$.target.subject.name"],
+        rationale: "A descriptive name must not stand in for the actual mathematical change.",
+      },
+      transportRequest(),
+      { engineRoot: "/not-used" },
+    ),
+  ).toThrow(expect.objectContaining({ code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID" }));
+});
+
+test("refuses wrong revision, analysis, or assessment scope before invoking transport", () => {
+  const workspace = assessedWorkspace();
+  const modelBinding = {
+    changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
+    rationale: "The revised premise changes the target sequential cost declaration.",
+  };
+  for (const binding of [
+    {
+      revision_id: "missing-revision",
+      analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+      applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+    },
+    {
+      revision_id: "revision.x-half-v3",
+      analysis: { bundle_id: "alpha", analysis_id: "missing-analysis" },
+      applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+    },
+    {
+      revision_id: "revision.x-half-v3",
+      analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+      applicability_assessment_id: "missing-assessment",
+    },
+  ]) {
+    expect(() =>
+      createCertificateTransportRecord(workspace, binding, modelBinding, transportRequest(), {
+        engineRoot: "/not-used",
+      }),
+    ).toThrow();
+  }
+});
+
 integration(
   "preserves the old result, gates stale applicability, transports a successor, and replays checker-only",
   () => {
@@ -218,6 +383,11 @@ integration(
 
     let workspace = importSharedAnalyses("certificate-transport-story", [alphaImport]);
     workspace = attachDecisionExecution(workspace, analysis, executionBytes(baseExecution));
+    expect(verifyEncodedBytes(workspace.value.bundles[0]!.case_file, "original case")).toEqual(
+      alphaImport.case_bytes,
+    );
+    expect(baseExecution.applicability.status).toBe("supported");
+    expect(baseExecution.human_review).toEqual({ disposition: "unreviewed", reviewer: null });
     workspace = recordRevision(workspace, quantitativeRevision());
 
     const impactBefore = assessRevision(workspace, "revision.x-half-v3").impacts[0]!;
@@ -263,21 +433,7 @@ integration(
     );
     workspace = recomputed.workspace;
 
-    const transportRecord = createCertificateTransportRecord(
-      workspace,
-      {
-        revision_id: "revision.x-half-v3",
-        analysis,
-        applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
-      },
-      {
-        changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
-        rationale:
-          "The supported revised model basis is explicitly mapped to the changed target sequential cost declaration; Writ does not infer that mapping from prose.",
-      },
-      transportRequest(),
-      engineOptions,
-    );
+    const transportRecord = createValidTransportRecord(workspace);
 
     const recipientRoot = mkdtempSync(join(tmpdir(), "writ-certificate-transport-recipient-"));
     try {
@@ -288,11 +444,20 @@ integration(
         { mode: 0o700 },
       );
 
-      const sharedReplay = replaySharedAnalysis(exportSharedAnalysis(workspace), {
+      const embeddedArchive = verifyEncodedBytes(
+        transportRecord.value.shared_analysis,
+        "embedded shared analysis",
+      );
+      expect(embeddedArchive).toEqual(exportSharedAnalysis(workspace));
+      const sharedReplay = replaySharedAnalysis(embeddedArchive, {
         engineRoot: engineRoot!,
         pythonExecutable: checkOnlyPython,
       });
       expect(sharedReplay.freshly_checked).toHaveLength(2);
+      expect(sharedReplay.freshly_checked.map(({ revision_id }) => revision_id)).toEqual([
+        null,
+        "revision.x-half-v3",
+      ]);
 
       const replay = replayCertificateTransportRecord(
         certificateTransportRecordBytes(transportRecord),
@@ -318,6 +483,191 @@ integration(
         policy_upper: "1",
         regret_upper: "1",
       });
+    } finally {
+      rmSync(recipientRoot, { recursive: true, force: true });
+    }
+  },
+);
+
+integration("refuses unsupported structural transport and exact adapter source drift", () => {
+  const unsupported = [
+    changedRequest((request) => {
+      request.target.subject.nodes[0]!.actions.pop();
+    }),
+    changedRequest((request) => {
+      request.target.subject.horizon = 2;
+    }),
+    changedRequest((request) => {
+      request.target.subject.unit = "different-loss-unit";
+    }),
+    changedRequest((request) => {
+      request.target.subject.criterion = "unsupported-criterion";
+    }),
+    changedRequest((request) => {
+      request.target.subject.nodes[0]!.actions[0]!.outcomes = [
+        { observation: "x", probability: "1" },
+      ];
+      request.target.subject.nodes.push({
+        history: [["a", "x"]],
+        terminal: "0",
+        actions: [],
+      });
+    }),
+  ];
+  for (const request of unsupported) {
+    expect(() => produceCertificateTransport(request, engineOptions)).toThrow(
+      expect.objectContaining({ code: "SHARED_ANALYSIS_TRANSPORT_PROTOCOL_ERROR" }),
+    );
+  }
+
+  const driftRoot = mkdtempSync(join(tmpdir(), "writ-certificate-transport-drift-"));
+  try {
+    cpSync(engineRoot!, driftRoot, { recursive: true });
+    appendFileSync(
+      join(driftRoot, "src", "writ_decision_lab", "transport", "checker.py"),
+      "\n# deliberate source drift\n",
+    );
+    expect(() =>
+      produceCertificateTransport(transportRequest(), {
+        engineRoot: driftRoot,
+        pythonExecutable: pythonExecutable!,
+      }),
+    ).toThrow(expect.objectContaining({ code: "SHARED_ANALYSIS_TRANSPORT_ENGINE_PIN_MISMATCH" }));
+  } finally {
+    rmSync(driftRoot, { recursive: true, force: true });
+  }
+});
+
+integration(
+  "rejects forged bindings and derives every certificate status from checker-only replay",
+  () => {
+    const record = createValidTransportRecord();
+    const rejectionCases: Array<Mutable<CertificateTransportRecord>> = [];
+
+    for (const field of [
+      "reassessment_basis_sha256",
+      "revision_impact_sha256",
+      "prior_analysis_sha256",
+      "target_analysis_sha256",
+    ] as const) {
+      const changed = mutableRecord(record);
+      changed.binding[field] = ZERO_SHA256;
+      rejectionCases.push(changed);
+    }
+    const wrongRevision = mutableRecord(record);
+    wrongRevision.binding.revision_id = "missing-revision";
+    rejectionCases.push(wrongRevision);
+    const wrongAnalysis = mutableRecord(record);
+    wrongAnalysis.binding.analysis.analysis_id = "missing-analysis";
+    rejectionCases.push(wrongAnalysis);
+    const wrongAssessment = mutableRecord(record);
+    wrongAssessment.binding.applicability_assessment_id = "missing-assessment";
+    rejectionCases.push(wrongAssessment);
+    const wrongCommit = mutableRecord(record);
+    (wrongCommit.decision_lab as { commit: string }).commit = "0".repeat(40);
+    rejectionCases.push(wrongCommit);
+
+    for (const changed of rejectionCases) {
+      expect(() => openCertificateTransportRecord(exactJsonBytes(changed))).toThrow();
+    }
+    expect(() =>
+      openCertificateTransportRecord(
+        exactJsonBytes({ ...mutableRecord(record), authority_to_act: true }),
+      ),
+    ).toThrow();
+
+    for (const field of ["request", "evidence", "producer_check"] as const) {
+      const changed = mutableRecord(record);
+      corruptContent(changed[field]);
+      expect(() => openCertificateTransportRecord(exactJsonBytes(changed))).toThrow();
+    }
+
+    const changedSourceCertificate = mutableRecord(record);
+    const changedSourceRequest = decodedObject(
+      changedSourceCertificate.request,
+    ) as unknown as TransportRequestFixture;
+    changedSourceRequest.source.certificate.lower[0] = "2";
+    replaceRequestAndStoredCheck(
+      changedSourceCertificate,
+      changedSourceRequest as unknown as Record<string, unknown>,
+    );
+    expect(() =>
+      openCertificateTransportRecord(exactJsonBytes(changedSourceCertificate)),
+    ).toThrow();
+
+    const changedTargetCertificate = mutableRecord(record);
+    const changedTargetEvidence = decodedObject(changedTargetCertificate.evidence);
+    (changedTargetEvidence.certificate as { lower: string[] }).lower[0] = "2";
+    replaceEvidenceAndStoredCheck(changedTargetCertificate, changedTargetEvidence);
+    expect(() =>
+      openCertificateTransportRecord(exactJsonBytes(changedTargetCertificate)),
+    ).toThrow();
+
+    const recipientRoot = mkdtempSync(join(tmpdir(), "writ-certificate-status-recipient-"));
+    try {
+      const checkOnlyPython = join(recipientRoot, "check-only-python");
+      writeFileSync(
+        checkOnlyPython,
+        '#!/bin/sh\nif [ "$4" = "solve" ]; then echo "recipient replay attempted producer solve" >&2; exit 97; fi\nexec "$WRIT_DECISION_LAB_PYTHON" "$@"\n',
+        { mode: 0o700 },
+      );
+      const recipientOptions = { engineRoot: engineRoot!, pythonExecutable: checkOnlyPython };
+
+      const invalidProvenance = mutableRecord(record);
+      const invalidProvenanceEvidence = decodedObject(invalidProvenance.evidence);
+      (invalidProvenanceEvidence.alpha as string[])[0] = "0";
+      replaceEvidenceAndStoredCheck(invalidProvenance, invalidProvenanceEvidence);
+      const provenanceReplay = replayCertificateTransportRecord(
+        exactJsonBytes(invalidProvenance),
+        recipientOptions,
+      );
+      expect(provenanceReplay.fresh_check_matches_producer_check).toBe(false);
+      expect(provenanceReplay.source_certificate_status).toBe("checked");
+      expect(provenanceReplay.target_certificate_status).toBe("checked");
+      expect(provenanceReplay.transport_status).toBe("rejected");
+      expect(provenanceReplay.mathematical_status).toBe("rejected");
+      expect(provenanceReplay.bounds).toEqual({
+        optimum_lower: "0",
+        policy_upper: "1",
+        regret_upper: "1",
+      });
+
+      const invalidSource = mutableRecord(record);
+      const invalidSourceRequest = decodedObject(
+        invalidSource.request,
+      ) as unknown as TransportRequestFixture;
+      invalidSourceRequest.source.certificate.lower[0] = "2";
+      invalidSource.binding.transport_source_certificate_sha256 = sha256Bytes(
+        exactJsonBytes(invalidSourceRequest.source.certificate),
+      );
+      replaceRequestAndStoredCheck(
+        invalidSource,
+        invalidSourceRequest as unknown as Record<string, unknown>,
+      );
+      const sourceReplay = replayCertificateTransportRecord(
+        exactJsonBytes(invalidSource),
+        recipientOptions,
+      );
+      expect(sourceReplay.fresh_check_matches_producer_check).toBe(false);
+      expect(sourceReplay.source_certificate_status).toBe("rejected");
+      expect(sourceReplay.target_certificate_status).toBe("checked");
+      expect(sourceReplay.transport_status).toBe("rejected");
+
+      const invalidTarget = mutableRecord(record);
+      const invalidTargetEvidence = decodedObject(invalidTarget.evidence);
+      (invalidTargetEvidence.certificate as { lower: string[] }).lower[0] = "2";
+      invalidTarget.binding.transport_target_certificate_sha256 = sha256Bytes(
+        exactJsonBytes(invalidTargetEvidence.certificate),
+      );
+      replaceEvidenceAndStoredCheck(invalidTarget, invalidTargetEvidence);
+      const targetReplay = replayCertificateTransportRecord(
+        exactJsonBytes(invalidTarget),
+        recipientOptions,
+      );
+      expect(targetReplay.fresh_check_matches_producer_check).toBe(false);
+      expect(targetReplay.source_certificate_status).toBe("not_checked");
+      expect(targetReplay.target_certificate_status).toBe("rejected");
+      expect(targetReplay.transport_status).toBe("not_checked");
     } finally {
       rmSync(recipientRoot, { recursive: true, force: true });
     }

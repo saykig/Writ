@@ -50,29 +50,28 @@ flowchart LR
    authored analysis import, explicit revision/reassessment, old-result preservation, successor
    recomputation, and checker-only replay. Treat this as a bounded capability, not a general
    decision workspace.
-2. **Test one mature Bellman transfer end to end.** The current trial pins Decision Lab's merged
-   certificate-transport adapter and reuses the accepted PR #47 lifecycle rather than creating a new
-   revision system. The required story is: preserved old result -> substantive model/policy revision
-   -> stale applicability -> explicit reassessment -> transported successor certificate ->
-   checker-only recipient replay.
+2. **Retain the one Bellman transfer that passed end-to-end review.** PR #51 pins Decision Lab's
+   merged certificate-transport adapter and reuses the accepted PR #47 lifecycle rather than
+   creating a new revision system. It earns only a revision-bound checked mathematical transition:
+   preserved old result -> substantive model/policy revision -> stale applicability -> explicit
+   reassessment -> transported successor certificate -> checker-only recipient replay.
 3. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
    review, provenance, and correction work where it reveals reusable knowledge-layer requirements.
    Do not let “NIST is the proving ground” become “Writ is only a corpus system.”
-4. **Do not port another Bellman theorem automatically.** After the certificate-transport trial,
-   decide whether the resulting transition object is genuinely reusable across future Writ work. A
-   successful demo is evidence for one semantic, not a queue to implement Bellman PR #7 or later
-   modules.
+4. **Stop after the accepted transport slice.** The transition object is retained narrowly because
+   its history, staleness, reassessment, binding, and replay safeguards justify its integration
+   complexity. That judgment is not a queue to implement Bellman PR #7 or later modules.
 
-**Exit gate from Now:** one complete certificate-transport change story passes fresh checking and
-recipient replay without weakening ADR 0026/0028 boundaries, and the review records a clear verdict
-on whether the new transition record is worth retaining as a reusable Writ semantic.
+**Exit gate from Now:** PR #51's complete certificate-transport change story passes fresh checking,
+adversarial controls, and recipient replay without weakening ADR 0026/0028 boundaries, and remains
+limited to the accepted revision-bound checked mathematical transition.
 
 ## Next
 
-1. **If the current trial earns it, retain a narrow revision-bound mathematical-transition
-   semantic.** It should preserve the old guarantee, exact revised basis, explicit model-to-request
-   mapping premise, successor certificate, target-certificate status, transport-provenance status,
-   and fresh replay identity without pretending the mapping premise is empirically true.
+1. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
+   old guarantee, exact revised basis, explicit model-to-request mapping premise, successor
+   certificate, target-certificate status, transport-provenance status, and fresh replay identity
+   without pretending the mapping premise is empirically true.
 2. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A
    later result may receive a transported or tightened certificate and coexist with alternatives or
    incompatible results, but certificate accumulation/selection should enter only after a specific

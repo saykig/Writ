@@ -105,6 +105,10 @@ The decision is accepted after the following bounded evidence:
 - a direct script remains mathematically adequate, so Writ's accepted value is the durable
   provenance/revision/handoff boundary rather than a stronger mathematical theorem.
 
+The final PR #51 architecture review re-evaluated this decision independently of the proposed
+certificate-transport extension and retained Accepted. The transport trial depends on this boundary;
+its success or failure cannot retroactively supply the evidence for this decision.
+
 ## Consequences and limits
 
 - Corpora, records, sources, passages and reviews remain independent of decision questions.

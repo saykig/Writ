@@ -56,6 +56,37 @@ function shaWithoutPrefix(value: string): string {
   return value.startsWith("sha256:") ? value.slice("sha256:".length) : "";
 }
 
+function assertCheckBindsExactBytes(
+  check: ReturnType<typeof parseTransportCheck>,
+  requestBytes: Uint8Array,
+  evidenceBytes: Uint8Array,
+): void {
+  if (
+    check.request_sha256 !== shaWithoutPrefix(sha256Bytes(requestBytes)) ||
+    check.evidence_sha256 !== shaWithoutPrefix(sha256Bytes(evidenceBytes))
+  ) {
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_TRANSPORT_PROTOCOL_ERROR",
+      "Pinned certificate-transport checker report does not bind the exact supplied request and evidence bytes.",
+    );
+  }
+}
+
+function freshSourceCertificateStatus(
+  check: ReturnType<typeof parseTransportCheck>,
+): CertificateTransportReplay["source_certificate_status"] {
+  if (check.transport_status === "checked") return "checked";
+  if (check.target_certificate_status !== "checked" || check.transport_status !== "rejected") {
+    return "not_checked";
+  }
+  // The exact PR #4 checker verifies the target first, then verifies the source before any
+  // transport binding/envelope check. Its E_TARGET_CERTIFICATE diagnostic at this stage therefore
+  // identifies the source certificate; every other ordinary rejection occurs after it checked.
+  return check.diagnostics.some(({ code }) => code === "E_TARGET_CERTIFICATE")
+    ? "rejected"
+    : "checked";
+}
+
 function parseJsonObject(bytes: Uint8Array, label: string): Record<string, unknown> {
   let value: unknown;
   try {
@@ -168,6 +199,14 @@ function pathTokens(path: string): Array<string | number> {
   return tokens;
 }
 
+function isDescriptiveOnlyPath(tokens: readonly (string | number)[]): boolean {
+  return (
+    tokens[0] === "target" &&
+    tokens[1] === "subject" &&
+    (tokens[2] === "name" || tokens[2] === "premises")
+  );
+}
+
 function lookup(root: unknown, tokens: readonly (string | number)[]): unknown {
   let current = root;
   for (const token of tokens) {
@@ -246,6 +285,12 @@ function normalizedModelBinding(
   }
   for (const field of fields) {
     const targetTokens = pathTokens(field);
+    if (isDescriptiveOnlyPath(targetTokens)) {
+      throw new SharedAnalysisError(
+        "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
+        `Transport changed-request field ${field} is descriptive bookkeeping, not a mathematical model or policy field.`,
+      );
+    }
     const sourceTokens = ["source", ...targetTokens.slice(1)];
     const targetValue = lookup(request, targetTokens);
     const sourceValue = lookup(request, sourceTokens);
@@ -341,9 +386,8 @@ function validateLoadedRecord(value: CertificateTransportRecord): LoadedCertific
     );
   }
   const producerCheck = parseTransportCheck(producerCheckBytes);
+  assertCheckBindsExactBytes(producerCheck, requestBytes, evidenceBytes);
   if (
-    producerCheck.request_sha256 !== shaWithoutPrefix(value.request.sha256) ||
-    producerCheck.evidence_sha256 !== shaWithoutPrefix(value.evidence.sha256) ||
     producerCheck.status !== "checked" ||
     producerCheck.target_certificate_status !== "checked" ||
     producerCheck.transport_status !== "checked"
@@ -379,6 +423,7 @@ export function createCertificateTransportRecord(
   const evidenceBytes = produceCertificateTransport(requestBytes, options);
   const producerCheckBytes = checkCertificateTransportBytes(requestBytes, evidenceBytes, options);
   const producerCheck = parseTransportCheck(producerCheckBytes);
+  assertCheckBindsExactBytes(producerCheck, requestBytes, evidenceBytes);
   if (
     producerCheck.status !== "checked" ||
     producerCheck.target_certificate_status !== "checked" ||
@@ -450,6 +495,7 @@ export function replayCertificateTransportRecord(
   const producerCheck = verifyEncodedBytes(loaded.value.producer_check, "producer_check");
   const freshCheckBytes = checkCertificateTransportBytes(request, evidence, options);
   const fresh = parseTransportCheck(freshCheckBytes);
+  assertCheckBindsExactBytes(fresh, request, evidence);
   return deepFreeze({
     record_sha256: loaded.record_sha256,
     shared_analysis_sha256: loaded.value.binding.shared_analysis_sha256,
@@ -460,7 +506,7 @@ export function replayCertificateTransportRecord(
     source_certificate_sha256: loaded.value.binding.transport_source_certificate_sha256,
     target_certificate_sha256: loaded.value.binding.transport_target_certificate_sha256,
     historical_source_guarantee_preserved: true,
-    source_certificate_status: "checked",
+    source_certificate_status: freshSourceCertificateStatus(fresh),
     fresh_check_matches_producer_check:
       Buffer.from(freshCheckBytes).compare(Buffer.from(producerCheck)) === 0,
     target_certificate_status: fresh.target_certificate_status,

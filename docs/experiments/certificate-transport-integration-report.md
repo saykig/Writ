@@ -124,9 +124,43 @@ The certificate-transport integration's four cases are:
 4. preserve the old result, record the substantive revision, require reassessment, construct the
    successor, and perform checker-only recipient replay.
 
-A final exact-head validation is required after documentation, task-ledger, formatting, and manifest
-changes. If any semantic code changes after the executed commit, the real integration must be rerun
-rather than inferred from this evidence.
+That run is retained as historical implementation evidence. The final acceptance review reruns the
+real integration after every semantic hardening change rather than inferring success from this
+earlier commit.
+
+## Final acceptance hardening
+
+The final review independently retained ADR 0026 and ADR 0028 as Accepted before evaluating the
+transport extension. Current Writ main `d4f2769f1f7e935809225677505779a62770dcde` was then merged
+non-destructively. Its v0.0.8 release history remains intact; the transport work does not rewrite a
+published release or make this capability retroactive.
+
+One assurance defect required repair. Recipient replay previously emitted
+`source_certificate_status: checked` unconditionally after reading a record whose stored
+producer-time report claimed success. The exact PR #4 checker validates the ordinary target first,
+then the source certificate, then request/evidence transport bindings and the anchored envelope.
+Replay now derives source status from that fresh checker path: `checked`, `rejected`, or
+`not_checked`. It also verifies that both producer-time and fresh reports name the exact supplied
+request and evidence byte hashes. A stored report can no longer make a fresh component status true.
+
+The explicit model-to-request premise is also tighter. A declared changed field must resolve on both
+source and target, actually differ, and identify a mathematical subject or policy field;
+descriptive-only `subject.name` and `subject.premises` paths cannot conceal the real mathematical
+change.
+
+The expanded real suite retains failures for missing/stale/wrong reassessment context; wrong
+revision, analysis, prior/target analysis, impact, basis, and adapter identities; exact request,
+evidence, producer-check, source-certificate, and target-certificate mutation; no-op, label-only,
+descriptive-only, and falsely unchanged mappings; action-menu, horizon, unit, criterion, and
+observable-history changes; and exact adapter source drift. Forged stored success reports are
+replayed with the producer disabled. The fresh checker separately demonstrates a valid target with
+invalid anchored provenance, an invalid source with a still-valid target, and an invalid target for
+which source/transport are not claimed checked. Applicability remains necessary before transport,
+and the closed record schema rejects an authority-to-act field.
+
+The final no-skip transport run reports 8 pass, 0 skip, and 61 assertions against exact Decision Lab
+merge `e5f77dfcf929708951f4673b3f394461ef09c752`, CPython 3.13.15, and SciPy 1.17.0. The complete
+repository and hosted results are recorded after the final combined tree is committed.
 
 ## Simpler-workflow comparison
 

@@ -75,17 +75,35 @@ function parseCheckProjection(bytes: Uint8Array): TransportCheckProjection {
   const status = String(report.status);
   const targetStatus = String(report.target_certificate_status);
   const transportStatus = String(report.transport_status);
+  const hash = /^[0-9a-f]{64}$/;
+  const diagnostics = Array.isArray(report.diagnostics) ? report.diagnostics : [];
+  const limits = Array.isArray(report.limits) ? report.limits : [];
+  const bounds = report.bounds;
   if (
     report.schema !== "certificate-transport-check.v1" ||
     !["checked", "rejected", "checker_error"].includes(status) ||
     !["checked", "rejected", "not_checked"].includes(targetStatus) ||
     !["checked", "rejected", "not_checked"].includes(transportStatus) ||
     typeof report.request_sha256 !== "string" ||
+    !hash.test(report.request_sha256) ||
     typeof report.evidence_sha256 !== "string" ||
+    !hash.test(report.evidence_sha256) ||
     !Array.isArray(report.diagnostics) ||
+    diagnostics.some(
+      (diagnostic) =>
+        diagnostic === null ||
+        typeof diagnostic !== "object" ||
+        Array.isArray(diagnostic) ||
+        typeof (diagnostic as Record<string, unknown>).code !== "string" ||
+        typeof (diagnostic as Record<string, unknown>).path !== "string" ||
+        typeof (diagnostic as Record<string, unknown>).message !== "string",
+    ) ||
     !Array.isArray(report.limits) ||
-    (report.bounds !== null &&
-      (typeof report.bounds !== "object" || Array.isArray(report.bounds))) ||
+    limits.some((limit) => typeof limit !== "string") ||
+    (bounds !== null &&
+      (typeof bounds !== "object" ||
+        Array.isArray(bounds) ||
+        Object.values(bounds).some((bound) => typeof bound !== "string"))) ||
     (report.warrant !== null && typeof report.warrant !== "string")
   ) {
     throw new SharedAnalysisError(

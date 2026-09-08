@@ -38,9 +38,9 @@ supplied engine directory. The interpreter, standard library, OS and installed S
 remain trusted prerequisites.
 
 A later Bellman transfer may use a separately pinned adapter rather than changing this original
-Build 1/2 pin. The current certificate-transport trial does exactly that: it reuses the accepted
+Build 1/2 pin. The accepted certificate-transport slice does exactly that: it reuses the accepted
 revision/applicability lifecycle while separately verifying the merged Decision Lab transport source
-closure. It does not alter `finite-linear-uncertainty.v1` semantics.
+closure. It does not alter `finite-linear-uncertainty.v1` semantics or authorize another transfer.
 
 ## Identity and checking
 

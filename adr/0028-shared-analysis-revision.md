@@ -139,6 +139,10 @@ The accepted value is the portable revision/replay boundary and its fail-closed 
 a claim that the synthetic cases are representative, that lineage implies dependence, or that every
 future mathematical result belongs in this archive.
 
+The final PR #51 architecture review re-evaluated this decision independently of certificate
+transport and retained Accepted. PR #51 reuses this revision/reassessment authority; it does not
+broaden or become substitute evidence for the decision recorded here.
+
 ## Consequences and limits
 
 - PR #43's native case and execution schemas and historical fixtures remain unchanged.

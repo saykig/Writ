@@ -59,7 +59,7 @@ bun packages/shared-analysis/bin/writ-shared-analysis.ts replay \
 It prints one standard-JSON replay report and does not mutate the archive, engine checkout, or
 source cases.
 
-## Certificate-transport extension under review
+## Bounded certificate-transport extension
 
 The current engineering trial adds a separate `certificate_transport_integration` record rather
 than changing the accepted shared-analysis archive into a generic mathematical-result container.
@@ -74,17 +74,21 @@ The record embeds the exact shared-analysis archive and binds one affected revis
 
 The integration does not infer that the mapping declaration is empirically or substantively true.
 It checks that every declared request field resolves on both source and target and actually changed,
-and it refuses no-op or label-only transports. The model-to-request mapping remains an explicit
-review premise.
+and it refuses no-op or label-only transports. Descriptive `name` and `premises` paths cannot stand
+in for a mathematical model or policy field even when some other request content changed. The
+model-to-request mapping remains an explicit review premise.
 
 `replayCertificateTransportRecord(...)` reopens the embedded PR 47 archive, revalidates the exact
 revision/reassessment binding, and invokes only the pinned transport checker on the stored request
 and evidence. A stored producer-time check is not authority. The fresh replay preserves Decision
 Lab's distinction between an ordinary target certificate and the stronger warrant that the target
-certificate was validly transported from the old checked source certificate.
+certificate was validly transported from the old checked source certificate. It verifies the fresh
+check's request/evidence hashes against the supplied bytes and derives source-certificate status
+from the exact checker order; it never repeats a stored `checked` label unconditionally.
 
-This extension is an engineering acceptance trial. It is not yet permission to port certificate
-accumulation or another Bellman component automatically.
+The acceptance review retains this extension only as a revision-bound checked mathematical
+transition. It is not permission to port certificate accumulation or another Bellman component
+automatically.
 
 ## Meaning of revision results
 

@@ -49,11 +49,11 @@ now **Accepted** after their human architecture gate. Acceptance is deliberately
 the first Decision Lab adapter, `finite-linear-uncertainty.v1`, nor the shared-analysis archive is a
 universal decision workspace or permanent mathematical ceiling.
 
-The current engineering trial extends that accepted lifecycle with one separately pinned Bellman
-certificate-transport adapter. It asks whether Writ can preserve an old guarantee, bind a declared
-substantive revision to an exact successor mathematical request, preserve a newly checked successor
-certificate, and replay the transition with the producer disabled. That trial does not itself make
-every Bellman theorem a Writ semantic.
+The reviewed engineering trial extends that accepted lifecycle with one separately pinned Bellman
+certificate-transport adapter. It earns one revision-bound checked mathematical transition: Writ can
+preserve an old guarantee, bind a declared substantive revision to an exact successor mathematical
+request, preserve a newly checked successor certificate, and replay the transition with the producer
+disabled. That result does not make every Bellman theorem a Writ semantic.
 
 ## Bellman and Writ
 
