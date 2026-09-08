@@ -13,6 +13,7 @@ is kept separate.
 | [`v0.0.5`](./releases/v0.0.5.md) · [Release](https://github.com/saykig/Writ/releases/tag/v0.0.5) | 30 Aug–3 Sep 2026 | `7c1ff7cf` | Exact canonical identity and generic provenance mechanics became a portable kernel. | The kernel remains the mechanical boundary; grounding and decision meaning remain caller-owned layers. |
 | [`v0.0.6`](./releases/v0.0.6.md) · [Release](https://github.com/saykig/Writ/releases/tag/v0.0.6) | 3–5 Sep 2026 | `20f0473a` | Bounded grounding, review-byte binding, and cross-layer hardening moved Writ toward decision provenance. | Durable tests and invariants survived; the temporary Track B agent layer did not. |
 | [`v0.0.7`](./releases/v0.0.7.md) · [Release](https://github.com/saykig/Writ/releases/tag/v0.0.7) | 7 Sep 2026 | `32207b81` | A bounded checked decision case joined the knowledge layer; governance and repository layout followed. | This is the PR #46 cutoff and current two-surface model; PR #47 is excluded. |
+| [`v0.0.8`](./releases/v0.0.8.md) · [Release](https://github.com/saykig/Writ/releases/tag/v0.0.8) | 7–8 Sep 2026 | `8b5ec349` | Shared-analysis revision and replay preserved separate models across explicit changes. | Bounded cross-analysis reassessment is established; general cumulative decision intelligence remains open. |
 
 The release policy, exact identities, and reconstruction method live in
 [`releases/`](./releases/README.md).

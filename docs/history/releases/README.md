@@ -31,6 +31,7 @@ versions and do not receive parallel version releases.
 | [`v0.0.5`](./v0.0.5.md) | Portable provenance kernel | `7c1ff7cf881236beacb40181a83f320e88d9b4f1` |
 | [`v0.0.6`](./v0.0.6.md) | Decision-provenance foundation | `20f0473afa62ed3c6e0433a21b189d1d9d1712d6` |
 | [`v0.0.7`](./v0.0.7.md) | Bounded decision-provenance integration | `32207b8178f969da04e0133470b33f286c5512ad` |
+| [`v0.0.8`](./v0.0.8.md) | Shared-analysis revision and replay | `8b5ec349e908fa70e0a13853f0ee977dd573b01f` |
 
 The `v0.0.4` target follows the named `nist-reference-2026-08-29` checkpoint by one merged pull
 request. This is deliberate: the named checkpoint at `148da931...` remains unchanged, while the
