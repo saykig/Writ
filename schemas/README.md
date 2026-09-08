@@ -64,11 +64,11 @@ extensions. The classification and dependency rules are recorded in
 
 ## Derived decision-case schemas
 
-| Schema                                                        | Classification   | Responsibility                                                                                                                                                                     |
-| ------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `analysis/decision-case-v0.1.schema.json`                     | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.                                                                    |
-| `analysis/decision-execution-v0.1.schema.json`                | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                                                   |
-| `analysis/shared-analysis-revision-v0.1.schema.json`          | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay.                       |
+| Schema                                                        | Classification   | Responsibility                                                                                                                                                                           |
+| ------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `analysis/decision-case-v0.1.schema.json`                     | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.                                                                          |
+| `analysis/decision-execution-v0.1.schema.json`                | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                                                         |
+| `analysis/shared-analysis-revision-v0.1.schema.json`          | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay.                             |
 | `analysis/certificate-transport-integration-v0.1.schema.json` | derived analysis | Bounded attachment of one accepted shared-analysis revision/reassessment to exact certificate-transport request, candidate evidence, source/successor certificate identities and replay. |
 
 ADR 0026 and ADR 0028 are Accepted for the bounded decision-case and shared-analysis revision
@@ -149,7 +149,7 @@ schema tree.
 | review             | core; evidence review definition                                                                            |
 | corpus manifest    | core responsibility; legacy source manifests remain compatibility-only until migration                      |
 | published judgment | the relevant family extension plus core provenance; legacy score-shaped judgments remain compatibility-only |
-| decision case      | analysis; separate from corpora and records, under accepted ADR 0026                                         |
+| decision case      | analysis; separate from corpora and records, under accepted ADR 0026                                        |
 | decision execution | analysis; an untrusted candidate and recorded check that must be freshly checked at use                     |
 
 ## Protocols and migration records
