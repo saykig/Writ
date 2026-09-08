@@ -4,10 +4,7 @@ import { fileURLToPath } from "node:url";
 import { exactJsonBytes } from "@writ/decision-case";
 
 import { SharedAnalysisError } from "./errors.js";
-import type {
-  TransportCheckProjection,
-  TransportEngineOptions,
-} from "./transport-types.js";
+import type { TransportCheckProjection, TransportEngineOptions } from "./transport-types.js";
 import { createVerifiedTransportSourceSnapshot } from "./verified-transport-source.js";
 
 const PYTHON_ADAPTER = join(
@@ -103,11 +100,7 @@ export function produceCertificateTransport(
   request: Uint8Array,
   options: TransportEngineOptions,
 ): Uint8Array {
-  return protocolCall(
-    "solve",
-    { request: Buffer.from(request).toString("base64") },
-    options,
-  );
+  return protocolCall("solve", { request: Buffer.from(request).toString("base64") }, options);
 }
 
 export function checkCertificateTransportBytes(
