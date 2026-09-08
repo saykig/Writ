@@ -43,10 +43,17 @@ This layer is separate from native records. It can preserve an explicit question
 mathematical guarantee is meaningless without its query, model, assumptions, information context,
 units, and permitted operation. It does not turn that question or answer into a source fact.
 
-The first implementation is the bounded `derived_decision_case` package merged in PR #43. It uses a
-pinned Decision Lab checker for `finite-linear-uncertainty.v1`. ADR 0026 still records that
-architecture as **Proposed** until its status is explicitly resolved; merged implementation is not
-itself evidence that every future decision capability should use the same adapter or shape.
+The first implementation is the bounded `derived_decision_case` package merged in PR #43. PR #47
+adds the accepted shared-analysis revision/reassessment/replay boundary. ADR 0026 and ADR 0028 are
+now **Accepted** after their human architecture gate. Acceptance is deliberately bounded: neither
+the first Decision Lab adapter, `finite-linear-uncertainty.v1`, nor the shared-analysis archive is a
+universal decision workspace or permanent mathematical ceiling.
+
+The current engineering trial extends that accepted lifecycle with one separately pinned Bellman
+certificate-transport adapter. It asks whether Writ can preserve an old guarantee, bind a declared
+substantive revision to an exact successor mathematical request, preserve a newly checked successor
+certificate, and replay the transition with the producer disabled. That trial does not itself make
+every Bellman theorem a Writ semantic.
 
 ## Bellman and Writ
 
@@ -75,6 +82,8 @@ Writ must keep separate:
 - one exact model from a set or outer enclosure of models;
 - mathematical correctness from empirical model adequacy;
 - a checked result from applicability to a revised case;
+- target-certificate validity from a stronger claim that the certificate was transported from an
+  earlier checked guarantee;
 - a common optimal action from a complete pointwise minimizing set;
 - uncertainty or nonidentification from exact ties;
 - human review from mathematical checking;
@@ -89,8 +98,8 @@ the old result.
 - **NIST institutional corpus:** source grounding, typed institutional facts, review, provenance,
   supersession, and source/version integrity.
 - **Synthetic derived decision cases:** exact mathematical binding, checking, revision, applicability,
-  and portable handoff. These cases are tests of infrastructure, not product ontologies or empirical
-  claims about the world.
+  portable handoff, and bounded mathematical-transition experiments. These cases are tests of
+  infrastructure, not product ontologies or empirical claims about the world.
 
 Other reviewed corpora remain preserved and inspectable. They do not have to drive current
 development merely because they exist.
