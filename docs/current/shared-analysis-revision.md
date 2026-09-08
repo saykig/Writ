@@ -19,25 +19,30 @@ The library path is:
 1. `importSharedAnalyses(workspaceId, bundles)` validates each complete native case and exact source
    bytes, scopes local IDs, deduplicates exact repeat imports, and refuses bundle or source/version
    conflicts.
-2. `inspectSharedAnalyses(workspace)` derives shared exact sources and compares exact assumption,
+2. `attachDecisionExecution(workspace, analysis, bytes)` preserves an existing exact native
+   execution at `revision_id: null` only after the decision-case boundary verifies its exact case,
+   analysis, problem, query, and engine bindings. It does not solve or refresh applicability.
+3. `inspectSharedAnalyses(workspace)` derives shared exact sources and compares exact assumption,
    model, subject, intended-use, and unit declarations. Matching local labels alone establish
-   nothing; comparisons without a shared exact source remain `not_established`.
-3. `recordRevision(workspace, declaration)` appends one explicit source, withdrawal, assumption, or
+   nothing; bundle-local analysis/reference/dependency IDs and applicability, human review, and
+   revision-history bookkeeping do not create model disagreement. Comparisons without a shared
+   exact source remain `not_established`.
+4. `recordRevision(workspace, declaration)` appends one explicit source, withdrawal, assumption, or
    metadata event. Prose and version labels never create an event.
-4. `assessRevision(workspace, revisionId)` reconstructs direct/downstream paths and reports the
+5. `assessRevision(workspace, revisionId)` reconstructs direct/downstream paths and reports the
    preserved original subject, available historical candidate evidence, successor-subject status,
    current applicability, statement-scoped alternative routes, conflicts, and inventory limits
    separately. Semantic dependency roles, not fixture ID spellings, identify subject/check nodes.
-5. `deriveReassessmentBasis(workspace, revisionId, analysis)` derives the exact reviewable basis from
+6. `deriveReassessmentBasis(workspace, revisionId, analysis)` derives the exact reviewable basis from
    the selected prior and any declared successor. It covers subject hashes, intended use, unit,
    relevant exact source/reference declarations, assumption addresses and contents, mappings,
    derivation declarations, route scope, revision effect, and inventory completeness. It excludes
    human disposition, display title, workspace label, and unrelated analyses.
-6. `reassessApplicability(workspace, declaration)` records a declaration whose basis, exact source
+7. `reassessApplicability(workspace, declaration)` records a declaration whose basis, exact source
    bindings, and assumption addresses must equal that derived basis. `recomputeAnalysis(...)`
    refuses to run a successor without it, then uses the existing pinned Decision Lab runner and
    preserves the checked execution bytes.
-7. `exportSharedAnalysis(workspace)` emits exact portable JSON. `openSharedAnalysis(bytes)` validates
+8. `exportSharedAnalysis(workspace)` emits exact portable JSON. `openSharedAnalysis(bytes)` validates
    it. `replaySharedAnalysis(bytes, engineOptions)` reconstructs impacts and freshly checks every
    preserved candidate.
 

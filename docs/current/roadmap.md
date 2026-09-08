@@ -2,8 +2,8 @@
 
 **Status:** current directional roadmap  
 **Observation cutoff:** 7 September 2026  
-**Baseline:** `main` after PR #45 and the public README simplification
-(`ba385418c61e597d818331940b15d5b8439773b5`)
+**Baseline:** `main` after PR #48's release-history integration
+(`0acabcd73c8d51e1c728d4d461841761f6ec1e49`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
@@ -46,22 +46,26 @@ flowchart LR
 
 ## Now
 
-1. **Stabilize the first derived decision boundary.** Treat the merged PR #43 implementation as a
-   bounded capability, not a general decision workspace. Resolve ADR 0026's human architecture
-   status explicitly. Preserve fresh checking, exact subject binding, applicability, and human
-   disposition as separate meanings.
-2. **Prove the layer is reusable rather than fixture-specific.** Author a second synthetic case from
-   the published contract without changing the package merely to accommodate it. Use the existing
-   finite-linear-uncertainty profile first; the test is whether another author/recipient can use the
-   boundary, not whether Writ can add more mathematics quickly.
+1. **Review the bounded derived-decision architecture now demonstrated by PRs #43 and #47.** PR #43
+   supplies exact native case execution/checking. PR #47 adds separately authored analysis import,
+   exact model comparison, explicit revision/reassessment, attachment of existing original
+   executions, successor recomputation, and fresh replay of every preserved candidate. Treat these
+   as one bounded `finite-linear-uncertainty.v1` capability, not a general decision workspace.
+2. **Resolve the human architecture gate.** Decide ADR 0026 and ADR 0028 explicitly. The executable
+   evidence now exercises two separately authored cases, preserves both original checked results,
+   and carries their distinct assumptions and successors without making applicability, review, or
+   local history into mathematical disagreement. No additional engine or composition layer is
+   needed to make that decision.
 3. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
    review, provenance, and correction work where it reveals reusable knowledge-layer requirements.
    Do not let “NIST is the proving ground” become “Writ is only a corpus system.”
 4. **Align repository governance with the current direction.** Current docs and agent instructions
    should describe both source-grounded knowledge and derived mathematical work. Retire one-off agent
    experiments once their durable lessons live in tests and invariants.
-**Exit gate from Now:** a clean second-case handoff, explicit ADR 0026 disposition, and no unresolved
-semantic disagreement between the roadmap, product definition, schemas, and executable behavior.
+**Exit gate from Now:** explicit human disposition of ADRs 0026 and 0028, and no unresolved semantic
+disagreement between the roadmap, product definition, schemas, and executable behavior. PR #47
+supplies the technical second-case/revision/replay evidence for that gate; merging it does not decide
+the proposed ADRs automatically.
 
 ## Next
 

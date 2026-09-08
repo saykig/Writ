@@ -2,7 +2,7 @@
 
 This package owns one bounded lifecycle above the existing decision-case v0.1 boundary:
 
-`import -> inspect -> record revision -> assess impact -> explicitly reassess/recompute -> export -> replay`
+`import -> attach prior execution -> inspect -> record revision -> assess impact -> explicitly reassess/recompute -> export -> replay`
 
 The portable archive preserves the exact bytes of each separately authored native case. Case-local
 analysis, dependency and reference IDs are addressed by `(bundle_id, local_id)` and are never
@@ -23,6 +23,12 @@ hashes, intended use and unit, full relevant dependencies and mappings, exact so
 source-version hashes, scoped support routes, the revision effect, and declared inventory coverage.
 Callers supply only that derived identity plus the reviewer's status and rationale; unchecked
 mapping/context hash fields are not part of the portable declaration.
+
+`attachDecisionExecution(...)` accepts the exact bytes of an existing native
+`DecisionExecution` for an imported analysis. It attaches only at `revision_id: null`, validates the
+existing case, analysis, problem, query, and engine bindings through the decision-case boundary,
+and preserves the supplied bytes without running a producer. Recipient replay freshly checks the
+preserved candidate just like a recomputed successor.
 
 Support-route IDs remain local to their bundle and each route names the analyses and precise
 statement/scope it supports. Revision events are explicit caller-supplied declarations. A metadata

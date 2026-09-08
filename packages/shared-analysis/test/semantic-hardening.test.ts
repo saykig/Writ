@@ -1,9 +1,12 @@
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 import { exactJsonBytes, type DecisionCase } from "@writ/decision-case";
 
 import {
   assessRevision,
+  attachDecisionExecution,
   deriveReassessmentBasis,
   exportSharedAnalysis,
   importSharedAnalyses,
@@ -20,6 +23,7 @@ import {
 import {
   alphaImport,
   betaImport,
+  ROOT,
   sourceOnlyRevision,
   unaffectedImport,
   withdrawalRevision,
@@ -268,6 +272,76 @@ describe("shared-analysis semantic hardening", () => {
         declared_context_equal: false,
         status: "different_models",
       }),
+    );
+  });
+
+  test("ignores bundle-local analysis IDs and lifecycle bookkeeping in model comparison", () => {
+    const renamed = changedCase(alphaImport, (value) => {
+      (value.analyses[0] as { analysis_id: string }).analysis_id = "local-analysis-copy";
+    });
+    const lifecycleChanged = changedCase(alphaImport, (value) => {
+      const analysis = value.analyses[0]!;
+      (analysis as { kind: "interpretation_control" }).kind = "interpretation_control";
+      (analysis as { previous_analysis_id: string }).previous_analysis_id = "control-q-b";
+      (
+        analysis as unknown as { applicability: DecisionCase["analyses"][number]["applicability"] }
+      ).applicability = {
+        status: "contested",
+        rationale: "Different current applicability bookkeeping for the same declared model.",
+        changed_dependencies: ["choice.independence"],
+      };
+      (analysis as unknown as { change: DecisionCase["analyses"][number]["change"] }).change = {
+        summary: "Different local revision history for the same declared model.",
+        changed_dependencies: ["choice.independence"],
+      };
+      (
+        analysis as unknown as { human_review: DecisionCase["analyses"][number]["human_review"] }
+      ).human_review = { disposition: "proposed", reviewer: null };
+    });
+    const inspection = inspectSharedAnalyses(
+      importSharedAnalyses("one", [
+        alphaImport,
+        {
+          ...renamed,
+          bundle_id: "renamed",
+          selected_analysis_ids: ["local-analysis-copy"],
+        },
+        { ...lifecycleChanged, bundle_id: "lifecycle" },
+      ]),
+    );
+    for (const difference of inspection.differences) {
+      expect(difference).toEqual(
+        expect.objectContaining({
+          mathematical_subject_equal: true,
+          declared_context_equal: true,
+          distinct_assumptions: [],
+          status: "same_declared_model",
+        }),
+      );
+    }
+  });
+
+  test("rejects an existing execution that is not bound to the imported analysis", () => {
+    const workspace = importSharedAnalyses("one", [alphaImport]);
+    expectCode(
+      () =>
+        attachDecisionExecution(
+          workspace,
+          { bundle_id: "alpha", analysis_id: "analysis-base" },
+          new Uint8Array(
+            readFileSync(
+              join(
+                ROOT,
+                "examples",
+                "decision-cases",
+                "failure-choice",
+                "executions",
+                "revision-0.execution.json",
+              ),
+            ),
+          ),
+        ),
+      "SHARED_ANALYSIS_REVISION_INVALID",
     );
   });
 

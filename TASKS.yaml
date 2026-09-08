@@ -42,8 +42,9 @@ tasks:
       decision fixtures under examples. PR 47 hardening now derives an exact analysis-scoped
       reassessment basis, scopes routes to bundles/analyses/statements, uses typed lineage roles,
       rejects substantive metadata relabelling, and distinguishes preserved subjects, stored
-      candidates, and fresh recipient checks; all repository gates pass and ADR 0028 remains
-      Proposed.
+      candidates, and fresh recipient checks. Final merge hardening ignores local/lifecycle-only
+      differences in model comparison and imports exact original executions for fresh replay beside
+      successors; all repository gates pass and ADR 0028 remains Proposed.
     baseline_commit: a65b4f70e54b7020c6a480c2a39b6735f9151b9d
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee

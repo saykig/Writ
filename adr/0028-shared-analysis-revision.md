@@ -105,6 +105,19 @@ applicability. Recipient replay parses the archive, reconstructs every impact, a
 each stored numerical candidate through the existing adapter. Its result identifies the revision,
 execution, case, analysis, problem, query, and candidate hashes rather than relying on array order.
 
+An existing native `DecisionExecution` may be attached to an imported original analysis at
+`revision_id: null`. Attachment preserves the supplied exact execution bytes and validates their
+case, selected analysis, problem, query, analysis binding, and engine through the existing
+decision-case boundary. It does not run the producer or establish current applicability. Recipient
+replay freshly checks that preserved original candidate alongside any successor candidates.
+
+Cross-analysis model equality ignores bundle-local analysis/dependency/reference identifiers and
+lifecycle bookkeeping such as applicability, human review, predecessor, analysis kind, and change
+history. It compares the exact mathematical subject, ID-independent dependency graph declarations,
+model mappings, referenced material, engine semantics, question, intended use, prohibited uses, and
+unit. Exact modelling-choice differences remain separately reported by their scoped local
+addresses.
+
 ## Consequences and limits
 
 - PR 43's native case and execution schemas and historical fixtures remain unchanged.

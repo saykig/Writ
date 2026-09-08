@@ -3,10 +3,11 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { openDecisionCase, runDecisionCase } from "@writ/decision-case";
+import { executionBytes, openDecisionCase, runDecisionCase } from "@writ/decision-case";
 
 import {
   assessRevision,
+  attachDecisionExecution,
   deriveReassessmentBasis,
   exportSharedAnalysis,
   importSharedAnalyses,
@@ -87,10 +88,32 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
     }),
   );
 
-  let workspace = recordRevision(
-    importSharedAnalyses("synthetic-shared-revision", [alphaImport, betaImport]),
-    quantitativeRevision(),
+  let workspace = importSharedAnalyses("synthetic-shared-revision", [alphaImport, betaImport]);
+  workspace = attachDecisionExecution(
+    workspace,
+    { bundle_id: "alpha", analysis_id: "analysis-base" },
+    executionBytes(alphaBase),
   );
+  expect(
+    attachDecisionExecution(
+      workspace,
+      { bundle_id: "alpha", analysis_id: "analysis-base" },
+      executionBytes(alphaBase),
+    ),
+  ).toBe(workspace);
+  expect(() =>
+    attachDecisionExecution(
+      workspace,
+      { bundle_id: "alpha", analysis_id: "analysis-base" },
+      executionBytes(betaBase),
+    ),
+  ).toThrow();
+  workspace = attachDecisionExecution(
+    workspace,
+    { bundle_id: "beta", analysis_id: "analysis-base" },
+    executionBytes(betaBase),
+  );
+  workspace = recordRevision(workspace, quantitativeRevision());
   for (const bundleId of ["alpha", "beta"]) {
     workspace = reassessApplicability(
       workspace,
@@ -157,8 +180,10 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
     ({ analysis }) => analysis.bundle_id === "alpha",
   )!;
   expect(quantitativeAlphaImpact.original_check_evidence).toEqual({
-    status: "absent",
-    execution_sha256: null,
+    status: "stored_candidate_unverified",
+    execution_sha256: workspace.value.executions.find(
+      ({ analysis, revision_id }) => analysis.bundle_id === "alpha" && revision_id === null,
+    )!.execution.sha256,
   });
   expect(quantitativeAlphaImpact.successor_check_evidence).toEqual({
     status: "stored_candidate_unverified",
@@ -170,14 +195,39 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
 
   const archive = exportSharedAnalysis(workspace);
   const replay = replaySharedAnalysis(archive, options);
-  const expectedExecutions = [withdrawn.execution, alpha.execution, beta.execution];
+  const expectedExecutions = [
+    alphaBase,
+    withdrawn.execution,
+    alpha.execution,
+    betaBase,
+    beta.execution,
+  ];
+  const expectedAddresses = [
+    { bundle_id: "alpha", analysis_id: "analysis-base", revision_id: null },
+    {
+      bundle_id: "alpha",
+      analysis_id: "analysis-base",
+      revision_id: "revision.alpha-withdraw-independence",
+    },
+    {
+      bundle_id: "alpha",
+      analysis_id: "analysis-base",
+      revision_id: "revision.x-half-v3",
+    },
+    { bundle_id: "beta", analysis_id: "analysis-base", revision_id: null },
+    {
+      bundle_id: "beta",
+      analysis_id: "analysis-base",
+      revision_id: "revision.x-half-v3",
+    },
+  ] as const;
   expect(replay.freshly_checked).toEqual(
     expectedExecutions.map((execution, index) => ({
       analysis: {
-        bundle_id: index < 2 ? "alpha" : "beta",
-        analysis_id: "analysis-base",
+        bundle_id: expectedAddresses[index]!.bundle_id,
+        analysis_id: expectedAddresses[index]!.analysis_id,
       },
-      revision_id: index === 0 ? "revision.alpha-withdraw-independence" : "revision.x-half-v3",
+      revision_id: expectedAddresses[index]!.revision_id,
       execution_sha256: workspace.value.executions[index]!.execution.sha256,
       case_sha256: execution.case_sha256,
       analysis_sha256: execution.analysis_sha256,
@@ -225,7 +275,7 @@ integration("runs, revises, recomputes, exports and freshly replays both analyse
       freshly_checked: unknown[];
     };
     expect(output.archive_sha256).toBe(replay.archive_sha256);
-    expect(output.freshly_checked).toHaveLength(3);
+    expect(output.freshly_checked).toHaveLength(5);
     expect(readFileSync(archivePath)).toEqual(Buffer.from(archive));
   } finally {
     rmSync(recipientRoot, { recursive: true, force: true });

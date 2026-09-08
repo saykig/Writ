@@ -229,3 +229,34 @@ pass, and Ruff, pack validation, and source-registry drift checks pass. All seve
 (`format`, `lint`, `typecheck`, `test`, `data:check`, `verify:writ`, and `build`) pass on the final
 tree. The exact alpha/beta and revision outcomes listed above remain unchanged. ADR 0028 remains
 Proposed, and no Bellman, Decision Lab, or Aldera repository was modified.
+
+## Final merge-hardening addendum
+
+PR #48 main at `0acabcd73c8d51e1c728d4d461841761f6ec1e49` was merged into the PR #47
+branch before this final change. Its release-history index and documentation remain intact, and the
+root manifest was rebuilt from the actual combined tracked tree rather than choosing either parent.
+
+Model comparison now removes bundle-local analysis, dependency, and reference identifiers from its
+semantic projection and excludes applicability, human review, predecessor, kind, and change-history
+bookkeeping. It continues to compare exact subject bytes, an ID-independent dependency graph, model
+mappings, referenced source material, engine semantics, question, intended/prohibited use, and
+unit. Full modelling-choice differences remain visible through scoped local addresses. Regression
+cases establish `same_declared_model` for identical models with different local analysis IDs and for
+identical models carrying different applicability, review, and change-history metadata.
+
+The new public `attachDecisionExecution` operation accepts exact existing execution bytes for one
+imported original analysis. It validates the existing case/analysis/problem/query/engine binding,
+stores the bytes with `revision_id: null`, is idempotent for an exact repeat, and rejects an execution
+from another case. The no-skip integration now preserves and freshly replays original alpha A and
+original beta `model_dependent` alongside quantitative alpha B, quantitative beta
+`model_dependent`, and independence-withdrawn alpha `model_dependent`. The check-only replay control
+continues to reject any producer solve call.
+
+Final post-PR48 verification used Bun 1.3.12, CPython 3.13.15, and SciPy 1.17.0. All seven
+repository gates pass. The aggregate Bun suite reports 577 pass, 4 expected integration-gated
+skips, and 0 fail; the offline shared-analysis package reports 23 pass, 2 expected
+integration-gated skips, and 93 assertions. The no-skip decision-case integration reports 16 pass,
+0 skip, and 147 assertions, and the no-skip shared-analysis integration reports 2 pass, 0 skip, and
+22 assertions. The Python suite reports 75 pass; Ruff, pack validation, source-registry drift, all
+four Writ verification dimensions, and byte-identical data checks pass. Hosted CI is recorded after
+the final branch push.

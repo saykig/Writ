@@ -442,16 +442,75 @@ function comparisonProjection(
   caseFile: LoadedDecisionCase,
   analysis: DecisionAnalysis,
 ): Readonly<Record<string, unknown>> {
-  const projection = analysisProjection(caseFile, analysis);
+  const material = referencedMaterial(caseFile, analysis);
+  const dependencyFingerprints = semanticDependencyFingerprints(caseFile, analysis);
   return {
-    engine: projection.engine,
-    context: projection.context,
-    mathematical_subject: projection.mathematical_subject,
-    dependencies: projection.dependencies,
-    model_mappings: projection.model_mappings,
-    references: projection.references,
-    sources: projection.sources,
+    engine: {
+      ...caseFile.value.engine,
+      supported_operations: [...caseFile.value.engine.supported_operations].sort(compare),
+    },
+    use: useProjection(analysis),
+    mathematical_subject: analysis.mathematical_subject,
+    dependencies: [...dependencyFingerprints.values()].sort(compare),
+    model_mappings: analysis.model_mappings
+      .map((mapping) => ({
+        target: mapping.target,
+        dependencies: mapping.dependency_ids
+          .map((dependencyId) => dependencyFingerprints.get(dependencyId)!)
+          .sort(compare),
+      }))
+      .sort((left, right) => compare(exactJsonKey(left), exactJsonKey(right))),
+    references: material.references
+      .map(referenceProjection)
+      .sort((left, right) => compare(exactJsonKey(left), exactJsonKey(right))),
+    sources: material.sources,
   };
+}
+
+function useProjection(analysis: DecisionAnalysis): Readonly<Record<string, unknown>> {
+  return {
+    intended_use: analysis.intended_use,
+    prohibited_uses: analysis.prohibited_uses,
+    question: analysis.question,
+    unit: analysis.unit,
+  };
+}
+
+function referenceProjection(reference: CaseSourceReference): Readonly<Record<string, unknown>> {
+  const { reference_id: _localReferenceId, ...semanticReference } = reference;
+  return semanticReference;
+}
+
+function semanticDependencyFingerprints(
+  caseFile: LoadedDecisionCase,
+  analysis: DecisionAnalysis,
+): Map<string, string> {
+  const dependencies = new Map(
+    analysis.dependencies.map((dependency) => [dependency.dependency_id, dependency]),
+  );
+  const references = new Map(
+    caseFile.value.source_references.map((reference) => [reference.reference_id, reference]),
+  );
+  const fingerprints = new Map<string, string>();
+  const fingerprint = (dependencyId: string): string => {
+    const prior = fingerprints.get(dependencyId);
+    if (prior !== undefined) return prior;
+    const dependency = dependencies.get(dependencyId)!;
+    const value = exactJsonKey({
+      role: dependency.role,
+      kind: dependency.kind,
+      description: dependency.description,
+      rationale: dependency.rationale,
+      depends_on: dependency.depends_on.map(fingerprint).sort(compare),
+      references: dependency.reference_ids
+        .map((referenceId) => referenceProjection(references.get(referenceId)!))
+        .sort((left, right) => compare(exactJsonKey(left), exactJsonKey(right))),
+    });
+    fingerprints.set(dependencyId, value);
+    return value;
+  };
+  for (const dependency of analysis.dependencies) fingerprint(dependency.dependency_id);
+  return fingerprints;
 }
 
 function modellingChoices(analysis: DecisionAnalysis): CaseDependency[] {
@@ -472,22 +531,20 @@ function checkedUses(analysis: DecisionAnalysis): CaseDependency[] {
   );
 }
 
-function assumptionFingerprint(caseFile: LoadedDecisionCase, dependency: CaseDependency): string {
-  const referenceIds = new Set(dependency.reference_ids);
-  const references = caseFile.value.source_references
-    .filter(({ reference_id }) => referenceIds.has(reference_id))
-    .sort((left, right) => compare(left.reference_id, right.reference_id));
-  const versions = new Set(
-    references.map(({ source_id, document_version_id }) =>
-      sourceVersionKey({ source_id, document_version_id }),
-    ),
-  );
-  const sources = caseFile.value.source_documents
-    .filter((source) => versions.has(sourceVersionKey(source)))
-    .sort((left, right) =>
-      compare(sourceKey(sourceIdentity(left)), sourceKey(sourceIdentity(right))),
-    );
-  return exactJsonKey({ dependency, references, sources });
+function unmatchedAssumptions<T extends { fingerprint: string }>(
+  candidates: readonly T[],
+  other: readonly T[],
+): T[] {
+  const remaining = new Map<string, number>();
+  for (const { fingerprint } of other) {
+    remaining.set(fingerprint, (remaining.get(fingerprint) ?? 0) + 1);
+  }
+  return candidates.filter(({ fingerprint }) => {
+    const count = remaining.get(fingerprint) ?? 0;
+    if (count === 0) return true;
+    remaining.set(fingerprint, count - 1);
+    return false;
+  });
 }
 
 /** Derive shared source identity and model disagreement from the portable evidence. */
@@ -523,22 +580,18 @@ export function inspectSharedAnalyses(workspace: LoadedSharedAnalysis): SharedAn
         .map(sourceIdentity)
         .filter((identity) => leftSources.has(sourceKey(identity)))
         .sort((a, b) => compare(sourceKey(a), sourceKey(b)));
-      const assumptions = (entry: typeof left) =>
-        modellingChoices(entry.analysis).map((dependency) => ({
+      const assumptions = (entry: typeof left) => {
+        const fingerprints = semanticDependencyFingerprints(entry.caseFile, entry.analysis);
+        return modellingChoices(entry.analysis).map((dependency) => ({
           address: { ...entry.address, dependency_id: dependency.dependency_id },
-          fingerprint: assumptionFingerprint(entry.caseFile, dependency),
+          fingerprint: fingerprints.get(dependency.dependency_id)!,
         }));
+      };
       const leftAssumptions = assumptions(left);
       const rightAssumptions = assumptions(right);
-      const leftFingerprints = new Set(leftAssumptions.map(({ fingerprint }) => fingerprint));
-      const rightFingerprints = new Set(rightAssumptions.map(({ fingerprint }) => fingerprint));
       const distinct = [
-        ...leftAssumptions
-          .filter(({ fingerprint }) => !rightFingerprints.has(fingerprint))
-          .map(({ address }) => address),
-        ...rightAssumptions
-          .filter(({ fingerprint }) => !leftFingerprints.has(fingerprint))
-          .map(({ address }) => address),
+        ...unmatchedAssumptions(leftAssumptions, rightAssumptions).map(({ address }) => address),
+        ...unmatchedAssumptions(rightAssumptions, leftAssumptions).map(({ address }) => address),
       ].sort((a, b) => compare(dependencyKey(a), dependencyKey(b)));
       const subjectEqual =
         left.analysis.mathematical_subject.problem.sha256 ===
@@ -546,8 +599,7 @@ export function inspectSharedAnalyses(workspace: LoadedSharedAnalysis): SharedAn
         left.analysis.mathematical_subject.query.sha256 ===
           right.analysis.mathematical_subject.query.sha256;
       const contextEqual =
-        exactJsonKey(analysisContext(left.analysis)) ===
-        exactJsonKey(analysisContext(right.analysis));
+        exactJsonKey(useProjection(left.analysis)) === exactJsonKey(useProjection(right.analysis));
       const declaredModelEqual =
         exactJsonKey(comparisonProjection(left.caseFile, left.analysis)) ===
         exactJsonKey(comparisonProjection(right.caseFile, right.analysis));
@@ -1209,6 +1261,35 @@ function validateExecution(
   }
 }
 
+function appendExecution(
+  workspace: LoadedSharedAnalysis,
+  portable: SharedAnalysisArchive["executions"][number],
+): LoadedSharedAnalysis {
+  validateExecution(workspace, portable);
+  const byKey = new Map(
+    workspace.value.executions.map((item) => [revisionExecutionKey(item), item]),
+  );
+  const key = revisionExecutionKey(portable);
+  const prior = byKey.get(key);
+  if (prior !== undefined) {
+    if (exactJsonKey(prior) === exactJsonKey(portable)) return workspace;
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_REVISION_INVALID",
+      "The archive already contains different execution bytes for this analysis revision.",
+    );
+  }
+  byKey.set(key, portable);
+  return validatedSnapshot({
+    ...workspace.value,
+    executions: [...byKey.values()].sort(
+      (left, right) =>
+        compare(left.analysis.bundle_id, right.analysis.bundle_id) ||
+        compare(left.analysis.analysis_id, right.analysis.analysis_id) ||
+        compare(left.revision_id ?? "", right.revision_id ?? ""),
+    ),
+  });
+}
+
 function validateArchive(workspace: LoadedSharedAnalysis): void {
   validateBundles(workspace.value.bundles);
   authoritySourceKeys(workspace);
@@ -1301,6 +1382,20 @@ export function reassessApplicability(
   });
 }
 
+/** Attach an existing exact execution to its imported original analysis for recipient replay. */
+export function attachDecisionExecution(
+  workspace: LoadedSharedAnalysis,
+  analysis: AnalysisAddress,
+  rawExecution: Uint8Array,
+): LoadedSharedAnalysis {
+  assertLoaded(workspace);
+  return appendExecution(workspace, {
+    analysis,
+    revision_id: null,
+    execution: encodedBytes(new Uint8Array(rawExecution)),
+  });
+}
+
 /** Solve and freshly check a declared successor; calculation cannot create applicability. */
 export function recomputeAnalysis(
   workspace: LoadedSharedAnalysis,
@@ -1353,28 +1448,8 @@ export function recomputeAnalysis(
     revision_id: request.revision_id,
     execution: encodedBytes(executionBytes(execution)),
   };
-  const byKey = new Map(
-    workspace.value.executions.map((item) => [revisionExecutionKey(item), item]),
-  );
-  const key = revisionExecutionKey(portable);
-  const prior = byKey.get(key);
-  if (prior !== undefined && exactJsonKey(prior) !== exactJsonKey(portable)) {
-    throw new SharedAnalysisError(
-      "SHARED_ANALYSIS_REVISION_INVALID",
-      "Repeated recomputation produced conflicting portable execution bytes.",
-    );
-  }
-  byKey.set(key, portable);
   return {
-    workspace: validatedSnapshot({
-      ...workspace.value,
-      executions: [...byKey.values()].sort(
-        (left, right) =>
-          compare(left.analysis.bundle_id, right.analysis.bundle_id) ||
-          compare(left.analysis.analysis_id, right.analysis.analysis_id) ||
-          compare(left.revision_id ?? "", right.revision_id ?? ""),
-      ),
-    }),
+    workspace: appendExecution(workspace, portable),
     execution,
   };
 }
