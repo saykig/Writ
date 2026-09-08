@@ -32,6 +32,10 @@ Before changing core behavior, read:
 - accepted ADRs that govern the affected behavior;
 - the selected task in `TASKS.yaml` when one exists.
 
+Use `writ-domain` for Writ semantics, `writ-decision-integration` when transferring or checking
+mathematical decision primitives, and `writ-release-history` for versions, tags, snapshots, and
+historical reconstruction.
+
 Git-tagged snapshots indexed by `docs/history/snapshots.md` and documents under `docs/migrations/`
 are historical evidence, not current instructions.
 
