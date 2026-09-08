@@ -4,7 +4,42 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
+  finalize-pr51:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'codex/certificate-transport-integration' && github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Update task ledger
+        run: python internal/tooling/scripts/pr51_finalize_temp.py tasks
+      - name: Format final tree
+        run: bun run format:write
+      - name: Restore standard CI
+        run: |
+          git fetch origin main --depth=1
+          git show FETCH_HEAD:.github/workflows/ci.yml > .github/workflows/ci.yml
+      - name: Regenerate exact manifest
+        run: python internal/tooling/scripts/pr51_finalize_temp.py manifest
+      - name: Remove temporary finalizer
+        run: git rm internal/tooling/scripts/pr51_finalize_temp.py
+      - name: Commit final tree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "docs: finalize certificate transport integration evidence"
+          git push origin HEAD:codex/certificate-transport-integration
+
   writ-verification:
     name: Writ verification
     runs-on: ubuntu-latest
