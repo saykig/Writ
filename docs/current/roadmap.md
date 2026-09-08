@@ -2,7 +2,7 @@
 
 **Status:** current directional roadmap  
 **Observation cutoff:** 7 September 2026  
-**Baseline:** `main` after PR #50 (`bb4534249a313c92a045edd7f9462ff77fbb1bdb`)
+**Baseline:** `main` after PR #52 (`d4f2769f1f7e935809225677505779a62770dcde`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence

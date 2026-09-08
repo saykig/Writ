@@ -160,7 +160,12 @@ and the closed record schema rejects an authority-to-act field.
 
 The final no-skip transport run reports 8 pass, 0 skip, and 61 assertions against exact Decision Lab
 merge `e5f77dfcf929708951f4673b3f394461ef09c752`, CPython 3.13.15, and SciPy 1.17.0. The complete
-repository and hosted results are recorded after the final combined tree is committed.
+post-PR52 repository verification reports 582 Bun tests passing, 7 explicit backend-gated skips, and
+0 failures; all seven repository gates pass, including byte-identical export of 81 records, 16
+links, and 65 judgments, plus all four Writ verification dimensions with 0 errors and 0 warnings.
+The pinned Decision Case integration reports 16 pass and 147 assertions; Shared Analysis reports 2
+pass and 22 assertions; both have zero skips. Pack validation, source-registry drift, Ruff, mypy, and
+all 75 Python tests pass. Hosted PR evidence is recorded after the final branch push.
 
 ## Simpler-workflow comparison
 
