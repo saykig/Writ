@@ -10,7 +10,7 @@ reconstruct and freshly check.
 The package does not merge the native cases into a master case. Original bytes remain embedded in
 the archive, and native local IDs are always addressed with a bundle ID. It does not infer a current
 source version, statistical dependence, real-world applicability, human approval, or a preferred
-analyst.
+analyst. ADR 0028 is **Accepted** for this bounded lifecycle.
 
 ## Public lifecycle
 
@@ -59,6 +59,43 @@ bun packages/shared-analysis/bin/writ-shared-analysis.ts replay \
 It prints one standard-JSON replay report and does not mutate the archive, engine checkout, or
 source cases.
 
+## Bounded certificate-transport extension
+
+The current engineering trial adds a separate `certificate_transport_integration` record rather
+than changing the accepted shared-analysis archive into a generic mathematical-result container.
+The record embeds the exact shared-analysis archive and binds one affected revision to:
+
+- the current supported reassessment basis;
+- the exact prior and target analysis identities;
+- an explicit caller-supplied mapping from that revised basis to actual changed fields in a pinned
+  Bellman certificate-transport request;
+- the exact archived source-certificate bytes, transported target certificate, and their hashes;
+- the exact producer candidate and producer-time checker report.
+
+The integration does not infer that the mapping declaration is empirically or substantively true.
+It deterministically computes the complete recursive source-to-target diff across `subject` and `policy`,
+excluding only descriptive `subject.name` and `subject.premises`, and requires the declaration to
+enumerate that complete substantive diff. Every declared request field must resolve on both sides
+and actually change; no mathematical or policy change may remain undeclared. A descriptive path
+cannot stand in for a mathematical model or policy field even when some other request content
+changed. This proves disclosure completeness, not the truth of the caller's rationale: the
+model-to-request mapping remains an explicit reviewed modelling premise.
+
+`replayCertificateTransportRecord(...)` reopens the embedded PR 47 archive, revalidates the exact
+revision/reassessment binding, and invokes only the pinned transport checker on the stored request
+and evidence. A stored producer-time check is not authority. The fresh replay preserves Decision
+Lab's distinction between an ordinary target certificate and the stronger warrant that the target
+certificate was validly transported from the old checked source certificate. It verifies the fresh
+check's request/evidence hashes against the supplied bytes and derives `source_certificate_status`
+only from that fresh checker execution; it never repeats a stored `checked` label unconditionally.
+The replay field `source_certificate_bytes_preserved: true` describes exact archival preservation
+only. It makes no historical-validity claim: preserved bytes can freshly check as `rejected`, while
+an invalid target can leave the source `not_checked` because the pinned checker stops earlier.
+
+The acceptance review retains this extension only as a revision-bound checked mathematical
+transition. It is not permission to port certificate accumulation or another Bellman component
+automatically.
+
 ## Meaning of revision results
 
 - `affected` means an explicit changed or withdrawn input has an observed direct/transitive path, or
@@ -77,9 +114,9 @@ source cases.
 Within a support route every source premise is required. Distinct complete routes for one identical
 statement and scope are alternatives. Route identity is `(bundle_id, route_id)`, and each route
 explicitly names its selected local analyses. A route for another statement or analysis is not an
-alternative. A surviving route remains conditional support; it cannot
-silence contradictory current input. Native dependency graphs must be acyclic, and supplemental
-routes can begin only from source identities, so circular self-support is not expressible.
+alternative. A surviving route remains conditional support; it cannot silence contradictory current
+input. Native dependency graphs must be acyclic, and supplemental routes can begin only from source
+identities, so circular self-support is not expressible.
 
 A `metadata_change` event must contain no source replacement/withdrawal, assumption withdrawal,
 route withdrawal, conflicting premise, or successor transition. That makes its non-reassessment
@@ -91,6 +128,7 @@ The checked-in alpha and beta cases are synthetic. Alpha explicitly assumes inde
 does not. Shared bytes do not create that assumption. The full fixture and its exact expected
 mathematics are documented in `examples/decision-cases/shared-analysis-revision/README.md`.
 
-The profile remains limited to the existing `finite-linear-uncertainty.v1` decision and
-compatibility operations. It adds no conditional, causal, sequential, strategic, safety, or
-authority-to-act meaning. ADR 0028 is Proposed; implementation does not constitute acceptance.
+The accepted shared-analysis profile remains limited to the existing `finite-linear-uncertainty.v1`
+decision and compatibility operations. The certificate-transport trial adds one separately pinned
+sequential guarantee operation; it does not add conditional, causal, strategic, safety, empirical
+validation, authenticated review, or authority-to-act meaning.

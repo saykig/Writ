@@ -28,11 +28,70 @@ statuses:
   - blocked
 
 tasks:
+  - id: CERTIFICATE-TRANSPORT-INTEGRATION-001
+    title: Bind a transported mathematical guarantee to an accepted revision lifecycle
+    status: review
+    implementation_pr: https://github.com/saykig/Writ/pull/51
+    architecture_status: retained_narrowly
+    baseline_commit: bb4534249a313c92a045edd7f9462ff77fbb1bdb
+    external_pins:
+      decision_lab: e5f77dfcf929708951f4673b3f394461ef09c752
+      bellman: aae1b56276b231d16748473f4a54dd4a9ea514cf
+    dependencies:
+      - SHARED-ANALYSIS-REVISION-001
+    completion_note: >-
+      ADR 0026 and ADR 0028 are Accepted. The trial reuses PR 47's revision/reassessment authority,
+      adds one separately pinned Bellman certificate-transport attachment, preserves exact old and
+      successor certificate identities, and separates target-certificate validity from transport
+      provenance. A private Decision Lab validation run against Writ commit
+      dccd5908debc6f364723a69d15a0364aea4acd00 passed Decision Case 16/16, Shared Analysis 2/2,
+      and Certificate Transport 4/4 with zero skips. The reusable semantic is retained narrowly as a
+      revision-bound checked mathematical transition. Final acceptance hardening describes exact
+      source-certificate byte preservation without claiming validity, derives source status only
+      from fresh checker evidence, rejects descriptive-only mapping fields, validates exact checker
+      response hashes, requires complete substantive subject/policy diff disclosure, and expands the
+      real transport suite to 12/12 with adversarial binding, partial-declaration, mutation,
+      structural, pin-drift, invalid-archived-source, and separated-status controls. No subsequent
+      Bellman component is authorized by this result.
+    scope:
+      - Preserve an old checked result and exact source certificate under their historical premises.
+      - Require a substantive model or policy revision with changed successor subject and stale applicability.
+      - Require a current supported reassessment before constructing a transported successor guarantee.
+      - Bind an explicit reviewed model-to-request mapping premise to every exact substantive subject or policy field that demonstrably changed.
+      - Preserve exact request, evidence, source certificate, successor certificate, and checker identities.
+      - Reopen the record in a fresh recipient and run checker-only replay for the mathematical transition.
+      - Compare the Writ lifecycle with direct Bellman/Decision Lab use before deciding whether to retain the semantic.
+    exclusions:
+      - Automatic evidence-to-model mapping, inferred source-to-cost translation, or automatic transport on every dependency change.
+      - Certificate accumulation, policy selection, structural transport, persistent model families, replanning, causal, statistical, strategic, safety, or authority semantics.
+      - A general certificate registry, solver registry, database, service, language migration, or automatic next Bellman transfer.
+    acceptance:
+      - ADR 0026 and ADR 0028 are explicitly Accepted before the new transfer is treated as usable architecture.
+      - Transport is refused before supported reassessment, for no-op or label-only changes, and when a declared changed request field did not actually change.
+      - The changed-request declaration covers the complete substantive subject and policy diff, excluding only descriptive subject name and premises fields.
+      - Exact source-certificate bytes remain archived without asserting validity; fresh recipient checking may report the source checked, rejected, or not checked, separately from target-certificate and transport-provenance statuses.
+      - Recipient replay invokes only the checker on preserved transport evidence and separately rechecks the old and successor PR 47 executions.
+      - Real no-skip Decision Lab integration passes for Decision Case, Shared Analysis, and Certificate Transport against the exact pinned merge commit.
+      - Standard repository format, lint, typecheck, test, data, Writ verification, build, Python, pack, and source-registry gates pass on the final tree.
+      - The final report retains the revision-bound checked mathematical transition and explicitly stops before automatic certificate accumulation or another Bellman port.
+    outputs:
+      - adr/0026-bounded-derived-decision-cases.md
+      - adr/0028-shared-analysis-revision.md
+      - packages/shared-analysis
+      - schemas/analysis/certificate-transport-integration-v0.1.schema.json
+      - docs/current/decision-cases.md
+      - docs/current/shared-analysis-revision.md
+      - docs/current/product-definition.md
+      - docs/current/roadmap.md
+      - docs/experiments/certificate-transport-integration-report.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: SHARED-ANALYSIS-REVISION-001
     title: Import shared analyses and process explicit source revisions
-    status: review
+    status: done
     implementation_pr: https://github.com/saykig/Writ/pull/47
-    architecture_status: proposed
+    architecture_status: accepted
     completion_note: >-
       The selected consolidation retains the smaller native lifecycle, adapts Aldera's deterministic
       scoped lineage mechanics, and uses Writ's exact decision-case runner and fresh candidate
@@ -44,7 +103,7 @@ tasks:
       rejects substantive metadata relabelling, and distinguishes preserved subjects, stored
       candidates, and fresh recipient checks. Final merge hardening ignores local/lifecycle-only
       differences in model comparison and imports exact original executions for fresh replay beside
-      successors; all repository gates pass and ADR 0028 remains Proposed.
+      successors. PR 47 is merged, the bounded lifecycle passed its human gate, and ADR 0028 is Accepted.
     baseline_commit: a65b4f70e54b7020c6a480c2a39b6735f9151b9d
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
@@ -69,7 +128,7 @@ tasks:
       - Complete alternative derivations remain disjunctive, cycles fail, contradictions remain visible, and missing ancestry never becomes unaffected.
       - Import order, exact repeat import, byte conflicts, inventory completeness, unaffected analysis, and portable recipient replay controls pass deterministically.
       - All required repository gates and explicit no-skip pinned Decision Lab integrations pass on the selected final implementation.
-      - The implementation comparison records exact candidate commits, adapted components and reasons for declined dependencies; the governing ADR remains Proposed.
+      - The implementation comparison records exact candidate commits, adapted components and reasons for declined dependencies; ADR 0028 is Accepted after the completed human gate.
     outputs:
       - adr/0028-shared-analysis-revision.md
       - packages/shared-analysis
@@ -183,10 +242,10 @@ tasks:
     title: Add one bounded executable decision-case layer
     status: done
     implementation_pr: https://github.com/saykig/Writ/pull/43
-    architecture_status: proposed
+    architecture_status: accepted
     architecture_note: >-
-      The bounded implementation is merged on main. ADR 0026 remains Proposed pending explicit
-      human architectural disposition; implementation does not constitute that acceptance.
+      The bounded implementation is merged on main. ADR 0026 is Accepted after PR 43 and PR 47
+      supplied the execution, revision, handoff, and hardening evidence required by the human gate.
     baseline_commit: 20f0473afa62ed3c6e0433a21b189d1d9d1712d6
     external_pins:
       decision_lab: 7215b53096bc487756f94f4ca87390716a14f2ee
@@ -209,7 +268,7 @@ tasks:
       - Reuse assessment detects structured support, mapping and use-context changes without collapsing human review into applicability.
       - The complete repository-owned engine import closure and declared CPython runtime are verified; an explicit no-skip integration command passes.
       - Existing NIST, canonical identity, bundle export/reload and required repository gates remain unchanged and pass.
-      - The implementation, current instructions, compact execution/comparison record and exact external pins are present on main through PR #43; ADR 0026 remains Proposed pending explicit human architectural disposition.
+      - The implementation, current instructions, compact execution/comparison record and exact external pins are present on main through PR #43; ADR 0026 is Accepted after the completed human gate.
     outputs:
       - adr/0026-bounded-derived-decision-cases.md
       - packages/decision-case

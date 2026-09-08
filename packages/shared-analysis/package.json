@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "bun test",
     "test:integration": "WRIT_REQUIRE_SHARED_ANALYSIS_INTEGRATION=1 bun test --timeout 30000 test/shared-analysis.integration.test.ts",
+    "test:transport-integration": "WRIT_REQUIRE_CERTIFICATE_TRANSPORT_INTEGRATION=1 bun test --timeout 30000 test/certificate-transport.integration.test.ts",
     "lint": "eslint .",
     "format": "prettier --check ."
   },

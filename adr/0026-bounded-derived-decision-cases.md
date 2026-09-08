@@ -1,6 +1,6 @@
 # ADR 0026: Add bounded derived decision cases through a pinned checker boundary
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
@@ -17,8 +17,9 @@ candidate producer and an independent exact checker. Neither external repository
 modified by Writ, and neither computation supplies empirical truth, human approval, or authority to
 act.
 
-This ADR is intentionally proposed, not accepted. The implementation on its review branch is a
-candidate for human architectural disposition.
+The architecture was implemented in PR #43 and then exercised more aggressively in PR #47. The
+human gate now accepts the bounded architecture described below; acceptance does not turn the first
+engine, language, fixture, or mathematical profile into Writ's permanent ceiling.
 
 ## Options considered
 
@@ -45,16 +46,17 @@ A workspace could add multiple engines, notebooks, registries, dashboards, datab
 belief revision and broad composition. The first case supplies no measured need for those surfaces.
 They would enlarge the semantic and maintenance boundary before another operation earned it.
 
-## Proposed decision
+## Decision
 
-Select option 2 for review.
+Select option 2.
 
 Add a separate `derived_decision_case` namespace governed by the analysis-layer schemas. It is not a
 Core or family record, does not enter the corpus catalog, and does not affect NIST data or identities.
-Its first and only adapter supports the exact Decision Lab commit
+Its first adapter supports the exact Decision Lab Build 2 commit
 `7215b53096bc487756f94f4ca87390716a14f2ee`, semantics
 `finite-linear-uncertainty.v1`, and the bounded `decision` and `compatibility` operations used by the
-fixture.
+fixture. Later adapters may be added only through another bounded transfer that preserves the same
+separations and earns its own acceptance evidence.
 
 The pure layer verifies the portable envelope, exact bytes, Writ source/version/reference identity,
 actual cited byte spans, complete model-row/loss mappings, and an acyclic derivation dependency
@@ -87,6 +89,25 @@ Every execution keeps three meanings separate:
 A source-only change may preserve the mathematical bytes and old exact theorem while still marking
 applicability for reassessment. A changed problem, loss or query requires a new exact check. Prior
 case revisions and execution artifacts remain immutable snapshots.
+
+## Acceptance evidence
+
+The decision is accepted after the following bounded evidence:
+
+- PR #43 established exact subject binding, pinned producer/checker execution, fresh recipient
+  checking, applicability separation, and revision invalidation for one executable decision case;
+- PR #47 demonstrated that the same boundary can be used across separately authored analyses while
+  preserving colliding local IDs, differing assumptions, old executions, explicit revisions,
+  reassessment, successor computation, and checker-only replay;
+- targeted hardening removed fixture-specific identity logic, bound reassessment to the exact
+  selected basis, preserved prior checked executions, and separated preserved history from fresh
+  mathematical checking;
+- a direct script remains mathematically adequate, so Writ's accepted value is the durable
+  provenance/revision/handoff boundary rather than a stronger mathematical theorem.
+
+The final PR #51 architecture review re-evaluated this decision independently of the proposed
+certificate-transport extension and retained Accepted. The transport trial depends on this boundary;
+its success or failure cannot retroactively supply the evidence for this decision.
 
 ## Consequences and limits
 

@@ -1,10 +1,10 @@
 # ADR 0028: Add a portable shared-analysis revision boundary
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
-Proposed ADR 0026 and the implementation merged through PR 43 establish one bounded handoff: an
+Accepted ADR 0026 and the implementation merged through PR #43 establish one bounded handoff: an
 exact source-grounded decision case can be run through a pinned producer/checker, preserved, and
 freshly checked by a recipient. They do not answer the next interoperability question: how should a
 caller combine separately authored cases that share evidence, retain their different modelling
@@ -21,8 +21,9 @@ leaves dependence unspecified. Their case-local IDs deliberately collide. They s
 bytes and losses, but their checked answers differ legitimately. Explicit source-only,
 quantitative, and assumption-withdrawal events exercise applicability and calculation changes.
 
-This ADR remains proposed pending human architectural disposition. The implementation and its PR do
-not accept it automatically.
+PR #47 implemented the candidate architecture, compared native and reuse-oriented approaches,
+selected the smaller native lifecycle plus a narrow Aldera-derived lineage index, and then survived
+two rounds of semantic hardening. The human gate now accepts that bounded architecture.
 
 ## Options considered
 
@@ -52,7 +53,7 @@ surface. W3C PROV-DM provides useful meanings for derivation, revision, and alte
 is a specification rather than an execution engine. None removes enough Writ-owned semantics to
 justify adoption for this bounded operation.
 
-## Proposed decision
+## Decision
 
 Use a separate `@writ/shared-analysis` package and a versioned
 `shared-analysis-revision-v0.1.schema.json` portable archive. Use the native candidate's smaller
@@ -118,9 +119,33 @@ model mappings, referenced material, engine semantics, question, intended use, p
 unit. Exact modelling-choice differences remain separately reported by their scoped local
 addresses.
 
+## Acceptance evidence
+
+The decision is accepted after PR #47 demonstrated and hardened the full public lifecycle:
+
+- independently authored alpha/beta analyses preserve colliding local IDs and differing modelling
+  premises without flattening disagreement;
+- exact shared evidence is distinguished from independence, causality, and authority;
+- source, assumption, route, and successor changes propagate through scoped dependency paths;
+- reassessment is bound mechanically to the exact selected source/assumption/model/use basis rather
+  than caller-supplied summary hashes;
+- local bookkeeping and identifier differences no longer create false model disagreement;
+- original executions and successor executions coexist immutably and are freshly checked by a
+  recipient without producer rerun;
+- metadata relabelling cannot hide a substantive revision, incomplete ancestry never becomes
+  optimistic `unaffected`, and target validity remains separate from current applicability.
+
+The accepted value is the portable revision/replay boundary and its fail-closed semantics. It is not
+a claim that the synthetic cases are representative, that lineage implies dependence, or that every
+future mathematical result belongs in this archive.
+
+The final PR #51 architecture review re-evaluated this decision independently of certificate
+transport and retained Accepted. PR #51 reuses this revision/reassessment authority; it does not
+broaden or become substitute evidence for the decision recorded here.
+
 ## Consequences and limits
 
-- PR 43's native case and execution schemas and historical fixtures remain unchanged.
+- PR #43's native case and execution schemas and historical fixtures remain unchanged.
 - Corpora and native records remain independent of shared workspaces, questions, and presentations;
   NIST remains the sole active knowledge proving ground.
 - The archive is portable across processes but requires the declared Writ code, pinned Decision Lab

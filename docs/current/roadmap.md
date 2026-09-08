@@ -2,8 +2,7 @@
 
 **Status:** current directional roadmap  
 **Observation cutoff:** 7 September 2026  
-**Baseline:** `main` after PR #48's release-history integration
-(`0acabcd73c8d51e1c728d4d461841761f6ec1e49`)
+**Baseline:** `main` after PR #52 (`d4f2769f1f7e935809225677505779a62770dcde`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
@@ -46,39 +45,42 @@ flowchart LR
 
 ## Now
 
-1. **Review the bounded derived-decision architecture now demonstrated by PRs #43 and #47.** PR #43
-   supplies exact native case execution/checking. PR #47 adds separately authored analysis import,
-   exact model comparison, explicit revision/reassessment, attachment of existing original
-   executions, successor recomputation, and fresh replay of every preserved candidate. Treat these
-   as one bounded `finite-linear-uncertainty.v1` capability, not a general decision workspace.
-2. **Resolve the human architecture gate.** Decide ADR 0026 and ADR 0028 explicitly. The executable
-   evidence now exercises two separately authored cases, preserves both original checked results,
-   and carries their distinct assumptions and successors without making applicability, review, or
-   local history into mathematical disagreement. No additional engine or composition layer is
-   needed to make that decision.
+1. **The first bounded derived-decision architecture has passed its human gate.** ADR 0026 and ADR
+   0028 are Accepted after PR #43 and PR #47 demonstrated exact execution/checking, separately
+   authored analysis import, explicit revision/reassessment, old-result preservation, successor
+   recomputation, and checker-only replay. Treat this as a bounded capability, not a general
+   decision workspace.
+2. **Retain the one Bellman transfer that passed end-to-end review.** PR #51 pins Decision Lab's
+   merged certificate-transport adapter and reuses the accepted PR #47 lifecycle rather than
+   creating a new revision system. It earns only a revision-bound checked mathematical transition:
+   preserved old result -> substantive model/policy revision -> stale applicability -> explicit
+   reassessment -> transported successor certificate -> checker-only recipient replay.
 3. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
    review, provenance, and correction work where it reveals reusable knowledge-layer requirements.
    Do not let “NIST is the proving ground” become “Writ is only a corpus system.”
-4. **Align repository governance with the current direction.** Current docs and agent instructions
-   should describe both source-grounded knowledge and derived mathematical work. Retire one-off agent
-   experiments once their durable lessons live in tests and invariants.
-**Exit gate from Now:** explicit human disposition of ADRs 0026 and 0028, and no unresolved semantic
-disagreement between the roadmap, product definition, schemas, and executable behavior. PR #47
-supplies the technical second-case/revision/replay evidence for that gate; merging it does not decide
-the proposed ADRs automatically.
+4. **Stop after the accepted transport slice.** The transition object is retained narrowly because
+   its history, staleness, reassessment, binding, and replay safeguards justify its integration
+   complexity. That judgment is not a queue to implement Bellman PR #7 or later modules.
+
+**Exit gate from Now:** PR #51's complete certificate-transport change story passes fresh checking,
+adversarial controls, and recipient replay without weakening ADR 0026/0028 boundaries, and remains
+limited to the accepted revision-bound checked mathematical transition.
 
 ## Next
 
-1. **Bring in the next stable Bellman semantics deliberately.** Prefer one mature capability whose
-   mathematical assumptions and checker boundary are already clear—such as sequential whole-policy
-   certificates, certificate transport/revalidation, or accumulated/tightened certificates—rather
-   than creating a generic solver registry.
-2. **Make cumulative reuse operational.** A result should be able to remain valid under old premises,
-   become inapplicable under a changed dependency, receive a new transported/tightened certificate,
-   and coexist with alternative or incompatible results without forcing consensus.
-3. **Exercise a complete change story.** Start from evidence/model assumptions, obtain a checked
-   result, change one substantive premise, identify what becomes stale, and construct the justified
-   successor result. The point is inspectable correction, not merely rerunning a script.
+1. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
+   exact source-certificate bytes and prior claim context, exact revised basis, explicit
+   complete model-to-request mapping premise, successor certificate, fresh source-certificate status,
+   target-certificate status, transport-provenance status, and replay identity without pretending
+   that archival preservation establishes validity or that the mapping premise is empirically true.
+2. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A
+   later result may receive a transported or tightened certificate and coexist with alternatives or
+   incompatible results, but certificate accumulation/selection should enter only after a specific
+   downstream use demonstrates the need.
+3. **Exercise broader change stories before broadening the core.** Distinguish archived bytes and
+   prior claim context from fresh source-certificate status, current inapplicability, unsupported
+   transport, valid target certificate with invalid transport provenance, and justified successor
+   reuse.
 4. **Test the language/runtime threshold rather than guessing.** When two or three genuinely
    different Bellman certificate types depend on Writ checking, compare a small Rust exact checker
    with the current Python reference. If handwritten Python search becomes the mathematical

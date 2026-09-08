@@ -2,9 +2,10 @@
 
 ## Status and boundary
 
-The bounded derived decision-case layer is a review candidate governed by proposed ADR 0026. It is
-separate from Writ's political-knowledge records and does not change the two implemented native
-families or the NIST proving ground.
+The bounded derived decision-case layer is governed by **Accepted ADR 0026**. It is separate from
+Writ's political-knowledge records and does not change the two implemented native families or the
+NIST proving ground. Acceptance is limited to this bounded derived-analysis boundary; it does not
+make the first engine, mathematical profile, or adapter shape a universal decision workspace.
 
 A case can preserve an intended mathematical question, explicit supplied content, modelling choices,
 deterministic transformations, exact mathematical subjects, checked candidate artifacts,
@@ -35,6 +36,11 @@ and 3.13 major/minor and confirms that every loaded `writ_decision_lab` module o
 inside the snapshot. Each invocation removes its snapshot on success or failure without mutating the
 supplied engine directory. The interpreter, standard library, OS and installed SciPy distribution
 remain trusted prerequisites.
+
+A later Bellman transfer may use a separately pinned adapter rather than changing this original
+Build 1/2 pin. The accepted certificate-transport slice does exactly that: it reuses the accepted
+revision/applicability lifecycle while separately verifying the merged Decision Lab transport source
+closure. It does not alter `finite-linear-uncertainty.v1` semantics or authorize another transfer.
 
 ## Identity and checking
 
@@ -72,14 +78,15 @@ separate fields. The supplied fixture remains `unreviewed`; no reviewer is inven
 
 ## Runnable fixture
 
-`examples/decision-cases/failure-choice/case.json` is one self-contained
-portable fixture with three static revisions and an interpretation control. It is synthetic supplied
-mathematics, not NIST data or an empirical estimate. Its directory README gives the local commands.
+`examples/decision-cases/failure-choice/case.json` is one self-contained portable fixture with three
+static revisions and an interpretation control. It is synthetic supplied mathematics, not NIST data
+or an empirical estimate. Its directory README gives the local commands.
 
 The alternative control retains revision 1 and revision 2 as separate scenarios. It does not weight,
 average, intersect or convexify them. The simultaneous control explicitly asserts both disjoint A
 bounds and asks only whether that conjunction is compatible.
 
-The profile does not support conditional decisions, sequential policies, causal effects, safety
-certificates, acquisition decisions, model weights or authority-to-act conclusions. Revision means a
-new version of a static problem, not a sequential decision process.
+The original profile does not support conditional decisions, sequential policies, causal effects,
+safety certificates, acquisition decisions, model weights or authority-to-act conclusions. The
+separately pinned certificate-transport trial adds one bounded sequential guarantee transition; it
+does not turn the original static case profile into a sequential planner.
