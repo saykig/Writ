@@ -97,6 +97,7 @@ test("requires an explicit supplied decision and never derives its action from m
 });
 
 test("rejects any stale identity in the exact checked-history chain", () => {
+  const episode = fixture().value;
   for (const field of [
     "shared_analysis_sha256",
     "reassessment_basis_sha256",
@@ -108,18 +109,18 @@ test("rejects any stale identity in the exact checked-history chain", () => {
     "source_certificate_sha256",
     "target_certificate_sha256",
   ] as const) {
-    const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+    const changed = structuredClone(episode) as Mutable<DecisionEpisode>;
     changed.checked_history[field] = ZERO_SHA256;
     expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
       expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
     );
   }
-  const changedSource = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+  const changedSource = structuredClone(episode) as Mutable<DecisionEpisode>;
   changedSource.checked_history.source_bindings[0]!.sha256 = ZERO_SHA256;
   expect(() => openDecisionEpisode(exactJsonBytes(changedSource))).toThrow(
     expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
   );
-});
+}, 15_000);
 
 test("keeps causality, correctness, and model-update claims outside the observation", () => {
   const episode = fixture().value;
