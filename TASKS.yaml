@@ -91,7 +91,7 @@ tasks:
 
   - id: DECISION-EPISODE-001
     title: Close one checked decision-to-consequence provenance loop
-    status: in_progress
+    status: review
     implementation_pr: https://github.com/saykig/Writ/pull/53
     architecture_status: proposed
     baseline_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
@@ -100,7 +100,13 @@ tasks:
     completion_note: >-
       The build composes one exact merged-PR-51 transition with a supplied authority basis, explicit
       human or institutional decision, implementation, observation and reconsideration trigger. It
-      remains Proposed pending the ADR 0029 human architecture gate.
+      proposes retaining that envelope narrowly as a replayable decision episode because exact
+      cross-layer binding and fresh checker-only recipient replay add concrete provenance value over
+      loose files. All seven repository gates, pack and registry checks, Ruff, mypy, 75 Python
+      tests, Decision Case 16/16, Shared Analysis 2/2, Certificate Transport 12/12 and Decision
+      Episode 1/1 pass; all real integrations ran with zero skips against the exact pinned Decision
+      Lab tree. Hosted CI passed all three jobs. ADR 0029 remains Proposed pending the human
+      architecture gate, and no later capability is authorized by this result.
     scope:
       - Reuse the exact accepted decision-case, shared-analysis, revision, applicability, execution, replay, and PR 51 transition artifacts without duplicating their semantics.
       - Bind one exact checked revision history to a separately supplied authority basis and explicit human or institutional decision.

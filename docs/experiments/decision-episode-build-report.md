@@ -103,6 +103,7 @@ verification on the proposed combined tree passed:
 - exact tree verification of all 204 files from Decision Lab commit
   `e5f77dfcf929708951f4673b3f394461ef09c752`, using CPython 3.13.15 and SciPy 1.17.0.
 
-Hosted CI remains required on the final pushed head before handoff. The human gate should evaluate
-the semantic separation and extra provenance value, not infer architecture acceptance from green
-automation.
+Hosted CI [run 34233265785](https://github.com/saykig/Writ/actions/runs/34233265785) passed its
+TypeScript, Python and Writ-verification jobs before the final ledger-only status transition. The
+human gate should evaluate the semantic separation and extra provenance value, not infer
+architecture acceptance from green automation.
