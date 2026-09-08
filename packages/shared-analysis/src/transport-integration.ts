@@ -75,10 +75,7 @@ function parseJsonObject(bytes: Uint8Array, label: string): Record<string, unkno
   return value as Record<string, unknown>;
 }
 
-function requireObject(
-  value: unknown,
-  label: string,
-): Record<string, unknown> {
+function requireObject(value: unknown, label: string): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
@@ -144,7 +141,8 @@ function requireSubstantiveTransportRequest(requestBytes: Uint8Array): Record<st
   const subjectChanged =
     exactJsonKey(mathematicalSubjectProjection(components.sourceSubject)) !==
     exactJsonKey(mathematicalSubjectProjection(components.targetSubject));
-  const policyChanged = exactJsonKey(components.sourcePolicy) !== exactJsonKey(components.targetPolicy);
+  const policyChanged =
+    exactJsonKey(components.sourcePolicy) !== exactJsonKey(components.targetPolicy);
   if (!subjectChanged && !policyChanged) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
@@ -286,9 +284,7 @@ function certificateIdentities(
   };
 }
 
-function validateLoadedRecord(
-  value: CertificateTransportRecord,
-): LoadedCertificateTransportRecord {
+function validateLoadedRecord(value: CertificateTransportRecord): LoadedCertificateTransportRecord {
   const sharedAnalysisBytes = verifyEncodedBytes(value.shared_analysis, "shared_analysis");
   const requestBytes = verifyEncodedBytes(value.request, "request");
   const evidenceBytes = verifyEncodedBytes(value.evidence, "evidence");

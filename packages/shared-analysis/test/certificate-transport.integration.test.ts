@@ -62,9 +62,7 @@ function supportedAssessment(
   };
 }
 
-function transportRequest(
-  change: "model" | "none" | "labels" = "model",
-): Uint8Array {
+function transportRequest(change: "model" | "none" | "labels" = "model"): Uint8Array {
   const sourceSubject = {
     name: "transport-source",
     semantics: "finite-observable-history.v1",
