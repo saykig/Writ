@@ -132,7 +132,8 @@ changes current understanding, and stop at the gate.
 Version history lives under `docs/history/releases/`. Meaningful releases summarize completed
 transitions and preserve failures and retirements as well as surviving work; do not release after
 every PR. Published version tags are immutable, and release publication requires explicit human
-authorization.
+authorization. Use numbered version tags for Writ milestones, named tags only for existing legacy
+checkpoints or genuine recovery points, and `snapshot/*` only for frozen data or artifact history.
 
 ## Review priorities
 

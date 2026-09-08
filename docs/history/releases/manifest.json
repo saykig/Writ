@@ -5,6 +5,28 @@
   "repository_root_date": "2026-07-23T00:14:10-04:00",
   "historical_cutoff_commit": "32207b8178f969da04e0133470b33f286c5512ad",
   "time_convention": "Human-readable periods use UTC; commit timestamps preserve their recorded numeric offsets.",
+  "historical_checkpoint_tags": [
+    {
+      "tag": "pre-foundation-reset-2026-08-22",
+      "target_commit": "6f451687408a0b5780060332340c16d6b4b09a15",
+      "relationship_to_version_history": "recovery point between v0.0.3 and v0.0.4"
+    },
+    {
+      "tag": "nist-reference-2026-08-29",
+      "target_commit": "148da9310985f317d1663d1cfbddfd5f30c91e98",
+      "relationship_to_version_history": "named supplementary checkpoint immediately before the final v0.0.4 cutoff"
+    },
+    {
+      "tag": "portable-provenance-kernel-2026-09-02",
+      "target_commit": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+      "relationship_to_version_history": "historical named alias/checkpoint for the exact v0.0.5 commit"
+    },
+    {
+      "tag": "decision-provenance-foundation-2026-09-05",
+      "target_commit": "20f0473afa62ed3c6e0433a21b189d1d9d1712d6",
+      "relationship_to_version_history": "historical named alias/checkpoint for the exact v0.0.6 commit"
+    }
+  ],
   "releases": [
     {
       "version": "v0.0.1",

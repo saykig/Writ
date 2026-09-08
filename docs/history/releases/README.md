@@ -37,6 +37,22 @@ request. This is deliberate: the named checkpoint at `148da931...` remains uncha
 version cutoff at `8a8c19e...` also includes the HTTP application retirement required to complete
 the foundation transition.
 
+## Historical checkpoint aliases and recovery tags
+
+| Tag | Relationship to version history |
+| --- | --- |
+| `pre-foundation-reset-2026-08-22` | Recovery point between `v0.0.3` and `v0.0.4`; preserves the state immediately before the foundation reset |
+| `nist-reference-2026-08-29` | Named NIST checkpoint immediately before the final `v0.0.4` cutoff |
+| `portable-provenance-kernel-2026-09-02` | Historical named checkpoint at the exact `v0.0.5` target commit |
+| `decision-provenance-foundation-2026-09-05` | Historical named checkpoint at the exact `v0.0.6` target commit |
+
+Numbered `v0.0.x` and future `v0.x.x` tags are the canonical Writ development milestones for
+meaningful research, architecture, or capability transitions, not individual PRs or commits.
+Existing named tags remain immutable aliases or genuine recovery points; do not create a free-form
+named milestone when the next numbered release is the appropriate record. The `snapshot/*` tags
+preserve historical data bodies and are not product versions. `v0.1.0` remains reserved for an
+explicit future maturity decision.
+
 ## Reconstruction method
 
 The series was reconstructed from commits and trees first, then historical ADR versions, merged
