@@ -33,12 +33,11 @@ jobs:
         with:
           bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
-      - run: bun run format
-      - run: bun run lint
-      - run: bun run typecheck
-      - run: bun run test
-      - run: bun run data:check
-      - run: bun run build
+      - name: Show exact Prettier repair
+        run: |
+          bun run format:write
+          git diff -- packages/shared-analysis/src/transport-engine.ts packages/shared-analysis/src/transport-integration.ts packages/shared-analysis/src/transport-types.ts packages/shared-analysis/test/certificate-transport.integration.test.ts
+          exit 1
 
   python:
     runs-on: ubuntu-latest
