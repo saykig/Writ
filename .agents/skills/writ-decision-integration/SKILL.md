@@ -7,8 +7,8 @@ description: Transfer mature Bellman decision semantics into Writ through exact,
 
 Use this skill for Bellman-to-Writ transfer, Decision Lab integration, mathematical decision cases,
 candidate execution and checking, sequential or model-family certificates, certificate transport
-or accumulation, and mathematical revision, reuse, or applicability. Read `writ-domain` for the
-meanings of Writ objects and states.
+or accumulation, shared-analysis revision/replay lifecycles, and mathematical revision, reuse, or
+applicability. Read `writ-domain` for the meanings of Writ objects and states.
 
 ## Transfer contract
 
@@ -61,6 +61,10 @@ missing premises. Data must never select arbitrary executable commands.
 Preserve old mathematical results, dependency changes, applicability reassessments, and successor
 subjects/results. A changed world, source basis, model, mapping, unit, assumption, or intended use
 may leave the old mathematics correct while making the result inapplicable; do not mutate it.
+
+For cross-analysis reuse, derive reassessment from the exact prior subject, its dependencies, the
+supplied revision, and the intended use. Replay must freshly check preserved candidate evidence; it
+must not silently recompute the candidate or treat a changed basis as already applicable or approved.
 
 Keep these states distinct when the primitive uses them:
 
