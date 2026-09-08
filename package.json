@@ -19,6 +19,7 @@
     "test": "bun run --filter '*' test",
     "test:decision-integration": "bun run --filter '@writ/decision-case' test:integration",
     "test:shared-analysis-integration": "bun run --filter '@writ/shared-analysis' test:integration",
+    "test:certificate-transport-integration": "bun run --filter '@writ/shared-analysis' test:transport-integration",
     "lint": "bun run --filter '*' lint",
     "pretypecheck": "bun run --filter '@writ/provenance' build",
     "typecheck": "bun run --filter '*' typecheck",
