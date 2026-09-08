@@ -35,6 +35,16 @@ import type { AnalysisAddress, LoadedSharedAnalysis } from "./types.js";
 
 const MAX_RECORD_BYTES = 12 * 1024 * 1024;
 const REQUEST_PATH = /^\$\.target(?:(?:\.[A-Za-z_][A-Za-z0-9_]*)|(?:\[[0-9]+\]))+$/;
+const REQUEST_PATH_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+interface TransportRequestComponents {
+  readonly request: Record<string, unknown>;
+  readonly sourceSubject: Record<string, unknown>;
+  readonly targetSubject: Record<string, unknown>;
+  readonly sourcePolicy: Record<string, unknown>;
+  readonly targetPolicy: Record<string, unknown>;
+  readonly sourceCertificate: Record<string, unknown>;
+}
 
 function compare(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
@@ -134,28 +144,11 @@ function parseCanonicalRecord(bytes: Uint8Array): CertificateTransportRecord {
   return value;
 }
 
-function mathematicalSubjectProjection(subject: Record<string, unknown>): Record<string, unknown> {
-  const { name: _name, premises: _premises, ...mathematical } = subject;
-  return mathematical;
-}
-
-function requestComponents(requestBytes: Uint8Array): {
-  request: Record<string, unknown>;
-  source: Record<string, unknown>;
-  target: Record<string, unknown>;
-  sourceSubject: Record<string, unknown>;
-  targetSubject: Record<string, unknown>;
-  sourcePolicy: Record<string, unknown>;
-  targetPolicy: Record<string, unknown>;
-  sourceCertificate: Record<string, unknown>;
-} {
-  const request = parseJsonObject(requestBytes, "Certificate transport request");
+function requestComponentsFromValue(request: Record<string, unknown>): TransportRequestComponents {
   const source = requireObject(request.source, "Certificate transport source");
   const target = requireObject(request.target, "Certificate transport target");
   return {
     request,
-    source,
-    target,
     sourceSubject: requireObject(source.subject, "Certificate transport source subject"),
     targetSubject: requireObject(target.subject, "Certificate transport target subject"),
     sourcePolicy: requireObject(source.policy, "Certificate transport source policy"),
@@ -167,14 +160,13 @@ function requestComponents(requestBytes: Uint8Array): {
   };
 }
 
+function requestComponents(requestBytes: Uint8Array): TransportRequestComponents {
+  return requestComponentsFromValue(parseJsonObject(requestBytes, "Certificate transport request"));
+}
+
 function requireSubstantiveTransportRequest(requestBytes: Uint8Array): Record<string, unknown> {
   const components = requestComponents(requestBytes);
-  const subjectChanged =
-    exactJsonKey(mathematicalSubjectProjection(components.sourceSubject)) !==
-    exactJsonKey(mathematicalSubjectProjection(components.targetSubject));
-  const policyChanged =
-    exactJsonKey(components.sourcePolicy) !== exactJsonKey(components.targetPolicy);
-  if (!subjectChanged && !policyChanged) {
+  if (substantiveChangedRequestFields(components).length === 0) {
     throw new SharedAnalysisError(
       "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
       "This integration requires a substantive target model or policy revision, not a label-only or no-op transport.",
@@ -205,6 +197,79 @@ function isDescriptiveOnlyPath(tokens: readonly (string | number)[]): boolean {
     tokens[1] === "subject" &&
     (tokens[2] === "name" || tokens[2] === "premises")
   );
+}
+
+function targetPath(tokens: readonly (string | number)[]): string {
+  let path = "$";
+  for (const token of tokens) {
+    if (typeof token === "number") {
+      path += `[${token}]`;
+    } else {
+      if (!REQUEST_PATH_KEY.test(token)) {
+        throw new SharedAnalysisError(
+          "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
+          `Transport substantive change uses unsupported request key ${JSON.stringify(token)}.`,
+        );
+      }
+      path += `.${token}`;
+    }
+  }
+  return path;
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function collectSubstantiveDiff(
+  source: unknown,
+  target: unknown,
+  targetTokens: readonly (string | number)[],
+  changed: string[],
+): void {
+  if (isDescriptiveOnlyPath(targetTokens) || exactJsonKey(source) === exactJsonKey(target)) {
+    return;
+  }
+  if (Array.isArray(source) && Array.isArray(target)) {
+    if (source.length !== target.length) {
+      changed.push(targetPath(targetTokens));
+      return;
+    }
+    for (let index = 0; index < source.length; index += 1) {
+      collectSubstantiveDiff(source[index], target[index], [...targetTokens, index], changed);
+    }
+    return;
+  }
+  if (isObject(source) && isObject(target)) {
+    const sourceKeys = Object.keys(source).sort(compare);
+    const targetKeys = Object.keys(target).sort(compare);
+    if (exactJsonKey(sourceKeys) !== exactJsonKey(targetKeys)) {
+      changed.push(targetPath(targetTokens));
+      return;
+    }
+    for (const key of sourceKeys) {
+      collectSubstantiveDiff(source[key], target[key], [...targetTokens, key], changed);
+    }
+    return;
+  }
+  changed.push(targetPath(targetTokens));
+}
+
+function substantiveChangedRequestFields(components: TransportRequestComponents): string[] {
+  const changed: string[] = [];
+  collectSubstantiveDiff(
+    components.sourceSubject,
+    components.targetSubject,
+    ["target", "subject"],
+    changed,
+  );
+  collectSubstantiveDiff(
+    components.sourcePolicy,
+    components.targetPolicy,
+    ["target", "policy"],
+    changed,
+  );
+  return changed.sort(compare);
 }
 
 function lookup(root: unknown, tokens: readonly (string | number)[]): unknown {
@@ -307,8 +372,24 @@ function normalizedModelBinding(
       );
     }
   }
+  const normalizedFields = fields.sort(compare);
+  const substantiveFields = substantiveChangedRequestFields(requestComponentsFromValue(request));
+  if (exactJsonKey(normalizedFields) !== exactJsonKey(substantiveFields)) {
+    const declared = new Set(normalizedFields);
+    const substantive = new Set(substantiveFields);
+    throw new SharedAnalysisError(
+      "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
+      "Transport changed-request fields must enumerate the complete substantive source/target subject and policy diff.",
+      {
+        missing_changed_request_fields: substantiveFields.filter((field) => !declared.has(field)),
+        extraneous_changed_request_fields: normalizedFields.filter(
+          (field) => !substantive.has(field),
+        ),
+      },
+    );
+  }
   return {
-    changed_request_fields: fields.sort(compare),
+    changed_request_fields: normalizedFields,
     rationale: declaration.rationale,
   };
 }

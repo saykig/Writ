@@ -60,12 +60,19 @@ type Mutable<T> = T extends readonly (infer Item)[]
 interface TransportRequestFixture {
   source: {
     subject: TransportSubjectFixture;
+    policy: TransportPolicyFixture;
     certificate: { lower: string[]; upper: string[] };
   };
-  target: { subject: TransportSubjectFixture };
+  target: { subject: TransportSubjectFixture; policy: TransportPolicyFixture };
+}
+
+interface TransportPolicyFixture {
+  choices: Array<{ history: string[][]; action: string }>;
 }
 
 interface TransportSubjectFixture {
+  name: string;
+  premises: string[];
   criterion: string;
   horizon: number;
   unit: string;
@@ -322,6 +329,94 @@ test("requires every declared transport field to identify an actual source/targe
     }),
   );
 });
+
+test("rejects an incomplete declaration of multiple substantive model changes", () => {
+  const request = changedRequest((value) => {
+    value.target.subject.nodes[0]!.actions[0]!.cost = "3";
+  });
+  expect(() =>
+    createCertificateTransportRecord(
+      assessedWorkspace(),
+      {
+        revision_id: "revision.x-half-v3",
+        analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+        applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+      },
+      {
+        changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
+        rationale: "An incomplete declaration must not conceal another changed model field.",
+      },
+      request,
+      { engineRoot: "/not-used" },
+    ),
+  ).toThrow(expect.objectContaining({ code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID" }));
+});
+
+test("rejects an undeclared policy change alongside a declared model change", () => {
+  const request = changedRequest((value) => {
+    value.target.policy.choices[0]!.action = "b";
+  });
+  expect(() =>
+    createCertificateTransportRecord(
+      assessedWorkspace(),
+      {
+        revision_id: "revision.x-half-v3",
+        analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+        applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+      },
+      {
+        changed_request_fields: ["$.target.subject.nodes[0].actions[1].cost"],
+        rationale: "A declared model change must not conceal an undeclared policy change.",
+      },
+      request,
+      { engineRoot: "/not-used" },
+    ),
+  ).toThrow(expect.objectContaining({ code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID" }));
+});
+
+integration(
+  "accepts the complete two-field model diff while exempting descriptive subject metadata",
+  () => {
+    const request = changedRequest((value) => {
+      value.target.subject.nodes[0]!.actions[0]!.cost = "3";
+    });
+    const record = createCertificateTransportRecord(
+      assessedWorkspace(),
+      {
+        revision_id: "revision.x-half-v3",
+        analysis: { bundle_id: "alpha", analysis_id: "analysis-base" },
+        applicability_assessment_id: "assessment.revision.x-half-v3.alpha",
+      },
+      {
+        changed_request_fields: [
+          "$.target.subject.nodes[0].actions[1].cost",
+          "$.target.subject.nodes[0].actions[0].cost",
+        ],
+        rationale:
+          "The reviewed modelling premise explicitly maps both changed target model costs.",
+      },
+      request,
+      engineOptions,
+    );
+    expect(record.value.model_binding.changed_request_fields).toEqual([
+      "$.target.subject.nodes[0].actions[0].cost",
+      "$.target.subject.nodes[0].actions[1].cost",
+    ]);
+    expect(record.value.model_binding.changed_request_fields).not.toContain(
+      "$.target.subject.name",
+    );
+    expect(record.value.model_binding.changed_request_fields).not.toContain(
+      "$.target.subject.premises",
+    );
+    const archivedRequest = decodedObject(
+      record.value.request,
+    ) as unknown as TransportRequestFixture;
+    expect(archivedRequest.target.subject.name).not.toBe(archivedRequest.source.subject.name);
+    expect(archivedRequest.target.subject.premises).not.toEqual(
+      archivedRequest.source.subject.premises,
+    );
+  },
+);
 
 test("refuses a descriptive field as the mapping for an otherwise substantive request", () => {
   const workspace = assessedWorkspace();

@@ -63,6 +63,7 @@
       "required": ["changed_request_fields", "rationale"],
       "properties": {
         "changed_request_fields": {
+          "description": "The complete deterministic source-to-target substantive diff path set across subject and policy. Subject name and premises are descriptive exemptions.",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,

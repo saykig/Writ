@@ -54,7 +54,9 @@ certificate-transport adapter. It earns one revision-bound checked mathematical 
 preserve the exact source-certificate bytes and prior claim context, bind a declared substantive
 revision to an exact successor mathematical request, preserve a newly checked successor certificate,
 and freshly check the source and transition with the producer disabled. Archival preservation alone
-makes no validity claim. That result does not make every Bellman theorem a Writ semantic.
+makes no validity claim. The reviewed mapping declaration must enumerate the complete substantive
+subject-and-policy diff, but Writ does not infer that the mapping describes empirical reality. That
+result does not make every Bellman theorem a Writ semantic.
 
 ## Bellman and Writ
 

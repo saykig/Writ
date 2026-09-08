@@ -49,14 +49,15 @@ tasks:
       revision-bound checked mathematical transition. Final acceptance hardening describes exact
       source-certificate byte preservation without claiming validity, derives source status only
       from fresh checker evidence, rejects descriptive-only mapping fields, validates exact checker
-      response hashes, and expands the real transport suite to 9/9 with adversarial binding,
-      mutation, structural, pin-drift, invalid-archived-source, and separated-status controls. No
-      subsequent Bellman component is authorized by this result.
+      response hashes, requires complete substantive subject/policy diff disclosure, and expands the
+      real transport suite to 12/12 with adversarial binding, partial-declaration, mutation,
+      structural, pin-drift, invalid-archived-source, and separated-status controls. No subsequent
+      Bellman component is authorized by this result.
     scope:
       - Preserve an old checked result and exact source certificate under their historical premises.
       - Require a substantive model or policy revision with changed successor subject and stale applicability.
       - Require a current supported reassessment before constructing a transported successor guarantee.
-      - Bind an explicit model-to-request mapping premise to exact request fields that demonstrably changed.
+      - Bind an explicit reviewed model-to-request mapping premise to every exact substantive subject or policy field that demonstrably changed.
       - Preserve exact request, evidence, source certificate, successor certificate, and checker identities.
       - Reopen the record in a fresh recipient and run checker-only replay for the mathematical transition.
       - Compare the Writ lifecycle with direct Bellman/Decision Lab use before deciding whether to retain the semantic.
@@ -67,6 +68,7 @@ tasks:
     acceptance:
       - ADR 0026 and ADR 0028 are explicitly Accepted before the new transfer is treated as usable architecture.
       - Transport is refused before supported reassessment, for no-op or label-only changes, and when a declared changed request field did not actually change.
+      - The changed-request declaration covers the complete substantive subject and policy diff, excluding only descriptive subject name and premises fields.
       - Exact source-certificate bytes remain archived without asserting validity; fresh recipient checking may report the source checked, rejected, or not checked, separately from target-certificate and transport-provenance statuses.
       - Recipient replay invokes only the checker on preserved transport evidence and separately rechecks the old and successor PR 47 executions.
       - Real no-skip Decision Lab integration passes for Decision Case, Shared Analysis, and Certificate Transport against the exact pinned merge commit.

@@ -70,7 +70,7 @@ limited to the accepted revision-bound checked mathematical transition.
 
 1. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
    exact source-certificate bytes and prior claim context, exact revised basis, explicit
-   model-to-request mapping premise, successor certificate, fresh source-certificate status,
+   complete model-to-request mapping premise, successor certificate, fresh source-certificate status,
    target-certificate status, transport-provenance status, and replay identity without pretending
    that archival preservation establishes validity or that the mapping premise is empirically true.
 2. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A

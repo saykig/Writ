@@ -73,10 +73,13 @@ The record embeds the exact shared-analysis archive and binds one affected revis
 - the exact producer candidate and producer-time checker report.
 
 The integration does not infer that the mapping declaration is empirically or substantively true.
-It checks that every declared request field resolves on both source and target and actually changed,
-and it refuses no-op or label-only transports. Descriptive `name` and `premises` paths cannot stand
-in for a mathematical model or policy field even when some other request content changed. The
-model-to-request mapping remains an explicit review premise.
+It deterministically computes the complete recursive source-to-target diff across `subject` and `policy`,
+excluding only descriptive `subject.name` and `subject.premises`, and requires the declaration to
+enumerate that complete substantive diff. Every declared request field must resolve on both sides
+and actually change; no mathematical or policy change may remain undeclared. A descriptive path
+cannot stand in for a mathematical model or policy field even when some other request content
+changed. This proves disclosure completeness, not the truth of the caller's rationale: the
+model-to-request mapping remains an explicit reviewed modelling premise.
 
 `replayCertificateTransportRecord(...)` reopens the embedded PR 47 archive, revalidates the exact
 revision/reassessment binding, and invokes only the pinned transport checker on the stored request

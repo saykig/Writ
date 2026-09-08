@@ -153,25 +153,29 @@ archive fact instead of claiming that the historical guarantee is preserved. The
 an invalid source certificate, preserves its exact bytes, and requires fresh replay to report the
 source as `rejected` rather than translating archive presence into validity.
 
-The explicit model-to-request premise is also tighter. A declared changed field must resolve on both
-source and target, actually differ, and identify a mathematical subject or policy field;
-descriptive-only `subject.name` and `subject.premises` paths cannot conceal the real mathematical
-change.
+The explicit model-to-request premise is also tighter. Writ computes the complete deterministic
+recursive source-to-target diff across `subject` and `policy`, excluding only descriptive `subject.name`
+and `subject.premises`, and requires the declaration to enumerate every substantive changed path.
+Each declared field must still resolve on both sides and actually differ. This proves that no
+mathematical or policy change is silently omitted; it does not prove the empirical truth of the
+reviewed modelling rationale.
 
 The expanded real suite retains failures for missing/stale/wrong reassessment context; wrong
 revision, analysis, prior/target analysis, impact, basis, and adapter identities; exact request,
 evidence, producer-check, source-certificate, and target-certificate mutation; no-op, label-only,
 descriptive-only, and falsely unchanged mappings; action-menu, horizon, unit, criterion, and
 observable-history changes; exact adapter source drift; and an invalid archived source certificate.
-Forged stored success reports are
+It also rejects partial declarations when two model fields change or when model and policy change
+together, while accepting complete declarations and exempting only the two descriptive subject
+fields. Forged stored success reports are
 replayed with the producer disabled. The fresh checker separately demonstrates a valid target with
 invalid anchored provenance, an invalid source with a still-valid target, and an invalid target for
 which source/transport are not claimed checked. Applicability remains necessary before transport,
 and the closed record schema rejects an authority-to-act field.
 
-The final no-skip transport run reports 9 pass, 0 skip, and 64 assertions against exact Decision Lab
+The final no-skip transport run reports 12 pass, 0 skip, and 71 assertions against exact Decision Lab
 merge `e5f77dfcf929708951f4673b3f394461ef09c752`, CPython 3.13.15, and SciPy 1.17.0. The complete
-post-PR52 repository verification reports 582 Bun tests passing, 8 explicit backend-gated skips, and
+post-PR52 repository verification reports 584 Bun tests passing, 9 explicit backend-gated skips, and
 0 failures; all seven repository gates pass, including byte-identical export of 81 records, 16
 links, and 65 judgments, plus all four Writ verification dimensions with 0 errors and 0 warnings.
 The pinned Decision Case integration reports 16 pass and 147 assertions; Shared Analysis reports 2
