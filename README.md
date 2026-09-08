@@ -41,4 +41,7 @@ correctable across more than one bounded case without hard-coding a single probl
 See [`docs/current/roadmap.md`](./docs/current/roadmap.md) for the current Now / Next / Later roadmap,
 architecture gates, and longer-term direction.
 
+See [`docs/history/`](./docs/history/README.md) for versioned development history and recoverable
+snapshots.
+
 Copyright 2026 Sara Kim

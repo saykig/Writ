@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "repository": "saykig/Writ",
+  "repository_root_commit": "3f639246d002b358c0ea6de09fefe03205590903",
+  "repository_root_date": "2026-07-23T00:14:10-04:00",
+  "historical_cutoff_commit": "32207b8178f969da04e0133470b33f286c5512ad",
+  "time_convention": "Human-readable periods use UTC; commit timestamps preserve their recorded numeric offsets.",
+  "releases": [
+    {
+      "version": "v0.0.1",
+      "title": "Origin: Covenant to Writ",
+      "historical_start_commit": "3f639246d002b358c0ea6de09fefe03205590903",
+      "historical_start_date": "2026-07-23T00:14:10-04:00",
+      "target_commit": "a435e9d2a340df58fcbb6dad85ea8444e7b72e52",
+      "target_commit_date": "2026-07-31T02:50:55-04:00",
+      "tree_sha": "652de8fbecfca2430ff11b38c806d1b5ddaa2433",
+      "release_note_path": "docs/history/releases/v0.0.1.md",
+      "release_note_sha256": "69142cdb91b4eb30cfa21257b0c912e97cd44636bd034a54a84b6ab215175cfe",
+      "important_adr_ids": [
+        "0001",
+        "0002",
+        "0003",
+        "0004",
+        "0005",
+        "0006",
+        "0007",
+        "0008",
+        "0009",
+        "0010",
+        "0011",
+        "0012"
+      ],
+      "important_merged_pr_numbers": [],
+      "existing_named_checkpoint_tags": [],
+      "root_manifest_sha256": "3a0453a1611b8eb327c07b8554f03344c47278e06943fd4897f154e6a532820f",
+      "other_historical_hashes": {
+        "reset_audit_reviewed_yaml_sha256": "8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb"
+      }
+    },
+    {
+      "version": "v0.0.2",
+      "title": "Source-grounded reset and corpus architecture",
+      "historical_start_commit": "d0ebc868e397eb52f1c29ae22e4330ee4c521ee",
+      "historical_start_date": "2026-07-31T03:23:56-04:00",
+      "target_commit": "14ec512a28949155054dd2e7479337dbfce95f8c",
+      "target_commit_date": "2026-08-04T23:39:13-04:00",
+      "tree_sha": "2b26fd7972208e8583f83dbb886a7aa1e35cb6e0",
+      "release_note_path": "docs/history/releases/v0.0.2.md",
+      "release_note_sha256": "405722ec5c0ae8e6c1591f9505bbb52e3ee56e6a1571706fed9582f5e0adffc1",
+      "important_adr_ids": [
+        "0013",
+        "0014",
+        "0015",
+        "0016",
+        "0017"
+      ],
+      "important_merged_pr_numbers": [
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "existing_named_checkpoint_tags": [],
+      "root_manifest_sha256": "7388f473b6f7312b5b60f90fd91b3328636a49bd45d4b9548269c1e1709b4863",
+      "other_historical_hashes": {
+        "nist_sources_writ_sha256": "55b23c6e0e7777e260fdeec9fa36be0f080da34753d6c252c166a340a47aecee",
+        "reviewed_yaml_sha256": "8de1e3b84a15875a39f3de2857f68dcd3040830ad72ffd9728c1ded0eda07cbb"
+      }
+    },
+    {
+      "version": "v0.0.3",
+      "title": "Reviewed institutional knowledge and verification",
+      "historical_start_commit": "2a7b7fd75daeba4aa7a64082ac83c8362d946e16",
+      "historical_start_date": "2026-08-05T21:39:02-04:00",
+      "target_commit": "8a4e3b8ed31c8f7b26fbfdb377ec901a39ffdeb4",
+      "target_commit_date": "2026-08-13T00:32:08-04:00",
+      "tree_sha": "9f317294cf6d25b9069d32d9f9a1e6c0f9a36e99",
+      "release_note_path": "docs/history/releases/v0.0.3.md",
+      "release_note_sha256": "af0957c5caebe82e1a9f43444282102a65ad2fdc6e8032435f150df6f95b7652",
+      "important_adr_ids": [
+        "0018",
+        "0019",
+        "0020"
+      ],
+      "important_merged_pr_numbers": [
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "existing_named_checkpoint_tags": [
+        {
+          "tag": "pre-foundation-reset-2026-08-22",
+          "target_commit": "6f451687408a0b5780060332340c16d6b4b09a15",
+          "relation": "later pre-reset recovery point after documentation-only cleanup"
+        }
+      ],
+      "root_manifest_sha256": "592944d4d933ed34acb6bb9ac568633a7af7273c39658a9fe29549dea7245dee",
+      "other_historical_hashes": {
+        "verification_json_sha256_at_pr18": "26c9b9b7dffb631e1b96cfc00047aa5e5bd4ade19465452b0e4afb792c073aa6",
+        "data_bundle_sha256_at_pr20": "7b97f24153080c4f539bf411c2b9fe1b79014a9377ec9dc4647d4166135446d9"
+      }
+    },
+    {
+      "version": "v0.0.4",
+      "title": "Evidence-bound foundation and NIST reference",
+      "historical_start_commit": "c9deae45f9454d58fb7b23fbdc993d05a802ff08",
+      "historical_start_date": "2026-08-22T01:10:27-04:00",
+      "target_commit": "8a8c19e25fc129c84b27f0f545fcde697032097a",
+      "target_commit_date": "2026-08-29T04:12:12-04:00",
+      "tree_sha": "ff7717b60322db7c48590b910e517a457cb35abf",
+      "release_note_path": "docs/history/releases/v0.0.4.md",
+      "release_note_sha256": "4f3805bc930537f5bd8f2bb6d93d0ccab6ed92b74be764d4f0b5760d2fed11d1",
+      "important_adr_ids": [
+        "0021",
+        "0022",
+        "0023",
+        "0024"
+      ],
+      "important_merged_pr_numbers": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "existing_named_checkpoint_tags": [
+        {
+          "tag": "pre-foundation-reset-2026-08-22",
+          "target_commit": "6f451687408a0b5780060332340c16d6b4b09a15",
+          "relation": "immediately preceding pre-reset recovery point"
+        },
+        {
+          "tag": "nist-reference-2026-08-29",
+          "target_commit": "148da9310985f317d1663d1cfbddfd5f30c91e98",
+          "relation": "immediately preceding named NIST checkpoint before PR 29"
+        }
+      ],
+      "root_manifest_sha256": "53129fcc107b837f236195146f78d70aab83902d22883fbf06eac8e40fe55617",
+      "other_historical_hashes": {
+        "data_bundle_sha256_reported_by_pr29": "215f0477c0cbb8e12800beb052617c49f58d3f554ce5e51383c47ff4114ceff5"
+      }
+    },
+    {
+      "version": "v0.0.5",
+      "title": "Portable provenance kernel",
+      "historical_start_commit": "91d092cd992d6e9109bab50ee0f7e080e250acfd",
+      "historical_start_date": "2026-08-30T12:23:19-04:00",
+      "target_commit": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+      "target_commit_date": "2026-09-02T21:11:13-04:00",
+      "tree_sha": "aa66c5e4d8cf98ac8074c421acaaf2f6d3bf485e",
+      "release_note_path": "docs/history/releases/v0.0.5.md",
+      "release_note_sha256": "f21b26cffc0aac9ba0ef10f83be54363be8ed159a27d987cfb0177293c7fd1c9",
+      "important_adr_ids": [
+        "0004",
+        "0013",
+        "0016",
+        "0020",
+        "0023"
+      ],
+      "important_merged_pr_numbers": [
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "existing_named_checkpoint_tags": [
+        {
+          "tag": "portable-provenance-kernel-2026-09-02",
+          "target_commit": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+          "relation": "same commit"
+        }
+      ],
+      "root_manifest_sha256": "7fd8cc42eeed2e1b6cc6e92a67ab5ba48f587a19f6408a2c69286f47b4b509ef",
+      "other_historical_hashes": {
+        "pr35_preserved_oracle_sha256": "b8ebe659644d2b589483c0f7fc01967b8e6c3e621802996334a74de0fcb33b29"
+      }
+    },
+    {
+      "version": "v0.0.6",
+      "title": "Decision-provenance foundation",
+      "historical_start_commit": "fb6e517236db2a00f94c06dcc46ce9338d4ea603",
+      "historical_start_date": "2026-09-02T23:52:51-04:00",
+      "target_commit": "20f0473afa62ed3c6e0433a21b189d1d9d1712d6",
+      "target_commit_date": "2026-09-04T20:42:01-04:00",
+      "tree_sha": "efb2a92bd4c87ea0a7e6ad2d404333a8f646812f",
+      "release_note_path": "docs/history/releases/v0.0.6.md",
+      "release_note_sha256": "f33c13e3ebcde74b38def2457946e92a10f7ca4142da7e6698846939ca39154e",
+      "important_adr_ids": [
+        "0020",
+        "0021",
+        "0023",
+        "0025"
+      ],
+      "important_merged_pr_numbers": [
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "existing_named_checkpoint_tags": [
+        {
+          "tag": "decision-provenance-foundation-2026-09-05",
+          "target_commit": "20f0473afa62ed3c6e0433a21b189d1d9d1712d6",
+          "relation": "same commit"
+        }
+      ],
+      "root_manifest_sha256": "0ca7f526138c976071a2507ac34587a2f2a24493691a50edcf4f8c1f79ce7161",
+      "other_historical_hashes": {
+        "ecfr_passage_a_sha256": "bad7706f4b4a2bed7afe210bf35e9f890d9960cf30f6477c4fe97fa41917f2c7",
+        "ecfr_passage_d_sha256": "0be471d591511a1e3a85e410fb5b0c2e1df5b356a44e0cf18164b26682d81f2e",
+        "review_artifact_sha256": "75e67171bd28d33e623b8079ae20fb6c92dd7ba7b984c8ddbf8ee940fcd0f713"
+      }
+    },
+    {
+      "version": "v0.0.7",
+      "title": "Bounded decision-provenance integration",
+      "historical_start_commit": "99c7e4f31bbd3a405e19176b13cd776f4b16a0db",
+      "historical_start_date": "2026-09-07T14:04:57-04:00",
+      "target_commit": "32207b8178f969da04e0133470b33f286c5512ad",
+      "target_commit_date": "2026-09-07T17:54:32-04:00",
+      "tree_sha": "dfa8952d5091874e4a932235f52a3fe6ca55bd7f",
+      "release_note_path": "docs/history/releases/v0.0.7.md",
+      "release_note_sha256": "e79e54101df62b2bf6897be38853f1087c0a5e66d344c43ad51881e4234cac2d",
+      "important_adr_ids": [
+        "0021",
+        "0025",
+        "0026",
+        "0027"
+      ],
+      "important_merged_pr_numbers": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "existing_named_checkpoint_tags": [],
+      "root_manifest_sha256": "af9459477da325692786765e82d51bcc8e44ec14cc244b86f7d10aa00c5291d8",
+      "other_historical_hashes": {
+        "bellman_commit": "b1266137f824dc65e614722f1f0592846b915262",
+        "decision_lab_commit": "7215b53096bc487756f94f4ca87390716a14f2ee",
+        "corpora_tree_sha1": "5614653c836cfa63e905d533fb7729f78c03dc5c",
+        "snapshot_eu_us_sha256": "3ca03cc4bf3d0bb43d3c7cea9bdbac59c28a8615cb903139094e3ebecd122a33",
+        "snapshot_g7_sha256": "f8ae684ae6dd8f0fda247abb73ed36e3ad46345dcf7cba89ed5d11501bb00dc7",
+        "snapshot_g20_sha256": "462605d2c441beb5e7caaa82139b7ab5f9e02ae4ed772a1e82bfcade74bd5965"
+      }
+    }
+  ]
+}
