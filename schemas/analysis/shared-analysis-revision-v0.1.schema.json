@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/shared-analysis-revision-v0.1.schema.json",
+  "title": "Writ shared-analysis revision archive v0.1",
+  "description": "A portable exact-byte envelope for separately authored decision cases, explicit revision events, scope-bound applicability declarations, and fresh recipient replay.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "archive_kind",
+    "workspace_id",
+    "bundles",
+    "revisions",
+    "applicability_assessments",
+    "executions"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "archive_kind": { "const": "shared_analysis_revision" },
+    "workspace_id": { "$ref": "#/$defs/nonEmptyString" },
+    "bundles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/bundle" }
+    },
+    "revisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/revision" }
+    },
+    "applicability_assessments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/assessment" }
+    },
+    "executions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/execution" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "encodedBytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "content", "sha256"],
+      "properties": {
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "document_version_id", "sha256"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sourceDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "document_version_id",
+        "media_type",
+        "encoding",
+        "content",
+        "sha256"
+      ],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "media_type": { "const": "text/plain" },
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "analysisAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundle_id", "analysis_id"],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "dependencyAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundle_id", "analysis_id", "dependency_id"],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis_id": { "$ref": "#/$defs/nonEmptyString" },
+        "dependency_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "supportRouteAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundle_id", "route_id"],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "route_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route_id",
+        "analysis_ids",
+        "statement_id",
+        "statement_scope",
+        "premise_sources"
+      ],
+      "properties": {
+        "route_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "statement_id": { "$ref": "#/$defs/nonEmptyString" },
+        "statement_scope": { "$ref": "#/$defs/nonEmptyString" },
+        "premise_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/sourceIdentity" }
+        }
+      }
+    },
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "completeness", "unresolved_references", "support_routes"],
+      "properties": {
+        "scope": { "$ref": "#/$defs/nonEmptyString" },
+        "completeness": { "enum": ["complete", "partial", "unknown"] },
+        "unresolved_references": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "support_routes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/route" }
+        }
+      }
+    },
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_id",
+        "case_file",
+        "selected_analysis_ids",
+        "inventory",
+        "supplemental_sources"
+      ],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "case_file": { "$ref": "#/$defs/encodedBytes" },
+        "selected_analysis_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "inventory": { "$ref": "#/$defs/inventory" },
+        "supplemental_sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceDocument" }
+        }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prior", "successor_case", "successor_analysis_id"],
+      "properties": {
+        "prior": { "$ref": "#/$defs/analysisAddress" },
+        "successor_case": { "$ref": "#/$defs/encodedBytes" },
+        "successor_analysis_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement_id", "statement_scope", "description", "source"],
+      "properties": {
+        "statement_id": { "$ref": "#/$defs/nonEmptyString" },
+        "statement_scope": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "source": { "$ref": "#/$defs/sourceIdentity" }
+      }
+    },
+    "replacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "$ref": "#/$defs/sourceIdentity" },
+        "to": { "$ref": "#/$defs/sourceDocument" }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision_id",
+        "kind",
+        "summary",
+        "source_replacements",
+        "withdrawn_sources",
+        "withdrawn_dependencies",
+        "withdrawn_routes",
+        "conflicting_premises",
+        "transitions"
+      ],
+      "properties": {
+        "revision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": [
+            "source_revision",
+            "source_withdrawal",
+            "assumption_withdrawal",
+            "metadata_change"
+          ]
+        },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "source_replacements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/replacement" }
+        },
+        "withdrawn_sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceIdentity" }
+        },
+        "withdrawn_dependencies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dependencyAddress" }
+        },
+        "withdrawn_routes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/supportRouteAddress" }
+        },
+        "conflicting_premises": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/conflict" }
+        },
+        "transitions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/transition" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "metadata_change" } },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "source_replacements": { "type": "array", "maxItems": 0 },
+              "withdrawn_sources": { "type": "array", "maxItems": 0 },
+              "withdrawn_dependencies": { "type": "array", "maxItems": 0 },
+              "withdrawn_routes": { "type": "array", "maxItems": 0 },
+              "conflicting_premises": { "type": "array", "maxItems": 0 },
+              "transitions": { "type": "array", "maxItems": 0 }
+            }
+          },
+          "else": {
+            "anyOf": [
+              {
+                "properties": { "source_replacements": { "type": "array", "minItems": 1 } }
+              },
+              {
+                "properties": { "withdrawn_sources": { "type": "array", "minItems": 1 } }
+              },
+              {
+                "properties": { "withdrawn_dependencies": { "type": "array", "minItems": 1 } }
+              },
+              {
+                "properties": { "withdrawn_routes": { "type": "array", "minItems": 1 } }
+              },
+              {
+                "properties": { "conflicting_premises": { "type": "array", "minItems": 1 } }
+              },
+              { "properties": { "transitions": { "type": "array", "minItems": 1 } } }
+            ]
+          }
+        }
+      ]
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessment_id",
+        "revision_id",
+        "analysis",
+        "basis_sha256",
+        "status",
+        "rationale",
+        "source_bindings",
+        "assumption_dependencies"
+      ],
+      "properties": {
+        "assessment_id": { "$ref": "#/$defs/nonEmptyString" },
+        "revision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis": { "$ref": "#/$defs/analysisAddress" },
+        "basis_sha256": { "$ref": "#/$defs/sha256" },
+        "status": { "enum": ["supported", "needs_reassessment", "unknown", "contested"] },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "source_bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceIdentity" }
+        },
+        "assumption_dependencies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dependencyAddress" }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["analysis", "revision_id", "execution"],
+      "properties": {
+        "analysis": { "$ref": "#/$defs/analysisAddress" },
+        "revision_id": { "type": ["string", "null"], "minLength": 1 },
+        "execution": { "$ref": "#/$defs/encodedBytes" }
+      }
+    }
+  }
+}

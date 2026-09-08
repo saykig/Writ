@@ -1,0 +1,26 @@
+{
+  "name": "@writ/shared-analysis",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test",
+    "test:integration": "WRIT_REQUIRE_SHARED_ANALYSIS_INTEGRATION=1 bun test --timeout 30000 test/shared-analysis.integration.test.ts",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+  },
+  "bin": {
+    "writ-shared-analysis": "./bin/writ-shared-analysis.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@writ/decision-case": "workspace:*",
+    "@writ/provenance": "workspace:*",
+    "ajv": "^8.20.0"
+  }
+}

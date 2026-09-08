@@ -1,0 +1,5 @@
+Analyst alpha modelling context.
+With the supplied fixed marginals, alpha assumes X and Y are independent, hence q=P(X=1,Y=1)=1/16.
+Sensitivity alpha-b instead assumes q is in [1/10,3/25].
+Sensitivity alpha-c instead assumes q is in [3/16,7/32].
+The primary and sensitivity dependence premises are alternatives, not simultaneous facts.

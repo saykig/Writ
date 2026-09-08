@@ -631,7 +631,7 @@ describe("deterministic neutral contract", () => {
   test("refuses to label a dirty or invalid repository state as a Writ commit", () => {
     expect(resolveCommitIdentity(TEST_COMMIT, "")).toBe(TEST_COMMIT);
     expect(() => resolveCommitIdentity(TEST_COMMIT, " M corpora/catalog.yaml")).toThrow(
-      /clean committed repository state/,
+      /clean committed repository state:\n M corpora\/catalog\.yaml/,
     );
     expect(() => resolveCommitIdentity("not-a-commit", "")).toThrow(/Invalid Writ commit identity/);
   });

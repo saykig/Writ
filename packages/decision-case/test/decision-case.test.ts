@@ -28,6 +28,7 @@ import {
   exportDecisionCase,
   openDecisionCase,
   parseExecution,
+  recheckDecisionExecution,
   runDecisionCase,
   type DecisionCase,
   type DecisionExecution,
@@ -598,6 +599,11 @@ describe("pinned Decision Lab integration", () => {
       expect(
         executions.get("control-simultaneous-a-bounds")!.mathematical_check.result.status,
       ).toBe("incompatible");
+
+      expect(
+        recheckDecisionExecution(caseFile, executions.get("revision-1")!, "revision-1", options)
+          .status,
+      ).toBe("model_dependent");
 
       expectCode(
         () =>

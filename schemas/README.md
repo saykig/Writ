@@ -64,15 +64,18 @@ extensions. The classification and dependency rules are recorded in
 
 ## Derived decision-case schemas
 
-| Schema                                         | Classification   | Responsibility                                                                                                   |
-| ---------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `analysis/decision-case-v0.1.schema.json`      | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.  |
-| `analysis/decision-execution-v0.1.schema.json` | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition. |
+| Schema                                               | Classification   | Responsibility                                                                                                                                               |
+| ---------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `analysis/decision-case-v0.1.schema.json`            | derived analysis | Portable case, exact source bytes/spans, model mappings, dependency DAG, immutable revisions and intended uses.                                              |
+| `analysis/decision-execution-v0.1.schema.json`       | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                             |
+| `analysis/shared-analysis-revision-v0.1.schema.json` | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay. |
 
-These contracts implement the bounded candidate in proposed ADR 0026. They are not Core or family
-record contracts, cannot appear as a corpus `record_contract`, and do not make a computation a source
-of truth. A recipient must freshly check an execution against independently reopened intended bytes;
-the execution schema does not turn its stored check status into authorization.
+The case and execution contracts implement the bounded candidate in proposed ADR 0026. The shared
+revision envelope is proposed by ADR 0028 and composes those exact native cases without merging them
+into a corpus or master case. These are not Core or family record contracts, cannot appear as a
+corpus `record_contract`, and do not make a computation a source of truth. A recipient must freshly
+check an execution against independently reopened intended bytes; a stored check status does not
+become authorization.
 
 ### Declared record contracts
 

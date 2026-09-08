@@ -27,7 +27,7 @@ export function resolveCommitIdentity(commit: string, worktreeStatus: string): s
   if (!/^[0-9a-f]{40}$/.test(commit)) throw new Error(`Invalid Writ commit identity: ${commit}`);
   if (worktreeStatus.length > 0) {
     throw new Error(
-      "The Writ data bundle must be exported from a clean committed repository state",
+      `The Writ data bundle must be exported from a clean committed repository state:\n${worktreeStatus}`,
     );
   }
   return commit;
