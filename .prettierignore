@@ -23,6 +23,7 @@ examples/decision-cases/**/case.json
 examples/decision-cases/**/*.case.json
 examples/decision-cases/**/executions/*.json
 examples/decision-cases/shared-analysis-revision/fixture-hashes.json
+examples/decision-cases/decision-episode/episode.json
 
 # Generated embed outputs (regenerated on build)
 **/schemas.embedded.ts

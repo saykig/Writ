@@ -4,4 +4,4 @@
 files are not source-of-truth corpora, normative schemas, governing protocols, or reviewed evidence.
 
 - [`decision-cases/`](./decision-cases/) contains portable derived decision examples and their saved
-  checked executions.
+  checked executions, including one proposed decision-episode provenance loop.

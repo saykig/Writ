@@ -50,3 +50,26 @@ bun packages/shared-analysis/bin/writ-shared-analysis.ts replay \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```
+
+## Proposed decision-episode composition
+
+ADR 0029 proposes one small envelope above this accepted lifecycle. A `decision_episode` embeds one
+exact PR #51 transport record and derives its shared archive, revision, reassessment, source,
+assumption, execution, problem/query and certificate identities through the existing public APIs.
+It adds separate supplied authority, decision, implementation, observation and reconsideration
+declarations. It does not create another revision graph or infer an action from mathematics.
+
+Observation interpretations are separate reviewable declarations. The base observation cannot
+carry structured causality, decision-correctness or model-update fields, and reconsideration has no
+automatic model effect. `replayDecisionEpisode(...)` freshly checks the embedded original and
+successor executions and the PR #51 transport evidence while reporting the later declarations only
+by preserved exact hashes.
+
+```bash
+bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
+  --episode /path/to/episode.json \
+  --engine-root /path/to/pinned/writ-decision-lab \
+  --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
+```
+
+This semantic remains Proposed until the human architecture gate.

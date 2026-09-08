@@ -70,6 +70,7 @@ extensions. The classification and dependency rules are recorded in
 | `analysis/decision-execution-v0.1.schema.json`                | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                                                         |
 | `analysis/shared-analysis-revision-v0.1.schema.json`          | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay.                             |
 | `analysis/certificate-transport-integration-v0.1.schema.json` | derived analysis | Bounded attachment of one accepted shared-analysis revision/reassessment to exact certificate-transport request, candidate evidence, source/successor certificate identities and replay. |
+| `analysis/decision-episode-v0.1.schema.json`                  | derived analysis | Proposed bounded binding from one exact checked revision transition through supplied authority, decision, implementation, observation and explicit reconsideration.                      |
 
 ADR 0026 and ADR 0028 are Accepted for the bounded decision-case and shared-analysis revision
 contracts. The certificate-transport schema is an additive engineering trial above that accepted
@@ -78,6 +79,11 @@ container and does not authorize another Bellman transfer automatically. These a
 family record contracts, cannot appear as a corpus `record_contract`, and do not make a computation
 a source of truth. A recipient must freshly check mathematical candidates against independently
 reopened intended bytes; a stored check status does not become authorization.
+
+The decision-episode contract is Proposed under ADR 0029. It composes the accepted artifacts rather
+than duplicating them, requires an explicit human or institutional decision, and keeps observation
+interpretations separately reviewable. It does not infer authority, causality, correctness or a
+model update.
 
 ### Declared record contracts
 
@@ -151,6 +157,7 @@ schema tree.
 | published judgment | the relevant family extension plus core provenance; legacy score-shaped judgments remain compatibility-only |
 | decision case      | analysis; separate from corpora and records, under accepted ADR 0026                                        |
 | decision execution | analysis; an untrusted candidate and recorded check that must be freshly checked at use                     |
+| decision episode   | analysis; a proposed exact provenance envelope over checked history and supplied post-check declarations    |
 
 ## Protocols and migration records
 

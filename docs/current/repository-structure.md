@@ -14,7 +14,7 @@ map, not a universal knowledge model.
 | `packages/domain/` | native record/link/judgment contracts | derived mathematical semantics |
 | `packages/provenance/` | portable mechanical provenance primitives | domain truth or mathematical proof |
 | `packages/decision-case/` | validation, identity, revision, runner and fresh-checking consumer boundary for the currently supported decision profile | general optimization, empirical modelling, or a solver registry |
-| `packages/shared-analysis/` | scoped import, disagreement inspection, explicit revision impact, applicability reassessment, selected recomputation, and portable replay over native decision cases | source truth, automatic source selection, authenticated review, or a second mathematical engine |
+| `packages/shared-analysis/` | scoped import, disagreement inspection, explicit revision impact, applicability reassessment, selected recomputation, portable replay, and the proposed bounded decision-episode composition | source truth, automatic source selection, authenticated review, outcome evaluation, causal inference, workflow management, or a second mathematical engine |
 | `packages/language/` and data/export packages | deterministic authoring/lowering/export tooling | reviewed political data |
 | `internal/verification/` | Writ verification gates, grounding checks, fixtures, and integration/schema suites | source or mathematical authority |
 | `internal/tooling/` | repository maintenance, source-registry, acquisition, migration, and reproduction commands | current product semantics or evidence acceptance |

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -63,6 +63,11 @@ integration(
       }),
     );
     expect(episode.value.interpretations).toEqual([]);
+    expect(decisionEpisodeBytes(episode)).toEqual(
+      new Uint8Array(
+        readFileSync(join(ROOT, "examples", "decision-cases", "decision-episode", "episode.json")),
+      ),
+    );
 
     const recipientRoot = mkdtempSync(join(tmpdir(), "writ-decision-episode-recipient-"));
     try {

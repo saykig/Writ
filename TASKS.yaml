@@ -30,8 +30,9 @@ statuses:
 tasks:
   - id: CERTIFICATE-TRANSPORT-INTEGRATION-001
     title: Bind a transported mathematical guarantee to an accepted revision lifecycle
-    status: review
+    status: done
     implementation_pr: https://github.com/saykig/Writ/pull/51
+    merge_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
     architecture_status: retained_narrowly
     baseline_commit: bb4534249a313c92a045edd7f9462ff77fbb1bdb
     external_pins:
@@ -40,7 +41,8 @@ tasks:
     dependencies:
       - SHARED-ANALYSIS-REVISION-001
     completion_note: >-
-      ADR 0026 and ADR 0028 are Accepted. The trial reuses PR 47's revision/reassessment authority,
+      PR 51 merged at 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2. ADR 0026 and ADR 0028 are
+      Accepted. The trial reuses PR 47's revision/reassessment authority,
       adds one separately pinned Bellman certificate-transport attachment, preserves exact old and
       successor certificate identities, and separates target-certificate validity from transport
       provenance. A private Decision Lab validation run against Writ commit
@@ -84,6 +86,49 @@ tasks:
       - docs/current/product-definition.md
       - docs/current/roadmap.md
       - docs/experiments/certificate-transport-integration-report.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
+  - id: DECISION-EPISODE-001
+    title: Close one checked decision-to-consequence provenance loop
+    status: in_progress
+    architecture_status: proposed
+    baseline_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
+    dependencies:
+      - CERTIFICATE-TRANSPORT-INTEGRATION-001
+    completion_note: >-
+      The build composes one exact merged-PR-51 transition with a supplied authority basis, explicit
+      human or institutional decision, implementation, observation and reconsideration trigger. It
+      remains Proposed pending the ADR 0029 human architecture gate.
+    scope:
+      - Reuse the exact accepted decision-case, shared-analysis, revision, applicability, execution, replay, and PR 51 transition artifacts without duplicating their semantics.
+      - Bind one exact checked revision history to a separately supplied authority basis and explicit human or institutional decision.
+      - Preserve implementation, observation, optional separately reviewed interpretation, and explicit reconsideration as distinct declarations.
+      - Let a fresh recipient rederive every identity and freshly replay all checkable mathematical artifacts with the producer disabled.
+      - Compare the closed episode envelope with keeping the same material as independent files before proposing a narrow reusable semantic.
+    exclusions:
+      - Another Bellman transfer or any change to Bellman, Decision Lab, or Aldera.
+      - Inferring authority or a decision from mathematical optimality.
+      - Causal inference, automatic outcome evaluation, automatic model update, or treating temporal order as causality.
+      - A workflow engine, database, universal ontology, knowledge graph, solver registry, UI, or autonomous decision-making.
+    acceptance:
+      - One complete old-check, substantive-revision, stale-applicability, reassessment, checked-successor, transported-transition, decision, implementation, observation, reconsideration, and recipient-replay story passes.
+      - Every source, assumption, applicability, execution, problem, query, and certificate identity is rederived from the exact embedded accepted artifacts.
+      - The human decision is mandatory and supplied even when it differs from the checked optimal action.
+      - Structured causal, correctness, and model-update claims cannot appear in an observation; any supplied interpretation is separate and independently reviewable.
+      - Recipient replay invokes no producer and reports fresh mathematics separately from preserved human declarations.
+      - The engineering report identifies the exact provenance value over loose files and every unearned semantic.
+      - All repository, Python, real no-skip Decision Lab integration, integrity, and hosted CI gates pass on the final tree.
+      - ADR 0029 remains Proposed and the PR remains open for explicit human architecture disposition.
+    outputs:
+      - adr/0029-bounded-decision-episodes.md
+      - schemas/analysis/decision-episode-v0.1.schema.json
+      - packages/shared-analysis
+      - examples/decision-cases/decision-episode
+      - docs/current/decision-episodes.md
+      - docs/experiments/decision-episode-build-report.md
+      - docs/current/product-definition.md
+      - docs/current/roadmap.md
       - TASKS.yaml
       - MANIFEST.sha256
 

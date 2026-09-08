@@ -58,6 +58,13 @@ makes no validity claim. The reviewed mapping declaration must enumerate the com
 subject-and-policy diff, but Writ does not infer that the mapping describes empirical reality. That
 result does not make every Bellman theorem a Writ semantic.
 
+The next bounded build proposes a `decision_episode` envelope above those accepted artifacts. It
+preserves one exact checked transition alongside a separately supplied authority basis, explicit
+human or institutional decision, implementation record, observed consequence and reconsideration
+trigger. A recipient can rederive every binding and freshly check the mathematical history while
+leaving the later acts as preserved declarations. ADR 0029 remains Proposed pending a human
+architecture gate; no decision, causal attribution, outcome evaluation or model update is inferred.
+
 ## Bellman and Writ
 
 Bellman develops and assembles the mathematical foundations for consequential decision-making:
@@ -90,7 +97,9 @@ Writ must keep separate:
 - a common optimal action from a complete pointwise minimizing set;
 - uncertainty or nonidentification from exact ties;
 - human review from mathematical checking;
-- recommendation or optimality from institutional authority to act.
+- recommendation or optimality from institutional authority to act;
+- implementation from the preceding decision, and temporal sequence from causal attribution;
+- an observed consequence from a judgment that the decision was correct or that a model changed.
 
 Historical results remain valid under the premises they actually had. Revisions should suspend,
 narrow, transport, tighten, or replace current reuse with explicit justification rather than erase

@@ -97,9 +97,26 @@ test("requires an explicit supplied decision and never derives its action from m
 });
 
 test("rejects any stale identity in the exact checked-history chain", () => {
-  const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
-  changed.checked_history.shared_analysis_sha256 = ZERO_SHA256;
-  expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
+  for (const field of [
+    "shared_analysis_sha256",
+    "reassessment_basis_sha256",
+    "revision_impact_sha256",
+    "target_problem_sha256",
+    "target_query_sha256",
+    "prior_execution_sha256",
+    "successor_execution_sha256",
+    "source_certificate_sha256",
+    "target_certificate_sha256",
+  ] as const) {
+    const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+    changed.checked_history[field] = ZERO_SHA256;
+    expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
+      expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
+    );
+  }
+  const changedSource = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+  changedSource.checked_history.source_bindings[0]!.sha256 = ZERO_SHA256;
+  expect(() => openDecisionEpisode(exactJsonBytes(changedSource))).toThrow(
     expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
   );
 });
@@ -117,6 +134,23 @@ test("keeps causality, correctness, and model-update claims outside the observat
     };
     expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
       expect.objectContaining({ code: "DECISION_EPISODE_INVALID" }),
+    );
+  }
+});
+
+test("preserves exact authority, implementation, and observation artifact bytes", () => {
+  for (const mutate of [
+    (episode: Mutable<DecisionEpisode>) => episode.authority_basis.artifact,
+    (episode: Mutable<DecisionEpisode>) => episode.implementation.record,
+    (episode: Mutable<DecisionEpisode>) => episode.observation.record,
+  ]) {
+    const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+    const artifact = mutate(changed);
+    const bytes = Buffer.from(artifact.content, "base64");
+    bytes[0] = bytes[0]! ^ 1;
+    artifact.content = bytes.toString("base64");
+    expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
+      expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
     );
   }
 });
