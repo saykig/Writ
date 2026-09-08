@@ -46,10 +46,11 @@ tasks:
       provenance. A private Decision Lab validation run against Writ commit
       dccd5908debc6f364723a69d15a0364aea4acd00 passed Decision Case 16/16, Shared Analysis 2/2,
       and Certificate Transport 4/4 with zero skips. The reusable semantic is retained narrowly as a
-      revision-bound checked mathematical transition. Final acceptance hardening derives source
-      certificate status from fresh checker evidence, rejects descriptive-only mapping fields,
-      validates exact checker response hashes, and expands the real transport suite to 8/8 with
-      adversarial binding, mutation, structural, pin-drift, and separated-status controls. No
+      revision-bound checked mathematical transition. Final acceptance hardening describes exact
+      source-certificate byte preservation without claiming validity, derives source status only
+      from fresh checker evidence, rejects descriptive-only mapping fields, validates exact checker
+      response hashes, and expands the real transport suite to 9/9 with adversarial binding,
+      mutation, structural, pin-drift, invalid-archived-source, and separated-status controls. No
       subsequent Bellman component is authorized by this result.
     scope:
       - Preserve an old checked result and exact source certificate under their historical premises.
@@ -66,7 +67,7 @@ tasks:
     acceptance:
       - ADR 0026 and ADR 0028 are explicitly Accepted before the new transfer is treated as usable architecture.
       - Transport is refused before supported reassessment, for no-op or label-only changes, and when a declared changed request field did not actually change.
-      - The source certificate remains preserved and checked; target-certificate validity and transport provenance remain distinct independently checked statuses.
+      - Exact source-certificate bytes remain archived without asserting validity; fresh recipient checking may report the source checked, rejected, or not checked, separately from target-certificate and transport-provenance statuses.
       - Recipient replay invokes only the checker on preserved transport evidence and separately rechecks the old and successor PR 47 executions.
       - Real no-skip Decision Lab integration passes for Decision Case, Shared Analysis, and Certificate Transport against the exact pinned merge commit.
       - Standard repository format, lint, typecheck, test, data, Writ verification, build, Python, pack, and source-registry gates pass on the final tree.

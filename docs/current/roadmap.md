@@ -69,16 +69,18 @@ limited to the accepted revision-bound checked mathematical transition.
 ## Next
 
 1. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
-   old guarantee, exact revised basis, explicit model-to-request mapping premise, successor
-   certificate, target-certificate status, transport-provenance status, and fresh replay identity
-   without pretending the mapping premise is empirically true.
+   exact source-certificate bytes and prior claim context, exact revised basis, explicit
+   model-to-request mapping premise, successor certificate, fresh source-certificate status,
+   target-certificate status, transport-provenance status, and replay identity without pretending
+   that archival preservation establishes validity or that the mapping premise is empirically true.
 2. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A
    later result may receive a transported or tightened certificate and coexist with alternatives or
    incompatible results, but certificate accumulation/selection should enter only after a specific
    downstream use demonstrates the need.
-3. **Exercise broader change stories before broadening the core.** Distinguish historical validity,
-   current inapplicability, unsupported transport, valid target certificate with invalid transport
-   provenance, and justified successor reuse.
+3. **Exercise broader change stories before broadening the core.** Distinguish archived bytes and
+   prior claim context from fresh source-certificate status, current inapplicability, unsupported
+   transport, valid target certificate with invalid transport provenance, and justified successor
+   reuse.
 4. **Test the language/runtime threshold rather than guessing.** When two or three genuinely
    different Bellman certificate types depend on Writ checking, compare a small Rust exact checker
    with the current Python reference. If handwritten Python search becomes the mathematical

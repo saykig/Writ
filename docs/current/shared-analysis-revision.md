@@ -69,7 +69,7 @@ The record embeds the exact shared-analysis archive and binds one affected revis
 - the exact prior and target analysis identities;
 - an explicit caller-supplied mapping from that revised basis to actual changed fields in a pinned
   Bellman certificate-transport request;
-- the preserved source certificate, transported target certificate, and their exact hashes;
+- the exact archived source-certificate bytes, transported target certificate, and their hashes;
 - the exact producer candidate and producer-time checker report.
 
 The integration does not infer that the mapping declaration is empirically or substantively true.
@@ -83,8 +83,11 @@ revision/reassessment binding, and invokes only the pinned transport checker on 
 and evidence. A stored producer-time check is not authority. The fresh replay preserves Decision
 Lab's distinction between an ordinary target certificate and the stronger warrant that the target
 certificate was validly transported from the old checked source certificate. It verifies the fresh
-check's request/evidence hashes against the supplied bytes and derives source-certificate status
-from the exact checker order; it never repeats a stored `checked` label unconditionally.
+check's request/evidence hashes against the supplied bytes and derives `source_certificate_status`
+only from that fresh checker execution; it never repeats a stored `checked` label unconditionally.
+The replay field `source_certificate_bytes_preserved: true` describes exact archival preservation
+only. It makes no historical-validity claim: preserved bytes can freshly check as `rejected`, while
+an invalid target can leave the source `not_checked` because the pinned checker stops earlier.
 
 The acceptance review retains this extension only as a revision-bound checked mathematical
 transition. It is not permission to port certificate accumulation or another Bellman component

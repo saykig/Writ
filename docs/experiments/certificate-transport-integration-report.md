@@ -5,10 +5,11 @@
 **RETAIN THE NARROW TRANSITION SEMANTIC; STOP BEFORE AUTOMATICALLY PORTING ANOTHER BELLMAN COMPONENT.**
 
 This build earns one reusable Writ operation: a **revision-bound checked mathematical transition**.
-It preserves an old mathematical guarantee under its old premises, binds a substantive Writ revision
-and current applicability reassessment to an explicitly declared mathematical transport request,
-preserves the exact successor certificate, and lets a fresh recipient independently recheck the
-successor and the stronger transport provenance.
+It preserves the exact source-certificate bytes and prior claim context, binds a substantive Writ
+revision and current applicability reassessment to an explicitly declared mathematical transport
+request, preserves the exact successor certificate, and lets a fresh recipient independently check
+the source, successor, and stronger transport provenance. Archival preservation makes no validity
+claim.
 
 It does **not** earn a generic Bellman theorem registry, automatic evidence-to-model translation,
 certificate accumulation, structural transport between different decision trees, or a general
@@ -55,10 +56,12 @@ and rejects repository-module origins outside the verified source-only snapshot.
 The integration reuses PR #47's accepted revision and applicability lifecycle rather than creating a
 parallel history model.
 
-1. An exact original `DecisionExecution` is preserved in the shared-analysis archive.
+1. An exact original `DecisionExecution` and the source-certificate bytes are preserved in the
+   shared-analysis and transport archives without treating preservation as a validity result.
 2. A substantive revision declares a changed successor mathematical subject.
 3. `assessRevision` reports that the analysis is affected and that current applicability requires
-   reassessment; historical validity is not erased.
+   reassessment; the old claim context remains inspectable, but archive presence does not establish
+   validity.
 4. Certificate transport is refused until the exact revised basis has a current `supported`
    applicability declaration.
 5. The caller explicitly declares which exact target request fields implement the revised model or
@@ -88,7 +91,8 @@ upper bound is `1`.
 
 The important status separation survives Writ transport:
 
-- preserved source certificate: checked under the exact old subject;
+- source-certificate bytes: preserved exactly, with no validity implied by preservation;
+- fresh source-certificate status: checked under the exact old subject;
 - target certificate: separately checked under the exact target subject;
 - transport provenance: separately checked as a valid anchored derivation from the old certificate;
 - applicability: separately supplied and bound to the revised Writ basis;
@@ -143,6 +147,12 @@ Replay now derives source status from that fresh checker path: `checked`, `rejec
 `not_checked`. It also verifies that both producer-time and fresh reports name the exact supplied
 request and evidence byte hashes. A stored report can no longer make a fresh component status true.
 
+The public replay projection now reports `source_certificate_bytes_preserved: true` as a descriptive
+archive fact instead of claiming that the historical guarantee is preserved. The separate
+`source_certificate_status` is derived only from the fresh recipient checker. A regression archives
+an invalid source certificate, preserves its exact bytes, and requires fresh replay to report the
+source as `rejected` rather than translating archive presence into validity.
+
 The explicit model-to-request premise is also tighter. A declared changed field must resolve on both
 source and target, actually differ, and identify a mathematical subject or policy field;
 descriptive-only `subject.name` and `subject.premises` paths cannot conceal the real mathematical
@@ -152,13 +162,14 @@ The expanded real suite retains failures for missing/stale/wrong reassessment co
 revision, analysis, prior/target analysis, impact, basis, and adapter identities; exact request,
 evidence, producer-check, source-certificate, and target-certificate mutation; no-op, label-only,
 descriptive-only, and falsely unchanged mappings; action-menu, horizon, unit, criterion, and
-observable-history changes; and exact adapter source drift. Forged stored success reports are
+observable-history changes; exact adapter source drift; and an invalid archived source certificate.
+Forged stored success reports are
 replayed with the producer disabled. The fresh checker separately demonstrates a valid target with
 invalid anchored provenance, an invalid source with a still-valid target, and an invalid target for
 which source/transport are not claimed checked. Applicability remains necessary before transport,
 and the closed record schema rejects an authority-to-act field.
 
-The final no-skip transport run reports 8 pass, 0 skip, and 61 assertions against exact Decision Lab
+The final no-skip transport run reports 9 pass, 0 skip, and 64 assertions against exact Decision Lab
 merge `e5f77dfcf929708951f4673b3f394461ef09c752`, CPython 3.13.15, and SciPy 1.17.0. The complete
 post-PR52 repository verification reports 582 Bun tests passing, 7 explicit backend-gated skips, and
 0 failures; all seven repository gates pass, including byte-identical export of 81 records, 16
@@ -196,7 +207,7 @@ The reusable object is deliberately smaller than a generic certificate system:
 
 Its stable meanings are:
 
-- old guarantee remains historical rather than being overwritten;
+- exact source-certificate bytes and prior claim context remain archived without asserting validity;
 - current reuse can become stale independently of old mathematical truth;
 - mapping from revised evidence/model premises to mathematical request fields is explicit and
   reviewable, never silently inferred;

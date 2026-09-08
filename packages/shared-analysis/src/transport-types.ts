@@ -80,7 +80,8 @@ export interface CertificateTransportReplay {
   readonly reassessment_basis_sha256: string;
   readonly source_certificate_sha256: string;
   readonly target_certificate_sha256: string;
-  readonly historical_source_guarantee_preserved: true;
+  /** Exact source-certificate bytes survived record decoding and binding checks; validity is separate. */
+  readonly source_certificate_bytes_preserved: true;
   readonly source_certificate_status: "checked" | "rejected" | "not_checked";
   readonly fresh_check_matches_producer_check: boolean;
   readonly target_certificate_status: TransportCheckProjection["target_certificate_status"];

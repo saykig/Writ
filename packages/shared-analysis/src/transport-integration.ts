@@ -505,7 +505,7 @@ export function replayCertificateTransportRecord(
     reassessment_basis_sha256: loaded.value.binding.reassessment_basis_sha256,
     source_certificate_sha256: loaded.value.binding.transport_source_certificate_sha256,
     target_certificate_sha256: loaded.value.binding.transport_target_certificate_sha256,
-    historical_source_guarantee_preserved: true,
+    source_certificate_bytes_preserved: true,
     source_certificate_status: freshSourceCertificateStatus(fresh),
     fresh_check_matches_producer_check:
       Buffer.from(freshCheckBytes).compare(Buffer.from(producerCheck)) === 0,

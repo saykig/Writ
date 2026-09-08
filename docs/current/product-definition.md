@@ -51,9 +51,10 @@ universal decision workspace or permanent mathematical ceiling.
 
 The reviewed engineering trial extends that accepted lifecycle with one separately pinned Bellman
 certificate-transport adapter. It earns one revision-bound checked mathematical transition: Writ can
-preserve an old guarantee, bind a declared substantive revision to an exact successor mathematical
-request, preserve a newly checked successor certificate, and replay the transition with the producer
-disabled. That result does not make every Bellman theorem a Writ semantic.
+preserve the exact source-certificate bytes and prior claim context, bind a declared substantive
+revision to an exact successor mathematical request, preserve a newly checked successor certificate,
+and freshly check the source and transition with the producer disabled. Archival preservation alone
+makes no validity claim. That result does not make every Bellman theorem a Writ semantic.
 
 ## Bellman and Writ
 

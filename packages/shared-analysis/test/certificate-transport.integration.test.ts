@@ -466,7 +466,7 @@ integration(
           pythonExecutable: checkOnlyPython,
         },
       );
-      expect(replay.historical_source_guarantee_preserved).toBe(true);
+      expect(replay.source_certificate_bytes_preserved).toBe(true);
       expect(replay.source_certificate_status).toBe("checked");
       expect(replay.source_certificate_sha256).toBe(
         transportRecord.value.binding.transport_source_certificate_sha256,
@@ -632,27 +632,6 @@ integration(
         regret_upper: "1",
       });
 
-      const invalidSource = mutableRecord(record);
-      const invalidSourceRequest = decodedObject(
-        invalidSource.request,
-      ) as unknown as TransportRequestFixture;
-      invalidSourceRequest.source.certificate.lower[0] = "2";
-      invalidSource.binding.transport_source_certificate_sha256 = sha256Bytes(
-        exactJsonBytes(invalidSourceRequest.source.certificate),
-      );
-      replaceRequestAndStoredCheck(
-        invalidSource,
-        invalidSourceRequest as unknown as Record<string, unknown>,
-      );
-      const sourceReplay = replayCertificateTransportRecord(
-        exactJsonBytes(invalidSource),
-        recipientOptions,
-      );
-      expect(sourceReplay.fresh_check_matches_producer_check).toBe(false);
-      expect(sourceReplay.source_certificate_status).toBe("rejected");
-      expect(sourceReplay.target_certificate_status).toBe("checked");
-      expect(sourceReplay.transport_status).toBe("rejected");
-
       const invalidTarget = mutableRecord(record);
       const invalidTargetEvidence = decodedObject(invalidTarget.evidence);
       (invalidTargetEvidence.certificate as { lower: string[] }).lower[0] = "2";
@@ -668,6 +647,48 @@ integration(
       expect(targetReplay.source_certificate_status).toBe("not_checked");
       expect(targetReplay.target_certificate_status).toBe("rejected");
       expect(targetReplay.transport_status).toBe("not_checked");
+    } finally {
+      rmSync(recipientRoot, { recursive: true, force: true });
+    }
+  },
+);
+
+integration(
+  "preserves source certificate bytes without claiming validity and freshly rejects an invalid archived source certificate",
+  () => {
+    const invalidSource = mutableRecord(createValidTransportRecord());
+    const invalidSourceRequest = decodedObject(
+      invalidSource.request,
+    ) as unknown as TransportRequestFixture;
+    invalidSourceRequest.source.certificate.lower[0] = "2";
+    invalidSource.binding.transport_source_certificate_sha256 = sha256Bytes(
+      exactJsonBytes(invalidSourceRequest.source.certificate),
+    );
+    replaceRequestAndStoredCheck(
+      invalidSource,
+      invalidSourceRequest as unknown as Record<string, unknown>,
+    );
+
+    const recipientRoot = mkdtempSync(join(tmpdir(), "writ-certificate-source-recipient-"));
+    try {
+      const checkOnlyPython = join(recipientRoot, "check-only-python");
+      writeFileSync(
+        checkOnlyPython,
+        '#!/bin/sh\nif [ "$4" = "solve" ]; then echo "recipient replay attempted producer solve" >&2; exit 97; fi\nexec "$WRIT_DECISION_LAB_PYTHON" "$@"\n',
+        { mode: 0o700 },
+      );
+      const replay = replayCertificateTransportRecord(exactJsonBytes(invalidSource), {
+        engineRoot: engineRoot!,
+        pythonExecutable: checkOnlyPython,
+      });
+
+      expect(replay.source_certificate_bytes_preserved).toBe(true);
+      expect("historical_source_guarantee_preserved" in replay).toBe(false);
+      expect(replay.fresh_check_matches_producer_check).toBe(false);
+      expect(replay.source_certificate_status).toBe("rejected");
+      expect(replay.target_certificate_status).toBe("checked");
+      expect(replay.transport_status).toBe("rejected");
+      expect(replay.mathematical_status).toBe("rejected");
     } finally {
       rmSync(recipientRoot, { recursive: true, force: true });
     }
