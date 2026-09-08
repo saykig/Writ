@@ -40,7 +40,9 @@
         "reassessment_basis_sha256",
         "revision_impact_sha256",
         "prior_analysis_sha256",
-        "target_analysis_sha256"
+        "target_analysis_sha256",
+        "transport_source_certificate_sha256",
+        "transport_target_certificate_sha256"
       ],
       "properties": {
         "shared_analysis_sha256": { "$ref": "#/$defs/sha256" },
@@ -50,7 +52,9 @@
         "reassessment_basis_sha256": { "$ref": "#/$defs/sha256" },
         "revision_impact_sha256": { "$ref": "#/$defs/sha256" },
         "prior_analysis_sha256": { "$ref": "#/$defs/sha256" },
-        "target_analysis_sha256": { "$ref": "#/$defs/sha256" }
+        "target_analysis_sha256": { "$ref": "#/$defs/sha256" },
+        "transport_source_certificate_sha256": { "$ref": "#/$defs/sha256" },
+        "transport_target_certificate_sha256": { "$ref": "#/$defs/sha256" }
       }
     },
     "model_binding": {
