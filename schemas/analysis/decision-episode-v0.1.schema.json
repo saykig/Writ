@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/decision-episode-v0.1.schema.json",
+  "title": "Writ decision episode v0.1",
+  "description": "A bounded portable episode that binds one exact checked revision transition to a supplied authority basis, explicit human or institutional decision, implementation, observation, optional separately reviewed interpretations, and an explicit reconsideration trigger.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_kind",
+    "episode_id",
+    "checked_history",
+    "authority_basis",
+    "human_decision",
+    "implementation",
+    "observation",
+    "interpretations",
+    "reconsideration"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "episode_kind": { "const": "decision_episode" },
+    "episode_id": { "$ref": "#/$defs/nonEmptyString" },
+    "checked_history": { "$ref": "#/$defs/checkedHistory" },
+    "authority_basis": { "$ref": "#/$defs/authorityBasis" },
+    "human_decision": { "$ref": "#/$defs/humanDecision" },
+    "implementation": { "$ref": "#/$defs/implementation" },
+    "observation": { "$ref": "#/$defs/observation" },
+    "interpretations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/interpretation" }
+    },
+    "reconsideration": { "$ref": "#/$defs/reconsideration" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "eventTime": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "encodedBytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "content", "sha256"],
+      "properties": {
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": { "enum": ["human", "institution"] },
+        "actor_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "analysisAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundle_id", "analysis_id"],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "dependencyAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundle_id", "analysis_id", "dependency_id"],
+      "properties": {
+        "bundle_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis_id": { "$ref": "#/$defs/nonEmptyString" },
+        "dependency_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "document_version_id", "sha256"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyString" },
+        "document_version_id": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "checkedHistory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_sha256",
+        "certificate_transport_record",
+        "certificate_transport_record_sha256",
+        "shared_analysis_sha256",
+        "revision_id",
+        "analysis",
+        "applicability_assessment_id",
+        "reassessment_basis_sha256",
+        "revision_impact_sha256",
+        "source_bindings",
+        "assumption_dependencies",
+        "target_problem_sha256",
+        "target_query_sha256",
+        "prior_execution_sha256",
+        "successor_execution_sha256",
+        "source_certificate_sha256",
+        "target_certificate_sha256"
+      ],
+      "properties": {
+        "binding_sha256": { "$ref": "#/$defs/sha256" },
+        "certificate_transport_record": { "$ref": "#/$defs/encodedBytes" },
+        "certificate_transport_record_sha256": { "$ref": "#/$defs/sha256" },
+        "shared_analysis_sha256": { "$ref": "#/$defs/sha256" },
+        "revision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "analysis": { "$ref": "#/$defs/analysisAddress" },
+        "applicability_assessment_id": { "$ref": "#/$defs/nonEmptyString" },
+        "reassessment_basis_sha256": { "$ref": "#/$defs/sha256" },
+        "revision_impact_sha256": { "$ref": "#/$defs/sha256" },
+        "source_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/sourceIdentity" }
+        },
+        "assumption_dependencies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dependencyAddress" }
+        },
+        "target_problem_sha256": { "$ref": "#/$defs/sha256" },
+        "target_query_sha256": { "$ref": "#/$defs/sha256" },
+        "prior_execution_sha256": { "$ref": "#/$defs/sha256" },
+        "successor_execution_sha256": { "$ref": "#/$defs/sha256" },
+        "source_certificate_sha256": { "$ref": "#/$defs/sha256" },
+        "target_certificate_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "authorityBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_basis_id",
+        "authority_holder",
+        "basis_statement",
+        "artifact",
+        "verification_status"
+      ],
+      "properties": {
+        "authority_basis_id": { "$ref": "#/$defs/nonEmptyString" },
+        "authority_holder": { "$ref": "#/$defs/actor" },
+        "basis_statement": { "$ref": "#/$defs/nonEmptyString" },
+        "artifact": { "$ref": "#/$defs/encodedBytes" },
+        "verification_status": { "const": "supplied_not_verified_by_writ" }
+      }
+    },
+    "humanDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "decided_by",
+        "decided_at",
+        "selected_action",
+        "rationale",
+        "authority_basis_id",
+        "considered_analysis_binding_sha256",
+        "mathematical_role"
+      ],
+      "properties": {
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "decided_by": { "$ref": "#/$defs/actor" },
+        "decided_at": { "$ref": "#/$defs/eventTime" },
+        "selected_action": { "$ref": "#/$defs/nonEmptyString" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "authority_basis_id": { "$ref": "#/$defs/nonEmptyString" },
+        "considered_analysis_binding_sha256": { "$ref": "#/$defs/sha256" },
+        "mathematical_role": { "const": "considered_not_authorizing" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementation_id",
+        "decision_id",
+        "implemented_by",
+        "implemented_at",
+        "implemented_action",
+        "description",
+        "record"
+      ],
+      "properties": {
+        "implementation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "implemented_by": { "$ref": "#/$defs/actor" },
+        "implemented_at": { "$ref": "#/$defs/eventTime" },
+        "implemented_action": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "record": { "$ref": "#/$defs/encodedBytes" }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_id",
+        "implementation_id",
+        "observed_by",
+        "observed_at",
+        "description",
+        "record"
+      ],
+      "properties": {
+        "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "implementation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "observed_by": { "$ref": "#/$defs/actor" },
+        "observed_at": { "$ref": "#/$defs/eventTime" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "record": { "$ref": "#/$defs/encodedBytes" }
+      }
+    },
+    "interpretationReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewer", "rationale"],
+      "properties": {
+        "status": { "enum": ["unreviewed", "accepted", "rejected", "contested"] },
+        "reviewer": {
+          "anyOf": [{ "$ref": "#/$defs/actor" }, { "type": "null" }]
+        },
+        "rationale": {
+          "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "unreviewed" } } },
+          "then": {
+            "properties": {
+              "reviewer": { "type": "null" },
+              "rationale": { "type": "null" }
+            }
+          },
+          "else": {
+            "properties": {
+              "reviewer": { "$ref": "#/$defs/actor" },
+              "rationale": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        }
+      ]
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interpretation_id", "observation_id", "kind", "statement", "review"],
+      "properties": {
+        "interpretation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": ["causal_attribution", "decision_evaluation", "model_update_proposal"]
+        },
+        "statement": { "$ref": "#/$defs/nonEmptyString" },
+        "review": { "$ref": "#/$defs/interpretationReview" }
+      }
+    },
+    "reconsideration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reconsideration_id",
+        "observation_id",
+        "declared_by",
+        "declared_at",
+        "status",
+        "rationale",
+        "interpretation_ids",
+        "model_effect",
+        "next_step"
+      ],
+      "properties": {
+        "reconsideration_id": { "$ref": "#/$defs/nonEmptyString" },
+        "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "declared_by": { "$ref": "#/$defs/actor" },
+        "declared_at": { "$ref": "#/$defs/eventTime" },
+        "status": { "const": "reconsideration_required" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "interpretation_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "model_effect": { "const": "none_automatic" },
+        "next_step": { "const": "human_review" }
+      }
+    }
+  }
+}
