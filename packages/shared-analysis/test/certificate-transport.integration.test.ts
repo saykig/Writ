@@ -23,7 +23,6 @@ import {
   recordRevision,
   replayCertificateTransportRecord,
   replaySharedAnalysis,
-  SharedAnalysisError,
   type AnalysisAddress,
   type ApplicabilityAssessmentDeclaration,
   type LoadedSharedAnalysis,
@@ -144,7 +143,7 @@ test("refuses transport before the shared-analysis applicability reassessment", 
       { engineRoot: "/not-used" },
     ),
   ).toThrow(
-    expect.objectContaining<Partial<SharedAnalysisError>>({
+    expect.objectContaining({
       code: "SHARED_ANALYSIS_REASSESSMENT_REQUIRED",
     }),
   );
@@ -174,7 +173,7 @@ test("refuses no-op and label-only transports after a supported reassessment", (
         { engineRoot: "/not-used" },
       ),
     ).toThrow(
-      expect.objectContaining<Partial<SharedAnalysisError>>({
+      expect.objectContaining({
         code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
       }),
     );
@@ -204,7 +203,7 @@ test("requires every declared transport field to identify an actual source/targe
       { engineRoot: "/not-used" },
     ),
   ).toThrow(
-    expect.objectContaining<Partial<SharedAnalysisError>>({
+    expect.objectContaining({
       code: "SHARED_ANALYSIS_TRANSPORT_BINDING_INVALID",
     }),
   );
@@ -243,7 +242,7 @@ integration(
         engineOptions,
       ),
     ).toThrow(
-      expect.objectContaining<Partial<SharedAnalysisError>>({
+      expect.objectContaining({
         code: "SHARED_ANALYSIS_REASSESSMENT_REQUIRED",
       }),
     );
