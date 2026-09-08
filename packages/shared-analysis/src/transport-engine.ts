@@ -4,7 +4,10 @@ import { fileURLToPath } from "node:url";
 import { exactJsonBytes } from "@writ/decision-case";
 
 import { SharedAnalysisError } from "./errors.js";
-import type { TransportCheckProjection, TransportEngineOptions } from "./transport-types.js";
+import type {
+  TransportCheckProjection,
+  TransportEngineOptions,
+} from "./transport-types.js";
 import { createVerifiedTransportSourceSnapshot } from "./verified-transport-source.js";
 
 const PYTHON_ADAPTER = join(
