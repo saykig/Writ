@@ -3,14 +3,10 @@ import type { EncodedBytes } from "@writ/decision-case";
 import type { AnalysisAddress } from "./types.js";
 
 export const CERTIFICATE_TRANSPORT_RECORD_SCHEMA_VERSION = "0.1.0" as const;
-export const CERTIFICATE_TRANSPORT_RECORD_KIND =
-  "certificate_transport_integration" as const;
-export const DECISION_LAB_TRANSPORT_COMMIT =
-  "e5f77dfcf929708951f4673b3f394461ef09c752" as const;
-export const DECISION_LAB_TRANSPORT_INTERFACE =
-  "certificate-transport-request.v1" as const;
-export const DECISION_LAB_TRANSPORT_GUARANTEE =
-  "expected-additive-total-cost-regret" as const;
+export const CERTIFICATE_TRANSPORT_RECORD_KIND = "certificate_transport_integration" as const;
+export const DECISION_LAB_TRANSPORT_COMMIT = "e5f77dfcf929708951f4673b3f394461ef09c752" as const;
+export const DECISION_LAB_TRANSPORT_INTERFACE = "certificate-transport-request.v1" as const;
+export const DECISION_LAB_TRANSPORT_GUARANTEE = "expected-additive-total-cost-regret" as const;
 
 export interface TransportDiagnostic {
   readonly code: string;
