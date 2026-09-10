@@ -1,0 +1,27 @@
+{
+  "combined_source": "2a00603f3ca128dfb948358f54d77cbb15b704da",
+  "combined_hosted_ci": "https://github.com/saykig/Writ/actions/runs/34434039156",
+  "combined_hosted_conclusion": "success",
+  "supplementary_checks": {
+    "ruff_optional_producer_and_model": "passed after import-order-only repair",
+    "typescript_example_generator": "passed using repository compiler options and explicit example entrypoint",
+    "both_actual_producer_runs": "byte-identical to retained outputs"
+  },
+  "producer_source_sha256": "sha256:70eaae569acdd291b939993a1d21c17ff9b11b1201f813ed6d402b3055980e3c",
+  "producer_change": "Standard-library import ordering only; no model, interpreter, inputs, execution or result semantics changed. First checkpoint producer bytes remain retrievable from b6f73f0 and its receipt is unchanged.",
+  "actual_runs": {
+    "1": {
+      "run_sha256": "sha256:aff2e46ccf942f842c0e6fca0524984e0c3b373c1b435092b8e21fb3c31b393e",
+      "input_sha256": "sha256:df06bb93064a29a7637c32c94dbfed9f6d6615b692a97d093b1ca54af3a3a92a",
+      "output_sha256": "sha256:c0c19a92b53620abc1f238be66bb09c0011e3743c6e5599acbefee9c620653b3",
+      "package_source_checked": true
+    },
+    "2": {
+      "run_sha256": "sha256:569e9aaa81538a0d9bac3f2aae0a21cdee75e8db39e61cabf446b91f65802798",
+      "input_sha256": "sha256:9c75ff6d167aa1fedbe712b3a8bf8c3b501f010b3cb7560081214dc0f70e1d6f",
+      "output_sha256": "sha256:3f33c734eaac1a1588445ade51fe04027e0e8b6b33601197be526d3a1a7ee471",
+      "package_source_checked": true
+    }
+  },
+  "final_scope": "No new capability beyond combined acceptance. Final-head hosted status is separately reported on the PR."
+}

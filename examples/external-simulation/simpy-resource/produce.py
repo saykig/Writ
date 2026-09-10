@@ -6,12 +6,12 @@ Run with the isolated CPython 3.13.15 environment containing SimPy 4.1.1.
 import base64
 import hashlib
 import json
-from pathlib import Path
-import platform
 import os
-import tempfile
+import platform
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 
 import simpy
 
