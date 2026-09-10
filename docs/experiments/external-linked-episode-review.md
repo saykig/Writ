@@ -13,7 +13,7 @@ producer: it checks identities and output format, then an independent exact FIFO
 [Selection evidence](external-producer-selection.md) distinguishes actual package/source capabilities
 from descriptions and explains why EMA's nonlinear Monte Carlo lake study was not needed.
 
-The second step constructs a resolved parent/successor pair grounded in that simulation workflow.
+Second checkpoint `2a00603` constructs a resolved parent/successor pair grounded in that simulation workflow.
 Service time changes from 5 to 9 minutes; actual starts change from 0,2,5,7 to 0,2,9,11, and total
 simulated waiting from 2 to 10 minutes. This is a declared input revision and rerun, not a new measured
 observation. The parent observation/reconsideration IDs resolve inside the exact pinned parent.
@@ -78,5 +78,13 @@ outputs must first justify units, likelihoods/losses and empirical applicability
 
 Focused external receiving: 5 tests / 15 assertions. Linked receiving: 5 tests / 21 assertions.
 Real relocated linked integration: 1 test / 12 assertions, zero skips, producers disabled.
-Package typecheck/lint pass. The original source-to-check boundaries remain intact. Combined
-repository and inherited real-backend acceptance is the next gate and will be retained separately.
+All 19 combined local gates passed on implementation source
+`2a00603f3ca128dfb948358f54d77cbb15b704da`: seven repository gates; pack, source registry, Ruff,
+mypy and 75 Python tests; retained assessment packet/pilot receiving; and real Decision Case 16,
+Shared Analysis 2, Certificate Transport 12, standalone Episode 2 and linked Episode 1, with zero
+integration skips. Both actual SimPy runs reproduced byte-identically, as did the public generator's
+parent/successor/link/pins outputs. The [acceptance receipt](external-linked-acceptance.json) binds
+source, commands, log hashes, preservation comparisons and the first checkpoint's schema-formatting
+CI failure. That formatting failure was corrected before the successful combined source run.
+Hosted checks are evaluated separately on the final PR head; they do not substitute for real local
+backend receiving. Later metadata-only changes do not change the source capability checked here.

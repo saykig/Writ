@@ -98,6 +98,9 @@ episodes. The [external/linked review](../experiments/external-linked-episode-re
 pinned SimPy run and one service-assumption revision whose parent events actually resolve. The
 external trace is model-generated; native mathematical history is preserved and checked separately.
 This is a bounded engineering addition, not another empirical study or automatic model transfer.
+Both additions passed combined local acceptance at `2a00603`; the PR's final-head hosted checks and
+explicit human architecture disposition remain separate. No further external-model or episode
+framework expansion is implied.
 
 **Exit gate from Now:** the decision-episode build proves one exact decision-to-reconsideration
 story, compares the envelope with loose files, passes producer-disabled recipient replay, and stops
