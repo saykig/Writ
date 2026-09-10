@@ -7,3 +7,5 @@ export * from "./transport-engine.js";
 export * from "./transport-integration.js";
 export * from "./transport-types.js";
 export * from "./types.js";
+
+export * from "./external-simulation.js";

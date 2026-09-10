@@ -125,3 +125,14 @@ Keep the useful decision/implementation/observation/reconsideration distinction.
 or overlap is not a reason to remove it: Vela Claim acceptance and Writ's supplied operational choice
 have different meanings. No new Vela dependency is required. The PR #51-only profile is retained as a
 bounded operation rather than generalized into a universal episode framework.
+
+## Authorized external-evidence build (Proposed)
+
+The user authorized an external producer and then linked episodes on this PR. The first checkpoint
+adds `external-simulation-v0.1.schema.json` and a pure receiver for one pinned SimPy FIFO resource
+profile. It retains source, model, input, runtime and output identities separately from native exact
+mathematical checks. [Selection evidence](../docs/experiments/external-producer-selection.md)
+records actual package/source inspection, execution, reuse and unsupported claims.
+Simulation receiving establishes only finite trace agreement under supplied assumptions. Attaching
+that evidence must not weaken the existing native transport profile or imply an empirical observation,
+Bellman certificate, causal effect or authority. Both additions remain Proposed pending disposition.
