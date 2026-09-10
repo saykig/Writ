@@ -1,6 +1,6 @@
 # Bounded simulation-to-decision connection
 
-**Status: Proposed under ADR 0029 and PR #53; neither merged nor architecturally accepted.**
+**Status: Accepted as a bounded ADR 0029 profile through PR #53.**
 
 This operation closes one deliberately small gap in the prior external-simulation example: it maps
 several actual model runs into a supplied objective, compares a complete declared menu, preserves a

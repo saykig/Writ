@@ -75,11 +75,11 @@ modelling programme or evidence of strategic advantage.
    creating a new revision system. It earns only a revision-bound checked mathematical transition:
    preserved old result -> substantive model/policy revision -> stale applicability -> explicit
    reassessment -> transported successor certificate -> checker-only recipient replay.
-3. **Evaluate one post-check provenance loop.** The current bounded build proposes a
+3. **Retain the accepted bounded post-check provenance loop.** ADR 0029 and PR #53 add a
    `decision_episode` that composes the accepted transition with a supplied authority basis,
-   explicit human/institutional decision, implementation, observation and reconsideration. It must
-   add exact cross-artifact binding and fresh replay without inferring authority, causality,
-   correctness or a model update. ADR 0029 remains Proposed until a human disposition.
+   explicit human/institutional decision, implementation, observation and reconsideration. Exact
+   cross-artifact binding and fresh replay remain mandatory, without inferring authority,
+   causality, correctness or a model update.
 4. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
    review, provenance, and correction work where it reveals reusable knowledge-layer requirements.
    Do not let “NIST is the proving ground” become “Writ is only a corpus system.”
@@ -90,35 +90,37 @@ modelling programme or evidence of strategic advantage.
 
 The [PR #53 repair review](../experiments/decision-episode-repair-review.md) recommends retaining
 that bounded episode after identity, calendar and fresh-warrant repairs. Combined local acceptance
-passed; current hosted status belongs to the final PR head. This recommendation does not accept
-ADR 0029 or reopen the completed assessment experiment.
+passed; current hosted status belongs to the final PR head. That recommendation preceded and did
+not itself supply architecture acceptance. The subsequent human gate accepted ADR 0029 after final
+review; it did not reopen the completed assessment experiment.
 
 The user then authorized two ordered additions on PR #53: an actual external producer and linked
 episodes. The [external/linked review](../experiments/external-linked-episode-review.md) records a
 pinned SimPy run and one service-assumption revision whose parent events actually resolve. The
 external trace is model-generated; native mathematical history is preserved and checked separately.
 This is a bounded engineering addition, not another empirical study or automatic model transfer.
-Both additions passed combined local acceptance at `2a00603`; the PR's final-head hosted checks and
-explicit human architecture disposition remain separate.
+Both additions passed combined local acceptance at `2a00603`; the final review then confirmed the
+final-head hosted checks and accepted them only within ADR 0029's closed profile.
 
 The user subsequently authorized one bounded simulation-to-decision connection on the same PR.
 The [current operation](simulation-to-decision.md) compares three actual deterministic FIFO runs
 under an explicit supplied integer loss, revises the unvalidated base-service assumption, reruns
 every option and independently recomputes the conditional ranking. A separate revision record binds
 both comparisons to immutable episodes; the successor human act defers adoption despite the new
-conditional preference. This adds neither empirical validity nor new Bellman mathematics and does
-not widen the native certificate-transport profile.
+conditional preference. This accepted profile adds neither empirical validity nor new Bellman
+mathematics and does not widen the native certificate-transport profile.
 
-**Exit gate from Now:** the decision-episode build proves one exact decision-to-reconsideration
-story and one exact simulation-to-decision revision, compares the envelopes with loose files, passes
-producer-disabled recipient replay, and stops for an explicit human decision on Proposed ADR 0029.
-Green checks do not accept the architecture.
+**Exit gate from Now: passed.** The build proves one exact decision-to-reconsideration story and one
+exact simulation-to-decision revision, compares the envelopes with loose files, passes
+producer-disabled recipient replay, and received explicit human acceptance of ADR 0029. The
+accepted boundary stops here; green checks alone do not authorize another capability.
 
 ## Next
 
-1. **Use a decision episode only if the human gate accepts its extra provenance value.** If accepted,
-   preserve the exact checked-history binding and supplied post-check declarations without turning
-   the episode into workflow state or authority. If rejected, retain the separate-file baseline.
+1. **Use the accepted decision episode only within its earned provenance boundary.** Preserve the
+   exact checked-history binding and supplied post-check declarations without turning the episode
+   into workflow state, empirical validation or authority. Keep the separate-file baseline for
+   cases that do not need the accepted binding and replay safeguards.
 2. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
    exact source-certificate bytes and prior claim context, exact revised basis, explicit
    complete model-to-request mapping premise, successor certificate, fresh source-certificate status,

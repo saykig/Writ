@@ -62,20 +62,20 @@ makes no validity claim. The reviewed mapping declaration must enumerate the com
 subject-and-policy diff, but Writ does not infer that the mapping describes empirical reality. That
 result does not make every Bellman theorem a Writ semantic.
 
-The next bounded build proposes a `decision_episode` envelope above those accepted artifacts. It
+PR #53 adds the accepted bounded `decision_episode` envelope above those artifacts. It
 preserves one exact checked transition alongside a separately supplied authority basis, explicit
 human or institutional decision, implementation record, observed consequence and reconsideration
 trigger. A recipient can rederive every binding and freshly check the mathematical history while
-leaving the later acts as preserved declarations. ADR 0029 remains Proposed pending a human
+leaving the later acts as preserved declarations. ADR 0029 is **Accepted** after its human
 architecture gate; no decision, causal attribution, outcome evaluation or model update is inferred.
 
-The authorized extension on the same Proposed PR adds a separately labelled external SimPy result
-and one resolved parent/successor episode pair. It independently checks the external trace and the
-complete declared input revision, while preserving native mathematical history and checking it
-separately. It does not promote simulation output to empirical evidence or a native certificate.
-[Current bounded operations](external-and-linked-episodes.md) state the exact limits.
+The accepted external extension adds a separately labelled SimPy result and one resolved
+parent/successor episode pair. It independently checks the external trace and the complete declared
+input revision, while preserving native mathematical history and checking it separately. It does
+not promote simulation output to empirical evidence or a native certificate. [Current bounded
+operations](external-and-linked-episodes.md) state the exact limits.
 
-The subsequent authorized [simulation-to-decision connection](simulation-to-decision.md) adds a
+The accepted [simulation-to-decision connection](simulation-to-decision.md) adds a
 separate exact comparison subject rather than altering that transport profile. It binds a complete
 declared option menu, actual external runs, explicit run-to-loss mapping and supplied preferences;
 then revises one base-service assumption, reruns every option, independently recomputes the ranking

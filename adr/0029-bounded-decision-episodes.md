@@ -1,6 +1,6 @@
 # ADR 0029: Add bounded replayable decision episodes
 
-**Status:** Proposed in DECISION-EPISODE-001; awaiting human architecture disposition
+**Status:** Accepted
 
 ## Context
 
@@ -42,9 +42,9 @@ A general system could assign work, authenticate authority, evaluate outcomes, i
 models and manage repeated episodes. One synthetic story supplies no evidence for that scope. It
 would also blur the line between a portable provenance object and operational authority.
 
-## Proposed decision
+## Decision
 
-Propose option 2 for human review.
+Select option 2.
 
 Add `decision-episode-v0.1.schema.json` and a small `@writ/shared-analysis` extension. The episode is
 not a Core record, corpus object, workflow state machine or mathematical result. It contains one
@@ -108,13 +108,15 @@ It earns no stronger mathematics or empirical conclusion.
   solver registry, UI or autonomous decision-making is introduced.
 - This build is not another Bellman transfer and authorizes none.
 
-The implementation stops at this Proposed decision. A human must decide whether the replayable
-decision episode should become accepted Writ architecture.
+The accepted implementation stops at this bounded operation. It does not authorize a workflow
+engine, empirical outcome evaluator, automatic model update or later Bellman transfer.
 
 
 ## Repair review addendum (9 September 2026)
 
-Status remains **Proposed**. PR #53's repair authorization is not architecture acceptance.
+At this repair checkpoint the status remained **Proposed**; the repair authorization was not
+architecture acceptance. The final disposition below accepts the repaired boundary without
+rewriting this evidence.
 The [repair review](../docs/experiments/decision-episode-repair-review.md) supersedes the original
 build report's unrestricted substitution claim: whole-episode preservation requires a recipient's
 independently retained expected hash. Internal references alone cannot reject a coherently rewritten
@@ -126,7 +128,7 @@ or overlap is not a reason to remove it: Vela Claim acceptance and Writ's suppli
 have different meanings. No new Vela dependency is required. The PR #51-only profile is retained as a
 bounded operation rather than generalized into a universal episode framework.
 
-## Authorized external-evidence build (Proposed)
+## External-evidence extension
 
 The user authorized an external producer and then linked episodes on this PR. The first checkpoint
 adds `external-simulation-v0.1.schema.json` and a pure receiver for one pinned SimPy FIFO resource
@@ -135,9 +137,10 @@ mathematical checks. [Selection evidence](../docs/experiments/external-producer-
 records actual package/source inspection, execution, reuse and unsupported claims.
 Simulation receiving establishes only finite trace agreement under supplied assumptions. Attaching
 that evidence must not weaken the existing native transport profile or imply an empirical observation,
-Bellman certificate, causal effect or authority. Both additions remain Proposed pending disposition.
+Bellman certificate, causal effect or authority. Final acceptance retains both additions only within
+this closed profile.
 
-## Authorized linked-pair build (Proposed)
+## Linked-pair extension
 
 `linked-episode-revision-v0.1.schema.json` adds one immutable pair whose parent reference resolves an
 exact supplied observation and reconsideration, whose successor carries a newly checked external
@@ -150,9 +153,9 @@ The [current operation](../docs/current/external-and-linked-episodes.md) and
 [build/review evidence](../docs/experiments/external-linked-episode-review.md) define this explicitly
 bounded extension. This supersedes the earlier repair review's scope recommendation prospectively,
 not its frozen evidence. Standalone episode behavior remains unchanged. Both new dispositions stay
-Proposed until the user's architecture decision.
+accepted only as parts of the same bounded decision-episode architecture.
 
-## Authorized simulation-to-decision build (Proposed)
+## Simulation-to-decision extension
 
 The user later authorized the missing bounded connection from the external model to a decision
 comparison. This does not amend the native certificate-transport subject or retrospectively add a
@@ -173,5 +176,40 @@ native episode histories with the producer disabled. It establishes no empirical
 causal intervention effect, calibrated cost, real-world menu completeness, authority or automatic
 adoption. Bellman's existing finite supplied-loss principles and Decision Lab's existing native
 checkers are sufficient; this build adds no cross-repository mathematical warrant. The
-[current contract](../docs/current/simulation-to-decision.md) remains part of this Proposed ADR and
-requires the same explicit human architecture disposition as the rest of PR #53.
+[current contract](../docs/current/simulation-to-decision.md) is accepted as part of this ADR with
+the same limits as the rest of PR #53.
+
+## Final acceptance evidence (10 September 2026)
+
+The human architecture gate accepted option 2 and its three bounded PR #53 extensions after a final
+review of the exact head based on `c09922f8a4689284de42b1b1bcc22098fa19c117`. The review found no
+unresolved semantic defect. It confirmed that:
+
+- every mathematical result remains bound to the exact native subject, candidate, certificate,
+  revision, applicability basis and independent checker;
+- episode replay requires an independently retained whole-episode identity and freshly checks both
+  executions plus source, target and transport warrants without invoking a producer;
+- external FIFO receiving checks exact model, package, input, unit and trace identities without
+  claiming authenticated execution or empirical validity;
+- simulation comparison binds the complete declared menu, option-to-input mapping, exact units,
+  supplied objective, zero tolerance and full minimizing set before linking the result to a
+  separately supplied human disposition;
+- the base-service revision reruns every option, preserves both immutable comparisons and episodes,
+  and permits no unreported option, objective, arrival, unit or native-history change; and
+- the successor human act deliberately defers the conditional recommendation, demonstrating that
+  checked preference supplies neither a decision nor authority.
+
+All seven repository gates, pack and registry validation, Ruff, mypy, 75 Python tests, both retained
+pilot receivers and the real Decision Lab integrations passed. The no-skip integration counts were
+16 Decision Case, 2 Shared Analysis, 12 Certificate Transport, 2 Decision Episode, 1 linked episode
+and 1 simulation decision. Five actual SimPy runs and all six public generator artifacts reproduced
+byte-for-byte. Hosted Writ verification, TypeScript and Python checks passed on the reviewed head.
+
+The review corrected one packaging defect before acceptance: all new declared command entrypoints
+are executable, and the simulation-decision command has the same Bun shebang and closed argument
+boundary as the other commands. This does not alter frozen example or acceptance-receipt bytes.
+
+Acceptance is deliberately narrow. It does not authenticate people or institutions, establish the
+empirical adequacy of a model or objective, infer causality, evaluate a decision, establish
+real-world menu completeness, authorize an action, generalize the queue profile, or authorize the
+next mathematical capability. Those claims require their own evidence and governed decision.

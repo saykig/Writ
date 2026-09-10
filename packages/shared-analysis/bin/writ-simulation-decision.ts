@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import { readFileSync } from "node:fs";
 
 import { replaySimulationDecisionRevision } from "../src/simulation-decision-revision.js";
@@ -11,6 +13,7 @@ const [
   successorEpisodeSha256,
   engineRoot,
   pythonExecutable,
+  ...extra
 ] = process.argv.slice(2);
 
 if (
@@ -21,7 +24,8 @@ if (
   !parentEpisodeSha256 ||
   !successorEpisodeSha256 ||
   !engineRoot ||
-  !pythonExecutable
+  !pythonExecutable ||
+  extra.length > 0
 ) {
   console.error(
     "Usage: writ-simulation-decision REVISION REVISION_SHA256 PARENT_COMPARISON_SHA256 SUCCESSOR_COMPARISON_SHA256 PARENT_EPISODE_SHA256 SUCCESSOR_EPISODE_SHA256 ENGINE_ROOT PYTHON",

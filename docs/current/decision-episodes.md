@@ -2,8 +2,8 @@
 
 ## Status and boundary
 
-`decision_episode` is a **Proposed** analysis-layer contract awaiting the ADR 0029 human architecture
-gate. It tests whether Writ can close one provenance loop after a checked mathematical transition:
+`decision_episode` is an **Accepted, bounded** analysis-layer contract under ADR 0029. It lets Writ
+close one provenance loop after a checked mathematical transition:
 
 ```text
 checked analysis
@@ -78,9 +78,9 @@ The fixture intentionally records a human choice of A after the successor mathem
 is strictly optimal. That proves only that decision supply is separate from mathematical checking.
 It does not say that A was wise, authorized in reality or caused the later observation.
 
-ADR 0029 proposes retaining the narrow semantic `replayable decision episode` because the envelope
-adds exact cross-artifact binding and recipient replay that loose files do not enforce. It remains
-unaccepted until the human architecture gate. No workflow, causal, evaluation, model-update,
+ADR 0029 retains the narrow semantic `replayable decision episode` because the envelope adds exact
+cross-artifact binding and recipient replay that loose files do not enforce. The human architecture
+gate accepted that value after PR #53's final review. No workflow, causal, evaluation, model-update,
 authentication or authority-to-act semantics are earned.
 
 

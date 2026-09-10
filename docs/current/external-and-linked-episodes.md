@@ -1,6 +1,6 @@
 # External simulation evidence and one linked episode revision
 
-**Status: Proposed under ADR 0029, PR #53; neither merged nor architecturally accepted.**
+**Status: Accepted as a bounded ADR 0029 profile through PR #53.**
 
 This addition receives one real external SimPy result and resolves one explicit successor episode.
 It retains the repaired standalone episode contract unchanged. It adds two closed operations rather

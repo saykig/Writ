@@ -29,8 +29,8 @@ integration(
         '#!/bin/sh\nif [ "$4" = "solve" ]; then echo "producer disabled" >&2; exit 97; fi\nexec "$WRIT_DECISION_LAB_PYTHON" "$@"\n',
         { mode: 0o700 },
       );
+      const cli = join(ROOT, "packages/shared-analysis/bin/writ-simulation-decision.ts");
       const args = [
-        join(ROOT, "packages/shared-analysis/bin/writ-simulation-decision.ts"),
         file,
         pins.revisionSha256,
         pins.parentComparisonSha256,
@@ -40,7 +40,7 @@ integration(
         engineRoot!,
         wrapper,
       ];
-      const result = spawnSync(process.execPath, args, {
+      const result = spawnSync(cli, args, {
         cwd: directory,
         env: {
           ...process.env,
@@ -69,12 +69,17 @@ integration(
         ).toBe("checked");
       }
       const staleArgs = [...args];
-      staleArgs[2] = `sha256:${"0".repeat(64)}`;
-      const stale = spawnSync(process.execPath, staleArgs, {
+      staleArgs[1] = `sha256:${"0".repeat(64)}`;
+      const stale = spawnSync(cli, staleArgs, {
         cwd: directory,
         encoding: "utf8",
       });
       expect(stale.status).toBe(2);
+      const extra = spawnSync(cli, [...args, "unexpected"], {
+        cwd: directory,
+        encoding: "utf8",
+      });
+      expect(extra.status).toBe(2);
     } finally {
       rmSync(directory, { recursive: true, force: true });
     }

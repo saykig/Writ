@@ -70,11 +70,11 @@ extensions. The classification and dependency rules are recorded in
 | `analysis/decision-execution-v0.1.schema.json`                | derived analysis | Byte-bound untrusted candidate plus separately recorded mathematical check, applicability and human disposition.                                                                         |
 | `analysis/shared-analysis-revision-v0.1.schema.json`          | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay.                             |
 | `analysis/certificate-transport-integration-v0.1.schema.json` | derived analysis | Bounded attachment of one accepted shared-analysis revision/reassessment to exact certificate-transport request, candidate evidence, source/successor certificate identities and replay. |
-| `analysis/decision-episode-v0.1.schema.json`                  | derived analysis | Proposed bounded binding from one exact checked revision transition through supplied authority, decision, implementation, observation and explicit reconsideration.                      |
-| `analysis/external-simulation-v0.1.schema.json`               | derived analysis | Proposed pinned SimPy FIFO run with model-generated evidence labels and independent exact trace receiving.                                                                               |
-| `analysis/linked-episode-revision-v0.1.schema.json`           | derived analysis | Proposed service-duration-only link between two immutable decision episodes and their separately checked external runs.                                                                  |
-| `analysis/simulation-decision-v0.1.schema.json`               | derived analysis | Proposed closed option menu, exact run-to-loss mapping, complete minimizing set and explicit empirical/applicability limits.                                                             |
-| `analysis/simulation-decision-revision-v0.1.schema.json`      | derived analysis | Proposed base-service revision, complete option reruns, unchanged native history and exact comparison-to-human-disposition binding.                                                      |
+| `analysis/decision-episode-v0.1.schema.json`                  | derived analysis | Accepted bounded binding from one exact checked revision transition through supplied authority, decision, implementation, observation and explicit reconsideration.                      |
+| `analysis/external-simulation-v0.1.schema.json`               | derived analysis | Accepted pinned SimPy FIFO run with model-generated evidence labels and independent exact trace receiving.                                                                               |
+| `analysis/linked-episode-revision-v0.1.schema.json`           | derived analysis | Accepted service-duration-only link between two immutable decision episodes and their separately checked external runs.                                                                  |
+| `analysis/simulation-decision-v0.1.schema.json`               | derived analysis | Accepted closed option menu, exact run-to-loss mapping, complete minimizing set and explicit empirical/applicability limits.                                                             |
+| `analysis/simulation-decision-revision-v0.1.schema.json`      | derived analysis | Accepted base-service revision, complete option reruns, unchanged native history and exact comparison-to-human-disposition binding.                                                      |
 
 ADR 0026 and ADR 0028 are Accepted for the bounded decision-case and shared-analysis revision
 contracts. The certificate-transport schema is an additive engineering trial above that accepted
@@ -84,10 +84,10 @@ family record contracts, cannot appear as a corpus `record_contract`, and do not
 a source of truth. A recipient must freshly check mathematical candidates against independently
 reopened intended bytes; a stored check status does not become authorization.
 
-The decision-episode contract is Proposed under ADR 0029. It composes the accepted artifacts rather
-than duplicating them, requires an explicit human or institutional decision, and keeps observation
-interpretations separately reviewable. It does not infer authority, causality, correctness or a
-model update.
+The decision-episode and its bounded external/link/comparison profiles are Accepted under ADR 0029.
+They compose the accepted artifacts rather than duplicating them, require an explicit human or
+institutional decision, and keep observation interpretations separately reviewable. They do not
+infer authority, causality, correctness or a model update.
 
 ### Declared record contracts
 

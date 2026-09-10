@@ -133,9 +133,9 @@ decision and compatibility operations. The certificate-transport trial adds one 
 sequential guarantee operation; it does not add conditional, causal, strategic, safety, empirical
 validation, authenticated review, or authority-to-act meaning.
 
-## Proposed post-check episode
+## Accepted bounded post-check episode
 
-ADR 0029 proposes a separate `decision_episode` envelope above this accepted lifecycle. It embeds
+ADR 0029 accepts a separate bounded `decision_episode` envelope above this lifecycle. It embeds
 one exact certificate-transport record and rederives the existing archive, revision, reassessment,
 source, assumption, execution and certificate identities. It does not extend this package's
 revision or applicability semantics. Supplied authority, decision, implementation, observation and
