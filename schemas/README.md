@@ -71,6 +71,10 @@ extensions. The classification and dependency rules are recorded in
 | `analysis/shared-analysis-revision-v0.1.schema.json`          | derived analysis | Exact imported case bundles, bounded inventories, explicit revisions, scope-bound applicability declarations, and preserved executions for recipient replay.                             |
 | `analysis/certificate-transport-integration-v0.1.schema.json` | derived analysis | Bounded attachment of one accepted shared-analysis revision/reassessment to exact certificate-transport request, candidate evidence, source/successor certificate identities and replay. |
 | `analysis/decision-episode-v0.1.schema.json`                  | derived analysis | Proposed bounded binding from one exact checked revision transition through supplied authority, decision, implementation, observation and explicit reconsideration.                      |
+| `analysis/external-simulation-v0.1.schema.json`               | derived analysis | Proposed pinned SimPy FIFO run with model-generated evidence labels and independent exact trace receiving.                                                                               |
+| `analysis/linked-episode-revision-v0.1.schema.json`           | derived analysis | Proposed service-duration-only link between two immutable decision episodes and their separately checked external runs.                                                                  |
+| `analysis/simulation-decision-v0.1.schema.json`               | derived analysis | Proposed closed option menu, exact run-to-loss mapping, complete minimizing set and explicit empirical/applicability limits.                                                             |
+| `analysis/simulation-decision-revision-v0.1.schema.json`      | derived analysis | Proposed base-service revision, complete option reruns, unchanged native history and exact comparison-to-human-disposition binding.                                                      |
 
 ADR 0026 and ADR 0028 are Accepted for the bounded decision-case and shared-analysis revision
 contracts. The certificate-transport schema is an additive engineering trial above that accepted
@@ -170,4 +174,6 @@ schema tree.
 Proposed PR #53 additions: `analysis/external-simulation-v0.1.schema.json` governs the pinned
 model-generated SimPy trace envelope; `analysis/linked-episode-revision-v0.1.schema.json` governs one
 explicit service-duration revision between two immutable episodes. Neither promotes external output
-to a native mathematical certificate or empirical observation.
+to a native mathematical certificate or empirical observation. The later simulation-decision pair
+adds one exact supplied loss mapping and complete rerun over a declared menu without changing those
+profiles, asserting empirical applicability or turning a conditional preference into authority.

@@ -40,3 +40,12 @@ are unsupported. The receiver never executes embedded source and rejects stronge
 A second actual run reproduced the envelope byte-for-byte. Five receiving tests include relocated
 receiving with no producer on PATH; wrong source/model/input bindings; silently changed output;
 rehashed numerically false output; and attempted empirical, causal or Bellman promotion.
+
+## Additional actual option runs
+
+The bounded [simulation-decision example](../../decision-cases/simulation-decision/README.md) reuses
+`run-1.json` (service 5) and `run-2.json` (service 9), and adds actual producer outputs for service
+1, 3 and 7 under the identical arrival list and pinned model profile. Their input/run files use the
+`input-service-N.json` and `run-service-N.json` names. Each was created by the same command above,
+substituting the corresponding input and a new output path, and each is independently received
+before any objective arithmetic. Adding those runs does not make the service deltas causal effects.

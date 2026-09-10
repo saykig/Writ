@@ -1,7 +1,7 @@
 # Writ: current roadmap
 
 **Status:** current directional roadmap  
-**Observation cutoff:** 9 September 2026  
+**Observation cutoff:** 10 September 2026
 **Baseline:** current `main` (`c09922f8a4689284de42b1b1bcc22098fa19c117`) integrated into PR #53
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
@@ -99,12 +99,20 @@ pinned SimPy run and one service-assumption revision whose parent events actuall
 external trace is model-generated; native mathematical history is preserved and checked separately.
 This is a bounded engineering addition, not another empirical study or automatic model transfer.
 Both additions passed combined local acceptance at `2a00603`; the PR's final-head hosted checks and
-explicit human architecture disposition remain separate. No further external-model or episode
-framework expansion is implied.
+explicit human architecture disposition remain separate.
+
+The user subsequently authorized one bounded simulation-to-decision connection on the same PR.
+The [current operation](simulation-to-decision.md) compares three actual deterministic FIFO runs
+under an explicit supplied integer loss, revises the unvalidated base-service assumption, reruns
+every option and independently recomputes the conditional ranking. A separate revision record binds
+both comparisons to immutable episodes; the successor human act defers adoption despite the new
+conditional preference. This adds neither empirical validity nor new Bellman mathematics and does
+not widen the native certificate-transport profile.
 
 **Exit gate from Now:** the decision-episode build proves one exact decision-to-reconsideration
-story, compares the envelope with loose files, passes producer-disabled recipient replay, and stops
-for an explicit human decision on Proposed ADR 0029. Green checks do not accept the architecture.
+story and one exact simulation-to-decision revision, compares the envelopes with loose files, passes
+producer-disabled recipient replay, and stops for an explicit human decision on Proposed ADR 0029.
+Green checks do not accept the architecture.
 
 ## Next
 

@@ -75,6 +75,13 @@ complete declared input revision, while preserving native mathematical history a
 separately. It does not promote simulation output to empirical evidence or a native certificate.
 [Current bounded operations](external-and-linked-episodes.md) state the exact limits.
 
+The subsequent authorized [simulation-to-decision connection](simulation-to-decision.md) adds a
+separate exact comparison subject rather than altering that transport profile. It binds a complete
+declared option menu, actual external runs, explicit run-to-loss mapping and supplied preferences;
+then revises one base-service assumption, reruns every option, independently recomputes the ranking
+and links both results to supplied episode decisions. A conditional preference remains distinct from
+empirical applicability, the human act and authority. The native A/B history remains unchanged.
+
 ## Bellman and Writ
 
 Bellman develops and assembles the mathematical foundations for consequential decision-making:

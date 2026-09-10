@@ -64,3 +64,12 @@ independent analytical agreement have different assurance scopes.
 The example's native A/B cost history is deliberately separate from simulated waiting time. Neither
 minute-to-loss conversion nor empirical applicability is assumed. The synthetic board commissions
 simulation only and subsequently asks for real service-time evidence; nothing is deployed.
+
+## Separate simulation-to-decision extension
+
+The later authorized [simulation-to-decision operation](simulation-to-decision.md) does not alter
+either contract above. It adds a separately versioned comparison subject that maps several actual
+FIFO runs into a supplied exact loss, followed by a separately versioned revision that reruns every
+declared option and binds the conditional preference to supplied episode decisions. Its stipulated
+minute-to-loss mapping applies only inside that new subject; it does not reinterpret the earlier
+queue runs or the native A/B certificate history.

@@ -151,6 +151,17 @@ tasks:
       all 19 combined local gates, real integrations 16/2/12/2/1 without skips and 75 Python tests.
       Both actual SimPy outputs and the public pair generator reproduce byte-for-byte. ADR 0029
       remains Proposed; hosted checks belong to the final PR head.
+    simulation_decision_review: docs/experiments/simulation-decision-review.md
+    simulation_decision_acceptance: docs/experiments/simulation-decision-acceptance.json
+    simulation_decision_note: >-
+      The user subsequently authorized the missing bounded simulation-to-decision connection on PR
+      53. Three declared FIFO options bind exact service-input mappings and actual SimPy runs to a
+      supplied integer waiting-plus-burden objective. Revising the unvalidated base-service
+      assumption from five to nine minutes reruns every option and changes the conditional unique
+      minimum from retain to intensive. Both exact comparisons, complete input changes, immutable
+      episodes and supplied human dispositions are preserved; the successor human act instead asks
+      for empirical evidence. Native A/B history remains unchanged. ADR 0029 remains Proposed and
+      PR 53 remains unmerged for human disposition.
     repair_review: docs/experiments/decision-episode-repair-review.md
     repair_evidence: docs/experiments/decision-episode-repair-evidence.json
     repair_note: >-
@@ -170,6 +181,7 @@ tasks:
       - Inferring authority or a decision from mathematical optimality.
       - Causal inference, automatic outcome evaluation, automatic model update, or treating temporal order as causality.
       - A workflow engine, database, universal ontology, knowledge graph, solver registry, UI, or autonomous decision-making.
+      - Empirically identifying service times, option effects, cost weights, real-world menu completeness, causal effects or authority from the synthetic comparison.
     acceptance:
       - One complete old-check, substantive-revision, stale-applicability, reassessment, checked-successor, transported-transition, decision, implementation, observation, reconsideration, and recipient-replay story passes.
       - Every source, assumption, applicability, execution, problem, query, and certificate identity is rederived from the exact embedded accepted artifacts.
@@ -179,6 +191,10 @@ tasks:
       - The engineering report identifies the exact provenance value over loose files and every unearned semantic.
       - All repository, Python, real no-skip Decision Lab integration, integrity, and hosted CI gates pass on the final tree.
       - ADR 0029 remains Proposed and the PR remains open for explicit human architecture disposition.
+      - Every declared simulation option runs through the actual pinned external producer and the independent exact FIFO receiver.
+      - Exact units, option-to-input mappings, fixed costs, preferences, rounding, tolerance and declared-menu completeness bind before ranking.
+      - One base-service revision reruns every option, preserves the old comparison and rejects stale outputs, substituted model/input, wrong units/mapping, omitted changes and a false optimum.
+      - A relocated recipient with both producers disabled freshly checks both comparisons and both native episode histories while preserving human choice separately.
     outputs:
       - adr/0029-bounded-decision-episodes.md
       - schemas/analysis/decision-episode-v0.1.schema.json
@@ -188,6 +204,12 @@ tasks:
       - docs/experiments/decision-episode-build-report.md
       - docs/current/product-definition.md
       - docs/current/roadmap.md
+      - schemas/analysis/simulation-decision-v0.1.schema.json
+      - schemas/analysis/simulation-decision-revision-v0.1.schema.json
+      - examples/decision-cases/simulation-decision
+      - docs/current/simulation-to-decision.md
+      - docs/experiments/simulation-decision-review.md
+      - docs/experiments/simulation-decision-acceptance.json
       - TASKS.yaml
       - MANIFEST.sha256
 

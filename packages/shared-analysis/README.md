@@ -85,3 +85,16 @@ This semantic remains Proposed until the human architecture gate.
 one separately checked SimPy FIFO profile and one parent/successor service-duration revision.
 The receivers reuse native episode checks without promoting simulated output to a native certificate.
 Both operations remain Proposed; standalone episode semantics and frozen examples are unchanged.
+
+## Proposed simulation decision comparison
+
+[The bounded simulation-to-decision operation](../../docs/current/simulation-to-decision.md) adds a
+separate exact subject above the external FIFO receiver. `openSimulationDecisionComparison(...)`
+freshly checks every run and recomputes a declared integer loss and full minimizing set.
+`openSimulationDecisionRevision(...)` requires one complete base-service change, all derived option
+reruns, immutable parent/successor episodes and exact comparison-to-human-disposition links.
+
+`replaySimulationDecisionRevision(...)` invokes both native episode receivers with their producer
+disabled while comparison receiving never imports SimPy. The returned conditional recommendation,
+empirical applicability and supplied human act remain distinct. The operation is not a widening of
+the native certificate-transport profile and remains Proposed under ADR 0029.
