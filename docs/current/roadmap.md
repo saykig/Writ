@@ -43,6 +43,12 @@ flowchart LR
   U --> Q
 ```
 
+The user-adopted [strategic-security moonshot](strategic-security-moonshot.md) supplies the
+long-term destination: explicit strategic models, warranted comparison across plausible
+worlds, decision-relevant information and durable correction under adversarial uncertainty.
+The current cross-tool assessment pilot is a bounded enabling test, not a new security
+modelling programme or evidence of strategic advantage.
+
 ## Now
 
 1. **The first bounded derived-decision architecture has passed its human gate.** ADR 0026 and ADR
