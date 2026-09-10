@@ -1,0 +1,454 @@
+{
+  "source_commit": "c57ffb96bbee64cf4af541a04f6c730cbb215f8a",
+  "source_manifest_sha256": "f3deeb36191f1d60ee03cca3656c0973fbd479a2f0493eabde85cfc4b7279472",
+  "combined_gates": [
+    {
+      "name": "format",
+      "command": [
+        "bun",
+        "run",
+        "format"
+      ],
+      "exit_code": 0,
+      "seconds": 2.87,
+      "log_sha256": "1d66faad74f5e8709353f7288592866bd3a9095da1174a916e7aa632949971e2"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "bun",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 3.39,
+      "log_sha256": "aac768b4c3d786237eae13961bf08193ff587bce958ff378e7c2c9cad5af2bbe"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "bun",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "seconds": 5.23,
+      "log_sha256": "15f48aa510d05b56a348ae5582b15594cb6f2a0a0e6c079d9a63db47ce96acd5"
+    },
+    {
+      "name": "test",
+      "command": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "exit_code": 0,
+      "seconds": 24.89,
+      "log_sha256": "1aaa51ed92dc8e0b96004fe4f04542d3538a8b20efe46f9d42ac53289e0872ed"
+    },
+    {
+      "name": "data:check",
+      "command": [
+        "bun",
+        "run",
+        "data:check"
+      ],
+      "exit_code": 0,
+      "seconds": 1.06,
+      "log_sha256": "73d277a395ce379fec931d22c9ba6242b85c3ba1269cf89b27fe74f551a20023"
+    },
+    {
+      "name": "verify:writ",
+      "command": [
+        "bun",
+        "run",
+        "verify:writ"
+      ],
+      "exit_code": 0,
+      "seconds": 1.47,
+      "log_sha256": "d898e86edd4ee8330cd6e85ab970f662673c385328687e3c4f2a9e760c7a7b20"
+    },
+    {
+      "name": "build",
+      "command": [
+        "bun",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 4.84,
+      "log_sha256": "792542ce65f45f4cd9525371b117587944fcc7750b00520d5efda1166a0d51ac"
+    },
+    {
+      "name": "test:decision-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:decision-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 3.09,
+      "log_sha256": "e2b12d271b8d7e6d8fee51dce92f68634ea70839229fadd97583199fff389d2a"
+    },
+    {
+      "name": "test:shared-analysis-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:shared-analysis-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 7.35,
+      "log_sha256": "ad2aef4a2c8d455d7a341b80f012fd2066e11db8e4741e2e41e01622898125ff"
+    },
+    {
+      "name": "test:certificate-transport-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:certificate-transport-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 5.62,
+      "log_sha256": "44bac75a6385854fa796e33f204bd38d8ff5eb9f06d6d79888c7f7cf533091f8"
+    },
+    {
+      "name": "test:decision-episode-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:decision-episode-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 4.6,
+      "log_sha256": "9afe2a102fabb6dd5baf0a4b2f81b0b09844b6ea11cacf1218b5e072e1e41d76"
+    },
+    {
+      "name": "pack",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "internal/tooling/scripts/validate_pack.py"
+      ],
+      "exit_code": 0,
+      "seconds": 2.0,
+      "log_sha256": "0ccdeb22790e3b06b058bccf6af71c447e88ad3e80a98d67c2551b2bf93d06e0"
+    },
+    {
+      "name": "registry",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "internal/tooling/scripts/generate_source_registry.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.16,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruff",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/ruff",
+        "check",
+        "apps/ingest",
+        "internal/tooling/scripts",
+        "internal/verification"
+      ],
+      "exit_code": 0,
+      "seconds": 0.08,
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/mypy",
+        "apps/ingest/src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.23,
+      "log_sha256": "8b88f6d12bd312c1b024b66d07a7f7619a68482ac4d64e475759b1823199faa5"
+    },
+    {
+      "name": "pytest",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "-m",
+        "pytest",
+        "apps/ingest",
+        "internal/verification"
+      ],
+      "exit_code": 0,
+      "seconds": 4.0,
+      "log_sha256": "933755ae49720b139416ba92ae75a1282cd40b7b5dc780d60b1e03d4ee92da0a"
+    },
+    {
+      "name": "pilot-packets",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "examples/assessments/revisable-pilot/receive-packets.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.03,
+      "log_sha256": "f05d2cfa0fff47d980bb0676efbca8c9de319c5ed1cc449b3bd0952ece76298b"
+    },
+    {
+      "name": "pilot-results",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "examples/assessments/revisable-pilot/receive-pilot.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.05,
+      "log_sha256": "5f6a65d70fd0fe03487b08fd253a5241dc264e22039f25b3157aea8cacf0ad27"
+    }
+  ],
+  "initial_attempt": {
+    "gates": [
+      {
+        "name": "format",
+        "command": [
+          "bun",
+          "run",
+          "format"
+        ],
+        "exit_code": 1,
+        "seconds": 2.92,
+        "log_sha256": "d8cb794b67522f3a800037d0824d082aabdfdece90a7a5df54a720c91d433a7d"
+      },
+      {
+        "name": "lint",
+        "command": [
+          "bun",
+          "run",
+          "lint"
+        ],
+        "exit_code": 0,
+        "seconds": 3.5,
+        "log_sha256": "741966a3f76c44524b092b7850f555a080ad4e34683c84a6e4558646be530f09"
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "bun",
+          "run",
+          "typecheck"
+        ],
+        "exit_code": 0,
+        "seconds": 5.02,
+        "log_sha256": "15f48aa510d05b56a348ae5582b15594cb6f2a0a0e6c079d9a63db47ce96acd5"
+      },
+      {
+        "name": "test",
+        "command": [
+          "bun",
+          "run",
+          "test"
+        ],
+        "exit_code": 1,
+        "seconds": 38.41,
+        "log_sha256": "1c4cbc16c8148ac592349676474357b782cfefc81c29fc4dfc43892f252a57e4"
+      },
+      {
+        "name": "data:check",
+        "command": [
+          "bun",
+          "run",
+          "data:check"
+        ],
+        "exit_code": 1,
+        "seconds": 0.25,
+        "log_sha256": "aaab19f002253e32c8658ec8c65f6f47a949acd347a2bdaab141161d2b6b7221"
+      },
+      {
+        "name": "verify:writ",
+        "command": [
+          "bun",
+          "run",
+          "verify:writ"
+        ],
+        "exit_code": 1,
+        "seconds": 1.72,
+        "log_sha256": "4494e49108841499877aaf84695809a990c5f72b12a4311705ce4809569e1363"
+      },
+      {
+        "name": "build",
+        "command": [
+          "bun",
+          "run",
+          "build"
+        ],
+        "exit_code": 0,
+        "seconds": 4.55,
+        "log_sha256": "792542ce65f45f4cd9525371b117587944fcc7750b00520d5efda1166a0d51ac"
+      },
+      {
+        "name": "test:decision-integration",
+        "command": [
+          "bun",
+          "run",
+          "test:decision-integration"
+        ],
+        "exit_code": 0,
+        "seconds": 2.96,
+        "log_sha256": "3d3a3d14252b9afb6a0caafb98588488292f759581ae5470d1d291a3478d8991"
+      },
+      {
+        "name": "test:shared-analysis-integration",
+        "command": [
+          "bun",
+          "run",
+          "test:shared-analysis-integration"
+        ],
+        "exit_code": 0,
+        "seconds": 8.31,
+        "log_sha256": "c62ffd61ecf53686d6825dc2092dd49fd3ceff66224a1b7dc1b6429bf4540a5c"
+      },
+      {
+        "name": "test:certificate-transport-integration",
+        "command": [
+          "bun",
+          "run",
+          "test:certificate-transport-integration"
+        ],
+        "exit_code": 0,
+        "seconds": 5.85,
+        "log_sha256": "e23870cdb40a38ef0cc5ddaf1635a4eb3f05df13415007225859b6cd32fff99b"
+      },
+      {
+        "name": "test:decision-episode-integration",
+        "command": [
+          "bun",
+          "run",
+          "test:decision-episode-integration"
+        ],
+        "exit_code": 0,
+        "seconds": 4.44,
+        "log_sha256": "2fd56ea726056a98ab654814117834ac409ee8c96635d49e71c43c5dc2f8ff1c"
+      },
+      {
+        "name": "pack",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/python",
+          "internal/tooling/scripts/validate_pack.py"
+        ],
+        "exit_code": 0,
+        "seconds": 1.82,
+        "log_sha256": "0ccdeb22790e3b06b058bccf6af71c447e88ad3e80a98d67c2551b2bf93d06e0"
+      },
+      {
+        "name": "registry",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/python",
+          "internal/tooling/scripts/generate_source_registry.py",
+          "--check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.17,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "ruff",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/ruff",
+          "check",
+          "apps/ingest",
+          "internal/tooling/scripts",
+          "internal/verification"
+        ],
+        "exit_code": 0,
+        "seconds": 0.21,
+        "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      {
+        "name": "mypy",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/mypy",
+          "apps/ingest/src"
+        ],
+        "exit_code": 0,
+        "seconds": 0.6,
+        "log_sha256": "8b88f6d12bd312c1b024b66d07a7f7619a68482ac4d64e475759b1823199faa5"
+      },
+      {
+        "name": "pytest",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/python",
+          "-m",
+          "pytest",
+          "apps/ingest",
+          "internal/verification"
+        ],
+        "exit_code": 0,
+        "seconds": 4.01,
+        "log_sha256": "6fb8a03bb3b5ba2e47cef74066e1e4d64455eaa3796abf4ce96291545ef9ec80"
+      },
+      {
+        "name": "pilot-packets",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/python",
+          "examples/assessments/revisable-pilot/receive-packets.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.03,
+        "log_sha256": "f05d2cfa0fff47d980bb0676efbca8c9de319c5ed1cc449b3bd0952ece76298b"
+      },
+      {
+        "name": "pilot-results",
+        "command": [
+          "$WRIT_ROOT/.venv/bin/python",
+          "examples/assessments/revisable-pilot/receive-pilot.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.05,
+        "log_sha256": "5f6a65d70fd0fe03487b08fd253a5241dc264e22039f25b3157aea8cacf0ad27"
+      }
+    ],
+    "disposition": "Retained failures: generator formatting; enabling optional integrations inside default 5-second test runner caused timeout; formatting edit during that run caused dirty-tree and checksum rejection. Repaired format, committed clean source, and reran with dedicated longer-timeout no-skip integration entrypoints. No failing result counted as passing."
+  },
+  "real_integration_counts": {
+    "decision_case": 16,
+    "shared_analysis": 2,
+    "certificate_transport": 12,
+    "decision_episode": 2,
+    "skips": 0
+  },
+  "python_tests": 75,
+  "episode_unit_tests": 10,
+  "preservation": {
+    "c09922f": {
+      "paths": [
+        "examples/assessments",
+        "packages/assessment-view",
+        "packages/provenance",
+        "packages/decision-case",
+        "corpora",
+        "docs/history",
+        ".github/workflows/ci.yml",
+        "docs/current/strategic-security-moonshot.md"
+      ],
+      "changed_files": []
+    },
+    "b1f950e": {
+      "paths": [
+        "examples/decision-cases/decision-episode/episode.json",
+        "examples/decision-cases/decision-episode/authority-basis.txt",
+        "examples/decision-cases/decision-episode/implementation-record.txt",
+        "examples/decision-cases/decision-episode/observation-record.txt",
+        "docs/experiments/decision-episode-build-report.md"
+      ],
+      "changed_files": []
+    }
+  },
+  "external_engine": {
+    "commit": "e5f77dfcf929708951f4673b3f394461ef09c752",
+    "python": "CPython 3.13.15",
+    "scipy": "1.17.0",
+    "source_modified": false
+  },
+  "limits": [
+    "Source-bound execution record, not a formal proof or actor authentication.",
+    "Unpinned structural opening does not prove historical identity.",
+    "Supplied pin authority is external.",
+    "Default unit runner excludes optional integration backends; dedicated integration gates ran all backends without skips.",
+    "No Vela acceptance, causal conclusion or automatic model change."
+  ]
+}

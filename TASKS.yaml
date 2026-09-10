@@ -140,6 +140,14 @@ tasks:
       Episode 1/1 pass; all real integrations ran with zero skips against the exact pinned Decision
       Lab tree. Hosted CI passed all three jobs. ADR 0029 remains Proposed pending the human
       architecture gate, and no later capability is authorized by this result.
+    repair_review: docs/experiments/decision-episode-repair-review.md
+    repair_evidence: docs/experiments/decision-episode-repair-evidence.json
+    repair_note: >-
+      Integrated current main c09922f without rewriting evidence. Recipient replay now requires an
+      independently retained episode hash, real UTC calendar dates and fully checked source, target
+      and transport statuses. Clean source c57ffb9 passed all 18 combined local gates, including real
+      Decision Episode 2/2 and inherited 16/2/12 integrations with zero skips. Keep the useful bounded
+      profile after repair; ADR 0029 remains Proposed and PR 53 remains unmerged for human disposition.
     scope:
       - Reuse the exact accepted decision-case, shared-analysis, revision, applicability, execution, replay, and PR 51 transition artifacts without duplicating their semantics.
       - Bind one exact checked revision history to a separately supplied authority basis and explicit human or institutional decision.

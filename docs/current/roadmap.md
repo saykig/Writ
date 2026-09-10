@@ -88,6 +88,11 @@ modelling programme or evidence of strategic advantage.
    justify its integration complexity. That judgment is not a queue to implement Bellman PR #7 or
    later modules.
 
+The [PR #53 repair review](../experiments/decision-episode-repair-review.md) recommends retaining
+that bounded episode after identity, calendar and fresh-warrant repairs. Combined local acceptance
+passed; current hosted status belongs to the final PR head. This recommendation does not accept
+ADR 0029 or reopen the completed assessment experiment.
+
 **Exit gate from Now:** the decision-episode build proves one exact decision-to-reconsideration
 story, compares the envelope with loose files, passes producer-disabled recipient replay, and stops
 for an explicit human decision on Proposed ADR 0029. Green checks do not accept the architecture.

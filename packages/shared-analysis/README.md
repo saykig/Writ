@@ -68,8 +68,13 @@ by preserved exact hashes.
 ```bash
 bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
   --episode /path/to/episode.json \
+  --expected-episode-sha256 sha256:<independently-retained-hex-digest> \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```
+
+Replay requires an independently retained episode identity and rejects any failed fresh warrant.
+Structural opening alone establishes neither historical identity nor mathematical validity.
+See [the reviewed recipient boundary](../../docs/current/decision-episodes.md#reviewed-recipient-boundary).
 
 This semantic remains Proposed until the human architecture gate.
