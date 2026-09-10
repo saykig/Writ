@@ -57,10 +57,12 @@ These components earn exact binding, replay, and revision within their accepted 
 not earn empirical validity, causal attribution, forecasting accuracy, a strategic world model,
 robust security policy, human benefit, or permission to act.
 
-The completed [revisable-assessment pilot](../../examples/assessments/revisable-pilot/BRIEF.md) is one
-enabling test. It preserved an evolving public-information assessment across Writ and Vela and
-tested fresh machine continuation. It found no continuation advantage over competent prose and did
-not test general human usability.
+The completed revisable-assessment pilot is one enabling test. It preserved an evolving
+public-information assessment across Writ and Vela and tested fresh machine continuation. It found
+no continuation advantage over competent prose and did not test general human usability. Its
+disposable UI and evidence tree are now recoverable from
+`snapshot/revisable-assessment-pilot-v1`, indexed in the
+[historical snapshot ledger](../history/snapshots.md), rather than tracked on current `main`.
 
 ## Current enabling work
 

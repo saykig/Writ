@@ -1,0 +1,56 @@
+{
+  "format": "writ.repository-navigation-audit.v1",
+  "observed_on": "2026-09-10",
+  "baseline_commit": "28e0cd4f2208cc0ba5ca2e34ad474a2784960709",
+  "root_inventory": [
+    { "path": ".agents", "tracked_files_at_baseline": 3, "decision": "keep" },
+    { "path": ".github", "tracked_files_at_baseline": 1, "decision": "keep" },
+    { "path": "adr", "tracked_files_at_baseline": 29, "decision": "keep" },
+    { "path": "apps", "tracked_files_at_baseline": 14, "decision": "keep" },
+    { "path": "corpora", "tracked_files_at_baseline": 175, "decision": "keep" },
+    { "path": "docs", "tracked_files_at_baseline": 77, "decision": "simplify_navigation" },
+    { "path": "examples", "tracked_files_at_baseline": 123, "decision": "keep_at_root" },
+    { "path": "internal", "tracked_files_at_baseline": 64, "decision": "keep" },
+    { "path": "packages", "tracked_files_at_baseline": 182, "decision": "keep" },
+    { "path": "protocols", "tracked_files_at_baseline": 2, "decision": "keep" },
+    { "path": "schemas", "tracked_files_at_baseline": 37, "decision": "keep" }
+  ],
+  "moves": [],
+  "retirements": [
+    {
+      "id": "revisable-assessment-pilot-v1",
+      "decision": "retired_from_current_main",
+      "reason": "The completed HTML/CLI was explicitly disposable, had no package dependents, and supplied no native semantics beyond the retained shared-analysis, decision-case, and provenance packages.",
+      "snapshot": {
+        "tag": "snapshot/revisable-assessment-pilot-v1",
+        "tag_kind": "lightweight",
+        "target_commit": "c09922f8a4689284de42b1b1bcc22098fa19c117",
+        "remote": "https://github.com/saykig/Writ.git",
+        "remote_ref": "refs/tags/snapshot/revisable-assessment-pilot-v1",
+        "remote_ref_object": "c09922f8a4689284de42b1b1bcc22098fa19c117",
+        "verified_on": "2026-09-10"
+      },
+      "historical_paths": [
+        {
+          "path": "examples/assessments/revisable-pilot",
+          "tracked_files": 60,
+          "git_tree": "ffbdb320b45485bccb520badf5e22d31f81fb26c",
+          "relocation_independent_sha256": "de021abf955867ac0de06cfd8858a366a8ce07aa1a9fe455cc1e54669e70da07"
+        },
+        {
+          "path": "packages/assessment-view",
+          "tracked_files": 10,
+          "git_tree": "4d2738503b1e887fa4f5da810113a414bb97d60a",
+          "relocation_independent_sha256": "9df26ff833a8d50f5dbcb66ccc68f7f0ae3954b89ea448038042b734ec530309"
+        }
+      ],
+      "recovery_command": "git checkout snapshot/revisable-assessment-pilot-v1 -- examples/assessments/revisable-pilot packages/assessment-view",
+      "retained_native_paths": [
+        "packages/shared-analysis",
+        "packages/decision-case",
+        "packages/provenance"
+      ],
+      "historical_coordinates_rewritten": false
+    }
+  ]
+}

@@ -3,22 +3,47 @@
 This document explains the active tree and authority boundaries. It is a retention and ownership
 map, not a universal knowledge model.
 
+## Finding your way around
+
+For a first visit:
+
+1. read the root `README.md` for one runnable path;
+2. use `docs/README.md` to find current guidance and historical evidence;
+3. use `examples/README.md` for executable examples;
+4. go to `packages/` or `apps/` only when changing implementation; and
+5. treat `schemas/`, `protocols/`, `adr/`, and `corpora/` as governed authorities rather than
+   miscellaneous support folders.
+
+The active root is deliberately short, but not flat. Its eleven tracked directories separate public
+contracts and evidence from implementations, internal checks, examples, documentation, repository
+automation, and agent guidance. The [September 2026 navigation audit](../migrations/2026-09-repository-navigation-audit.md)
+records why each root remains and why moving `examples/` under `docs/` was rejected.
+
 ## Active areas and authority boundaries
 
-| Path | Owns | Does not own |
-| --- | --- | --- |
-| `corpora/` | reviewed native records, source passages, provenance, reviews, and corpus manifests | downstream questions, mathematical models, or recommendations |
-| `examples/` | runnable illustrative material, including bounded portable decision fixtures and immutable case/execution artifacts | source truth, normative contracts, empirical premise validity, or authority to act |
-| `schemas/` | active JSON Schema interchange contracts, including analysis-layer decision-case contracts | mathematical theorem authority |
-| `protocols/` | Writ language protocol definitions | corpus or Bellman mathematical authority |
-| `packages/domain/` | native record/link/judgment contracts | derived mathematical semantics |
-| `packages/provenance/` | portable mechanical provenance primitives | domain truth or mathematical proof |
-| `packages/decision-case/` | validation, identity, revision, runner and fresh-checking consumer boundary for the currently supported decision profile | general optimization, empirical modelling, or a solver registry |
-| `packages/shared-analysis/` | scoped import, disagreement inspection, explicit revision impact, applicability reassessment, selected recomputation, portable replay, and the accepted bounded decision-episode composition | source truth, automatic source selection, authenticated review, outcome evaluation, causal inference, workflow management, or a second mathematical engine |
-| `packages/language/` and data/export packages | deterministic authoring/lowering/export tooling | reviewed political data |
-| `internal/verification/` | Writ verification gates, grounding checks, fixtures, and integration/schema suites | source or mathematical authority |
-| `internal/tooling/` | repository maintenance, source-registry, acquisition, migration, and reproduction commands | current product semantics or evidence acceptance |
-| `docs/current/` | governing product guidance, roadmap, and current technical documentation | historical migration evidence |
+| Path         | Classification      | Owns                                                                                                                | Does not own                                                                       |
+| ------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `.agents/`   | keep                | current reusable repository skills                                                                                  | one-off reviewer roles or product authority                                        |
+| `.github/`   | keep                | hosted repository checks                                                                                            | Writ semantics                                                                     |
+| `adr/`       | keep                | architecture decisions and their historical status                                                                  | implementation or release publication                                              |
+| `apps/`      | keep                | language-specific application boundaries; currently the Python ingestion package                                    | schema, corpus, or review authority                                                |
+| `corpora/`   | keep                | reviewed native records, source passages, provenance, reviews, and corpus manifests                                 | downstream questions, mathematical models, or recommendations                      |
+| `docs/`      | simplify navigation | current guidance, bounded experiment reports, migrations, verification notes, and release/recovery history          | runtime contracts or executable fixtures                                           |
+| `examples/`  | keep at root        | runnable illustrative material, including bounded portable decision fixtures and immutable case/execution artifacts | source truth, normative contracts, empirical premise validity, or authority to act |
+| `internal/`  | keep                | developer-only verification, tooling, fixtures, and operational configuration                                       | public API or semantic authority                                                   |
+| `packages/`  | keep                | TypeScript libraries, commands, tests, and package-owned generated copies                                           | reviewed political data                                                            |
+| `protocols/` | keep                | Writ language protocol definitions                                                                                  | corpus or Bellman mathematical authority                                           |
+| `schemas/`   | keep                | active JSON Schema interchange contracts, including analysis-layer contracts                                        | mathematical theorem authority                                                     |
+
+Within `packages/`, authority stays narrow:
+
+| Path                                          | Owns                                                                                                                                                                                         | Does not own                                                                                                                                               |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/domain/`                            | native record/link/judgment contracts                                                                                                                                                        | derived mathematical semantics                                                                                                                             |
+| `packages/provenance/`                        | portable mechanical provenance primitives                                                                                                                                                    | domain truth or mathematical proof                                                                                                                         |
+| `packages/decision-case/`                     | validation, identity, revision, runner and fresh-checking consumer boundary for the currently supported decision profile                                                                     | general optimization, empirical modelling, or a solver registry                                                                                            |
+| `packages/shared-analysis/`                   | scoped import, disagreement inspection, explicit revision impact, applicability reassessment, selected recomputation, portable replay, and the accepted bounded decision-episode composition | source truth, automatic source selection, authenticated review, outcome evaluation, causal inference, workflow management, or a second mathematical engine |
+| `packages/language/` and data/export packages | deterministic authoring, lowering, and export tooling                                                                                                                                        | reviewed political data                                                                                                                                    |
 
 `adr/` preserves architecture decisions. A later decision supersedes earlier active wiring without
 rewriting historical ADR text.

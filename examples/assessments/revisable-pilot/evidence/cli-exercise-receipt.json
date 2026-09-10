@@ -1,7 +1,0 @@
-{
-  "status": "checked",
-  "scope": "exact declared continuation and preserved history; no empirical or mathematical interpretation checked",
-  "base_sha256": "sha256:189a81ffa41b742abce4436c0d6e76a457292568ece1be0ff5de05f73a7d82ae",
-  "request_sha256": "sha256:edc9ffde7e458c5b73d4adc5b15c4dad5a8a1e6de081aae1d46e4bfd5ecccfe6",
-  "result_sha256": "sha256:29c9b4d5490420206eae635fa28bd526f714e9a314714223f70eb6bcf18a2036"
-}

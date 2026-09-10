@@ -33,15 +33,18 @@ The sections below use three meanings deliberately:
 
 ## One completed enabling demonstration
 
-The [completion report](../../examples/assessments/revisable-pilot/COMPLETION_REPORT.md)
-retains real Writ–Vela receiving, two source updates, six fresh AI contexts and actual
+The completed revisable-assessment pilot, preserved through the
+[snapshot ledger](../history/snapshots.md), retains real Writ–Vela receiving, two source updates,
+six fresh AI contexts and actual
 browser-exported requests with independent receiving. Both structured and competent
 prose conditions scored 71/72; no continuation advantage or human benefit is established.
 The user narrowed the HTML to a disposable demonstration, not a maintained website.
 The initial failed export, code repair, copied-text observation and later actual file
 receiving remain distinct. General UI usability is untested and outside that revised
-scope. Required local, real native integration and hosted checks passed. No further UI
-engineering or experiment is active; human comparison remains optional future research.
+scope. Required local, real native integration and hosted checks passed. Its disposable UI/package
+and live evidence tree have since been retired from `main` to the exact
+`snapshot/revisable-assessment-pilot-v1` recovery point. No further UI engineering or experiment is
+active; human comparison remains optional future research.
 This result earns bounded provenance and handoff capability, not strategic-security
 validity or a new mathematical guarantee.
 
@@ -49,7 +52,7 @@ validity or a new mathematical guarantee.
 
 > **Make consequential decision-making mathematically inspectable, cumulative, and correctable.**
 
-Writ should eventually let a recipient reconstruct not only *what* was concluded, but the chain that
+Writ should eventually let a recipient reconstruct not only _what_ was concluded, but the chain that
 made the conclusion usable and the conditions under which it must be reconsidered.
 
 ![Writ North Star](./writ-north-star.png)

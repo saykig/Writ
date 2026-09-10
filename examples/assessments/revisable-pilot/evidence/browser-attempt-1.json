@@ -1,8 +1,0 @@
-{
-  "artifact_sha256": "2daafc04faf962fb1e3423e0b95e01d413cdc208960a903c2f07a2d0dc72684c",
-  "source_checkpoint": "6200eb1",
-  "user_report": "Selected Withdrawn, entered a synthetic test rationale, clicked Export continuation request; nothing happened and no continuation-request.json was found in browser Downloads.",
-  "syntax_check": "Failed: generated script contains a literal newline inside a single-quoted string at line 12. Entire script fails to parse.",
-  "browser_policy": "Browser Use rejected file:///tmp/writ-pilot-ui/index.html and prohibits workaround, indirect execution, raw CDP and alternate browser surfaces.",
-  "standing": "Failed manual export; no UI pass. Preserve original artifact; corrected output must have a new name."
-}

@@ -37,10 +37,6 @@ corpora/legal-policy/us/nist/
 corpora/legal-policy/us/office-of-management-and-budget/
 corpora/legal-policy/us/white-house/
 
-# Signed third-party manifests and frozen pilot packets retain exact bytes.
-examples/assessments/revisable-pilot/evidence/
-examples/assessments/revisable-pilot/packets/
-
 # External run inputs and raw output envelopes are frozen byte evidence.
 examples/external-simulation/simpy-resource/*.json
 examples/decision-cases/linked-episodes/*.json
