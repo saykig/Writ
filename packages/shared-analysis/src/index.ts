@@ -11,3 +11,7 @@ export * from "./types.js";
 export * from "./external-simulation.js";
 
 export * from "./linked-episodes.js";
+
+export * from "./simulation-decision.js";
+
+export * from "./simulation-decision-revision.js";

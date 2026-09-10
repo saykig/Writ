@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/simulation-decision-revision-v0.1.schema.json",
+  "title": "Writ bounded simulation decision revision v0.1",
+  "description": "One immutable comparison-to-comparison and episode-to-episode revision under a declared base-service assumption change.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_kind",
+    "parent_comparison",
+    "successor_comparison",
+    "parent_episode",
+    "successor_episode",
+    "parent_reference",
+    "successor_reference",
+    "assumption_revision",
+    "option_input_changes",
+    "dispositions",
+    "relationship",
+    "evidence_kind",
+    "native_model_effect",
+    "supersession"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "record_kind": { "const": "simulation_decision_revision" },
+    "parent_comparison": { "$ref": "#/$defs/encodedBytes" },
+    "successor_comparison": { "$ref": "#/$defs/encodedBytes" },
+    "parent_episode": { "$ref": "#/$defs/encodedBytes" },
+    "successor_episode": { "$ref": "#/$defs/encodedBytes" },
+    "parent_reference": { "$ref": "#/$defs/episodeReference" },
+    "successor_reference": { "$ref": "#/$defs/episodeReference" },
+    "assumption_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumption_id",
+        "changed_field",
+        "prior_value",
+        "successor_value",
+        "unit",
+        "reason",
+        "declared_by",
+        "declared_at",
+        "declared_change_scope"
+      ],
+      "properties": {
+        "assumption_id": { "$ref": "#/$defs/nonEmptyString" },
+        "changed_field": { "const": "base_service_minutes" },
+        "prior_value": { "$ref": "#/$defs/positiveInteger" },
+        "successor_value": { "$ref": "#/$defs/positiveInteger" },
+        "unit": { "type": "string", "minLength": 1 },
+        "reason": { "$ref": "#/$defs/nonEmptyString" },
+        "declared_by": { "$ref": "#/$defs/actor" },
+        "declared_at": { "$ref": "#/$defs/eventTime" },
+        "declared_change_scope": {
+          "const": "base_service_minutes_and_all_derived_option_inputs_only"
+        }
+      }
+    },
+    "option_input_changes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/optionInputChange" }
+    },
+    "dispositions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent", "successor"],
+      "properties": {
+        "parent": { "$ref": "#/$defs/disposition" },
+        "successor": { "$ref": "#/$defs/disposition" }
+      }
+    },
+    "relationship": { "const": "explicit_reconsideration_and_rerun" },
+    "evidence_kind": { "const": "model_generated_with_supplied_preferences" },
+    "native_model_effect": { "const": "unchanged" },
+    "supersession": { "const": "none_automatic" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "positiveInteger": { "type": "string", "pattern": "^[1-9][0-9]*$" },
+    "eventTime": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "encodedBytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "content", "sha256"],
+      "properties": {
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": { "enum": ["human", "institution"] },
+        "actor_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "episodeReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["episode_sha256", "decision_id", "observation_id", "reconsideration_id"],
+      "properties": {
+        "episode_sha256": { "$ref": "#/$defs/sha256" },
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "observation_id": { "$ref": "#/$defs/nonEmptyString" },
+        "reconsideration_id": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "optionInputChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "option_id",
+        "prior_run_sha256",
+        "successor_run_sha256",
+        "prior_input_sha256",
+        "successor_input_sha256",
+        "prior_service_minutes",
+        "successor_service_minutes"
+      ],
+      "properties": {
+        "option_id": { "$ref": "#/$defs/nonEmptyString" },
+        "prior_run_sha256": { "$ref": "#/$defs/sha256" },
+        "successor_run_sha256": { "$ref": "#/$defs/sha256" },
+        "prior_input_sha256": { "$ref": "#/$defs/sha256" },
+        "successor_input_sha256": { "$ref": "#/$defs/sha256" },
+        "prior_service_minutes": { "$ref": "#/$defs/positiveInteger" },
+        "successor_service_minutes": { "$ref": "#/$defs/positiveInteger" }
+      }
+    },
+    "disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison_sha256",
+        "episode_sha256",
+        "decision_id",
+        "selected_action",
+        "modeled_option_id",
+        "status",
+        "authority_status"
+      ],
+      "properties": {
+        "comparison_sha256": { "$ref": "#/$defs/sha256" },
+        "episode_sha256": { "$ref": "#/$defs/sha256" },
+        "decision_id": { "$ref": "#/$defs/nonEmptyString" },
+        "selected_action": { "$ref": "#/$defs/nonEmptyString" },
+        "modeled_option_id": {
+          "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }]
+        },
+        "status": {
+          "enum": [
+            "selected_recommended_modeled_option",
+            "selected_other_modeled_option",
+            "deferred_or_outside_modeled_menu"
+          ]
+        },
+        "authority_status": { "const": "supplied_not_inferred" }
+      }
+    }
+  }
+}

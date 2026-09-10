@@ -13,11 +13,13 @@
     "test:episode-integration": "WRIT_REQUIRE_DECISION_EPISODE_INTEGRATION=1 bun test --timeout 60000 test/decision-episode.integration.test.ts",
     "lint": "eslint .",
     "format": "prettier --check .",
-    "test:linked-integration": "WRIT_REQUIRE_LINKED_EPISODES_INTEGRATION=1 bun test --timeout 60000 test/linked-episodes.integration.test.ts"
+    "test:linked-integration": "WRIT_REQUIRE_LINKED_EPISODES_INTEGRATION=1 bun test --timeout 60000 test/linked-episodes.integration.test.ts",
+    "test:simulation-decision-integration": "WRIT_REQUIRE_SIMULATION_DECISION_INTEGRATION=1 bun test --timeout 60000 test/simulation-decision.integration.test.ts"
   },
   "bin": {
     "writ-shared-analysis": "./bin/writ-shared-analysis.ts",
-    "writ-decision-episode": "./bin/writ-decision-episode.ts"
+    "writ-decision-episode": "./bin/writ-decision-episode.ts",
+    "writ-simulation-decision": "./bin/writ-simulation-decision.ts"
   },
   "exports": {
     ".": "./src/index.ts"
