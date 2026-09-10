@@ -142,7 +142,7 @@
       "target_commit_date": "2026-08-29T04:12:12-04:00",
       "tree_sha": "ff7717b60322db7c48590b910e517a457cb35abf",
       "release_note_path": "docs/history/releases/v0.0.4.md",
-      "release_note_sha256": "4f3805bc930537f5bd8f2bb6d93d0ccab6ed92b74be764d4f0b5760d2fed11d1",
+      "release_note_sha256": "57715015fafe3ef56698930d70ec6c4cea83995482ac91601e75bb2e5f8b35a0",
       "important_adr_ids": [
         "0021",
         "0022",
