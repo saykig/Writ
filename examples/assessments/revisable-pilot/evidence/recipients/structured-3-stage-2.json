@@ -1,0 +1,78 @@
+{
+  "stage": 2,
+  "current_assessment": "The current source-bound interpretation is a corrected measurement anomaly: S2 reports flight times consistent with light speed from four named experiments and attributes the original OPERA measurement to a faulty fibre timing element. This supports H2 as the reported explanation and displaces H1 as the explanation of the original anomaly. S0 remains an accurate historical record of the initial report. The packet does not quantify the two timing effects described in S1.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Displaced as the current explanation of the original anomaly",
+      "rationale": "S2 reports later measurements consistent with light speed and attributes the original measurement to a timing fault. The original anomaly therefore no longer supports H1 under the supplied correction. This is not a universal proof excluding every possible superluminal propagation claim."
+    },
+    {
+      "id": "H2",
+      "status": "Supported as the source-reported explanation",
+      "rationale": "S2 explicitly attributes the original OPERA measurement to a faulty fibre timing element. This advances H2 beyond the possible mechanisms in S1, while remaining a publisher's reported attribution rather than an independently reproduced causal analysis."
+    },
+    {
+      "id": "H3",
+      "status": "Not established as the explanation; possible contributions unresolved",
+      "rationale": "S2 supplies a timing-fault explanation rather than a statistical or analysis explanation. It does not expressly exclude every statistical, pulse-profile or analysis contribution, and the explanation menu was never established as mutually exclusive."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "Remains withdrawn under U1 and cannot support present reasoning. S2's reported timing fault also contradicts its exclusion of unrecognized timing-chain faults in this case.",
+      "historical_standing": "Preserve the provisional assumption, its stronger-than-S0 character, the challenge to it and its stage-1 withdrawal; do not retroactively erase it."
+    },
+    "D1": {
+      "current_use": "Its warning against equating unsuccessful checks with exclusion of unknown faults is reinforced by S2. There is no basis to restore the disputed premise.",
+      "historical_standing": "Preserve Beta's AI-authored objection as an earlier analytic disagreement, not a source statement or a prior identification of the specific fibre fault."
+    }
+  },
+  "impacts": [
+    {
+      "id": "C2",
+      "dependency_reason": "Its operative premise A1 was withdrawn in U1, and S2 now reports the type of fault it excluded. C2 remains historical conditional reasoning with no current applicability to excluding H2."
+    },
+    {
+      "id": "C1",
+      "dependency_reason": "Its original S0-based judgment that an anomaly merited scrutiny remains historically appropriate. Current uses must incorporate S2's corrected interpretation rather than imply an unexplained propagation anomaly."
+    },
+    {
+      "id": "H1",
+      "dependency_reason": "Any current support drawn from the original measurement must be reassessed against S2's correction."
+    },
+    {
+      "id": "H2",
+      "dependency_reason": "S2 changes its standing from a possible explanation to the explicitly reported attribution."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "S2 answers the broad explanatory question at the level of source reporting, while detailed causal quantification remains absent."
+    },
+    {
+      "id": "Q2",
+      "dependency_reason": "Neither S2 nor U2 supplies the separate magnitudes or net numerical contribution of the two effects; this question remains unresolved."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0", "S1", "S2", "U1", "U2"],
+      "reason": "Preserve the initial report, possible faults, premise withdrawal and later correction with their provenance and sequence."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "reason": "Retain the contested premise and conditional exclusion, including why their current use ceased."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "C1", "Q1", "Q2", "B0"],
+      "reason": "Retain the evolving assessment and its boundaries without rewriting earlier uncertainty as foreknowledge."
+    }
+  ],
+  "unresolved": [
+    "The separate magnitudes and net numerical contribution of the two timing effects.",
+    "The oscillator's eventual assessed role and any residual analysis contributions.",
+    "The detailed measurements, uncertainties and causal checks underlying S2's report."
+  ],
+  "source_ids": ["S0", "S1", "S2"],
+  "limits": "This is an authored proposal, not accepted truth or a mathematical result. Multiple experiments are reported through one publisher page; their underlying evidence and independence were not checked here. Light-speed consistency does not establish exact equality. Hashes bind bytes, not truth. No quantitative decomposition, posterior probability, independently verified causal result or authority to act is supplied."
+}

@@ -1,0 +1,76 @@
+{
+  "stage": 0,
+  "current_assessment": "S0 supports investigating a reported apparent speed excess of about 20 ppm from over 15,000 events. Reported checks found no instrumental explanation, but this does not establish that none exists or confirm genuinely superluminal propagation. Independent measurements remain sought. This is an authored continuation proposal.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Unresolved; not established",
+      "rationale": "The reported observation motivates this hypothesis, but S0 explicitly presents an apparent anomaly awaiting confirmation or refutation."
+    },
+    {
+      "id": "H2",
+      "status": "Unresolved; remains in the working explanation menu",
+      "rationale": "Finding no instrumental explanation is not equivalent to excluding unrecognized timing-chain faults. Exclusion is available only within Alpha's contested A1 assumption."
+    },
+    {
+      "id": "H3",
+      "status": "Unresolved; not excluded",
+      "rationale": "S0 does not supply evidence that separates or eliminates statistical, pulse-profile or analysis explanations. Event count alone does not settle their adequacy."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "Retain as Alpha's explicit provisional premise, not as an established consequence of S0. Do not use it to exclude H2 unconditionally.",
+      "historical_standing": "Preserve its initial formulation and dependence on S0 as an AI-authored analyst assumption stronger than the source."
+    },
+    "D1": {
+      "current_use": "Retain the contest over A1. Its distinction between not finding a fault and excluding unknown faults limits what can be inferred from S0.",
+      "historical_standing": "Preserve Beta's disagreement and its links to A1 and S0; it is neither a quotation nor a human endorsement."
+    }
+  },
+  "impacts": [
+    {
+      "id": "A1",
+      "dependency_reason": "Depends on S0, whose reported checks do not establish calibration sufficiency; its evidential standing must remain provisional."
+    },
+    {
+      "id": "C2",
+      "dependency_reason": "Depends on A1, D1 and H2; retain only as a contested conditional exclusion, not the current unconditional assessment."
+    },
+    {
+      "id": "C1",
+      "dependency_reason": "Depends on S0 and remains supported at its stated scope: an anomaly merits scrutiny without establishing H1."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "Depends on H1, H2 and H3, all unresolved; retain the question rather than treating the menu as settled or exhaustive."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0"],
+      "reason": "Preserve the reported observation, source attribution, date and capture provenance, including that the capture is a dated section of a current page."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3"],
+      "reason": "Preserve the original candidate explanations and the warning that they are neither exhaustive nor proven mutually exclusive."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "reason": "Preserve the assumption, its contest and the resulting conditional interpretation so their distinct standing remains inspectable."
+    },
+    {
+      "identifiers": ["C1", "Q1", "B0"],
+      "reason": "Preserve the bounded initial interpretation, open question and limits governing this assessment."
+    }
+  ],
+  "unresolved": [
+    "Whether independent measurements reproduce the reported anomaly.",
+    "Whether an unrecognized timing-chain fault or statistical, pulse-profile or analysis effect accounts for it.",
+    "Whether genuine superluminal propagation is supported after further scrutiny.",
+    "Whether explanations outside the supplied menu or combinations of its hypotheses are needed.",
+    "What the reported checks actually tested and what faults they could exclude."
+  ],
+  "source_ids": ["S0"],
+  "limits": "The packet provides a selected publisher account, not raw measurement data or an independent scientific check. Its hashes and byte span describe provenance; no byte verification was performed here, and hashes would not establish truth. Reported instrumental checks do not demonstrate exhaustive fault exclusion. No numerical probabilities, likelihoods, causal identification, evidential independence, native mathematical guarantee or authority to act are supplied. A1 and D1 are synthetic AI-authored positions."
+}

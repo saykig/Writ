@@ -1,0 +1,72 @@
+{
+  "stage": 2,
+  "current_assessment": "S2 reports light-speed-consistent flight times from Borexino, ICARUS, LVD and OPERA and attributes the original OPERA measurement to a faulty fibre timing element. H2 is therefore the source-supported current explanation of the original anomaly. H1 is no longer supported as its explanation, and H3 is not established as a contributor. This corrects the current interpretation without changing S0's historical report. This is an authored continuation proposal.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Disfavoured as an explanation of the original anomaly",
+      "rationale": "S2 reports measurements consistent with light speed and attributes the original result to faulty timing. The supplied evidence no longer supports interpreting that result as genuine superluminal propagation. This is not a universal proof excluding every possible propagation effect."
+    },
+    {
+      "id": "H2",
+      "status": "Source-supported current explanation",
+      "rationale": "S2 expressly attributes the original OPERA measurement to a faulty fibre timing element, moving H2 beyond S1's possible-mechanism status. The attribution remains CERN's reported conclusion; the packet does not provide underlying data for an independent causal check."
+    },
+    {
+      "id": "H3",
+      "status": "Not established; residual contribution unresolved",
+      "rationale": "S2 supplies a timing-fault explanation, not evidence establishing statistical, pulse-profile or analysis effects. It does not expressly exclude every such contribution, and the menu was never established as mutually exclusive."
+    }
+  ],
+  "assumptions_and_disagreements": [
+    {
+      "id": "A1",
+      "current_use": "Remains withdrawn. S2's reported timing-fault attribution further defeats its use to exclude unrecognized timing-chain faults.",
+      "historical_standing": "Preserve Alpha's original assumption, its dependence on S0 and its withdrawal under U1. Do not rewrite the original assumption as though Alpha had never held it."
+    },
+    {
+      "id": "D1",
+      "current_use": "Its objection to calibration sufficiency is supported by the subsequent source account. C2 cannot be restored by treating the earlier unsuccessful fault search as conclusive.",
+      "historical_standing": "Preserve Beta's original AI-authored disagreement. The objection did not itself establish a fault, identify the fibre mechanism or provide a causal measurement."
+    }
+  ],
+  "impacts": [
+    {
+      "ids": ["H1", "H2", "H3", "Q1"],
+      "dependency_reasons": "S2 changes the explanation assessment. Q1's question about what accounts for the anomaly is answered at the level of CERN's reported fibre-fault attribution; possible additional contributions remain unquantified."
+    },
+    {
+      "ids": ["A1", "D1", "C2"],
+      "dependency_reasons": "C2 depends on the withdrawn A1 and concerns excluding H2, now supported by S2. C2 remains inapplicable for current exclusion. The assumption and disagreement retain their histories with updated current standing."
+    },
+    {
+      "ids": ["C1"],
+      "dependency_reasons": "C1 remains a valid S0-grounded interpretation that the originally reported anomaly merited investigation. It should not be reused to imply a currently unexplained superluminal observation."
+    },
+    {
+      "ids": ["Q2"],
+      "dependency_reasons": "U2 explicitly preserves the absence of a numerical decomposition. S2's attribution does not supply the separate oscillator and fibre magnitudes or their net contribution."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0", "S1", "S2", "U1", "U2"],
+      "why": "Preserve the original report, possible timing effects, later attribution, assumption withdrawal and interpretation correction as distinct stages. S0 remains a record of what was reported at its date."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "why": "Retain the contested premise and conditional inference, including the dependency change that ended C2's current applicability."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "C1", "Q1", "Q2", "B0"],
+      "why": "Preserve earlier assessment states, investigative rationale, remaining questions and scope restrictions."
+    }
+  ],
+  "unresolved": [
+    "The separate and net magnitudes of the oscillator and fibre effects.",
+    "Whether additional statistical or analysis contributions existed.",
+    "The underlying measurement uncertainties, datasets and evidence supporting the reported attribution."
+  ],
+  "source_ids": ["S0", "S1", "S2"],
+  "limits": "Four experiments are reported through one publisher page; shared provenance is not independent evidence, and experimental independence cannot be established here. Light-speed consistency does not prove exact equality. Supplied hashes were not independently verified and bind bytes rather than truth. No numerical probabilities, independent causal verification, mathematical guarantee or authority to act is supplied."
+}

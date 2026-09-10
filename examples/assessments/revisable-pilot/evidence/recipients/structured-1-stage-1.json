@@ -1,0 +1,83 @@
+{
+  "stage": 1,
+  "current_assessment": "S1 introduces two possible timing effects with opposite flight-time directions and unquantified magnitudes. The anomaly remains unresolved, but timing-chain faults now have specific reported candidates. Under U1, Alpha withdraws A1 for current use, so C2 no longer supports excluding H2. S0 remains the historical account of the initial report. This is an authored continuation proposal.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Unresolved; not established",
+      "rationale": "S1 supplies possible measurement explanations that must be investigated before attributing the observation to genuine propagation. It neither confirms H1 nor conclusively refutes it."
+    },
+    {
+      "id": "H2",
+      "status": "Active explanation with specific reported candidates; not yet established",
+      "rationale": "The oscillator could overestimate flight time, while the fibre connector could underestimate it. These possible faults make H2 concretely investigable, and withdrawal of A1 removes Alpha's premise for exclusion. Their unknown magnitudes prevent concluding that either or their combination explains the anomaly."
+    },
+    {
+      "id": "H3",
+      "status": "Unresolved; not excluded",
+      "rationale": "The update addresses possible timing effects, not decisive tests of statistical, pulse-profile or analysis explanations. It does not establish that H2 and H3 are mutually exclusive."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "Withdrawn explicitly by Alpha in U1. It must no longer serve as a current premise excluding timing-chain faults.",
+      "historical_standing": "Preserve the original provisional assumption and its S0 dependency. Withdrawal changes its current applicability without erasing that Alpha previously used it."
+    },
+    "D1": {
+      "current_use": "Its objection to inferring exhaustive fault exclusion from unsuccessful searches remains relevant and receives concrete motivation from S1. The original dispute over using A1 no longer blocks withdrawal, because Alpha has withdrawn it.",
+      "historical_standing": "Preserve Beta's original contest as an AI-authored position. S1 does not turn it into a prior discovery of either fault or proof of H2."
+    }
+  },
+  "impacts": [
+    {
+      "id": "A1",
+      "dependency_reason": "U1 explicitly withdraws current use following S1's possible timing faults."
+    },
+    {
+      "id": "C2",
+      "dependency_reason": "Its exclusion of H2 depends on A1. With A1 withdrawn, C2 is historical and conditional only; any current assessment relying on that exclusion requires revision."
+    },
+    {
+      "id": "D1",
+      "dependency_reason": "The contested A1 is now withdrawn; update the disagreement's current standing while retaining its original content."
+    },
+    {
+      "id": "C1",
+      "dependency_reason": "Its S0-grounded claim that an anomaly merits scrutiny remains supported; current scrutiny must incorporate S1's possible measurement explanations."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "H2 has newly specified candidates, but no hypothesis is settled; reassess the explanation menu without closing the question."
+    },
+    {
+      "id": "Q2",
+      "dependency_reason": "S1 leaves separate magnitudes and net timing contribution unquantified; this becomes an explicit open dependency for evaluating H2."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0", "C1"],
+      "reason": "The original report and bounded interpretation remain historical evidence; S1 must not rewrite what was reported earlier."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "reason": "Preserve the withdrawn premise, original objection and conditional exclusion, together with their dependencies."
+    },
+    {
+      "identifiers": ["S1", "U1", "Q2"],
+      "reason": "Record the new possible effects, explicit withdrawal and remaining quantitative uncertainty."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "Q1", "B0"],
+      "reason": "Retain the candidate definitions, unresolved broader question and assessment boundaries."
+    }
+  ],
+  "unresolved": [
+    "Whether either possible timing effect is confirmed.",
+    "The separate magnitudes, uncertainties and net contribution of the oscillator and connector effects.",
+    "Whether those effects account for the observed apparent excess.",
+    "Whether further measurements support H1, H3, another explanation or a combination."
+  ],
+  "source_ids": ["S0", "S1"],
+  "limits": "S1 reports possibilities requiring tests, not a quantified or independently checked causal explanation. Opposite timing directions do not establish cancellation. Shared publisher-page provenance is not independent corroboration. Supplied hashes do not establish truth and were not verified here. No numerical probability update, mathematical guarantee or authority is supplied."
+}

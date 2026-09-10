@@ -1,0 +1,18 @@
+{
+  "name": "@writ/assessment-view",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+  },
+  "dependencies": {
+    "@writ/provenance": "workspace:*",
+    "@writ/shared-analysis": "workspace:*"
+  }
+}
