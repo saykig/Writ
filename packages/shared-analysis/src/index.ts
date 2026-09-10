@@ -9,3 +9,5 @@ export * from "./transport-types.js";
 export * from "./types.js";
 
 export * from "./external-simulation.js";
+
+export * from "./linked-episodes.js";

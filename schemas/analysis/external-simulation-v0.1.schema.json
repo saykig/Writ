@@ -36,12 +36,7 @@
     "package": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "version",
-        "sdist_sha256",
-        "source_manifest"
-      ],
+      "required": ["name", "version", "sdist_sha256", "source_manifest"],
       "properties": {
         "name": {
           "const": "simpy"
@@ -65,11 +60,7 @@
     "model": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "encoding",
-        "content",
-        "sha256"
-      ],
+      "required": ["encoding", "content", "sha256"],
       "properties": {
         "encoding": {
           "const": "base64"
@@ -91,11 +82,7 @@
     "inputs": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "encoding",
-        "content",
-        "sha256"
-      ],
+      "required": ["encoding", "content", "sha256"],
       "properties": {
         "encoding": {
           "const": "base64"
@@ -113,11 +100,7 @@
     "output": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "encoding",
-        "content",
-        "sha256"
-      ],
+      "required": ["encoding", "content", "sha256"],
       "properties": {
         "encoding": {
           "const": "base64"
@@ -141,12 +124,7 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "implementation",
-        "version",
-        "randomness",
-        "time_arithmetic"
-      ],
+      "required": ["implementation", "version", "randomness", "time_arithmetic"],
       "properties": {
         "implementation": {
           "const": "CPython"
@@ -171,11 +149,7 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "arrivals",
-        "service_minutes",
-        "unit"
-      ],
+      "required": ["arrivals", "service_minutes", "unit"],
       "properties": {
         "arrivals": {
           "type": "array",
@@ -198,10 +172,7 @@
     "output": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "unit",
-        "rows"
-      ],
+      "required": ["unit", "rows"],
       "properties": {
         "unit": {
           "const": "minute"
@@ -213,12 +184,7 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-              "car",
-              "arrival",
-              "start",
-              "finish"
-            ],
+            "required": ["car", "arrival", "start", "finish"],
             "properties": {
               "car": {
                 "type": "string",

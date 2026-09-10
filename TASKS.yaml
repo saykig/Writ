@@ -140,6 +140,13 @@ tasks:
       Episode 1/1 pass; all real integrations ran with zero skips against the exact pinned Decision
       Lab tree. Hosted CI passed all three jobs. ADR 0029 remains Proposed pending the human
       architecture gate, and no later capability is authorized by this result.
+    authorized_extension_review: docs/experiments/external-linked-episode-review.md
+    authorized_extension_note: >-
+      User authorized actual external production first and then linked episodes on the same PR.
+      First checkpoint b6f73f0 runs pinned SimPy and independently checks its finite integer trace.
+      The successor revises only service duration; both immutable episodes, parent event references,
+      complete external input diff and independent successor receiving are preserved. Simulation is
+      model-generated throughout and leaves native history unchanged. ADR 0029 remains Proposed.
     repair_review: docs/experiments/decision-episode-repair-review.md
     repair_evidence: docs/experiments/decision-episode-repair-evidence.json
     repair_note: >-

@@ -60,7 +60,7 @@ export interface ResourceInput {
   readonly service_minutes: string;
   readonly unit: "minute";
 }
-interface ResourceOutput {
+export interface ResourceOutput {
   readonly unit: "minute";
   readonly rows: readonly {
     readonly car: string;

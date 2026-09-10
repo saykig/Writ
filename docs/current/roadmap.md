@@ -93,6 +93,12 @@ that bounded episode after identity, calendar and fresh-warrant repairs. Combine
 passed; current hosted status belongs to the final PR head. This recommendation does not accept
 ADR 0029 or reopen the completed assessment experiment.
 
+The user then authorized two ordered additions on PR #53: an actual external producer and linked
+episodes. The [external/linked review](../experiments/external-linked-episode-review.md) records a
+pinned SimPy run and one service-assumption revision whose parent events actually resolve. The
+external trace is model-generated; native mathematical history is preserved and checked separately.
+This is a bounded engineering addition, not another empirical study or automatic model transfer.
+
 **Exit gate from Now:** the decision-episode build proves one exact decision-to-reconsideration
 story, compares the envelope with loose files, passes producer-disabled recipient replay, and stops
 for an explicit human decision on Proposed ADR 0029. Green checks do not accept the architecture.

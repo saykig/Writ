@@ -78,3 +78,10 @@ Structural opening alone establishes neither historical identity nor mathematica
 See [the reviewed recipient boundary](../../docs/current/decision-episodes.md#reviewed-recipient-boundary).
 
 This semantic remains Proposed until the human architecture gate.
+
+## Proposed external evidence and linked pair
+
+[External and linked episode operations](../../docs/current/external-and-linked-episodes.md) add
+one separately checked SimPy FIFO profile and one parent/successor service-duration revision.
+The receivers reuse native episode checks without promoting simulated output to a native certificate.
+Both operations remain Proposed; standalone episode semantics and frozen examples are unchanged.

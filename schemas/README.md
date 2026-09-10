@@ -166,3 +166,8 @@ schema tree.
 - Completed path map: `docs/migrations/repository-reset/04-schema-protocol-path-map.md`
 - Completed reference implementation retirement:
   `docs/migrations/repository-reset/08-reference-core-retirement.md`
+
+Proposed PR #53 additions: `analysis/external-simulation-v0.1.schema.json` governs the pinned
+model-generated SimPy trace envelope; `analysis/linked-episode-revision-v0.1.schema.json` governs one
+explicit service-duration revision between two immutable episodes. Neither promotes external output
+to a native mathematical certificate or empirical observation.

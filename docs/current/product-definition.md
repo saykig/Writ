@@ -69,6 +69,12 @@ trigger. A recipient can rederive every binding and freshly check the mathematic
 leaving the later acts as preserved declarations. ADR 0029 remains Proposed pending a human
 architecture gate; no decision, causal attribution, outcome evaluation or model update is inferred.
 
+The authorized extension on the same Proposed PR adds a separately labelled external SimPy result
+and one resolved parent/successor episode pair. It independently checks the external trace and the
+complete declared input revision, while preserving native mathematical history and checking it
+separately. It does not promote simulation output to empirical evidence or a native certificate.
+[Current bounded operations](external-and-linked-episodes.md) state the exact limits.
+
 ## Bellman and Writ
 
 Bellman develops and assembles the mathematical foundations for consequential decision-making:

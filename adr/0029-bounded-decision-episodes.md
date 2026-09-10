@@ -136,3 +136,18 @@ records actual package/source inspection, execution, reuse and unsupported claim
 Simulation receiving establishes only finite trace agreement under supplied assumptions. Attaching
 that evidence must not weaken the existing native transport profile or imply an empirical observation,
 Bellman certificate, causal effect or authority. Both additions remain Proposed pending disposition.
+
+## Authorized linked-pair build (Proposed)
+
+`linked-episode-revision-v0.1.schema.json` adds one immutable pair whose parent reference resolves an
+exact supplied observation and reconsideration, whose successor carries a newly checked external
+run, and whose declared service-time change is the complete external input diff. Each observation
+record embeds the labelled model-generated run itself. Native history remains unchanged and both
+native episodes receive fresh producer-disabled checking. The pair cannot infer empirical validity,
+causality, source acceptance, authority, model update or supersession.
+
+The [current operation](../docs/current/external-and-linked-episodes.md) and
+[build/review evidence](../docs/experiments/external-linked-episode-review.md) define this explicitly
+bounded extension. This supersedes the earlier repair review's scope recommendation prospectively,
+not its frozen evidence. Standalone episode behavior remains unchanged. Both new dispositions stay
+Proposed until the user's architecture decision.

@@ -43,3 +43,4 @@ examples/assessments/revisable-pilot/packets/
 
 # External run inputs and raw output envelopes are frozen byte evidence.
 examples/external-simulation/simpy-resource/*.json
+examples/decision-cases/linked-episodes/*.json

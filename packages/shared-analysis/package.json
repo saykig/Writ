@@ -12,7 +12,8 @@
     "test:transport-integration": "WRIT_REQUIRE_CERTIFICATE_TRANSPORT_INTEGRATION=1 bun test --timeout 30000 test/certificate-transport.integration.test.ts",
     "test:episode-integration": "WRIT_REQUIRE_DECISION_EPISODE_INTEGRATION=1 bun test --timeout 60000 test/decision-episode.integration.test.ts",
     "lint": "eslint .",
-    "format": "prettier --check ."
+    "format": "prettier --check .",
+    "test:linked-integration": "WRIT_REQUIRE_LINKED_EPISODES_INTEGRATION=1 bun test --timeout 60000 test/linked-episodes.integration.test.ts"
   },
   "bin": {
     "writ-shared-analysis": "./bin/writ-shared-analysis.ts",
