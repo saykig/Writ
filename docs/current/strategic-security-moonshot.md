@@ -1,57 +1,120 @@
 # Strategic-security moonshot
 
-**Standing:** user-adopted programme ambition, clarified 10 September 2026. This is
-living direction, not an earned capability, a mathematical theorem or authority to act.
+**Standing:** user-adopted programme ambition, clarified 10 September 2026. This is living
+direction—not an earned capability, a theorem, a forecast, or authority to act.
 
-Writ's long-term destination includes explicit, contestable models of the strategic
-world: actors, capabilities, objectives, beliefs, commitments, dependencies,
-interventions, evidence and uncertainty. Security is central to this ambition.
-Non-security cases are enabling testbeds, not a substitute destination.
+## The destination
 
-The aim is to make the reasoning behind consequential security decisions inspectable,
-challengeable, revisable and inheritable across people, AI systems and independently
-governed tools. There need not be one agreed world model. Competing explanations and
-strategic warrants should preserve their mechanisms, assumptions, evidence,
-alternatives, uncertainty and failure conditions.
+Writ's long-term purpose is to make reasoning about consequential security decisions easier to
+inspect, challenge, revise, and inherit.
 
-The long-term loop is:
+That requires explicit accounts of:
 
-**MAP → MODEL → SIMULATE → RED TEAM → human-authorized ACT → OBSERVE → REMAP**
+- the actors involved and the capabilities they may have;
+- their objectives, incentives, beliefs, and commitments;
+- the evidence for those beliefs, including source limits and dependencies;
+- the actions available and how actors may react to them;
+- several plausible worlds when the true situation is uncertain; and
+- the mechanisms, alternatives, and failure conditions behind each conclusion.
 
-Each transition needs its own warrant. Maps and models can be incomplete; simulation
-is conditional; red teaming can expose failures without proving completeness; an
-observation can challenge applicability without disproving old conditional mathematics.
-A new assessment should preserve the reason for an update instead of replacing history.
+There need not be one agreed world model. Disagreement is useful when the competing explanations,
+assumptions, evidence, and implications remain visible. The programme should help a successor see
+why an assessment changed instead of receiving only the latest conclusion.
 
-Strategic actors may observe a proposed intervention, adapt, deceive, disclose
-selectively or change behavior because they are being measured. Those are future
-modelling obligations, not effects a provenance edge or static probability can supply.
-The programme should compare explicitly justified plausible worlds and failure paths,
-identify assumptions doing the most work, and ask which obtainable information would
-most improve the decision. It should reduce consequential uncertainty where worthwhile
-and feasible, and support warranted decisions under uncertainty that remains.
+Strategic settings are unusually difficult because other actors can observe a proposed action,
+adapt, deceive, disclose selectively, and change behavior when they know they are being measured.
+Those effects must be modelled and supported for a particular question. They cannot be supplied by
+a provenance link, a static probability, or a simulation label.
 
-Robustness criteria, scenario coverage, probabilities, causal assumptions, preference
-comparisons and empirical validity must be supplied or earned for the particular
-question. A larger scenario collection is not a completeness proof. A replay, signature,
-review or checked calculation does not establish a strategic claim's empirical truth.
-Claims of intelligence superiority, AI dominance or broad institutional benefit remain
-unverified ambitions, not findings adopted from the motivating passage.
+## The decision cycle
 
-Bellman supplies mature mathematical semantics. Writ preserves sources, explicit
-assessments, checked artifacts, disagreement, applicability, human disposition and
-revision. Independent tools retain their native meanings and authority. Borrow existing
-mathematics and software when they fit; describe the concrete gap when adaptation is
-needed. Research need not have an immediate user, while each earned usable capability
-should be named plainly.
+The programme's long-term cycle is:
 
-The current bounded [revisable-assessment pilot](../../examples/assessments/revisable-pilot/BRIEF.md)
-tests an enabling layer: Writ–Vela artifact transfer, an evolving public-information
-assessment, fresh-AI continuation against a fair prose baseline, and a small local view.
-It does not earn strategic simulation, robust security policies, forecasting accuracy,
-human benefit or permission to act. Human evaluation follows separately. This moonshot
-creates no new autonomous goal, security-modelling task, outreach or deployment.
+> Map the situation → model it → explore possible outcomes → independently challenge the assumptions
+> → take a human-authorized action → observe → remap.
 
-Provenance: the user's selected strategic-security passage and subsequent clarification.
-The earlier generic interoperability interpretation is insufficient as the destination;
-interoperability remains supporting infrastructure. Existing frozen records are unchanged.
+In the compact programme notation, this is **MAP → MODEL → SIMULATE → CHALLENGE → human-authorized
+ACT → OBSERVE → REMAP**. “Challenge” includes testing alternative explanations, failure paths,
+missing evidence, and ways another actor could invalidate the model.
+
+Every arrow needs its own justification. A model may be incomplete. A simulation is conditional on
+its inputs. Independent challenge can expose failures without proving that all failures were found.
+An observation may make an old result inapplicable without making its earlier conditional
+mathematics false. Writ should preserve those distinctions and the reason for each update.
+
+The aim is not comprehensive strategic prediction. It is to compare explicitly justified possible
+worlds, find the assumptions doing the most work, ask what obtainable information would improve the
+decision, and support a warranted human decision under the uncertainty that remains.
+
+## What has been earned
+
+Writ can currently preserve source-grounded records and a bounded decision history: explicit
+questions and assumptions, exact mathematical subjects, independently checked results,
+applicability, human disposition, revision, authority, implementation, observation, and
+reconsideration. It has also exercised narrow transfer through Decision Lab, Vela, and SimPy.
+
+These components earn exact binding, replay, and revision within their accepted profiles. They do
+not earn empirical validity, causal attribution, forecasting accuracy, a strategic world model,
+robust security policy, human benefit, or permission to act.
+
+The completed [revisable-assessment pilot](../../examples/assessments/revisable-pilot/BRIEF.md) is one
+enabling test. It preserved an evolving public-information assessment across Writ and Vela and
+tested fresh machine continuation. It found no continuation advantage over competent prose and did
+not test general human usability.
+
+## Current enabling work
+
+The active empirical interoperability build uses Bellman's retained AFY 2024 case. The recorded
+case is intentionally awkward: its main comparison is inconclusive, a simple Markov/report
+predictor performed better in the retained comparison, and the decision changes with supplied prior
+and utility assumptions. Reported beliefs were measured after the participant's action, which
+limits policy interpretation.
+
+The build is testing whether that exact research object can travel through a pinned RO-Crate
+envelope to a separate standard consumer, be reproduced with its original tools, have one material
+assumption or proposed use challenged, and return as a linked successor assessment without
+overwriting the original. Its decision question is whether reliance on the strategic predictor is
+warranted—not whether an intervention or psychological mechanism has been demonstrated.
+
+Until that round trip and its negative controls pass, it remains work in progress. Crate
+conformance, byte identity, numerical reproduction, empirical support, applicability, and a
+supplied human or machine disposition are separate results. Research interoperability is useful
+infrastructure for the security destination; it is not the destination itself.
+
+## Future research obligations
+
+The strategic programme still needs bounded, independently reviewed work on:
+
+- actor knowledge, incentives, commitments, adaptation, and strategic disclosure;
+- causal and measurement assumptions linking observations to a decision;
+- scenario coverage and decision rules across uncertain worlds;
+- sequential actions, partial observability, and decision-relevant information;
+- explicit robustness and failure criteria; and
+- correction after implementation and observation.
+
+Established tools should be tried at the boundary where their actual semantics fit: for example,
+pyAgrum for a justified influence diagram, EMA Workbench for explicit scenario ensembles, `voi` for
+decision value of information, or later strategic and formal tools for a concrete supported
+question. A sampled scenario success rate is not automatically a real-world probability, and
+information gain is not automatically decision value.
+
+Before building a new general capability, the programme records the needed claim, candidate
+mathematics and software, exact version and licence, one executed example, semantic losses,
+maintenance cost, and the remaining gap. The preference is an existing API or command-line tool,
+then a narrow adapter, then a justified patch or fork, and only then genuinely new infrastructure.
+A library list is a research map; only exercised connections become earned capability.
+
+Bellman supplies mature mathematical semantics and their limits. Writ preserves sources,
+assessments, checked artifacts, disagreements, applicability, human disposition, and revision.
+Independent tools keep their native meanings and authority. No component may relabel donor output
+as stronger evidence than the donor actually provides.
+
+Robustness criteria, probabilities, causal assumptions, preferences, and empirical validity must be
+supplied or earned for the question at hand. A replay, signature, review, or checked calculation
+does not establish a strategic claim's empirical truth. Claims of intelligence superiority, AI
+dominance, or broad institutional benefit in the motivating passage remain aspirations, not Writ
+findings.
+
+Provenance: the user's selected strategic-security passage, the adopted programme moonshot, and
+subsequent clarifications. Earlier generic interoperability language remains supporting
+infrastructure only. Existing frozen records are unchanged.

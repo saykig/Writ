@@ -1,47 +1,74 @@
 # Writ
 
-Writ is an open, reviewable protocol for **decision provenance**.
+Writ helps people keep the reasoning behind consequential decisions inspectable and correctable.
 
-Consequential decisions are often easier to see than the evidence, assumptions, uncertainty, review,
-and revisions that produced them. Writ is building a durable way to preserve that chain so a later
-human or machine can inspect what was known, what was assumed, what followed, and what needs to be
-reconsidered when the underlying basis changes.
+A decision rarely rests on one fact. It has sources, interpretations, assumptions, calculations,
+judgments, authority, implementation, and consequences. Those pieces often end up scattered across
+documents and tools. Writ preserves their connections so a later person or machine can answer:
 
-```mermaid
-flowchart LR
-  S[Sources & evidence] --> K[Reviewed knowledge]
-  K --> Q[Question & assumptions]
-  Q --> C[Checked result]
-  C --> H[Human disposition]
-  H --> D[Decision]
-  D --> I[Implementation]
-  I --> O[Observed consequences]
-  O --> R[Revision & reuse]
-  R --> K
-  R --> Q
+- What did we know, and where did it come from?
+- What did we assume?
+- What followed from the supplied model or calculation?
+- Who decided what, under which authority?
+- What changed, and should the old conclusion still be used?
+
+Writ does not decide for people. It does not turn a checked calculation into empirical truth or
+permission to act.
+
+## What works today
+
+Writ currently has two deliberately separate parts.
+
+**Source-grounded knowledge** preserves exact sources and passages, typed institutional and
+legal-policy records, human review, provenance, and correction history.
+
+**Bounded decision work** preserves an explicit question, supplied assumptions, an exact
+mathematical subject, computation, an independent check, applicability, human disposition, and
+revision. It can also preserve a small post-decision history—authority, decision, implementation,
+observation, and reconsideration—without claiming that sequence proves causality or that the
+decision was correct.
+
+The repository contains runnable examples of both boundaries, including exact decision cases,
+revision and replay, a pinned external SimPy calculation, and a simulation comparison kept separate
+from the human act. These are working research components, not a finished decision application.
+
+## Try a small example
+
+You need [Bun](https://bun.sh/) 1.3.12. From the repository root:
+
+```sh
+bun install --frozen-lockfile
+bun examples/decision-cases/failure-choice/generate.ts
+bun packages/decision-case/bin/writ-decision-case.ts summary \
+  --case examples/decision-cases/failure-choice/case.json
 ```
 
-## Current focus
+The fictional case asks which of two actions minimizes expected cost across every compatible model.
+The summary shows the exact question, pinned engine, applicability, and human-review status without
+contacting a live service. Running its mathematical producer requires the separately pinned
+Decision Lab environment described in the
+[example guide](examples/decision-cases/failure-choice/README.md).
 
-Writ currently connects two separate surfaces:
+To run the ordinary repository checks:
 
-- **Source-grounded knowledge:** source → passage → typed record → human review → provenance.
-- **Bounded decision work:** question + assumptions → checked result → applicability → human
-  disposition → revision and reuse.
+```sh
+bun run format
+bun run lint
+bun run typecheck
+bun run test
+bun run verify:writ
+bun run build
+```
 
-They can connect, but one does not silently become the other. Evidence remains distinct from
-interpretation, results remain bound to the basis that justifies them, and revision preserves
-history instead of overwriting it.
+The [development guide](docs/current/development.md) lists the remaining data, Python, and real
+integration checks.
 
-The immediate engineering goal is to make these pieces portable, checkable, reusable, and
-correctable across more than one bounded case without hard-coding a single problem or domain.
+## Read more
 
-## Roadmap
-
-See [`docs/current/roadmap.md`](./docs/current/roadmap.md) for the current Now / Next / Later roadmap,
-architecture gates, and longer-term direction.
-
-See [`docs/history/`](./docs/history/README.md) for versioned development history and recoverable
-snapshots.
+- [What Writ supports now](docs/current/product-definition.md)
+- [Examples](examples/README.md)
+- [Current roadmap](docs/current/roadmap.md)
+- [Development and verification](docs/current/development.md)
+- [Versioned history](docs/history/README.md)
 
 Copyright 2026 Sara Kim

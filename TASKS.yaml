@@ -28,6 +28,42 @@ statuses:
   - blocked
 
 tasks:
+  - id: AFY-RO-CRATE-AND-PRESENTATION-001
+    title: Exercise one empirical research-object round trip and clarify Writ's active surface
+    status: in_progress
+    baseline_commit: 28e0cd4f2208cc0ba5ca2e34ad474a2784960709
+    dependencies:
+      - DECISION-EPISODE-001
+    scope:
+      - Export Bellman's completed AFY 2024 portable case through one pinned standard RO-Crate profile without changing its frozen evidence or statistical meaning.
+      - Reopen the crate in a separate process with a standard consumer, run the existing numerical receiver, obtain one leakage-controlled machine challenge, and reimport a linked original/successor assessment.
+      - Refuse at least one stale or mistaken intended use while keeping crate conformance, byte identity, numerical reproduction, empirical support, applicability, and disposition separate.
+      - Rewrite the root README for newcomers and update the existing roadmap and strategic-security moonshot with clear earned, current, and future boundaries.
+      - Audit every existing tag and GitHub release; improve authorized published descriptions in place without changing tag targets, assets, or historical scope.
+      - Audit the tracked root layout and make only justified navigation, consolidation, or retirement changes with exact historical recovery and migration evidence.
+    exclusions:
+      - A new statistical schema, estimator, solver registry, universal ontology, participant study, maintained website, or claim of human usefulness.
+      - Rewriting Bellman evidence, redistributing the external AFY raw table, or treating metadata conformance and replay as empirical truth.
+      - A new branch, repository, numbered release, deployment, outreach, recruitment, spending, or rewritten Git/tag history.
+      - Replacing correct exact receivers merely because a broader library exists, or removing still-supported material solely to reduce root count.
+    acceptance:
+      - Exact RO-Crate, Process Run profile, library distribution, runtime dependency, Bellman source, and external-data identities are pinned and reported with licence and semantic-loss notes.
+      - A real standard consumer reopens the exported crate in an isolated process and the existing AFY receiver checks the obtained external table without importing the producer or fitting stack.
+      - A fresh machine recipient sees only the supplied crate and task, challenges a material assumption or intended use, and returns a separately attributed assessment without an encoded expected answer.
+      - Writ preserves the original and successor assessments, derives changed dependencies, leaves authority false, and rejects silent same-use, stale, or tampered reuse.
+      - README, current roadmap, and moonshot are approachable and historically accurate; the README describes only current supported behavior.
+      - Existing published release descriptions retain their technical evidence while gaining plain-language summaries; every tag target and release asset identity is unchanged.
+      - Root cleanup has a keep/simplify/retire inventory, updates every active consumer of moved paths, and provides verified immutable recovery for every retired historical body.
+      - Required repository, example-specific, Python, integration, integrity, and hosted checks pass before completion is recorded.
+    outputs:
+      - examples/empirical-handoffs/afy-2024-ro-crate
+      - README.md
+      - docs/current/roadmap.md
+      - docs/current/strategic-security-moonshot.md
+      - docs/history
+      - TASKS.yaml
+      - MANIFEST.sha256
+
   - id: REVISABLE-ASSESSMENT-PILOT-001
     title: Test cross-tool revisable assessment and fresh-recipient continuation
     status: done
