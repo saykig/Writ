@@ -27,9 +27,12 @@ consistent with the user brief and accepted ADR 0024.
 
 ## Evidence and open questions
 
-Real Vela transfer and Writ receiving have executed. The public source case and fresh
-recipient pilot are being built; no usability or productivity gain is established.
-Human evaluation follows separately. No visual brand asset is required or supplied.
+Real Vela transfer and Writ receiving executed. The completed public-source continuation
+pilot found no observed advantage over competent prose. Actual browser-exported requests
+were independently received after an initial script defect was repaired. The user
+explicitly scoped this interface as a disposable demonstration; general website usability
+and human benefit remain untested. No ongoing website maintenance is authorized by this
+result. No visual brand asset is required or supplied.
 
 ## Accessibility
 

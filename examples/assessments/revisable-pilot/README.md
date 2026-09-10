@@ -1,8 +1,11 @@
 # Revisable-assessment pilot
 
-Start with the [retained research report](RESEARCH_REPORT.md) and the
+Start with the [completion report](COMPLETION_REPORT.md) and the earlier
+[retained research checkpoint](RESEARCH_REPORT.md) and the
 [local notebook instructions](../../../packages/assessment-view/README.md).
-The current checkpoint is incomplete at the corrected browser-workflow gate.
+The user revised the interface to a disposable demonstration. Actual exported bytes
+and independent receiving close that bounded path; general website usability remains
+unperformed and outside scope. Earlier incomplete checkpoints remain unchanged.
 
 The native synthetic exercise uses existing shared-analysis records; the public
 OPERA packets are experimental analyst artifacts with no invented native mathematical

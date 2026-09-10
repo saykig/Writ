@@ -8,17 +8,19 @@ This roadmap describes where Writ is going. It is not permission to bypass accep
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
 of how the project got here; they do not constrain Writ to their retired product boundaries.
 
-## Bounded revisable-assessment checkpoint
+## Completed bounded revisable-assessment demonstration
 
-The [executed pilot report](../../examples/assessments/revisable-pilot/RESEARCH_REPORT.md)
-retains native Writ–Vela receiving and a prospectively frozen six-context AI continuation
-comparison. Both structured records and competent prose scored 71/72; no advantage or
-human benefit is established. A local exported notebook uses existing provenance and
-shared-analysis records while keeping the OPERA analyst artifact outside native
-mathematical and political-record semantics. The first manual export failed due to a
-generated-script syntax defect. Code and exact receiving are repaired/checked, but the
-corrected browser workflow remains the completion gate. Preserve the failed attempt;
-do not substitute unit checks or a broader feature build for the missing observation.
+The [completion report](../../examples/assessments/revisable-pilot/COMPLETION_REPORT.md)
+retains real Writ–Vela receiving, two source updates, six fresh AI contexts and actual
+browser-exported requests with independent receiving. Both structured and competent
+prose conditions scored 71/72; no continuation advantage or human benefit is established.
+The user narrowed the HTML to a disposable demonstration, not a maintained website.
+The initial failed export, code repair, copied-text observation and later actual file
+receiving remain distinct. General UI usability is untested and outside that revised
+scope. Required local, real native integration and hosted checks passed. No further UI
+engineering or experiment is active; human comparison remains optional future research.
+This result earns bounded provenance and handoff capability, not strategic-security
+validity or a new mathematical guarantee.
 
 ## North Star
 
