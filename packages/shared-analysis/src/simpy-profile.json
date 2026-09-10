@@ -1,0 +1,29 @@
+{
+  "profile": "simpy-resource-fifo.v1",
+  "package": "simpy",
+  "version": "4.1.1",
+  "sdist_sha256": "sha256:06d0750a7884b11e0e8e20ce0bc7c6d4ed5f1743d456695340d13fdff95001a6",
+  "source_manifest": {
+    "simpy/__init__.py": "sha256:9a15ad441b4e1c59b1391c698f512caeb547ee936c96d633f2f841c10cd3a246",
+    "simpy/core.py": "sha256:0274b36d9dda5c0901b8d765885705bbe76640e24da1bc63e679433e0f9c49dd",
+    "simpy/events.py": "sha256:7cba6e717092cee1b0d51ed33b83a2f51f055dc3327c894bf99122c3bfa16b4d",
+    "simpy/exceptions.py": "sha256:9b29a23cee188bb94d9cc0ea0dff98916cac2789fe4d6375815976b69f98db76",
+    "simpy/resources/__init__.py": "sha256:85376d218f852a766427d1074379aa79b76bbbfa746d496f8bdff6621c254255",
+    "simpy/resources/base.py": "sha256:20dc903861a382b42772c9daec7ad79ae9fc87d076341bd3f3297dd6c34d1da1",
+    "simpy/resources/container.py": "sha256:2721dacd16fe46c3fc1ff027cd65ae8f5f090a1eaf3850bb7eb2ec778e37f3bd",
+    "simpy/resources/resource.py": "sha256:e184fb6ab518d23552f8ac1b05fb52ad854f5045a62814e531f6ca4353204e05",
+    "simpy/resources/store.py": "sha256:5731066d0126fd68c1ee798a23927a65d4ebf14c7e89bfce5ce703494c77bbe7",
+    "simpy/rt.py": "sha256:6d51d90a0badc6d08d0bdbc67ffe589398af0bd430bb74c46f0cddabff6d2b6d",
+    "simpy/util.py": "sha256:e4270b11b743ff4fd1fab86bff08a9b464219a02190d9725cf6d87006603f49c"
+  },
+  "upstream_example_sha256": "sha256:a9b2265ecff3aa6542a7814ce419252b61e10abec84daba552d696c86457cdcd",
+  "model_sha256": "sha256:22b76f26b874c56bf136df0472d447ce85eec584c277ee853c5ed5625b205898",
+  "assumptions": [
+    "initially_empty",
+    "fifo",
+    "two_identical_servers",
+    "constant_service",
+    "no_abandonment",
+    "deterministic_arrivals"
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "source_commit": "2a00603f3ca128dfb948358f54d77cbb15b704da",
+  "source_manifest_sha256": "4d2dad89408dbbf6c4f0bbe6aaef4033d6c38ebf941a8ff68fd1eeb44d23dcfa",
+  "first_checkpoint": "b6f73f09bcc7948045b59bc23d1d73823be67f4a",
+  "combined_gates": [
+    {
+      "name": "format",
+      "command": [
+        "bun",
+        "run",
+        "format"
+      ],
+      "exit_code": 0,
+      "seconds": 2.91,
+      "log_sha256": "1d66faad74f5e8709353f7288592866bd3a9095da1174a916e7aa632949971e2"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "bun",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 3.68,
+      "log_sha256": "d11e86a394943f1d26dcd90c29369edb18fa0cdacbdbc39bc5c8e48127dc872c"
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "bun",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "seconds": 5.05,
+      "log_sha256": "15f48aa510d05b56a348ae5582b15594cb6f2a0a0e6c079d9a63db47ce96acd5"
+    },
+    {
+      "name": "test",
+      "command": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "exit_code": 0,
+      "seconds": 19.85,
+      "log_sha256": "5f14e80e7723ab54bdd3a6c8eb5bb5bb52d81a9a8e14a86629bef8e5c56642bd"
+    },
+    {
+      "name": "data:check",
+      "command": [
+        "bun",
+        "run",
+        "data:check"
+      ],
+      "exit_code": 0,
+      "seconds": 1.14,
+      "log_sha256": "4073664a0bbca860b007174aff755fc226b9321e9838db3511902ec79bdcffc6"
+    },
+    {
+      "name": "verify:writ",
+      "command": [
+        "bun",
+        "run",
+        "verify:writ"
+      ],
+      "exit_code": 0,
+      "seconds": 1.84,
+      "log_sha256": "d898e86edd4ee8330cd6e85ab970f662673c385328687e3c4f2a9e760c7a7b20"
+    },
+    {
+      "name": "build",
+      "command": [
+        "bun",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 6.39,
+      "log_sha256": "8cfc621316596701d74584a8778ae77e5cfbfb7421d10e463e273354576635a3"
+    },
+    {
+      "name": "test:decision-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:decision-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 3.69,
+      "log_sha256": "bd0dbcbd7fb7e54ca7d4f5e301310221389fa24b1465562f6378c5cec9d51f1f"
+    },
+    {
+      "name": "test:shared-analysis-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:shared-analysis-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 8.3,
+      "log_sha256": "11851435db80808468f985accc32f8f6cc259dc8abab01ef0517a04a44792cf9"
+    },
+    {
+      "name": "test:certificate-transport-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:certificate-transport-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 6.09,
+      "log_sha256": "2f85587200468ca6db869fba96bfe63d29f25b0acec1032343dfe5eed744c6f4"
+    },
+    {
+      "name": "test:decision-episode-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:decision-episode-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 5.03,
+      "log_sha256": "b5b2c5adb1331888594eb4fb7c238485e204e4d986849d1dd1fd3b1c3bcbf258"
+    },
+    {
+      "name": "test:linked-episodes-integration",
+      "command": [
+        "bun",
+        "run",
+        "test:linked-episodes-integration"
+      ],
+      "exit_code": 0,
+      "seconds": 2.26,
+      "log_sha256": "2d4401f401b40cf9900cd148753105a86032f96d8529fb6bcfb4c9abb6164986"
+    },
+    {
+      "name": "pack",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "internal/tooling/scripts/validate_pack.py"
+      ],
+      "exit_code": 0,
+      "seconds": 2.44,
+      "log_sha256": "0ccdeb22790e3b06b058bccf6af71c447e88ad3e80a98d67c2551b2bf93d06e0"
+    },
+    {
+      "name": "registry",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "internal/tooling/scripts/generate_source_registry.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.21,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruff",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/ruff",
+        "check",
+        "apps/ingest",
+        "internal/tooling/scripts",
+        "internal/verification"
+      ],
+      "exit_code": 0,
+      "seconds": 0.07,
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/mypy",
+        "apps/ingest/src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.35,
+      "log_sha256": "8b88f6d12bd312c1b024b66d07a7f7619a68482ac4d64e475759b1823199faa5"
+    },
+    {
+      "name": "pytest",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "-m",
+        "pytest",
+        "apps/ingest",
+        "internal/verification"
+      ],
+      "exit_code": 0,
+      "seconds": 4.45,
+      "log_sha256": "26c2800600e87a5cf06fb95e5bef1f421d6cd9fd86facb34688bc8d582f63681"
+    },
+    {
+      "name": "pilot-packets",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "examples/assessments/revisable-pilot/receive-packets.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.04,
+      "log_sha256": "f05d2cfa0fff47d980bb0676efbca8c9de319c5ed1cc449b3bd0952ece76298b"
+    },
+    {
+      "name": "pilot-results",
+      "command": [
+        "$WRIT_ROOT/.venv/bin/python",
+        "examples/assessments/revisable-pilot/receive-pilot.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06,
+      "log_sha256": "5f6a65d70fd0fe03487b08fd253a5241dc264e22039f25b3157aea8cacf0ad27"
+    }
+  ],
+  "real_integrations": {
+    "decision_case": 16,
+    "shared_analysis": 2,
+    "certificate_transport": 12,
+    "standalone_episode": 2,
+    "linked_episode": 1,
+    "skips": 0
+  },
+  "python_tests": 75,
+  "new_receiving_unit_tests": {
+    "external": 5,
+    "linked": 5
+  },
+  "additional_actual_reproduction": {
+    "simpy_run_1_byte_identical": true,
+    "simpy_run_2_byte_identical": true,
+    "public_link_generator_parent_successor_link_and_pins_byte_identical": true
+  },
+  "preserved_against": "5cd032c3c00886bfd8520024e4f6fbabb1608615",
+  "unchanged_paths": [
+    "examples/assessments",
+    "packages/assessment-view",
+    "packages/decision-case",
+    "packages/provenance",
+    "corpora",
+    "docs/history",
+    ".github/workflows/ci.yml",
+    "examples/decision-cases/decision-episode/episode.json",
+    "packages/shared-analysis/src/decision-episode.ts",
+    "docs/experiments/decision-episode-repair-review.md",
+    "docs/experiments/decision-episode-repair-evidence.json",
+    "docs/experiments/decision-episode-build-report.md"
+  ],
+  "initial_hosted_failure": {
+    "run": "https://github.com/saykig/Writ/actions/runs/34433469942",
+    "cause": "External simulation schema formatting failed; source checkpoint 2a00603 includes the formatting correction. No failed gate counted as passing.",
+    "log_sha256": "99d3a1cf5c031953e7dd5db96d95e411b4983d2ae988f4dcee14c334e7c13df6"
+  },
+  "assurance_limits": [
+    "Execution record and numerical reproduction do not authenticate a remote producer.",
+    "Numerical trace agreement is conditional on explicit deterministic FIFO model inputs and is not empirical validation or a Bellman certificate.",
+    "Linked native histories remain unchanged and independently checked; there is no queue-time-to-loss mapping.",
+    "Declared episode actor/event times are synthetic, not authenticated facts.",
+    "Expected hash authority must be supplied independently."
+  ]
+}

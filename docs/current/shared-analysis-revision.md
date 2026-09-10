@@ -132,3 +132,13 @@ The accepted shared-analysis profile remains limited to the existing `finite-lin
 decision and compatibility operations. The certificate-transport trial adds one separately pinned
 sequential guarantee operation; it does not add conditional, causal, strategic, safety, empirical
 validation, authenticated review, or authority-to-act meaning.
+
+## Accepted bounded post-check episode
+
+ADR 0029 accepts a separate bounded `decision_episode` envelope above this lifecycle. It embeds
+one exact certificate-transport record and rederives the existing archive, revision, reassessment,
+source, assumption, execution and certificate identities. It does not extend this package's
+revision or applicability semantics. Supplied authority, decision, implementation, observation and
+reconsideration declarations remain separate, and a recipient freshly replays the embedded
+mathematics without treating those declarations as checked facts. See
+[`decision-episodes.md`](./decision-episodes.md).

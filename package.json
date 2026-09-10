@@ -20,6 +20,7 @@
     "test:decision-integration": "bun run --filter '@writ/decision-case' test:integration",
     "test:shared-analysis-integration": "bun run --filter '@writ/shared-analysis' test:integration",
     "test:certificate-transport-integration": "bun run --filter '@writ/shared-analysis' test:transport-integration",
+    "test:decision-episode-integration": "bun run --filter '@writ/shared-analysis' test:episode-integration",
     "lint": "bun run --filter '*' lint",
     "pretypecheck": "bun run --filter '@writ/provenance' build",
     "typecheck": "bun run --filter '*' typecheck",
@@ -36,7 +37,9 @@
     "preverify:provenance": "bun run --filter '@writ/provenance' build",
     "verify:provenance": "bun internal/verification/writ/src/cli.ts provenance",
     "preverify:integrity": "bun run --filter '@writ/provenance' build",
-    "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity"
+    "verify:integrity": "bun internal/verification/writ/src/cli.ts integrity",
+    "test:linked-episodes-integration": "bun run --filter '@writ/shared-analysis' test:linked-integration",
+    "test:simulation-decision-integration": "bun run --filter '@writ/shared-analysis' test:simulation-decision-integration"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
