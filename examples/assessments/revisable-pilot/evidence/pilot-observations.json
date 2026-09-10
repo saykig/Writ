@@ -1,0 +1,511 @@
+{
+  "schema": "writ.experimental-continuation-pilot.v1",
+  "freeze_commit": "bdeef24",
+  "responses_commit": "6200eb1",
+  "freeze_sha256": "f16bde5459cdff5d54ea3148c084122801a4e09b63724af7c9bf4b7eb67d8289",
+  "blind_map": {
+    "A": "prose-2",
+    "B": "structured-1",
+    "C": "structured-3",
+    "D": "prose-1",
+    "E": "prose-3",
+    "F": "structured-2"
+  },
+  "scorer_sha256": "34cc617fbdef5918c4610935c8f97d8f5b4cfed71e4d46c915fd6d284ba6d8b2",
+  "responses": {
+    "prose-2-stage-0.json": {
+      "sha256": "a0e767391b7c59bf70413129d0783e527f6d84d0153b0e99a08f98299e2c7c55",
+      "whitespace_word_count": 503,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-2-stage-1.json": {
+      "sha256": "3ff24b9554806b6e47aa879284db45fd6ebaf6568a3caf439892634a871b5a0c",
+      "whitespace_word_count": 589,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-2-stage-2.json": {
+      "sha256": "232fd7c1ce2d7a0f96caa662e3c3cd83fcb46d59e181e4a3b2e687b9756b59cb",
+      "whitespace_word_count": 629,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-1-stage-0.json": {
+      "sha256": "156336af2aac37461a9a5169d62217fc31e6916ebb1ff709e062116cca0d2ee4",
+      "whitespace_word_count": 557,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-1-stage-1.json": {
+      "sha256": "12794f4335692446e6a04536400ba7a0c6d7783425b79d4b541cea6da217e47e",
+      "whitespace_word_count": 613,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-1-stage-2.json": {
+      "sha256": "dd8fe847c68901de69d4bfcc75a9f0b59a404a9ac2eab0eb17a219ab6ac8c5ce",
+      "whitespace_word_count": 679,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-3-stage-0.json": {
+      "sha256": "117a9859314eafe28f56282f20f035f859e5b82ca9ae73d9f0a0b0c55ae23364",
+      "whitespace_word_count": 534,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-3-stage-1.json": {
+      "sha256": "54a9137bd518e4cc5bfc17cea8b1bc5c8549f18322043128f1a1f88cbc644438",
+      "whitespace_word_count": 594,
+      "scores": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-3-stage-2.json": {
+      "sha256": "8c2ef199539c9c6df663f0b4ae07bd578ca8097e3d0f4e08de5fd03f2a3cefe6",
+      "whitespace_word_count": 654,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-1-stage-0.json": {
+      "sha256": "e336cd8c02fb76f1038d8958b1152964176236f85cd0cfb72d63d3bf6dfdf549",
+      "whitespace_word_count": 495,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-1-stage-1.json": {
+      "sha256": "09547e104b9a789115a13ab210dc86fcedc78b303220353aabdcca7c9c7332de",
+      "whitespace_word_count": 587,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-1-stage-2.json": {
+      "sha256": "3e7703099333989e61b77dce659819ec381ab06b645f7adb0bf4c8acc88a7355",
+      "whitespace_word_count": 636,
+      "scores": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-3-stage-0.json": {
+      "sha256": "6b06c9c0674512d1ddbca52068b26566db544483c2596288aca7aaa93e2b3bf9",
+      "whitespace_word_count": 526,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-3-stage-1.json": {
+      "sha256": "87a10681bf43a2c83c8099ffb25784fdf43840679eecc226ba2ad1110e3d1b10",
+      "whitespace_word_count": 589,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "prose-3-stage-2.json": {
+      "sha256": "48973b0d2964db683198f775a9da3c029a84080a3ea071f474e4861b62e45fe1",
+      "whitespace_word_count": 627,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-2-stage-0.json": {
+      "sha256": "52e4f93db7c4ad888db3b1d92d150bb1987de3cb6c0be9101970287b1a8823f3",
+      "whitespace_word_count": 560,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-2-stage-1.json": {
+      "sha256": "e1f121add8301d77286dd814cb61081195bf78073f35bd4d56d2ced6337923e4",
+      "whitespace_word_count": 616,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "structured-2-stage-2.json": {
+      "sha256": "ee54cefa1bea1341285b2d673ed6f5e37cefb5593d0ab6e7fb05fc5b36d9892e",
+      "whitespace_word_count": 662,
+      "scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "execution_observations": [
+    {
+      "recipient": "/root/recipient_1",
+      "thread_id": "01a088fc-7961-7e00-9fb6-377466423f53",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fc-7a2f-7ee2-9752-f3ff8006fc67"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fd-b487-7e10-9104-2fc66e65e9ad"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fe-d8ee-7030-80aa-66bd872c0aac"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-1/packet-0.json\",max_output_tokens:20000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-1/packet-1.json\",max_output_tokens:20000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-1/packet-2.json\",max_output_tokens:20000}));\n"
+        }
+      ]
+    },
+    {
+      "recipient": "/root/recipient_2",
+      "thread_id": "01a088fc-ac6b-7e80-8a1a-d775f65efd41",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fc-acff-70e1-a9db-50474b804532"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fd-d1e3-70f3-91aa-22b5e96795d1"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fe-f2b4-74c2-ae7e-e60ae7055722"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-1/packet-0.md\",max_output_tokens:20000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-1/packet-1.md\",max_output_tokens:20000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-1/packet-2.md\",max_output_tokens:20000}));\n"
+        }
+      ]
+    },
+    {
+      "recipient": "/root/recipient_3",
+      "thread_id": "01a088fc-deed-7141-8f0c-238f70c66395",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fc-df7d-77a3-8385-0382e7e47d72"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088fd-eac4-7700-92cc-d852bc15a6bf"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a088ff-0e6b-7781-9dc1-27f8f6f8527d"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-2/packet-0.json\",max_output_tokens:10000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-2/packet-1.json\",max_output_tokens:10000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-2/packet-2.json\",max_output_tokens:10000}));\n"
+        }
+      ]
+    },
+    {
+      "recipient": "/root/recipient_4",
+      "thread_id": "01a08902-1b9e-76d0-9854-1ab4692c4420",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08902-1c3d-7331-9778-f07cf3882550"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08903-e288-7532-bf21-877ef0002557"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08905-86bd-7b41-904a-fe66a38a5788"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-2/packet-0.md\",max_output_tokens:14000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-2/packet-1.md\",max_output_tokens:14000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-2/packet-2.md\",max_output_tokens:14000}));\n"
+        }
+      ]
+    },
+    {
+      "recipient": "/root/recipient_5",
+      "thread_id": "01a08902-5aad-7df3-8658-037a764ca15f",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08902-5b3d-7581-8a2a-a4b0ec220c89"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08903-f888-78c1-940d-4888af997068"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08905-a03f-7d02-960f-c339d62e8e33"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-3/packet-0.json\",max_output_tokens:12000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-3/packet-1.json\",max_output_tokens:12000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/structured-3/packet-2.json\",max_output_tokens:12000}));\n"
+        }
+      ]
+    },
+    {
+      "recipient": "/root/recipient_6",
+      "thread_id": "01a08902-9186-7b53-9847-618c71a86122",
+      "turns": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08902-9211-7963-910c-ce231849a923"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08904-113e-7f10-b2bb-a4bb2264a78c"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high",
+          "turn_id": "01a08905-bb53-7b22-96ff-6a648f37e2eb"
+        }
+      ],
+      "calls": [
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-3/packet-0.md\",max_output_tokens:12000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-3/packet-1.md\",max_output_tokens:12000}));\n"
+        },
+        {
+          "tool": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat <isolated-packets>/prose-3/packet-2.md\",max_output_tokens:12000}));\n"
+        }
+      ]
+    }
+  ],
+  "condition_totals": {
+    "structured": 71,
+    "prose": 71
+  },
+  "root_review": {
+    "standing": "Separate author/scorer model roles; not independent human review. Root inspected all 18 responses and concurs with both source-binding deductions under the frozen rubric.",
+    "deductions": [
+      {
+        "run": "structured-3",
+        "stage": 1,
+        "dimension": 1,
+        "reason": "Unsupplied Beta causal preference."
+      },
+      {
+        "run": "prose-1",
+        "stage": 2,
+        "dimension": 1,
+        "reason": "S2 is described as reporting corrected measurements; supplied material reports later measurements and a corrected interpretation. Strict source-binding deduction; wording ambiguity retained."
+      }
+    ],
+    "scope": "No numerical, independence, history-erasure or applicability failure found under the other frozen dimensions. No general superiority claim."
+  },
+  "limits": [
+    "Same model label gpt-6-astra/high observed in all recipient turn metadata; exact model build, sampling seed and temperature unavailable.",
+    "Fresh contexts forked with no parent turns; file access restricted by instructions, not an OS sandbox.",
+    "Recipient tool-output caps varied from 10000 to 20000 tokens; every supplied file fit, with no truncation. All responses were below the shared 800-word limit.",
+    "Historical familiarity and shared-model/scorer limitations; three runs per condition; no significance test or human benefit inference.",
+    "Blinding withheld condition mapping from scorer; output styles might still suggest a condition.",
+    "No exclusions, retries or future update feedback in recipient evaluation."
+  ]
+}

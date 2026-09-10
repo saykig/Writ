@@ -32,6 +32,13 @@ tasks:
     title: Test cross-tool revisable assessment and fresh-recipient continuation
     status: in_progress
     baseline_commit: 4e9b7f4
+    checkpoint_note: >-
+      Frozen packets at bdeef24 preceded six fresh recipient contexts and 18 retained responses
+      at 6200eb1. Both conditions scored 71/72 with no observed continuation advantage.
+      Native Vela receiving and 16/2/12 no-skip integration tests pass. A first manual local
+      export failed from generated-script escaping; the repaired script and exact continuation
+      receiver pass code checks, while corrected browser interaction remains unverified.
+      Full goal remains in progress; retain the failed attempt and await concrete browser evidence.
     scope:
       - Execute pinned Vela artifact transfer, scoped verification, native replay and correction limits using disposable synthetic fixtures.
       - Preserve one bounded public-information assessment, contradictory interpretations and two source updates without inventing mathematical semantics.

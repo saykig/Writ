@@ -1,12 +1,24 @@
 # Writ: current roadmap
 
 **Status:** current directional roadmap  
-**Observation cutoff:** 7 September 2026  
+**Observation cutoff:** 9 September 2026  
 **Baseline:** `main` after PR #52 (`d4f2769f1f7e935809225677505779a62770dcde`)
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
 of how the project got here; they do not constrain Writ to their retired product boundaries.
+
+## Bounded revisable-assessment checkpoint
+
+The [executed pilot report](../../examples/assessments/revisable-pilot/RESEARCH_REPORT.md)
+retains native Writ–Vela receiving and a prospectively frozen six-context AI continuation
+comparison. Both structured records and competent prose scored 71/72; no advantage or
+human benefit is established. A local exported notebook uses existing provenance and
+shared-analysis records while keeping the OPERA analyst artifact outside native
+mathematical and political-record semantics. The first manual export failed due to a
+generated-script syntax defect. Code and exact receiving are repaired/checked, but the
+corrected browser workflow remains the completion gate. Preserve the failed attempt;
+do not substitute unit checks or a broader feature build for the missing observation.
 
 ## North Star
 

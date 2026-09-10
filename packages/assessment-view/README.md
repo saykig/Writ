@@ -20,7 +20,9 @@ bun packages/assessment-view/src/cli.ts view /tmp/assessment-history.json \
 ```
 
 Open the HTML locally. Inspect the dated stages and sources. Choose a current use of
-A1, write a rationale, and export `continuation-request.json`. That request is a
+A1, write a rationale, and generate the request. Inspect the visible JSON, then save
+`continuation-request.json` or select and copy its text into a plain-text file. A save
+request is not confirmation that the browser saved a file. That request is a
 proposal; it has no acceptance or authority effect. The form binds it to the entire
 loaded history, regardless of which earlier stage is selected for inspection.
 
@@ -35,7 +37,8 @@ bun packages/assessment-view/src/cli.ts view /tmp/revised-history.json \
 
 Outputs use exclusive creation. Existing records are never overwritten. The receiver
 checks source excerpt identities, declared references, exact base identity, the
-permitted request fields and exact append-only history. It does not call the append
+permitted request fields and exact append-only history. Structural equality preserves authored Unicode code points
+even when Writ Canonical JSON would normalize two spellings to the same identity. It does not call the append
 producer. Both share validation and Writ Canonical JSON v1 hashing, so this is operation
 reconstruction, not an independent implementation of the provenance library. Parent
 page hashes/spans are supplied provenance; excerpt-length/hash checks do not retrieve

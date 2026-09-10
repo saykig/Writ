@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { Script } from "node:vm";
 import { readFileSync } from "node:fs";
 import { sha256Canonical } from "@writ/provenance";
 import { applyRequest, initialSnapshot, validateSnapshot, type Request } from "../src/contract.js";
@@ -95,6 +96,14 @@ describe("declared continuation with preserved history", () => {
     expect(result.events[0]).toEqual(r);
     expect(() => applyRequest(first, r)).toThrow("STALE_BASE");
   });
+  test("canonical equivalence cannot silently rewrite an author's Unicode text", () => {
+    const r = request();
+    r.rationale = "A café assumption remains contested.";
+    const candidate = applyRequest(base, r);
+    candidate.events[0]!.rationale = r.rationale.normalize("NFD");
+    expect(sha256Canonical(candidate.events[0])).toBe(sha256Canonical(r));
+    expect(() => receiveContinuation(base, r, candidate)).toThrow("REQUEST_MISMATCH");
+  });
   test("authored display rejects changed packet semantics", () => {
     const changed = structuredClone(base);
     changed.packets[0]!.records[1]!.text = "A different hypothesis";
@@ -106,6 +115,19 @@ describe("declared continuation with preserved history", () => {
         replay: {},
       }),
     ).toThrow("UNSUPPORTED_DISPLAY_EDITION");
+  });
+  test("actual rendered client script parses and includes visible request fallback", () => {
+    const html = renderView(base, {
+      archive_base64: "e30=",
+      archive_sha256: "sha256:test",
+      inspection: {},
+      replay: {},
+    });
+    const script = html.split("<script>")[1]!.split("</script>")[0]!;
+    expect(() => new Script(script)).not.toThrow();
+    expect(html).toContain('id="request-text" readonly');
+    expect(html).toContain("page cannot confirm that a file was saved");
+    expect(html).not.toContain("Request exported.");
   });
   test("render safely embeds authored text and exposes original native bytes", () => {
     const r = request();
