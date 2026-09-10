@@ -1,0 +1,77 @@
+{
+  "stage": 0,
+  "current_assessment": "S0 supports C1: OPERA reported an apparent neutrino-speed anomaly that merits investigation. The reported failure to find an instrumental explanation does not establish genuine superluminal propagation or exclude unknown timing faults. Independent confirmation or refutation remains sought. This is an authored continuation proposal, not accepted truth or a mathematical result.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Unestablished hypothesis",
+      "rationale": "The reported apparent excess is consistent with the question H1 raises, but S0 supplies no basis for concluding that it reflects genuine propagation rather than measurement or analysis effects."
+    },
+    {
+      "id": "H2",
+      "status": "Open; exclusion is contested and conditional",
+      "rationale": "Reported checks found no instrumental explanation. That is weaker than demonstrating the absence of unrecognized timing-chain faults. Alpha excludes H2 only under A1; D1 disputes that premise."
+    },
+    {
+      "id": "H3",
+      "status": "Open and unresolved",
+      "rationale": "S0 does not establish or exclude statistical, pulse-profile or analysis effects. The event count alone does not settle these possibilities. The hypothesis menu is neither exhaustive nor proven mutually exclusive."
+    }
+  ],
+  "assumptions_and_disagreements": [
+    {
+      "id": "A1",
+      "current_use": "Retain as Alpha's explicit provisional premise, usable only when presenting the conditional reasoning in C2. Do not adopt it as a source-established exclusion of timing faults.",
+      "historical_standing": "Preserve its stage-0 role and dependency on S0, including its acknowledged strength beyond the source."
+    },
+    {
+      "id": "D1",
+      "current_use": "Retain as an active challenge to A1: failure to identify a fault does not exclude unknown faults. This challenge does not itself establish H2.",
+      "historical_standing": "Preserve as Beta's AI-authored analytic disagreement with Alpha, not a quotation or human endorsement."
+    }
+  ],
+  "impacts": [
+    {
+      "id": "A1",
+      "dependency_reason": "Its dependency on S0 requires maintaining the distinction between reported checks and the stronger claim of calibration sufficiency."
+    },
+    {
+      "id": "D1",
+      "dependency_reason": "Depends on A1 and S0; remains relevant wherever their relationship is evaluated."
+    },
+    {
+      "id": "C2",
+      "dependency_reason": "Depends on A1, D1 and H2. Any assessment using it must retain its contested condition rather than remove H2 unconditionally."
+    },
+    {
+      "id": "C1",
+      "dependency_reason": "Depends on S0 and is supported within the limited meaning of a reported anomaly meriting scrutiny."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "Depends on H1, H2 and H3; remains open because the supplied evidence does not select an established explanation."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0"],
+      "reason": "Preserve the dated report and supplied capture, excerpt and provenance metadata as the evidence available at this stage."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "A1", "D1", "C1", "C2", "Q1"],
+      "reason": "Preserve the initial explanation menu, contested premise, conditional inference and unresolved question so later revisions can be traced without rewriting this assessment."
+    },
+    {
+      "identifiers": ["B0"],
+      "reason": "Preserve the exercise's source, provenance and inference boundaries."
+    }
+  ],
+  "unresolved": [
+    "Whether independent measurements confirm or refute the reported anomaly.",
+    "Whether unrecognized timing-chain faults or statistical, pulse-profile or analysis effects account for it.",
+    "Whether another explanation, or a combination of explanations, is needed.",
+    "What detailed checks justify any stronger calibration claim."
+  ],
+  "source_ids": ["S0"],
+  "limits": "The packet contains selected dated material from one publisher page, captured in 2026 rather than an archived historical edition. Shared provenance is not independent corroboration. The supplied hashes bind bytes, not truth; this assessment has not independently verified the parent bytes, experiment or reported checks. No numeric prior, likelihood, posterior, causal effect, model independence, mathematical guarantee or authority to act is supplied."
+}

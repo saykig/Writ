@@ -1,0 +1,37 @@
+{
+  "schema": "writ.manual-browser-export-observation.v1",
+  "source_commit": "7ff6204ba53ab2d09cddf7d80872155d9f1fa57c",
+  "standing": "Additive evidence after checkpoint 1: exact request files observed in the expected Downloads directory and independently received. User reported performing Save; file identities alone do not cryptographically authenticate browser origin.",
+  "exports": [
+    {
+      "filename": "continuation-request.json",
+      "retained_file": "browser-download-1.json",
+      "bytes": 337,
+      "raw_sha256": "7a7d56b237d261cab3f45a4066247d10dd362f66f0b4e722421074070b8015b9",
+      "received": {
+        "status": "checked",
+        "scope": "exact declared continuation and preserved history; no empirical or mathematical interpretation checked",
+        "base_sha256": "sha256:189a81ffa41b742abce4436c0d6e76a457292568ece1be0ff5de05f73a7d82ae",
+        "request_sha256": "sha256:1e819d27f0c2b0af239fd74e03a4f5b0390bb2797c30597544715a3947b1ebf1",
+        "result_sha256": "sha256:1e3191d89e248285a55c1dbbac466b705b01c468ef5fa6731ddd235caaceb332"
+      }
+    },
+    {
+      "filename": "continuation-request (1).json",
+      "retained_file": "browser-download-2.json",
+      "bytes": 329,
+      "raw_sha256": "43ba54ca8eb62023cb050a5407d91713dfa6c83d8ec048fdd26b8fcc61c9fb2c",
+      "received": {
+        "status": "checked",
+        "scope": "exact declared continuation and preserved history; no empirical or mathematical interpretation checked",
+        "base_sha256": "sha256:189a81ffa41b742abce4436c0d6e76a457292568ece1be0ff5de05f73a7d82ae",
+        "request_sha256": "sha256:815fb58db8685fa647d35abf0c662a0d036e9ca9b5005f6ffa2a36615f74aab5",
+        "result_sha256": "sha256:b0349bc9575f4b85f5d93045f674079779032a2a2a9d806fd7365f1a1c74def5"
+      }
+    }
+  ],
+  "composition": "Both bind the original base. Each was received as an alternative single append. No automatic supersession or consecutive append is inferred.",
+  "substantive_status": "First rationale is a filename; second is an explicit synthetic UI test. Neither is scientific justification or human acceptance of a physical conclusion.",
+  "remaining": "Actual stage/source navigation, visual/keyboard/mobile observations and the full corrected browser workflow remain unconfirmed.",
+  "prior_failure": "browser-attempt-1.json remains unchanged."
+}

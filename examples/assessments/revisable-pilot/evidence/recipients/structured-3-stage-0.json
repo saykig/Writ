@@ -1,0 +1,72 @@
+{
+  "stage": 0,
+  "current_assessment": "S0 supports C1: the reported apparent excess speed merits investigation. It does not establish genuinely superluminal propagation or identify an explanation. Reported unsuccessful instrumental checks leave H2 unresolved; independent measurements are sought but not supplied.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Unestablished hypothesis",
+      "rationale": "The apparent anomaly motivates considering a genuine propagation effect, but S0 supplies no confirmation that the observation reflects superluminal propagation rather than measurement or analysis effects."
+    },
+    {
+      "id": "H2",
+      "status": "Open; exclusion is conditional and contested",
+      "rationale": "S0 reports finding no instrumental explanation after checks, which does not establish that all unrecognized faults are excluded. Only adopting the stronger analyst assumption A1 supports Alpha's conditional exclusion in C2."
+    },
+    {
+      "id": "H3",
+      "status": "Open and unresolved",
+      "rationale": "The packet does not provide evidence sufficient to establish or exclude statistical, pulse-profile or analysis effects. The reported event count alone does not settle this hypothesis."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "May be retained as an explicit provisional premise for Alpha's conditional interpretation, but should not govern an unconditional assessment or remove H2 from the overall explanation menu.",
+      "historical_standing": "Preserve as the initial synthetic analyst assumption, explicitly stronger than S0 and neither a source finding nor a human endorsement."
+    },
+    "D1": {
+      "current_use": "Maintains the substantive objection that failure to identify a fault does not exclude unknown faults. The packet does not resolve the disagreement.",
+      "historical_standing": "Preserve Beta's AI-authored challenge and its dependencies on A1 and S0; do not recast it as source testimony."
+    }
+  },
+  "impacts": [
+    {
+      "id": "C2",
+      "dependency_reason": "Its exclusion of H2 depends on contested A1 and must be assessed and used only conditionally, with D1 visible."
+    },
+    {
+      "id": "A1",
+      "dependency_reason": "It strengthens S0's report of checks into exclusion of unknown faults; that additional premise remains unsupported by the supplied source."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "All three explanatory hypotheses remain unresolved, so the question stays open."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0"],
+      "reason": "Preserve the dated report and its capture provenance, distinguishing the 2011 section from the 2026 capture of a current page."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "Q1"],
+      "reason": "Preserve the initial, nonexhaustive and potentially overlapping explanation menu and open question."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "reason": "Preserve the premise, disagreement and conditional consequence together so contested reasoning cannot become an unconditional historical finding."
+    },
+    {
+      "identifiers": ["C1", "B0"],
+      "reason": "Preserve the limited anomaly interpretation and the exercise's evidential and authority boundaries."
+    }
+  ],
+  "unresolved": [
+    "Whether the apparent excess speed persists under independent measurement.",
+    "Whether an unrecognized timing-chain fault accounts for the observation.",
+    "Whether statistical, pulse-profile or analysis effects account for it.",
+    "Whether other explanations or combinations of explanations are needed.",
+    "What the reported checks covered and whether their scope could justify A1."
+  ],
+  "source_ids": ["S0"],
+  "limits": "This is an authored continuation proposal, not accepted truth or a mathematical result. The packet contains a selected dated section of one publisher page, not an archived historical edition or independent corroboration. No supplied check establishes an explanation, calibration sufficiency, numerical hypothesis probabilities, mutual exclusivity, causal attribution, mathematical guarantees or authority to act. Hashes describe byte binding, not truth; their underlying bytes were not independently checked here."
+}

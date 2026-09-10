@@ -1,12 +1,26 @@
 # Writ: current roadmap
 
 **Status:** current directional roadmap  
-**Observation cutoff:** 8 September 2026
-**Baseline:** `main` after merged PR #51 (`4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2`)
+**Observation cutoff:** 9 September 2026  
+**Baseline:** current `main` (`c09922f8a4689284de42b1b1bcc22098fa19c117`) integrated into PR #53
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
 of how the project got here; they do not constrain Writ to their retired product boundaries.
+
+## Completed bounded revisable-assessment demonstration
+
+The [completion report](../../examples/assessments/revisable-pilot/COMPLETION_REPORT.md)
+retains real Writ–Vela receiving, two source updates, six fresh AI contexts and actual
+browser-exported requests with independent receiving. Both structured and competent
+prose conditions scored 71/72; no continuation advantage or human benefit is established.
+The user narrowed the HTML to a disposable demonstration, not a maintained website.
+The initial failed export, code repair, copied-text observation and later actual file
+receiving remain distinct. General UI usability is untested and outside that revised
+scope. Required local, real native integration and hosted checks passed. No further UI
+engineering or experiment is active; human comparison remains optional future research.
+This result earns bounded provenance and handoff capability, not strategic-security
+validity or a new mathematical guarantee.
 
 ## North Star
 
@@ -42,6 +56,12 @@ flowchart LR
   U --> R
   U --> Q
 ```
+
+The user-adopted [strategic-security moonshot](strategic-security-moonshot.md) supplies the
+long-term destination: explicit strategic models, warranted comparison across plausible
+worlds, decision-relevant information and durable correction under adversarial uncertainty.
+The current cross-tool assessment pilot is a bounded enabling test, not a new security
+modelling programme or evidence of strategic advantage.
 
 ## Now
 

@@ -28,6 +28,39 @@ statuses:
   - blocked
 
 tasks:
+  - id: REVISABLE-ASSESSMENT-PILOT-001
+    title: Test cross-tool revisable assessment and fresh-recipient continuation
+    status: done
+    baseline_commit: 4e9b7f4
+    completion_note: >-
+      Frozen packets at bdeef24 preceded six fresh recipient contexts and 18 retained responses
+      at 6200eb1. Both conditions scored 71/72 with no observed continuation advantage.
+      Twenty local gates bind to 7ff6204, including real 16/2/12 no-skip integration and
+      75 Python tests. Hosted CPU-profile acceptance passed at 5e3411f. Exact contested and
+      withdrawn browser-exported requests passed independent receiving. The user explicitly
+      revised the HTML to a disposable demonstration; general website usability remains
+      untested and outside scope. Original failures and scope are preserved additively.
+      Completion report and audit are under examples/assessments/revisable-pilot. No
+      human comparison, further experiment or ongoing website maintenance is authorized.
+    scope:
+      - Execute pinned Vela artifact transfer, scoped verification, native replay and correction limits using disposable synthetic fixtures.
+      - Preserve one bounded public-information assessment, contradictory interpretations and two source updates without inventing mathematical semantics.
+      - Freeze a fair information-matched three-runs-per-condition fresh-AI continuation pilot before executing recipients.
+      - Expose inspection and authored continuation through a small local file-based interface and verify its actual workflow.
+      - Retain the strategic-security moonshot as long-term direction without expanding this bounded testbed into security modelling.
+    exclusions:
+      - New Bellman theorem, empirical fitting campaign, native political records, production deployment, real authority, outreach, merges or published releases.
+      - Modifying Decision Lab, Vela source, frozen evidence or the unmerged decision-episode branch.
+    acceptance:
+      - Real Vela receiving or a decisive executed incompatibility and supported route.
+      - Two inspectable revisions, real fresh-recipient evidence and independent replay.
+      - Browser workflow, meaningful positive and rejection controls, required repository and no-skip integration gates.
+      - Plain-language findings, explicit semantic losses, source-bound artifacts and honest usability/empirical limits.
+    outputs:
+      - examples/assessments/revisable-pilot
+      - packages/assessment-view
+      - docs/current/strategic-security-moonshot.md
+
   - id: CERTIFICATE-TRANSPORT-INTEGRATION-001
     title: Bind a transported mathematical guarantee to an accepted revision lifecycle
     status: done

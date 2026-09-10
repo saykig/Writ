@@ -1,0 +1,69 @@
+{
+  "stage": 0,
+  "current_assessment": "S0 supports investigating a reported apparent neutrino-speed anomaly of about 20 ppm from over 15,000 events. It does not establish genuinely superluminal propagation or settle its explanation. OPERA's reported inability to find an instrumental explanation leaves room for an unrecognized fault; independent measurements were sought.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Open; not established",
+      "rationale": "The reported observation motivates this hypothesis, but an apparent excess speed does not by itself establish a genuine propagation effect."
+    },
+    {
+      "id": "H2",
+      "status": "Open; conditionally excluded only under contested A1",
+      "rationale": "S0 reports unsuccessful searches for an instrumental explanation, not proof that timing-chain faults are absent. C2's exclusion depends on Alpha's stronger premise, disputed by Beta."
+    },
+    {
+      "id": "H3",
+      "status": "Open; not established or excluded",
+      "rationale": "The packet does not provide evidence sufficient to determine whether statistical, pulse-profile or analysis effects explain the anomaly. Event count alone does not settle this question."
+    }
+  ],
+  "assumptions_and_disagreements": [
+    {
+      "id": "A1",
+      "current_use": "May be retained as Alpha's explicit provisional premise for C2, but cannot justify an unconditional exclusion of H2.",
+      "historical_standing": "Preserve as an AI-authored assumption based on S0 that exceeds what S0 establishes."
+    },
+    {
+      "id": "D1",
+      "current_use": "Keep the calibration-sufficiency dispute visible when using A1 or C2. Its objection identifies the gap between finding no fault and excluding unknown faults.",
+      "historical_standing": "Preserve as Beta's AI-authored disagreement with A1, not a human endorsement or proof that H2 is true."
+    }
+  ],
+  "impacts": [
+    {
+      "id": "A1",
+      "dependency_reason": "Its reliance on S0 requires reassessing whether reported checks warrant its stronger exclusion premise; the supplied report does not establish that premise."
+    },
+    {
+      "id": "C2",
+      "dependency_reason": "Depends on A1, D1 and H2; must retain its conditional and contested standing."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "Depends on H1, H2 and H3, all unresolved. No explanation can yet close the question."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0"],
+      "reason": "Preserve the dated report and capture provenance as evidence of what was reported."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2"],
+      "reason": "Preserve the premise, disagreement and conditional inference separately so subsequent assessment cannot erase or recast their original standing."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "C1", "Q1", "B0"],
+      "reason": "Preserve the initial explanation menu, bounded interpretation, open question and exercise limits."
+    }
+  ],
+  "unresolved": [
+    "Whether further measurements reproduce the apparent anomaly.",
+    "Whether an unrecognized timing-chain fault or analysis effect accounts for it.",
+    "Whether H1 is supported after alternatives are investigated.",
+    "Whether other explanations or combinations are relevant; the menu is neither exhaustive nor proven mutually exclusive."
+  ],
+  "source_ids": ["S0"],
+  "limits": "This is an authored continuation proposal, not accepted truth or a mathematical result. S0 is a selected dated section of a current CERN page, not an archived historical edition or independent corroboration. Supplied hashes bind bytes, not truth; no separate hash verification was performed. Reported checks do not establish exhaustive fault exclusion. The packet supplies no quantitative evidential model, probabilities, causal identification, independence guarantee or authority to act."
+}

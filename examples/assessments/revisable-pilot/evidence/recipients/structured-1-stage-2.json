@@ -1,0 +1,83 @@
+{
+  "stage": 2,
+  "current_assessment": "The current source-bound assessment favors H2: S2 reports flight times consistent with light speed from Borexino, ICARUS, LVD and OPERA and attributes the original OPERA measurement to a faulty fibre timing element. The original anomaly should therefore no longer be interpreted as evidence establishing superluminal propagation. S0 remains the record of what was reported initially. This is an authored continuation proposal, not independent verification of CERN's attribution.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Disfavored as an explanation of the original anomaly",
+      "rationale": "S2's reported measurements and fault attribution undermine the genuine-propagation interpretation of this observation. This does not establish a universal impossibility of superluminal propagation beyond the supplied case."
+    },
+    {
+      "id": "H2",
+      "status": "Supported as the current source-reported explanation",
+      "rationale": "S2 advances from S1's possible timing faults to attribution of the original measurement to a faulty fibre timing element. The packet supplies that attribution and reported follow-up consistency, but no independent causal reconstruction."
+    },
+    {
+      "id": "H3",
+      "status": "Not established; no longer needed as the leading explanation",
+      "rationale": "The current supplied account attributes the anomaly to H2. It does not provide a separate decisive exclusion of every statistical, pulse-profile or analysis contribution, and the hypotheses were never established as mutually exclusive."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "Remains withdrawn under U1. S2's reported timing fault further contradicts using calibration sufficiency to exclude unknown timing-chain faults.",
+      "historical_standing": "Preserve Alpha's original provisional assumption, its dependence on S0 and its explicit withdrawal. Do not replace its historical content with the later correction."
+    },
+    "D1": {
+      "current_use": "Its warning against treating failure to find a fault as fault exclusion is supported by the subsequent source account. A1's withdrawal ends the need to treat that premise as a live accepted basis for exclusion.",
+      "historical_standing": "Preserve Beta's original objection as an AI-authored analytic position. It did not identify the fibre fault or independently demonstrate the later attribution."
+    }
+  },
+  "impacts": [
+    {
+      "id": "C2",
+      "dependency_reason": "Its exclusion of H2 requires withdrawn A1, and S2 now supports H2. C2 has no current applicability as an exclusion; preserve it only as the historical contested conditional."
+    },
+    {
+      "id": "C1",
+      "dependency_reason": "S0 still supports the historical judgment that the reported anomaly merited scrutiny. Its current use should incorporate S2's correction rather than imply an unexplained anomaly persists."
+    },
+    {
+      "id": "Q1",
+      "dependency_reason": "The explanation question now has a source-reported answer favoring H2. Remaining uncertainty concerns the detail and independent substantiation of that answer, not an unchanged three-way evidential standing."
+    },
+    {
+      "id": "Q2",
+      "dependency_reason": "U2 explicitly supplies no numerical decomposition. S2's fibre attribution does not determine the separate oscillator and connector magnitudes or their net contribution."
+    },
+    {
+      "id": "A1",
+      "dependency_reason": "S2 reinforces its inapplicability; historical preservation must remain distinct from current evidential use."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "identifiers": ["S0", "C1"],
+      "reason": "Preserve the original reported observation and why it warranted investigation, without retaining its initial interpretation as current."
+    },
+    {
+      "identifiers": ["A1", "D1", "C2", "U1"],
+      "reason": "Retain the premise, disagreement, conditional consequence and withdrawal as an inspectable reasoning history."
+    },
+    {
+      "identifiers": ["S1", "Q2"],
+      "reason": "Preserve the intermediate possible effects and their unresolved quantitative decomposition."
+    },
+    {
+      "identifiers": ["S2", "U2"],
+      "reason": "Record the later reported measurements, fault attribution and correction."
+    },
+    {
+      "identifiers": ["H1", "H2", "H3", "Q1", "B0"],
+      "reason": "Preserve candidate definitions, the original question and scope limits while updating their current standing."
+    }
+  ],
+  "unresolved": [
+    "The separate magnitudes and net contribution of the two timing effects.",
+    "The oscillator's eventual evidential standing and contribution, if any.",
+    "The underlying measurements, uncertainties and diagnostic evidence supporting the fibre attribution.",
+    "Whether other effects made subsidiary contributions."
+  ],
+  "source_ids": ["S0", "S1", "S2"],
+  "limits": "All supplied source sections share one publisher page; the packet does not independently establish the reported experiments' evidential independence. Consistency with light speed is not an exact equality proof. CERN's fault attribution is preserved as a source claim, not a checked mathematical or independently reproduced causal result. Hashes bind bytes rather than truth and were not verified here. No numerical posterior, quantitative decomposition or authority to act is supplied."
+}

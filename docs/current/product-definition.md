@@ -8,6 +8,10 @@ decision calculus. It is to preserve enough structure that a later human or mach
 what was known, what was assumed, what followed mathematically, what remained uncertain, what was
 decided, and what changed afterward.
 
+The [strategic-security moonshot](strategic-security-moonshot.md) states the user-adopted
+long-term destination. Current non-security pilots test enabling infrastructure; they do
+not replace that ambition or establish its strategic validity.
+
 ## Current architecture
 
 Writ currently has two separate layers.

@@ -1,0 +1,137 @@
+{
+  "schema": "writ.revisable-assessment-completion-audit.v1",
+  "scope": "Original brief plus explicit user-authorized disposable-demonstration scope revision; no inferred waiver.",
+  "requirements": [
+    {
+      "requirement": "Pinned real Vela compatibility, native meanings and supported correction route",
+      "status": "verified",
+      "evidence": [
+        "REUSE_REPORT.md",
+        "evidence/vela-reuse.json",
+        "evidence/synthetic-vela.bundle",
+        "evidence/vela-receiving-final.json"
+      ]
+    },
+    {
+      "requirement": "One public assessment with three explanations, disagreement, source correction, two updates and unresolved question",
+      "status": "verified",
+      "evidence": [
+        "packets/stage-0.json",
+        "packets/stage-1.json",
+        "packets/stage-2.json",
+        "RESEARCH_REPORT.md"
+      ]
+    },
+    {
+      "requirement": "Prospective fair three-runs-per-condition fresh AI comparison with all attempts retained",
+      "status": "verified",
+      "evidence": [
+        "packets/PROTOCOL.md",
+        "packets/FREEZE.json",
+        "evidence/pilot-observations.json",
+        "evidence/blinded-scorer.json",
+        "evidence/recipients"
+      ]
+    },
+    {
+      "requirement": "Exact receiving, decisive rejection controls, source/query identity and producer-disabled operation",
+      "status": "verified",
+      "evidence": [
+        "receive-vela.py",
+        "receive-pilot.py",
+        "evidence/checkpoint-1.json",
+        "../../../packages/assessment-view/test/continuation.test.ts"
+      ]
+    },
+    {
+      "requirement": "Revised disposable local demonstration with actual export and independent append receiving",
+      "status": "verified",
+      "evidence": [
+        "UI_SCOPE_ADDENDUM.md",
+        "evidence/browser-download-1.json",
+        "evidence/browser-download-2.json",
+        "evidence/browser-receiving-addendum.json"
+      ]
+    },
+    {
+      "requirement": "Human follow-up materials without performing/recruiting a study",
+      "status": "verified",
+      "evidence": [
+        "packets/PROTOCOL.md"
+      ]
+    },
+    {
+      "requirement": "Source-bound findings and programme guidance",
+      "status": "verified",
+      "evidence": [
+        "COMPLETION_REPORT.md",
+        "../../../docs/current/roadmap.md",
+        "../../../TASKS.yaml"
+      ]
+    },
+    {
+      "requirement": "Required local/native/hosted gates, preserved failures and later recoveries",
+      "status": "verified",
+      "evidence": [
+        "evidence/checkpoint-1.json",
+        "evidence/browser-attempt-1.json",
+        "evidence/completion-audit.json"
+      ]
+    }
+  ],
+  "local_machine_source": "7ff6204ba53ab2d09cddf7d80872155d9f1fa57c",
+  "local_reported_gates": 20,
+  "hosted_ci": {
+    "run_id": 34429017601,
+    "head_sha": "5e3411f859b1086277ff7c5cb4f55a838fe734d1",
+    "conclusion": "success",
+    "url": "https://github.com/saykig/Writ/actions/runs/34429017601",
+    "jobs": [
+      {
+        "name": "Writ verification",
+        "conclusion": "success",
+        "url": "https://github.com/saykig/Writ/actions/runs/34429017601/job/102720316593"
+      },
+      {
+        "name": "python",
+        "conclusion": "success",
+        "url": "https://github.com/saykig/Writ/actions/runs/34429017601/job/102720316777"
+      },
+      {
+        "name": "typescript",
+        "conclusion": "success",
+        "url": "https://github.com/saykig/Writ/actions/runs/34429017601/job/102720316793"
+      }
+    ]
+  },
+  "unchanged_load_bearing_code": true,
+  "changed_earlier_source_files": [
+    ".github/workflows/ci.yml",
+    "TASKS.yaml",
+    "docs/current/roadmap.md",
+    "examples/assessments/revisable-pilot/README.md",
+    "packages/assessment-view/PRODUCT.md"
+  ],
+  "change_scope": "CPU-only hosted setup and living guidance. Component/library code, frozen inputs, outputs and receipts match the tested source. Completion adds evidence/guidance; no scientific or checker semantics change.",
+  "preservation": {
+    "baseline": "4e9b7f4",
+    "unchanged_paths": [
+      "docs/history",
+      "examples/decision-cases",
+      "schemas",
+      "packages/decision-case",
+      "packages/shared-analysis",
+      "packages/provenance"
+    ],
+    "vela_source_clean": true,
+    "no_new_branch_merge_release_or_deployment": true
+  },
+  "explicitly_unperformed": [
+    "General visual/responsive/keyboard/navigation usability outside revised scope",
+    "Human comparison or recruitment",
+    "Empirical physics validation",
+    "Strategic disclosure, general history preservation theorem or mechanism composition",
+    "Formal verification or production maintenance"
+  ],
+  "final_status": "All revised substantive requirements verified; final metadata/manifest integrity and push follow."
+}

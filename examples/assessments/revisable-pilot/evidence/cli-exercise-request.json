@@ -1,0 +1,12 @@
+{
+  "schema": "writ.experimental-continuation-request.v1",
+  "assessment_id": "opera-bounded-2011-2012",
+  "base_sha256": "sha256:189a81ffa41b742abce4436c0d6e76a457292568ece1be0ff5de05f73a7d82ae",
+  "target": "A1",
+  "status": "withdrawn",
+  "rationale": "Synthetic CLI exercise: retain the original A1 and D1 records while withdrawing current reliance on calibration sufficiency after S1 and S2.",
+  "source_ids": [
+    "S1",
+    "S2"
+  ]
+}

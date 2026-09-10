@@ -1,0 +1,22 @@
+{
+  "edition": 1,
+  "frozen_before_any_recipient": true,
+  "run_order": [
+    "structured-1",
+    "prose-1",
+    "structured-2",
+    "prose-2",
+    "structured-3",
+    "prose-3"
+  ],
+  "files": {
+    "TASK.txt": "0effa6bb11bbb836966af2905f3abdcdb9e453da27261299d9d43b0f6771f416",
+    "PROTOCOL.md": "e113e184c9f12bac67fb3edd0c5aa3266ccbf229fe435bf8a09c766a51d9e5a4",
+    "stage-0.json": "69375bd0c5809fd7c9758d8ab26646f05ae4ab1c141a9b07d6ee5c7ed65570f8",
+    "stage-0.md": "5a090db9246791b9ef3ffbcffd0660963c0f8973ae2e20b8c39c8cd9a556c702",
+    "stage-1.json": "a87510c07a22dbbcfb794cc43c4d1855001fd7ad12b3cc4dbafd262f722fca67",
+    "stage-1.md": "600d43598974996268e3296188d7758431d3c1640258a30dd62f3652094bbf46",
+    "stage-2.json": "90fa1c790e7cc4248bae162cbf441cb86edd0a6cd68d1e727c64f2652408b36b",
+    "stage-2.md": "2e7c0a471e336d1fff9db67cdb273e783dd2b8102190ed6420f110957cb27b87"
+  }
+}

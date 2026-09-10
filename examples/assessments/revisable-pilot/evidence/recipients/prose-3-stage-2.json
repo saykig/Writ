@@ -1,0 +1,78 @@
+{
+  "stage": 2,
+  "current_assessment": "S2 reports flight times consistent with light speed from Borexino, ICARUS, LVD and OPERA, and attributes the original OPERA measurement to a faulty fibre timing element. The current source-bound interpretation therefore favors H2 and no longer treats the original anomaly as evidence establishing H1. S0 remains an accurate historical record of the earlier report. C2 remains inapplicable to the current assessment.",
+  "explanations": [
+    {
+      "id": "H1",
+      "status": "Disfavored as an explanation of the original anomaly",
+      "rationale": "S2 reports measurements consistent with light speed and a timing-fault attribution for the original result. This corrects the earlier propagation interpretation without establishing a universal claim about every possible propagation effect."
+    },
+    {
+      "id": "H2",
+      "status": "Supported as the source-reported explanation",
+      "rationale": "S2 attributes the original measurement to a faulty fibre timing element. This advances H2 beyond S1's possible mechanisms, while remaining CERN's reported attribution rather than an independently verified causal finding in this exercise."
+    },
+    {
+      "id": "H3",
+      "status": "Unsupported as the primary explanation; not exhaustively excluded",
+      "rationale": "The supplied correction points to a timing fault rather than a statistical, pulse-profile or analysis explanation. It supplies no exhaustive exclusion of ancillary effects or combinations."
+    }
+  ],
+  "assumptions_and_disagreements": {
+    "A1": {
+      "current_use": "Remains withdrawn. S2's reported timing fault further contradicts its claim that the earlier checks excluded unrecognized timing-chain faults.",
+      "historical_standing": "Preserve Alpha's provisional assumption, its S0 dependency and U1's withdrawal, without recasting it as something S0 established."
+    },
+    "D1": {
+      "current_use": "Its objection to A1 is supported by the subsequent reported fault. It does not supply an independent measurement or a numerical causal decomposition.",
+      "historical_standing": "Preserve Beta's original AI-authored objection and its dependencies. Alpha's withdrawal and the later correction do not erase the earlier disagreement."
+    }
+  },
+  "impacts": [
+    {
+      "ids": ["H1", "H2", "H3", "Q1"],
+      "dependency_reasons": "S2 changes the evidence relevant to the explanation menu on which Q1 depends: a timing fault is now the reported explanation, and new measurements are consistent with light speed. Q1 has a source-reported answer, subject to the remaining evidentiary limits."
+    },
+    {
+      "ids": ["C2"],
+      "dependency_reasons": "C2 depends on withdrawn A1 and concerns exclusion of H2. S2 now supports H2, reinforcing that C2 cannot be applied currently."
+    },
+    {
+      "ids": ["A1", "D1"],
+      "dependency_reasons": "Reassess their present standing against S2 while retaining their original S0-based dependency context and U1's withdrawal."
+    },
+    {
+      "ids": ["C1"],
+      "dependency_reasons": "Its S0-based judgment that the reported anomaly merited investigation remains historically sound. Current use must incorporate S2 rather than suggest the original anomaly remains unexplained."
+    },
+    {
+      "ids": ["Q2"],
+      "dependency_reasons": "U2 explicitly supplies no numerical decomposition. S2's fibre attribution does not settle Q2's separate magnitudes or net contribution."
+    }
+  ],
+  "history_to_preserve": [
+    {
+      "ids": ["S0", "C1"],
+      "why": "The original report and justified call for scrutiny remain historical records, despite correction of the measurement interpretation."
+    },
+    {
+      "ids": ["A1", "D1", "C2", "U1"],
+      "why": "Preserve the premise, disagreement, conditional conclusion and withdrawal so the changed applicability is inspectable."
+    },
+    {
+      "ids": ["S1", "Q2"],
+      "why": "Preserve the intermediate report of two possible effects and the still-unanswered numerical question."
+    },
+    {
+      "ids": ["S2", "U2", "H1", "H2", "H3", "Q1", "B0"],
+      "why": "Preserve the correction, evolving explanation assessment and governing boundaries without rewriting earlier stages."
+    }
+  ],
+  "unresolved": [
+    "The separate magnitudes and net contribution of the oscillator and fibre effects.",
+    "Detailed experimental evidence, uncertainty estimates and causal checks underlying S2's attribution.",
+    "Whether ancillary effects contributed; the supplied menu is not exhaustive."
+  ],
+  "source_ids": ["S0", "S1", "S2"],
+  "limits": "This is an authored continuation proposal. One publisher reports four experiments; this packet does not independently establish their methodological independence. The dated sections share current-page provenance, not archived editions. Hashes bind bytes, not truth, and were not independently verified here. No numeric posterior, complete causal decomposition, mathematical guarantee or authority to act is established."
+}
