@@ -68,7 +68,7 @@ by preserved exact hashes.
 ```bash
 bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
   --episode /path/to/episode.json \
-  --expected-episode-sha256 sha256:<independently-retained-hex-digest> \
+  --expected-episode-sha256 "$EXPECTED_EPISODE_SHA256" \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```
