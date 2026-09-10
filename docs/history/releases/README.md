@@ -65,6 +65,10 @@ release-note hashes, and supported checkpoint hashes.
 Human-readable period dates use UTC to match the GitHub merge chronology. Exact Git commit
 timestamps retain their recorded numeric offsets.
 
+The [10 September 2026 GitHub description audit](./github-description-audit-2026-09-10.json)
+records the authorized human-first description refresh, exact before/after body hashes, and the
+post-mutation proof that release metadata, assets, and tag refs remained unchanged.
+
 Historical sections describe what existed at the target. Later interpretation is confined to “What
 did not survive,” “What survived,” “What changed next,” and “Current retrospective.” Checks reported
 for an old version come from evidence attached to that work; current verification is not projected

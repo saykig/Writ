@@ -1,0 +1,306 @@
+{
+  "schema": "writ.github-release-description-audit.v1",
+  "recorded_at": "2026-09-10",
+  "repository": "saykig/Writ",
+  "scope": "Authorized in-place improvement of the eight existing GitHub release descriptions; no release, version, tag, target, title, state, timestamp, or asset mutation was authorized.",
+  "implementation_commit": "acb6387690c6e9bfc248366651782bd29f283f02",
+  "implementation_ci": {
+    "run_id": 34504386968,
+    "url": "https://github.com/saykig/Writ/actions/runs/34504386968",
+    "conclusion": "success",
+    "jobs": ["Writ verification", "python", "typescript"]
+  },
+  "pre_mutation_evidence": {
+    "release_metadata_snapshot_sha256": "d342b3e85914c4c3a6c4023c4246ca6631b47eaa4617c86483972c06c0cbe6f7",
+    "original_fifteen_tag_inventory_sha256": "63ead3d77b7bf51ddbd53fe5aa2932c8364c35a1893a6dd13b5ec88c7a0918f5",
+    "read_only_audit_report_sha256": "e4f7097539ebaee14acb34b431780945f7bd4861b72d46a6a78b007a567c4019",
+    "release_count": 8,
+    "all_bodies_matched_their_then_current_canonical_release_notes": true,
+    "all_assets": []
+  },
+  "mutation": {
+    "method": "GitHub REST API PATCH by immutable release ID",
+    "serialized": true,
+    "fields_sent": ["name", "body"],
+    "name_values_changed": false,
+    "body_changes": "Each body gained a human-first retrospective summary followed by a clearly separated technical and machine-readable record.",
+    "canonical_note_link_commit": "acb6387690c6e9bfc248366651782bd29f283f02",
+    "v0_0_4_corrected_note_sha256": "57715015fafe3ef56698930d70ec6c4cea83995482ac91601e75bb2e5f8b35a0"
+  },
+  "releases": [
+    {
+      "tag": "v0.0.1",
+      "release_id": 384360587,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.1",
+      "name": "v0.0.1 — Origin: Covenant to Writ",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:05Z",
+      "updated_at_before": "2026-09-07T23:35:05Z",
+      "updated_at_after": "2026-09-10T16:53:27Z",
+      "source_draft_sha256": "2b3027f7f32a342de856dd617170067f0e728f0ac4b89f3248fd4cfba0aa4f32",
+      "body_sha256_before": "69142cdb91b4eb30cfa21257b0c912e97cd44636bd034a54a84b6ab215175cfe",
+      "body_sha256_after": "e62839185f6df162389c00eeb3842b6acab14db930b8bf4a0d6d390279a7a5b8",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.2",
+      "release_id": 384360593,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.2",
+      "name": "v0.0.2 — Source-grounded reset and corpus architecture",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:05Z",
+      "updated_at_before": "2026-09-07T23:35:05Z",
+      "updated_at_after": "2026-09-10T16:53:28Z",
+      "source_draft_sha256": "e709738efa669052bda184be2c0c9cb4b97b8eb9d8c9f42fadad6971c1c10a21",
+      "body_sha256_before": "405722ec5c0ae8e6c1591f9505bbb52e3ee56e6a1571706fed9582f5e0adffc1",
+      "body_sha256_after": "9473109b890e1b899ce8b9d93aabe74d6f4221fe930dd75a1f24b2488d2be511",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.3",
+      "release_id": 384360598,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.3",
+      "name": "v0.0.3 — Reviewed institutional knowledge and verification",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:06Z",
+      "updated_at_before": "2026-09-07T23:35:06Z",
+      "updated_at_after": "2026-09-10T16:53:29Z",
+      "source_draft_sha256": "d5b7d043445f5ba97dff8711fae7ee3f967a15e90ae08f97bd2338f576f97e12",
+      "body_sha256_before": "af0957c5caebe82e1a9f43444282102a65ad2fdc6e8032435f150df6f95b7652",
+      "body_sha256_after": "f16df372c819fb9c63e37d8fd95f2067ce89b426d5984913d0fac556e8a157c1",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.4",
+      "release_id": 384360605,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.4",
+      "name": "v0.0.4 — Evidence-bound foundation and NIST reference",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:07Z",
+      "updated_at_before": "2026-09-07T23:35:07Z",
+      "updated_at_after": "2026-09-10T16:53:30Z",
+      "source_draft_sha256": "e505c3332ac79e8f013453bf9aff9eff5383e6804c4256cafabba0892bd0faab",
+      "body_sha256_before": "4f3805bc930537f5bd8f2bb6d93d0ccab6ed92b74be764d4f0b5760d2fed11d1",
+      "body_sha256_after": "732b20915e22da086c112a9dad01586b4f53be742af8e6aa0140371f50868148",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.5",
+      "release_id": 384360611,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.5",
+      "name": "v0.0.5 — Portable provenance kernel",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:08Z",
+      "updated_at_before": "2026-09-07T23:35:08Z",
+      "updated_at_after": "2026-09-10T16:53:31Z",
+      "source_draft_sha256": "0d284a5da0d1aefa779558ede7955bde383ce77a94e653515562b7881b49d97b",
+      "body_sha256_before": "f21b26cffc0aac9ba0ef10f83be54363be8ed159a27d987cfb0177293c7fd1c9",
+      "body_sha256_after": "5bd0c822519ffc89703bfc16dca795cd07390da854e56e3066bf8883b26f4302",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.6",
+      "release_id": 384360614,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.6",
+      "name": "v0.0.6 — Decision-provenance foundation",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:09Z",
+      "updated_at_before": "2026-09-07T23:35:09Z",
+      "updated_at_after": "2026-09-10T16:53:32Z",
+      "source_draft_sha256": "5fdb51d1c7ee5730b8a5f5dcfc452877f008ea04ca2457afd22e16ba2d38cf10",
+      "body_sha256_before": "f33c13e3ebcde74b38def2457946e92a10f7ca4142da7e6698846939ca39154e",
+      "body_sha256_after": "cb48a7fcc4610b27f4db6c55fcc66b88910825d6f28f4ddba3c4f68bf5cf91a8",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.7",
+      "release_id": 384360621,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.7",
+      "name": "v0.0.7 — Bounded decision-provenance integration",
+      "target_commitish": "main",
+      "created_at": "2026-09-07T23:34:26Z",
+      "published_at": "2026-09-07T23:35:10Z",
+      "updated_at_before": "2026-09-07T23:35:10Z",
+      "updated_at_after": "2026-09-10T16:53:32Z",
+      "source_draft_sha256": "990336b8554b1533ed9ff3c28413fdeaa9f80a3eea008559faf67462ed3102e8",
+      "body_sha256_before": "e79e54101df62b2bf6897be38853f1087c0a5e66d344c43ad51881e4234cac2d",
+      "body_sha256_after": "6e0b1b435c4c4be13e2549bf73261e681ddc1785b1c2deb3cf5064a18eef3442",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": "v0.0.8",
+      "release_id": 384413747,
+      "url": "https://github.com/saykig/Writ/releases/tag/v0.0.8",
+      "name": "v0.0.8 — Shared-analysis revision and replay",
+      "target_commitish": "main",
+      "created_at": "2026-09-08T02:42:18Z",
+      "published_at": "2026-09-08T02:42:31Z",
+      "updated_at_before": "2026-09-08T02:42:31Z",
+      "updated_at_after": "2026-09-10T16:53:33Z",
+      "source_draft_sha256": "3b06bd100023e895d04828419fe68460b3b70db62e61e7bcfd7c69b8dc792056",
+      "body_sha256_before": "699afa6c76483e8020c310101caca207915d4b40a28d76c1d404a3ffcfdff911",
+      "body_sha256_after": "d8ddbf106649422e5c3fabf0412934a112cb1b4ba7059e62108a66fa53c6411b",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    }
+  ],
+  "post_mutation_verification": {
+    "release_count": 8,
+    "release_ids_unchanged": true,
+    "tag_names_unchanged": true,
+    "names_unchanged": true,
+    "target_commitish_values_unchanged": true,
+    "draft_and_prerelease_states_unchanged": true,
+    "creation_and_publication_timestamps_unchanged": true,
+    "asset_arrays_unchanged": true,
+    "new_release_created": false,
+    "all_body_hashes_matched_the_applied_content": true,
+    "all_canonical_note_links_resolved_to_the_implementation_commit": true,
+    "v0_0_4_no_longer_claims_the_nist_checkpoint_is_a_release": true,
+    "remote_tag_refs_sha256_before_and_after": "5f90262fd37988fa8854667471af7795053e3a8c5b9a9cd89da46704b865cf77",
+    "remote_ls_remote_line_count": 28,
+    "logical_tag_count": 16,
+    "original_tags_changed": 0,
+    "authorized_snapshot_added_before_description_mutation": "snapshot/revisable-assessment-pilot-v1"
+  },
+  "tag_inventory_after": [
+    {
+      "tag": "decision-provenance-foundation-2026-09-05",
+      "object_type": "tag",
+      "ref_object": "161956a3cc25e603a684910d520d3e65c8344dd9",
+      "target_commit": "20f0473afa62ed3c6e0433a21b189d1d9d1712d6",
+      "tree": "efb2a92bd4c87ea0a7e6ad2d404333a8f646812f"
+    },
+    {
+      "tag": "nist-reference-2026-08-29",
+      "object_type": "tag",
+      "ref_object": "9013c25a5d235711174c02bf80924e0f22e6678a",
+      "target_commit": "148da9310985f317d1663d1cfbddfd5f30c91e98",
+      "tree": "c31c632e87b6fc8acf47a812f4cc6b6b980b7564"
+    },
+    {
+      "tag": "portable-provenance-kernel-2026-09-02",
+      "object_type": "tag",
+      "ref_object": "d32dde0e0a3f143e6ff588b5f7a9e8ab0f299cc9",
+      "target_commit": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+      "tree": "aa66c5e4d8cf98ac8074c421acaaf2f6d3bf485e"
+    },
+    {
+      "tag": "pre-foundation-reset-2026-08-22",
+      "object_type": "tag",
+      "ref_object": "cb4be356477084be9dc68d8d14032c2a41c180c1",
+      "target_commit": "6f451687408a0b5780060332340c16d6b4b09a15",
+      "tree": "4263573015a15b641bcfc6a111f92faa14df6597"
+    },
+    {
+      "tag": "snapshot/eu-us-ai-evaluation-v1",
+      "object_type": "commit",
+      "ref_object": "60d5b5e023fb3578db323e424136f3100b561952",
+      "target_commit": "60d5b5e023fb3578db323e424136f3100b561952",
+      "tree": "cc3d50f37ee31d4e9c54fbeced75eb57af8b7dbc"
+    },
+    {
+      "tag": "snapshot/g20-2024-rio",
+      "object_type": "commit",
+      "ref_object": "8c149002d0e371e4dc3f605bbbbed216f4297189",
+      "target_commit": "8c149002d0e371e4dc3f605bbbbed216f4297189",
+      "tree": "5905698c58eb4077d24dce62e79d9927d1e46091"
+    },
+    {
+      "tag": "snapshot/g7-2025-ai-sme",
+      "object_type": "commit",
+      "ref_object": "9cf9187e07cfa53f019bf33e363447047ca161a4",
+      "target_commit": "9cf9187e07cfa53f019bf33e363447047ca161a4",
+      "tree": "43ad456f1fd1e32732a061e7ec3fb09be08651ae"
+    },
+    {
+      "tag": "snapshot/revisable-assessment-pilot-v1",
+      "object_type": "commit",
+      "ref_object": "c09922f8a4689284de42b1b1bcc22098fa19c117",
+      "target_commit": "c09922f8a4689284de42b1b1bcc22098fa19c117",
+      "tree": "e099d9915d8199de29bf834e3ecd56c403916cd3"
+    },
+    {
+      "tag": "v0.0.1",
+      "object_type": "tag",
+      "ref_object": "8a2e6b21d48bd7b08fec4438c15f5fe8ea52c6ce",
+      "target_commit": "a435e9d2a340df58fcbb6dad85ea8444e7b72e52",
+      "tree": "652de8fbecfca2430ff11b38c806d1b5ddaa2433"
+    },
+    {
+      "tag": "v0.0.2",
+      "object_type": "tag",
+      "ref_object": "92bb46fbea2b608f1312e24e9380897a97192226",
+      "target_commit": "14ec512a28949155054dd2e7479337dbfce95f8c",
+      "tree": "2b26fd7972208e8583f83dbb886a7aa1e35cb6e0"
+    },
+    {
+      "tag": "v0.0.3",
+      "object_type": "tag",
+      "ref_object": "8ecb005260ec12dde6d2c554b40001696f906965",
+      "target_commit": "8a4e3b8ed31c8f7b26fbfdb377ec901a39ffdeb4",
+      "tree": "9f317294cf6d25b9069d32d9f9a1e6c0f9a36e99"
+    },
+    {
+      "tag": "v0.0.4",
+      "object_type": "tag",
+      "ref_object": "8c6c53c7a3dc133fa4c44b25e79c26fb17e1e1ca",
+      "target_commit": "8a8c19e25fc129c84b27f0f545fcde697032097a",
+      "tree": "ff7717b60322db7c48590b910e517a457cb35abf"
+    },
+    {
+      "tag": "v0.0.5",
+      "object_type": "tag",
+      "ref_object": "e89ddb6c8625899de6aaf778cf596505e76db0fa",
+      "target_commit": "7c1ff7cf881236beacb40181a83f320e88d9b4f1",
+      "tree": "aa66c5e4d8cf98ac8074c421acaaf2f6d3bf485e"
+    },
+    {
+      "tag": "v0.0.6",
+      "object_type": "tag",
+      "ref_object": "b0a1129680c991e8733605487a8fd34ce849ee74",
+      "target_commit": "20f0473afa62ed3c6e0433a21b189d1d9d1712d6",
+      "tree": "efb2a92bd4c87ea0a7e6ad2d404333a8f646812f"
+    },
+    {
+      "tag": "v0.0.7",
+      "object_type": "tag",
+      "ref_object": "113c81bcd60da2d28b46333df4a6d61286aba576",
+      "target_commit": "32207b8178f969da04e0133470b33f286c5512ad",
+      "tree": "dfa8952d5091874e4a932235f52a3fe6ca55bd7f"
+    },
+    {
+      "tag": "v0.0.8",
+      "object_type": "tag",
+      "ref_object": "2d1405e4673e18d756a9851f4d28fbc4c92e5d9c",
+      "target_commit": "8b5ec349e908fa70e0a13853f0ee977dd573b01f",
+      "tree": "412caf120cbc05a285c3dcc7734b251c62062f38"
+    }
+  ],
+  "limitations": [
+    "GitHub-generated source archives are tag-derived endpoints and have no uploaded-asset digest in the release API; their identity is preserved by the unchanged tag refs.",
+    "The authorized snapshot/revisable-assessment-pilot-v1 tag was created and verified before the release-description mutation; it is a recovery point, not a numbered release.",
+    "This audit verifies metadata identity and description bytes. It does not reinterpret the historical scope of any release."
+  ]
+}
