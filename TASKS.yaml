@@ -30,9 +30,9 @@ statuses:
 tasks:
   - id: AFY-RO-CRATE-AND-PRESENTATION-001
     title: Exercise one empirical research-object round trip and clarify Writ's active surface
-    status: review
+    status: done
     baseline_commit: 28e0cd4f2208cc0ba5ca2e34ad474a2784960709
-    review_note: >-
+    completion_note: >-
       The executed AFY handoff is retained at the example boundary in acb6387. A pinned
       rocrate==0.15.1 consumer reopened all 86 declared files; required profile checks passed
       42/42 and the deliberately incomplete recommended profile passed 94/98. A zero-history
@@ -41,10 +41,10 @@ tasks:
       provenance are retained without the raw data. Repository cleanup retired the disposable
       assessment pilot to snapshot/revisable-assessment-pilot-v1 while retaining all justified
       architectural roots. Local repository, Python, example and six no-skip integration gates
-      passed, as did hosted run 34504386968. All eight existing GitHub release descriptions were
-      refreshed in place; release IDs, titles, targets, states, timestamps, assets and every
-      pre-existing tag ref remained unchanged. Completion awaits hosted verification of the durable
-      release-audit record.
+      passed, as did hosted implementation run 34504386968. All eight existing GitHub release
+      descriptions were refreshed in place; release IDs, titles, targets, states, timestamps,
+      assets and every pre-existing tag ref remained unchanged. The durable release audit was
+      committed at e1f0ff5 and its hosted run 34505598016 passed before completion was recorded.
     dependencies:
       - DECISION-EPISODE-001
     scope:
