@@ -153,4 +153,7 @@ export interface DecisionEpisodeReplay {
   };
 }
 
-export type DecisionEpisodeReplayOptions = TransportEngineOptions;
+export type DecisionEpisodeReplayOptions = TransportEngineOptions & {
+  /** Obtained independently of the received file; a hash is identity, not actor authentication. */
+  readonly expectedEpisodeSha256: string;
+};

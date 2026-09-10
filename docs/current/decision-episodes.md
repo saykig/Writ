@@ -50,7 +50,7 @@ reconsideration. Ordering is provenance only; it is not causal identification.
 - `decisionEpisodeBytes(episode)` emits deterministic exact JSON.
 - `openDecisionEpisode(bytes)` validates the authoritative schema, every embedded byte hash, the
   transitive Writ bindings, event references and ordering.
-- `replayDecisionEpisode(bytes, engineOptions)` freshly rechecks the original and successor
+- `replayDecisionEpisode(bytes, { ...engineOptions, expectedEpisodeSha256 })` freshly rechecks the original and successor
   executions plus the transported certificate. It returns preserved declaration hashes separately.
 
 The recipient command is:
@@ -58,6 +58,7 @@ The recipient command is:
 ```bash
 bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
   --episode /path/to/episode.json \
+  --expected-episode-sha256 sha256:f0b049f4dbdcb66ad5c4ecc26bf0560e4778474c91fc4957d2309a57fb7fceb3 \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```
@@ -81,3 +82,32 @@ ADR 0029 proposes retaining the narrow semantic `replayable decision episode` be
 adds exact cross-artifact binding and recipient replay that loose files do not enforce. It remains
 unaccepted until the human architecture gate. No workflow, causal, evaluation, model-update,
 authentication or authority-to-act semantics are earned.
+
+
+## Reviewed recipient boundary
+
+The CLI requires `--expected-episode-sha256`; the API requires the same pin for replay.
+Obtain it from the intended handoff or reviewed repository revision independently of the received
+file. The example above pins the retained synthetic fixture. Computing a hash from an untrusted
+replacement and passing that same hash does not detect replacement. `openDecisionEpisode` without
+its optional expected hash establishes internal structure only. Neither operation authenticates an
+actor, authority, interpretation review, or empirical observation. Even a perfectly rehashed whole
+replacement is rejected against a previously retained pin; with a new pin it is a different episode.
+
+Replay succeeds only if both executions and the source certificate, target certificate and transport
+warrant freshly check. The lower-level transport API remains able to report rejected/not-checked
+statuses; the episode CLI rejects that case with `DECISION_EPISODE_REPLAY_INCOMPLETE`. Opening or
+creating an envelope does not perform these mathematical checks despite the historical field name
+`checked_history`.
+
+Times are supplied real UTC calendar instants with whole-second precision, excluding leap seconds.
+Strict order is this bounded profile's restriction, not a claim that all real processes have distinct
+second-resolution timestamps. Free text and opaque artifacts can contain arbitrary actor claims;
+closed fields prevent machine promotion, not false prose. A declared accepted interpretation remains
+a supplied review status, not Writ verification, Vela Claim acceptance, or a mathematical revision.
+
+The retained PR #51 profile is a deliberate bounded contract for this operation: one substantive
+revision, supported reassessment, two executions and a transported certificate. Episode validation
+does not name alpha, X, A or B. It does not yet support decisions lacking a certificate transition,
+multiple implementation/observation acts, or repeated reconsideration. Those limits need a concrete
+second operation before broadening the schema; no new adapter or provenance system is justified here.

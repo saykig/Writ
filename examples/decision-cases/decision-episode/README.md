@@ -33,6 +33,7 @@ Freshly replay without invoking the producer:
 ```bash
 bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
   --episode examples/decision-cases/decision-episode/episode.json \
+  --expected-episode-sha256 sha256:f0b049f4dbdcb66ad5c4ecc26bf0560e4778474c91fc4957d2309a57fb7fceb3 \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```

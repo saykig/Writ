@@ -14,15 +14,18 @@ function option(args: readonly string[], name: string): string {
 function main(args: readonly string[]): number {
   if (args[0] !== "replay") {
     throw new Error(
-      "Usage: writ-decision-episode replay --episode <file> --engine-root <path> [--python <path>]",
+      "Usage: writ-decision-episode replay --episode <file> --expected-episode-sha256 <sha256:hex> --engine-root <path> [--python <path>]",
     );
   }
   const episode = readFileSync(option(args, "--episode"));
   const engineRoot = option(args, "--engine-root");
+  const expectedEpisodeSha256 = option(args, "--expected-episode-sha256");
   const pythonIndex = args.indexOf("--python");
   const pythonExecutable = pythonIndex >= 0 ? option(args, "--python") : undefined;
   const options =
-    pythonExecutable === undefined ? { engineRoot } : { engineRoot, pythonExecutable };
+    pythonExecutable === undefined
+      ? { engineRoot, expectedEpisodeSha256 }
+      : { engineRoot, pythonExecutable, expectedEpisodeSha256 };
   console.log(JSON.stringify(replayDecisionEpisode(episode, options), null, 2));
   return 0;
 }

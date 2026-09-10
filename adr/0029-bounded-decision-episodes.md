@@ -110,3 +110,18 @@ It earns no stronger mathematics or empirical conclusion.
 
 The implementation stops at this Proposed decision. A human must decide whether the replayable
 decision episode should become accepted Writ architecture.
+
+
+## Repair review addendum (9 September 2026)
+
+Status remains **Proposed**. PR #53's repair authorization is not architecture acceptance.
+The [repair review](../docs/experiments/decision-episode-repair-review.md) supersedes the original
+build report's unrestricted substitution claim: whole-episode preservation requires a recipient's
+independently retained expected hash. Internal references alone cannot reject a coherently rewritten
+set of supplied declarations. Replay now requires that pin, validates real calendar instants and
+rejects a freshly invalid source/target/transport warrant. No frozen episode bytes change.
+
+Keep the useful decision/implementation/observation/reconsideration distinction. Vela inspiration
+or overlap is not a reason to remove it: Vela Claim acceptance and Writ's supplied operational choice
+have different meanings. No new Vela dependency is required. The PR #51-only profile is retained as a
+bounded operation rather than generalized into a universal episode framework.

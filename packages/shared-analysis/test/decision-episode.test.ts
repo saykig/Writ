@@ -198,3 +198,69 @@ test("requires an exact, strictly ordered decision-to-reconsideration chain", ()
     expect.objectContaining({ code: "DECISION_EPISODE_SEQUENCE_INVALID" }),
   );
 });
+
+test("rejects impossible calendar dates while accepting a real leap day", () => {
+  for (const time of ["2026-02-30T00:00:00Z", "2026-00-01T00:00:00Z", "2026-01-01T25:00:00Z"]) {
+    const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+    changed.human_decision.decided_at = time;
+    expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
+      expect.objectContaining({ code: "DECISION_EPISODE_SEQUENCE_INVALID" }),
+    );
+  }
+  const changed = structuredClone(fixture().value) as Mutable<DecisionEpisode>;
+  changed.human_decision.decided_at = "2024-02-29T00:00:00Z";
+  expect(openDecisionEpisode(exactJsonBytes(changed)).value.human_decision.decided_at).toBe(
+    "2024-02-29T00:00:00Z",
+  );
+});
+
+test("a trusted whole-episode pin rejects coherent substitutions and rewritten declarations", () => {
+  const original = fixture();
+  for (const mutate of [
+    (episode: Mutable<DecisionEpisode>) => {
+      episode.episode_id = "another-episode";
+    },
+    (episode: Mutable<DecisionEpisode>) => {
+      episode.human_decision.rationale = "Rewritten human history";
+    },
+    (episode: Mutable<DecisionEpisode>) => {
+      episode.authority_basis.basis_statement = "A different supplied mandate";
+    },
+    (episode: Mutable<DecisionEpisode>) => {
+      episode.observation.description = "A different supplied observation";
+    },
+  ]) {
+    const changed = structuredClone(original.value) as Mutable<DecisionEpisode>;
+    mutate(changed);
+    const bytes = exactJsonBytes(changed);
+    // Self-consistency alone cannot establish historical identity or authorship.
+    expect(openDecisionEpisode(bytes).episode_sha256).not.toBe(original.episode_sha256);
+    expect(() => openDecisionEpisode(bytes, original.episode_sha256)).toThrow(
+      expect.objectContaining({ code: "DECISION_EPISODE_BINDING_MISMATCH" }),
+    );
+  }
+});
+
+test("rejects authority and automatic-model promotions; implementation may differ from choice", () => {
+  const original = fixture().value;
+  for (const changed of [
+    {
+      ...original,
+      authority_basis: { ...original.authority_basis, verification_status: "verified" },
+    },
+    {
+      ...original,
+      human_decision: { ...original.human_decision, mathematical_role: "authorizing" },
+    },
+    { ...original, reconsideration: { ...original.reconsideration, model_effect: "updated" } },
+  ]) {
+    expect(() => openDecisionEpisode(exactJsonBytes(changed))).toThrow(
+      expect.objectContaining({ code: "DECISION_EPISODE_INVALID" }),
+    );
+  }
+  const changed = structuredClone(original) as Mutable<DecisionEpisode>;
+  changed.implementation.implemented_action = "B";
+  expect(openDecisionEpisode(exactJsonBytes(changed)).value.human_decision.selected_action).toBe(
+    "A",
+  );
+});

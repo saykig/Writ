@@ -24,7 +24,7 @@ import {
   recordRevision,
   type ApplicabilityAssessmentDeclaration,
   type BundleImport,
-  type DecisionEpisodeReplayOptions,
+  type TransportEngineOptions,
   type LoadedDecisionEpisode,
   type RevisionDeclaration,
   type SourceIdentity,
@@ -138,7 +138,7 @@ function transportRequest(): Uint8Array {
 }
 
 export function buildDecisionEpisodeStory(
-  options: DecisionEpisodeReplayOptions,
+  options: TransportEngineOptions,
 ): LoadedDecisionEpisode {
   const analysis = { bundle_id: "alpha", analysis_id: "analysis-base" };
   const originalCase = openDecisionCase(alphaImport().case_bytes);

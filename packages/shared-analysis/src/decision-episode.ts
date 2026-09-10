@@ -132,6 +132,23 @@ function verifyDeclarationBytes(episode: DecisionEpisode): void {
 }
 
 function validateSequence(episode: DecisionEpisode): void {
+  for (const time of [
+    episode.human_decision.decided_at,
+    episode.implementation.implemented_at,
+    episode.observation.observed_at,
+    episode.reconsideration.declared_at,
+  ]) {
+    const timestamp = Date.parse(time);
+    if (
+      !Number.isFinite(timestamp) ||
+      new Date(timestamp).toISOString() !== time.replace("Z", ".000Z")
+    ) {
+      throw new DecisionEpisodeError(
+        "DECISION_EPISODE_SEQUENCE_INVALID",
+        "Event times must be real UTC calendar instants at whole-second precision (no leap seconds).",
+      );
+    }
+  }
   if (
     episode.human_decision.authority_basis_id !== episode.authority_basis.authority_basis_id ||
     episode.human_decision.considered_analysis_binding_sha256 !==
@@ -259,7 +276,16 @@ export function decisionEpisodeBytes(episode: LoadedDecisionEpisode): Uint8Array
   return bytes;
 }
 
-export function openDecisionEpisode(bytes: Uint8Array): LoadedDecisionEpisode {
+export function openDecisionEpisode(
+  bytes: Uint8Array,
+  expectedEpisodeSha256?: string,
+): LoadedDecisionEpisode {
+  if (expectedEpisodeSha256 !== undefined && sha256Bytes(bytes) !== expectedEpisodeSha256) {
+    throw new DecisionEpisodeError(
+      "DECISION_EPISODE_BINDING_MISMATCH",
+      "Received episode differs from the caller's independently supplied expected identity.",
+    );
+  }
   if (bytes.length === 0 || bytes.length > MAX_EPISODE_BYTES) {
     throw new DecisionEpisodeError(
       "DECISION_EPISODE_INVALID",
@@ -287,7 +313,13 @@ export function replayDecisionEpisode(
   bytes: Uint8Array,
   options: DecisionEpisodeReplayOptions,
 ): DecisionEpisodeReplay {
-  const episode = openDecisionEpisode(bytes);
+  if (!/^sha256:[0-9a-f]{64}$/.test(options.expectedEpisodeSha256 ?? "")) {
+    throw new DecisionEpisodeError(
+      "DECISION_EPISODE_INVALID",
+      "Recipient replay requires an expected episode SHA-256.",
+    );
+  }
+  const episode = openDecisionEpisode(bytes, options.expectedEpisodeSha256);
   const transportBytes = verifyEncodedBytes(
     episode.value.checked_history.certificate_transport_record,
     "checked_history.certificate_transport_record",
@@ -311,10 +343,18 @@ export function replayDecisionEpisode(
       checked.revision_id === episode.value.checked_history.revision_id &&
       checked.execution_sha256 === episode.value.checked_history.successor_execution_sha256,
   );
-  if (!originalChecked || !successorChecked) {
+  if (
+    !originalChecked ||
+    !successorChecked ||
+    transportReplay.source_certificate_status !== "checked" ||
+    transportReplay.target_certificate_status !== "checked" ||
+    transportReplay.transport_status !== "checked" ||
+    transportReplay.mathematical_status !== "checked"
+  ) {
     throw new DecisionEpisodeError(
       "DECISION_EPISODE_REPLAY_INCOMPLETE",
-      "Fresh recipient replay did not recheck both exact episode executions.",
+      "Fresh recipient replay did not establish both exact executions and the complete source, target, and transport warrant.",
+      { certificate_transport: transportReplay },
     );
   }
   return deepFreeze({
