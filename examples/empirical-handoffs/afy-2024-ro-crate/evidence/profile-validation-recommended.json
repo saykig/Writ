@@ -1,0 +1,217 @@
+{
+    "meta": {
+        "generated_by": "rocrate-validator",
+        "version": "0.11.3_30e4dff+23-dirty"
+    },
+    "validation_settings": {
+        "rocrate_uri": "/tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate",
+        "rocrate_relative_root_path": null,
+        "profiles_path": "/private/tmp/writ-afy-validator-erLvXa/venv/lib/python3.13/site-packages/rocrate_validator/profiles",
+        "extra_profiles_path": null,
+        "profile_identifier": "process-run-crate-0.5",
+        "enable_profile_inheritance": true,
+        "abort_on_first": false,
+        "disable_inherited_profiles_issue_reporting": false,
+        "requirement_severity": "RECOMMENDED",
+        "allow_requirement_check_override": true,
+        "disable_check_for_duplicates": false,
+        "skip_checks": [],
+        "metadata_only": false,
+        "verbose": false,
+        "cache_max_age": -1,
+        "cache_path": "/Users/kimchee/.cache/rocrate-validator/http_cache",
+        "offline": false,
+        "no_cache": false,
+        "creation_time": false,
+        "enforce_availability": false,
+        "skip_availability_check": true,
+        "profile_identifiers": [
+            "process-run-crate-0.5"
+        ]
+    },
+    "passed": false,
+    "issues": [
+        {
+            "severity": "RECOMMENDED",
+            "message": "The SoftwareApplication id SHOULD be an absolute URI",
+            "violatingEntity": "http://schema.org/SoftwareApplication",
+            "violatingProperty": "n61dc5b82ad4b46429515e84117e906e0b16",
+            "violatingPropertyValue": "file:///tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate/payload/bellman-afy-2024/checks.py",
+            "check": {
+                "identifier": "process-run-crate-0.5_5.1",
+                "label": "SHOULD 5.1",
+                "order": 1,
+                "name": "SoftwareApplication id",
+                "description": "The SoftwareApplication id SHOULD be an absolute URI",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "process-run-crate-0.5_5",
+                    "name": "ProcRC SoftwareApplication ID",
+                    "description": "Process Run Crate SoftwareApplication ID",
+                    "order": 5,
+                    "profile": {
+                        "identifier": "process-run-crate-0.5",
+                        "uri": "https://w3id.org/ro/wfrun/process/0.5",
+                        "name": "Process Run Crate 0.5",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        },
+        {
+            "severity": "RECOMMENDED",
+            "message": "The SoftwareApplication id SHOULD be an absolute URI",
+            "violatingEntity": "http://schema.org/SoftwareApplication",
+            "violatingProperty": "n61dc5b82ad4b46429515e84117e906e0b16",
+            "violatingPropertyValue": "file:///tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate/payload/bellman-afy-2024/check_transfer.py",
+            "check": {
+                "identifier": "process-run-crate-0.5_5.1",
+                "label": "SHOULD 5.1",
+                "order": 1,
+                "name": "SoftwareApplication id",
+                "description": "The SoftwareApplication id SHOULD be an absolute URI",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "process-run-crate-0.5_5",
+                    "name": "ProcRC SoftwareApplication ID",
+                    "description": "Process Run Crate SoftwareApplication ID",
+                    "order": 5,
+                    "profile": {
+                        "identifier": "process-run-crate-0.5",
+                        "uri": "https://w3id.org/ro/wfrun/process/0.5",
+                        "name": "Process Run Crate 0.5",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        },
+        {
+            "severity": "RECOMMENDED",
+            "message": "The Action SHOULD have an agent that is a Person or Organization",
+            "violatingEntity": "./#fresh-native-receiving",
+            "violatingProperty": "http://schema.org/agent",
+            "violatingPropertyValue": null,
+            "check": {
+                "identifier": "process-run-crate-0.5_8.6",
+                "label": "SHOULD 8.6",
+                "order": 6,
+                "name": "Action agent",
+                "description": "The Action SHOULD have an agent that is a Person or Organization",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "process-run-crate-0.5_8",
+                    "name": "Process Run Crate Action SHOULD",
+                    "description": "Recommended properties of the Process Run Crate Action",
+                    "order": 8,
+                    "profile": {
+                        "identifier": "process-run-crate-0.5",
+                        "uri": "https://w3id.org/ro/wfrun/process/0.5",
+                        "name": "Process Run Crate 0.5",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        },
+        {
+            "severity": "RECOMMENDED",
+            "message": "The Action SHOULD have an agent that is a Person or Organization",
+            "violatingEntity": "./#fresh-transfer-check",
+            "violatingProperty": "http://schema.org/agent",
+            "violatingPropertyValue": null,
+            "check": {
+                "identifier": "process-run-crate-0.5_8.6",
+                "label": "SHOULD 8.6",
+                "order": 6,
+                "name": "Action agent",
+                "description": "The Action SHOULD have an agent that is a Person or Organization",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "process-run-crate-0.5_8",
+                    "name": "Process Run Crate Action SHOULD",
+                    "description": "Recommended properties of the Process Run Crate Action",
+                    "order": 8,
+                    "profile": {
+                        "identifier": "process-run-crate-0.5",
+                        "uri": "https://w3id.org/ro/wfrun/process/0.5",
+                        "name": "Process Run Crate 0.5",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        },
+        {
+            "severity": "RECOMMENDED",
+            "message": "The Root Data Entity SHOULD have a link to a Contextual Entity representing the `author` of the RO-Crate",
+            "violatingEntity": "./",
+            "violatingProperty": "http://schema.org/author",
+            "violatingPropertyValue": null,
+            "check": {
+                "identifier": "ro-crate-1.1_22.2",
+                "label": "SHOULD 22.2",
+                "order": 2,
+                "name": "Root Data Entity: `author` property",
+                "description": "Check if the Root Data Entity includes a `author` property (as specified by schema.org)\n        to provide information about its author.",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "ro-crate-1.1_22",
+                    "name": "RO-Crate Root Data Entity RECOMMENDED properties",
+                    "description": "The Root Data Entity SHOULD have\n    the properties `name`, `description` and `license` defined as described\n    in the RO-Crate specification <https://www.researchobject.org/ro-crate/1.1/root-data-entity.html>",
+                    "order": 22,
+                    "profile": {
+                        "identifier": "ro-crate-1.1",
+                        "uri": "https://w3id.org/ro/crate/1.1",
+                        "name": "RO-Crate Metadata Specification 1.1",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        },
+        {
+            "severity": "RECOMMENDED",
+            "message": "The `publisher` property of a `Root Data Entity` SHOULD be an `Organization`",
+            "violatingEntity": "./",
+            "violatingProperty": "http://schema.org/publisher",
+            "violatingPropertyValue": null,
+            "check": {
+                "identifier": "ro-crate-1.1_22.3",
+                "label": "RECOMMENDED 22.3",
+                "order": 3,
+                "name": "Root Data Entity: `publisher` property",
+                "description": "Check if the Root Data Entity has a `publisher` property of type `Organization`.",
+                "severity": "RECOMMENDED",
+                "requirement": {
+                    "identifier": "ro-crate-1.1_22",
+                    "name": "RO-Crate Root Data Entity RECOMMENDED properties",
+                    "description": "The Root Data Entity SHOULD have\n    the properties `name`, `description` and `license` defined as described\n    in the RO-Crate specification <https://www.researchobject.org/ro-crate/1.1/root-data-entity.html>",
+                    "order": 22,
+                    "profile": {
+                        "identifier": "ro-crate-1.1",
+                        "uri": "https://w3id.org/ro/crate/1.1",
+                        "name": "RO-Crate Metadata Specification 1.1",
+                        "description": "RO-Crate Metadata Specification."
+                    }
+                }
+            }
+        }
+    ],
+    "statistics": {
+        "started_at": "2026-09-10T16:23:24.426942+00:00",
+        "finished_at": "2026-09-10T16:23:25.926416+00:00",
+        "duration": 1.499474,
+        "profiles": [
+            "process-run-crate-0.5",
+            "ro-crate-1.1"
+        ],
+        "total_requirements": 38,
+        "total_passed_requirements": 35,
+        "total_failed_requirements": 2,
+        "total_checks": 98,
+        "total_passed_checks": 94,
+        "total_failed_checks": 4,
+        "total_checks_by_severity": {
+            "REQUIRED": 42,
+            "RECOMMENDED": 56,
+            "OPTIONAL": 0
+        }
+    }
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "example.afy2024.recipient-assessment.v1",
+  "assessment_id": "afy-2024-prospective-reliance-challenge.independent-20260910",
+  "predecessor": {
+    "assessment_id": "afy-2024-retrospective-comparison.original",
+    "sha256": "6e5dcefbfcf98994dc29565938bcf73f4a28478a7150078145b309e4e62d68d5"
+  },
+  "question": "Does the supplied evidence warrant relying on the strategic catalogue predictor for prospective model selection outside the retained AFY target sessions?",
+  "intended_use": {
+    "operation": "select a predictor for prospective institutional decision support",
+    "population": "a future institutional setting outside the supplied AFY target sessions",
+    "decision_time": "before an institutional decision, using only information available then",
+    "conclusion": "whether the strategic catalogue predictor warrants prospective reliance",
+    "authority": "none; assessment only"
+  },
+  "challenge": {
+    "dependency_kind": "intended_use",
+    "dependency_id": "requested_intended_use.population",
+    "summary": "The requested population moves from the retained AFY High-T and Low-R sessions to an unspecified future institutional setting. The attached evidence establishes numerical reconstruction and retrospective comparisons only; it contains no prospective or external-setting validation, while prior and utility sensitivities show that the catalogue comparison is not stable across supplied modelling choices.",
+    "evidence_pointers": [
+      {
+        "file": "handoff/original-assessment.json",
+        "json_pointer": "/intended_use/population"
+      },
+      {
+        "file": "payload/bellman-afy-2024/first-results/results.json",
+        "json_pointer": "/comparisons/ten-linear/comparison"
+      },
+      {
+        "file": "payload/bellman-afy-2024/first-results/results.json",
+        "json_pointer": "/comparisons/ten-linear/sessions"
+      },
+      {
+        "file": "payload/bellman-afy-2024/first-results/results.json",
+        "json_pointer": "/comparisons/ten-reciprocal/comparison"
+      },
+      {
+        "file": "payload/bellman-afy-2024/first-results/results.json",
+        "json_pointer": "/comparisons/ten-square/comparison"
+      },
+      {
+        "file": "payload/bellman-afy-2024/prior-sensitivity-results.json",
+        "json_pointer": "/shared_pure_priors/AC/comparison"
+      },
+      {
+        "file": "payload/bellman-afy-2024/prior-sensitivity-results.json",
+        "json_pointer": "/shared_pure_priors/TFT/comparison"
+      },
+      {
+        "file": "payload/bellman-afy-2024/prior-sensitivity-results.json",
+        "json_pointer": "/scope"
+      },
+      {
+        "file": "native-receiving.json",
+        "json_pointer": "/not_checked"
+      }
+    ]
+  },
+  "numerical_receiving": {
+    "status": "freshly_received",
+    "evidence_file": "native-receiving.json",
+    "scope": "Producer-disabled standard-library receiving checked exact rational residual bounds and reconstructed predictions and session scores for the four supplied predictor variants; it did not certify sampling inference, human preferences, causal assignment, or global mixture optimality."
+  },
+  "empirical_support": {
+    "status": "not_established",
+    "findings": [
+      "In the retained sessions, the primary ten-catalogue linear updated-minus-fixed Brier contrast is -0.0004068276563452926, but its supplied bootstrap 95% interval [-0.001865778115372449, 0.0012281477273708465] spans zero.",
+      "The session results imply a lower equal-session mean Brier score for the simpler Markov/report baseline than for either fixed or updated ten-linear catalogue predictions in each retained treatment arm.",
+      "Utility sensitivity changes the retrospective conclusion: the ten-reciprocal contrast is -0.0009755755907599655 with a bootstrap interval wholly below zero, whereas the ten-square contrast is 0.000855506852350911 with an interval spanning zero; these remain conditional comparisons on the retained sessions.",
+      "Shared pure-prior witnesses reverse direction: AC yields updated-minus-fixed Brier +0.029655333206836186 while TFT yields -0.013184212713126336, so a uniform directional advantage is not established over the supplied prior family.",
+      "None of the attached comparisons evaluates performance in the requested future institutional population, and the prior sensitivity scope expressly states that there was no target fitting."
+    ]
+  },
+  "applicability": {
+    "status": "not_established",
+    "changed_dependencies": [
+      "authority",
+      "conclusion",
+      "decision_time",
+      "operation",
+      "population"
+    ]
+  },
+  "disposition": {
+    "status": "withhold_prospective_reliance",
+    "rationale": "The evidence is adequate for its bounded retrospective arithmetic and comparison claims but does not establish transport to a future institutional setting, prospective model-selection performance, or superiority to the simpler baseline. Prospective reliance would require a separately specified setting, pre-decision information protocol, utility and prior commitments, and externally evaluated validation evidence.",
+    "authority_to_act": false
+  },
+  "limits": [
+    "The external author data is hash-bound but not redistributed in the crate.",
+    "Sampling claims are conditional on source fitting and supplied session-sampling assumptions.",
+    "Pure-prior cases are feasible sensitivity witnesses, not evidence that those priors describe participants or the future institution.",
+    "The supplied utility variants do not identify human utility or a psychological mechanism.",
+    "No causal treatment effect, prospective institutional validity, human utility identification, or authority to act follows from this assessment."
+  ]
+}

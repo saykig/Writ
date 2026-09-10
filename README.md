@@ -29,8 +29,9 @@ observation, and reconsideration—without claiming that sequence proves causali
 decision was correct.
 
 The repository contains runnable examples of both boundaries, including exact decision cases,
-revision and replay, a pinned external SimPy calculation, and a simulation comparison kept separate
-from the human act. These are working research components, not a finished decision application.
+revision and replay, a pinned external SimPy calculation, and an executed RO-Crate handoff of one
+empirical result. The handoff keeps numerical reconstruction, empirical support, applicability, and
+authority separate. These are working research components, not a finished decision application.
 
 ## Try a small example
 

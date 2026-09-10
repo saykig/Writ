@@ -41,3 +41,6 @@ corpora/legal-policy/us/white-house/
 examples/external-simulation/simpy-resource/*.json
 examples/decision-cases/linked-episodes/*.json
 examples/decision-cases/simulation-decision/*.json
+
+# Independently authored AFY recipient output and exact executed receipts are frozen byte evidence.
+examples/empirical-handoffs/afy-2024-ro-crate/evidence/*.json

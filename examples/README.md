@@ -8,3 +8,6 @@ files are not source-of-truth corpora, normative schemas, governing protocols, o
   simulation-to-decision comparison.
 - [`external-simulation/`](./external-simulation/) contains the pinned SimPy fixture reused by the
   bounded external and simulation-comparison examples.
+- [`empirical-handoffs/afy-2024-ro-crate/`](./empirical-handoffs/afy-2024-ro-crate/) contains an
+  executed, non-raw RO-Crate handoff of Bellman's AFY 2024 result, a standard-consumer receipt, and
+  an independently attributed successor assessment.

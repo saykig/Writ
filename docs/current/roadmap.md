@@ -18,11 +18,11 @@ The project has earned bounded source-grounded records, exact decision cases, in
 revision and replay, and one small post-decision provenance loop. It has not earned empirical truth,
 general strategic modelling, automated recommendations, or authority to act.
 
-Current work is testing whether one awkward empirical result can travel to a separate research
-consumer, be reproduced and challenged, and return as a linked successor assessment without
-overwriting the original. The long-term destination remains strategic-security reasoning under
-adversarial uncertainty. Interoperable research handoff is an enabling layer, not a substitute for
-that destination.
+The latest enabling trial carried one awkward empirical result to a separate research consumer,
+reopened and challenged it, and returned a linked successor assessment without overwriting the
+original. The long-term destination remains strategic-security reasoning under adversarial
+uncertainty. Interoperable research handoff is an enabling layer, not a substitute for that
+destination.
 
 The sections below use three meanings deliberately:
 
@@ -142,13 +142,13 @@ exact simulation-to-decision revision, compares the envelopes with loose files, 
 producer-disabled recipient replay, and received explicit human acceptance of ADR 0029. The
 accepted boundary stops here; green checks alone do not authorize another capability.
 
-## Current empirical handoff build
+## Completed empirical handoff trial
 
-The next build is authorized and active, but not yet an earned capability. It uses Bellman's retained
-AFY 2024 case together with its existing R/Python analysis, `stratEst`, SciPy, exact checks, and
-independent receiver. A pinned RO-Crate profile and standard `ro-crate-py` consumer provide the
-outer research-handoff envelope. Writ should add only the narrow connection needed to preserve and
-recheck its own semantics.
+The AFY 2024 trial used Bellman's retained case, its frozen R/Python analysis outputs and exact
+receiver. An RO-Crate 1.1 envelope with Process Run Crate 0.5 supplied the outer research-handoff
+metadata, and a separately installed `rocrate==0.15.1` consumer reopened all 86 manifest-declared
+files. The external author data remained outside the crate because redistribution permission for
+those exact bytes was not established.
 
 The case was selected because it exposes a real decision problem about model reliance without
 rewarding a positive result. Its retained evidence says:
@@ -158,35 +158,27 @@ rewarding a positive result. Its retained evidence says:
 - conclusions depend on supplied utility and prior assumptions; and
 - beliefs were reported after the participant's action, limiting intervention or mechanism claims.
 
-The build asks whether reliance on the strategic predictor is warranted. It does not ask Writ to
-recommend a demonstrated policy. A conditional or unresolved successor assessment is a valid
-outcome.
+The trial asked whether the supplied evidence warrants relying on the strategic predictor in a
+future institutional setting. Producer-disabled receiving reconstructed the exact residual
+assurance and 8,414 predictions plus 16 session scores for each of four declared variants. That is
+a numerical result, not empirical validation. A fresh machine recipient found empirical support and
+prospective applicability not established, challenged the changed population, and returned a
+`withhold_prospective_reliance` disposition with authority false.
 
-The planned round trip is:
+Required Process Run Crate and inherited RO-Crate validation passed 42 of 42 checks. The broader
+recommended run passed 94 of 98; the retained gaps are relative IDs for the two attached,
+hash-bound execution scripts and missing Action agents and root author/publisher identities. The
+trial did not invent identities or weaken execution-byte binding to improve that score. Exact
+issued bytes, validator reports, consumer receipts, the independently authored response, and the
+linked reimport receipt are retained with the
+[executed example](../../examples/empirical-handoffs/afy-2024-ro-crate/).
 
-1. export the exact permitted research files and references in a pinned RO-Crate envelope;
-2. open the crate in a separate process with a standard non-Writ consumer;
-3. run the original reproduction and focused independent checks;
-4. give a fresh machine recipient the evidence and task without an expected answer;
-5. challenge one supplied assumption or intended use, including a stale or mistaken use that must
-   be refused or reconsidered; and
-6. return a linked assessment that preserves both the original and successor and states what
-   changed, what remains supported, and whether reliance is warranted.
-
-Data access and redistribution terms govern what can be embedded. Archive metadata must never be
-substituted for data bytes that were not actually obtained. Existing and frozen AFY evidence remains
-unchanged.
-
-The result must report crate conformance, byte identity, numerical reproduction, empirical support,
-applicability, and supplied human or machine disposition separately. A machine recipient is
-sufficient for this internal continuation test; it does not establish human usefulness.
-
-**Exit gate from the current build:** a real standard RO-Crate consumer opens the exported object;
-the appropriate original and independent checks pass or their failures are retained; one material
-assumption or intended use is challenged; one invalid or stale reuse is refused; and Writ receives a
-linked successor without changing the original. Retain the adapter only if this demonstrates a
-concrete interoperability benefit over the existing portable directory. Otherwise retain the
-executed gap and the simpler directory.
+**Exit gate: passed within the example boundary.** The real standard consumer reopened the object;
+the existing numerical and transfer checks ran; stale or mistaken reuse was refused; and the linked
+successor preserved the original. The narrow adapter is retained because metadata-based discovery
+and process links let a new recipient navigate the handoff without knowing Bellman or Writ paths.
+It does not justify a Writ statistical schema, empirical claim, general interoperability layer, or
+authority to act.
 
 ## Next after that gate
 

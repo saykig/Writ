@@ -64,24 +64,25 @@ disposable UI and evidence tree are now recoverable from
 `snapshot/revisable-assessment-pilot-v1`, indexed in the
 [historical snapshot ledger](../history/snapshots.md), rather than tracked on current `main`.
 
-## Current enabling work
+## Completed empirical enabling trial
 
-The active empirical interoperability build uses Bellman's retained AFY 2024 case. The recorded
-case is intentionally awkward: its main comparison is inconclusive, a simple Markov/report
-predictor performed better in the retained comparison, and the decision changes with supplied prior
-and utility assumptions. Reported beliefs were measured after the participant's action, which
-limits policy interpretation.
+The AFY 2024 interoperability trial carried Bellman's retained research result through a pinned
+RO-Crate 1.1 / Process Run Crate 0.5 envelope. A standard consumer reopened the attached evidence,
+the producer-disabled receiver reconstructed the declared numerical results, and a fresh machine
+recipient returned a linked successor without overwriting the original. The external author data
+was hash-bound but not redistributed.
 
-The build is testing whether that exact research object can travel through a pinned RO-Crate
-envelope to a separate standard consumer, be reproduced with its original tools, have one material
-assumption or proposed use challenged, and return as a linked successor assessment without
-overwriting the original. Its decision question is whether reliance on the strategic predictor is
-warranted—not whether an intervention or psychological mechanism has been demonstrated.
+The recorded case was intentionally awkward: its main comparison is inconclusive, a simple
+Markov/report predictor performed better in the retained comparison, and the direction changes with
+supplied prior and utility choices. The recipient therefore reported empirical support and
+prospective applicability as not established and withheld prospective reliance. That disposition
+has no authority to act and does not establish a human judgment.
 
-Until that round trip and its negative controls pass, it remains work in progress. Crate
-conformance, byte identity, numerical reproduction, empirical support, applicability, and a
-supplied human or machine disposition are separate results. Research interoperability is useful
-infrastructure for the security destination; it is not the destination itself.
+The narrow adapter is retained at the example boundary because ordinary metadata discovery and
+process links helped a new recipient navigate the handoff. Crate conformance, byte identity,
+numerical reconstruction, empirical support, applicability, and disposition remain separate.
+Research interoperability is useful infrastructure for the security destination; it is not the
+destination itself.
 
 ## Future research obligations
 

@@ -1,0 +1,30 @@
+{
+  "schema": "example.afy2024.recipient-provenance.v1",
+  "record_authority": "orchestrator_authored_not_recipient_attested",
+  "restriction_enforcement": "orchestrator_controlled_not_os_sandbox_attested",
+  "recipient_task": "/root/afy_boundary_review/afy_final_recipient",
+  "fork_turns": "none",
+  "allowed_inputs": [
+    "/tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate",
+    "/tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate/handoff/recipient-task.json",
+    "/tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/crate/handoff/RECIPIENT_RESPONSE.md"
+  ],
+  "context_controls": {
+    "prior_turns_available": false,
+    "repository_available": false,
+    "sibling_agents_available": false,
+    "prior_recipient_response_available": false,
+    "expected_answer_supplied": false,
+    "network_allowed": false
+  },
+  "response": {
+    "source_path": "/tmp/afy-rocrate-roundtrip-20260910-final-coherent-2/independent-recipient-response.json",
+    "retained_path": "evidence/independent-recipient-response.json",
+    "sha256": "57e94a6f4a9139c4a24da8e9e6801cf305997434fe00065167fa3f818057d6e5"
+  },
+  "unavailable_facts": {
+    "model": "not_recorded",
+    "runtime": "not_recorded",
+    "authored_at": "not_recorded"
+  }
+}

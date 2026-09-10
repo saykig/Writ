@@ -1,0 +1,43 @@
+{
+  "applicability": {
+    "changed_mechanism_use": "reassessment_required",
+    "changed_report_timing": "reassessment_required"
+  },
+  "consumer": {
+    "distribution": "rocrate",
+    "role": "third-party RO-Crate reader; not the Bellman numerical receiver",
+    "version": "0.15.1"
+  },
+  "crate": {
+    "attached_files_checked": 86,
+    "base_profile": "https://w3id.org/ro/crate/1.1",
+    "external_data_included": false,
+    "external_data_sha256": "fbb9136eaaa6b56e66201f57379bd3891f72d80a91cf34c43d76213287abf8a3",
+    "issued_metadata_sha256": "52eec0a24a4e5ea055af6d7d8099cd568c46aa231f5bcabfb277847aad37a40f",
+    "issued_payload_manifest_sha256": "752b2b3378cb11eff2379cc28b4c3d7974df99a67769189481b0b4b1f34e79a3",
+    "process_profile": "https://w3id.org/ro/wfrun/process/0.5"
+  },
+  "nonclaims": [
+    "Opening metadata does not establish empirical truth.",
+    "Fresh numerical receiving does not establish sampling coverage or applicability.",
+    "The crate supplies no authority to act."
+  ],
+  "numerical_receiving": {
+    "producer_disabled": true,
+    "schema": "bellman.afy2024.receiving.v1",
+    "scope": "exact rational residual assurance; numerical prediction and score reconstruction; no statistical or preference certification",
+    "status": "fresh_receipt_present"
+  },
+  "profile_check": {
+    "checked": [
+      "metadata descriptor and root profile declarations",
+      "unique standard-consumer entity lookup",
+      "Process Run software/action/instrument/object/result links",
+      "attached file presence and SHA-256",
+      "external data non-inclusion and exact reference"
+    ],
+    "scope": "targeted RO-Crate 1.1 and Process Run Crate 0.5 requirements; not a claim that ro-crate-py is a full profile validator",
+    "status": "targeted_requirements_passed"
+  },
+  "schema": "example.afy2024.standard-consumer-report.v1"
+}
