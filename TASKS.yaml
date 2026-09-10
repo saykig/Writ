@@ -160,8 +160,11 @@ tasks:
       assumption from five to nine minutes reruns every option and changes the conditional unique
       minimum from retain to intensive. Both exact comparisons, complete input changes, immutable
       episodes and supplied human dispositions are preserved; the successor human act instead asks
-      for empirical evidence. Native A/B history remains unchanged. ADR 0029 remains Proposed and
-      PR 53 remains unmerged for human disposition.
+      for empirical evidence. Native A/B history remains unchanged. Eleven focused tests with 30
+      assertions pass, as do real no-skip integrations 16/2/12/2/1/1, five actual SimPy
+      reproductions and all six public-generator artifacts. The acceptance receipt preserves failed
+      setup attempts without counting them as passes. ADR 0029 remains Proposed and PR 53 remains
+      unmerged for human disposition.
     repair_review: docs/experiments/decision-episode-repair-review.md
     repair_evidence: docs/experiments/decision-episode-repair-evidence.json
     repair_note: >-

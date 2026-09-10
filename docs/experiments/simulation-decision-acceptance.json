@@ -1,0 +1,207 @@
+{
+  "capability_source": {
+    "implementation_commit": "da51942f66e1ac3e5225a7f95435779f0b9302c9",
+    "documentation_commit": "4d8d5af65a1f8ee638b162110707d24bb791819e",
+    "baseline_commit": "c09922f8a4689284de42b1b1bcc22098fa19c117",
+    "pull_request": "https://github.com/saykig/Writ/pull/53",
+    "pull_request_disposition": "open_unmerged_for_human_review",
+    "adr_0029_status": "Proposed"
+  },
+  "external_pins": {
+    "bellman_commit": "58987d2389b6fc841a2b780cb45d4369d6a3e436",
+    "decision_lab_commit": "e5f77dfcf929708951f4673b3f394461ef09c752",
+    "simpy": {
+      "name": "simpy",
+      "version": "4.1.1",
+      "sdist_sha256": "sha256:06d0750a7884b11e0e8e20ce0bc7c6d4ed5f1743d456695340d13fdff95001a6",
+      "python": "CPython 3.13.15",
+      "source_manifest_checked": true,
+      "randomness": "none"
+    },
+    "external_sources_modified": false
+  },
+  "artifact_identities": {
+    "revision": "sha256:ca43272fcb1fd79f190dd33100652acc5e2b77bd24a9bb6c23dc3920763263b3",
+    "parent_comparison": "sha256:237684e5ccf3a9458a107a778eed0d5266421997d5e21224cadd8e841cd3351a",
+    "successor_comparison": "sha256:3a85e4ba0c56e77c251c6cc0044d2ae6848af6579eff4e71a7d2c6cbf7c5baae",
+    "parent_episode": "sha256:7cc8b95f079010a09bb4a5935acdc01009f419f636b7570eabe52daed5c560fa",
+    "successor_episode": "sha256:4052f17e34af89a543f6e307fd0379bac47e99712bc5cdf12877b2c169f1bcb0"
+  },
+  "conditional_comparison": {
+    "objective": "total_loss=wait_weight*total_wait+fixed_cost",
+    "loss_unit": "stipulated_loss_point",
+    "wait_weight": "1 stipulated_loss_point_per_minute",
+    "rounding": "none_exact_integer_arithmetic",
+    "tolerance": "0",
+    "declared_menu_complete": true,
+    "real_world_menu_completeness": "not_established",
+    "parent": {
+      "base_service_minutes": "5",
+      "losses": {
+        "intensive": "7",
+        "retain": "2",
+        "streamline": "4"
+      },
+      "minimum_status": "unique_minimum",
+      "preferred_option_ids": [
+        "retain"
+      ],
+      "supplied_human_disposition": "selected_recommended_modeled_option"
+    },
+    "successor": {
+      "base_service_minutes": "9",
+      "losses": {
+        "intensive": "9",
+        "retain": "10",
+        "streamline": "10"
+      },
+      "minimum_status": "unique_minimum",
+      "preferred_option_ids": [
+        "intensive"
+      ],
+      "supplied_human_disposition": "deferred_or_outside_modeled_menu"
+    }
+  },
+  "actual_simpy_reproduction": {
+    "byte_identical_runs": 5,
+    "expected_runs": 5,
+    "package_source_checked_for_every_run": true,
+    "runs": [
+      {
+        "service_minutes": "1",
+        "input_sha256": "sha256:db66610ae7e3dd7b5fd4b8b4632fc6afbb1eb7e7d6106b3c29580a4b985c33db",
+        "output_sha256": "sha256:cac9c6fe1a9006a96db0d349e5884ab7abecbc8118e993ee01cec3170afa25c6",
+        "run_sha256": "sha256:519a7213db43eff2ff999cffa24cde4e9ec0e508da557a1f7bd231b4a5ffc146"
+      },
+      {
+        "service_minutes": "3",
+        "input_sha256": "sha256:aba9b776a8325471cc7f54b9be271850960f2e26d36168e3f74b0a79ffbc3291",
+        "output_sha256": "sha256:0b93162615c92f057ab849bef42b0e9e270da9276ea67a97769ecbcd4d7aa3ab",
+        "run_sha256": "sha256:6fb3dc1e06658ae85b068a573aa1f761a699e5fbcdc5f7c69338abe91c8e4f14"
+      },
+      {
+        "service_minutes": "5",
+        "input_sha256": "sha256:df06bb93064a29a7637c32c94dbfed9f6d6615b692a97d093b1ca54af3a3a92a",
+        "output_sha256": "sha256:c0c19a92b53620abc1f238be66bb09c0011e3743c6e5599acbefee9c620653b3",
+        "run_sha256": "sha256:aff2e46ccf942f842c0e6fca0524984e0c3b373c1b435092b8e21fb3c31b393e"
+      },
+      {
+        "service_minutes": "7",
+        "input_sha256": "sha256:6eeed08762fd5e6cca1fdbaef070c6b8dcfeaf721595f60797d4d8c99575e2fc",
+        "output_sha256": "sha256:6958f17de93499938307faba1d0b9da28308fec6aa39ff16296826a8e92a7b27",
+        "run_sha256": "sha256:7a79164b202b85226b5a179aa5bd118e342067ad9d66eabaf61be0c0ebbc3f6e"
+      },
+      {
+        "service_minutes": "9",
+        "input_sha256": "sha256:9c75ff6d167aa1fedbe712b3a8bf8c3b501f010b3cb7560081214dc0f70e1d6f",
+        "output_sha256": "sha256:3f33c734eaac1a1588445ade51fe04027e0e8b6b33601197be526d3a1a7ee471",
+        "run_sha256": "sha256:569e9aaa81538a0d9bac3f2aae0a21cdee75e8db39e61cabf446b91f65802798"
+      }
+    ]
+  },
+  "deterministic_generation": {
+    "byte_identical_artifacts": 6,
+    "expected_artifacts": 6,
+    "artifacts": [
+      "parent-comparison.json",
+      "successor-comparison.json",
+      "parent-episode.json",
+      "successor-episode.json",
+      "revision.json",
+      "pins.json"
+    ]
+  },
+  "focused_tests": {
+    "comparison_and_revision_tests": 11,
+    "assertions": 30,
+    "status": "passed",
+    "controls": [
+      "exact_tie",
+      "wrong_unit",
+      "wrong_loss_mapping",
+      "nonzero_tolerance",
+      "stale_output",
+      "substituted_input",
+      "substituted_model",
+      "false_optimum",
+      "wrong_whole_artifact_pin",
+      "incomplete_change_declaration",
+      "undeclared_option_semantics_change",
+      "false_human_disposition",
+      "substituted_episode_pin",
+      "changed_native_history"
+    ]
+  },
+  "real_integrations": {
+    "decision_case": 16,
+    "shared_analysis": 2,
+    "certificate_transport": 12,
+    "decision_episode": 2,
+    "linked_episode": 1,
+    "simulation_decision": 1,
+    "skips": 0,
+    "producer_disabled_for_simulation_decision_recipient": true,
+    "decision_lab_solver_disabled_for_simulation_decision_recipient": true,
+    "status": "passed"
+  },
+  "local_gates": {
+    "format": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "default_test": "passed_with_optional_integrations_skipped_by_design",
+    "data_check": "passed",
+    "build": "passed",
+    "pack": "passed",
+    "source_registry_check": "passed_with_explicit_pythonpath",
+    "ruff": "passed",
+    "mypy": "passed",
+    "pytest": {
+      "status": "passed_with_explicit_environment",
+      "tests": 75
+    },
+    "pilot_packet_receiver": "passed",
+    "pilot_result_receiver": "passed",
+    "verify_writ": "passed_after_final_manifest_regeneration"
+  },
+  "retained_failed_attempts": [
+    {
+      "attempt": "Run every optional integration inside the ordinary five-second Bun test runner.",
+      "result": "One pre-existing Decision Case integration timed out; no assertion failed.",
+      "correction": "The ordinary suite passed with its designed skips, and every optional integration ran through its dedicated required no-skip entrypoint and timeout."
+    },
+    {
+      "attempt": "Run source-registry and pytest checks from the local virtual environment without PYTHONPATH.",
+      "result": "The local Writ ingest package was not importable.",
+      "correction": "Both checks passed with PYTHONPATH=apps/ingest/src; no editable install or source mutation was substituted."
+    },
+    {
+      "attempt": "Rerun pytest with PYTHONPATH but without the Bun installation on PATH.",
+      "result": "Thirteen grounding cases could not spawn Bun; 62 other cases passed.",
+      "correction": "The same suite passed 75/75 with the Bun path and ingest PYTHONPATH explicit."
+    },
+    {
+      "attempt": "Hosted Writ verification before regenerating MANIFEST.sha256.",
+      "result": "Integrity rejected the new and changed tracked files; TypeScript and Python jobs passed.",
+      "correction": "Regenerate the final-tree manifest before final local and hosted verification; no failed result is counted as passing."
+    },
+    {
+      "attempt": "Run data:check against the staged acceptance tree before committing it.",
+      "result": "The data-bundle gate correctly refused to assign a Writ commit identity to a dirty tree.",
+      "correction": "Run the gate again on the clean acceptance commit."
+    },
+    {
+      "attempt": "Run the complete build concurrently with the complete test suite.",
+      "result": "Generated provenance-package availability raced and dependent TypeScript packages could not resolve it.",
+      "correction": "Run the build sequentially after the full test suite; the earlier sequential build passed."
+    }
+  ],
+  "assurance_limits": [
+    "The runs and losses are model-generated and do not empirically validate service times, option effects or fixed burdens.",
+    "Exact objective arithmetic does not identify the stipulated objective, establish causal effects or produce a Bellman certificate.",
+    "Declared-menu completeness does not establish real-world option completeness.",
+    "A conditional minimizing set does not infer a human decision or authority to act.",
+    "The successor human disposition is supplied and deliberately defers the modeled recommendation.",
+    "Native A/B decision-case and certificate-transport histories remain separate and unchanged.",
+    "ADR 0029 remains Proposed, and PR 53 remains unmerged for explicit human disposition."
+  ]
+}

@@ -84,6 +84,17 @@ refuses Decision Lab `solve`. It freshly checks both external comparison subject
 successor native execution sets and both certificate-transport warrants. Stored check labels and
 prior receipts are not receiving authority.
 
+## Validation evidence
+
+The final capability source passed 11 focused comparison/revision tests with 30 assertions. The
+real no-skip recipients passed Decision Case 16/16, Shared Analysis 2/2, Certificate Transport
+12/12, Decision Episode 2/2, linked episodes 1/1 and simulation decision 1/1 against the exact
+pinned Decision Lab tree. The new relocated recipient disabled both the external producer and
+Decision Lab solver. All five actual SimPy runs and all six public-generator artifacts reproduced
+byte-for-byte. The standard repository, Python, pack, registry and pilot gates are retained in the
+[acceptance receipt](simulation-decision-acceptance.json), including failed setup attempts and their
+successful explicit-environment retries. No failed result is counted as passing.
+
 ## Maintenance and limits
 
 Added maintained surface: two closed JSON Schemas, two TypeScript receiver modules, one CLI, one
