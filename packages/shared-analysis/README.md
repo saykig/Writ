@@ -50,3 +50,52 @@ bun packages/shared-analysis/bin/writ-shared-analysis.ts replay \
   --engine-root /path/to/pinned/writ-decision-lab \
   --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
 ```
+
+## Accepted bounded decision-episode composition
+
+ADR 0029 accepts one small envelope above this lifecycle. A `decision_episode` embeds one
+exact PR #51 transport record and derives its shared archive, revision, reassessment, source,
+assumption, execution, problem/query and certificate identities through the existing public APIs.
+It adds separate supplied authority, decision, implementation, observation and reconsideration
+declarations. It does not create another revision graph or infer an action from mathematics.
+
+Observation interpretations are separate reviewable declarations. The base observation cannot
+carry structured causality, decision-correctness or model-update fields, and reconsideration has no
+automatic model effect. `replayDecisionEpisode(...)` freshly checks the embedded original and
+successor executions and the PR #51 transport evidence while reporting the later declarations only
+by preserved exact hashes.
+
+```bash
+bun packages/shared-analysis/bin/writ-decision-episode.ts replay \
+  --episode /path/to/episode.json \
+  --expected-episode-sha256 "$EXPECTED_EPISODE_SHA256" \
+  --engine-root /path/to/pinned/writ-decision-lab \
+  --python /path/to/cpython-3.13-with-scipy-1.17/bin/python
+```
+
+Replay requires an independently retained episode identity and rejects any failed fresh warrant.
+Structural opening alone establishes neither historical identity nor mathematical validity.
+See [the reviewed recipient boundary](../../docs/current/decision-episodes.md#reviewed-recipient-boundary).
+
+The human architecture gate accepted this semantic only within ADR 0029's closed boundary.
+
+## Accepted external evidence and linked pair
+
+[External and linked episode operations](../../docs/current/external-and-linked-episodes.md) add
+one separately checked SimPy FIFO profile and one parent/successor service-duration revision.
+The receivers reuse native episode checks without promoting simulated output to a native certificate.
+Both operations are accepted only within ADR 0029's bounded profile; standalone episode semantics
+and frozen examples are unchanged.
+
+## Accepted simulation decision comparison
+
+[The bounded simulation-to-decision operation](../../docs/current/simulation-to-decision.md) adds a
+separate exact subject above the external FIFO receiver. `openSimulationDecisionComparison(...)`
+freshly checks every run and recomputes a declared integer loss and full minimizing set.
+`openSimulationDecisionRevision(...)` requires one complete base-service change, all derived option
+reruns, immutable parent/successor episodes and exact comparison-to-human-disposition links.
+
+`replaySimulationDecisionRevision(...)` invokes both native episode receivers with their producer
+disabled while comparison receiving never imports SimPy. The returned conditional recommendation,
+empirical applicability and supplied human act remain distinct. The operation is not a widening of
+the native certificate-transport profile and is accepted only within ADR 0029's bounded operation.

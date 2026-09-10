@@ -1,0 +1,40 @@
+{
+  "checkpoint": "external-producer-first",
+  "parent_pr_head": "5cd032c3c00886bfd8520024e4f6fbabb1608615",
+  "artifacts": {
+    "input-1.json": "sha256:df06bb93064a29a7637c32c94dbfed9f6d6615b692a97d093b1ca54af3a3a92a",
+    "run-1.json": "sha256:aff2e46ccf942f842c0e6fca0524984e0c3b373c1b435092b8e21fb3c31b393e",
+    "model.py": "sha256:22b76f26b874c56bf136df0472d447ce85eec584c277ee853c5ed5625b205898",
+    "produce.py": "sha256:ad26293e2cd97da90b148d17fb0f57d5ed3db6cbf232968199f5cac4f0a2f046",
+    "upstream-example.rst": "sha256:a9b2265ecff3aa6542a7814ce419252b61e10abec84daba552d696c86457cdcd",
+    "LICENSE.simpy.txt": "sha256:5f09a7bdf08f239271b15df1cbe2ba7f62649f8b497988274626f48638b84802"
+  },
+  "actual_execution": {
+    "package": "SimPy 4.1.1",
+    "runtime": "CPython 3.13.15",
+    "source_manifest_checked": true,
+    "second_run_byte_identical": true,
+    "randomness": "none",
+    "start_minutes": [
+      "0",
+      "2",
+      "5",
+      "7"
+    ],
+    "finish_minutes": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ]
+  },
+  "independent_receiving": {
+    "implementation": "TypeScript integer FIFO recurrence; no producer import",
+    "tests_passed": 5,
+    "assertions": 15,
+    "relocated_recipient": true,
+    "empirical_validity": false,
+    "bellman_certificate": false
+  },
+  "scope": "Package/model execution, artifact binding and analytical trace check are distinct from empirical validation or authenticated execution. Full combined gates follow linked-episode completion."
+}

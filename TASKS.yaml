@@ -63,8 +63,9 @@ tasks:
 
   - id: CERTIFICATE-TRANSPORT-INTEGRATION-001
     title: Bind a transported mathematical guarantee to an accepted revision lifecycle
-    status: review
+    status: done
     implementation_pr: https://github.com/saykig/Writ/pull/51
+    merge_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
     architecture_status: retained_narrowly
     baseline_commit: bb4534249a313c92a045edd7f9462ff77fbb1bdb
     external_pins:
@@ -73,7 +74,8 @@ tasks:
     dependencies:
       - SHARED-ANALYSIS-REVISION-001
     completion_note: >-
-      ADR 0026 and ADR 0028 are Accepted. The trial reuses PR 47's revision/reassessment authority,
+      PR 51 merged at 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2. ADR 0026 and ADR 0028 are
+      Accepted. The trial reuses PR 47's revision/reassessment authority,
       adds one separately pinned Bellman certificate-transport attachment, preserves exact old and
       successor certificate identities, and separates target-certificate validity from transport
       provenance. A private Decision Lab validation run against Writ commit
@@ -117,6 +119,104 @@ tasks:
       - docs/current/product-definition.md
       - docs/current/roadmap.md
       - docs/experiments/certificate-transport-integration-report.md
+      - TASKS.yaml
+      - MANIFEST.sha256
+
+  - id: DECISION-EPISODE-001
+    title: Close one checked decision-to-consequence provenance loop
+    status: done
+    implementation_pr: https://github.com/saykig/Writ/pull/53
+    architecture_status: accepted
+    baseline_commit: 4e9b7f49e240e4ca5d6a8df0c6b8ecb060d606e2
+    dependencies:
+      - CERTIFICATE-TRANSPORT-INTEGRATION-001
+    completion_note: >-
+      The build composes one exact merged-PR-51 transition with a supplied authority basis, explicit
+      human or institutional decision, implementation, observation and reconsideration trigger. It
+      proposes retaining that envelope narrowly as a replayable decision episode because exact
+      cross-layer binding and fresh checker-only recipient replay add concrete provenance value over
+      loose files. All seven repository gates, pack and registry checks, Ruff, mypy, 75 Python
+      tests, Decision Case 16/16, Shared Analysis 2/2, Certificate Transport 12/12 and Decision
+      Episode 2/2 pass; all real integrations ran with zero skips against the exact pinned Decision
+      Lab tree. Hosted CI passed all three jobs. The explicit human architecture gate accepted ADR
+      0029 on 10 September 2026 after final semantic and packaging review. Acceptance remains bounded
+      and authorizes no later capability.
+    final_acceptance_review: docs/experiments/decision-episode-final-acceptance.md
+    authorized_extension_review: docs/experiments/external-linked-episode-review.md
+    authorized_extension_acceptance: docs/experiments/external-linked-acceptance.json
+    authorized_extension_note: >-
+      User authorized actual external production first and then linked episodes on the same PR.
+      First checkpoint b6f73f0 runs pinned SimPy and independently checks its finite integer trace.
+      The successor revises only service duration; both immutable episodes, parent event references,
+      complete external input diff and independent successor receiving are preserved. Simulation is
+      model-generated throughout and leaves native history unchanged. Implementation 2a00603 passes
+      all 19 combined local gates, real integrations 16/2/12/2/1 without skips and 75 Python tests.
+      Both actual SimPy outputs and the public pair generator reproduce byte-for-byte. The final
+      human gate accepts this operation only as part of bounded ADR 0029.
+    simulation_decision_review: docs/experiments/simulation-decision-review.md
+    simulation_decision_acceptance: docs/experiments/simulation-decision-acceptance.json
+    simulation_decision_note: >-
+      The user subsequently authorized the missing bounded simulation-to-decision connection on PR
+      53. Three declared FIFO options bind exact service-input mappings and actual SimPy runs to a
+      supplied integer waiting-plus-burden objective. Revising the unvalidated base-service
+      assumption from five to nine minutes reruns every option and changes the conditional unique
+      minimum from retain to intensive. Both exact comparisons, complete input changes, immutable
+      episodes and supplied human dispositions are preserved; the successor human act instead asks
+      for empirical evidence. Native A/B history remains unchanged. Eleven focused tests with 30
+      assertions pass, as do real no-skip integrations 16/2/12/2/1/1, five actual SimPy
+      reproductions and all six public-generator artifacts. The acceptance receipt preserves failed
+      setup attempts without counting them as passes. The final human gate accepts this operation
+      only as part of bounded ADR 0029.
+    repair_review: docs/experiments/decision-episode-repair-review.md
+    repair_evidence: docs/experiments/decision-episode-repair-evidence.json
+    repair_note: >-
+      Integrated current main c09922f without rewriting evidence. Recipient replay now requires an
+      independently retained episode hash, real UTC calendar dates and fully checked source, target
+      and transport statuses. Clean source c57ffb9 passed all 18 combined local gates, including real
+      Decision Episode 2/2 and inherited 16/2/12 integrations with zero skips. Keep the useful bounded
+      profile after repair. The later final human gate accepts the repaired bounded profile without
+      rewriting this pre-acceptance evidence.
+    scope:
+      - Reuse the exact accepted decision-case, shared-analysis, revision, applicability, execution, replay, and PR 51 transition artifacts without duplicating their semantics.
+      - Bind one exact checked revision history to a separately supplied authority basis and explicit human or institutional decision.
+      - Preserve implementation, observation, optional separately reviewed interpretation, and explicit reconsideration as distinct declarations.
+      - Let a fresh recipient rederive every identity and freshly replay all checkable mathematical artifacts with the producer disabled.
+      - Compare the closed episode envelope with keeping the same material as independent files before proposing a narrow reusable semantic.
+    exclusions:
+      - Another Bellman transfer or any change to Bellman, Decision Lab, or Aldera.
+      - Inferring authority or a decision from mathematical optimality.
+      - Causal inference, automatic outcome evaluation, automatic model update, or treating temporal order as causality.
+      - A workflow engine, database, universal ontology, knowledge graph, solver registry, UI, or autonomous decision-making.
+      - Empirically identifying service times, option effects, cost weights, real-world menu completeness, causal effects or authority from the synthetic comparison.
+    acceptance:
+      - One complete old-check, substantive-revision, stale-applicability, reassessment, checked-successor, transported-transition, decision, implementation, observation, reconsideration, and recipient-replay story passes.
+      - Every source, assumption, applicability, execution, problem, query, and certificate identity is rederived from the exact embedded accepted artifacts.
+      - The human decision is mandatory and supplied even when it differs from the checked optimal action.
+      - Structured causal, correctness, and model-update claims cannot appear in an observation; any supplied interpretation is separate and independently reviewable.
+      - Recipient replay invokes no producer and reports fresh mathematics separately from preserved human declarations.
+      - The engineering report identifies the exact provenance value over loose files and every unearned semantic.
+      - All repository, Python, real no-skip Decision Lab integration, integrity, and hosted CI gates pass on the final tree.
+      - ADR 0029 is Accepted only after explicit human architecture disposition and final review; PR #53 may merge without authorizing a later capability.
+      - Every declared simulation option runs through the actual pinned external producer and the independent exact FIFO receiver.
+      - Exact units, option-to-input mappings, fixed costs, preferences, rounding, tolerance and declared-menu completeness bind before ranking.
+      - One base-service revision reruns every option, preserves the old comparison and rejects stale outputs, substituted model/input, wrong units/mapping, omitted changes and a false optimum.
+      - A relocated recipient with both producers disabled freshly checks both comparisons and both native episode histories while preserving human choice separately.
+    outputs:
+      - adr/0029-bounded-decision-episodes.md
+      - schemas/analysis/decision-episode-v0.1.schema.json
+      - packages/shared-analysis
+      - examples/decision-cases/decision-episode
+      - docs/current/decision-episodes.md
+      - docs/experiments/decision-episode-build-report.md
+      - docs/current/product-definition.md
+      - docs/current/roadmap.md
+      - schemas/analysis/simulation-decision-v0.1.schema.json
+      - schemas/analysis/simulation-decision-revision-v0.1.schema.json
+      - examples/decision-cases/simulation-decision
+      - docs/current/simulation-to-decision.md
+      - docs/experiments/simulation-decision-review.md
+      - docs/experiments/simulation-decision-acceptance.json
+      - docs/experiments/decision-episode-final-acceptance.md
       - TASKS.yaml
       - MANIFEST.sha256
 

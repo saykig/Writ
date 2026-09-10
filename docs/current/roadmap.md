@@ -1,8 +1,8 @@
 # Writ: current roadmap
 
 **Status:** current directional roadmap  
-**Observation cutoff:** 9 September 2026  
-**Baseline:** `main` after PR #52 (`d4f2769f1f7e935809225677505779a62770dcde`)
+**Observation cutoff:** 10 September 2026
+**Baseline:** current `main` (`c09922f8a4689284de42b1b1bcc22098fa19c117`) integrated into PR #53
 
 This roadmap describes where Writ is going. It is not permission to bypass accepted ADRs, source
 integrity, review, or mathematical assumptions. Historical roadmaps and migrations remain evidence
@@ -70,38 +70,71 @@ modelling programme or evidence of strategic advantage.
    authored analysis import, explicit revision/reassessment, old-result preservation, successor
    recomputation, and checker-only replay. Treat this as a bounded capability, not a general
    decision workspace.
-2. **Retain the one Bellman transfer that passed end-to-end review.** PR #51 pins Decision Lab's
-   merged certificate-transport adapter and reuses the accepted PR #47 lifecycle rather than
+2. **Retain the one Bellman transfer that passed end-to-end review.** Merged PR #51 pins Decision
+   Lab's merged certificate-transport adapter and reuses the accepted PR #47 lifecycle rather than
    creating a new revision system. It earns only a revision-bound checked mathematical transition:
    preserved old result -> substantive model/policy revision -> stale applicability -> explicit
    reassessment -> transported successor certificate -> checker-only recipient replay.
-3. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
+3. **Retain the accepted bounded post-check provenance loop.** ADR 0029 and PR #53 add a
+   `decision_episode` that composes the accepted transition with a supplied authority basis,
+   explicit human/institutional decision, implementation, observation and reconsideration. Exact
+   cross-artifact binding and fresh replay remain mandatory, without inferring authority,
+   causality, correctness or a model update.
+4. **Keep the knowledge layer strong without making it the whole roadmap.** Continue NIST source,
    review, provenance, and correction work where it reveals reusable knowledge-layer requirements.
    Do not let “NIST is the proving ground” become “Writ is only a corpus system.”
-4. **Stop after the accepted transport slice.** The transition object is retained narrowly because
-   its history, staleness, reassessment, binding, and replay safeguards justify its integration
-   complexity. That judgment is not a queue to implement Bellman PR #7 or later modules.
+5. **Stop the mathematics expansion after the accepted transport slice.** The transition object is
+   retained narrowly because its history, staleness, reassessment, binding, and replay safeguards
+   justify its integration complexity. That judgment is not a queue to implement Bellman PR #7 or
+   later modules.
 
-**Exit gate from Now:** PR #51's complete certificate-transport change story passes fresh checking,
-adversarial controls, and recipient replay without weakening ADR 0026/0028 boundaries, and remains
-limited to the accepted revision-bound checked mathematical transition.
+The [PR #53 repair review](../experiments/decision-episode-repair-review.md) recommends retaining
+that bounded episode after identity, calendar and fresh-warrant repairs. Combined local acceptance
+passed; current hosted status belongs to the final PR head. That recommendation preceded and did
+not itself supply architecture acceptance. The subsequent human gate accepted ADR 0029 after final
+review; it did not reopen the completed assessment experiment.
+
+The user then authorized two ordered additions on PR #53: an actual external producer and linked
+episodes. The [external/linked review](../experiments/external-linked-episode-review.md) records a
+pinned SimPy run and one service-assumption revision whose parent events actually resolve. The
+external trace is model-generated; native mathematical history is preserved and checked separately.
+This is a bounded engineering addition, not another empirical study or automatic model transfer.
+Both additions passed combined local acceptance at `2a00603`; the final review then confirmed the
+final-head hosted checks and accepted them only within ADR 0029's closed profile.
+
+The user subsequently authorized one bounded simulation-to-decision connection on the same PR.
+The [current operation](simulation-to-decision.md) compares three actual deterministic FIFO runs
+under an explicit supplied integer loss, revises the unvalidated base-service assumption, reruns
+every option and independently recomputes the conditional ranking. A separate revision record binds
+both comparisons to immutable episodes; the successor human act defers adoption despite the new
+conditional preference. This accepted profile adds neither empirical validity nor new Bellman
+mathematics and does not widen the native certificate-transport profile.
+
+**Exit gate from Now: passed.** The build proves one exact decision-to-reconsideration story and one
+exact simulation-to-decision revision, compares the envelopes with loose files, passes
+producer-disabled recipient replay, and received explicit human acceptance of ADR 0029. The
+accepted boundary stops here; green checks alone do not authorize another capability.
 
 ## Next
 
-1. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
+1. **Use the accepted decision episode only within its earned provenance boundary.** Preserve the
+   exact checked-history binding and supplied post-check declarations without turning the episode
+   into workflow state, empirical validation or authority. Keep the separate-file baseline for
+   cases that do not need the accepted binding and replay safeguards.
+2. **Use the retained transition semantic only where an actual Writ workflow needs it.** Preserve the
    exact source-certificate bytes and prior claim context, exact revised basis, explicit
    complete model-to-request mapping premise, successor certificate, fresh source-certificate status,
    target-certificate status, transport-provenance status, and replay identity without pretending
    that archival preservation establishes validity or that the mapping premise is empirically true.
-2. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A
+3. **Make cumulative reuse operational only where a concrete workflow needs the next operation.** A
    later result may receive a transported or tightened certificate and coexist with alternatives or
    incompatible results, but certificate accumulation/selection should enter only after a specific
    downstream use demonstrates the need.
-3. **Exercise broader change stories before broadening the core.** Distinguish archived bytes and
+4. **Exercise broader change stories before broadening the core.** Distinguish archived bytes and
    prior claim context from fresh source-certificate status, current inapplicability, unsupported
    transport, valid target certificate with invalid transport provenance, and justified successor
    reuse.
-4. **Test the language/runtime threshold rather than guessing.** When two or three genuinely
+5. **Test the language/runtime threshold rather than guessing.** When two or three genuinely
    different Bellman certificate types depend on Writ checking, compare a small Rust exact checker
    with the current Python reference. If handwritten Python search becomes the mathematical
    bottleneck, compare Julia/JuMP or another established optimizer on one existing problem. Do not

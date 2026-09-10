@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writ.example/schemas/analysis/simulation-decision-v0.1.schema.json",
+  "title": "Writ bounded simulation decision comparison v0.1",
+  "description": "A closed comparison of declared queue-model options under an explicit supplied objective. Model output, objective mapping, conditional preference, empirical applicability, and authority remain separate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "profile",
+    "evidence_kind",
+    "claim",
+    "comparison_id",
+    "completed_at",
+    "time_status",
+    "scenario",
+    "option_class",
+    "objective",
+    "options",
+    "result",
+    "assurance"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "artifact_kind": { "const": "simulation_decision_comparison" },
+    "profile": { "const": "simpy-resource-fifo-decision.v1" },
+    "evidence_kind": { "const": "model_generated_with_supplied_preferences" },
+    "claim": { "const": "conditional_minimum_loss_over_declared_options" },
+    "comparison_id": { "$ref": "#/$defs/nonEmptyString" },
+    "completed_at": { "$ref": "#/$defs/eventTime" },
+    "time_status": { "const": "supplied_not_authenticated" },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumption_id",
+        "base_service_minutes",
+        "arrivals",
+        "unit",
+        "status",
+        "statement"
+      ],
+      "properties": {
+        "assumption_id": { "$ref": "#/$defs/nonEmptyString" },
+        "base_service_minutes": { "$ref": "#/$defs/positiveInteger" },
+        "arrivals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/nonNegativeInteger" }
+        },
+        "unit": { "type": "string", "minLength": 1 },
+        "status": { "const": "supplied_not_empirically_validated" },
+        "statement": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "option_class": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declared_menu_completeness",
+        "real_world_option_completeness",
+        "scope_statement"
+      ],
+      "properties": {
+        "declared_menu_completeness": { "const": "complete" },
+        "real_world_option_completeness": { "const": "not_established" },
+        "scope_statement": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sense",
+        "output_metric",
+        "output_unit",
+        "loss_unit",
+        "mapping",
+        "wait_weight",
+        "preference_statement",
+        "rounding",
+        "tolerance"
+      ],
+      "properties": {
+        "sense": { "type": "string", "minLength": 1 },
+        "output_metric": { "type": "string", "minLength": 1 },
+        "output_unit": { "type": "string", "minLength": 1 },
+        "loss_unit": { "type": "string", "minLength": 1 },
+        "mapping": { "type": "string", "minLength": 1 },
+        "wait_weight": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit"],
+          "properties": {
+            "value": { "$ref": "#/$defs/positiveInteger" },
+            "unit": { "type": "string", "minLength": 1 }
+          }
+        },
+        "preference_statement": { "$ref": "#/$defs/nonEmptyString" },
+        "rounding": { "type": "string", "minLength": 1 },
+        "tolerance": { "type": "string", "minLength": 1 }
+      }
+    },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/option" }
+    },
+    "result": { "$ref": "#/$defs/result" },
+    "assurance": { "$ref": "#/$defs/assurance" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "positiveInteger": { "type": "string", "pattern": "^[1-9][0-9]{0,5}$" },
+    "nonNegativeInteger": { "type": "string", "pattern": "^(0|[1-9][0-9]{0,23})$" },
+    "signedInteger": { "type": "string", "pattern": "^(0|-?[1-9][0-9]{0,5})$" },
+    "eventTime": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "encodedBytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "content", "sha256"],
+      "properties": {
+        "encoding": { "const": "base64" },
+        "content": {
+          "type": "string",
+          "minLength": 4,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit"],
+      "properties": {
+        "value": { "$ref": "#/$defs/nonNegativeInteger" },
+        "unit": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "option_id",
+        "action_id",
+        "description",
+        "service_delta_minutes",
+        "fixed_cost",
+        "run",
+        "run_sha256",
+        "input_sha256"
+      ],
+      "properties": {
+        "option_id": { "$ref": "#/$defs/nonEmptyString" },
+        "action_id": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "service_delta_minutes": { "$ref": "#/$defs/signedInteger" },
+        "fixed_cost": { "$ref": "#/$defs/quantity" },
+        "run": { "$ref": "#/$defs/encodedBytes" },
+        "run_sha256": { "$ref": "#/$defs/sha256" },
+        "input_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "optionLoss": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "option_id",
+        "run_sha256",
+        "input_sha256",
+        "service_minutes",
+        "total_wait",
+        "weighted_wait_loss",
+        "fixed_cost",
+        "total_loss"
+      ],
+      "properties": {
+        "option_id": { "$ref": "#/$defs/nonEmptyString" },
+        "run_sha256": { "$ref": "#/$defs/sha256" },
+        "input_sha256": { "$ref": "#/$defs/sha256" },
+        "service_minutes": { "$ref": "#/$defs/positiveInteger" },
+        "total_wait": { "$ref": "#/$defs/quantity" },
+        "weighted_wait_loss": { "$ref": "#/$defs/quantity" },
+        "fixed_cost": { "$ref": "#/$defs/quantity" },
+        "total_loss": { "$ref": "#/$defs/quantity" }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison_status",
+        "preferred_option_ids",
+        "option_losses",
+        "recommendation_status",
+        "applicability_status"
+      ],
+      "properties": {
+        "comparison_status": { "enum": ["unique_minimum", "exact_tie"] },
+        "preferred_option_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "option_losses": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/optionLoss" }
+        },
+        "recommendation_status": { "const": "conditional_not_authorizing" },
+        "applicability_status": { "const": "not_established" }
+      }
+    },
+    "assurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_output_check",
+        "objective_check",
+        "model_empirically_validated",
+        "objective_empirically_identified",
+        "causal_result",
+        "bellman_certificate",
+        "recommendation_authorizes_action"
+      ],
+      "properties": {
+        "model_output_check": { "const": "fresh_exact_integer_fifo_trace" },
+        "objective_check": { "const": "fresh_exact_integer_arithmetic" },
+        "model_empirically_validated": { "const": false },
+        "objective_empirically_identified": { "const": false },
+        "causal_result": { "const": false },
+        "bellman_certificate": { "const": false },
+        "recommendation_authorizes_action": { "const": false }
+      }
+    }
+  }
+}
