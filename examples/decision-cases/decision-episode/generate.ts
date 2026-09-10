@@ -137,9 +137,7 @@ function transportRequest(): Uint8Array {
   });
 }
 
-export function buildDecisionEpisodeStory(
-  options: TransportEngineOptions,
-): LoadedDecisionEpisode {
+export function buildDecisionEpisodeStory(options: TransportEngineOptions): LoadedDecisionEpisode {
   const analysis = { bundle_id: "alpha", analysis_id: "analysis-base" };
   const originalCase = openDecisionCase(alphaImport().case_bytes);
   const originalExecution = runDecisionCase(originalCase, analysis.analysis_id, options);
