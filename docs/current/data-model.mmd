@@ -1,9 +1,12 @@
-erDiagram
-  SOURCE ||--o{ PASSAGE : contains
-  PASSAGE ||--o{ EVIDENCE_LINK : anchors
-  TYPED_RECORD ||--o{ EVIDENCE_LINK : supported_by
-  TYPED_RECORD ||--o{ HUMAN_REVIEW : reviewed_in
-  SOURCE ||--o{ PROVENANCE : identified_by
-  PASSAGE ||--o{ PROVENANCE : anchored_by
-  TYPED_RECORD ||--o{ PROVENANCE : traced_by
-  HUMAN_REVIEW ||--o{ PROVENANCE : recorded_by
+flowchart LR
+  P[Decision problem] --> V[Variables]
+  V --> D[Dependencies and information]
+  D --> U[Uncertainty]
+  U --> A[Actions]
+  A --> C[Constraints and objectives]
+  C --> E[Engine request]
+  E --> R[Candidate result]
+  R --> K[Independent check]
+  P --> G[Optional provenance]
+  G --> V
+  G --> C

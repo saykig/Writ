@@ -1,69 +1,30 @@
 # Third-party notices
 
-This file records third-party and externally authored material associated with Writ. It is
-informational and does not modify the Apache License 2.0. The Apache license covers original Writ
-code and documentation contributed to this repository; it does not relicense the materials listed
-below. Copyright and other rights remain with their respective owners.
+This file records third-party and externally authored material associated with Writ. It does not
+change the repository's Apache License 2.0. Rights in the materials below remain with their original
+owners.
 
-## Political, legal, and research sources
+## Sources and corpora
 
 Writ corpora contain source metadata, anchored excerpts, and source-reported judgments derived from
-externally published laws, policies, standards, reports, and research. Their inclusion preserves
-provenance and does not assert Writ ownership or grant reuse rights in the underlying material.
-Users must consult each source publisher's current terms.
+published laws, policies, standards, reports, and research. Their presence records provenance; it
+does not grant new reuse rights in the underlying material.
 
-The historical snapshot tags indexed in [`docs/history/snapshots.md`](./docs/history/snapshots.md)
-preserve source-document files including:
+Historical snapshot tags indexed in `docs/history/snapshots.md` preserve additional source files and
+older research artifacts. Users should consult the original publishers' terms before redistributing
+source material.
 
-- `g7-2025-ai-sme-chapter.pdf`, published by the G7 Research Group;
-- `2024-g20-compliance-final-excerpt.pdf` and `2024-g20-compliance-interim-excerpt.pdf`, published
-  by the G20 Research Group.
+## UCDP-derived provenance fixtures
 
-The EU and US jurisdictional corpora and the tagged EU-US pilot snapshot also preserve passages or metadata
-from the Publications Office of the European Union, the United States Office of Management and
-Budget, the National Institute of Standards and Technology, and the White House. The repository does
-not contain a separate license grant from those publishers for the source texts. The tagged
-deep-research report contains citations and excerpts whose reuse remains subject to the original
-sources.
+`packages/provenance/test/fixtures/aldera-ucdp-holdout.json` contains short normalized vectors
+derived from Uppsala Conflict Data Program material. The tracked metadata identifies the source and
+its Creative Commons Attribution 4.0 license. The fixture retains attribution and does not imply
+UCDP endorsement.
 
-Published G7 and G20 ratings and judgments are source-reported data. Their representation in Writ
-does not transfer ownership or relicense the publishers' reports or analytical judgments.
+## Software
 
-## UCDP-derived provenance golden vectors
+JavaScript and Python dependencies keep their upstream licenses. Exact JavaScript versions are
+recorded in `bun.lock`; Python dependencies are declared by the packages that use them.
 
-`packages/provenance/test/fixtures/aldera-ucdp-holdout.json` contains short normalized text vectors
-derived from the UCDP Battle-related Deaths Dataset Codebook version 26.1 and the UCDP Dataset
-Download Center. Attribution: Uppsala Conflict Data Program (UCDP), Uppsala University. UCDP's
-tracked source metadata declares these materials licensed under
-[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
-The fixture preserves UCDP citations present in the derived text; reuse must retain appropriate
-attribution and comply with that license.
-
-The vectors were derived by Aldera from local PDF and HTML artifacts and a generated receipt under
-its ignored `data/local/` tree. Those raw local artifacts and receipt are not committed at Aldera
-commit `9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4`. Writ freezes only the derived vectors, their
-artifact hashes, and paths to Aldera's tracked manifest, source registry, and source metadata; this
-does not imply UCDP or Aldera endorsement.
-
-## Software dependencies and copied components
-
-JavaScript and Python dependencies are not relicensed under Apache-2.0. Their own license files and
-package metadata govern them; exact JavaScript versions are recorded in `bun.lock`, while Python
-requirements are declared in `apps/ingest/pyproject.toml` and resolved at installation time.
-
-Items requiring particular attention when distributing Writ or bundled artifacts include:
-
-- PyMuPDF, a direct Python dependency, declares a choice of GNU Affero General Public License 3.0
-  or an Artifex commercial license;
-- JavaScript packages recorded in `bun.lock` retain their upstream licenses and notices.
-
-`packages/shared-analysis/src/lineage-index.ts` adapts the content-conflict, deterministic traversal,
-complete path enumeration, and cycle-detection mechanics from Aldera's `src/lineage-graph.ts` at
-commit `9b7d05e9fb2ed11c315e9b6a1dca66e3a8aa9eb4`. Aldera is licensed under the Apache License 2.0.
-Writ's adaptation is narrower: it indexes scoped decision-case dependencies and deliberately omits
-Aldera's dataset, entity, activity, and store authority model.
-
-These dependencies do not change the license of original Writ source files, but a distributed
-combined application may carry additional source, notice, attribution, or commercial-license
-obligations. Dependency licenses must be reviewed again against the resolved versions before a
-release.
+PyMuPDF, used by the ingestion package, declares AGPL-3.0 or a commercial Artifex license. Review all
+resolved dependency licenses again before distributing a combined application.

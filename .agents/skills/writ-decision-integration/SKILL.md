@@ -1,109 +1,50 @@
 ---
 name: writ-decision-integration
-description: Transfer mature Bellman decision semantics into Writ through exact, independently checkable, revision-aware interfaces.
+description: Connect a bounded Writ decision problem to established mathematical software without weakening its semantics.
 ---
 
-# Writ decision integration
+# Decision integration
 
-Use this skill for Bellman-to-Writ transfer, Decision Lab integration, mathematical decision cases,
-candidate execution and checking, sequential or model-family certificates, certificate transport
-or accumulation, shared-analysis revision/replay lifecycles, and mathematical revision, reuse, or
-applicability. Read `writ-domain` for the meanings of Writ objects and states.
+Use this skill when evaluating or implementing a mathematical engine adapter.
 
-## Transfer contract
+## Start with the operation
 
-Bellman supplies the mathematical objects, premises, operations, composition rules, and guarantees.
-Writ does not invent missing mathematics or weaken a premise at the interface. For each mature
-primitive:
+State the exact mathematical operation Writ needs before choosing a library. Then identify a mature
+engine whose native semantics fit that operation.
 
-1. encode the exact mathematical subject;
-2. preserve every assumption and dependency required by its guarantee;
-3. compute or receive a candidate through an explicit producer boundary;
-4. independently check only the supported mathematical claim;
-5. bind the subject, candidate, certificate, and result to exact bytes and identities;
-6. assess empirical applicability separately;
-7. preserve human disposition separately; and
-8. version, revise, transport, tighten, or reuse without rewriting history.
+For each candidate engine record:
 
-Keep mathematical truth or semantic guarantee, producer execution, checker assurance, empirical
-or model adequacy, applicability, human disposition, and authority to act as distinct claims. A
-checked result establishes neither empirical truth nor permission to act.
+1. project and exact version;
+2. license and installation burden;
+3. native mathematical objects used;
+4. Writ fields required;
+5. translation losses or unsupported states;
+6. exact request and result format; and
+7. what can be checked independently.
 
-## Exact binding
+Run one local example before adding a durable dependency.
 
-Bind a checked result to every dimension on which the guarantee depends, including where relevant:
+## Adapter boundary
 
-- model/problem identity and requested operation;
-- action or policy class and information access;
-- horizon and history structure;
-- exact units and representations;
-- assumptions and loss/cost semantics;
-- uncertainty or model-family semantics;
-- guarantee and certificate type;
-- source and model dependency identities; and
-- exact candidate and certificate bytes.
+Keep adapters thin. Writ may validate, translate, invoke, receive, bind, and check. It must not
+silently strengthen the donor engine's result.
 
-A caller may supply premises but may not silently omit or weaken Bellman premises. Treat Python and
-TypeScript as current reference implementations rather than the mathematical architecture.
+A probability model, influence diagram, optimization model, POMDP, simulation, or proof object keeps
+its own meaning. Similar field names do not make different formalisms interchangeable.
 
-## Production and assurance
+## Candidate versus check
 
-Keep candidate production and checking separable. Where the certificate type supports portable
-checking, preserve enough bytes for a recipient to run a fresh check. Replaying the same unchecked
-calculation does not establish independent assurance. Document the trusted computing boundary,
-including parsing, canonicalization, arithmetic, checker code, and any external runner it trusts.
+When possible, separate result production from checking. Bind the check to the exact intended
+problem, units, assumptions, action set, objective, and information structure required by the claim.
 
-Fail closed on unsupported semantics, identity mismatch, malformed bytes, stale subjects, and
-missing premises. Data must never select arbitrary executable commands.
+If an independent check is not practical, say what remains trusted rather than describing producer
+success as independent assurance.
 
-## Revision and composition
+## Language choice
 
-Preserve old mathematical results, dependency changes, applicability reassessments, and successor
-subjects/results. A changed world, source basis, model, mapping, unit, assumption, or intended use
-may leave the old mathematics correct while making the result inapplicable; do not mutate it.
+Use the language that makes the mathematical boundary clearest. TypeScript is suitable for Writ's
+application and interchange layer. Python, Julia, R, C++, Rust, Lean, or another language may own a
+specific engine or checker.
 
-For cross-analysis reuse, derive reassessment from the exact prior subject, its dependencies, the
-supplied revision, and the intended use. Replay must freshly check preserved candidate evidence; it
-must not silently recompute the candidate or treat a changed basis as already applicable or approved.
-
-Keep these states distinct when the primitive uses them:
-
-- compatible, incompatible, and unresolved/not established;
-- identified and nonidentified;
-- exact tie and uncertified action.
-
-Persistent model-family uncertainty must not silently become node-by-node model switching. Before
-composing outputs, establish that the component guarantees permit that exact composition. Shared
-labels, a common decision, overlapping intervals, individually valid certificates, or local policy
-agreement do not establish composability.
-
-## Implementation threshold
-
-Do not migrate languages automatically. Re-evaluate the implementation only at a demonstrated
-bottleneck:
-
-- if handwritten Python search or optimization is the bottleneck, evaluate Julia with established
-  optimization tooling on an existing problem;
-- if several Bellman certificate types need a durable independent infrastructure checker, evaluate
-  Rust with exact rational arithmetic;
-- if a stable foundational theorem becomes a dependency for many later guarantees, consider Lean.
-
-Do not introduce a universal solver registry, generic graph architecture, ontology,
-service/database layer, implicit output composition, authority-to-act semantics, or new Bellman
-mathematics as part of a transfer.
-
-## Required evidence
-
-For each transferred primitive, add decisive fail-closed tests for:
-
-- a valid positive case;
-- malformed and stale/mismatched subjects;
-- a missing premise;
-- a forged or altered certificate;
-- unsupported semantics;
-- revision or applicability failure; and
-- recipient fresh checking where the certificate type supports it.
-
-Report separately what producer execution demonstrated, what the independent checker established,
-what remains in the trusted computing boundary, and what applicability or human review still must
-decide.
+Test Rust when several supported result types need a small portable exact checker. Use Lean when a
+stable formal theorem or checker property becomes a repeated dependency. Do not migrate for style.
