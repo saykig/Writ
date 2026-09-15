@@ -1,12 +1,12 @@
 # Agent roles
 
-Writ keeps agent skills narrow so one task does not silently become the whole architecture.
+Writ uses narrow agent skills with explicit handoffs between stages of work.
 
 Use one primary skill for the job:
 
-- `writ-decision-object` — define or review the decision problem itself;
+- `writ-decision-object` — define or review the decision problem;
 - `writ-engine-adapter` — choose and connect established mathematical software;
-- `writ-proving-ground` — test whether Writ adds value beyond the direct engine; and
+- `writ-proving-ground` — test Writ against a direct-engine baseline; and
 - `writ-release-history` — maintain releases, recovery points, and historical records.
 
 The normal build chain is:
@@ -17,10 +17,8 @@ decision object
 -> proving ground
 ```
 
-Release/history work sits outside that chain.
+Each role owns one layer. The decision-object role defines the problem, the engine-adapter role
+handles mathematical translation, and the proving-ground role evaluates whether the resulting
+architecture earns its place. Release and history work stays separate from that build chain.
 
-A task may cross boundaries, but do not let one skill take over another role. In particular, engine
-choice should not define the decision object, and a proving case should be allowed to reject an
-abstraction that earlier work proposed.
-
-All skills remain subordinate to `AGENTS.md` and the current design principles.
+All skills follow `AGENTS.md` and the current design principles.
