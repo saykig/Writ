@@ -1,5 +1,6 @@
 name: finalize direct current documentation
 
+# one-use finalizer
 on:
   push:
     branches:
