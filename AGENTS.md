@@ -17,10 +17,15 @@ interchange object, adapters, exact bindings, checks, and clear limits around wh
 Before changing current architecture, read:
 
 - `docs/current/product-definition.md`;
+- `docs/current/design-principles.md`;
 - `docs/current/decision-object.md`;
 - `docs/current/roadmap.md`;
 - the relevant current schema or ADR; and
 - the selected task in `TASKS.yaml`, when one exists.
+
+`docs/current/design-principles.md` records lessons that new work should not quietly violate. It is
+not immutable: a later proving case may justify changing a principle, but that change should be
+explicit and evidence-backed.
 
 Current docs and the newest accepted ADR govern new work. Files under `docs/history/`,
 `docs/migrations/`, and `docs/experiments/` are evidence of completed work, not current product
