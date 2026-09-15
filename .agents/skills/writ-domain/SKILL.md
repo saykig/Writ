@@ -1,85 +1,52 @@
 ---
 name: writ-domain
-description: Apply Writ's current domain rules across source-grounded knowledge and bounded derived decision work.
+description: Apply Writ's current rules for local, explicit decision problems.
 ---
 
-# Writ Domain Skill
+# Writ domain
 
-Use this skill when implementing or reviewing Writ domain behavior.
+Use this skill when implementing or reviewing Writ semantics.
 
 ## Mental model
 
-Writ has two separate but composable surfaces.
+Writ centers on one bounded decision problem. Depending on the problem, it may contain variables,
+dependencies, uncertainty, information available, actions, constraints, objectives, provenance,
+engine requests, and checked results.
 
-### Source-grounded knowledge
+Do not assume those objects belong to a particular application domain.
 
-1. immutable source versions and anchored passages;
-2. typed institutional and legal-policy records;
-3. human review;
-4. provenance and correction history.
+## Keep claims separate
 
-### Derived decision work
+Never silently merge:
 
-1. an explicit question/requested operation;
-2. supplied content and modelling assumptions;
-3. an exact mathematical subject;
-4. candidate computation and independent checking;
-5. applicability and human disposition;
-6. immutable revision/reuse history.
+- supplied information;
+- a modelling assumption;
+- a mathematical object;
+- an engine result;
+- an independent check;
+- real-world applicability; and
+- a human or institutional decision.
 
-The derived layer may depend on reviewed Writ knowledge, but it never turns a question, model,
-calculation, or recommendation into the source of truth for a native record.
+A correct calculation can still rest on a poor model. A useful model still does not grant authority
+to act.
 
-Bellman supplies the mathematical semantics for mature decision primitives. Do not weaken Bellman
-assumptions when implementing them in Writ, and do not treat today's implementation language as the
-mathematical architecture.
+## External engines
 
-## Epistemic separation
+Prefer established mathematics. An adapter must preserve the donor engine's native meaning and fail
+on unsupported translations. Do not invent missing probabilities, utilities, constraints, causal
+relations, or information structure.
 
-Never merge:
+The current `decision-case` package is a reference for exactness and checking, not the universal Writ
+model.
 
-- source evidence;
-- fact claim;
-- interpretation;
-- modelling assumption;
-- mathematical guarantee;
-- checked calculation;
-- applicability;
-- human disposition;
-- authority to act.
+## Provenance
 
-Workflow status and truth value are also separate.
-
-## Truth, compatibility, and uncertainty
-
-Where the four-valued record truth profile applies, retain `true`, `false`, `unknown`, and
-`contested` exactly. For mathematical/model status, also preserve distinctions such as compatible,
-incompatible, unresolved/not established, identified, nonidentified, exact tie, and uncertified
-action. Do not map these statuses into one another for convenience.
-
-## Evidence and revision
-
-Every native record needs the source/review history required by its state. Accepted records are
-superseded, never silently rewritten.
-
-Every derived result must remain bound to its exact mathematical subject and dependencies. A changed
-source or modelling basis may leave the old mathematics correct while requiring applicability
-reassessment. Preserve the old result and construct or check a successor rather than rewriting it.
-
-## Automation boundary
-
-Models and solvers may produce candidates. Independent checking establishes only the mathematical
-claim within its supported semantics. Human or institutional authority controls acceptance and
-real-world use.
-
-## Schema boundary
-
-The shared record core does not require commitments, obligations, legal force, or scores. Derived
-decision cases live under separate analysis-layer contracts rather than becoming another record
-family.
+Attach provenance when it answers a concrete question such as where a variable value, constraint,
+objective, or model choice came from. Provenance supports the decision object; it does not determine
+the mathematical semantics of the object it points to.
 
 ## Diagnostics
 
-Return stable diagnostic codes for semantic gaps, ambiguity, missing provenance, invalid identity,
-stale mathematical subjects, unsupported semantics, failed checking, and incomplete traces. Never
-renumber or repurpose released diagnostics silently.
+Return clear typed errors for malformed, unsupported, mismatched, or ambiguous inputs. Preserve
+meaningful distinctions such as unknown versus false, unresolved versus incompatible, and exact tie
+versus absence of a certified action.

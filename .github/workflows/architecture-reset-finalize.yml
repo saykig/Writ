@@ -1,0 +1,46 @@
+name: finalize architecture reset
+
+on:
+  push:
+    branches:
+      - architecture/decision-object-reset
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - name: Refresh lockfile
+        run: |
+          bun install
+          bun install --frozen-lockfile
+      - name: Build integrity manifest for verification
+        run: |
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+      - name: Run TypeScript and repository checks
+        run: |
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
+      - name: Commit generated lock and manifest
+        run: |
+          git rm .github/workflows/architecture-reset-finalize.yml
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add bun.lock MANIFEST.sha256
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Finalize architecture reset lock and manifest"
+          git push origin HEAD:${GITHUB_REF_NAME}

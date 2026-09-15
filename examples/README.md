@@ -1,13 +1,9 @@
 # Examples
 
-`examples/` contains runnable, illustrative material for exercising Writ's public boundaries. These
-files are not source-of-truth corpora, normative schemas, governing protocols, or reviewed evidence.
+Examples are runnable tests of Writ boundaries. They are not product specifications.
 
-- [`decision-cases/`](./decision-cases/) contains portable derived decision examples and their saved
-  checked executions, including an accepted bounded decision-episode provenance loop and a bounded
-  simulation-to-decision comparison.
-- [`external-simulation/`](./external-simulation/) contains the pinned SimPy fixture reused by the
-  bounded external and simulation-comparison examples.
-- [`empirical-handoffs/afy-2024-ro-crate/`](./empirical-handoffs/afy-2024-ro-crate/) contains an
-  executed, non-raw RO-Crate handoff of Bellman's AFY 2024 result, a standard-consumer receipt, and
-  an independently attributed successor assessment.
+`decision-cases/failure-choice/` is the current mathematical reference example. It uses a small
+synthetic uncertainty problem to exercise exact input binding and independent checking.
+
+New examples should support the current decision-object roadmap and run locally without requiring an
+LLM or hosted service.
