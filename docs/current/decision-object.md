@@ -52,6 +52,21 @@ Before an adapter is accepted, it must document:
 - whether the engine produces a candidate, a proof, or both; and
 - what Writ can check without trusting the producer.
 
+## Changes and old results
+
+Earlier Writ experiments established one lesson that should survive the reset: a changed source,
+assumption, or model does not always mean the same thing.
+
+Writ will eventually need to tell apart:
+
+- an old calculation that is still mathematically correct for its old inputs;
+- a problem whose mathematical inputs changed and therefore needs recomputation; and
+- a calculation that may still be correct but needs a new judgment about whether it applies to the
+  real situation.
+
+Do not rebuild the old revision system now. Add this only when the new decision object and a real
+proving case show the smallest structure required.
+
 ## First design test
 
 Do not freeze `decision-object-v0.1` from one library. First express bounded problems through at least
