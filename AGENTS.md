@@ -99,7 +99,7 @@ bun run build
 
 ## Documentation style
 
-Write for a technically curious reader who has never seen the project. Start with the plain-language
+Write for a technically curious reader who is new to the project. Start with the plain-language
 point. Use specialized terms only when they add precision, define them when necessary, and keep
 current Markdown short. State the current project directly; place historical explanation in the
 history and experiment directories.
