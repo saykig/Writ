@@ -6,11 +6,11 @@ Build Writ as local infrastructure for explicit decision problems.
 
 The central object is a decision problem: variables, relationships, uncertainty, information
 available to the decision-maker, actions, constraints, objectives, mathematical requests, and
-checked results. Provenance may explain where a supplied value, constraint, model choice, or other
-input came from. It is not the product by itself.
+checked results. Provenance may explain where an important supplied input or modelling choice came
+from. It is supporting structure, not the product by itself.
 
 Writ should use established mathematical software when it fits the problem. The repository owns the
-interchange object, adapters, exact bindings, checks, and clear limits around what each result means.
+decision object, adapters, exact bindings, checks, and clear limits around what each result means.
 
 ## Read first
 
@@ -20,66 +20,74 @@ Before changing current architecture, read:
 - `docs/current/design-principles.md`;
 - `docs/current/decision-object.md`;
 - `docs/current/roadmap.md`;
+- `.agents/README.md` and the relevant skill;
 - the relevant current schema or ADR; and
 - the selected task in `TASKS.yaml`, when one exists.
 
-`docs/current/design-principles.md` records lessons that new work should not quietly violate. It is
-not immutable: a later proving case may justify changing a principle, but that change should be
-explicit and evidence-backed.
+`docs/current/design-principles.md` records lessons that new work should not quietly violate. A later
+proving case may justify changing a principle, but that change must be explicit and evidence-backed.
 
 Current docs and the newest accepted ADR govern new work. Files under `docs/history/`,
 `docs/migrations/`, and `docs/experiments/` are evidence of completed work, not current product
 instructions.
 
+## Agent work chain
+
+Choose one primary skill for the task.
+
+1. `writ-decision-object` defines or reviews the decision problem itself.
+2. `writ-engine-adapter` selects and connects established mathematical software once the operation is
+   clear.
+3. `writ-proving-ground` tests whether Writ adds real value beyond using the underlying engine
+   directly.
+4. `writ-release-history` handles releases, recovery points, snapshots, and historical records. It is
+   outside the build chain.
+
+The normal build handoff is:
+
+```text
+decision object
+-> engine adapter
+-> proving ground
+```
+
+Do not let an engine define the problem merely because its API is convenient. Do not let a proving
+case protect an abstraction from failure merely because code already exists. Do not let historical
+maintenance change current semantics.
+
 ## Core rules
 
 1. Writ must run locally without an LLM. Models may be optional tools, never a runtime requirement.
-2. Do not assume variables represent people, countries, institutions, or any other domain. The core
-   decision representation is domain-neutral.
-3. Keep supplied facts, modelling choices, mathematical objects, solver output, independent checks,
-   empirical adequacy, and human decisions separate.
+2. Keep the core domain-neutral. Variables do not have to represent people, institutions, or any
+   particular application area.
+3. Keep supplied information, modelling choices, mathematical objects, solver output, independent
+   checks, empirical adequacy, and human decisions separate.
 4. Never invent probabilities, utilities, causal effects, constraints, authority, or missing model
-   structure at an adapter boundary.
-5. Prefer mature external mathematics over new Writ mathematics. Use a library or CLI, then a thin
-   adapter, before building a new solver.
-6. Preserve the native meaning of an external engine. A successful translation does not make two
-   mathematical formalisms equivalent.
-7. Every engine adapter must be explicit about versions, units, supported inputs, unsupported states,
-   output meaning, translation loss, and the trusted computing boundary.
-8. Candidate production and independent checking should be separate whenever a useful independent
-   check is possible.
-9. Exact values must stay exact when the mathematics requires it. Do not silently round them through
+   structure to make an adapter work.
+5. Prefer mature external mathematics over new Writ mathematics. Use a library or CLI and a thin
+   adapter before building a solver.
+6. Preserve the native meaning of each engine. A translation does not make different mathematical
+   formalisms equivalent.
+7. Record exact versions, units, supported inputs, unsupported states, output meaning, translation
+   loss, and the trusted computing boundary for each adapter.
+8. Separate candidate production from independent checking whenever a useful check is possible.
+9. Keep exact values exact when the mathematics requires it. Do not silently round through
    JavaScript numbers.
-10. TypeScript is the current application language, not the mathematical ceiling. Python, Julia, R,
-    Rust, Lean, C++, or another language may sit behind a narrow adapter when the problem warrants it.
+10. TypeScript is the current application language, not the mathematical ceiling. Use the language
+    that makes a bounded mathematical or checking boundary clearest.
 11. Do not create a universal ontology, solver registry, graph platform, workflow engine, or hosted
-    service before a concrete proving case demonstrates the need.
-12. Do not extend `packages/shared-analysis` or the removed episode/replay interfaces. New decision
-    work targets the decision-object architecture described in current docs.
+    service before a proving case demonstrates the need.
+12. Do not extend the removed shared-analysis, episode, or replay interfaces. New decision work uses
+    the current decision-object path.
 
 ## Current reference implementation
 
 `packages/decision-case/` remains a bounded reference for exact input binding, a pinned local
-producer, and independent checking. Its first mathematical profile is not the Writ ontology and must
-not dictate the future decision-object schema.
+producer, and independent checking. Its mathematical profile is not the Writ ontology and must not
+dictate the future decision-object schema.
 
 Source-grounded corpora and record tooling remain usable inputs and research infrastructure. They do
 not define the decision object and should not be expanded merely because they already exist.
-
-## Donor-tool discipline
-
-Before adding an engine, record:
-
-1. the exact operation Writ needs;
-2. the upstream project and version;
-3. its license and local installation burden;
-4. the mathematical meaning of its inputs and outputs;
-5. one executed local example;
-6. what Writ can independently check; and
-7. any meaning lost in translation.
-
-Likely tools include influence-diagram, optimization, probabilistic, sequential-decision, and formal
-verification libraries. Their presence on a research list is not evidence that Writ supports them.
 
 ## Verification
 
