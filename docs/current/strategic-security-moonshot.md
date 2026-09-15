@@ -19,6 +19,15 @@ situation and available information
 -> human or institutional decision
 ```
 
+A later provenance layer may continue that trace through:
+
+```text
+decision -> implementation -> observed outcome -> reconsideration
+```
+
+That later trace should preserve what happened without pretending that time order proves causation.
+It is not part of the first decision-object schema.
+
 The important question is not whether one system can predict a crisis. It is whether the assumptions,
 information limits, alternatives, mathematical claims, and authority behind a consequential choice
 can be inspected rather than hidden inside prose, code, or one analyst's head.
