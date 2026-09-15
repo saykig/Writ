@@ -1,0 +1,52 @@
+name: finalize reset ledger
+
+on:
+  push:
+    branches:
+      - architecture/decision-object-reset
+    paths:
+      - 'docs/**'
+      - '.github/workflows/reset-ledger-finalize.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/decision-object-reset
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Refresh manifest
+        run: |
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MANIFEST.sha256
+          git commit -m "Refresh manifest after architecture ledger"
+          git push
+      - name: Verify branch
+        run: |
+          bun install --frozen-lockfile
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
+      - name: Remove one-use workflow and finalize manifest
+        run: |
+          rm .github/workflows/reset-ledger-finalize.yml
+          git add .github/workflows/reset-ledger-finalize.yml
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize architecture reset ledger"
+          git push
