@@ -2,10 +2,7 @@
 
 Writ is local infrastructure for explicit decision problems.
 
-A decision problem can contain many variables, uncertain states, dependencies, available actions,
-constraints, objectives, and information limits. Writ's job is to keep those pieces in one
-inspectable object, send well-defined mathematical work to the right engine, and preserve exactly
-what the engine was asked and what its result means.
+It gives a decision problem one inspectable representation for the pieces that matter:
 
 ```text
 decision problem
@@ -17,32 +14,32 @@ decision problem
   -> checked result
 ```
 
-Writ does not require an LLM, a hosted service, or a social-science ontology. A variable can be a
-physical quantity, a system state, a probability, a cost, a mathematical object, or anything else a
-specific model defines.
+The meaning of each variable comes from the mathematical model that uses it. A Writ object can carry
+physical quantities, system states, probabilities, costs, symbolic objects, or other typed values.
 
 ## What Writ owns
 
-Writ should own the decision object, exact input/output binding, provenance where it matters, engine
-adapters, and independent checks. It should not reimplement mature mathematics that already exists.
+Writ owns the decision object, exact input/output binding, provenance where useful, engine adapters,
+and independent checks.
 
-Different problems may therefore use different established tools: an influence-diagram library, an
-optimization system, a POMDP framework, a statistical package, or a formal checker. Each adapter must
-state what it accepts, what the external engine guarantees, and what Writ can independently verify.
+Established mathematical software performs the underlying mathematics. Different problems can use
+different tools: influence diagrams, optimization systems, POMDP frameworks, statistical packages,
+formal checkers, and other mature engines.
 
-A solver result is not the same thing as a good real-world model, and neither is the same thing as a
-human decision. Writ keeps those claims separate.
+Each adapter records the engine request, version, input meaning, output meaning, translation boundary,
+and the checks Writ can perform independently.
+
+Writ also keeps mathematical results, real-world applicability, and human decisions as separate
+claims.
 
 ## Current status
 
-The repository already has one narrow reference implementation under `packages/decision-case/`. It
-shows how Writ can preserve exact mathematical inputs, run a pinned local engine, and check a
-candidate result independently. It is a useful test bed, not the final decision-object format or a
-universal solver interface.
+`packages/decision-case/` is the current reference implementation for exact mathematical input
+binding and independent checking.
 
-The next milestone is a small, engine-neutral decision object and one strong local proving case. The
-case must run without an LLM or network service and must be difficult enough that using Writ is more
-useful than calling a solver directly.
+The next milestone is a small engine-neutral decision object exercised through at least two
+established mathematical systems, followed by one strong local proving case. The proving case will
+compare Writ with the same problem solved directly through the underlying engine.
 
 ## Run the repository
 
