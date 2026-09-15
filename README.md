@@ -59,6 +59,7 @@ bun run build
 ```
 
 Start with [the product definition](docs/current/product-definition.md), then read the
-[current roadmap](docs/current/roadmap.md) and [decision-object note](docs/current/decision-object.md).
+[design principles](docs/current/design-principles.md), [decision-object note](docs/current/decision-object.md),
+and [current roadmap](docs/current/roadmap.md).
 
 Copyright 2026 Sara Kim
