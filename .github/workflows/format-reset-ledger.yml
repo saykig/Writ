@@ -1,0 +1,45 @@
+name: format reset ledger
+on:
+  push:
+    branches: [architecture/decision-object-reset]
+    paths: [".github/workflows/format-reset-ledger.yml"]
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/decision-object-reset
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Format ledger docs
+        run: |
+          bunx prettier --write docs/README.md docs/current/decision-object.md docs/current/strategic-security-moonshot.md docs/history/architecture-reset-ledger-2026-09-15.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/README.md docs/current/decision-object.md docs/current/strategic-security-moonshot.md docs/history/architecture-reset-ledger-2026-09-15.md
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          if ! git diff --cached --quiet; then git commit -m "Format architecture reset ledger"; git push; fi
+      - name: Verify final docs and repository
+        run: |
+          bunx prettier --check docs/README.md docs/current/decision-object.md docs/current/strategic-security-moonshot.md docs/history/architecture-reset-ledger-2026-09-15.md
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
+      - name: Remove one-use workflow and finalize manifest
+        run: |
+          rm .github/workflows/format-reset-ledger.yml
+          git add .github/workflows/format-reset-ledger.yml
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize formatted reset ledger"
+          git push
