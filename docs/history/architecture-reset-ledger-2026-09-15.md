@@ -99,6 +99,20 @@ Why the implementation is retired: the handoff was useful interoperability resea
 | Old current-doc pages for these systems | No | Keeping them under `docs/current/` would make retired architecture look current. |
 | Old north-star diagram | No | It hard-coded the old source/Bellman/shared-analysis layering. Its useful ideas are retained here and in the new current docs. |
 
+## Agent-tooling reset
+
+The reset also narrows the coding-agent roles.
+
+The overlapping `writ-domain` and `writ-decision-integration` skills are retired. Their useful rules now live in the current design principles and in three clearer work roles:
+
+```text
+writ-decision-object
+-> writ-engine-adapter
+-> writ-proving-ground
+```
+
+`writ-release-history` remains separate for releases and historical recovery. The point is to stop one agent role from quietly defining the problem, choosing the mathematics, implementing the adapter, and judging its own success.
+
 ## What must survive the reset
 
 The reset keeps these principles:
