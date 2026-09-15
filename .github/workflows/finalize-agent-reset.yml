@@ -1,0 +1,54 @@
+name: finalize agent role reset
+
+on:
+  push:
+    branches:
+      - architecture/decision-object-reset
+    paths:
+      - '.github/workflows/finalize-agent-reset.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/decision-object-reset
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Format agent and current docs
+        run: >-
+          bunx prettier --write AGENTS.md .agents/README.md
+          .agents/skills/writ-decision-object/SKILL.md
+          .agents/skills/writ-engine-adapter/SKILL.md
+          .agents/skills/writ-proving-ground/SKILL.md
+          .agents/skills/writ-release-history/SKILL.md
+          docs/current/design-principles.md
+          docs/current/repository-structure.md
+          docs/history/architecture-reset-ledger-2026-09-15.md
+      - name: Commit final tree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/finalize-agent-reset.yml
+          git add AGENTS.md .agents docs/current/design-principles.md docs/current/repository-structure.md docs/history/architecture-reset-ledger-2026-09-15.md
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize Writ agent work chain"
+          git push
+      - name: Verify final repository
+        run: |
+          bun install --frozen-lockfile
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
