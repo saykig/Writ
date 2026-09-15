@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Writ schemas, protocols, fixtures, and tasks."""
+"""Validate Writ schemas, protocols, fixtures, tasks, and agent roles."""
 
 from __future__ import annotations
 
@@ -35,7 +35,11 @@ REQUIRED_FILES = [
     "TASKS.yaml",
     "schemas/README.md",
     "protocols/language/writ.ebnf",
-    ".agents/skills/writ-domain/SKILL.md",
+    ".agents/README.md",
+    ".agents/skills/writ-decision-object/SKILL.md",
+    ".agents/skills/writ-engine-adapter/SKILL.md",
+    ".agents/skills/writ-proving-ground/SKILL.md",
+    ".agents/skills/writ-release-history/SKILL.md",
     "internal/infrastructure/generated/source-registry.json",
 ]
 
