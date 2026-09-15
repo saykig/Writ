@@ -3,11 +3,11 @@
 Writ's long-term application is consequential decision-making under uncertainty, including security
 and foreign policy.
 
-The core infrastructure should remain domain-neutral. A security problem may later supply actors,
-capabilities, beliefs, incentives, commitments, possible actions, legal limits, and strategic
-responses, but those concepts should not become mandatory Writ primitives.
+The shared core stays domain-neutral. Security-specific concepts such as actors, capabilities,
+beliefs, incentives, commitments, legal limits, and strategic responses can enter through typed
+profiles and supplied models.
 
-A useful security decision object would make explicit:
+A security decision object could make this structure explicit:
 
 ```text
 situation and available information
@@ -19,22 +19,20 @@ situation and available information
 -> human or institutional decision
 ```
 
-A later provenance layer may continue that trace through:
+A later provenance layer can continue the trace through:
 
 ```text
 decision -> implementation -> observed outcome -> reconsideration
 ```
 
-That later trace should preserve what happened without pretending that time order proves causation.
-It is not part of the first decision-object schema.
+Chronology records what happened. Causal claims require separate evidence and analysis.
 
-The important question is not whether one system can predict a crisis. It is whether the assumptions,
-information limits, alternatives, mathematical claims, and authority behind a consequential choice
-can be inspected rather than hidden inside prose, code, or one analyst's head.
+The central question is whether the assumptions, information limits, alternatives, mathematical
+claims, and authority behind a consequential choice can be inspected together as one coherent
+decision record.
 
-Provenance matters when it explains why an input, assumption, constraint, or model is present. It is
-supporting structure for the decision object, not a requirement that every decision be treated as a
-continuously updating research artifact.
+Provenance supports that record by showing where important inputs, assumptions, constraints, and
+model choices came from.
 
-This is a future application area. The near-term proving ground should be a simpler local problem
-where the mathematics and ground truth are easier to test.
+The near-term proving ground uses a simpler local problem where the mathematics and outcomes are
+easier to test. The same decision structure can later be stressed in harder strategic domains.
