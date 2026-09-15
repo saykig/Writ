@@ -2,46 +2,43 @@
 
 Writ is local infrastructure for explicit decision problems.
 
-Its purpose is to make a bounded decision problem inspectable by both humans and software without
-forcing every problem into one mathematical language.
+Its purpose is to make a bounded decision problem inspectable by humans and software while preserving
+the mathematical meaning of the tools used to solve it.
 
 ## The core object
 
-A Writ decision object should be able to state, when relevant:
+A Writ decision object can state, when relevant:
 
 - the variables in the problem;
 - relationships or dependencies between them;
-- what is uncertain;
-- what information is available before each decision;
-- the actions that can be chosen;
+- uncertainty;
+- information available before each decision;
+- available actions;
 - constraints on those actions;
-- the objective, value, loss, or other comparison rule;
-- provenance for supplied inputs when provenance matters;
+- the objective, value, loss, or comparison rule;
+- provenance for important supplied inputs;
 - the exact request sent to a mathematical engine; and
 - the returned result and any independent check.
 
-Not every problem needs every field. The first schema should contain only structure that proves
-useful across more than one mathematical family.
+Fields enter the shared core after they prove useful across more than one mathematical family.
+Engine-specific meaning stays in typed profiles.
 
 ## Mathematical engines
 
-Writ should not become a general solver. It should connect to established tools whose mathematics
-already fits the problem.
+Writ connects decision objects to established mathematical software.
 
-Examples worth testing include influence diagrams, mathematical optimization, probabilistic models,
-partially observable sequential decisions, statistical systems, and formal proof tools. Each stays
-responsible for its native mathematical meaning.
+Useful families include influence diagrams, mathematical optimization, probabilistic models,
+partially observable sequential decisions, statistical systems, simulation, and formal proof tools.
+Each engine keeps its native mathematical meaning.
 
 Writ owns the boundary around an engine: exact inputs, exact outputs, version and environment pins,
-translation rules, unsupported cases, and checks that can be performed independently.
+translation rules, supported states, and checks that can be performed independently.
 
-## What a checked result means
+## Checked results
 
-A checked calculation establishes only the claim that was actually checked. It does not establish
-that the model describes reality, that its probabilities or preferences are correct, or that a human
-should act on it.
+A checked calculation certifies the exact mathematical claim that was checked.
 
-Keep these separate:
+Writ records the surrounding layers separately:
 
 ```text
 supplied information
@@ -53,19 +50,15 @@ real-world applicability
 human decision
 ```
 
-## Local first
+This keeps each conclusion tied to the evidence and assumptions that support it.
 
-A complete proving case must run locally without an LLM or hosted service. LLMs may later help create
-or inspect decision objects, but the object, engine execution, and checking path must stand on their
-own.
+## Local execution
+
+The correctness path runs locally from the decision object through engine execution and checking.
+This makes proving cases reproducible from structured inputs and pinned software.
 
 ## Existing repository components
 
-`packages/decision-case/` is a narrow reference implementation for exact mathematical input binding
-and independent checking. Source-grounded corpora and provenance packages remain available as inputs
-when a decision problem needs them. Neither defines the full decision-object format.
-
-## Non-goals
-
-Writ is not currently a universal ontology, autonomous decision-maker, general workflow system,
-solver registry, knowledge graph, forecasting system, or social-science model.
+`packages/decision-case/` is the current reference implementation for exact mathematical input
+binding and independent checking. Source-grounded corpora and provenance packages remain available
+when a decision problem needs those inputs.
