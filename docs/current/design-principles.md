@@ -1,79 +1,71 @@
 # Design principles
 
-These are the main lessons Writ should carry into new work.
+These principles capture the main lessons Writ carries into new work.
 
-They are not a frozen architecture. A later proving case can change them, but new work should not
-quietly violate them. If a principle needs to change, record the reason and the evidence that made
-the change necessary.
+They guide the current architecture while remaining open to revision when a proving case provides
+clear evidence for a better rule.
 
-## 1. Make the decision problem explicit before choosing the tool
+## 1. Define the decision problem before choosing the tool
 
-Start with what is being decided: the variables, uncertainty, information, actions, constraints, and
-objective that actually matter. Do not begin with a preferred solver or language and force the
-problem into it.
+Begin with the variables, uncertainty, information, actions, constraints, and objective that define
+the problem. Choose the solver or language after that structure is clear.
 
 ## 2. Keep different kinds of claims separate
 
-Do not blur supplied information, modelling assumptions, mathematical results, independent checks,
-real-world applicability, and human decisions. Success at one layer does not establish the others.
+Record supplied information, modelling assumptions, mathematical results, independent checks,
+real-world applicability, and human decisions as distinct claims. Each layer supports its own kind of
+conclusion.
 
-## 3. Preserve the mathematics you borrow
+## 3. Preserve donor mathematics
 
-Different mathematical systems mean different things. A probability distribution, uncertainty set,
-causal relation, information edge, constraint, and data dependency are not interchangeable. Writ
-should preserve the native meaning of the engine it uses rather than flattening everything into one
-universal representation.
+Carry the native meaning of each mathematical system through the adapter boundary. Probability
+distributions, uncertainty sets, causal relations, information links, constraints, and data
+dependencies keep their own semantics.
 
-## 4. Reuse established mathematics before building new mathematics
+## 4. Reuse established mathematics
 
-Prefer mature local libraries and solvers when they already implement the needed mathematics. Writ
-should own the decision object, adapter boundary, exact bindings, and checks, not rebuild a general
-solver ecosystem.
+Use mature local libraries and solvers when they already implement the mathematics well. Writ focuses
+on the decision object, adapter boundary, exact bindings, and checks.
 
-## 5. The correctness path must work locally
+## 5. Keep the correctness path local
 
-A proving case must run without an LLM or hosted service. Models may later help author or inspect a
-decision object, but they are not part of the correctness boundary.
+A proving case runs locally from structured inputs through engine execution and checking. This keeps
+the mathematical path reproducible and inspectable.
 
-## 6. Be exact at boundaries
+## 6. Preserve exact boundaries
 
-Preserve the versions, units, identities, inputs, outputs, and numeric representation that a result
-depends on. Do not silently round, normalize, substitute, or reinterpret values when doing so can
-change the mathematical claim.
+Record the versions, units, identities, inputs, outputs, and numeric representations that a result
+depends on. Preserve exact values wherever the mathematics requires them.
 
-## 7. Check independently when a useful check is possible
+## 7. Check independently when useful
 
-An engine may produce a candidate result. Writ should verify that result separately when there is a
-meaningful independent check. A saved success flag is evidence that a check happened before; it is
-not permanent authority.
+Treat engine output as a candidate result when an independent check is available. Bind the check to
+the exact problem, assumptions, units, action set, objective, and information structure.
 
-## 8. Never fill in missing substance for convenience
+## 8. Represent missing substance explicitly
 
-Do not invent probabilities, utilities, causal effects, constraints, authority, missing states, or
-other model structure just to make a calculation possible. Unsupported information should remain
-unsupported or unknown.
+Keep unknown values, unsupported states, absent probabilities, and unresolved model structure
+explicit. Missing information remains visible in the decision object.
 
-## 9. Treat change carefully
+## 9. Type the effect of change
 
-A changed input does not automatically make an old calculation mathematically wrong. Distinguish
-between:
+When an input changes, classify what changed: the recorded situation, the mathematical problem, the
+applicability judgment, or some combination of them. Recompute only when the mathematical claim
+requires it.
 
-- an old result that is still correct for its original problem;
-- a changed mathematical problem that needs recomputation; and
-- a result that may still be mathematically correct but needs a new real-world applicability
-  judgment.
+## 10. Separate chronology, causation, and authority
 
-Build change-tracking machinery only when a real proving case needs it.
+A future decision trace may record:
 
-## 10. Do not turn sequence into causation or analysis into authority
+```text
+decision -> implementation -> observed outcome -> reconsideration
+```
 
-A later Writ object may trace `decision -> implementation -> observed outcome -> reconsideration`.
-That sequence is useful provenance, but it does not prove that the decision caused the outcome. In
-the same way, a mathematical recommendation or ranking does not authorize a human or institution to
-act.
+Chronology records what happened. Causal claims require their own support. Human or institutional
+authority remains a separate part of the decision record.
 
 ## How to use these principles
 
-Use them as a filter for new schemas, adapters, proving cases, and language choices. New primitives
-should be added only when a concrete case needs them. If a future case genuinely conflicts with a
-principle, update the principle openly rather than working around it in code.
+Use these principles to evaluate new schemas, adapters, proving cases, and language choices. Promote
+new primitives when a concrete case shows that they are necessary and reusable. Record any future
+revision to a principle together with the evidence that motivated it.
