@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import importlib.metadata
 import json
+import re
 from fractions import Fraction
 from pathlib import Path
 from typing import Any
@@ -21,14 +22,20 @@ def exact(value: Any) -> Fraction:
     return Fraction(str(value))
 
 
-def query_property(query: dict[str, Any]) -> str:
-    if query["kind"] != "expected_accumulated_reward_until_label":
+def engine_state_label(state_id: str) -> str:
+    if not re.fullmatch(r"[A-Za-z0-9_]+", state_id):
+        raise ValueError(f"state id {state_id!r} cannot be lowered to a stable Storm label")
+    return f"writ_state_{state_id}"
+
+
+def query_property(query: dict[str, Any], *, target_label: str) -> str:
+    if query["kind"] != "expected_accumulated_reward_until_state":
         raise ValueError(f"unsupported query kind {query['kind']!r}")
     direction = query["direction"]
     if direction not in {"min", "max"}:
         raise ValueError(f"unsupported direction {direction!r}")
     reward = query["reward_model"].replace('"', '\\"')
-    target = query["stop_label"].replace('"', '\\"')
+    target = target_label.replace('"', '\\"')
     return f'R{{"{reward}"}}{direction}=? [F "{target}"]'
 
 
@@ -42,19 +49,19 @@ def validate_case(case: dict[str, Any]) -> None:
         raise ValueError("state ids must be unique")
     if model["initial_state"] not in state_ids:
         raise ValueError("initial state is missing")
+    if case["query"]["stop_state"] not in state_ids:
+        raise ValueError(f"stop state {case['query']['stop_state']!r} is absent from the model")
 
     action_ids = [action["id"] for action in model["actions"]]
     if len(action_ids) != len(set(action_ids)):
         raise ValueError("action ids must be unique")
 
-    all_labels = {label for state in model["states"] for label in state["labels"]}
-    if case["query"]["stop_label"] not in all_labels:
-        raise ValueError(f"stop label {case['query']['stop_label']!r} is absent from the model")
     if case["query"]["reward_model"] not in model["reward_models"]:
         raise ValueError(f"reward model {case['query']['reward_model']!r} is absent")
 
     for state in model["states"]:
         sid = state["id"]
+        engine_state_label(sid)
         choices = model["transitions"].get(sid, {})
         if state["absorbing"]:
             if choices:
@@ -80,6 +87,7 @@ def build_storm_model(case: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
     state_index = {state_id: index for index, state_id in enumerate(state_order)}
     action_labels = {action["id"]: action["label"] for action in model["actions"]}
     action_by_label = {label: action_id for action_id, label in action_labels.items()}
+    query_state_labels = {state_id: engine_state_label(state_id) for state_id in state_order}
 
     builder = stormpy.SparseMatrixBuilder(
         rows=0,
@@ -122,13 +130,16 @@ def build_storm_model(case: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
     transition_matrix = builder.build()
 
     state_labeling = stormpy.storage.StateLabeling(len(states))
-    labels = sorted({label for state in states for label in state["labels"]})
-    for label in labels:
+    source_labels = sorted({label for state in states for label in state["labels"]})
+    for label in source_labels:
+        state_labeling.add_label(label)
+    for label in query_state_labels.values():
         state_labeling.add_label(label)
     for state in states:
         sid = state["id"]
         for label in state["labels"]:
             state_labeling.add_label_to_state(label, state_index[sid])
+        state_labeling.add_label_to_state(query_state_labels[sid], state_index[sid])
 
     choice_labeling = stormpy.storage.ChoiceLabeling(row)
     for label in sorted(action_by_label):
@@ -167,6 +178,7 @@ def build_storm_model(case: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
 
     boundary = {
         "state_order": state_order,
+        "query_state_labels": query_state_labels,
         "row_bindings": {str(key): value for key, value in row_bindings.items()},
         "numeric_translation": "exact rational strings converted to Storm double precision; exact checking uses source rationals",
     }
@@ -177,6 +189,7 @@ def extract_policy(case: dict[str, Any], mdp: Any, scheduler: Any) -> dict[str, 
     model = case["model"]
     state_order = [state["id"] for state in model["states"]]
     action_by_label = {action["label"]: action["id"] for action in model["actions"]}
+    stop_state = case["query"]["stop_state"]
     policy: dict[str, str] = {}
 
     if not scheduler.memoryless or not scheduler.deterministic:
@@ -185,7 +198,7 @@ def extract_policy(case: dict[str, Any], mdp: Any, scheduler: Any) -> dict[str, 
     for state in mdp.states:
         sid = state_order[state.id]
         source_state = model["states"][state.id]
-        if source_state["absorbing"]:
+        if source_state["absorbing"] or sid == stop_state:
             continue
         choice = scheduler.get_choice(state)
         if not choice.defined:
@@ -203,7 +216,9 @@ def extract_policy(case: dict[str, Any], mdp: Any, scheduler: Any) -> dict[str, 
 
 def run(case: dict[str, Any], *, source: str) -> dict[str, Any]:
     mdp, boundary = build_storm_model(case)
-    prop_text = query_property(case["query"])
+    stop_state = case["query"]["stop_state"]
+    target_label = boundary["query_state_labels"][stop_state]
+    prop_text = query_property(case["query"], target_label=target_label)
     prop = stormpy.parse_properties(prop_text)[0]
     result = stormpy.model_checking(mdp, prop, extract_scheduler=True)
     if not result.has_scheduler:
@@ -218,6 +233,10 @@ def run(case: dict[str, Any], *, source: str) -> dict[str, Any]:
         },
         "query": case["query"],
         "compiled_property": prop_text,
+        "query_binding": {
+            "stop_state": stop_state,
+            "engine_target_label": target_label,
+        },
         "initial_value": float(result.at(initial_state)),
         "policy": extract_policy(case, mdp, result.scheduler),
         "adapter_boundary": boundary,
@@ -230,14 +249,14 @@ def main() -> None:
     parser.add_argument("--output", default="writ-result.json")
     parser.add_argument("--source", default="writ-stormpy-adapter")
     parser.add_argument("--direction", choices=["min", "max"])
-    parser.add_argument("--stop-label")
+    parser.add_argument("--stop-state")
     args = parser.parse_args()
 
     case = load_case(HERE / args.case)
     if args.direction is not None:
         case["query"]["direction"] = args.direction
-    if args.stop_label is not None:
-        case["query"]["stop_label"] = args.stop_label
+    if args.stop_state is not None:
+        case["query"]["stop_state"] = args.stop_state
 
     payload = run(case, source=args.source)
     (HERE / args.output).write_text(
