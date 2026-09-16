@@ -2,8 +2,8 @@
 
 Writ is local infrastructure for explicit decision problems.
 
-Its purpose is to make a bounded decision problem inspectable by humans and software while preserving
-the mathematical meaning of the tools used to solve it.
+Its purpose is to make a bounded decision problem inspectable by both humans and software while
+preserving the mathematical meaning of the tools used to solve or analyze it.
 
 ## The core object
 
@@ -11,34 +11,33 @@ A Writ decision object can state, when relevant:
 
 - the variables in the problem;
 - relationships or dependencies between them;
-- uncertainty;
-- information available before each decision;
-- available actions;
+- what is uncertain;
+- what information is available before each decision;
+- the actions that can be chosen;
 - constraints on those actions;
-- the objective, value, loss, or comparison rule;
-- provenance for important supplied inputs;
+- the objective, value, loss, or other comparison rule;
+- provenance for supplied inputs when it adds useful context;
 - the exact request sent to a mathematical engine; and
 - the returned result and any independent check.
 
-Fields enter the shared core after they prove useful across more than one mathematical family.
-Engine-specific meaning stays in typed profiles.
+The shared object grows from structure that proves useful in real cases. Engine-specific mathematics
+stays in typed profiles.
 
 ## Mathematical engines
 
-Writ connects decision objects to established mathematical software.
+Established mathematical tools perform the mathematics they already implement well. Writ connects a
+decision object to those tools through narrow adapters.
 
-Useful families include influence diagrams, mathematical optimization, probabilistic models,
-partially observable sequential decisions, statistical systems, simulation, and formal proof tools.
-Each engine keeps its native mathematical meaning.
+Influence diagrams, mathematical optimization, probabilistic graphical models, sequential decision
+systems, statistical packages, and formal proof tools can each remain in their native ecosystem.
 
 Writ owns the boundary around an engine: exact inputs, exact outputs, version and environment pins,
-translation rules, supported states, and checks that can be performed independently.
+translation rules, supported and unsupported cases, and checks that can be performed independently.
 
-## Checked results
+## What a checked result means
 
-A checked calculation certifies the exact mathematical claim that was checked.
-
-Writ records the surrounding layers separately:
+A checked calculation establishes the claim that was actually checked. Mathematical validity,
+real-world applicability, and human choice remain separate claims.
 
 ```text
 supplied information
@@ -50,15 +49,17 @@ real-world applicability
 human decision
 ```
 
-This keeps each conclusion tied to the evidence and assumptions that support it.
+## Local proving path
 
-## Local execution
+The first build starts with one bounded case and one established engine. Writ creates only the
+experimental representation and adapter required to test a useful semantic boundary, then compares
+the result with using the donor engine directly.
 
-The correctness path runs locally from the decision object through engine execution and checking.
-This makes proving cases reproducible from structured inputs and pinned software.
+A second mathematical system tests which successful structure generalizes. Shared schema fields are
+promoted after that comparison.
 
 ## Existing repository components
 
-`packages/decision-case/` is the current reference implementation for exact mathematical input
-binding and independent checking. Source-grounded corpora and provenance packages remain available
-when a decision problem needs those inputs.
+`packages/decision-case/` is a narrow reference implementation for exact mathematical input binding
+and independent checking. Source-grounded corpora and provenance packages remain available as inputs
+when a decision problem needs them.

@@ -20,8 +20,8 @@ problem
 └─ result + check
 ```
 
-This shape guides the current proving work. The schema will become more precise as multiple
-mathematical families exercise it.
+This shape guides the current proving work. The schema becomes more precise as useful cases exercise
+it.
 
 ## Typed relationships
 
@@ -50,6 +50,30 @@ Each adapter records:
 - whether the engine produces a candidate, a proof, or both; and
 - the independent checks Writ can perform.
 
+Bindings at this boundary are semantic. Variables, nodes, states, table axes, information sets, and
+other mathematical objects are bound by explicit identity and type. Container position is only an
+implementation detail.
+
+A returned result is checked against the original decision object as well as the engine output. This
+keeps the declared problem as the reference point when an adapter or backend representation changes.
+
+## Influence-diagram profile
+
+The first proving case has now run through both DecisionProgramming.jl and pyAgrum. The following
+structure transferred with the same meaning across both systems:
+
+- stable node identities;
+- chance, decision, and value node kinds;
+- named states;
+- decision information sets;
+- conditional probability tables bound to named parents and states;
+- value tables bound to named parents and states;
+- policies mapping information states to actions; and
+- expected utility as a checked result.
+
+These fields currently form an influence-diagram profile. A different mathematical family is the
+next test for deciding which parts belong in Writ's shared core.
+
 ## Versioned results
 
 When inputs change, Writ can classify the effect on an existing result:
@@ -58,13 +82,5 @@ When inputs change, Writ can classify the effect on an existing result:
 - the mathematical problem changed and needs recomputation; or
 - the mathematics remains valid while real-world applicability needs a new judgment.
 
-The first decision-object schema only needs the minimum structure required by the proving cases. More
+The shared decision object should contain only the minimum structure earned by proving cases. More
 advanced change tracking can be added when a concrete workflow needs it.
-
-## First design test
-
-The first schema will be exercised through at least two established mathematical systems before its
-shared fields are promoted as general Writ structure.
-
-Initial donor candidates include DecisionProgramming.jl with JuMP and pyAgrum influence diagrams.
-Sequential tooling can enter when a proving case requires partially observed decisions over time.

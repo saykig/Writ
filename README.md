@@ -19,8 +19,8 @@ physical quantities, system states, probabilities, costs, symbolic objects, or o
 
 ## What Writ owns
 
-Writ owns the decision object, exact input/output binding, provenance where useful, engine adapters,
-and independent checks.
+Writ owns the decision object, exact semantic bindings, provenance where useful, engine adapters, and
+independent checks.
 
 Established mathematical software performs the underlying mathematics. Different problems can use
 different tools: influence diagrams, optimization systems, POMDP frameworks, statistical packages,
@@ -31,15 +31,6 @@ and the checks Writ can perform independently.
 
 Writ also keeps mathematical results, real-world applicability, and human decisions as separate
 claims.
-
-## Current status
-
-`packages/decision-case/` is the current reference implementation for exact mathematical input
-binding and independent checking.
-
-The next milestone is a small engine-neutral decision object exercised through at least two
-established mathematical systems, followed by one strong local proving case. The proving case will
-compare Writ with the same problem solved directly through the underlying engine.
 
 ## Run the repository
 
@@ -57,6 +48,6 @@ bun run build
 
 Start with [the product definition](docs/current/product-definition.md), then read the
 [design principles](docs/current/design-principles.md), [decision-object note](docs/current/decision-object.md),
-and [current roadmap](docs/current/roadmap.md).
+and [roadmap](docs/current/roadmap.md).
 
 Copyright 2026 Sara Kim

@@ -1,0 +1,5 @@
+Status `~/work/Writ/Writ/experiments/decision-object/first-proving-case/Project.toml`
+  [0e836bf4] DecisionProgramming v2.0.1 `https://github.com/gamma-opt/DecisionProgramming.jl#105a25e`
+  [87dc4568] HiGHS v1.25.3
+  [0f8b85d8] JSON3 v1.14.3
+  [4076af6c] JuMP v1.31.2

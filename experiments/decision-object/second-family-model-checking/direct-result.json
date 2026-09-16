@@ -1,0 +1,98 @@
+{
+  "compiled_property": "R{\"R\"}max=? [F \"dead\"]",
+  "engine": {
+    "backend": "Storm",
+    "stormpy": "1.14.0",
+    "stormvogel": "0.12.3"
+  },
+  "initial_value": 37732.6318503739,
+  "model_snapshot": {
+    "states": {
+      "dead": {
+        "labels": ["dead"],
+        "reward": 0.0
+      },
+      "full": {
+        "labels": ["full"],
+        "reward": 100.0
+      },
+      "hungry": {
+        "labels": ["hungry :("],
+        "reward": 0.0
+      },
+      "satisfied": {
+        "labels": ["init"],
+        "reward": 0.0
+      },
+      "starving": {
+        "labels": ["starving :(("],
+        "reward": 0.0
+      }
+    },
+    "transitions": {
+      "dead": {},
+      "full": {
+        "hunt": {
+          "full": 0.5,
+          "satisfied": 0.5
+        },
+        "rawr": {
+          "full": 0.9,
+          "satisfied": 0.1
+        }
+      },
+      "hungry": {
+        "hunt": {
+          "full": 0.2,
+          "hungry": 0.1,
+          "satisfied": 0.5,
+          "starving": 0.2
+        },
+        "rawr": {
+          "hungry": 0.9,
+          "starving": 0.1
+        }
+      },
+      "satisfied": {
+        "hunt": {
+          "full": 0.3,
+          "hungry": 0.2,
+          "satisfied": 0.5
+        },
+        "rawr": {
+          "hungry": 0.1,
+          "satisfied": 0.9
+        }
+      },
+      "starving": {
+        "hunt": {
+          "dead": 0.2,
+          "full": 0.1,
+          "hungry": 0.2,
+          "satisfied": 0.5
+        },
+        "rawr": {
+          "dead": 0.1,
+          "starving": 0.9
+        }
+      }
+    }
+  },
+  "policy": {
+    "full": "rawr",
+    "hungry": "hunt",
+    "satisfied": "hunt",
+    "starving": "hunt"
+  },
+  "query": {
+    "direction": "max",
+    "kind": "expected_accumulated_reward_until_state",
+    "reward_model": "R",
+    "stop_state": "dead"
+  },
+  "query_binding": {
+    "engine_target_label": "dead",
+    "stop_state": "dead"
+  },
+  "source": "direct-stormvogel-baseline"
+}

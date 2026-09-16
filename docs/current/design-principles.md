@@ -32,15 +32,17 @@ on the decision object, adapter boundary, exact bindings, and checks.
 A proving case runs locally from structured inputs through engine execution and checking. This keeps
 the mathematical path reproducible and inspectable.
 
-## 6. Preserve exact boundaries
+## 6. Preserve exact semantic bindings
 
 Record the versions, units, identities, inputs, outputs, and numeric representations that a result
-depends on. Preserve exact values wherever the mathematics requires them.
+depends on. Bind tables, axes, states, variables, nodes, and relationships by explicit identity and
+type. Container order is an implementation detail rather than the sole carrier of mathematical
+meaning. Preserve exact values wherever the mathematics requires them.
 
 ## 7. Check independently when useful
 
 Treat engine output as a candidate result when an independent check is available. Bind the check to
-the exact problem, assumptions, units, action set, objective, and information structure.
+the original problem, assumptions, units, action set, objective, and information structure.
 
 ## 8. Represent missing substance explicitly
 

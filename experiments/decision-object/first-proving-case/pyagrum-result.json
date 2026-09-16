@@ -1,0 +1,59 @@
+{
+  "engine": {
+    "inference": "ShaferShenoyLIMIDInference",
+    "name": "pyAgrum",
+    "version": "3.0.0"
+  },
+  "expected_utility": 726.8121000000001,
+  "information_sets": {
+    "D1": ["T1"],
+    "D2": ["T2"],
+    "D3": ["T3"]
+  },
+  "policy": {
+    "D1": [
+      {
+        "action": "pass",
+        "when": {
+          "T1": "negative"
+        }
+      },
+      {
+        "action": "pass",
+        "when": {
+          "T1": "positive"
+        }
+      }
+    ],
+    "D2": [
+      {
+        "action": "pass",
+        "when": {
+          "T2": "negative"
+        }
+      },
+      {
+        "action": "treat",
+        "when": {
+          "T2": "positive"
+        }
+      }
+    ],
+    "D3": [
+      {
+        "action": "pass",
+        "when": {
+          "T3": "negative"
+        }
+      },
+      {
+        "action": "treat",
+        "when": {
+          "T3": "positive"
+        }
+      }
+    ]
+  },
+  "source": "writ-pyagrum-adapter",
+  "termination_status": "INFERENCE_COMPLETE"
+}
