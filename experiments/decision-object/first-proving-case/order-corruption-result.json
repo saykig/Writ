@@ -10,11 +10,11 @@
             "T1"
         ]
     },
-    "expected_utility": 726.8121000000002,
+    "expected_utility": 952.7700000000002,
     "policy": {
         "D2": [
             {
-                "action": "treat",
+                "action": "pass",
                 "when": {
                     "T2": "positive"
                 }
@@ -28,7 +28,7 @@
         ],
         "D3": [
             {
-                "action": "treat",
+                "action": "pass",
                 "when": {
                     "T3": "positive"
                 }
@@ -55,7 +55,7 @@
             }
         ]
     },
-    "source": "writ-adapter",
+    "source": "deliberately-order-corrupted-lowering",
     "termination_status": "OPTIMAL",
     "engine": {
         "name": "DecisionProgramming.jl",

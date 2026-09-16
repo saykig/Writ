@@ -1,0 +1,5 @@
+Expected rejection of order-corrupted lowering: order-corrupted lowering reported expected utility 952.7700000000002, exact checker obtained 66939/100
+Expected rejection of full-memory result: decision information sets changed: declared={'D1': ['T1'], 'D2': ['T2'], 'D3': ['T3']}, received={'D2': ['T1', 'T2'], 'D3': ['T1', 'T2', 'T3'], 'D1': ['T1']}
+Exact checked expected utility: 7268121/10000 = 726.812100
+Full-memory donor model expected utility: 729.225000 (valid for a different information structure)
+OK: direct donor and Writ adapter agree; both semantic mutations were rejected
