@@ -5,8 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-import pyagrum
-import pyagrum.id as gum
+import pyagrum as gum
 
 HERE = Path(__file__).resolve().parent
 
@@ -155,7 +154,7 @@ def main() -> None:
         "source": "writ-pyagrum-adapter",
         "engine": {
             "name": "pyAgrum",
-            "version": pyagrum.__version__,
+            "version": gum.__version__,
             "inference": "ShaferShenoyLIMIDInference",
         },
         "information_sets": information_sets,
