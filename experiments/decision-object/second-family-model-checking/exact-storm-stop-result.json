@@ -1,0 +1,22 @@
+{
+  "compiled_property": "R{\"R\"}max=? [F \"writ_state_3\"]",
+  "engine": {
+    "backend": "Storm",
+    "model_numeric_domain": "exact_rational",
+    "stormpy": "1.14.0"
+  },
+  "initial_value_exact": "7750",
+  "prism_model": "mdp\n\nmodule writ_lion\n  s : [0..4] init 0;\n  [hunt] s=0 -> 1/2:(s'=0) + 3/10:(s'=1) + 1/5:(s'=2);\n  [rawr] s=0 -> 9/10:(s'=0) + 1/10:(s'=2);\n  [hunt] s=1 -> 1/2:(s'=0) + 1/2:(s'=1);\n  [rawr] s=1 -> 9/10:(s'=1) + 1/10:(s'=0);\n  [hunt] s=2 -> 1/5:(s'=1) + 1/2:(s'=0) + 1/10:(s'=2) + 1/5:(s'=3);\n  [rawr] s=2 -> 9/10:(s'=2) + 1/10:(s'=3);\n  [hunt] s=3 -> 1/10:(s'=1) + 1/2:(s'=0) + 1/5:(s'=2) + 1/5:(s'=4);\n  [rawr] s=3 -> 9/10:(s'=3) + 1/10:(s'=4);\n  [] s=4 -> (s'=4);\nendmodule\n\nlabel \"writ_state_0\" = s=0;\nlabel \"writ_state_1\" = s=1;\nlabel \"writ_state_2\" = s=2;\nlabel \"writ_state_3\" = s=3;\nlabel \"writ_state_4\" = s=4;\n\nrewards \"R\"\n  s=1 : 100;\nendrewards\n",
+  "prism_model_sha256": "bb25e2386a3b72169db8581cf1ccf2e6b55ca7642b8b4c68b74f311698dfe620",
+  "query": {
+    "direction": "max",
+    "kind": "expected_accumulated_reward_until_state",
+    "reward_model": "R",
+    "stop_state": "starving"
+  },
+  "query_binding": {
+    "engine_target_label": "writ_state_3",
+    "stop_state": "starving"
+  },
+  "source": "writ-storm-exact-stop"
+}
