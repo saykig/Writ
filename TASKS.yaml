@@ -1,4 +1,4 @@
-version: 7
+version: 8
 project: writ
 
 governing_definition: >-
@@ -29,13 +29,6 @@ tasks:
   - id: LOCAL-KILLER-CASE-001
     title: Prove one useful local decision workflow
     status: done
-    scope:
-      - Start with one bounded problem and the established mathematical engine that fits it best.
-      - Build only the experimental decision-object fields and adapter required by the case.
-      - Preserve exact information sets, variables, states, probabilities, utilities, engine request, and returned strategy.
-      - Compare the Writ workflow with the same substantive model written directly in the donor engine.
-      - Include an adversarial translation or candidate that violates a declared semantic boundary and confirm that Writ rejects it.
-      - Revise the proving case within this task when the direct-engine baseline already supplies the same useful guarantee.
     result:
       - DecisionProgramming.jl, JuMP, and HiGHS reproduce the published limited-memory policy through a Writ adapter.
       - The independent checker confirms exact expected utility 7268121/10000.
@@ -49,10 +42,6 @@ tasks:
     status: done
     dependencies:
       - LOCAL-KILLER-CASE-001
-    scope:
-      - Execute the same declared decision problem through an independent mathematical implementation.
-      - Reuse the decision object rather than rewriting the substantive case for the second engine.
-      - Compare returned policy, expected utility, information sets, and adapter-specific semantics.
     result:
       - pyAgrum 3.0.0 with Shafer-Shenoy LIMID inference returns the same policy as DecisionProgramming.jl.
       - The independent exact checker confirms the same expected utility 7268121/10000.
@@ -68,7 +57,7 @@ tasks:
     rationale:
       - Robust optimization would reuse the JuMP/solver path already exercised by the first family and would not stress a sufficiently different semantic boundary.
       - A POMDP case would overlap with the information-availability lesson already established by the influence-diagram case.
-      - Probabilistic model checking adds a separate quantitative property whose optimization direction, reward model, and temporal stopping condition must remain bound to the model.
+      - Probabilistic model checking adds a quantitative request whose reward model, optimization direction, and stopping state must remain bound to the transition model.
     family: probabilistic model checking over a finite Markov decision process
     donor_stack:
       - Storm 1.14.0 through stormpy 1.14.0
@@ -77,33 +66,40 @@ tasks:
     case:
       source_model: Stormvogel lion MDP
       source_reference: stormchecker/stormvogel@v0.12.3 stormvogel/examples/lion.py
-      question: maximize expected accumulated reward from reward model R until the state labelled dead is reached
-      property: 'R{"R"}max=? [F "dead"]'
+      question: maximize expected accumulated reward from reward model R until Writ state dead is reached
+      semantic_request:
+        kind: expected_accumulated_reward_until_state
+        reward_model: R
+        direction: max
+        stop_state: dead
       decision_object_must_bind:
         - initial state
-        - state and action identities
+        - stable state identity and source labels
+        - action identity
         - transition probabilities
-        - state labels
         - reward-model identity and values
         - optimization direction
-        - temporal stopping label
-      direct_baseline: build the published lion MDP through Stormvogel and model-check the declared property
+        - stopping state identity
+      direct_baseline: build the published lion MDP through Stormvogel and compile the semantic request to Storm property syntax
       writ_path: load the same substantive model from a structured Writ case and lower it to stormpy through a thin adapter
-      independent_check: evaluate the returned memoryless deterministic scheduler with exact rational arithmetic and enumerate the bounded policy space to verify the optimum
+      independent_check: evaluate returned memoryless deterministic schedulers with exact rational arithmetic and enumerate the bounded stationary policy space to verify optimality
     negative_cases:
-      - Change max to min while keeping the MDP and reward model fixed. Storm may solve the altered property, but the result is for a different Writ request.
-      - Change the stopping label from dead to the donor label 'starving :((' while keeping the MDP and optimization direction fixed. Storm may solve the altered property, but its result must remain distinct from the original request.
+      - Change max to min while keeping the MDP, reward model, and stop state fixed. Storm may solve the altered request, but the result belongs to a different Writ query.
+      - Change stop_state from dead to starving while keeping the MDP, reward model, and optimization direction fixed. The adapter must bind stable state identity to engine-safe property syntax rather than use the donor display label as the query identity.
     revision_history:
       - Stormvogel 0.12.0 was initially pinned because the lion example was present there, but its converter is incompatible with Stormpy 1.14.0 when a model has no state variables. The model itself was unchanged.
       - Stormvogel 0.12.3 keeps the same lion model, fixes the empty-valuation conversion path, and declares Stormpy 1.13.2 or newer. The proving case therefore uses 0.12.3 with Stormpy 1.14.0.
+      - The first stopping-condition mutation used the donor display label 'starving :((' directly in Storm property syntax and failed to parse. The Writ request was revised to bind a stable stop-state ID; engine labels are now an adapter concern.
+      - The first successful canonical Storm run returned the same scheduler from the direct and Writ paths but a floating value near 37732.63. Exact rational evaluation of that scheduler is 37750. The experiment therefore checks scheduler optimality exactly and records Storm's floating numeric result as a separate engine claim.
     revision_rule:
       - If the direct Storm workflow already exposes and binds the same semantics clearly enough that Writ adds no concrete checking or portability value, revise or replace the case before promotion.
-      - If scheduler extraction or exact checking depends on hidden Storm-specific ordering, treat that as adapter evidence rather than normalizing it away.
+      - If scheduler extraction, target binding, or exact checking depends on hidden Storm-specific ordering or syntax, record that boundary explicitly rather than normalizing it away.
     acceptance:
       - The complete case runs locally from repository files with pinned donor versions.
-      - The direct donor baseline and Writ adapter agree on the declared result.
-      - An independent checker verifies the accepted scheduler against the original structured case.
-      - Both altered properties remain valid engine inputs but are rejected as results for the original Writ request.
+      - The direct donor baseline and Writ adapter agree on the canonical scheduler and Storm result.
+      - An independent checker verifies scheduler optimality against the original rational model and semantic query.
+      - The altered direction and altered stop-state requests are valid engine inputs and remain distinguishable from the canonical result.
+      - Engine-reported floating values remain distinct from exact independent values when they differ.
       - The result identifies which concepts transfer from the first family and which belong only to the model-checking profile.
     outputs:
       - experiments/decision-object/second-family-model-checking
