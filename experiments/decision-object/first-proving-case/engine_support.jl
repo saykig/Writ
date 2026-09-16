@@ -15,7 +15,7 @@ function solve_diagram(diagram::InfluenceDiagram)
     optimize!(model)
 
     status = termination_status(model)
-    status == MOI.OPTIMAL || error("DecisionProgramming solve did not reach OPTIMAL: $(status)")
+    status == JuMP.MOI.OPTIMAL || error("DecisionProgramming solve did not reach OPTIMAL: $(status)")
 
     strategy = DecisionStrategy(diagram, z)
     utility_distribution = UtilityDistribution(diagram, strategy)
@@ -35,7 +35,6 @@ function render_policy(diagram::InfluenceDiagram, strategy::DecisionStrategy)
         strategy.Z_d,
     )
         decision_name = String(diagram.Names[decision_index])
-        info_names = [String(diagram.Names[i]) for i in info_indices]
         rows = Any[]
 
         information_states = isempty(info_indices) ? [()] : vec(collect(DecisionProgramming.paths(DecisionProgramming.get_values(diagram.S)[info_indices])))
