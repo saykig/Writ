@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 HERE = Path(__file__).resolve().parent
+DONOR_EXPECTED = Fraction(7_268_121, 10_000)
 
 
 def load_json(name: str) -> dict[str, Any]:
@@ -159,38 +160,54 @@ def compare_checked_result(case: dict[str, Any], result: dict[str, Any], label: 
     return exact_expected
 
 
+def expect_result_rejection(case: dict[str, Any], result: dict[str, Any], label: str) -> str:
+    try:
+        compare_checked_result(case, result, label)
+    except AssertionError as exc:
+        return str(exc)
+    raise AssertionError(f"{label} was accepted for the original Writ case")
+
+
 def main() -> None:
     case = load_json("case.json")
     writ_result = load_json("writ-result.json")
     direct_result = load_json("direct-result.json")
     memory_leak_result = load_json("memory-leak-result.json")
+    order_corruption_result = load_json("order-corruption-result.json")
 
     writ_expected = compare_checked_result(case, writ_result, "Writ adapter")
     direct_expected = compare_checked_result(case, direct_result, "direct donor baseline")
+
+    if direct_expected != DONOR_EXPECTED:
+        raise AssertionError(
+            f"direct donor baseline changed: expected {DONOR_EXPECTED}, obtained {direct_expected}"
+        )
     if writ_expected != direct_expected:
         raise AssertionError(
             f"Writ and direct donor policies differ in exact expected utility: {writ_expected} vs {direct_expected}"
         )
-
     if writ_result["policy"] != direct_result["policy"]:
         raise AssertionError("Writ adapter policy differs from the direct donor baseline")
 
-    leak_rejected = False
+    order_rejection = expect_result_rejection(
+        case, order_corruption_result, "order-corrupted lowering"
+    )
+    print(f"Expected rejection of order-corrupted lowering: {order_rejection}")
+
     try:
         check_information_boundary(case, memory_leak_result)
     except AssertionError as exc:
-        leak_rejected = True
-        print(f"Expected rejection of full-memory result: {exc}")
-
-    if not leak_rejected:
+        memory_rejection = str(exc)
+    else:
         raise AssertionError("full-memory donor result was accepted for the limited-memory Writ case")
+    print(f"Expected rejection of full-memory result: {memory_rejection}")
 
     print(f"Exact checked expected utility: {writ_expected} = {float(writ_expected):.6f}")
     print(
         "Full-memory donor model expected utility: "
         f"{float(memory_leak_result['expected_utility']):.6f} (valid for a different information structure)"
     )
-    print("OK: Writ preserved the declared decision information boundary")
+    print("OK: direct donor and Writ adapter agree; both semantic mutations were rejected")
 
 
 if __name__ == "__main__":
