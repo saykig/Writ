@@ -7,8 +7,8 @@
     "states": [
       {"id": "satisfied", "labels": ["init"], "absorbing": false},
       {"id": "full", "labels": ["full"], "absorbing": false},
-      {"id": "hungry", "labels": ["hungry"], "absorbing": false},
-      {"id": "starving", "labels": ["starving"], "absorbing": false},
+      {"id": "hungry", "labels": ["hungry :("], "absorbing": false},
+      {"id": "starving", "labels": ["starving :(("], "absorbing": false},
       {"id": "dead", "labels": ["dead"], "absorbing": true}
     ],
     "actions": [
