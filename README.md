@@ -32,19 +32,6 @@ and the checks Writ can perform independently.
 Writ also keeps mathematical results, real-world applicability, and human decisions as separate
 claims.
 
-## Current status
-
-The first new proving case is complete. One limited-memory influence diagram now runs from the same
-Writ object through DecisionProgramming.jl/JuMP/HiGHS and pyAgrum. Both engines return the same policy
-and the same independently checked expected utility.
-
-The case also established an adapter rule: mathematical content is bound by explicit identity and
-type. The checker caught a wrong table binding that still produced an optimal solver result, and it
-rejected a result computed under a different information structure.
-
-The current gate is a bounded case from a different mathematical family. That case will determine
-which parts of the influence-diagram profile belong in Writ's shared decision object.
-
 ## Run the repository
 
 You need Bun. From the repository root:
@@ -61,6 +48,6 @@ bun run build
 
 Start with [the product definition](docs/current/product-definition.md), then read the
 [design principles](docs/current/design-principles.md), [decision-object note](docs/current/decision-object.md),
-and [current roadmap](docs/current/roadmap.md).
+and [roadmap](docs/current/roadmap.md).
 
 Copyright 2026 Sara Kim
