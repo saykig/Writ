@@ -1,0 +1,66 @@
+{
+    "information_sets": {
+        "D2": [
+            "T2"
+        ],
+        "D3": [
+            "T3"
+        ],
+        "D1": [
+            "T1"
+        ]
+    },
+    "expected_utility": 726.8121000000002,
+    "policy": {
+        "D2": [
+            {
+                "action": "treat",
+                "when": {
+                    "T2": "positive"
+                }
+            },
+            {
+                "action": "pass",
+                "when": {
+                    "T2": "negative"
+                }
+            }
+        ],
+        "D3": [
+            {
+                "action": "treat",
+                "when": {
+                    "T3": "positive"
+                }
+            },
+            {
+                "action": "pass",
+                "when": {
+                    "T3": "negative"
+                }
+            }
+        ],
+        "D1": [
+            {
+                "action": "pass",
+                "when": {
+                    "T1": "positive"
+                }
+            },
+            {
+                "action": "pass",
+                "when": {
+                    "T1": "negative"
+                }
+            }
+        ]
+    },
+    "source": "direct-donor-baseline",
+    "termination_status": "OPTIMAL",
+    "engine": {
+        "name": "DecisionProgramming.jl",
+        "commit": "105a25ee898cc806db65d5b475e4f1a613265653",
+        "solver": "HiGHS",
+        "version": "2.0.1"
+    }
+}
