@@ -55,7 +55,13 @@
         "state_id": "dead"
       }
     },
-    "state_order": ["satisfied", "full", "hungry", "starving", "dead"]
+    "state_order": [
+      "satisfied",
+      "full",
+      "hungry",
+      "starving",
+      "dead"
+    ]
   },
   "compiled_property": "R{\"R\"}max=? [F \"writ_state_starving\"]",
   "engine": {
@@ -78,5 +84,5 @@
     "engine_target_label": "writ_state_starving",
     "stop_state": "starving"
   },
-  "source": "stop-state-mutation"
+  "source": "writ-stormpy-stop"
 }

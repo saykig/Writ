@@ -55,7 +55,13 @@
         "state_id": "dead"
       }
     },
-    "state_order": ["satisfied", "full", "hungry", "starving", "dead"]
+    "state_order": [
+      "satisfied",
+      "full",
+      "hungry",
+      "starving",
+      "dead"
+    ]
   },
   "compiled_property": "R{\"R\"}min=? [F \"writ_state_dead\"]",
   "engine": {
@@ -79,5 +85,5 @@
     "engine_target_label": "writ_state_dead",
     "stop_state": "dead"
   },
-  "source": "min-direction-mutation"
+  "source": "writ-stormpy-min"
 }
