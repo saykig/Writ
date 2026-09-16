@@ -1,0 +1,70 @@
+name: finalize second family model checking
+
+on:
+  push:
+    branches:
+      - experiment/second-family-model-checking
+    paths:
+      - '.github/workflows/finalize-second-family-model-checking.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/second-family-model-checking
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+
+      - run: bun install --frozen-lockfile
+      - run: python -m pip install --no-cache-dir PyYAML jsonschema
+
+      - name: Format second-family artifacts
+        run: |
+          bunx prettier --write TASKS.yaml THIRD_PARTY_NOTICES.md \
+            experiments/decision-object/second-family-model-checking/*.md \
+            experiments/decision-object/second-family-model-checking/*.json
+
+      - name: Verify committed second-family evidence
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: |
+          python -m py_compile direct_baseline.py run_writ.py check.py
+          python check.py
+
+      - name: Check repository pack
+        run: python internal/tooling/scripts/validate_pack.py
+
+      - name: Commit final tree and manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/finalize-second-family-model-checking.yml
+          git add TASKS.yaml THIRD_PARTY_NOTICES.md experiments/decision-object/second-family-model-checking
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize second-family model-checking gate"
+          git push
+
+      - name: Verify final repository
+        run: |
+          python internal/tooling/scripts/validate_pack.py
+          cd experiments/decision-object/second-family-model-checking && python check.py && cd ../../..
+          bun install --frozen-lockfile
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
