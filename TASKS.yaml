@@ -1,4 +1,4 @@
-version: 8
+version: 9
 project: writ
 
 governing_definition: >-
@@ -51,13 +51,9 @@ tasks:
 
   - id: SECOND-FAMILY-001
     title: Test Writ with probabilistic model checking
-    status: in_progress
+    status: done
     dependencies:
       - SECOND-ENGINE-001
-    rationale:
-      - Robust optimization would reuse the JuMP/solver path already exercised by the first family and would not stress a sufficiently different semantic boundary.
-      - A POMDP case would overlap with the information-availability lesson already established by the influence-diagram case.
-      - Probabilistic model checking adds a quantitative request whose reward model, optimization direction, and stopping state must remain bound to the transition model.
     family: probabilistic model checking over a finite Markov decision process
     donor_stack:
       - Storm 1.14.0 through stormpy 1.14.0
@@ -66,47 +62,43 @@ tasks:
     case:
       source_model: Stormvogel lion MDP
       source_reference: stormchecker/stormvogel@v0.12.3 stormvogel/examples/lion.py
-      question: maximize expected accumulated reward from reward model R until Writ state dead is reached
       semantic_request:
         kind: expected_accumulated_reward_until_state
         reward_model: R
         direction: max
         stop_state: dead
-      decision_object_must_bind:
-        - initial state
-        - stable state identity and source labels
-        - action identity
-        - transition probabilities
-        - reward-model identity and values
-        - optimization direction
-        - stopping state identity
-      direct_baseline: build the published lion MDP through Stormvogel and compile the semantic request to Storm property syntax
-      writ_path: load the same substantive model from a structured Writ case and lower it to stormpy through a thin adapter
-      independent_check: evaluate returned memoryless deterministic schedulers with exact rational arithmetic and enumerate the bounded stationary policy space to verify optimality
-    negative_cases:
-      - Change max to min while keeping the MDP, reward model, and stop state fixed. Storm may solve the altered request, but the result belongs to a different Writ query.
-      - Change stop_state from dead to starving while keeping the MDP, reward model, and optimization direction fixed. The adapter must bind stable state identity to engine-safe property syntax rather than use the donor display label as the query identity.
+    result:
+      - The direct Stormvogel baseline and Writ stormpy adapter return the same maximizing scheduler: hunt when satisfied, hunt when hungry, hunt when starving, and rawr when full.
+      - Both Storm paths report approximately 37732.6318503739 for the canonical request.
+      - Exact rational evaluation of that scheduler against case.json gives 37750 and exhaustive enumeration confirms it is optimal among all 16 stationary deterministic policies.
+      - The min-direction mutation is a valid different request with exact optimum 0 and a different scheduler.
+      - The stop-state mutation from dead to starving is a valid different request with exact optimum 7750; Storm reports approximately 7749.23504166989.
+      - A donor display label containing punctuation failed as raw Storm property syntax, which led to the stronger representation: Writ binds the stopping condition to stable state identity and the adapter owns engine query labels.
+      - Storm's floating numeric result and the independently checked exact scheduler value are recorded as separate claims with different guarantees.
+    earned_shared_candidates:
+      - stable typed mathematical identity
+      - model inputs separate from a typed mathematical request
+      - explicit adapter bindings from Writ identity to engine identity
+      - engine, version, and numeric-domain metadata
+      - typed engine result
+      - independent-check record with an explicit guarantee
+    family_specific:
+      - MDP state/action transition kernels
+      - reward models
+      - temporal stopping semantics
+      - memoryless deterministic schedulers
+      - Storm row groups, choice indices, synthetic labels, and property syntax
     revision_history:
-      - Stormvogel 0.12.0 was initially pinned because the lion example was present there, but its converter is incompatible with Stormpy 1.14.0 when a model has no state variables. The model itself was unchanged.
-      - Stormvogel 0.12.3 keeps the same lion model, fixes the empty-valuation conversion path, and declares Stormpy 1.13.2 or newer. The proving case therefore uses 0.12.3 with Stormpy 1.14.0.
-      - The first stopping-condition mutation used the donor display label 'starving :((' directly in Storm property syntax and failed to parse. The Writ request was revised to bind a stable stop-state ID; engine labels are now an adapter concern.
-      - The first successful canonical Storm run returned the same scheduler from the direct and Writ paths but a floating value near 37732.63. Exact rational evaluation of that scheduler is 37750. The experiment therefore checks scheduler optimality exactly and records Storm's floating numeric result as a separate engine claim.
-    revision_rule:
-      - If the direct Storm workflow already exposes and binds the same semantics clearly enough that Writ adds no concrete checking or portability value, revise or replace the case before promotion.
-      - If scheduler extraction, target binding, or exact checking depends on hidden Storm-specific ordering or syntax, record that boundary explicitly rather than normalizing it away.
-    acceptance:
-      - The complete case runs locally from repository files with pinned donor versions.
-      - The direct donor baseline and Writ adapter agree on the canonical scheduler and Storm result.
-      - An independent checker verifies scheduler optimality against the original rational model and semantic query.
-      - The altered direction and altered stop-state requests are valid engine inputs and remain distinguishable from the canonical result.
-      - Engine-reported floating values remain distinct from exact independent values when they differ.
-      - The result identifies which concepts transfer from the first family and which belong only to the model-checking profile.
+      - Stormvogel 0.12.0 was replaced by 0.12.3 because its older converter fails with Stormpy 1.14.0 on this variable-free model; the lion model itself is unchanged.
+      - The query target changed from donor display label to stable Writ state identity after Storm property parsing exposed the weakness of treating labels as mathematical identity.
+      - The checker changed from exact-value equality with Storm to exact scheduler verification plus separate recording of Storm's floating value after execution showed a measurable numeric difference.
     outputs:
       - experiments/decision-object/second-family-model-checking
+      - experiments/decision-object/second-family-model-checking/cross-family-findings.md
 
   - id: DECISION-OBJECT-001
     title: Promote the smallest shared Writ decision object
-    status: blocked
+    status: ready
     dependencies:
       - SECOND-FAMILY-001
     scope:
