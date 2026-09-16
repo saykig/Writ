@@ -19,8 +19,8 @@ physical quantities, system states, probabilities, costs, symbolic objects, or o
 
 ## What Writ owns
 
-Writ owns the decision object, exact input/output binding, provenance where useful, engine adapters,
-and independent checks.
+Writ owns the decision object, exact semantic bindings, provenance where useful, engine adapters, and
+independent checks.
 
 Established mathematical software performs the underlying mathematics. Different problems can use
 different tools: influence diagrams, optimization systems, POMDP frameworks, statistical packages,
@@ -34,13 +34,16 @@ claims.
 
 ## Current status
 
-`packages/decision-case/` is the current reference implementation for exact mathematical input
-binding and independent checking.
+The first new proving case is complete. One limited-memory influence diagram now runs from the same
+Writ object through DecisionProgramming.jl/JuMP/HiGHS and pyAgrum. Both engines return the same policy
+and the same independently checked expected utility.
 
-The next build is one bounded local proving case using the established engine that fits it best. Writ
-will build only the experimental decision object and adapter required by that case, compare the same
-problem with the donor engine directly, and test whether Writ adds a useful semantic or checking
-boundary. A second mathematical system will then test which successful structure generalizes.
+The case also established an adapter rule: mathematical content is bound by explicit identity and
+type. The checker caught a wrong table binding that still produced an optimal solver result, and it
+rejected a result computed under a different information structure.
+
+The current gate is a bounded case from a different mathematical family. That case will determine
+which parts of the influence-diagram profile belong in Writ's shared decision object.
 
 ## Run the repository
 
