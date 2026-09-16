@@ -7,56 +7,67 @@ The model is adapted from DecisionProgramming.jl's four-month Pig Breeding examp
 decision sees the current test result. Earlier test results are outside that decision's information
 set.
 
-## What is tested
+## Engines
 
-The experiment now exercises four paths:
+The same `case.json` is solved through two independent stacks:
 
-1. `direct_baseline.jl` — the donor model written directly in DecisionProgramming.jl;
-2. `run_writ.jl` — the same model loaded from `case.json` through the Writ adapter;
-3. `order_corruption_baseline.jl` — the same source tables deliberately inserted into the donor in a
-   semantically wrong order; and
-4. `memory_leak_baseline.jl` — a donor model whose later decisions receive extra earlier test results.
+- DecisionProgramming.jl 2.0.1 with JuMP and HiGHS;
+- pyAgrum 3.0.0 with Shafer-Shenoy LIMID inference.
 
-The two mutations test different boundaries. The table-order mutation keeps the source values and
-model shape but changes which value table the donor associates with each value node. The information
-mutation changes what a decision is allowed to know.
+The direct DecisionProgramming model provides the source baseline. Each Writ adapter translates the
+same declared case into the engine's native representation.
+
+## Semantic mutations
+
+Two deliberately altered paths test the boundary:
+
+1. `order_corruption_baseline.jl` inserts the same value tables into DecisionProgramming in a wrong
+   semantic order;
+2. `memory_leak_baseline.jl` gives later decisions extra earlier test results.
+
+The first mutation changes which values belong to which nodes while preserving compatible table
+shapes. The second changes what information is available when an action is chosen.
 
 ## Result
 
-The direct donor model and the corrected Writ adapter return the same policy and the same exact
-expected utility:
+DecisionProgramming, the corrected Writ DecisionProgramming adapter, and the Writ pyAgrum adapter all
+produce the same policy and the same independently checked expected utility:
 
 ```text
 7268121 / 10000 = 726.8121
 ```
 
-The independent checker rejected both mutations:
+The policy is:
 
-- the order-corrupted lowering reported `952.77`, while its returned policy evaluates to `669.39`
+```text
+D1: pass for either T1 result
+D2: treat after positive T2; pass after negative T2
+D3: treat after positive T3; pass after negative T3
+```
+
+The checker rejects both semantic mutations:
+
+- the order-corrupted lowering reports `952.77`, while its returned policy evaluates to `669.39`
   against the original Writ object;
-- the full-memory model returned `729.225`, but its decision information sets differ from the original
-  case.
+- the expanded-information model reports `729.225`, but its decision information sets describe a
+  different decision problem.
 
-The first failed adapter run exposed the table-order problem. DecisionProgramming had correctly
-optimized the model it received; the adapter had changed the model's meaning while lowering it. The
-exact checker caught the mismatch against the original decision object.
+The experiment therefore establishes a useful first capability: Writ can keep the declared decision
+problem as the reference point for checking results produced by external mathematical systems.
 
-This establishes a useful first capability: Writ can keep a declared decision problem as the
-reference point for checking a result even when the mathematical engine is correct about a different
-lowered problem.
+`cross-engine-findings.md` records which structure transferred across both engines and which details
+remain adapter-specific.
 
-It does not establish a general decision-object schema. The next test is whether the useful structure
-survives a second established engine.
+## Donor sources
 
-## Donor stack
+DecisionProgramming.jl is pinned to commit
+`105a25ee898cc806db65d5b475e4f1a613265653` and is MIT licensed. The model structure and numbers are
+adapted from its `docs/src/examples/pig-breeding.md` example.
 
-- DecisionProgramming.jl 2.0.1, commit `105a25ee898cc806db65d5b475e4f1a613265653`
-- JuMP
-- HiGHS
-- Python `Fraction` for independent exact policy evaluation
+pyAgrum is pinned to version `3.0.0` and uses its `ShaferShenoyLIMIDInference` implementation.
 
-DecisionProgramming.jl is MIT licensed. The model structure and numbers are adapted from its
-`docs/src/examples/pig-breeding.md` example.
+Python `Fraction` evaluates each returned policy directly from `case.json`, independently of either
+engine's reported objective.
 
 ## Run
 
@@ -68,8 +79,10 @@ julia --project=. direct_baseline.jl
 julia --project=. run_writ.jl case.json writ-result.json
 julia --project=. order_corruption_baseline.jl
 julia --project=. memory_leak_baseline.jl
-python3 check.py
+python -m pip install 'pyAgrum==3.0.0'
+python pyagrum_adapter.py
+python check.py
 ```
 
-`check.py` evaluates policies independently from `case.json` with exact rational arithmetic and
-checks the declared decision information sets.
+The next proving case should use a different mathematical family before broad shared Writ semantics
+are promoted.
