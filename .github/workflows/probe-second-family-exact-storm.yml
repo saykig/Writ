@@ -1,0 +1,61 @@
+name: probe second-family exact storm
+
+on:
+  push:
+    branches:
+      - experiment/second-family-model-checking
+    paths:
+      - '.github/workflows/probe-second-family-exact-storm.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  exact-storm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/second-family-model-checking
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned Storm bindings with parser
+        run: python -m pip install --no-cache-dir 'stormpy[parser]==1.14.0'
+
+      - name: Run exact Storm canonical request
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: python exact_storm.py --output exact-storm-result.json
+
+      - name: Run exact Storm direction mutation
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: python exact_storm.py --direction min --output exact-storm-min-result.json --source writ-storm-exact-min
+
+      - name: Run exact Storm stopping mutation
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: python exact_storm.py --stop-state starving --output exact-storm-stop-result.json --source writ-storm-exact-stop
+
+      - name: Print exact values
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for name in ['exact-storm-result.json', 'exact-storm-min-result.json', 'exact-storm-stop-result.json']:
+              value = json.loads(Path(name).read_text())['initial_value_exact']
+              print(f'{name}: {value}')
+          PY
+
+      - name: Commit probe evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/probe-second-family-exact-storm.yml
+          git add experiments/decision-object/second-family-model-checking/exact-storm-result.json
+          git add experiments/decision-object/second-family-model-checking/exact-storm-min-result.json
+          git add experiments/decision-object/second-family-model-checking/exact-storm-stop-result.json
+          git commit -m "Record exact Storm second-family audit"
+          git push
