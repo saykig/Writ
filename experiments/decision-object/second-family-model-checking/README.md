@@ -2,25 +2,26 @@
 
 This case tests Writ against a mathematical family that differs from the influence-diagram work.
 
-The engine is Storm through `stormpy`. Storm performs the probabilistic model checking. Writ only
-represents the bounded problem, lowers it to the engine, records the exact request, and checks the
-returned scheduler against the original problem.
+Storm performs the probabilistic model checking through `stormpy`. Writ represents the bounded
+problem, lowers it to the engine, records the exact request, and checks the returned scheduler against
+the original problem.
 
 ## Case
 
 The model is adapted from Stormvogel's published `lion` MDP. The lion can `hunt >:D` or `rawr` while
-moving between satisfied, full, hungry, starving, and dead states. The state `full` earns reward 100.
+moving between satisfied, full, hungry, starving, and dead states. The state `full` earns reward 100
+in reward model `R`.
 
 The declared question is:
 
 ```text
-maximize expected accumulated reward until dead is reached
+maximize expected accumulated reward from R until dead is reached
 ```
 
 Storm property:
 
 ```text
-Rmax=? [F "dead"]
+R{"R"}max=? [F "dead"]
 ```
 
 The direct baseline uses Stormvogel's model and its Storm integration. The Writ path loads the same
@@ -29,12 +30,10 @@ substantive MDP from `case.json` and builds Storm's sparse MDP directly through 
 ## Why this case
 
 The first proving family showed that a result can be mathematically correct for a wrongly translated
-model. This case asks whether Writ also keeps the mathematical **request** fixed.
+model. This case asks whether Writ also keeps the mathematical request fixed.
 
 For probabilistic model checking, the transition model alone is incomplete. The answer also depends
-on the property: reward model, optimization direction, and temporal stopping condition.
-
-That gives this case a new boundary to test:
+on the reward model, optimization direction, and stopping condition.
 
 ```text
 MDP + quantitative property -> scheduler + value
@@ -52,8 +51,7 @@ The Writ case must bind:
 - optimization direction; and
 - stopping label.
 
-The adapter may use Storm-specific row groups, choice indices, and property syntax internally. Those
-remain engine-profile details.
+Storm-specific row groups, choice indices, and property syntax remain inside the adapter.
 
 ## Positive test
 
@@ -61,19 +59,19 @@ The direct Stormvogel baseline and the Writ-to-stormpy adapter must produce the 
 an equivalent memoryless deterministic scheduler for the declared request.
 
 A separate checker evaluates the scheduler from the original structured case with exact rational
-arithmetic. Because this model has only four nonterminal decision states and two actions per state,
-the checker may enumerate all 16 stationary deterministic policies to verify the optimum without
-reimplementing Storm's general model checker.
+arithmetic. This model has four nonterminal decision states and two actions per state, so the checker
+can enumerate all 16 stationary deterministic policies to verify the optimum without reimplementing
+Storm's general model checker.
 
 ## Negative tests
 
 Two altered properties remain valid Storm questions but are different Writ requests.
 
-1. `Rmin=? [F "dead"]` changes the optimization direction.
-2. `Rmax=? [F "starving"]` changes the temporal stopping condition.
+1. `R{"R"}min=? [F "dead"]` changes the optimization direction.
+2. `R{"R"}max=? [F "starving :(("]` changes the stopping condition.
 
-Storm should be allowed to solve both. Their results must be rejected when presented as answers to
-the original `Rmax=? [F "dead"]` request.
+Storm should solve both normally. Their results must stay distinct from the original
+`R{"R"}max=? [F "dead"]` request.
 
 ## Falsification
 
@@ -86,10 +84,14 @@ verified.
 
 ## Donors
 
-The execution will pin:
+The execution pins:
 
 - `stormpy==1.14.0` / Storm 1.14.0;
-- `stormvogel==0.12.0` for the direct model source and baseline.
+- `stormvogel==0.12.3` for the direct model source and baseline.
+
+The first draft used Stormvogel 0.12.0. Its converter predates a Stormpy 1.14 state-valuation change
+and fails on this variable-free model. Stormvogel 0.12.3 keeps the same lion example, fixes that
+converter path, and declares compatibility with Stormpy 1.13.2 and newer.
 
 Storm and Stormvogel are GPL-3.0 software. They are experiment dependencies, not copied into Writ.
 The final result will record whether their licensing or installation burden argues against a durable
