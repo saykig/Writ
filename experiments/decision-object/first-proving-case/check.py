@@ -175,7 +175,7 @@ def main() -> None:
     memory_leak_result = load_json("memory-leak-result.json")
     order_corruption_result = load_json("order-corruption-result.json")
 
-    writ_expected = compare_checked_result(case, writ_result, "Writ adapter")
+    writ_expected = compare_checked_result(case, writ_result, "Writ DecisionProgramming adapter")
     direct_expected = compare_checked_result(case, direct_result, "direct donor baseline")
 
     if direct_expected != DONOR_EXPECTED:
@@ -186,8 +186,22 @@ def main() -> None:
         raise AssertionError(
             f"Writ and direct donor policies differ in exact expected utility: {writ_expected} vs {direct_expected}"
         )
-    if writ_result["policy"] != direct_result["policy"]:
-        raise AssertionError("Writ adapter policy differs from the direct donor baseline")
+    if policy_map(case, writ_result) != policy_map(case, direct_result):
+        raise AssertionError("Writ DecisionProgramming policy differs from the direct donor baseline")
+
+    pyagrum_path = HERE / "pyagrum-result.json"
+    if pyagrum_path.exists():
+        pyagrum_result = load_json("pyagrum-result.json")
+        pyagrum_expected = compare_checked_result(case, pyagrum_result, "Writ pyAgrum adapter")
+        if pyagrum_expected != direct_expected:
+            raise AssertionError(
+                f"pyAgrum and direct donor policies differ in exact expected utility: {pyagrum_expected} vs {direct_expected}"
+            )
+        if policy_map(case, pyagrum_result) != policy_map(case, direct_result):
+            raise AssertionError("Writ pyAgrum policy differs from the direct donor baseline")
+        print(
+            "Second engine agrees: pyAgrum policy and exact expected utility match DecisionProgramming"
+        )
 
     order_rejection = expect_result_rejection(
         case, order_corruption_result, "order-corrupted lowering"
@@ -207,7 +221,7 @@ def main() -> None:
         "Full-memory donor model expected utility: "
         f"{float(memory_leak_result['expected_utility']):.6f} (valid for a different information structure)"
     )
-    print("OK: direct donor and Writ adapter agree; both semantic mutations were rejected")
+    print("OK: accepted engine results agree; both semantic mutations were rejected")
 
 
 if __name__ == "__main__":
