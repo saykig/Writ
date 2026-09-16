@@ -12,20 +12,22 @@ The model is adapted from Stormvogel's published `lion` MDP. The lion can `hunt 
 moving between satisfied, full, hungry, starving, and dead states. The state `full` earns reward 100
 in reward model `R`.
 
-The declared question is:
+The Writ request is semantic:
 
 ```text
-maximize expected accumulated reward from R until dead is reached
+reward model: R
+direction: max
+stop state: dead
 ```
 
-Storm property:
+The direct Stormvogel baseline compiles that request to its native label:
 
 ```text
 R{"R"}max=? [F "dead"]
 ```
 
-The direct baseline uses Stormvogel's model and its Storm integration. The Writ path loads the same
-substantive MDP from `case.json` and builds Storm's sparse MDP directly through `stormpy`.
+The Writ-to-stormpy adapter uses stable engine labels derived from Writ state IDs. Storm property
+syntax stays inside the adapter rather than becoming part of the shared decision object.
 
 ## Why this case
 
@@ -33,10 +35,10 @@ The first proving family showed that a result can be mathematically correct for 
 model. This case asks whether Writ also keeps the mathematical request fixed.
 
 For probabilistic model checking, the transition model alone is incomplete. The answer also depends
-on the reward model, optimization direction, and stopping condition.
+on the reward model, optimization direction, and stopping state.
 
 ```text
-MDP + quantitative property -> scheduler + value
+MDP + quantitative request -> scheduler + value
 ```
 
 ## Required bindings
@@ -44,34 +46,42 @@ MDP + quantitative property -> scheduler + value
 The Writ case must bind:
 
 - initial state;
-- state identity and labels;
+- state identity and source labels;
 - action identity;
 - transition probabilities;
 - reward-model identity and values;
 - optimization direction; and
-- stopping label.
+- stopping state identity.
 
-Storm-specific row groups, choice indices, and property syntax remain inside the adapter.
+Storm-specific row groups, choice indices, query labels, and property syntax remain inside the
+adapter.
 
 ## Positive test
 
-The direct Stormvogel baseline and the Writ-to-stormpy adapter must produce the same initial value and
-an equivalent memoryless deterministic scheduler for the declared request.
+The direct Stormvogel baseline and the Writ-to-stormpy adapter must produce an equivalent memoryless
+deterministic scheduler for the declared request.
 
 A separate checker evaluates the scheduler from the original structured case with exact rational
-arithmetic. This model has four nonterminal decision states and two actions per state, so the checker
-can enumerate all 16 stationary deterministic policies to verify the optimum without reimplementing
-Storm's general model checker.
+arithmetic. The canonical model has four nonterminal decision states and two actions per state, so the
+checker can enumerate all 16 stationary deterministic policies to verify the optimum without
+reimplementing Storm's general model checker.
+
+Storm uses a floating sparse model in this path. The checker therefore treats the returned scheduler
+and the reported floating value as separate claims: it verifies scheduler optimality exactly and
+records any numeric difference between Storm's value and exact evaluation from the source rationals.
 
 ## Negative tests
 
-Two altered properties remain valid Storm questions but are different Writ requests.
+Two altered requests remain valid model-checking questions but answer something different.
 
-1. `R{"R"}min=? [F "dead"]` changes the optimization direction.
-2. `R{"R"}max=? [F "starving :(("]` changes the stopping condition.
+1. Change `direction: max` to `direction: min` while keeping the MDP, reward model, and stop state.
+2. Change `stop_state: dead` to `stop_state: starving` while keeping the MDP, reward model, and
+   optimization direction.
 
-Storm should solve both normally. Their results must stay distinct from the original
-`R{"R"}max=? [F "dead"]` request.
+The second mutation motivated an architecture correction during execution. The donor display label
+for that state is `starving :((`, which Storm's property parser does not accept cleanly in this path.
+Writ now binds the query to stable state identity and lets the adapter create an engine-safe query
+label. Display-label syntax no longer determines whether the mathematical request is representable.
 
 ## Falsification
 
@@ -79,8 +89,8 @@ This case does not earn a Writ capability if the direct Storm workflow already p
 useful binding and independent checking with no additional semantic boundary for Writ to preserve.
 
 It also fails if the Writ adapter cannot reproduce the donor model, if result interpretation depends
-on undocumented positional assumptions, or if the checker cannot state exactly which property it
-verified.
+on undocumented positional assumptions, or if the checker cannot state exactly which semantic
+request it verified.
 
 ## Donors
 
