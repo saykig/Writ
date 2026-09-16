@@ -1,155 +1,64 @@
-# Current product definition
+# Product definition
 
-Writ is infrastructure for making consequential decision-making more **inspectable, cumulative, and
-correctable** while keeping evidence, mathematics, interpretation, and human authority distinct.
+Writ is local infrastructure for explicit decision problems.
 
-Its long-term objective is not to formalize all political judgment or to produce one universal
-decision calculus. It is to preserve enough structure that a later human or machine can determine
-what was known, what was assumed, what followed mathematically, what remained uncertain, what was
-decided, and what changed afterward.
+Its purpose is to make a bounded decision problem inspectable by humans and software while preserving
+the mathematical meaning of the tools used to solve it.
 
-The [strategic-security moonshot](strategic-security-moonshot.md) states the user-adopted
-long-term destination. Current non-security pilots test enabling infrastructure; they do
-not replace that ambition or establish its strategic validity.
+## The core object
 
-## Current architecture
+A Writ decision object can state, when relevant:
 
-Writ currently has two separate layers.
+- the variables in the problem;
+- relationships or dependencies between them;
+- uncertainty;
+- information available before each decision;
+- available actions;
+- constraints on those actions;
+- the objective, value, loss, or comparison rule;
+- provenance for important supplied inputs;
+- the exact request sent to a mathematical engine; and
+- the returned result and any independent check.
 
-### 1. Source-grounded knowledge
+Fields enter the shared core after they prove useful across more than one mathematical family.
+Engine-specific meaning stays in typed profiles.
 
-```text
-source
--> passage
--> typed record
--> human review
--> provenance
-```
+## Mathematical engines
 
-This layer preserves institutional and legal-policy knowledge without making downstream analyses or
-questions the source of truth for those records. NIST remains its active institutional proving
-ground.
+Writ connects decision objects to established mathematical software.
 
-### 2. Derived decision cases
+Useful families include influence diagrams, mathematical optimization, probabilistic models,
+partially observable sequential decisions, statistical systems, simulation, and formal proof tools.
+Each engine keeps its native mathematical meaning.
 
-```text
-explicit question / requested operation
-+ supplied content and modelling assumptions
-+ exact mathematical problem/query bytes
--> candidate execution
--> independent mathematical check
--> applicability
--> human disposition
--> revision / reuse
-```
+Writ owns the boundary around an engine: exact inputs, exact outputs, version and environment pins,
+translation rules, supported states, and checks that can be performed independently.
 
-This layer is separate from native records. It can preserve an explicit question because a
-mathematical guarantee is meaningless without its query, model, assumptions, information context,
-units, and permitted operation. It does not turn that question or answer into a source fact.
+## Checked results
 
-The first implementation is the bounded `derived_decision_case` package merged in PR #43. PR #47
-adds the accepted shared-analysis revision/reassessment/replay boundary. ADR 0026 and ADR 0028 are
-now **Accepted** after their human architecture gate. Acceptance is deliberately bounded: neither
-the first Decision Lab adapter, `finite-linear-uncertainty.v1`, nor the shared-analysis archive is a
-universal decision workspace or permanent mathematical ceiling.
+A checked calculation certifies the exact mathematical claim that was checked.
 
-The reviewed engineering trial extends that accepted lifecycle with one separately pinned Bellman
-certificate-transport adapter. It earns one revision-bound checked mathematical transition: Writ can
-preserve the exact source-certificate bytes and prior claim context, bind a declared substantive
-revision to an exact successor mathematical request, preserve a newly checked successor certificate,
-and freshly check the source and transition with the producer disabled. Archival preservation alone
-makes no validity claim. The reviewed mapping declaration must enumerate the complete substantive
-subject-and-policy diff, but Writ does not infer that the mapping describes empirical reality. That
-result does not make every Bellman theorem a Writ semantic.
-
-PR #53 adds the accepted bounded `decision_episode` envelope above those artifacts. It
-preserves one exact checked transition alongside a separately supplied authority basis, explicit
-human or institutional decision, implementation record, observed consequence and reconsideration
-trigger. A recipient can rederive every binding and freshly check the mathematical history while
-leaving the later acts as preserved declarations. ADR 0029 is **Accepted** after its human
-architecture gate; no decision, causal attribution, outcome evaluation or model update is inferred.
-
-The accepted external extension adds a separately labelled SimPy result and one resolved
-parent/successor episode pair. It independently checks the external trace and the complete declared
-input revision, while preserving native mathematical history and checking it separately. It does
-not promote simulation output to empirical evidence or a native certificate. [Current bounded
-operations](external-and-linked-episodes.md) state the exact limits.
-
-The accepted [simulation-to-decision connection](simulation-to-decision.md) adds a
-separate exact comparison subject rather than altering that transport profile. It binds a complete
-declared option menu, actual external runs, explicit run-to-loss mapping and supplied preferences;
-then revises one base-service assumption, reruns every option, independently recomputes the ranking
-and links both results to supplied episode decisions. A conditional preference remains distinct from
-empirical applicability, the human act and authority. The native A/B history remains unchanged.
-
-## Bellman and Writ
-
-Bellman develops and assembles the mathematical foundations for consequential decision-making:
-objects, assumptions, operations, guarantees, composition rules, failure boundaries, and
-provenance. Writ turns stable portions of those semantics into executable, versioned infrastructure.
-
-The intended relationship is:
+Writ records the surrounding layers separately:
 
 ```text
-Bellman mathematics
--> executable producer / solver where useful
--> independently checkable certificate or result
--> Writ binding, versioning, applicability, reuse and correction
+supplied information
+model and assumptions
+mathematical request
+engine result
+independent check
+real-world applicability
+human decision
 ```
 
-Engineering does not determine the mathematics, and today's Python/TypeScript implementation does
-not define tomorrow's mathematical ceiling.
+This keeps each conclusion tied to the evidence and assumptions that support it.
 
-## Governing separations
+## Local execution
 
-Writ must keep separate:
+The correctness path runs locally from the decision object through engine execution and checking.
+This makes proving cases reproducible from structured inputs and pinned software.
 
-- source evidence from interpretation;
-- source support from a modelling choice;
-- one exact model from a set or outer enclosure of models;
-- mathematical correctness from empirical model adequacy;
-- a checked result from applicability to a revised case;
-- target-certificate validity from a stronger claim that the certificate was transported from an
-  earlier checked guarantee;
-- a common optimal action from a complete pointwise minimizing set;
-- uncertainty or nonidentification from exact ties;
-- human review from mathematical checking;
-- recommendation or optimality from institutional authority to act;
-- implementation from the preceding decision, and temporal sequence from causal attribution;
-- an observed consequence from a judgment that the decision was correct or that a model changed.
+## Existing repository components
 
-Historical results remain valid under the premises they actually had. Revisions should suspend,
-narrow, transport, tighten, or replace current reuse with explicit justification rather than erase
-the old result.
-
-## Current proving grounds
-
-- **NIST institutional corpus:** source grounding, typed institutional facts, review, provenance,
-  supersession, and source/version integrity.
-- **Synthetic derived decision cases:** exact mathematical binding, checking, revision, applicability,
-  portable handoff, and bounded mathematical-transition experiments. These cases are tests of
-  infrastructure, not product ontologies or empirical claims about the world.
-
-Other reviewed corpora remain preserved and inspectable. They do not have to drive current
-development merely because they exist.
-
-## Current non-goals
-
-Writ is not presently:
-
-- an autonomous policy decision-maker;
-- a general recommendation or question-answering system;
-- a universal political ontology or knowledge graph;
-- a general scenario or game-theory engine;
-- an empirical probability estimator that invents priors or source reliabilities;
-- a system that infers causal effects from provenance;
-- an authority or approval system that turns mathematical optimality into permission to act.
-
-Future causal, sequential, strategic, robust, or information-acquisition capabilities should enter
-only when Bellman supplies the relevant semantics and a bounded Writ integration demonstrates the
-need.
-
-## Direction
-
-The current sequencing and exit gates live in [`roadmap.md`](./roadmap.md). The roadmap may evolve
-as evidence accumulates. Accepted ADRs and schemas remain the authority for durable contracts.
+`packages/decision-case/` is the current reference implementation for exact mathematical input
+binding and independent checking. Source-grounded corpora and provenance packages remain available
+when a decision problem needs those inputs.

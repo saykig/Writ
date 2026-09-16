@@ -1,58 +1,52 @@
 # Writ
 
-Writ helps people keep the reasoning behind consequential decisions inspectable and correctable.
+Writ is local infrastructure for explicit decision problems.
 
-A decision rarely rests on one fact. It has sources, interpretations, assumptions, calculations,
-judgments, authority, implementation, and consequences. Those pieces often end up scattered across
-documents and tools. Writ preserves their connections so a later person or machine can answer:
+It gives a decision problem one inspectable representation for the pieces that matter:
 
-- What did we know, and where did it come from?
-- What did we assume?
-- What followed from the supplied model or calculation?
-- Who decided what, under which authority?
-- What changed, and should the old conclusion still be used?
+```text
+decision problem
+  -> variables and dependencies
+  -> uncertainty and information available
+  -> actions
+  -> constraints and objectives
+  -> mathematical engine
+  -> checked result
+```
 
-Writ does not decide for people. It does not turn a checked calculation into empirical truth or
-permission to act.
+The meaning of each variable comes from the mathematical model that uses it. A Writ object can carry
+physical quantities, system states, probabilities, costs, symbolic objects, or other typed values.
 
-## What works today
+## What Writ owns
 
-Writ currently has two deliberately separate parts.
+Writ owns the decision object, exact input/output binding, provenance where useful, engine adapters,
+and independent checks.
 
-**Source-grounded knowledge** preserves exact sources and passages, typed institutional and
-legal-policy records, human review, provenance, and correction history.
+Established mathematical software performs the underlying mathematics. Different problems can use
+different tools: influence diagrams, optimization systems, POMDP frameworks, statistical packages,
+formal checkers, and other mature engines.
 
-**Bounded decision work** preserves an explicit question, supplied assumptions, an exact
-mathematical subject, computation, an independent check, applicability, human disposition, and
-revision. It can also preserve a small post-decision history—authority, decision, implementation,
-observation, and reconsideration—without claiming that sequence proves causality or that the
-decision was correct.
+Each adapter records the engine request, version, input meaning, output meaning, translation boundary,
+and the checks Writ can perform independently.
 
-The repository contains runnable examples of both boundaries, including exact decision cases,
-revision and replay, a pinned external SimPy calculation, and an executed RO-Crate handoff of one
-empirical result. The handoff keeps numerical reconstruction, empirical support, applicability, and
-authority separate. These are working research components, not a finished decision application.
+Writ also keeps mathematical results, real-world applicability, and human decisions as separate
+claims.
 
-## Try a small example
+## Current status
 
-You need [Bun](https://bun.sh/) 1.3.12. From the repository root:
+`packages/decision-case/` is the current reference implementation for exact mathematical input
+binding and independent checking.
+
+The next milestone is a small engine-neutral decision object exercised through at least two
+established mathematical systems, followed by one strong local proving case. The proving case will
+compare Writ with the same problem solved directly through the underlying engine.
+
+## Run the repository
+
+You need Bun. From the repository root:
 
 ```sh
 bun install --frozen-lockfile
-bun examples/decision-cases/failure-choice/generate.ts
-bun packages/decision-case/bin/writ-decision-case.ts summary \
-  --case examples/decision-cases/failure-choice/case.json
-```
-
-The fictional case asks which of two actions minimizes expected cost across every compatible model.
-The summary shows the exact question, pinned engine, applicability, and human-review status without
-contacting a live service. Running its mathematical producer requires the separately pinned
-Decision Lab environment described in the
-[example guide](examples/decision-cases/failure-choice/README.md).
-
-To run the ordinary repository checks:
-
-```sh
 bun run format
 bun run lint
 bun run typecheck
@@ -61,15 +55,8 @@ bun run verify:writ
 bun run build
 ```
 
-The [development guide](docs/current/development.md) lists the remaining data, Python, and real
-integration checks.
-
-## Read more
-
-- [What Writ supports now](docs/current/product-definition.md)
-- [Examples](examples/README.md)
-- [Current roadmap](docs/current/roadmap.md)
-- [Development and verification](docs/current/development.md)
-- [Versioned history](docs/history/README.md)
+Start with [the product definition](docs/current/product-definition.md), then read the
+[design principles](docs/current/design-principles.md), [decision-object note](docs/current/decision-object.md),
+and [current roadmap](docs/current/roadmap.md).
 
 Copyright 2026 Sara Kim

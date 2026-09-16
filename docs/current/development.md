@@ -1,8 +1,6 @@
 # Development
 
-## Verification
-
-Run the standard repository checks from the root:
+Run the standard checks from the repository root:
 
 ```bash
 bun run format
@@ -14,39 +12,24 @@ bun run verify:writ
 bun run build
 ```
 
-Python and CI verification are defined in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml).
-After installing the ingestion development dependencies, run:
+Python checks used by CI are defined in `.github/workflows/ci.yml`.
 
-```bash
-.venv/bin/python internal/tooling/scripts/validate_pack.py
-.venv/bin/python internal/tooling/scripts/generate_source_registry.py --check
-.venv/bin/ruff check apps/ingest internal/tooling/scripts internal/verification
-.venv/bin/mypy apps/ingest/src
-.venv/bin/pytest apps/ingest internal/verification
-```
+## Changing schemas
 
-## Schema and protocol authority changes
+Authoritative JSON Schemas live under `schemas/`. Generated runtime copies stay synchronized.
+A schema change includes a valid example, a decisive invalid example, and an ADR when it changes a
+durable public contract.
 
-Authoritative schemas live under [`schemas/`](../../schemas/). Runtime vendor copies under
-`packages/domain/schemas/` must remain synchronized with their authority mapping.
-The language protocol authority lives at `protocols/language/writ.ebnf`.
+## Adding a mathematical engine
 
-For schema or protocol authority changes, also run:
+Start with the exact mathematical operation Writ needs. Run one local example, record the engine
+version and license, explain the input/output meaning, and document translation losses before making
+the dependency durable.
 
-```bash
-bun test packages/domain
-PYTHONPATH=apps/ingest/src .venv/bin/pytest -q internal/verification/schema
-.venv/bin/python internal/tooling/scripts/validate_pack.py
-bun run verify:writ
-```
+Keep lockfiles and language versions pinned. Use the donor project's native language and API when
+that gives the clearest mathematical boundary.
 
-## Dependency and version changes
+## Documentation
 
-- Resolve stable, mutually compatible releases from official registries and documentation; commit
-  exact lockfiles.
-- Keep Bun and Python versions pinned through `.bun-version` and `.python-version`.
-- Commit `bun.lock` and the Python lockfile when one is introduced.
-- Merge automated dependency updates only after the complete verification and migration tests pass.
-- Require deliberate review for parser, canonicalization, cryptography, PDF-parser,
-  browser-automation, and solver upgrades.
-- Record semantic changes in an ADR and bump the affected language, schema, or compiler version.
+Write current Markdown for a new reader. Lead with the point, define necessary jargon, and place
+research history in the history and experiment directories.

@@ -1,46 +1,32 @@
-# Build + tooling artifacts
+# Build and tooling output
 node_modules/
 dist/
 coverage/
 bun.lock
 *.langium
 
-# Authored specification + evidence content — kept byte-stable (golden JSON,
-# canonical IR, receipts, and governance docs must never be reformatted).
-packages/domain/schemas/
-internal/verification/fixtures/
-internal/infrastructure/generated/
+# Governed or byte-stable material
 docs/
 adr/
 .agents/
+packages/domain/schemas/
+internal/verification/fixtures/
+internal/infrastructure/generated/
 internal/tooling/scripts/
 MANIFEST.sha256
 AGENTS.md
 TASKS.yaml
 
-# Portable decision-case subjects and exact engine artifacts retain raw byte identities.
+# Exact reference decision-case bytes
 examples/decision-cases/**/case.json
 examples/decision-cases/**/*.case.json
 examples/decision-cases/**/executions/*.json
-examples/decision-cases/shared-analysis-revision/fixture-hashes.json
-examples/decision-cases/decision-episode/episode.json
 
-# Generated embed outputs (regenerated on build)
+# Generated embed outputs
 **/schemas.embedded.ts
 
-# The reviewed EU/US legal-policy corpora are emitted byte-for-byte by
-# writ_ingest.corpus.eu_us_ai_governance.canonical_yaml_bytes and checked with
-# `--check`. Reformatting them here would drift them from their generator.
-# Hand-authored corpora (constitutional law, institutional) are not listed.
+# Generated reviewed corpus material
 corpora/legal-policy/eu/
 corpora/legal-policy/us/nist/
 corpora/legal-policy/us/office-of-management-and-budget/
 corpora/legal-policy/us/white-house/
-
-# External run inputs and raw output envelopes are frozen byte evidence.
-examples/external-simulation/simpy-resource/*.json
-examples/decision-cases/linked-episodes/*.json
-examples/decision-cases/simulation-decision/*.json
-
-# Independently authored AFY recipient output and exact executed receipts are frozen byte evidence.
-examples/empirical-handoffs/afy-2024-ro-crate/evidence/*.json
