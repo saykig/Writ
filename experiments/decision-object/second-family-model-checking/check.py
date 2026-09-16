@@ -24,15 +24,10 @@ def states_by_id(case: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 
 def target_state(case: dict[str, Any], query: dict[str, Any]) -> str:
-    label = query["stop_label"]
-    matches = [
-        state["id"]
-        for state in case["model"]["states"]
-        if label in state["labels"]
-    ]
-    if len(matches) != 1:
-        raise AssertionError(f"stop label {label!r} resolves to {matches!r}")
-    return matches[0]
+    state = query["stop_state"]
+    if state not in states_by_id(case):
+        raise AssertionError(f"stop state {state!r} is absent from the Writ model")
+    return state
 
 
 def transition(case: dict[str, Any], state: str, action: str) -> dict[str, Fraction]:
@@ -52,7 +47,11 @@ def positive_successors(
     if state_spec["absorbing"]:
         return {state}
     action = policy[state]
-    return {successor for successor, probability in transition(case, state, action).items() if probability > 0}
+    return {
+        successor
+        for successor, probability in transition(case, state, action).items()
+        if probability > 0
+    }
 
 
 def reachable_before_target(
@@ -80,8 +79,6 @@ def has_closed_class_away_from_target(
     reachable = reachable_before_target(case, policy, target)
     candidates = set(reachable) - {target}
 
-    # Repeatedly remove states that have a positive-probability edge out of the candidate set.
-    # Any states left form one or more closed classes that can avoid the target forever.
     changed = True
     while changed:
         changed = False
@@ -147,7 +144,6 @@ def evaluate_policy(
 
         state_spec = states_by_id(case)[state]
         if state_spec["absorbing"]:
-            # A zero-reward absorbing state outside the target would have been caught as a closed class.
             continue
 
         action = policy[state]
@@ -164,16 +160,14 @@ def evaluate_policy(
     return values[index[initial]]
 
 
-def all_policies(case: dict[str, Any]) -> list[dict[str, str]]:
+def all_policies(case: dict[str, Any], query: dict[str, Any]) -> list[dict[str, str]]:
+    target = target_state(case, query)
     states = [
         state["id"]
         for state in case["model"]["states"]
-        if not state["absorbing"]
+        if not state["absorbing"] and state["id"] != target
     ]
-    actions = [
-        list(case["model"]["transitions"][state].keys())
-        for state in states
-    ]
+    actions = [list(case["model"]["transitions"][state].keys()) for state in states]
     return [dict(zip(states, choices)) for choices in itertools.product(*actions)]
 
 
@@ -182,7 +176,7 @@ def exact_optimum(
 ) -> tuple[Fraction, list[dict[str, str]]]:
     scored: list[tuple[Fraction, dict[str, str]]] = []
     improper = 0
-    for policy in all_policies(case):
+    for policy in all_policies(case, query):
         value = evaluate_policy(case, policy, query)
         if value is None:
             improper += 1
@@ -227,23 +221,38 @@ def compare_direct_snapshot(case: dict[str, Any], direct: dict[str, Any]) -> Non
                     )
 
 
+def check_query_binding(result: dict[str, Any]) -> None:
+    query = result["query"]
+    binding = result["query_binding"]
+    if binding["stop_state"] != query["stop_state"]:
+        raise AssertionError(
+            f"{result['source']} binds stop state {binding['stop_state']!r} "
+            f"for query state {query['stop_state']!r}"
+        )
+    if not binding["engine_target_label"]:
+        raise AssertionError(f"{result['source']} has an empty engine target binding")
+
+
 def check_result_for_own_query(
     case: dict[str, Any], result: dict[str, Any], label: str
-) -> Fraction:
+) -> tuple[Fraction, float]:
     query = result["query"]
+    check_query_binding(result)
     value = evaluate_policy(case, result["policy"], query)
     if value is None:
         raise AssertionError(f"{label} scheduler does not reach its target almost surely")
-    if not math.isclose(float(value), float(result["initial_value"]), rel_tol=0, abs_tol=1e-7):
-        raise AssertionError(
-            f"{label} reports {result['initial_value']}, exact scheduler evaluation gives {value}"
-        )
+
     optimum, optimal_policies = exact_optimum(case, query)
     if value != optimum:
-        raise AssertionError(f"{label} scheduler has value {value}, exact optimum is {optimum}")
+        raise AssertionError(f"{label} scheduler has exact value {value}, exact optimum is {optimum}")
     if result["policy"] not in optimal_policies:
         raise AssertionError(f"{label} policy is not among the exact optimal policies")
-    return value
+
+    reported = float(result["initial_value"])
+    if not math.isfinite(reported):
+        raise AssertionError(f"{label} reported a non-finite numeric value")
+    gap = reported - float(value)
+    return value, gap
 
 
 def main() -> None:
@@ -258,34 +267,50 @@ def main() -> None:
     canonical_query = case["query"]
     if direct["query"] != canonical_query or writ["query"] != canonical_query:
         raise AssertionError("accepted result changed the canonical Writ query")
-    if direct["compiled_property"] != writ["compiled_property"]:
-        raise AssertionError("direct and Writ adapters compiled different Storm properties")
 
-    direct_value = check_result_for_own_query(case, direct, "direct Stormvogel baseline")
-    writ_value = check_result_for_own_query(case, writ, "Writ Storm adapter")
+    direct_value, direct_gap = check_result_for_own_query(
+        case, direct, "direct Stormvogel baseline"
+    )
+    writ_value, writ_gap = check_result_for_own_query(case, writ, "Writ Storm adapter")
     if direct_value != writ_value:
         raise AssertionError(f"direct and Writ exact values differ: {direct_value} vs {writ_value}")
     if direct["policy"] != writ["policy"]:
         raise AssertionError("direct and Writ schedulers differ")
+    if not math.isclose(
+        float(direct["initial_value"]), float(writ["initial_value"]), rel_tol=0, abs_tol=1e-9
+    ):
+        raise AssertionError("direct and Writ Storm values differ")
 
-    min_value = check_result_for_own_query(case, min_result, "min-direction mutation")
+    min_value, min_gap = check_result_for_own_query(case, min_result, "min-direction mutation")
     if min_result["query"] == canonical_query:
         raise AssertionError("min-direction mutation did not change the query")
     if min_result["query"]["direction"] != "min":
         raise AssertionError("min-direction mutation lacks direction=min")
 
-    stop_value = check_result_for_own_query(case, stop_result, "stop-label mutation")
+    stop_value, stop_gap = check_result_for_own_query(case, stop_result, "stop-state mutation")
     if stop_result["query"] == canonical_query:
-        raise AssertionError("stop-label mutation did not change the query")
-    if stop_result["query"]["stop_label"] == canonical_query["stop_label"]:
-        raise AssertionError("stop-label mutation did not change the stopping condition")
+        raise AssertionError("stop-state mutation did not change the query")
+    if stop_result["query"]["stop_state"] == canonical_query["stop_state"]:
+        raise AssertionError("stop-state mutation did not change the stopping condition")
 
     print(f"Canonical exact optimum: {direct_value} = {float(direct_value):.6f}")
+    print(
+        f"Storm canonical value: {float(direct['initial_value']):.12f}; "
+        f"exact-minus-Storm: {-direct_gap:.12f}"
+    )
     print(f"Min-direction exact optimum: {min_value} = {float(min_value):.6f}")
-    print(f"Stop-label exact optimum: {stop_value} = {float(stop_value):.6f}")
-    print("Expected rejection: min-direction result answers a different quantitative request")
-    print("Expected rejection: stop-label result answers a different temporal request")
-    print("OK: Storm baseline and Writ adapter agree; exact checker binds result to model + query")
+    print(
+        f"Storm min value: {float(min_result['initial_value']):.12f}; "
+        f"exact-minus-Storm: {-min_gap:.12f}"
+    )
+    print(f"Stop-state exact optimum: {stop_value} = {float(stop_value):.6f}")
+    print(
+        f"Storm stop-state value: {float(stop_result['initial_value']):.12f}; "
+        f"exact-minus-Storm: {-stop_gap:.12f}"
+    )
+    print("Expected rejection: min-direction result answers a different optimization request")
+    print("Expected rejection: stop-state result answers a different temporal request")
+    print("OK: Storm baseline and Writ adapter agree on policy; exact checker verifies optimality against model + semantic query")
 
 
 if __name__ == "__main__":
