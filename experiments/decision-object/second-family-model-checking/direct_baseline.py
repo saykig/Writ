@@ -14,11 +14,11 @@ HERE = Path(__file__).resolve().parent
 STATE_BY_LABEL = {
     "init": "satisfied",
     "full": "full",
-    "hungry : (": "hungry",
     "hungry :(": "hungry",
     "starving :((": "starving",
     "dead": "dead",
 }
+DONOR_LABEL_BY_STATE = {state_id: label for label, state_id in STATE_BY_LABEL.items()}
 ACTION_BY_LABEL = {"hunt >:D": "hunt", "rawr": "rawr"}
 
 
@@ -34,15 +34,21 @@ def state_id(state: Any) -> str:
     return next(iter(matches))
 
 
-def query_property(query: dict[str, Any]) -> str:
-    if query["kind"] != "expected_accumulated_reward_until_label":
+def query_property(query: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    if query["kind"] != "expected_accumulated_reward_until_state":
         raise ValueError(f"unsupported query kind {query['kind']!r}")
     direction = query["direction"]
     if direction not in {"min", "max"}:
         raise ValueError(f"unsupported direction {direction!r}")
+    stop_state = query["stop_state"]
+    if stop_state not in DONOR_LABEL_BY_STATE:
+        raise ValueError(f"direct donor has no state binding for {stop_state!r}")
     reward = query["reward_model"].replace('"', '\\"')
-    target = query["stop_label"].replace('"', '\\"')
-    return f'R{{"{reward}"}}{direction}=? [F "{target}"]'
+    target_label = DONOR_LABEL_BY_STATE[stop_state].replace('"', '\\"')
+    return (
+        f'R{{"{reward}"}}{direction}=? [F "{target_label}"]',
+        {"stop_state": stop_state, "engine_target_label": target_label},
+    )
 
 
 def donor_snapshot(model: Any, reward_name: str) -> dict[str, Any]:
@@ -77,7 +83,7 @@ def donor_snapshot(model: Any, reward_name: str) -> dict[str, Any]:
 def main() -> None:
     case = load_case()
     query = case["query"]
-    prop = query_property(query)
+    prop, query_binding = query_property(query)
 
     lion = stormvogel.examples.create_lion_mdp()
     snapshot = donor_snapshot(lion, query["reward_model"])
@@ -89,7 +95,7 @@ def main() -> None:
     policy: dict[str, str] = {}
     for state in lion:
         sid = state_id(state)
-        if sid == "dead":
+        if sid == query["stop_state"] or sid == "dead":
             continue
         action = result.scheduler.get_action_at_state(state)
         if action.label not in ACTION_BY_LABEL:
@@ -105,6 +111,7 @@ def main() -> None:
         },
         "query": query,
         "compiled_property": prop,
+        "query_binding": query_binding,
         "initial_value": float(result.at_init()),
         "policy": policy,
         "model_snapshot": snapshot,
@@ -114,6 +121,7 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"Direct Stormvogel value: {payload['initial_value']}")
+    print(prop)
     print(json.dumps(policy, sort_keys=True))
 
 
