@@ -1,4 +1,4 @@
-version: 6
+version: 7
 project: writ
 
 governing_definition: >-
@@ -72,13 +72,13 @@ tasks:
     family: probabilistic model checking over a finite Markov decision process
     donor_stack:
       - Storm 1.14.0 through stormpy 1.14.0
-      - Stormvogel 0.12.0 as the direct-model source and baseline
+      - Stormvogel 0.12.3 as the direct-model source and baseline
       - Storm's native C++ model-checking core remains responsible for quantitative analysis
     case:
       source_model: Stormvogel lion MDP
-      source_reference: stormchecker/stormvogel stormvogel/examples/lion.py
-      question: maximize expected accumulated reward until the state labelled dead is reached
-      property: 'Rmax=? [F "dead"]'
+      source_reference: stormchecker/stormvogel@v0.12.3 stormvogel/examples/lion.py
+      question: maximize expected accumulated reward from reward model R until the state labelled dead is reached
+      property: 'R{"R"}max=? [F "dead"]'
       decision_object_must_bind:
         - initial state
         - state and action identities
@@ -92,7 +92,10 @@ tasks:
       independent_check: evaluate the returned memoryless deterministic scheduler with exact rational arithmetic and enumerate the bounded policy space to verify the optimum
     negative_cases:
       - Change max to min while keeping the MDP and reward model fixed. Storm may solve the altered property, but the result is for a different Writ request.
-      - Change the stopping label while keeping the MDP and optimization direction fixed. Storm may solve the altered property, but its result must remain distinct from the original request.
+      - Change the stopping label from dead to the donor label 'starving :((' while keeping the MDP and optimization direction fixed. Storm may solve the altered property, but its result must remain distinct from the original request.
+    revision_history:
+      - Stormvogel 0.12.0 was initially pinned because the lion example was present there, but its converter is incompatible with Stormpy 1.14.0 when a model has no state variables. The model itself was unchanged.
+      - Stormvogel 0.12.3 keeps the same lion model, fixes the empty-valuation conversion path, and declares Stormpy 1.13.2 or newer. The proving case therefore uses 0.12.3 with Stormpy 1.14.0.
     revision_rule:
       - If the direct Storm workflow already exposes and binds the same semantics clearly enough that Writ adds no concrete checking or portability value, revise or replace the case before promotion.
       - If scheduler extraction or exact checking depends on hidden Storm-specific ordering, treat that as adapter evidence rather than normalizing it away.
