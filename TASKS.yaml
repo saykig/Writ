@@ -1,11 +1,11 @@
-version: 3
+version: 4
 project: writ
 
 governing_definition: >-
   Writ is local infrastructure for explicit decision problems. It represents the variables,
   dependencies, uncertainty, information, actions, constraints, objectives, engine requests, and
-  checked results needed for a bounded decision problem without making one mathematical formalism or
-  application domain the core ontology.
+  checked results needed for a bounded decision problem while preserving the native meaning of the
+  mathematical systems it connects.
 
 execution_policy:
   one_task_per_change: true
@@ -14,6 +14,7 @@ execution_policy:
   required_reading:
     - AGENTS.md
     - docs/current/product-definition.md
+    - docs/current/design-principles.md
     - docs/current/decision-object.md
     - docs/current/roadmap.md
 
@@ -25,49 +26,72 @@ statuses:
   - blocked
 
 tasks:
-  - id: DECISION-OBJECT-001
-    title: Define the first engine-neutral Writ decision object
+  - id: LOCAL-KILLER-CASE-001
+    title: Prove one useful local decision workflow
     status: ready
     scope:
-      - Define the smallest object that can state a bounded decision problem without assuming a domain.
-      - Represent variables, dependencies or information structure, actions, constraints, objectives, uncertainty, and exact engine requests.
-      - Keep provenance optional and typed so a supplied input can explain where it came from without making source tracking the center of the object.
-      - Compare the proposed fields against at least two established decision or optimization systems before freezing a schema.
-    exclusions:
-      - A universal solver API, social-science ontology, autonomous decision-maker, hosted service, or LLM dependency.
-      - New mathematical theory where an established engine already supplies the needed operation.
+      - Start with one bounded problem and the established mathematical engine that fits it best.
+      - Build only the experimental decision-object fields and adapter required by the case.
+      - Preserve exact information sets, variables, states, probabilities, utilities, engine request, and returned strategy.
+      - Compare the Writ workflow with the same substantive model written directly in the donor engine.
+      - Include an adversarial translation or candidate that violates a declared semantic boundary and confirm that Writ rejects it.
+      - Revise the proving case within this task when the direct-engine baseline already supplies the same useful guarantee.
+    initial_case:
+      donor: DecisionProgramming.jl with JuMP and HiGHS
+      model: limited-memory multi-stage influence diagram
+      question: >-
+        Can Writ preserve and independently check which information is available at each decision,
+        including rejection of a translated model or policy that gains access to unavailable state?
+      starting_reference: DecisionProgramming.jl pig-breeding example
     acceptance:
-      - One concise design note states the object, its invariants, and unsupported cases.
-      - At least two donor systems are exercised locally on bounded examples and their translation losses are recorded.
-      - The schema is not frozen until the donor comparison shows that its fields are necessary across more than one mathematical family.
+      - The complete workflow runs locally from repository files.
+      - The donor engine remains responsible for optimization.
+      - Writ records and checks the translation boundary rather than reimplementing the solver.
+      - A direct-engine baseline uses the same substantive probabilities, utilities, and decision problem.
+      - Writ catches or exposes one material issue that the baseline leaves implicit.
+      - The result states whether the case earned a durable Writ capability or should be replaced.
+    outputs:
+      - experiments/decision-object/first-proving-case
+
+  - id: SECOND-ENGINE-001
+    title: Test the useful structure with a second mathematical system
+    status: blocked
+    dependencies:
+      - LOCAL-KILLER-CASE-001
+    scope:
+      - Choose a second established mathematical system that stresses different semantics from the first donor.
+      - Reuse only the fields that proved useful in the first case.
+      - Record which structure transfers and which structure belongs in an engine-specific profile.
+    acceptance:
+      - One bounded case runs through the second engine locally.
+      - The comparison identifies shared structure and engine-specific structure with concrete examples.
+      - Translation losses and unsupported states are explicit.
+
+  - id: DECISION-OBJECT-001
+    title: Promote the smallest shared Writ decision object
+    status: blocked
+    dependencies:
+      - SECOND-ENGINE-001
+    scope:
+      - Promote only structure supported by the proving cases into the shared decision object.
+      - Keep specialized mathematical semantics in typed engine profiles.
+      - Define exact bindings, unsupported states, and result meanings at the adapter boundary.
+    acceptance:
+      - One concise design note states the shared object and its invariants.
+      - The promoted fields are supported by evidence from more than one mathematical system.
+      - Engine-specific fields remain outside the shared core.
     outputs:
       - docs/current/decision-object.md
       - schemas/analysis
-
-  - id: LOCAL-KILLER-CASE-001
-    title: Prove one useful local decision workflow
-    status: blocked
-    dependencies:
-      - DECISION-OBJECT-001
-    scope:
-      - Select a non-social-science problem with interacting variables, uncertainty, competing actions, constraints or objectives, and a meaningful information structure.
-      - Run the complete workflow locally without an LLM or network service.
-      - Use an established mathematical engine rather than a Writ-built general solver.
-      - Produce an inspectable Writ object, engine request, result, and independent check.
-      - Compare the workflow with using the underlying engine directly.
-    acceptance:
-      - The case is reproducible from repository files on a fresh machine.
-      - Writ catches or exposes something material that the direct-engine baseline leaves implicit.
-      - The case does not depend on one application domain being encoded into Writ core.
 
   - id: ENGINE-CHECKER-THRESHOLD-001
     title: Test whether a portable checker is needed
     status: blocked
     dependencies:
-      - LOCAL-KILLER-CASE-001
+      - DECISION-OBJECT-001
     scope:
-      - Revisit Rust only if several supported result types need the same durable exact-checking layer.
-      - Revisit Lean only if a stable theorem or checker property becomes a repeated dependency.
-      - Keep Python, Julia, R, C++, or other engines in their native ecosystem when that is simpler and safer.
+      - Test Rust when several supported result types share a portable exact-checking need.
+      - Test Lean when a stable theorem or checker property becomes a repeated dependency.
+      - Keep Julia, Python, R, C++, and other mathematical engines in their native ecosystem where that gives the clearest boundary.
     acceptance:
-      - Any language expansion is justified by a measured capability or trust-boundary need, not preference.
+      - Any language expansion is justified by a measured capability or trust-boundary need.
