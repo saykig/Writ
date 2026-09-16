@@ -37,9 +37,10 @@ claims.
 `packages/decision-case/` is the current reference implementation for exact mathematical input
 binding and independent checking.
 
-The next milestone is a small engine-neutral decision object exercised through at least two
-established mathematical systems, followed by one strong local proving case. The proving case will
-compare Writ with the same problem solved directly through the underlying engine.
+The next build is one bounded local proving case using the established engine that fits it best. Writ
+will build only the experimental decision object and adapter required by that case, compare the same
+problem with the donor engine directly, and test whether Writ adds a useful semantic or checking
+boundary. A second mathematical system will then test which successful structure generalizes.
 
 ## Run the repository
 
