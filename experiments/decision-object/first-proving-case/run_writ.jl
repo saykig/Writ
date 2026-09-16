@@ -19,7 +19,25 @@ function load_case(path::AbstractString)
     return JSON3.read(read(path, String), Dict{String, Any})
 end
 
-function build_diagram(spec::Dict{String, Any})
+function declared_names(spec::Dict{String, Any}, kind::String)
+    return [String(node["id"]) for node in spec["nodes"] if String(node["kind"]) == kind]
+end
+
+function validate_table_keys(spec::Dict{String, Any})
+    chance_names = Set(declared_names(spec, "chance"))
+    value_names = Set(declared_names(spec, "value"))
+    probability_names = Set(String(name) for name in keys(spec["probabilities"]))
+    utility_names = Set(String(name) for name in keys(spec["utilities"]))
+
+    probability_names == chance_names || error(
+        "Probability tables do not match declared chance nodes: declared=$(sort!(collect(chance_names))) supplied=$(sort!(collect(probability_names)))",
+    )
+    utility_names == value_names || error(
+        "Utility tables do not match declared value nodes: declared=$(sort!(collect(value_names))) supplied=$(sort!(collect(utility_names)))",
+    )
+end
+
+function build_structure(spec::Dict{String, Any})
     diagram = InfluenceDiagram()
     node_information = Dict{String, Vector{String}}()
     node_states = Dict{String, Vector{String}}()
@@ -47,48 +65,80 @@ function build_diagram(spec::Dict{String, Any})
     end
 
     generate_arcs!(diagram)
+    return diagram, node_information, node_states
+end
 
-    for (raw_name, raw_rows) in spec["probabilities"]
-        name = String(raw_name)
-        information = node_information[name]
-        states = node_states[name]
-        table = ProbabilityMatrix(diagram, name)
+function add_probability_table!(diagram, spec, node_information, node_states, name::String)
+    raw_rows = spec["probabilities"][name]
+    information = node_information[name]
+    states = node_states[name]
+    table = ProbabilityMatrix(diagram, name)
 
-        for raw_row in raw_rows
-            row = Dict{String, Any}(raw_row)
-            given = Dict{String, Any}(row["given"])
-            values = Dict{String, Any}(row["values"])
-            prefix = [String(given[parent]) for parent in information]
-            for state in states
-                table[prefix..., state] = parse_exact_number(values[state])
-            end
+    for raw_row in raw_rows
+        row = Dict{String, Any}(raw_row)
+        given = Dict{String, Any}(row["given"])
+        values = Dict{String, Any}(row["values"])
+        prefix = [String(given[parent]) for parent in information]
+        for state in states
+            table[prefix..., state] = parse_exact_number(values[state])
         end
-
-        add_probabilities!(diagram, name, table)
     end
 
-    for (raw_name, raw_rows) in spec["utilities"]
-        name = String(raw_name)
-        information = node_information[name]
-        table = UtilityMatrix(diagram, name)
+    add_probabilities!(diagram, name, table)
+end
 
-        for raw_row in raw_rows
-            row = Dict{String, Any}(raw_row)
-            given = Dict{String, Any}(row["given"])
-            prefix = [String(given[parent]) for parent in information]
-            table[prefix...] = parse_exact_number(row["value"])
-        end
+function add_utility_table!(diagram, spec, node_information, name::String)
+    raw_rows = spec["utilities"][name]
+    information = node_information[name]
+    table = UtilityMatrix(diagram, name)
 
-        add_utilities!(diagram, name, table)
+    for raw_row in raw_rows
+        row = Dict{String, Any}(raw_row)
+        given = Dict{String, Any}(row["given"])
+        prefix = [String(given[parent]) for parent in information]
+        table[prefix...] = parse_exact_number(row["value"])
+    end
+
+    add_utilities!(diagram, name, table)
+end
+
+function build_diagram(
+    spec::Dict{String, Any};
+    chance_insertion_order::Union{Nothing, Vector{String}} = nothing,
+    value_insertion_order::Union{Nothing, Vector{String}} = nothing,
+)
+    validate_table_keys(spec)
+    diagram, node_information, node_states = build_structure(spec)
+
+    declared_chance = declared_names(spec, "chance")
+    declared_value = declared_names(spec, "value")
+    chance_order = isnothing(chance_insertion_order) ? declared_chance : chance_insertion_order
+    value_order = isnothing(value_insertion_order) ? declared_value : value_insertion_order
+
+    Set(chance_order) == Set(declared_chance) || error("Chance insertion order is not a permutation of declared chance nodes")
+    Set(value_order) == Set(declared_value) || error("Value insertion order is not a permutation of declared value nodes")
+
+    for name in chance_order
+        add_probability_table!(diagram, spec, node_information, node_states, name)
+    end
+
+    for name in value_order
+        add_utility_table!(diagram, spec, node_information, name)
     end
 
     return diagram
 end
 
-case_path = length(ARGS) >= 1 ? ARGS[1] : "case.json"
-result_path = length(ARGS) >= 2 ? ARGS[2] : "writ-result.json"
-spec = load_case(case_path)
-diagram = build_diagram(spec)
-strategy, expected_utility, status = solve_diagram(diagram)
-write_result(result_path, diagram, strategy, expected_utility, status; source = "writ-adapter")
-println("Writ adapter expected utility: $(expected_utility)")
+function run_writ(case_path::AbstractString, result_path::AbstractString)
+    spec = load_case(case_path)
+    diagram = build_diagram(spec)
+    strategy, expected_utility, status = solve_diagram(diagram)
+    write_result(result_path, diagram, strategy, expected_utility, status; source = "writ-adapter")
+    println("Writ adapter expected utility: $(expected_utility)")
+end
+
+if abspath(PROGRAM_FILE) == @__FILE__
+    case_path = length(ARGS) >= 1 ? ARGS[1] : "case.json"
+    result_path = length(ARGS) >= 2 ? ARGS[2] : "writ-result.json"
+    run_writ(case_path, result_path)
+end
