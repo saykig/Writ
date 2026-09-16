@@ -50,6 +50,30 @@ Each adapter records:
 - whether the engine produces a candidate, a proof, or both; and
 - the independent checks Writ can perform.
 
+Bindings at this boundary are semantic. Variables, nodes, states, table axes, information sets, and
+other mathematical objects are bound by explicit identity and type. Container position is only an
+implementation detail.
+
+A returned result is checked against the original decision object as well as the engine output. This
+keeps the declared problem as the reference point when an adapter or backend representation changes.
+
+## Influence-diagram profile
+
+The first proving case has now run through both DecisionProgramming.jl and pyAgrum. The following
+structure transferred with the same meaning across both systems:
+
+- stable node identities;
+- chance, decision, and value node kinds;
+- named states;
+- decision information sets;
+- conditional probability tables bound to named parents and states;
+- value tables bound to named parents and states;
+- policies mapping information states to actions; and
+- expected utility as a checked result.
+
+These fields currently form an influence-diagram profile. A different mathematical family is the
+next test for deciding which parts belong in Writ's shared core.
+
 ## Versioned results
 
 When inputs change, Writ can classify the effect on an existing result:
@@ -58,22 +82,5 @@ When inputs change, Writ can classify the effect on an existing result:
 - the mathematical problem changed and needs recomputation; or
 - the mathematics remains valid while real-world applicability needs a new judgment.
 
-The first decision-object schema only needs the minimum structure required by the proving cases. More
+The shared decision object should contain only the minimum structure earned by proving cases. More
 advanced change tracking can be added when a concrete workflow needs it.
-
-## First proving case
-
-The first build starts with one established engine and one bounded case. Its purpose is to discover
-whether Writ adds a useful semantic or checking boundary before a general schema is promoted.
-
-The initial case uses a limited-memory influence diagram. The Writ object states the information
-available at each decision. The adapter must preserve those information sets exactly, and the check
-must detect a translated model or candidate policy that gains access to information that the original
-decision did not have.
-
-DecisionProgramming.jl with JuMP and HiGHS is the first donor candidate because it already represents
-multi-stage influence diagrams with explicit information sets. A direct DecisionProgramming model
-provides the baseline.
-
-After the first case demonstrates a real advantage, a second mathematical system tests which parts
-of the object generalize beyond that donor and which parts belong in a typed profile.
