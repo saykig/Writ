@@ -35,7 +35,7 @@
       "dead": {}
     },
     "reward_models": {
-      "fullness": {
+      "R": {
         "kind": "state_reward",
         "values": {
           "satisfied": "0",
@@ -49,7 +49,7 @@
   },
   "query": {
     "kind": "expected_accumulated_reward_until_label",
-    "reward_model": "fullness",
+    "reward_model": "R",
     "direction": "max",
     "stop_label": "dead"
   },
