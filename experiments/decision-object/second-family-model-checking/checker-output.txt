@@ -1,0 +1,10 @@
+Canonical exact optimum: 37750 = 37750.000000
+Exact Storm canonical value: 37750
+Double Storm canonical value: 37732.631850373902; exact-minus-double: 17.368149626098
+Min-direction exact optimum: 0; exact Storm: 0
+Double Storm min value: 0.000000000000; exact-minus-double: -0.000000000000
+Stop-state exact optimum: 7750; exact Storm: 7750
+Double Storm stop-state value: 7749.235041669890; exact-minus-double: 0.764958330110
+Expected rejection: min-direction result answers a different optimization request
+Expected rejection: stop-state result answers a different temporal request
+OK: direct and Writ schedulers agree; Storm exact-rational model checking and the independent exact checker agree on all three queries

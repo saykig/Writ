@@ -32,6 +32,20 @@ The same experiment executes pyAgrum 3.0.0 as a second mathematical implementati
 distributed under a dual LGPLv3/MIT license. The package is installed as an external dependency and
 is not vendored into this repository.
 
+## Probabilistic model-checking proving case
+
+`experiments/decision-object/second-family-model-checking/` adapts the transition structure, action
+labels, state labels, and reward values of Stormvogel's published `lion` MDP at release 0.12.3.
+Stormvogel is distributed under GPL-3.0.
+
+The experiment executes Storm through `stormpy==1.14.0`. Stormpy is distributed under GPL-3.0 and
+provides Python bindings to the Storm model-checking engine. Storm and Stormvogel are installed as
+external experiment dependencies; their source trees are not vendored into Writ.
+
+The experiment README and task ledger identify the exact donor versions and how the adapted case is
+used. Review the upstream license terms before redistributing a packaged application that includes
+these dependencies or adapted upstream material.
+
 ## Software
 
 JavaScript and Python dependencies keep their upstream licenses. Exact JavaScript versions are
