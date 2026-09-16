@@ -5,7 +5,7 @@ version = "0.1.0"
 [deps]
 DecisionProgramming = "0e836bf4-a496-11ea-2c13-edcbe498ce6b"
 HiGHS = "87dc4568-4c63-4d18-b0c0-bb2238e4078b"
-JSON3 = "0f8b85d8-7281-11e9-16c6-39b5e8af5d7d"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 
 [compat]
