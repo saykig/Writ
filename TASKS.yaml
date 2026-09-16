@@ -1,4 +1,4 @@
-version: 4
+version: 5
 project: writ
 
 governing_definition: >-
@@ -28,7 +28,7 @@ statuses:
 tasks:
   - id: LOCAL-KILLER-CASE-001
     title: Prove one useful local decision workflow
-    status: ready
+    status: done
     scope:
       - Start with one bounded problem and the established mathematical engine that fits it best.
       - Build only the experimental decision-object fields and adapter required by the case.
@@ -36,49 +36,63 @@ tasks:
       - Compare the Writ workflow with the same substantive model written directly in the donor engine.
       - Include an adversarial translation or candidate that violates a declared semantic boundary and confirm that Writ rejects it.
       - Revise the proving case within this task when the direct-engine baseline already supplies the same useful guarantee.
-    initial_case:
-      donor: DecisionProgramming.jl with JuMP and HiGHS
-      model: limited-memory multi-stage influence diagram
-      question: >-
-        Can Writ preserve and independently check which information is available at each decision,
-        including rejection of a translated model or policy that gains access to unavailable state?
-      starting_reference: DecisionProgramming.jl pig-breeding example
-    acceptance:
-      - The complete workflow runs locally from repository files.
-      - The donor engine remains responsible for optimization.
-      - Writ records and checks the translation boundary rather than reimplementing the solver.
-      - A direct-engine baseline uses the same substantive probabilities, utilities, and decision problem.
-      - Writ catches or exposes one material issue that the baseline leaves implicit.
-      - The result states whether the case earned a durable Writ capability or should be replaced.
+    result:
+      - DecisionProgramming.jl, JuMP, and HiGHS reproduce the published limited-memory policy through a Writ adapter.
+      - The independent checker confirms exact expected utility 7268121/10000.
+      - A wrong value-table binding remains solvable by the donor but is rejected against the original Writ object.
+      - An expanded-information model is rejected as a different decision problem.
     outputs:
       - experiments/decision-object/first-proving-case
 
   - id: SECOND-ENGINE-001
-    title: Test the useful structure with a second mathematical system
-    status: blocked
+    title: Validate the same decision object through an independent engine
+    status: done
     dependencies:
       - LOCAL-KILLER-CASE-001
     scope:
-      - Choose a second established mathematical system that stresses different semantics from the first donor.
-      - Reuse only the fields that proved useful in the first case.
-      - Record which structure transfers and which structure belongs in an engine-specific profile.
+      - Execute the same declared decision problem through an independent mathematical implementation.
+      - Reuse the decision object rather than rewriting the substantive case for the second engine.
+      - Compare returned policy, expected utility, information sets, and adapter-specific semantics.
+    result:
+      - pyAgrum 3.0.0 with Shafer-Shenoy LIMID inference returns the same policy as DecisionProgramming.jl.
+      - The independent exact checker confirms the same expected utility 7268121/10000.
+      - Shared influence-diagram structure and engine-specific details are recorded separately.
+    outputs:
+      - experiments/decision-object/first-proving-case/cross-engine-findings.md
+
+  - id: SECOND-FAMILY-001
+    title: Test Writ with a different mathematical family
+    status: ready
+    dependencies:
+      - SECOND-ENGINE-001
+    scope:
+      - Choose a bounded problem whose natural mathematics differs from influence diagrams and LIMIDs.
+      - Prefer an established local open-source engine and its native language or API.
+      - Reuse only the Writ structure already earned by the first proving case.
+      - Include a direct-engine baseline and one semantic mutation that a result checker or boundary check can expose.
+      - Record which concepts transfer and which belong only to the new typed profile.
+    candidate_families:
+      - robust or stochastic optimization
+      - probabilistic model checking
+      - another established decision formalism with a clear local baseline
     acceptance:
-      - One bounded case runs through the second engine locally.
-      - The comparison identifies shared structure and engine-specific structure with concrete examples.
-      - Translation losses and unsupported states are explicit.
+      - The case runs locally from repository files.
+      - The established engine remains responsible for its mathematics.
+      - Writ preserves the intended problem across the adapter boundary.
+      - The comparison identifies shared cross-family structure with concrete evidence.
 
   - id: DECISION-OBJECT-001
     title: Promote the smallest shared Writ decision object
     status: blocked
     dependencies:
-      - SECOND-ENGINE-001
+      - SECOND-FAMILY-001
     scope:
       - Promote only structure supported by the proving cases into the shared decision object.
       - Keep specialized mathematical semantics in typed engine profiles.
       - Define exact bindings, unsupported states, and result meanings at the adapter boundary.
     acceptance:
       - One concise design note states the shared object and its invariants.
-      - The promoted fields are supported by evidence from more than one mathematical system.
+      - The promoted fields are supported by evidence across different mathematical families.
       - Engine-specific fields remain outside the shared core.
     outputs:
       - docs/current/decision-object.md
