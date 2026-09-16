@@ -2,17 +2,17 @@
 
 This case tests Writ against a mathematical family that differs from the influence-diagram work.
 
-Storm performs the probabilistic model checking through `stormpy`. Writ represents the bounded
-problem, lowers it to the engine, records the exact request, and checks the returned scheduler against
-the original problem.
+Storm performs probabilistic model checking through `stormpy`. Writ represents the bounded problem,
+lowers it to the engine, records the semantic request, and checks the returned scheduler against the
+original problem.
 
 ## Case
 
 The model is adapted from Stormvogel's published `lion` MDP. The lion can `hunt >:D` or `rawr` while
-moving between satisfied, full, hungry, starving, and dead states. The state `full` earns reward 100
-in reward model `R`.
+moving between satisfied, full, hungry, starving, and dead states. State `full` earns reward 100 in
+reward model `R`.
 
-The Writ request is semantic:
+The canonical Writ request is:
 
 ```text
 reward model: R
@@ -20,89 +20,100 @@ direction: max
 stop state: dead
 ```
 
-The direct Stormvogel baseline compiles that request to its native label:
+The direct Stormvogel baseline compiles that request to:
 
 ```text
 R{"R"}max=? [F "dead"]
 ```
 
-The Writ-to-stormpy adapter uses stable engine labels derived from Writ state IDs. Storm property
-syntax stays inside the adapter rather than becoming part of the shared decision object.
+The Writ-to-stormpy adapter instead binds `dead` to the engine label `writ_state_dead`. Storm syntax is
+an adapter output, not the Writ request itself.
 
-## Why this case
+## Result
 
-The first proving family showed that a result can be mathematically correct for a wrongly translated
-model. This case asks whether Writ also keeps the mathematical request fixed.
-
-For probabilistic model checking, the transition model alone is incomplete. The answer also depends
-on the reward model, optimization direction, and stopping state.
+The direct Stormvogel baseline and the Writ adapter returned the same scheduler:
 
 ```text
-MDP + quantitative request -> scheduler + value
+satisfied -> hunt
+full      -> rawr
+hungry    -> hunt
+starving  -> hunt
 ```
 
-## Required bindings
+Both Storm paths reported:
 
-The Writ case must bind:
+```text
+37732.6318503739
+```
 
-- initial state;
-- state identity and source labels;
-- action identity;
-- transition probabilities;
-- reward-model identity and values;
-- optimization direction; and
-- stopping state identity.
+The independent checker evaluates the returned scheduler from the exact rational probabilities in
+`case.json`, enumerates all 16 stationary deterministic policies, and obtains the exact optimum:
 
-Storm-specific row groups, choice indices, query labels, and property syntax remain inside the
-adapter.
+```text
+37750
+```
 
-## Positive test
+The scheduler is exactly optimal for the Writ problem. The Storm number remains recorded separately
+as the result of the floating sparse model used by the donor and adapter.
 
-The direct Stormvogel baseline and the Writ-to-stormpy adapter must produce an equivalent memoryless
-deterministic scheduler for the declared request.
+## Altered requests
 
-A separate checker evaluates the scheduler from the original structured case with exact rational
-arithmetic. The canonical model has four nonterminal decision states and two actions per state, so the
-checker can enumerate all 16 stationary deterministic policies to verify the optimum without
-reimplementing Storm's general model checker.
+Changing only the optimization direction to `min` produced a different optimal scheduler and exact
+value `0`.
 
-Storm uses a floating sparse model in this path. The checker therefore treats the returned scheduler
-and the reported floating value as separate claims: it verifies scheduler optimality exactly and
-records any numeric difference between Storm's value and exact evaluation from the source rationals.
+Changing only the Writ stop state from `dead` to `starving` produced the same maximizing actions on
+the states where a choice is still needed. The exact optimum is `7750`; Storm reported about
+`7749.23504166989`.
 
-## Negative tests
+Both are valid model-checking results. Neither is an answer to the canonical Writ request because the
+semantic query changed.
 
-Two altered requests remain valid model-checking questions but answer something different.
+## Revisions made during execution
 
-1. Change `direction: max` to `direction: min` while keeping the MDP, reward model, and stop state.
-2. Change `stop_state: dead` to `stop_state: starving` while keeping the MDP, reward model, and
-   optimization direction.
+The case changed when execution exposed weak assumptions.
 
-The second mutation motivated an architecture correction during execution. The donor display label
-for that state is `starving :((`, which Storm's property parser does not accept cleanly in this path.
-Writ now binds the query to stable state identity and lets the adapter create an engine-safe query
-label. Display-label syntax no longer determines whether the mathematical request is representable.
+Stormvogel 0.12.0 was initially pinned because it contains the lion example. Its converter is
+incompatible with Stormpy 1.14.0 for this variable-free model. Stormvogel 0.12.3 keeps the same lion
+model and fixes that conversion path, so the baseline moved to 0.12.3 rather than moving Storm
+backwards.
 
-## Falsification
+The first stopping-condition mutation used the donor display label `starving :((` directly as a Writ
+query target. Storm's property parser rejected that literal. The Writ request now names stable state
+ID `starving`, and the adapter creates an engine-safe query label. A mathematical target is therefore
+bound by state identity rather than display syntax.
 
-This case does not earn a Writ capability if the direct Storm workflow already provides the same
-useful binding and independent checking with no additional semantic boundary for Writ to preserve.
+The first canonical run also showed that scheduler correctness and engine-reported numeric value need
+different guarantees. The checker now verifies scheduler optimality exactly while preserving Storm's
+floating result as its own claim.
 
-It also fails if the Writ adapter cannot reproduce the donor model, if result interpretation depends
-on undocumented positional assumptions, or if the checker cannot state exactly which semantic
-request it verified.
+## What this case earned
+
+Across the first and second mathematical families, the useful shared pattern is now:
+
+```text
+model + typed mathematical request
+        -> explicit adapter bindings
+        -> established engine
+        -> typed result
+        -> independent check against the original Writ object
+```
+
+The case supports stable typed identity, a mathematical request separate from the model, explicit
+adapter bindings, numeric-domain metadata, typed results, and an independent-check record as
+candidates for Writ's shared layer.
+
+MDP transitions, reward models, temporal stopping semantics, Storm row groups, property strings, and
+scheduler representation remain in the probabilistic-model-checking profile.
+
+See `cross-family-findings.md` for the comparison with the influence-diagram family.
 
 ## Donors
 
 The execution pins:
 
 - `stormpy==1.14.0` / Storm 1.14.0;
-- `stormvogel==0.12.3` for the direct model source and baseline.
-
-The first draft used Stormvogel 0.12.0. Its converter predates a Stormpy 1.14 state-valuation change
-and fails on this variable-free model. Stormvogel 0.12.3 keeps the same lion example, fixes that
-converter path, and declares compatibility with Stormpy 1.13.2 and newer.
+- `stormvogel==0.12.3` for the direct baseline.
 
 Storm and Stormvogel are GPL-3.0 software. They are experiment dependencies, not copied into Writ.
-The final result will record whether their licensing or installation burden argues against a durable
-adapter.
+The Writ adapter itself only needs `stormpy`; Stormvogel is used to establish the direct donor
+baseline.
