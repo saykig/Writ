@@ -1,0 +1,70 @@
+name: finalize first proving case
+
+on:
+  push:
+    branches:
+      - experiment/first-decision-object-proving-case
+    paths:
+      - '.github/workflows/finalize-first-proving-case.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/first-decision-object-proving-case
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+
+      - run: bun install --frozen-lockfile
+      - run: python -m pip install --no-cache-dir PyYAML jsonschema
+
+      - name: Format changed documentation
+        run: >-
+          bunx prettier --write README.md THIRD_PARTY_NOTICES.md TASKS.yaml
+          docs/current/decision-object.md docs/current/design-principles.md docs/current/roadmap.md
+          experiments/decision-object/first-proving-case/*.md
+
+      - name: Check committed experiment evidence
+        working-directory: experiments/decision-object/first-proving-case
+        run: |
+          python -m py_compile check.py pyagrum_adapter.py
+          python check.py
+
+      - name: Check repository pack
+        run: python internal/tooling/scripts/validate_pack.py
+
+      - name: Commit final tree and manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/finalize-first-proving-case.yml
+          git add README.md THIRD_PARTY_NOTICES.md TASKS.yaml docs/current experiments/decision-object/first-proving-case
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize first decision-object proving case"
+          git push
+
+      - name: Verify final repository
+        run: |
+          python internal/tooling/scripts/validate_pack.py
+          cd experiments/decision-object/first-proving-case && python check.py && cd ../../..
+          bun install --frozen-lockfile
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
