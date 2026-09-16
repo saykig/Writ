@@ -1,0 +1,80 @@
+{
+  "format": "writ.experimental.finite-influence-diagram.v0",
+  "id": "pig-breeding-limited-memory-4-month",
+  "objective": "maximize_expected_utility",
+  "nodes": [
+    {"id": "H1", "kind": "chance", "states": ["ill", "healthy"], "information": []},
+    {"id": "T1", "kind": "chance", "states": ["positive", "negative"], "information": ["H1"]},
+    {"id": "D1", "kind": "decision", "states": ["treat", "pass"], "information": ["T1"]},
+    {"id": "V1", "kind": "value", "information": ["D1"]},
+    {"id": "H2", "kind": "chance", "states": ["ill", "healthy"], "information": ["H1", "D1"]},
+    {"id": "T2", "kind": "chance", "states": ["positive", "negative"], "information": ["H2"]},
+    {"id": "D2", "kind": "decision", "states": ["treat", "pass"], "information": ["T2"]},
+    {"id": "V2", "kind": "value", "information": ["D2"]},
+    {"id": "H3", "kind": "chance", "states": ["ill", "healthy"], "information": ["H2", "D2"]},
+    {"id": "T3", "kind": "chance", "states": ["positive", "negative"], "information": ["H3"]},
+    {"id": "D3", "kind": "decision", "states": ["treat", "pass"], "information": ["T3"]},
+    {"id": "V3", "kind": "value", "information": ["D3"]},
+    {"id": "H4", "kind": "chance", "states": ["ill", "healthy"], "information": ["H3", "D3"]},
+    {"id": "V4", "kind": "value", "information": ["H4"]}
+  ],
+  "probabilities": {
+    "H1": [
+      {"given": {}, "values": {"ill": "1/10", "healthy": "9/10"}}
+    ],
+    "T1": [
+      {"given": {"H1": "ill"}, "values": {"positive": "4/5", "negative": "1/5"}},
+      {"given": {"H1": "healthy"}, "values": {"positive": "1/10", "negative": "9/10"}}
+    ],
+    "H2": [
+      {"given": {"H1": "ill", "D1": "treat"}, "values": {"ill": "1/2", "healthy": "1/2"}},
+      {"given": {"H1": "ill", "D1": "pass"}, "values": {"ill": "9/10", "healthy": "1/10"}},
+      {"given": {"H1": "healthy", "D1": "treat"}, "values": {"ill": "1/10", "healthy": "9/10"}},
+      {"given": {"H1": "healthy", "D1": "pass"}, "values": {"ill": "1/5", "healthy": "4/5"}}
+    ],
+    "T2": [
+      {"given": {"H2": "ill"}, "values": {"positive": "4/5", "negative": "1/5"}},
+      {"given": {"H2": "healthy"}, "values": {"positive": "1/10", "negative": "9/10"}}
+    ],
+    "H3": [
+      {"given": {"H2": "ill", "D2": "treat"}, "values": {"ill": "1/2", "healthy": "1/2"}},
+      {"given": {"H2": "ill", "D2": "pass"}, "values": {"ill": "9/10", "healthy": "1/10"}},
+      {"given": {"H2": "healthy", "D2": "treat"}, "values": {"ill": "1/10", "healthy": "9/10"}},
+      {"given": {"H2": "healthy", "D2": "pass"}, "values": {"ill": "1/5", "healthy": "4/5"}}
+    ],
+    "T3": [
+      {"given": {"H3": "ill"}, "values": {"positive": "4/5", "negative": "1/5"}},
+      {"given": {"H3": "healthy"}, "values": {"positive": "1/10", "negative": "9/10"}}
+    ],
+    "H4": [
+      {"given": {"H3": "ill", "D3": "treat"}, "values": {"ill": "1/2", "healthy": "1/2"}},
+      {"given": {"H3": "ill", "D3": "pass"}, "values": {"ill": "9/10", "healthy": "1/10"}},
+      {"given": {"H3": "healthy", "D3": "treat"}, "values": {"ill": "1/10", "healthy": "9/10"}},
+      {"given": {"H3": "healthy", "D3": "pass"}, "values": {"ill": "1/5", "healthy": "4/5"}}
+    ]
+  },
+  "utilities": {
+    "V1": [
+      {"given": {"D1": "treat"}, "value": "-100"},
+      {"given": {"D1": "pass"}, "value": "0"}
+    ],
+    "V2": [
+      {"given": {"D2": "treat"}, "value": "-100"},
+      {"given": {"D2": "pass"}, "value": "0"}
+    ],
+    "V3": [
+      {"given": {"D3": "treat"}, "value": "-100"},
+      {"given": {"D3": "pass"}, "value": "0"}
+    ],
+    "V4": [
+      {"given": {"H4": "ill"}, "value": "300"},
+      {"given": {"H4": "healthy"}, "value": "1000"}
+    ]
+  },
+  "donor": {
+    "engine": "DecisionProgramming.jl",
+    "version": "2.0.1",
+    "commit": "105a25ee898cc806db65d5b475e4f1a613265653",
+    "solver": "HiGHS"
+  }
+}
