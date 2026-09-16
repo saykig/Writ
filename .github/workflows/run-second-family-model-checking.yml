@@ -42,9 +42,9 @@ jobs:
         working-directory: experiments/decision-object/second-family-model-checking
         run: python run_writ.py --output min-result.json --source min-direction-mutation --direction min
 
-      - name: Run stopping-condition mutation
+      - name: Run stopping-state mutation
         working-directory: experiments/decision-object/second-family-model-checking
-        run: python run_writ.py --output stop-result.json --source stop-label-mutation --stop-label 'starving :(('
+        run: python run_writ.py --output stop-result.json --source stop-state-mutation --stop-state starving
 
       - name: Run independent exact checker
         shell: bash
