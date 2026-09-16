@@ -1,4 +1,4 @@
-version: 9
+version: 10
 project: writ
 
 governing_definition: >-
@@ -51,7 +51,7 @@ tasks:
 
   - id: SECOND-FAMILY-001
     title: Test Writ with probabilistic model checking
-    status: done
+    status: in_progress
     dependencies:
       - SECOND-ENGINE-001
     family: probabilistic model checking over a finite Markov decision process
@@ -67,19 +67,18 @@ tasks:
         reward_model: R
         direction: max
         stop_state: dead
-    result:
-      - The direct Stormvogel baseline and Writ stormpy adapter return the same maximizing scheduler: hunt when satisfied, hunt when hungry, hunt when starving, and rawr when full.
-      - Both Storm paths report approximately 37732.6318503739 for the canonical request.
-      - Exact rational evaluation of that scheduler against case.json gives 37750 and exhaustive enumeration confirms it is optimal among all 16 stationary deterministic policies.
-      - The min-direction mutation is a valid different request with exact optimum 0 and a different scheduler.
-      - The stop-state mutation from dead to starving is a valid different request with exact optimum 7750; Storm reports approximately 7749.23504166989.
-      - A donor display label containing punctuation failed as raw Storm property syntax, which led to the stronger representation: Writ binds the stopping condition to stable state identity and the adapter owns engine query labels.
-      - Storm's floating numeric result and the independently checked exact scheduler value are recorded as separate claims with different guarantees.
+    audit:
+      - The normal Stormvogel and Writ sparse-double paths return the same maximizing scheduler.
+      - Their canonical numeric result is approximately 37732.6318503739, while exact rational policy evaluation gives 37750.
+      - The measurable gap triggered an exact Storm audit rather than being treated as floating-point noise.
+      - Storm's exact-rational model checker returns 37750 for the canonical request, 0 for the min-direction mutation, and 7750 for the stop-at-starving mutation, matching the independent exact checker.
+      - The strengthened gate now requires exact Storm and the independent checker to agree for all three requests while retaining the sparse-double values as approximate engine results.
     earned_shared_candidates:
       - stable typed mathematical identity
       - model inputs separate from a typed mathematical request
       - explicit adapter bindings from Writ identity to engine identity
-      - engine, version, and numeric-domain metadata
+      - engine and version metadata
+      - numeric-domain and result-guarantee metadata
       - typed engine result
       - independent-check record with an explicit guarantee
     family_specific:
@@ -91,14 +90,14 @@ tasks:
     revision_history:
       - Stormvogel 0.12.0 was replaced by 0.12.3 because its older converter fails with Stormpy 1.14.0 on this variable-free model; the lion model itself is unchanged.
       - The query target changed from donor display label to stable Writ state identity after Storm property parsing exposed the weakness of treating labels as mathematical identity.
-      - The checker changed from exact-value equality with Storm to exact scheduler verification plus separate recording of Storm's floating value after execution showed a measurable numeric difference.
+      - The float-versus-exact gap prompted a second execution path using Storm's exact-rational model checker from the same case.json.
     outputs:
       - experiments/decision-object/second-family-model-checking
       - experiments/decision-object/second-family-model-checking/cross-family-findings.md
 
   - id: DECISION-OBJECT-001
     title: Promote the smallest shared Writ decision object
-    status: ready
+    status: blocked
     dependencies:
       - SECOND-FAMILY-001
     scope:

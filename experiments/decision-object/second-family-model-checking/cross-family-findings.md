@@ -1,68 +1,56 @@
 # Cross-family findings
 
-This note compares the first influence-diagram proving family with the probabilistic model-checking
-case. It records what has now survived both families and what remains specific to one of them.
+The first proving family used influence diagrams. The second uses probabilistic model checking over a
+finite Markov decision process. This note records what survived both.
 
-## Structure that survived both families
+## Stable mathematical identity
 
-### Stable mathematical identity
+Results depend on stable mathematical objects, not display labels or container positions.
 
-Writ needs stable identities for the mathematical objects that a result depends on.
+The influence-diagram case needed explicit node, state, table, and information-set identity. The
+model-checking case needs explicit state, action, reward-model, and query-target identity.
 
-In the influence-diagram case this included node, state, table, and information-set identity. In the
-model-checking case it includes state, action, reward-model, and query-target identity.
+Adapters may create engine-specific names, row indices, and syntax, but their bindings back to Writ
+identity must remain explicit.
 
-Display labels and container positions are adapter details. They can be preserved for provenance and
-human readability, but they are weak primary identifiers for mathematical bindings.
+## The request is part of the problem
 
-### The mathematical request is part of the problem
+A mathematical model does not determine the question being asked of it.
 
-A model alone does not determine the result being claimed.
+The same lion MDP has different correct answers when the optimization direction changes or when the
+stopping state changes. Writ therefore needs a typed mathematical request beside the model. Engine
+property syntax is compiled from that request.
 
-The influence-diagram case bound an optimization problem and information structure. The model-checking
-case makes the request even more visible: the same MDP gives different correct answers when `max`
-becomes `min` or when the stopping state changes.
+## Translation is a semantic boundary
 
-Writ therefore needs a typed request beside the model. Engine syntax is a compilation target for that
-request.
+Both families produced valid engine runs for the wrong mathematical object during adversarial tests.
 
-### Engine translation is a semantic boundary
+The first case reordered compatible value tables. The solver still returned an optimum. The second
+case showed that query targets and engine labels also require explicit binding. A successful engine
+run establishes a result for the engine input; Writ checks that the input still means the declared
+problem.
 
-A successful engine run establishes a result for the object the engine actually received. Writ still
-needs to know whether that object represents the declared problem.
+## Numeric domain belongs to the result boundary
 
-The first family exposed a wrong value-table ordering that remained solvable. The second family
-exposed a weaker but similar dependency on engine labels and choice rows. Both cases support explicit
-bindings from Writ identity to engine identity.
+The model-checking case made this concrete.
 
-### Results need claim type and numeric meaning
+The ordinary double-precision Storm paths return the same optimal scheduler and about
+`37732.6318503739` for the canonical request. Writ's independent rational checker evaluates that
+scheduler at exactly `37750`.
 
-The first family produced a finite policy whose expected utility could be recomputed exactly. The
-second family produced a scheduler and a floating Storm value for an unbounded expected-reward query.
+The same Writ model and request were then compiled to Storm's exact-rational model checker. Storm also
+returned exactly `37750`. The two query mutations agree in the same way: exact Storm and the
+independent checker both return `0` for minimization and `7750` for stopping at `starving`.
 
-For the canonical lion case, Storm and the Writ adapter both return the same optimal scheduler and
-approximately `37732.6318503739`. Exact rational evaluation of that scheduler from `case.json` is
-`37750`.
+A Writ result therefore needs enough metadata to distinguish the mathematical claim being made,
+including the numeric domain and the guarantee attached to the value.
 
-The Writ result therefore needs to distinguish at least:
+## Independent checks start from the Writ object
 
-- the engine-reported numeric result;
-- the returned policy or scheduler;
-- the independent check performed; and
-- the guarantee actually established by that check.
-
-For this case the independent guarantee is exact scheduler optimality for the bounded finite policy
-space. It is not an assertion that Storm's floating numeric value is itself exact.
-
-### Independent checks should start from the Writ object
-
-Both families were useful because the checker went back to the original structured problem rather
-than merely checking internal consistency of the engine output.
-
-That is the reusable pattern:
+Both proving families were useful because checking returned to the original structured problem:
 
 ```text
-Writ problem + typed request
+Writ model + typed request
         |              |
         v              v
       adapter ------> engine
@@ -71,65 +59,34 @@ Writ problem + typed request
                |
                v
        independent check
-        against Writ problem
+        against Writ input
 ```
 
-## Influence-diagram profile
+The checker does not merely ask whether the engine output is internally well formed. It checks what
+that output means for the declared Writ problem.
 
-The following concepts are supported by the first family but have not become shared Writ primitives:
+## Family-specific structure
 
-- chance, decision, and value nodes;
-- conditional probability and utility tables;
-- decision information sets;
-- limited-memory versus expanded-information semantics;
-- influence-diagram policy representation.
+The influence-diagram profile keeps chance, decision, and value nodes; probability and utility
+tables; information sets; and influence-diagram policies.
 
-They belong in an influence-diagram profile unless another family demonstrates a broader need for the
-same exact concept.
+The probabilistic-model-checking profile keeps MDP transitions, reward models, temporal stopping
+semantics, optimization direction, schedulers, Storm row groups, choice indices, generated labels,
+and property syntax.
 
-## Probabilistic-model-checking profile
+These remain typed profile concepts until another concrete case gives a reason to promote them.
 
-The following concepts are specific to the second family so far:
+## Shared candidates earned so far
 
-- MDP states and action-labelled choices;
-- transition kernels;
-- reward models;
-- temporal stopping conditions;
-- optimization direction over a model-checking property;
-- memoryless deterministic schedulers;
-- Storm row groups, choice indices, property strings, and synthetic query labels.
+The two families now support examining these concepts for Writ's shared layer:
 
-The last four Storm construction details remain adapter internals rather than Writ core fields.
-
-## What changed during the case
-
-The experiment was revised when execution exposed two bad assumptions.
-
-First, Stormvogel 0.12.0's converter did not work with Stormpy 1.14.0 for this variable-free model.
-Stormvogel 0.12.3 keeps the same lion example and fixes that conversion path, so the donor pin moved to
-0.12.3 rather than moving Storm backwards.
-
-Second, the first stopping-condition mutation used the donor display label `starving :((` as the Writ
-query target. Storm's property parser rejected that literal. The Writ request now names the stable
-state ID `starving`; the adapter binds that state to an engine-safe label.
-
-That revision is important. It is evidence that Writ should preserve mathematical identity and let
-adapters own engine syntax.
-
-## Gate result
-
-`SECOND-FAMILY-001` supports promotion work on a small shared decision object, but it does not by
-itself define that object.
-
-The evidence now supports examining these candidates for the shared layer:
-
-- stable typed object identity;
-- explicit model inputs;
-- a typed mathematical request separate from the model;
+- stable typed mathematical identity;
+- model inputs separate from a typed mathematical request;
 - explicit adapter bindings;
-- engine/version/numeric-domain metadata;
-- a typed result;
-- an independent-check record and its guarantee.
+- engine and version metadata;
+- numeric-domain and result-guarantee metadata;
+- a typed engine result; and
+- an independent-check record.
 
-The next task should decide the smallest version of those concepts that is justified by both proving
-families. It should not copy either family's specialized vocabulary into the shared core.
+The next architecture step should promote only the smallest form of these concepts that both families
+actually require.

@@ -251,8 +251,26 @@ def check_result_for_own_query(
     reported = float(result["initial_value"])
     if not math.isfinite(reported):
         raise AssertionError(f"{label} reported a non-finite numeric value")
-    gap = reported - float(value)
-    return value, gap
+    return value, reported - float(value)
+
+
+def check_exact_storm_result(
+    case: dict[str, Any], result: dict[str, Any], label: str
+) -> tuple[Fraction, str]:
+    check_query_binding(result)
+    if result["engine"].get("model_numeric_domain") != "exact_rational":
+        raise AssertionError(f"{label} is not marked as exact rational")
+
+    query = result["query"]
+    optimum, _ = exact_optimum(case, query)
+    reported = exact(result["initial_value_exact"])
+    if reported != optimum:
+        raise AssertionError(f"{label} reports {reported}, exact checker obtains {optimum}")
+
+    model_hash = result.get("prism_model_sha256")
+    if not model_hash:
+        raise AssertionError(f"{label} lacks a generated-model digest")
+    return reported, str(model_hash)
 
 
 def main() -> None:
@@ -261,56 +279,88 @@ def main() -> None:
     writ = load_json("writ-result.json")
     min_result = load_json("min-result.json")
     stop_result = load_json("stop-result.json")
+    exact_storm = load_json("exact-storm-result.json")
+    exact_storm_min = load_json("exact-storm-min-result.json")
+    exact_storm_stop = load_json("exact-storm-stop-result.json")
 
     compare_direct_snapshot(case, direct)
 
     canonical_query = case["query"]
     if direct["query"] != canonical_query or writ["query"] != canonical_query:
         raise AssertionError("accepted result changed the canonical Writ query")
+    if exact_storm["query"] != canonical_query:
+        raise AssertionError("exact Storm path changed the canonical Writ query")
 
     direct_value, direct_gap = check_result_for_own_query(
         case, direct, "direct Stormvogel baseline"
     )
     writ_value, writ_gap = check_result_for_own_query(case, writ, "Writ Storm adapter")
-    if direct_value != writ_value:
-        raise AssertionError(f"direct and Writ exact values differ: {direct_value} vs {writ_value}")
+    storm_exact_value, canonical_hash = check_exact_storm_result(
+        case, exact_storm, "exact Storm canonical path"
+    )
+
+    if direct_value != writ_value or direct_value != storm_exact_value:
+        raise AssertionError(
+            "canonical exact values disagree across direct scheduler evaluation, "
+            "Writ scheduler evaluation, and exact Storm"
+        )
     if direct["policy"] != writ["policy"]:
         raise AssertionError("direct and Writ schedulers differ")
     if not math.isclose(
         float(direct["initial_value"]), float(writ["initial_value"]), rel_tol=0, abs_tol=1e-9
     ):
-        raise AssertionError("direct and Writ Storm values differ")
+        raise AssertionError("direct and Writ double-precision Storm values differ")
 
     min_value, min_gap = check_result_for_own_query(case, min_result, "min-direction mutation")
-    if min_result["query"] == canonical_query:
-        raise AssertionError("min-direction mutation did not change the query")
-    if min_result["query"]["direction"] != "min":
-        raise AssertionError("min-direction mutation lacks direction=min")
+    if min_result["query"] == canonical_query or min_result["query"]["direction"] != "min":
+        raise AssertionError("min-direction mutation did not define the intended different request")
+    if exact_storm_min["query"] != min_result["query"]:
+        raise AssertionError("exact Storm min request differs from the Writ min mutation")
+    storm_exact_min, min_hash = check_exact_storm_result(
+        case, exact_storm_min, "exact Storm min path"
+    )
+    if storm_exact_min != min_value:
+        raise AssertionError("exact Storm and independent checker disagree on min mutation")
 
     stop_value, stop_gap = check_result_for_own_query(case, stop_result, "stop-state mutation")
-    if stop_result["query"] == canonical_query:
-        raise AssertionError("stop-state mutation did not change the query")
-    if stop_result["query"]["stop_state"] == canonical_query["stop_state"]:
-        raise AssertionError("stop-state mutation did not change the stopping condition")
+    if (
+        stop_result["query"] == canonical_query
+        or stop_result["query"]["stop_state"] == canonical_query["stop_state"]
+    ):
+        raise AssertionError("stop-state mutation did not define the intended different request")
+    if exact_storm_stop["query"] != stop_result["query"]:
+        raise AssertionError("exact Storm stop request differs from the Writ stop mutation")
+    storm_exact_stop, stop_hash = check_exact_storm_result(
+        case, exact_storm_stop, "exact Storm stop path"
+    )
+    if storm_exact_stop != stop_value:
+        raise AssertionError("exact Storm and independent checker disagree on stop mutation")
+
+    if len({canonical_hash, min_hash, stop_hash}) != 1:
+        raise AssertionError("exact Storm mutations changed the generated MDP instead of only the query")
 
     print(f"Canonical exact optimum: {direct_value} = {float(direct_value):.6f}")
+    print(f"Exact Storm canonical value: {storm_exact_value}")
     print(
-        f"Storm canonical value: {float(direct['initial_value']):.12f}; "
-        f"exact-minus-Storm: {-direct_gap:.12f}"
+        f"Double Storm canonical value: {float(direct['initial_value']):.12f}; "
+        f"exact-minus-double: {-direct_gap:.12f}"
     )
-    print(f"Min-direction exact optimum: {min_value} = {float(min_value):.6f}")
+    print(f"Min-direction exact optimum: {min_value}; exact Storm: {storm_exact_min}")
     print(
-        f"Storm min value: {float(min_result['initial_value']):.12f}; "
-        f"exact-minus-Storm: {-min_gap:.12f}"
+        f"Double Storm min value: {float(min_result['initial_value']):.12f}; "
+        f"exact-minus-double: {-min_gap:.12f}"
     )
-    print(f"Stop-state exact optimum: {stop_value} = {float(stop_value):.6f}")
+    print(f"Stop-state exact optimum: {stop_value}; exact Storm: {storm_exact_stop}")
     print(
-        f"Storm stop-state value: {float(stop_result['initial_value']):.12f}; "
-        f"exact-minus-Storm: {-stop_gap:.12f}"
+        f"Double Storm stop-state value: {float(stop_result['initial_value']):.12f}; "
+        f"exact-minus-double: {-stop_gap:.12f}"
     )
     print("Expected rejection: min-direction result answers a different optimization request")
     print("Expected rejection: stop-state result answers a different temporal request")
-    print("OK: Storm baseline and Writ adapter agree on policy; exact checker verifies optimality against model + semantic query")
+    print(
+        "OK: direct and Writ schedulers agree; Storm exact-rational model checking and "
+        "the independent exact checker agree on all three queries"
+    )
 
 
 if __name__ == "__main__":
