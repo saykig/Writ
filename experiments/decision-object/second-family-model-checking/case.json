@@ -54,8 +54,8 @@
     "stop_label": "dead"
   },
   "donor": {
-    "model_source": "stormchecker/stormvogel:stormvogel/examples/lion.py",
-    "stormvogel_version": "0.12.0",
+    "model_source": "stormchecker/stormvogel@v0.12.3:stormvogel/examples/lion.py",
+    "stormvogel_version": "0.12.3",
     "stormpy_version": "1.14.0",
     "storm_version": "1.14.0"
   }
