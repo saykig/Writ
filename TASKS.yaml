@@ -1,4 +1,4 @@
-version: 5
+version: 6
 project: writ
 
 governing_definition: >-
@@ -61,25 +61,49 @@ tasks:
       - experiments/decision-object/first-proving-case/cross-engine-findings.md
 
   - id: SECOND-FAMILY-001
-    title: Test Writ with a different mathematical family
-    status: ready
+    title: Test Writ with probabilistic model checking
+    status: in_progress
     dependencies:
       - SECOND-ENGINE-001
-    scope:
-      - Choose a bounded problem whose natural mathematics differs from influence diagrams and LIMIDs.
-      - Prefer an established local open-source engine and its native language or API.
-      - Reuse only the Writ structure already earned by the first proving case.
-      - Include a direct-engine baseline and one semantic mutation that a result checker or boundary check can expose.
-      - Record which concepts transfer and which belong only to the new typed profile.
-    candidate_families:
-      - robust or stochastic optimization
-      - probabilistic model checking
-      - another established decision formalism with a clear local baseline
+    rationale:
+      - Robust optimization would reuse the JuMP/solver path already exercised by the first family and would not stress a sufficiently different semantic boundary.
+      - A POMDP case would overlap with the information-availability lesson already established by the influence-diagram case.
+      - Probabilistic model checking adds a separate quantitative property whose optimization direction, reward model, and temporal stopping condition must remain bound to the model.
+    family: probabilistic model checking over a finite Markov decision process
+    donor_stack:
+      - Storm 1.14.0 through stormpy 1.14.0
+      - Stormvogel 0.12.0 as the direct-model source and baseline
+      - Storm's native C++ model-checking core remains responsible for quantitative analysis
+    case:
+      source_model: Stormvogel lion MDP
+      source_reference: stormchecker/stormvogel stormvogel/examples/lion.py
+      question: maximize expected accumulated reward until the state labelled dead is reached
+      property: 'Rmax=? [F "dead"]'
+      decision_object_must_bind:
+        - initial state
+        - state and action identities
+        - transition probabilities
+        - state labels
+        - reward-model identity and values
+        - optimization direction
+        - temporal stopping label
+      direct_baseline: build the published lion MDP through Stormvogel and model-check the declared property
+      writ_path: load the same substantive model from a structured Writ case and lower it to stormpy through a thin adapter
+      independent_check: evaluate the returned memoryless deterministic scheduler with exact rational arithmetic and enumerate the bounded policy space to verify the optimum
+    negative_cases:
+      - Change max to min while keeping the MDP and reward model fixed. Storm may solve the altered property, but the result is for a different Writ request.
+      - Change the stopping label while keeping the MDP and optimization direction fixed. Storm may solve the altered property, but its result must remain distinct from the original request.
+    revision_rule:
+      - If the direct Storm workflow already exposes and binds the same semantics clearly enough that Writ adds no concrete checking or portability value, revise or replace the case before promotion.
+      - If scheduler extraction or exact checking depends on hidden Storm-specific ordering, treat that as adapter evidence rather than normalizing it away.
     acceptance:
-      - The case runs locally from repository files.
-      - The established engine remains responsible for its mathematics.
-      - Writ preserves the intended problem across the adapter boundary.
-      - The comparison identifies shared cross-family structure with concrete evidence.
+      - The complete case runs locally from repository files with pinned donor versions.
+      - The direct donor baseline and Writ adapter agree on the declared result.
+      - An independent checker verifies the accepted scheduler against the original structured case.
+      - Both altered properties remain valid engine inputs but are rejected as results for the original Writ request.
+      - The result identifies which concepts transfer from the first family and which belong only to the model-checking profile.
+    outputs:
+      - experiments/decision-object/second-family-model-checking
 
   - id: DECISION-OBJECT-001
     title: Promote the smallest shared Writ decision object
