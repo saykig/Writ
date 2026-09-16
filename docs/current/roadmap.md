@@ -5,47 +5,44 @@
 Make difficult decision problems explicit enough to inspect, compute with established mathematics,
 and check across different mathematical families.
 
-## 1. Define the smallest useful decision object
+## 1. Prove one bounded decision workflow
 
-Start with the structure shared by real decision problems: variables, dependencies or information
-structure, uncertainty, actions, constraints, objectives, engine requests, and results.
+Start with one problem and the established mathematical engine that fits it best. Build only the
+smallest Writ object and adapter needed to run that problem locally.
 
-Compare the proposed object with at least two established mathematical systems before promoting
-fields into the shared core.
+The first proving case should test a semantic boundary that matters. The initial candidate is a
+limited-memory influence diagram where later decisions have a deliberately restricted information
+set. Writ should preserve that information boundary across the adapter and reject a translated model
+or returned policy that uses information unavailable at the decision point.
 
-**Exit gate:** the same core fields remain useful across more than one mathematical family, while
-engine-specific meaning stays in typed profiles.
+Use the same substantive model directly through the donor engine as the baseline. If the direct
+engine already provides the same useful guarantee, revise the case inside this gate rather than
+promoting a weak demonstration.
 
-## 2. Exercise established mathematical engines
+**Exit gate:** Writ makes one material operation easier to inspect, verify, reuse, or compose than the
+direct-engine workflow.
 
-Run small local donor trials. The first serious candidates are:
+## 2. Test the useful structure with a second mathematical system
 
-- DecisionProgramming.jl / JuMP for influence-diagram-style optimization;
-- pyAgrum for Bayesian networks and influence diagrams; and
-- POMDP tooling when a sequential, partially observed problem requires it.
+After the first case earns its place, choose a second established system that stresses different
+parts of the representation. Keep each engine in its native ecosystem and add only a thin adapter.
 
-Python, Julia, R, Rust, Lean, C++, and other ecosystems can enter where their mathematics fits the
-problem best.
+Initial donor candidates include DecisionProgramming.jl / JuMP, pyAgrum, POMDP tooling, and other
+mature Python, Julia, R, Rust, Lean, or C++ systems whose mathematics fits a concrete problem.
 
-**Exit gate:** each retained adapter has one executed example, exact version and license, a clear
-input/output meaning, documented translation loss, and a useful checking story.
+**Exit gate:** we can identify which structure transfers across the two systems and which structure
+belongs only to an engine-specific profile.
 
-## 3. Build one local killer case
+## 3. Promote the smallest shared decision object
 
-Choose a case because it puts the architecture under pressure.
+Promote fields into Writ core only after the proving work shows that they carry useful meaning across
+more than one mathematical system.
 
-The case should:
+Keep engine-specific probability models, utility structures, solver options, proof objects, and other
+specialized semantics in typed profiles.
 
-- run locally from structured inputs;
-- contain interacting variables and genuine uncertainty;
-- include competing actions plus constraints or an objective;
-- make information available to the decision-maker explicit when timing matters;
-- use an established mathematical engine;
-- produce an inspectable Writ object and checked result; and
-- use a direct-engine baseline with the same substantive inputs.
-
-**Exit gate:** Writ makes an important operation easier to inspect, reuse, verify, or compose than the
-direct engine workflow.
+**Exit gate:** the shared object contains only structure supported by the proving cases, with exact
+translation boundaries and clear unsupported states.
 
 ## 4. Strengthen the trust boundary when the cases earn it
 
@@ -54,11 +51,13 @@ mathematics in its native ecosystem.
 
 A small Rust checker becomes useful when several result types share the same portable exact-checking
 need. Lean becomes useful when stable theorem or checker properties become repeated dependencies.
+Julia, Python, R, C++, and other languages can own mathematical work when their existing ecosystems
+already provide the right machinery.
 
 ## 5. Apply the substrate to harder domains
 
-After the domain-neutral object and local case are strong, test domains where decisions are harder to
-repeat and harder to formalize: scientific operations, infrastructure, AI governance, and later
+After the shared object and local proving cases are strong, test domains where decisions are harder
+to repeat and harder to formalize: scientific operations, infrastructure, AI governance, and later
 security and global affairs.
 
 Domain-specific concepts enter through typed profiles and supplied models. The shared core remains
