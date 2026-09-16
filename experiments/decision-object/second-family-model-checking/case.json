@@ -48,10 +48,10 @@
     }
   },
   "query": {
-    "kind": "expected_accumulated_reward_until_label",
+    "kind": "expected_accumulated_reward_until_state",
     "reward_model": "R",
     "direction": "max",
-    "stop_label": "dead"
+    "stop_state": "dead"
   },
   "donor": {
     "model_source": "stormchecker/stormvogel@v0.12.3:stormvogel/examples/lion.py",
