@@ -1,0 +1,73 @@
+name: finalize strengthened second-family gate
+
+on:
+  push:
+    branches:
+      - experiment/second-family-model-checking
+    paths:
+      - '.github/workflows/finalize-second-family-gate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/second-family-model-checking
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+
+      - name: Install repository dependencies
+        run: |
+          bun install --frozen-lockfile
+          python -m pip install --no-cache-dir PyYAML jsonschema
+
+      - name: Format proving-case artifacts
+        run: |
+          bunx prettier --write TASKS.yaml \
+            experiments/decision-object/second-family-model-checking/README.md \
+            experiments/decision-object/second-family-model-checking/cross-family-findings.md \
+            experiments/decision-object/second-family-model-checking/*.json
+
+      - name: Verify experiment code and committed evidence
+        working-directory: experiments/decision-object/second-family-model-checking
+        run: |
+          python -m py_compile check.py direct_baseline.py run_writ.py exact_storm.py
+          python check.py
+
+      - name: Validate repository pack
+        run: python internal/tooling/scripts/validate_pack.py
+
+      - name: Commit final tree and integrity manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/finalize-second-family-gate.yml
+          git add TASKS.yaml experiments/decision-object/second-family-model-checking
+          git ls-files | grep -v '^MANIFEST.sha256$' | LC_ALL=C sort | while IFS= read -r file; do sha256sum "$file"; done > MANIFEST.sha256
+          git add MANIFEST.sha256
+          git commit -m "Finalize strengthened second-family gate"
+          git push
+
+      - name: Verify final repository
+        run: |
+          python internal/tooling/scripts/validate_pack.py
+          cd experiments/decision-object/second-family-model-checking && python check.py && cd ../../..
+          bun install --frozen-lockfile
+          bun run format
+          bun run lint
+          bun run typecheck
+          bun run test
+          bun run data:check
+          bun run verify:writ
+          bun run build
