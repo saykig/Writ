@@ -1,0 +1,88 @@
+{
+  "adapter_boundary": {
+    "numeric_translation": "exact rational strings converted to Storm double precision; exact checking uses source rationals",
+    "query_state_labels": {
+      "dead": "writ_state_dead",
+      "full": "writ_state_full",
+      "hungry": "writ_state_hungry",
+      "satisfied": "writ_state_satisfied",
+      "starving": "writ_state_starving"
+    },
+    "row_bindings": {
+      "0": {
+        "action_id": "hunt",
+        "action_label": "hunt >:D",
+        "state_id": "satisfied"
+      },
+      "1": {
+        "action_id": "rawr",
+        "action_label": "rawr",
+        "state_id": "satisfied"
+      },
+      "2": {
+        "action_id": "hunt",
+        "action_label": "hunt >:D",
+        "state_id": "full"
+      },
+      "3": {
+        "action_id": "rawr",
+        "action_label": "rawr",
+        "state_id": "full"
+      },
+      "4": {
+        "action_id": "hunt",
+        "action_label": "hunt >:D",
+        "state_id": "hungry"
+      },
+      "5": {
+        "action_id": "rawr",
+        "action_label": "rawr",
+        "state_id": "hungry"
+      },
+      "6": {
+        "action_id": "hunt",
+        "action_label": "hunt >:D",
+        "state_id": "starving"
+      },
+      "7": {
+        "action_id": "rawr",
+        "action_label": "rawr",
+        "state_id": "starving"
+      },
+      "8": {
+        "action_id": null,
+        "engine_generated": "absorbing_self_loop",
+        "state_id": "dead"
+      }
+    },
+    "state_order": [
+      "satisfied",
+      "full",
+      "hungry",
+      "starving",
+      "dead"
+    ]
+  },
+  "compiled_property": "R{\"R\"}max=? [F \"writ_state_starving\"]",
+  "engine": {
+    "backend": "Storm",
+    "stormpy": "1.14.0"
+  },
+  "initial_value": 7749.23504166989,
+  "policy": {
+    "full": "rawr",
+    "hungry": "hunt",
+    "satisfied": "hunt"
+  },
+  "query": {
+    "direction": "max",
+    "kind": "expected_accumulated_reward_until_state",
+    "reward_model": "R",
+    "stop_state": "starving"
+  },
+  "query_binding": {
+    "engine_target_label": "writ_state_starving",
+    "stop_state": "starving"
+  },
+  "source": "stop-state-mutation"
+}

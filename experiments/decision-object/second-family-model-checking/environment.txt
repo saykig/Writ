@@ -1,0 +1,3 @@
+Python 3.12.14
+stormpy 1.14.0
+stormvogel 0.12.3
