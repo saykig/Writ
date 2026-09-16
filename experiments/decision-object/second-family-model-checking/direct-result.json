@@ -9,33 +9,23 @@
   "model_snapshot": {
     "states": {
       "dead": {
-        "labels": [
-          "dead"
-        ],
+        "labels": ["dead"],
         "reward": 0.0
       },
       "full": {
-        "labels": [
-          "full"
-        ],
+        "labels": ["full"],
         "reward": 100.0
       },
       "hungry": {
-        "labels": [
-          "hungry :("
-        ],
+        "labels": ["hungry :("],
         "reward": 0.0
       },
       "satisfied": {
-        "labels": [
-          "init"
-        ],
+        "labels": ["init"],
         "reward": 0.0
       },
       "starving": {
-        "labels": [
-          "starving :(("
-        ],
+        "labels": ["starving :(("],
         "reward": 0.0
       }
     },
