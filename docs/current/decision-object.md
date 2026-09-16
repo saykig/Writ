@@ -20,8 +20,8 @@ problem
 └─ result + check
 ```
 
-This shape guides the current proving work. The schema will become more precise as multiple
-mathematical families exercise it.
+This shape guides the current proving work. The schema becomes more precise as useful cases exercise
+it.
 
 ## Typed relationships
 
@@ -61,10 +61,19 @@ When inputs change, Writ can classify the effect on an existing result:
 The first decision-object schema only needs the minimum structure required by the proving cases. More
 advanced change tracking can be added when a concrete workflow needs it.
 
-## First design test
+## First proving case
 
-The first schema will be exercised through at least two established mathematical systems before its
-shared fields are promoted as general Writ structure.
+The first build starts with one established engine and one bounded case. Its purpose is to discover
+whether Writ adds a useful semantic or checking boundary before a general schema is promoted.
 
-Initial donor candidates include DecisionProgramming.jl with JuMP and pyAgrum influence diagrams.
-Sequential tooling can enter when a proving case requires partially observed decisions over time.
+The initial case uses a limited-memory influence diagram. The Writ object states the information
+available at each decision. The adapter must preserve those information sets exactly, and the check
+must detect a translated model or candidate policy that gains access to information that the original
+decision did not have.
+
+DecisionProgramming.jl with JuMP and HiGHS is the first donor candidate because it already represents
+multi-stage influence diagrams with explicit information sets. A direct DecisionProgramming model
+provides the baseline.
+
+After the first case demonstrates a real advantage, a second mathematical system tests which parts
+of the object generalize beyond that donor and which parts belong in a typed profile.
