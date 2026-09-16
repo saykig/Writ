@@ -1,0 +1,62 @@
+{
+  "format": "writ.experimental.probabilistic-model-checking.v0",
+  "id": "stormvogel-lion-reward-until-dead",
+  "model": {
+    "kind": "finite_mdp",
+    "initial_state": "satisfied",
+    "states": [
+      {"id": "satisfied", "labels": ["init"], "absorbing": false},
+      {"id": "full", "labels": ["full"], "absorbing": false},
+      {"id": "hungry", "labels": ["hungry"], "absorbing": false},
+      {"id": "starving", "labels": ["starving"], "absorbing": false},
+      {"id": "dead", "labels": ["dead"], "absorbing": true}
+    ],
+    "actions": [
+      {"id": "hunt", "label": "hunt >:D"},
+      {"id": "rawr", "label": "rawr"}
+    ],
+    "transitions": {
+      "satisfied": {
+        "hunt": {"satisfied": "1/2", "full": "3/10", "hungry": "1/5"},
+        "rawr": {"satisfied": "9/10", "hungry": "1/10"}
+      },
+      "full": {
+        "hunt": {"satisfied": "1/2", "full": "1/2"},
+        "rawr": {"full": "9/10", "satisfied": "1/10"}
+      },
+      "hungry": {
+        "hunt": {"full": "1/5", "satisfied": "1/2", "hungry": "1/10", "starving": "1/5"},
+        "rawr": {"hungry": "9/10", "starving": "1/10"}
+      },
+      "starving": {
+        "hunt": {"full": "1/10", "satisfied": "1/2", "hungry": "1/5", "dead": "1/5"},
+        "rawr": {"starving": "9/10", "dead": "1/10"}
+      },
+      "dead": {}
+    },
+    "reward_models": {
+      "fullness": {
+        "kind": "state_reward",
+        "values": {
+          "satisfied": "0",
+          "full": "100",
+          "hungry": "0",
+          "starving": "0",
+          "dead": "0"
+        }
+      }
+    }
+  },
+  "query": {
+    "kind": "expected_accumulated_reward_until_label",
+    "reward_model": "fullness",
+    "direction": "max",
+    "stop_label": "dead"
+  },
+  "donor": {
+    "model_source": "stormchecker/stormvogel:stormvogel/examples/lion.py",
+    "stormvogel_version": "0.12.0",
+    "stormpy_version": "1.14.0",
+    "storm_version": "1.14.0"
+  }
+}
