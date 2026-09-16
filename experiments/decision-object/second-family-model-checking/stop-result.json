@@ -55,13 +55,7 @@
         "state_id": "dead"
       }
     },
-    "state_order": [
-      "satisfied",
-      "full",
-      "hungry",
-      "starving",
-      "dead"
-    ]
+    "state_order": ["satisfied", "full", "hungry", "starving", "dead"]
   },
   "compiled_property": "R{\"R\"}max=? [F \"writ_state_starving\"]",
   "engine": {
